@@ -1,0 +1,158 @@
+&nbsp;ここではIgorの使い方について記載する。<br />
+--------------------------------------------------------------------------------<br />
+<a href="https://www.youtube.com/playlist?list=UUkb6QtZn6loPHl775mWH0aQ">https://www.youtube.com/playlist?list=UUkb6QtZn6loPHl775mWH0aQ</a>, <a href="http://www.wavemetrics.com/products/igorpro/videotutorials.htm">http://www.wavemetrics.com/products/igorpro/videotutorials.htm</a> を見ておくと良いだろう。<br />
+--------------------------------------------------------------------------------<br />
+■ Igor （基礎編）<br />
+<br />
+□ グラフの大きさの固定<br />
+1) グラフを二回クリックする。<br />
+2) 余白に値を入力。幅モードと縦モードを固定幅にして値を入力する。<br />
+3) グラフの設定を保存する（とりあえず全部にチェックを入れておけばよいだろう）。<br />
+<br />
+□&nbsp;グラフの修正<br />
+1) 縦軸を二回クリックする。<br />
+2) 「軸」<br />
+&nbsp; a)&nbsp;「離す」のチェックを外す。<br />
+&nbsp;&nbsp;b) 「反対」をオン。<br />
+&nbsp;&nbsp;c)&nbsp;「フォント」を Arial にする。<br />
+&nbsp;&nbsp;d) フォントのサイズを 14&nbsp;～ 16 程度にする。<br />
+3) 「目盛とグリッド」<br />
+&nbsp;&nbsp;&nbsp;「位置：」を内側にする。<br />
+4) 「軸ラベル」<br />
+&nbsp;&nbsp;&nbsp; Intensity / arb. units など、必要な事項を入力する。<br />
+5) 以上を横軸に対しても同様に行う。<br />
+6) 作成したグラフを選択し、グラフ -&gt; グラフ設定を保存 -&gt; 全てにチェックを入れてOKにすると、次回から同じ作業をする必要が無くなる。<br />
+<br />
+□ コマンドウインドウ（「名称未設定」など）に式を入れると簡単な計算が可能になる。<br />
+a) A := B + C とすると、 従属関係が構築され、BやCの値を変えると、自動的に A の値が変わるようになる。<br />
+b) 電卓として用いたい場合は、コマンドウインドウ（「名称未設定」など）で、print と入力した後に、式を入力する。例 print 25*40<br />
+c) 全ての行った行動は、コマンドウインドウに表示される。これをコピー&amp;ペーストすると別のグラフでもほとんどのコマンドが同じように動作する。<br />
+d) 「Ctrl + I」でグラフ上にカーソルが出る。カーソルを指定した後に、コマンドウィンドウで<br />
+&nbsp; print area(wavename,xcsr(A),xcsr(B))-(xcsr(A)-xcsr(B))*(wavename[pcsr(A)]+wavename[pcsr(B)])/2)<br />
+と入力すると直線で下地を引いた後の面積がでる。<br />
+print pcsr(A), xcsr(A) などとするとどこを指定しているか確認できる。<br />
+--------------------------------------------------------------------------------<br />
+■ Igor macro（基礎編）<br />
+1) 「データ（D)」&rarr;「Data Browser」<br />
+2) 「Data Browser」にて、「New Folder...」で新しい名称のファイルを作成する。<br />
+3) 右側にある矢印を好きなフォルダに移動させる。<br />
+4) 「Browse Expt...」を押して、過去に作成したファイルを開く。<br />
+5) 右側に過去に作成したファイルのデータがあるので、必要なものを左側に移動させる。<br />
+6) よく使うコマンドは、コマンドウインドウ（「名称未設定」など）に表示される。ここで、赤線の上の部分で必要なものをメモ帳やプロシージャなどにコピーしておいて、赤線の下にペーストすれば、同じ動作を簡単に行うことができる。<br />
+--------------------------------------------------------------------------------<br />
+■ Igor macro（初級編）<br />
+1) 「ウインドウ（W）」&rarr;「新規（N）」&rarr;「パネル（A）」<br />
+&nbsp; (Panel0 を右クリックして「背景をコントロール」を選択し、好きな色に変えることができる)<br />
+2) 「パネル（P）」&rarr;「ツールを表示（T）」<br />
+3) 「パネル（P）」&rarr;「コントロールを追加（A）」&rarr;「ボタンを追加（B）」<br />
+&nbsp; a) 左側の二番目を選択し、上記3)で作成したボタンなどをクリックして好きな場所に移動。<br />
+&nbsp; b) 二回クリックすると編集ができる。新規プロシージャを作成する。<br />
+&nbsp; c) パネルを利用するタイプのものに戻す場合は、左側の一番目を押す。<br />
+4) 実行<br />
+5) 作成したボタンを二回クリック &rarr; 新規<br />
+6) 通常良く使う動作を行って、（基礎編）で勉強したように、コマンドをメモっておく。<br />
+7) // click code here と break の間に、メモしておいたコマンドをコピー&amp;ペーストする。<br />
+　プロシージャを保存 &rarr; 変更<br />
+8) ツールを隠す<br />
+9) ボタンを押せば動作する<br />
+--------------------------------------------------------------------------------<br />
+■ Igor （三角図）<br />
+　C:\Program Files (x86)\WaveMetrics\Igor Pro Folder において、ternary で検索する。<br />
+　Ternary.pxp または Ternary Diagram Demo.pxp を開いたり、Ternary Diagram.ipf を実行させる。<br />
+　それらを利用して三角図を描けばよい。<br />
+　ウィンドウ -&gt; 新規 -&gt; Packages -&gt; Ternary Diagram<br />
+References: <a href="http://blog.hulinks.co.jp/2011/09/ig-ternary-plot.html">http://blog.hulinks.co.jp/2011/09/ig-ternary-plot.html</a><br />
+--------------------------------------------------------------------------------<br />
+■ 三角図での等高線<br />
+・ グラフ -&gt; Ternary Diagram -&gt; add Ternary Diagram Contour<br />
+・ グラフ -&gt; 等高線アピアランスを修正 -&gt;<br />
+　　手動の場合 -&gt; 手動 -&gt; 等高線の数をレベルの左側の空欄に入力 -&gt; レベル初期値と増分を入力 -&gt; ラベル 無し -&gt; ラインカラー 全て同じカラー 黒 -&gt; 補間： の線形をx256にして曲線にする -&gt; 実行<br />
+--------------------------------------------------------------------------------<br />
+■ Igor （スプライン）<br />
+※ 直線でデータ点を結ぶとデータの本質を見失ってしまうことにもなりますから、各データ点を繋ぐにスプラインを用います（雲形定規を使うのとほぼ同じ結果になります。旧帝や国公立大学でも、データ点を直線ではなくスプラインで線を引くということを教えられないところもありますからデータ点を結ぶときは注意してください。<br />
+※ 外国の教科書でも直線でデータ点を引いているものがあります。どれが正しいかは正直なところ私には分かりませんが、上司に従っておけば良いでしょう（それが処せ術というものです）。<br />
+<br />
+解析 -&gt; Interpolate -&gt; Interpolation type cubic Spline&nbsp;-&gt; (input) Y DATA, X DATA -&gt; Do it&nbsp;<br />
+plot *_CS<br />
+<a href="http://oshiete.goo.ne.jp/qa/3608414.html">http://oshiete.goo.ne.jp/qa/3608414.html</a><br />
+<br />
+Baseline Spline Fit<br />
+<a href="http://www.igorexchange.com/project/Packages/category/55">http://www.igorexchange.com/project/Packages/category/55</a><br />
+<br />
+スプライン補間の理論<br />
+<a href="http://www.akita-nct.ac.jp/yamamoto/lecture/2004/5E/interpolation/text/html/node3.html">http://www.akita-nct.ac.jp/yamamoto/lecture/2004/5E/interpolation/text/html/node3.html</a><br />
+<br />
+Fortran Program<br />
+<a href="http://www5d.biglobe.ne.jp/stssk/maze/spline.html">http://www5d.biglobe.ne.jp/stssk/maze/spline.html</a><br />
+--------------------------------------------------------------------------------<br />
+■ Igor （3D plot）<br />
+　Gizmo を用いることになる。<br />
+　C:\Program Files (x86)\WaveMetrics\Igor Pro Folder において、Gizmo で検索する。<br />
+<a href="http://www.igorexchange.com/node/2392">http://www.igorexchange.com/node/2392</a> 左のページから<a href="http://www.igorexchange.com/files/3DBarPanelDemo03.pxp">3DBarPanelDemo03.pxp</a>&nbsp;を利用するのも良い。<br />
+<br />
+■ 3D tarnary diagram<br />
+　Igorではなく、Originでは三角図でなおかつ3Dの図を簡単に描くことができる。<br />
+　gnuplot: <a href="http://gnuplot.10905.n7.nabble.com/Ploting-a-3D-Ternary-Phase-Diagram-dgrid3d-Problem-td2593.html">http://gnuplot.10905.n7.nabble.com/Ploting-a-3D-Ternary-Phase-Diagram-dgrid3d-Problem-td2593.html</a><br />
+　tex: <a href="http://tex.stackexchange.com/questions/141771/crop-ternary-plot">http://tex.stackexchange.com/questions/141771/crop-ternary-plot</a><br />
+　DiagPlot: <a href="http://thermodynamics.online.fr/pages/0.html">http://thermodynamics.online.fr/pages/0.html</a>&nbsp;(free)<br />
+　Statistica: <a href="http://www.ann.ugal.ro/eco/Doc2012.1/RamonaCalinica_DanielCalinica.pdf">http://www.ann.ugal.ro/eco/Doc2012.1/RamonaCalinica_DanielCalinica.pdf</a><br />
+　三角ダイヤグラムを描く: <a href="https://staff.aist.go.jp/a.noda/programs/ternary/ternary.html">ttps://staff.aist.go.jp/a.noda/programs/ternary/ternary.html</a><br />
+　三角図のソフト: ProSim Ternary Diagram<br />
+<br />
+■ 3D scatter plot<br />
+1. x, y, zの3つのwave (データ)を準備する。例えば、名称は、xwave, ywave, zwave。<br />
+2. concatenate {xwave,ywave,zwave},triwave と入力して、triwaveという名称で、xwave,ywave,zwaveを結合した3次元のデータを作成する。<br />
+3. 新規 &gt; 3D plots &gt; scatter plot、またはtriwaveを右クリックして Gizmo Plot<br />
+4. Shape を Point、または Use Wave for Shape でデータを選択&nbsp;<br />
+　Marker Size で大きさを変更, Marker Size from Wave にすればデータから大きさを変えられる<br />
+　Marker Colorで Color Tabe で色を選択<br />
+5. ImageInterpolate /S= {0, 0.01, 1, 0, 0.01, 1} Voronoi triwave<br />
+　データの間を挿間で埋めて表面を作る。<br />
+&nbsp;&nbsp; ImageInterpolate /S= {xの原点、挿間での刻み、xの終点、yの原点、挿間での刻み、yの終点} &nbsp;Voronoi triwave となっている。<br />
+6. 新規 &gt; 3D plots &gt; surface plotとし、surface に M_InterpolatedImage、Fill Surfaceのチェックを外し、Draw Grid Linesにチェックをいれて、OKを押す。<br />
+※ color wave は RGBAの4つのwaveが必要になる。値は0から1まで。<br />
+例えば、concatenate {rwave,gwave,bwave, awave},colorwave とすればよい。<br />
+<a href="https://www.youtube.com/watch?v=kggo0B43n_c">https://www.youtube.com/watch?v=kggo0B43n_c</a><br />
+<a href="http://www.igorexchange.com/node/6350">http://www.igorexchange.com/node/6350</a><br />
+-----コマンド、マニュアルを見ながら調べたが、まだ完全に再現できていない。<br />
+Dowindow/K Gizmo0<br />
+killwaves/Z triwave<br />
+concatenate {wave0,wave1,wave3},triwave<br />
+NewGizmo<br />
+AppendToGizmo/D Scatter=triwave,name=scatter0<br />
+ModifyGizmo ModifyObject=scatter0 property={Shape,1}<br />
+ModifyGizmo autoscaling=1<br />
+ModifyGizmo ModifyObject=scatter0 property={scatterColorType,0}<br />
+ModifyGizmo ModifyObject=scatter0 property={color,1,0,0,0}<br />
+ImageInterpolate /S= {0, 0.01, 1, 0, 0.01, 1} Voronoi triwave<br />
+AppendToGizmo/D Surface=M_InterpolatedImage,name=surface0<br />
+-----<br />
+--------------------------------------------------------------------------------<br />
+■ Igor macro（中級編）<br />
+下記を参考にするのがよい。大事なこととして、Igorはコマンドラインの合計の長さが400文字に制限されており、行継続記号が無い。<br />
+<a href="http://www.ppl.k.u-tokyo.ac.jp/saito/etc.html"><font color="#0000ff">http://www.ppl.k.u-tokyo.ac.jp/saito/etc.html</font></a><br />
+<a href="http://www.nips.ac.jp/huinfo/documents/IGOR/igor01.html"><font color="#0000ff">http://www.nips.ac.jp/huinfo/documents/IGOR/igor01.html</font></a><br />
+<a href="http://nps.sakura.ne.jp/sf/Igor/Igor1.htm"><font color="#0000ff">http://nps.sakura.ne.jp/sf/Igor/Igor1.htm</font></a><br />
+<a href="http://www.pme.kit.ac.jp/annex/archives/igor_pro/"><font color="#0000ff">http://www.pme.kit.ac.jp/annex/archives/igor_pro/</font></a><br />
+<a href="http://www.cm.kj.yamagata-u.ac.jp/atom11archive/res/mac/mes/igor_ni.html"><font color="#0000ff">http://www.cm.kj.yamagata-u.ac.jp/atom11archive/res/mac/mes/igor_ni.html</font></a><br />
+<a href="http://www.hulinks.co.jp/support/igor/index.html"><font color="#0000ff">http://www.hulinks.co.jp/support/igor/index.html</font></a>　<br />
+<a href="http://burggarten.ddo.jp/~tomo/blog/?p=1019"><font color="#0000ff">http://burggarten.ddo.jp/~tomo/blog/?p=1019</font></a><br />
+<a href="http://payam.minoofar.com/igor/"><font color="#0000ff">http://payam.minoofar.com/igor/</font></a><br />
+<a href="http://geo.shunpike.info/jpsj/06702/067020038.pdf"><font color="#0000ff">http://geo.shunpike.info/jpsj/06702/067020038.pdf</font></a><br />
+<a href="http://dora.bk.tsukuba.ac.jp/~takeuchi/index.php?%A5%BD%A5%D5%A5%C8%A5%A6%A5%A7%A5%A2%2FIgor%2F%A5%B7%A5%B9%A5%C6%A5%E0%A4%CE%B4%F0%CB%DC"><font color="#0000ff">http://dora.bk.tsukuba.ac.jp/~takeuchi/index.php?%A5%BD%A5%D5%A5%C8%A5%A6%A5%A7%A5%A2%2FIgor%2F%A5%B7%A5%B9%A5%C6%A5%E0%A4%CE%B4%F0%CB%DC</font></a><br />
+<a href="http://mikaka.org/~kana/dl/pdf/pdf-igor.pdf"><font color="#0000ff">http://mikaka.org/~kana/dl/pdf/pdf-igor.pdf</font></a><br />
+<br />
+Mac の場合は下記のHPを参照すると良い。LEEDやRHEEDを行う学生も目を通しておくと良い。<br />
+<a href="http://surfphys.tagen.tohoku.ac.jp/pages/HowToUseIgor/HowToUseIgor.pdf"><font color="#0000ff">http://surfphys.tagen.tohoku.ac.jp/pages/HowToUseIgor/HowToUseIgor.pdf</font></a><br />
+粉末X線回折の場合は下記HPを参照すると良い。<br />
+<a href="http://www.crl.nitech.ac.jp/~ida/index-j.html"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/index-j.html</font></a><br />
+画像の処理では下記が参考になる。<br />
+<a href="http://dora.bk.tsukuba.ac.jp/~takeuchi/index.php?%A5%BD%A5%D5%A5%C8%A5%A6%A5%A7%A5%A2%2FIgor%2F%A5%B0%A5%E9%A5%D5%B4%D8%CF%A2"><font color="#0000ff">http://dora.bk.tsukuba.ac.jp/~takeuchi/index.php?%A5%BD%A5%D5%A5%C8%A5%A6%A5%A7%A5%A2%2FIgor%2F%A5%B0%A5%E9%A5%D5%B4%D8%CF%A2</font></a><br />
+--------------------------------------------------------------------------------<br />
+■ Excel<br />
+◇ Excelはタブで区切ったデータは、コピー&amp;ペーストすると自動的にセルをわけてくれる。<br />
+◇ textデータは、メモ帳などで開いて、Tabをコピーする。編集 &gt; 置換 を選択肢、検索する文字列に空白をいれ、置換後の文字列でTabのコピーをペーストする。すべて置換を選択すればよい。そうして、Excelにコピー&amp;ペーストすればよい。<br />
+　この方法は、ファイルの場所をいちいち指定しなくてもよいので覚えておいてください。<br />
+※ 上記の方式を用いると、Excel上で式やグラフを描くようにしておけば、コピー&amp;ペーストで発表するデータができるようになる。さらに、Igorなどのグラフソフトへもコピー&amp;ペーストで対応できるようになる。<br />
+※ さらに、ExcelやIgorなどでマクロを作っておけば、ボタン一つで色々と複雑な工程も一瞬で処理できるようになる。<br />
+--------------------------------------------------------------------------------

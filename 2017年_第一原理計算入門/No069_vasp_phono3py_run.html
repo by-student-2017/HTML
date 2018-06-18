@@ -1,0 +1,479 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：<br />
+基本的な使い方： <a href="https://www.youtube.com/watch?v=59zxKB6W6qM">https://www.youtube.com/watch?v=59zxKB6W6qM</a><br />
+Advance: <a href="https://www.youtube.com/watch?v=2qXQNcNi6Ck">https://www.youtube.com/watch?v=2qXQNcNi6Ck</a>&nbsp;<br />
+GitHub: <a href="https://github.com/by-student-2017/vasp">https://github.com/by-student-2017/vasp</a> (you can get vasp_phono3py_run script)<br />
+------------------------------------------------------------------------------<br />
+■ setting<br />
+1. chmod +x vasp_phono3py_run<br />
+2. gedit vasp_phono3py_run<br />
+change<br />
+------<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+------<br />
+3. gedit vasp_phonopy_run<br />
+If you get libraries form Ubuntu Software center, I reccommend below,<br />
+------before<br />
+&nbsp; mpirun -np $num_core $vasp_adress<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#mpirun.openmpi -np $num_core $vasp_adress<br />
+------<br />
+------after<br />
+#mpirun -np $num_core $vasp_adress<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+mpirun.openmpi -np $num_core $vasp_adress<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+0. calculate optimized structure (for example, vasp_run)<br />
+1. vasp_phono3py_run<br />
+2. phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;11 11 11&quot; -c POSCAR-unitcell --br --bmfp 0.05 --tmin=0 --tmax=1000 --tstep=10 --isotope<br />
+<br />
+□ plot<br />
+1. gnuplot<br />
+2. p &quot;kaccum.dat&quot; i 30 u 1:2 w l, &quot;kaccum.dat&quot; i 30 u 1:8 w l<br />
+&nbsp; i 30 = 300 K<br />
+&nbsp; i 15 = 150 K<br />
+3. set xlabel &quot;Frequency (THz)&quot;<br />
+4. set ylabel &quot;Accumulated kappa (W/m-k)&quot;<br />
+5. replot<br />
+6. p &quot;kaccum.dat&quot; i 30 u ($1*4.136):2 w l, &quot;kaccum.dat&quot; i 30 u ($1*4.136):8 w l<br />
+7. set xlabel &quot;Energy (eV)&quot;<br />
+8. replot<br />
+<br />
+□ change --bmfp<br />
+(<a href="https://atztogo.github.io/phono3py/command-options.html#boundary-mfp-bmfp-very-simple-phonon-boundary-scattering-model">https://atztogo.github.io/phono3py/command-options.html#boundary-mfp-bmfp-very-simple-phonon-boundary-scattering-model</a> )<br />
+# = comment<br />
+e.g. please, change 0.05 (=0.10 um) to 0.50 (=1.00 um).<br />
+------before (line 146)<br />
+phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;11 11 11&quot; -c POSCAR-unitcell --br --bmfp 0.05 --tmin=0 --tmax=1000 --tstep=10 --isotope |tee kappa_all_data.dat<br />
+------<br />
+------after (line 146)<br />
+phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;11 11 11&quot; -c POSCAR-unitcell --br --bmfp 0.50 --tmin=0 --tmax=1000 --tstep=10 --isotope |tee kappa_all_data.dat<br />
+------<br />
+<br />
+□ change q-point<br />
+(<a href="https://atztogo.github.io/phono3py/auxiliary-tools.html">https://atztogo.github.io/phono3py/auxiliary-tools.html</a> )<br />
+e.g. please, change 11 to 19.<br />
+# = comment<br />
+------before (near line 143 to line 162)<br />
+#<br />
+phono3py --cf3_file file_list.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;11 11 11&quot; -c POSCAR-unitcell --br --bmfp 0.05 --tmin=0 --tmax=1000 --tstep=10 --isotope |tee kappa_all_data.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;11 11 11&quot; --sym_fc3r --sym_fc2 --tsym --br |tee kappa_all_data_bmfp1000.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 |tee kaccum.dat<br />
+# k vs mean free path<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --average --nsp 100 |tee kaccum_mfp.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv&nbsp; --average --nsp 100 |tee kaccum_gv.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --trace<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv&nbsp; --trace<br />
+#phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;19 19 19&quot; --sym_fc3r --sym_fc2 --tsym --br<br />
+#kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --mfp --average --trace --gv |tee kaccum_mfp.dat<br />
+# scalar data<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gamma&nbsp;&nbsp; --nsp 100 |tee kaccum_gamma.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --tau&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_tau.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --cv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_cv.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv_norm --nsp 100 |tee kaccum_gv_norm.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --pqj&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_pqj.dat<br />
+#<br />
+------<br />
+------after (near line 143 to line 162)<br />
+#<br />
+phono3py --cf3_file file_list.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;19 19 19&quot; -c POSCAR-unitcell --br --bmfp 0.05 --tmin=0 --tmax=1000 --tstep=10 --isotope |tee kappa_all_data.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;19 19 19&quot; --sym_fc3r --sym_fc2 --tsym --br |tee kappa_all_data_bmfp1000.dat<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 |tee kaccum.dat<br />
+# k vs mean free path<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --mfp --average --nsp 100 |tee kaccum_mfp.dat<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --gv&nbsp; --average --nsp 100 |tee kaccum_gv.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --trace<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv&nbsp; --trace<br />
+#phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;19 19 19&quot; --sym_fc3r --sym_fc2 --tsym --br<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --average --trace --gv |tee kaccum_mfp.dat<br />
+# scalar data<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --gamma&nbsp;&nbsp; --nsp 100 |tee kaccum_gamma.dat<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --tau&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_tau.dat<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --cv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_cv.dat<br />
+kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --gv_norm --nsp 100 |tee kaccum_gv_norm.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --pqj&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_pqj.dat<br />
+#<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ vasp_phono3py_run<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+# user settting<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+# Automatically setting<br />
+set num_core = `grep &#39;core id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+setenv OMP_NUM_THREADS 1<br />
+#<br />
+set NPAR = `echo 4-&quot;sqrt($num_core)&quot; | bc`<br />
+echo &quot;automatic setting NPAR = &quot;$NPAR<br />
+#<br />
+set No = 1<br />
+#<br />
+if ( -f phono3py.log ) then<br />
+&nbsp; set No = `cat phono3py.log`<br />
+&nbsp; echo &quot;*******************************************&quot;<br />
+&nbsp; echo &quot;continue calculation&quot;<br />
+&nbsp; set max = `sed -n -e &#39;s/num_displacements_created: //1p&#39; disp_fc3.yaml`<br />
+&nbsp; echo $No&quot;/&quot;$max<br />
+&nbsp; if ( $No &lt;= $max ) then<br />
+&nbsp;&nbsp;&nbsp; if ( $No &lt; 10) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd disp-0000$No<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( 10 &lt;= $No &amp;&amp; $No &lt; 100) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd disp-000$No<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( 100 &lt;= $No &amp;&amp; $No &lt; 1000) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd disp-00$No<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( 1000 &lt;= $No &amp;&amp; $No &lt; 10000) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd disp-0$No<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( 10000 &lt;= $No &amp;&amp; $No &lt; 100000) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd disp-$No<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp;&nbsp;&nbsp; cd ..<br />
+&nbsp; endif<br />
+&nbsp; @ No = $No + 1<br />
+&nbsp; echo $No &gt; phono3py.log<br />
+else<br />
+&nbsp; #<br />
+&nbsp; echo &quot;NPAR = $NPAR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; PREC = Accurate &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;IBRION = -1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;# ENCUT = 500&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; EDIFF = 1.0e-08 &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;ISMEAR = 0; SIGMA = 0.01&quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; IALGO = 38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; LREAL = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; LWAVE = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot; LCHARG = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; cp POSCAR POSCAR_backup<br />
+&nbsp; mv POSCAR POSCAR-unitcell<br />
+&nbsp; #<br />
+&nbsp; phono3py -d --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+&nbsp; #<br />
+&nbsp; set max = `sed -n -e &#39;s/num_displacements_created: //1p&#39; disp_fc3.yaml`<br />
+endif<br />
+#<br />
+echo $No, $max<br />
+while ( $No &lt;= $max )<br />
+&nbsp; echo &quot;*******************************************&quot;<br />
+&nbsp; echo $No&quot;/&quot;$max<br />
+&nbsp; date<br />
+&nbsp; if ( $No &lt; 10) then<br />
+&nbsp;&nbsp;&nbsp; mkdir disp-0000$No<br />
+&nbsp;&nbsp;&nbsp; mv POSCAR-0000$No ./disp-0000$No/POSCAR<br />
+&nbsp;&nbsp;&nbsp; cp POTCAR ./disp-0000$No/POTCAR<br />
+&nbsp;&nbsp;&nbsp; cp INCAR ./disp-0000$No/INCAR<br />
+&nbsp;&nbsp;&nbsp; cd disp-0000$No<br />
+&nbsp; endif<br />
+&nbsp; if ( 10 &lt;= $No &amp;&amp; $No &lt; 100) then<br />
+&nbsp;&nbsp;&nbsp; mkdir disp-000$No<br />
+&nbsp;&nbsp;&nbsp; mv POSCAR-000$No ./disp-000$No/POSCAR<br />
+&nbsp;&nbsp;&nbsp; cp POTCAR ./disp-000$No/POTCAR<br />
+&nbsp;&nbsp;&nbsp; cp INCAR ./disp-000$No/INCAR<br />
+&nbsp;&nbsp;&nbsp; cd disp-000$No<br />
+&nbsp; endif<br />
+&nbsp; if ( 100 &lt;= $No &amp;&amp; $No &lt; 1000) then<br />
+&nbsp;&nbsp;&nbsp; mkdir disp-00$No<br />
+&nbsp;&nbsp;&nbsp; mv POSCAR-00$No ./disp-00$No/POSCAR<br />
+&nbsp;&nbsp;&nbsp; cp POTCAR ./disp-00$No/POTCAR<br />
+&nbsp;&nbsp;&nbsp; cp INCAR ./disp-00$No/INCAR<br />
+&nbsp;&nbsp;&nbsp; cd disp-00$No<br />
+&nbsp; endif<br />
+&nbsp; if ( 1000 &lt;= $No &amp;&amp; $No &lt; 10000) then<br />
+&nbsp;&nbsp;&nbsp; mkdir disp-0$No<br />
+&nbsp;&nbsp;&nbsp; mv POSCAR-0$No ./disp-0$No/POSCAR<br />
+&nbsp;&nbsp;&nbsp; cp POTCAR ./disp-0$No/POTCAR<br />
+&nbsp;&nbsp;&nbsp; cp INCAR ./disp-0$No/INCAR<br />
+&nbsp;&nbsp;&nbsp; cd disp-0$No<br />
+&nbsp; endif<br />
+&nbsp; if ( 10000 &lt;= $No &amp;&amp; $No &lt; 100000) then<br />
+&nbsp;&nbsp;&nbsp; mkdir disp-$No<br />
+&nbsp;&nbsp;&nbsp; mv POSCAR-$No ./disp-$No/POSCAR<br />
+&nbsp;&nbsp;&nbsp; cp POTCAR ./disp-$No/POTCAR<br />
+&nbsp;&nbsp;&nbsp; cp INCAR ./disp-$No/INCAR<br />
+&nbsp;&nbsp;&nbsp; cd disp-$No<br />
+&nbsp; endif<br />
+&nbsp; echo $No &gt; ../phono3py.log<br />
+&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp; cd ..<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+if ( $No &gt; $max ) then<br />
+&nbsp; echo $No &gt; phono3py.log<br />
+endif<br />
+#<br />
+cp POSCAR_backup POSCAR<br />
+#<br />
+echo &quot;making file_list.dat&quot;<br />
+if ( -f file_list.dat ) then<br />
+&nbsp; rm -f -r file_list.dat<br />
+endif<br />
+#<br />
+set No = 1<br />
+echo $No, $max<br />
+while ( $No &lt;= $max )<br />
+&nbsp; if ( $No &lt; 10) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;disp-0000$No/vasprun.xml&quot; &gt;&gt; file_list.dat<br />
+&nbsp; endif<br />
+&nbsp; if ( 10 &lt;= $No &amp;&amp; $No &lt; 100) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;disp-000$No/vasprun.xml&quot;&nbsp; &gt;&gt; file_list.dat<br />
+&nbsp; endif<br />
+&nbsp; if ( 100 &lt;= $No &amp;&amp; $No &lt; 1000) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;disp-00$No/vasprun.xml&quot;&nbsp;&nbsp; &gt;&gt; file_list.dat<br />
+&nbsp; endif<br />
+&nbsp; if ( 1000 &lt;= $No &amp;&amp; $No &lt; 10000) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;disp-0$No/vasprun.xml&quot;&nbsp;&nbsp;&nbsp; &gt;&gt; file_list.dat<br />
+&nbsp; endif<br />
+&nbsp; if ( 10000 &lt;= $No &amp;&amp; $No &lt; 100000) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;disp-$No/vasprun.xml&quot;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; file_list.dat<br />
+&nbsp; endif<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+#<br />
+phono3py --cf3_file file_list.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+phono3py --fc3 --fc2 --dim=&quot;2 2 2&quot; --mesh=&quot;11 11 11&quot; -c POSCAR-unitcell --br --bmfp 0.05 --tmin=0 --tmax=1000 --tstep=10 --isotope |tee kappa_all_data.dat<br />
+phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;11 11 11&quot; --sym_fc3r --sym_fc2 --tsym --br |tee kappa_all_data_bmfp1000.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 |tee kaccum.dat<br />
+# k vs mean free path<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --average --nsp 100 |tee kaccum_mfp.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv&nbsp; --average --nsp 100 |tee kaccum_gv.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --mfp --trace<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv&nbsp; --trace<br />
+#phono3py --dim=&quot;2 2 2&quot; -c POSCAR-unitcell --mesh=&quot;19 19 19&quot; --sym_fc3r --sym_fc2 --tsym --br<br />
+#kaccum -c POSCAR-unitcell kappa-m191919.hdf5 --mfp --average --trace --gv |tee kaccum_mfp.dat<br />
+# scalar data<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gamma&nbsp;&nbsp; --nsp 100 |tee kaccum_gamma.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --tau&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_tau.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --cv&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_cv.dat<br />
+kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --gv_norm --nsp 100 |tee kaccum_gv_norm.dat<br />
+#kaccum -c POSCAR-unitcell kappa-m111111.hdf5 --pqj&nbsp;&nbsp;&nbsp;&nbsp; --nsp 100 |tee kaccum_pqj.dat<br />
+#<br />
+# plot k vs energy<br />
+sed -n -e &#39;/Thermal conductivity/,$p&#39; kappa_all_data.dat &gt; kappa.dat<br />
+awk &#39;{if($1==&quot;#&quot;){print $1,$2,$8}else if($1==&quot;&quot;){print}else{print ($1*4.136),$2,$8}}&#39; kaccum.dat &gt; kaccum_eV.dat<br />
+#<br />
+# kappa vs energy plot<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_k.ps&quot;<br />
+set epsformat = &quot;_k.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set mxtics 2<br />
+set xlabel &quot;Temperature (K)&quot;<br />
+set mytics 2<br />
+set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+p &quot;kappa.dat&quot; u 1:2 w l t &quot;kappa xx&quot;, &quot;kappa.dat&quot; u 1:4 w l t &quot;kappa zz&quot;, &quot;kappa.dat&quot; u 1:6 w l t &quot;kappa xz&quot;, &quot;kappa.dat&quot; u 1:7 w l t &quot;kappa xy&quot;<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+mkdir results<br />
+cp kappa.dat ./results/kappa.dat<br />
+#<br />
+# Accumulated kappa vs energy plot<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_ak.ps&quot;<br />
+set epsformat = &quot;_ak.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Energy (meV)&quot;<br />
+set ylabel &quot;Accumulated lattice thermal conductivity (W/mK)&quot;<br />
+set y2label &quot;Cumulative lattice thermal conductivity (W/mK)&quot;<br />
+set y2tics<br />
+set ytics mirror<br />
+set key top left<br />
+p &quot;kaccum_eV.dat&quot; i 30 u 1:2 w l t &quot;Accumulated kappa at 300 K&quot;, &quot;kaccum_eV.dat&quot; i 30 u 1:3 w l t &quot;Cumulative kappa at 300 K<br />
+#p &quot;kaccum.dat&quot; i 30 u 1:2 w l t &quot;Accumulated kappa at 300 K&quot;, &quot;kaccum.dat&quot; i 30 u 1:8 w l t &quot;Cumulative kappa at 300 K&quot;<br />
+#p &quot;kaccum.dat&quot; i 30 u 1:2 w l t &quot;Accumulated kappa at 300 K&quot;, &quot;kaccum.dat&quot; i 30 u 1:8 w l t &quot;Cumulative kappa at 300 K axes x1y2<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_eV.dat ./results/kaccum_eV.dat<br />
+#<br />
+# Cumulated kappa vs mean free path plot<br />
+awk &#39;{if($1==&quot;#&quot;){print $1,$2,$3}else if($1==&quot;&quot;){print}else{print ($1/10),$2,$3}}&#39; kaccum_mfp.dat &gt; kaccum_mfp_eV.dat<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_mfp.ps&quot;<br />
+set epsformat = &quot;_mfp.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Mean free path (nm)&quot;<br />
+set ylabel &quot;Cumulative lattice thermal conductivity (W/mK)&quot;<br />
+#set y2label &quot;Derivative of Cumulative lattice thermal conductivity (W/mK)&quot;<br />
+#set y2tics<br />
+#set ytics mirror<br />
+#set key top left<br />
+p &quot;kaccum_mfp_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulated kappa at 300 K&quot;<br />
+#p &quot;kaccum_mfp_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulated kappa at 300 K&quot;, &quot;kaccum_mfp_eV.dat&quot; i 30 u 1:3 w l t &quot;Derivative of Cumulative kappa at 300 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_mfp_eV.dat ./results/kaccum_mfp_eV.dat<br />
+#<br />
+# gv(eVxeVxnmxnm) vs meV<br />
+awk &#39;{if($1==&quot;&quot;){print}else{print ($1*4.136),($2*4.136*4.136/10/10),($3*4.136*4.136/10/10)}}&#39; kaccum_gv.dat &gt; kaccum_gv_eV.dat<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_gv.ps&quot;<br />
+set epsformat = &quot;_gv.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Energy / meV&quot;<br />
+set ylabel &quot;Cumulative averaged group velocities (meV^2nm^2)&quot;<br />
+set y2label &quot;Derivative of cumulative averaged group velocities (meV^2nm^2)&quot;<br />
+#set y2tics<br />
+#set ytics mirror<br />
+#set key top left<br />
+#p &quot;kaccum_gv_eV.dat&quot; u 1:2 w l t &quot;Cumulative Averaged group velocities&quot;<br />
+p &quot;kaccum_gv_eV.dat&quot; u 1:2 w l t &quot;Cumulative Averaged group velocities&quot;, &quot;kaccum_gv_eV.dat&quot; u 1:3 w l t &quot;Derivative of cumulative averaged group velocities&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_gv_eV.dat ./results/kaccum_gv_eV.dat<br />
+#<br />
+# tau vs meV<br />
+awk &#39;{if($1==&quot;#&quot;){print $1,$2,$3}else if($1==&quot;&quot;){print}else{print ($1*4.136),$2,$3}}&#39; kaccum_tau.dat &gt; kaccum_tau_eV.dat<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_tau.ps&quot;<br />
+set epsformat = &quot;_tau.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Energy / meV&quot;<br />
+set ylabel &quot;Cumulative lifetime (ps)&quot;<br />
+set y2label &quot;Derivative of cumulative lifetime (ps)&quot;<br />
+#set y2tics<br />
+#set ytics mirror<br />
+#set key top left<br />
+#p &quot;kaccum_tau_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulative lifetime at 300 K&quot;<br />
+p &quot;kaccum_tau_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulative lifetime at 300 K&quot;, &quot;kaccum_tau_eV.dat&quot; i 30 u 1:3 w l t &quot;Derivative of cumulative lifetime at 300 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_tau_eV.dat ./results/kaccum_tau_eV.dat<br />
+#<br />
+# cv (eV/K) vs meV<br />
+awk &#39;{if($1==&quot;#&quot;){print $1,$2,$3}else if($1==&quot;&quot;){print}else{print ($1*4.136),$2,$3}}&#39; kaccum_cv.dat &gt; kaccum_cv_eV.dat<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_cv.ps&quot;<br />
+set epsformat = &quot;_cv.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Energy / meV&quot;<br />
+set ylabel &quot;Cumulative modal heat capacity&nbsp; (eV/K)&quot;<br />
+set y2label &quot;Derivative of cumulative modal heat capacity (eV/K)&quot;<br />
+#set y2tics<br />
+#set ytics mirror<br />
+#set key top left<br />
+#p &quot;kaccum_cv_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulative modal heat capacity&nbsp; at 300 K&quot;<br />
+p &quot;kaccum_cv_eV.dat&quot; i 30 u 1:2 w l t &quot;Cumulative modal heat capacity&nbsp; at 300 K&quot;, &quot;kaccum_cv_eV.dat&quot; i 30 u 1:3 w l t &quot;Derivative of cumulative modal heat capacity at 300 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_cv_eV.dat ./results/kaccum_cv_eV.dat<br />
+#<br />
+# gv_norm (eV*nm) vs meV<br />
+awk &#39;{if($1==&quot;&quot;){print}else{print ($1*4.136),($2*4.136/10),($3*4.136/10)}}&#39; kaccum_gv_norm.dat &gt; kaccum_gv_norm_eV.dat<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_gv_norm.ps&quot;<br />
+set epsformat = &quot;_gv_norm.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set xlabel &quot;Energy / meV&quot;<br />
+set ylabel &quot;Cumulative absolute value of group velocity (meV.nm)&quot;<br />
+set y2label &quot;Derivative of cumulative absolute value of group velocity (meV.nm)&quot;<br />
+#set y2tics<br />
+#set ytics mirror<br />
+#set key top left<br />
+#p &quot;kaccum_gv_norm_eV.dat&quot; u 1:2 w l t &quot;Cumulative absolute group velocities at 0 K&quot;<br />
+p &quot;kaccum_gv_norm_eV.dat&quot; u 1:2 w l t &quot;Cumulative absolute group velocities at 0 K&quot;, &quot;kaccum_gv_norm_eV.dat&quot; u 1:3 w l t &quot;Derivative of cumulative averaged group velocities at 0 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+cp kaccum_gv_norm_eV.dat ./results/kaccum_gv_norm_eV.dat<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,373 @@
+(準備中)ここではGPAWを用いた基本的な計算からXANESの計算までを解説する。<br />
+-------------------------------------------------------------------------------<br />
+下記のHPを参照すると良い。<br />
+<a href="http://www.csc.fi/english/csc/courses/archive/gpaw-2008-01">http://www.csc.fi/english/csc/courses/archive/gpaw-2008-01</a><br />
+-------------------------------------------------------------------------------<br />
+■ インストール(Ubuntu 9.10以降)<br />
+&nbsp; 下記のコマンドを順番に入力することでインストールされる。<br />
+□ ASE [1,2] &amp; GPAW [1,3]（ GPAW 0.8.0 ）<br />
+&nbsp; sudo add-apt-repository ppa:campos-dev/campos<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install gpaw<br />
+■ インストール(Ubuntu 12.04 64bit)（2012/9/16時点では原子位置の構造最適化はagでエラーが出る）<br />
+□ ASE [1,2] &amp; GPAW [1,3]（ GPAW 0.9.0 ）<br />
+&nbsp; sudo bash -c &#39;echo &quot;deb http://widehat.opensuse.org/repositories/home:/dtufys/xUbuntu_12.04 /&quot; &gt; /etc/apt/sources.list.d/home_dtufys.sources.list&#39;<br />
+&nbsp; wget http://widehat.opensuse.org/repositories/home:/dtufys/xUbuntu_12.04/Release.key &amp;&amp; sudo apt-key add Release.key &amp;&amp; rm Release.key<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install python-ase<br />
+&nbsp; sudo apt-get install python-matplotlib<br />
+&nbsp;&nbsp;sudo apt-get install gpaw<br />
+※ もし、動作しない場合は、下記に記載されているパッケージもインストールしてください。<br />
+[1] <a href="https://wiki.fysik.dtu.dk/gpaw/install/Linux/Ubuntu_ppa.html#ubuntupackage">https://wiki.fysik.dtu.dk/gpaw/install/Linux/Ubuntu_ppa.html#ubuntupackage</a><br />
+[2] <a href="https://wiki.fysik.dtu.dk/ase/download.html">https://wiki.fysik.dtu.dk/ase/download.html</a><br />
+[3] <a href="https://wiki.fysik.dtu.dk/gpaw/install/installationguide.html#installationguide">https://wiki.fysik.dtu.dk/gpaw/install/installationguide.html#installationguide</a><br />
+-------------------------------------------------------------------------------<br />
+■ Ubuntuでのインストール[1]（上記で動作しなかった場合）<br />
+・必要なパッケージ<br />
+&nbsp; sudo apt-get install python-dev<br />
+&nbsp; sudo apt-get install python-numpy<br />
+&nbsp; sudo apt-get install liblapack-dev<br />
+・ 推薦するパッケージ<br />
+&nbsp; sudo apt-get install ptyhon-scientific<br />
+&nbsp; sudo apt-get install python-matplotlib<br />
+・ 並列化用パッケージ<br />
+&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+・ 推薦する並列化用のライブラリ*<br />
+&nbsp; sudo apt-get install libscalapack-mpi-dev<br />
+・ ドキュメント<br />
+&nbsp; sudo apt-get install python-sphinx<br />
+&nbsp; sudo apt-get install texlive-latex-base<br />
+&nbsp; sudo apt-get install texlive-latex-extra<br />
+&nbsp; sudo apt-get install dvipng<br />
+&nbsp; sudo apt-get install povray<br />
+[1] <a href="https://wiki.fysik.dtu.dk/gpaw/install/Linux/Ubuntu.html">https://wiki.fysik.dtu.dk/gpaw/install/Linux/Ubuntu.html</a><br />
+* 上記のHPにあるように設定が必要。<br />
+-------------------------------------------------------------------------------<br />
+■ インストール(Ubuntu以外のOS)<br />
+□ ASE[1]<br />
+・RHEL/CentOS:<br />
+・Fedora:<br />
+・openSUSE:<br />
+・Debian:<br />
+□ GPAW[2]<br />
+・RHEL/CentOS/Fedora:<br />
+&nbsp;&nbsp; yum install gpaw<br />
+・openSUSE:<br />
+&nbsp;&nbsp; yast -i gpaw<br />
+・Debian:<br />
+&nbsp;&nbsp; sudo apt-get update<br />
+&nbsp;&nbsp; sudo apt-get install gpaw<br />
+※ 各OSでのインストールは文献[1]に書かれている。<br />
+[1] <a href="https://wiki.fysik.dtu.dk/ase/download.html?highlight=ubuntu">https://wiki.fysik.dtu.dk/ase/download.html?highlight=ubuntu</a><br />
+[2] <a href="https://wiki.fysik.dtu.dk/gpaw/install/installationguide.html#installationguide">https://wiki.fysik.dtu.dk/gpaw/install/installationguide.html#installationguide</a><br />
+-------------------------------------------------------------------------------<br />
+■ コンパイルする場合（プログラム開発者向け）<br />
+pythonによって書かれているので、NumPy及びpython-devが必要になる。<br />
+&nbsp;<br />
+&nbsp; NumPy : <a href="http://www.scipy.org/Download">http://www.scipy.org/Download</a><br />
+&nbsp;&nbsp;&nbsp; tar zxvf numpy-1.6.0.b1.tar.gz<br />
+&nbsp;&nbsp;&nbsp; cd numpy-1.6.0b1<br />
+&nbsp;&nbsp;&nbsp; python setup.py build<br />
+&nbsp;&nbsp;&nbsp; python setup.py install<br />
+&nbsp; 以上でNumPyをセットアップしたら下記を行います。<br />
+<br />
+&nbsp; ASEのインストール <a href="https://wiki.fysik.dtu.dk/ase/">https://wiki.fysik.dtu.dk/ase/</a><br />
+&nbsp;&nbsp;&nbsp; tar zxvf python-ase-3.5.0.2101.tar.gz<br />
+&nbsp;&nbsp;&nbsp; cd python-ase-3.5.0.2101<br />
+&nbsp;&nbsp;&nbsp; python setup.py install<br />
+<br />
+&nbsp; Atomic PAW Setupsの設定<br />
+&nbsp; <a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html#setups">https://wiki.fysik.dtu.dk/gpaw/setups/setups.html#setups</a><br />
+&nbsp;&nbsp;&nbsp; tar zxvf gpaw-setups-0.8.7929.tar.gz<br />
+&nbsp;&nbsp;&nbsp; cd gpaw-setups-0.8.7929<br />
+&nbsp;&nbsp;&nbsp; gunzip *.gz<br />
+&nbsp;&nbsp;&nbsp; .bashrcに下記を書き込みます。<br />
+&nbsp;&nbsp;&nbsp; export GPAW_SETUP_PATH=${HOME}/gpaw-setups-0.8.7929<br />
+&nbsp;&nbsp;&nbsp; ${HOME}はgpaw-setups-0.8.7929.tar.gz を解凍したディレクトリ<br />
+<br />
+&nbsp; GPAWのインストール<br />
+&nbsp;&nbsp;&nbsp; tar zxvf gpaw-0.8.0.7895.tar.gz<br />
+&nbsp;&nbsp;&nbsp; cd gpaw-0.8.0.7895<br />
+&nbsp;&nbsp;&nbsp; python setup.py install<br />
+[1] <a href="http://www.cybernet.co.jp/quantumwise/example/tips/tips-10.html">http://www.cybernet.co.jp/quantumwise/example/tips/tips-10.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ ASE-GUI<br />
+□ 起動方法<br />
+&nbsp; ・GPAWやASE用のGUIは下記の ag のコマンドで起動する。<br />
+&nbsp; ag<br />
+□ 基本的な使い方<br />
+&nbsp; ・File &rarr; Open &rarr; cif&nbsp;ファイルを指定すれば結晶構造が読み込まれる。<br />
+&nbsp; ・左クリックで原子を選択 &rarr; Edit &rarr;&nbsp;Modify&nbsp;&rarr; Atom&nbsp;に元素名を入力 &rarr; OK で元素置換可能。<br />
+&nbsp; ・右クリックしながらマウスを動かすと座標を回転できる。<br />
+&nbsp; ・Calculate &rarr; Set Calculator &rarr; Density Functional Theory (GPAW) &rarr; Setup &rarr; k点を入力する（4 4 4）など &rarr; スピンが必要な場合は Spin polarized にチェックを入れる &rarr; OK &rarr; Apply &rarr; OK<br />
+&nbsp; ・File &rarr;&nbsp;save &rarr;&nbsp;py やその他のファイルを選択 &rarr;&nbsp;save&nbsp;<br />
+□ SCF計算<br />
+&nbsp; ・Calculate &rarr; Energy and Forces &rarr; Run<br />
+□ 構造最適化<br />
+&nbsp; ・Calculate &rarr; Energy Minimization &rarr; Run<br />
+□ 構造最適化<br />
+&nbsp; ・Calculate &rarr;&nbsp;Scale&nbsp;system&nbsp;&rarr; Maximal scale factor&nbsp;を 0.150 など大きめにする&nbsp;&rarr;&nbsp;Number of steps&nbsp;も大きな値にする&nbsp;&rarr; Load optimal configuration にチェック&nbsp;&rarr; Run&nbsp;<br />
+&nbsp; ・原子位置も最適化するには、Atomic relaxations で On にする。<br />
+□ NEB計算[2]（調査中）<br />
+&nbsp; ・ ag --interpolate 3 initial.xyz final.xyz -o interpolated_path.traj<br />
+[1] <a href="https://wiki.fysik.dtu.dk/ase/ase/gui/gui.html#module-gui">https://wiki.fysik.dtu.dk/ase/ase/gui/gui.html#module-gui</a><br />
+[2] <a href="https://wiki.fysik.dtu.dk/ase/ase/gui/basics.html#neb-calculations">https://wiki.fysik.dtu.dk/ase/ase/gui/basics.html#neb-calculations</a><br />
+[3] <a href="http://sstxp.ee.ous.ac.jp/dokuwiki/doku.php">http://sstxp.ee.ous.ac.jp/dokuwiki/doku.php</a><br />
+-------------------------------------------------------------------------------<br />
+※ このHPでの入力ファイルをコピー&amp;ペーストしても動作しないことがあります。GPAWのHPにあるTutorialをコピー&amp;ペーストして、それを元に下記の例のように書き換えていくのが良いでしょう。<br />
+■ 入力ファイル作成の基本<br />
+&nbsp; from stuff import f, C<br />
+&nbsp; print f(1, 2)<br />
+&nbsp; print C(1).m(2)<br />
+&nbsp;&nbsp;・一行目は、stuff.py に記されている関数fとクラスCを用いるための宣言である。<br />
+&nbsp; ・二行目は、関数fでの結果を表示する（print は表示させるためのコマンド）。<br />
+&nbsp; ・三行目は、クラスCで記されている関数mでの結果を表示する。<br />
+<br />
+■ 共通の入力ファイルの作成（原子座標の入力）<br />
+&nbsp; ・terminalで ag を入力&nbsp;&rarr; File &rarr; Open &rarr; cif ファイル &rarr;Open &rarr;&nbsp;File &rarr; save &rarr; py やその他のファイルを選択 &rarr; save<br />
+&nbsp; ・terminalで&nbsp;emacs 先ほど作成したpyファイル を入力<br />
+&nbsp; ・image を atom に書き換える（多くのtutorialの入力ファイルを僅かに修正するだけでよくなるため）。<br />
+&nbsp; ・from ase import Atoms の次の行に from gpaw import GPAW を追加する。&nbsp;<br />
+&nbsp; ・Atoms や GPAW は ワイルドカードである *&nbsp;に書き換える（計算に慣れたらtutorialに書かれているのを真似して、理解を深める為にクラスを指定しよう）。&nbsp;<br />
+<br />
+□ スーパーセルの作成（pyを作成する場合に成功率が高いようだ）<br />
+&nbsp; ag &rarr; setup &rarr; Bulk crystal &rarr; 結晶構造を入力 &rarr; Apply &rarr; python で得たデータをコピーする。<br />
+下記のように入力ファイルを作成する。x, y, z に格子定数を入力する。XAS計算の場合は from gpaw import GPAW を除いて、XASにある記述に従う。<br />
+from ase import Atoms<br />
+from gpaw import GPAW<br />
+import numpy as np<br />
+（python で得たデータをここにペーストする）<br />
+atoms.set_cell((x,y,z), scale_atoms=True)<br />
+atoms *= (3,3,3)<br />
+<br />
+□ スーパーセルの作成（ag上で構造最適化する場合に良いだろう）<br />
+&nbsp; ・ ag を起動する。<br />
+&nbsp; ・ File &rarr; Open でcif ファイルを読み取るか、Setup &rarr; Bulk Crystal で結晶構造を入力（unit cells の数値を大きくするとスーパーセルが作成可能）&rarr; Apply &rarr; OK<br />
+&nbsp; ・ View &rarr; Repeat &rarr; Repeat atoms: の下に各方位で拡張する倍率を入力 &rarr; Set unit cell を押すとスーパーセルが形成される。（View &rarr; Zoom out で構造を見やすくしよう）<br />
+&nbsp; ・元素置換したい場合は、 置換したい原子を図中から左クリックして選択し、Edit &rarr; Modify &rarr; atom の下の欄に置換する原子を入力する。画面が見づらい場合は、マウスを右クリックしながら上下左右に動かして図形を回転させるとよいだろう）。「正孔を導入する場合は何も変更は必要ない。しかし、単位胞に原子数が多くて混乱しやすい場合は置換する原子の原子番号が1つ大きなものを指定し、正孔を導入した擬ポテンシャルファイルのファイル名も原子番号を1つ大きくしたものにしよう」<br />
+&nbsp; ・File &rarr; save &rarr; py で save する。<br />
+<br />
+■ SCF計算<br />
+&nbsp; 共通の入力ファイルの作成後、そのファイルの一番最後に、下記を追加する。各結晶構造で書き換えるのはk点数を指定するkptsの数値。case.out のcase は好きな名称にすれば良い。その他は特に書き換えなくて良いだろう。下記のXXXに結晶名を入力。<br />
+calc = GPAW(h=0.18,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(4,4,4),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;PBE&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case.out&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br />
+atom.set_calculator(calc)<br />
+e1 = atom.get_potential_energy()<br />
+print &quot;total energy:&quot;, e1, &quot;eV&quot;<br />
+calc.write(&quot;XXX.gpw&quot;)<br />
+<br />
+□ DOS（調査中）<br />
+&nbsp; Tutorial[5] にある dos.py と pdos.py をそのまま用いればDOSの結果が得られそうだ。<br />
+[5] <a href="https://wiki.fysik.dtu.dk/gpaw/exercises/dos/dos.html">https://wiki.fysik.dtu.dk/gpaw/exercises/dos/dos.html</a><br />
+<br />
+□ バンド分散（調査中）<br />
+&nbsp; Tutorial[6]にあるPBE band structure が分かりやすい記述になっている。SCF計算の後に、「The band structure can be calculated like this:」と「and plotted like this:」をコピー&amp;ペーストして実行すれば良さそうに見える。ただし、例はFCCのものなので、BCCやHCPも調べておく必要がある。<br />
+[6] <a href="https://wiki.fysik.dtu.dk/gpaw/tutorials/pbe0/pbe0.html">https://wiki.fysik.dtu.dk/gpaw/tutorials/pbe0/pbe0.html</a><br />
+[7] <a href="https://wiki.fysik.dtu.dk/gpaw/tutorials/bandstructures/bandstructures.html#bandstructures">https://wiki.fysik.dtu.dk/gpaw/tutorials/bandstructures/bandstructures.html#bandstructures</a><br />
+[8] <a href="https://wiki.fysik.dtu.dk/gpaw/exercises/band_structure/bands.html#band-exercise">https://wiki.fysik.dtu.dk/gpaw/exercises/band_structure/bands.html#band-exercise</a><br />
+<br />
+■ 構造最適化 （原子位置の最適化）<br />
+&nbsp;&nbsp;共通の入力ファイルの作成後、そのファイルの一番上に、下記を追加する。<br />
+from ase.optimize import QuasiNewton<br />
+&nbsp; 入力ファイルの一番最後に、下記を追加する。各結晶構造で書き換えるのはk点数を指定するkptsの数値。case.out のcase は好きな名称にすれば良い。その他は特に書き換えなくて良いだろう。他の原子位置の最適化の手法を採用したい場合は、入力ファイル中のQuasiNewtonをBFGSに換える。<br />
+calc = GPAW(h=0.18,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(4,4,4),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;PBE&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case.out&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br />
+atom.set_calculator(calc)<br />
+relax = QuasiNewton(atom)<br />
+relax.run(fmax=0.05)<br />
+※ fmax = 0.05 程度にすると、原子位置の誤差は実験値に比べ、格子定数に対して1%程度になる。これ以内であれば対称性の高い構造に換えてみるという考えもどうだろうか？<br />
+<br />
+■ NEB計算<br />
+□<br />
+[9] <a href="https://wiki.fysik.dtu.dk/ase/tutorials/neb/diffusion.html">https://wiki.fysik.dtu.dk/ase/tutorials/neb/diffusion.html</a><br />
+[10] <a href="https://wiki.fysik.dtu.dk/gpaw/tutorials/neb/neb.html">https://wiki.fysik.dtu.dk/gpaw/tutorials/neb/neb.html</a><br />
+[11] <a href="https://wiki.fysik.dtu.dk/gpaw/exercises/neb/neb.html">https://wiki.fysik.dtu.dk/gpaw/exercises/neb/neb.html</a><br />
+<br />
+■ XAS計算<br />
+□ 正孔を導入した擬ポテンシャルの作成<br />
+&nbsp; 下記のXXの部分を元素名に換える。正孔1.0にしたい場合は、下記の0.5を1.0にする（Na, Mg は1.0の正孔を導入しようとすると失敗する）。hch1s はおそらく half core-hole 1s の略だと思われる。一方、fch1s は full core-hole 1s の略。<br />
+gpaw-setup -f PBE&nbsp;XX --name hch1s --core-hole=1s, 0.5<br />
+gpaw-setup -f PBE XX --name fch1s --core-hole=1s, 1.0<br />
+&nbsp; 成功すると元素名.hch1s.PBE という名称のファイルが作成される。（Terminal&nbsp;で ghost の記述が表示されればそのファイルは用いてはならない）<br />
+<br />
+□ 基底状態の計算（調査中）<br />
+&nbsp; 共通の入力ファイルの作成後、fromのある最後の行に、下記を追加する。<br />
+from gpaw import GPAW, setup_paths<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+&nbsp;&nbsp; 下記のXXXに結晶名を、Yに正孔を導入する原子に対する番号（上から順番｛0から数える｝に数えたときに空孔を導入する原子の番号）を記入する（Yは通常原点にある原子を指定することになる 0 の方が便利だろう）。入力ファイルの一番最後に、下記を追加する。（nbandsで指定する負の値が大きいほど非占有準位側の表示範囲が広くなる）<br />
+calc = GPAW(&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nbands=-30,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(4,4,4),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h=0.2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;PBE&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case_xas.txt&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setups={0: &#39;hch1s&#39;})<br />
+atoms.set_calculator(calc)<br />
+e = atoms.get_potential_energy()<br />
+calc.write(&#39;case_xas.gpw&#39;)<br />
+<br />
+□ dks_energy の計算<br />
+&nbsp; 共通の入力ファイルの作成後、fromのある最後の行に、下記を追加する。<br />
+from gpaw import GPAW, setup_paths<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+&nbsp;&nbsp; 下記のXXXに結晶名を、Yに正孔を導入する原子に対する番号（上から順番｛0から数える｝に数えたときに空孔を導入する原子の番号）を記入する（Yは通常原点にある原子を指定することになる 0 の方が便利だろう）。入力ファイルの一番最後に、下記を追加する。<br />
+calc1 = GPAW(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h=0.2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(4,4,4),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case_gs.txt&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;PBE&#39;)<br />
+atoms.set_calculator(calc1)<br />
+e1 = atoms.get_potential_energy() + calc1.get_reference_energy()<br />
+<br />
+calc2 = GPAW(<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; h=0.2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(4,4,4),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case_exc.txt&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;PBE&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; charge=-1,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spinpol=True,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; occupations=FermiDirac(0.0, fixmagmom=True),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; setups={0: &#39;fch1s&#39;})<br />
+atoms[0].magmom = 1<br />
+atoms.set_calculator(calc2)<br />
+e2 = atoms.get_potential_energy() + calc2.get_reference_energy()<br />
+<br />
+print &#39;Energy difference&#39; , e2 - e1<br />
+<br />
+□ ブロードニングしたXASスペクトルのプロット<br />
+&nbsp; 先の計算で得られた Energy difference を dks_energy の値に記述する。<br />
+from gpaw import GPAW, setup_paths<br />
+from gpaw.xas import XAS<br />
+import pylab as plt<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+<br />
+dks_energy = 532.774&nbsp; # from dks calcualtion<br />
+<br />
+calc = GPAW(&#39;case_xas.gpw&#39;)<br />
+calc.set_positions()<br />
+<br />
+xas = XAS(calc, mode=&#39;xas&#39;)<br />
+x, y = xas.get_spectra(fwhm=0.5, linbroad=[4.5, -1.0, 5.0])<br />
+x_s, y_s = xas.get_spectra(stick=True)<br />
+<br />
+shift = dks_energy - x_s[0]&nbsp; # shift the first transition<br />
+<br />
+y_tot = y[0] + y[1] + y[2]<br />
+y_tot_s = y_s[0] + y_s[1] + y_s[2]<br />
+<br />
+plt.plot(x + shift, y_tot)<br />
+plt.bar(x_s + shift, y_tot_s, width=0.001)<br />
+plt.show()<br />
+<br />
+■ XAS計算（Hydock recursion method）<br />
+□ 正孔を導入した擬ポテンシャルの作成<br />
+&nbsp;&nbsp; 下記のXXの部分を元素名に換える。正孔1.0にしたい場合は、下記の0.5を1.0にする（Na, Mg は1.0の正孔を導入しようとすると失敗する）。hch1s はおそらく half core-hole 1s の略だと思われる。一方、fch1s は full core-hole 1s の略。<br />
+gpaw-setup -f PBE XX --name hch1s --core-hole=1s, 0.5<br />
+gpaw-setup -f PBE XX --name fch1s --core-hole=1s, 1.0<br />
+&nbsp;&nbsp; 成功すると元素名.hch1s.PBE という名称のファイルが作成される。（Terminal で ghost の記述が表示されればそのファイルは用いてはならない）<br />
+<br />
+□ 基底状態の計算<br />
+&nbsp; 共通の入力ファイルの作成後、fromのある最後の行に、下記を追加する。<br />
+from gpaw import GPAW, setup_paths<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+&nbsp; 下記のXXXに結晶名を、Yに正孔を導入する原子に対する番号（上から順番｛0から数える｝に数えたときに空孔を導入する原子の番号）を記入する（Yは通常原点にある原子を指定することになる 0 の方が便利だろう）。入力ファイルの一番最後に、下記を追加する。<br />
+name= &#39;XXX_hch&#39;<br />
+calc = GPAW( h=0.2, kpts=(4,4,4,), txt = name + &#39;.txt&#39;, xc=&#39;PBE&#39;, setups={Y:&#39;hch1s&#39;})<br />
+atom.set_calculator(calc)<br />
+e = atom.get_potential_energy(calc)<br />
+calc.write(name+&#39;.gpw&#39;)<br />
+<br />
+□ recursion coefficients の計算（調査中）<br />
+from ase import Atoms<br />
+import numpy as np<br />
+from gpaw.xas import RecursionMethod<br />
+from gpaw import GPAW, setup_paths<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+&nbsp; 下記のXXXに結晶名を記入する。kptsの数値にk点を指定する。入力ファイルの一番最後に、下記を追加する。<br />
+name=&#39;XXX_hch&#39;<br />
+calc = GPAW(name +&#39;.gpw&#39;, kpts=(6,6,6), txt=name + &#39;_rec.txt&#39;)<br />
+calc.set_positions()<br />
+r = RecursionMethod(calc)<br />
+r.run(600)<br />
+r.run(1400,&nbsp;inverse_overlap=&#39;approximate&#39;)<br />
+r.write(name + &#39;_600_1400a.rec&#39;, mode=&#39;all&#39;)<br />
+<br />
+□ ブロードニングしたXASスペクトルのプロット（調査中）<br />
+下記のXXXに結晶名を記入する。ZZZは上記にある 「dks_energy の計算」で得る。<br />
+import sys<br />
+import numpy as np<br />
+import pylab as plt<br />
+from ase import Atoms<br />
+from gpaw.xas import RecursionMethod<br />
+from gpaw import GPAW, setup_paths<br />
+setup_paths.insert(0, &#39;.&#39;)<br />
+<br />
+sys.setrecursionlimit(10000)<br />
+name=&quot;XXX_hch_600_1400a.rec&quot;<br />
+x_start=-20<br />
+x_end=100<br />
+dx=0.01<br />
+x_rec = x_start + np.arange(0, x_end - x_start, dx)<br />
+r = RecursionMethod(filename=name)<br />
+y = r.get_spectra(x_rec, delta=0.4, fwhm=0.4)<br />
+y2 = sum(y)<br />
+plt.plot(x_rec + ZZZ, y2)<br />
+plt.show()<br />
+<br />
+■ EELS計算<br />
+□&nbsp;EELSスペクトル<br />
+&nbsp; Tutorial[4] の記述が非常に良く出来ている。A simple startup: Bulk aluminum の例をコピー&amp;ペーストして、atoms の行を消して、ag で得られる原子構造のデータに書き換えれば良い。この他に書き換える部分はkpts&nbsp;での数値、そして、 w=np.linspace (0, 40, 401)と大きめの範囲にすれば良いだろう。計算が終了したら、下記のように例にあるpyをコピー&amp;ペースとしてplot_EELS.py として保存し、python plot_EELS.py で plot すればよい。<br />
+from pylab import *<br />
+import numpy as np<br />
+<br />
+d = np.loadtxt(&#39;EELS.dat&#39;)<br />
+plot(d[:,0], d[:,1], &#39;-k&#39;)<br />
+show()<br />
+<br />
+□ q点の位置を徐々に変えた場合のEELSスペクトル（調査中）<br />
+&nbsp; Tutorial[4] の記述が非常に良く出来ている。A more sophisticated example: graphite の例をコピー&amp;ペーストして、atoms の行を消して、ag で得られる原子構造のデータに書き換えれば良い。この他に書き換える部分はxc=&quot;PBE&quot;、kpts での数値、nbandsでの数値、そして、convergence の数値だろう。計算が終了したら、python plot_EELS.py でplot すればよい。<br />
+[4] <a href="https://wiki.fysik.dtu.dk/gpaw/tutorials/dielectric_response/dielectric_response.html#example-1-optical-absorption-of-bulk-silicon">https://wiki.fysik.dtu.dk/gpaw/tutorials/dielectric_response/dielectric_response.html#example-1-optical-absorption-of-bulk-silicon</a><br />
+<br />
+■ TDDFT計算<br />
+<br />
+■ STM計算<br />
+<br />
+■ GLLB-sc計算<br />
+&nbsp; 共通の入力ファイルの作成後、そのファイルの一番最後に、下記を追加する。各結晶構造で書き換えるのはk点数を指定するkptsの数値。case.out のcase は好きな名称にすれば良い。その他は特に書き換えなくて良いだろう。<br />
+calc = GPAW(h=0.16,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kpts=(10,10,10),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xc=&#39;GLLBSC&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; txt=&#39;case.out&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eigensolver=&#39;cg&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; occupations=FermiDirac(width=0.05),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; )<br />
+atom.set_calculator(calc)<br />
+atom.get_potential_energy()<br />
+response = calc.hamiltonian.xc.xcs[&#39;RESPONSE&#39;]<br />
+response.calculate_delta_xc()<br />
+EKs, Dxc = response.calculate_delta_xc_perturbation()<br />
+Gap = EKs+Dxc<br />
+print &quot;Calculated band gap:&quot;, Gap<br />
+<br />
+■ PBE0計算<br />
+<br />
+■ RPA計算<br />
+<br />
+■ GW計算<br />
+<br />
+[1] <a href="http://www.csc.fi/english/csc/courses/archive/gpaw-2008-01">http://www.csc.fi/english/csc/courses/archive/gpaw-2008-01</a>&nbsp;<br />
+[2]&nbsp;<a href="https://wiki.fysik.dtu.dk/gpaw/tutorials/tutorials.html">https://wiki.fysik.dtu.dk/gpaw/tutorials/tutorials.html</a><br />
+[3] <a href="http://www.quantumwise.co.jp/example/tips/tips-10.html">http://www.quantumwise.co.jp/example/tips/tips-10.html</a>&nbsp;<br />
+-------------------------------------------------------------------------------<br />
+GPAW : <a href="https://wiki.fysik.dtu.dk/gpaw/index.html">https://wiki.fysik.dtu.dk/gpaw/index.html</a><br />
+チュートリアルを参考に入力用のスクリプト case.py を作成し、python case.py で計算する。<br />
+並列計算はmpirun -np 4 gpaw-python case.py で計算できる。<br />
+[1] <a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;frm=1&amp;source=web&amp;cd=4&amp;cad=rja&amp;ved=0CDwQFjAD&amp;url=http%3A%2F%2Fwww.csc.fi%2Fenglish%2Fcsc%2Fcourses%2Farchive%2Fmaterial%2FGPAW-2008-1%2Fparallel&amp;ei=SplUUNHADsf1mAWspYGoCQ&amp;usg=AFQjCNHKQiO97RBB51q0gMeohPddYO16Og&amp;sig2=D7IZ_TwlI570eKmg51yuYQ">http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;frm=1&amp;source=web&amp;cd=4&amp;cad=rja&amp;ved=0CDwQFjAD&amp;url=http%3A%2F%2Fwww.csc.fi%2Fenglish%2Fcsc%2Fcourses%2Farchive%2Fmaterial%2FGPAW-2008-1%2Fparallel&amp;ei=SplUUNHADsf1mAWspYGoCQ&amp;usg=AFQjCNHKQiO97RBB51q0gMeohPddYO16Og&amp;sig2=D7IZ_TwlI570eKmg51yuYQ</a><br />
+-------------------------------------------------------------------------------

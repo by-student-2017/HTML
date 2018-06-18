@@ -1,0 +1,62 @@
+　ここでは有機半導体材料の研究に関する情報を掲示しておく。<br />
+--------------------------------------------------------------------------------<br />
+■ 有機半導体におけるエネルギーバンド計算<br />
+東京工業大学　有機・高分子物質専攻 森研究室のHPを見るとよい。<br />
+<a href="http://www.op.titech.ac.jp/lab/mori/index.html">http://www.op.titech.ac.jp/lab/mori/index.html</a>　<br />
+HP内のBand Calculation で計算コードを手に入れる。<br />
+<a href="http://www.op.titech.ac.jp/lab/mori/lib/program1.html">http://www.op.titech.ac.jp/lab/mori/lib/program1.html</a>&nbsp;<br />
+<br />
+□ 重要な点<br />
+1.&nbsp;APW は金属的な結果が出やすいため有機半導体材料の計算には用いられていない。<br />
+2. Gaussian や GAMESS で用いられる基底関数（Gauss関数）は、計算が高速になる利点があるが長距離における波動関数の減衰が激しい。そのため、上記のHPでは長距離でより正しい波動関数を用いて計算している（スレーター軌道を用いないと分子間は数分の1に過小評価されてしまう）。<br />
+3. HOMOのエネルギー E (= H &psi;1) = -10 eV を用いる（※ 分子軌道法（MOPAC, GAMESS, Gaussian）による計算結果を用いては駄目か？）。<br />
+&nbsp; トランスファー積分 t = &int; &psi;2* H &psi;1 dv = E &int; &psi;2* &psi;1 dv = E*S, ここで E = H &psi;1<br />
+4. HOMO and/or LUMO のエネルギーバンドだけ考えれば十分<br />
+--------------------------------------------------------------------------------<br />
+■ トランスファー積分の計算<br />
+結晶構造（MOPACやGAMESS, Gaussian による構造最適化）<br />
+&darr;<br />
+分子軌道計算 拡張ヒュッケル法 　(EXTDH)<br />
+スレーター軌道　&Chi; &prop; exp [-&zeta;*r]<br />
+&darr;<br />
+分子間重なり積分 S (SCAL)<br />
+&darr;<br />
+トランスファー積分 t = E*S<br />
+E （HOMOのエネルギー）は -10 eV を用いる（MOPACやGAMESS, Gaussian などでの単分子での計算結果を利用しては駄目か？）<br />
+&darr;<br />
+強結合近似バンド計算 (TBMAP)<br />
+--------------------------------------------------------------------------------<br />
+■ Multiple trapping and release<br />
+&mu;eff = &mu;0 * exp [- Ea / (kB * T)]　：　&mu;の温度依存性<br />
+<br />
+※ J. Marks, Adv. Func. Mater. 20, 50 (2010).<br />
+1/T &rarr; 0 の値で、各種有機半導体についてバンド移動度が似たような値になる。<br />
+<br />
+※ Nelson, Appl. Phys. Lett. 72, 1854 (1998).<br />
+サンプルの依存性は、上手く作るとほぼ平坦な温度依存性が得られる。<br />
+--------------------------------------------------------------------------------<br />
+■ Time of Flight (TOF) 法<br />
+高純度な有機結晶の各結晶軸方向の移動度を調べることが出来る。<br />
+N. Karl, Landort-Bornstein Numerical Data and Functional Relationships in Science oand Technology, New Series Group Ⅲ 17a-i (1985).<br />
+--------------------------------------------------------------------------------<br />
+■ マーカス理論<br />
+&mu; = (e * a^2 / kB * T ) * kET<br />
+kET =　(2 * PI) * t^2 / (h/(2*PI)) * &radic;(1/(4*PI*&lambda;*kB*T)*exp[-&lambda;/(4*kB*T)])&nbsp;<br />
+<br />
+再配向エネルギー(eworganization energy)<br />
+&lambda; = &lambda;1 + &lambda;2<br />
+<br />
+&lambda;1 = ① - ②<br />
+&lambda;2 = ③ - ④<br />
+<br />
+以下の状態でのエネルギーを計算して得ておく。<br />
+①　中性分子Dの形のD+<br />
+②　構造最適化したD+<br />
+③　D+の構造でのD<br />
+④　構造最適化したD<br />
+<br />
+電荷移動反応のポテンシャルエネルギーが放物線的<br />
+&rarr;　活性化エネルギー　G* = &lambda; / 4<br />
+<br />
+Breadas, Chem. Rev.&nbsp;104, 4971 (2004); 107, 926 (2007).&nbsp;<br />
+--------------------------------------------------------------------------------

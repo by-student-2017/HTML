@@ -1,0 +1,119 @@
+　ここではGAMESSやopenMOPAC及び下記のGUIの導入が容易なWindows OSに対して解説を行う。<br />
+------------------------------------------------------------------------------<br />
+※1 研究資金があれば、計算速度の速いGaussianを購入するほうが良い。資金が無くLinux OSを扱うことができれば、GAMESSをコンパイルして使用。windowsしか扱えなければ、Fireflyを選択し、それでも駄目であればGAMESSを選択する。<br />
+※2 NMRの結果は系にもよるがGaussianの方が計算速度が110倍程度早い。Gaussianで3分の計算もGAMESSでは350分程度かかる。Gaussianは周期系の計算も行え、特定の原子を固定しての構造最適化もし易い。<br />
+※3 それでもGAMESSおよびFireflyを選択したい方のために色々と記述していきます。<br />
+------------------------------------------------------------------------------<br />
+PCの購入<br />
+(※ 10万円未満でないと管理などで面倒でしたので、下記の構成にしましたが、購入できれば、Core i7 2600K, SSD{64～120GB程度}とHDD{rpmが大きいもの}、Gigabitタイプ以上のネットワークカードが良い）<br />
+(※ <a href="http://classic.chem.msu.su/gran/gamess/index.html">http://classic.chem.msu.su/gran/gamess/index.html</a> , <a href="http://www.wien2k.at/reg_user/benchmark/">http://www.wien2k.at/reg_user/benchmark/</a>　で調査してみると良い）<br />
+<br />
+PCの構成（今回はTSUKUMOで購入）<br />
+1. OS: [64bit版] Windows 7 Home Premium 64-bit<br />
+2. CPU: Intel Core i5-2500<br />
+3. マザーボード: Intel H67 Express チップセット Micro ATX マザーボード<br />
+4. メモリ: DDR3-1333 DDR3 SDRAM 4GB &times; 4枚<br />
+5. 追加ビデオカード: ASUS GT430/1GB ENGT430/DI/1GD3<br />
+6. ハードディスク: 1TB 7200 rpm シリアルATA3 ハードディスク<br />
+7. パーティション分割: パーティション分割無し<br />
+8. 光学ドライブ: DL対応DVDスーパーマルチ（LG電子製 GH24NS70 / 書き込みソフト付き / SATA接続）<br />
+9. PCケース: eX.computerオリジナル MicroATXスリムタワーケースラック / EX1-7302T-S12F<br />
+10. ケースオプション: AeroSlim 用 12cm 冷却ファン<br />
+11. ケースオプション: AeroSlim 用 12cmフィルター（防塵エアロフィルター）<br />
+12. 入力機器: SRSET/YDKBU02BK-M2055R<br />
+------------------------------------------------------------------------------<br />
+antivirus soft（ウィルス対策）<br />
+1. AVG: <a href="http://free.avg.co.jp/download-avg-anti-virus-free">http://free.avg.co.jp/download-avg-anti-virus-free</a>&nbsp;から、ANTI-VIRUS FREE&nbsp;EDITION をダウンロード<br />
+2. 英語版もあるので、検索で探したりして、好きなように設定すると良い<br />
+------------------------------------------------------------------------------<br />
+Adobe Reader （マニュアルを読むためにインストール）<br />
+1. Adobe Reader:&nbsp;<a href="http://get.adobe.com/jp/reader/">http://get.adobe.com/jp/reader/</a><br />
+2. 何かとPDFを読む機会は多いので、ダウンロードしておくと良いだろう<br />
+------------------------------------------------------------------------------<br />
+OpenOffice 3.3.0 （計算や文章作成のためにインストール）<br />
+1. OpenOffice 3.3.0: <a href="http://www.forest.impress.co.jp/lib/offc/document/offcsuite/openoffice.html">http://www.forest.impress.co.jp/lib/offc/document/offcsuite/openoffice.html</a>&nbsp;<br />
+&nbsp; JRE付きをダウンロードした。<br />
+2. オープンオフィス3入門ガイド: <a href="http://www.forest.impress.co.jp/lib/stdy/pcstudy/guidebook/ooo2manual.html">http://www.forest.impress.co.jp/lib/stdy/pcstudy/guidebook/ooo2manual.html</a><br />
+------------------------------------------------------------------------------<br />
+Real VNC<br />
+1. Real VNC: <a href="http://www.vector.co.jp/soft/win95/net/se324464.html">http://www.vector.co.jp/soft/win95/net/se324464.html</a><br />
+2. 他のPC（Linux OS）などを操作するためにインストールしておくとよい。<br />
+------------------------------------------------------------------------------<br />
+VPN<br />
+------------------------------------------------------------------------------<br />
+ghostscript<br />
+1. <a href="http://www.cs.wisc.edu/~ghost/">http://www.cs.wisc.edu/~ghost/</a>　から 下記のHPにに進む。<br />
+2. <a href="http://www.ghostscript.com/download/">http://www.ghostscript.com/download/</a> &rarr;&nbsp;Ghostscript シリーズの最新版へ<br />
+3.&nbsp;<a href="http://www.ghostscript.com/download/gsdnld.html">http://www.ghostscript.com/download/gsdnld.html</a><br />
+4. Ghostscript 9.04 for Windows (64 bit) での Ghostscript GPL Release&nbsp; を選択<br />
+※ Phaseを扱う場合は、「Preferences」&rarr;「program paths」&rarr;「C:\Program Files\gs\gs9.04\bin\gswin64.exe」とすれば表示が可能だった。<br />
+------------------------------------------------------------------------------<br />
+無償で利用可能なGUI<br />
+<br />
+a) Winmostar : <a href="http://winmostar.com/">http://winmostar.com/</a><br />
+&nbsp; マニュアルも読んでおくと良いし、下記のソフトも導入しておくと良い。<br />
+&nbsp; openMOPAC : <a href="http://openmopac.net/index.html">http://openmopac.net/index.html</a><br />
+&nbsp; Youtube では操作方法も公開されている。<br />
+&nbsp; <a href="http://www.youtube.com/watch?v=ajdGnlLr2y4">http://www.youtube.com/watch?v=ajdGnlLr2y4</a><br />
+<br />
+b) Facio : <a href="http://www1.bbiq.jp/zzzfelis/">http://www1.bbiq.jp/zzzfelis/</a><br />
+<br />
+c) Ascalaph Quantum :&nbsp;<a href="http://jaist.dl.sourceforge.net/project/ascalaphquantum/AscalaphQuantum.zip">http://jaist.dl.sourceforge.net/project/ascalaphquantum/AscalaphQuantum.zip</a>　<br />
+CP2kが即座に利用可能。PC GAMESS / Firefily, CP2k, NWChemに対応<br />
+<br />
+d) GaussSum : <a href="http://gausssum.sourceforge.net/">http://gausssum.sourceforge.net/</a><br />
+&nbsp; GaussianやGAMESSで計算した結果から状態密度分布(DOS）や全エネルギーの変化をプロットできる。<br />
+<br />
+上記の中から、Winmostarを選択してインストールする。（全状態密度分布が欲しい場合はGaussSumのインストールが必要となる）<br />
+------------------------------------------------------------------------------<br />
+MPICH&nbsp;（並列計算に必要）<br />
+1. MPICH:&nbsp;<a href="http://www.mcs.anl.gov/research/projects/mpi/mpich1-old/">http://www.mcs.anl.gov/research/projects/mpi/mpich1-old/</a>&nbsp;<br />
+2.&nbsp;MPICH2を導入。<br />
+3. このままでも良いが、より計算速度を早くするために rsh を導入する。（調査中）<br />
+References<br />
+[1] <a href="http://www2.itc.nagoya-u.ac.jp/pub/pdf/pdf/vol03_03/194_225kouza.pdf">http://www2.itc.nagoya-u.ac.jp/pub/pdf/pdf/vol03_03/194_225kouza.pdf</a><br />
+------------------------------------------------------------------------------<br />
+GAMESS<br />
+（準備中）<br />
+------------------------------------------------------------------------------<br />
+Firefly<br />
+（準備中）<br />
+------------------------------------------------------------------------------<br />
+GAMESSの利用<br />
+『すぐできる 量子化学計算ビギナーズマニュアル 』<br />
+『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から実験値との比較まで 』（NMRの計算に関する記述がある）<br />
+使用方法は上記の文献を参考にすれば良いが、Raman分光の計算をする方法については詳細に解説さていない。そのため、本解説では、特にWinmostarを用いたRaman分光の計算方法を採り上げる。<br />
+さらにアドヴァンスドとして、情報機構主催の『GAMESS実践Q&amp;Aセミナー』や『Gaussian実践Q&amp;Aセミナー』に参加すると良いだろう。講師の株式会社 クロスアビリティ 代表取締役社長の古賀氏や株式会社 Transition State Technology 代表取締役社長 山口氏、株式会社 テンキューブ研究所 代表取締役社長 千田氏が丁寧に回答して下さる。<br />
+　右記のHPも良い: http://pc-chem.info/a00/a02gamess/<br />
+<br />
+WinmostarによるRaman分光の結果の得方<br />
+1) RUNTYP=OPTIMIZEで計算<br />
+2) RUNTYP=HESSIANで計算<br />
+3) case.pun（case=ファイル名）にある$HESS ～ $ENDまでをコピーして、<br />
+&nbsp; GAMESS Setupの一番上の空欄にペースト<br />
+4) $STARTでHESSをREADにする<br />
+5) RUNTYP=RAMANで計算<br />
+<br />
+FacioWinmostarによるRaman分光の結果の得方<br />
+計算方法は下記のHPに記載されている。<br />
+（下記のまとめは、参考文献　<a href="http://egfinal.jp/another/gamess.html">http://egfinal.jp/another/gamess.html</a> より作成）<br />
+「 振動解析：File&gt;Load new gamess output for optimized geometry&rarr;$CONTROLのRUNTYPをHessianに変更して計算。<br />
+Raman：Hessian演算後、File&gt;Get HESS grout from gamess punchでHessian演算の結果を読み取り&rarr;RUNTYPをRAMANに変更して計算」<br />
+<br />
+TDDFTを用いた紫外・可視光吸収スペクトルの計算方法（編集中）<br />
+<br />
+電場の掛け方（調査中）<br />
+下記を入力ファイルに加える。(a.u. 単位）<br />
+$EFIELD EVEC=0.0 0.0 0.001 $END<br />
+参考HP : <a href="http://phoenix.liu.edu/~nmatsuna/gamess/input/EFIELD.html">http://phoenix.liu.edu/~nmatsuna/gamess/input/EFIELD.html</a><br />
+<br />
+GAMESSとTINKERの併用<br />
+参考HP : <a href="http://blog.3016.net/2006/04/gamesstinkerqmmm.html">http://blog.3016.net/2006/04/gamesstinkerqmmm.html</a><br />
+<br />
+GAMESSによるFMO計算<br />
+参考HP : <a href="http://ccinfo.ims.ac.jp/nanogc/coop/coop2.html">http://ccinfo.ims.ac.jp/nanogc/coop/coop2.html</a><br />
+<br />
+GAMESS 関係のGUI<br />
+<a href="http://www.msg.ameslab.gov/graphics/other.html">http://www.msg.ameslab.gov/graphics/other.html</a><br />
+<br />
+------------------------------------------------------------------------------

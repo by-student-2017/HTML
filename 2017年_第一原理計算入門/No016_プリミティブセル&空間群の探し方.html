@@ -1,0 +1,160 @@
+&nbsp; ここではプリミティブセルや空間群の探し方の情報を記載する。<br />
+------------------------------------------------------------------------------<br />
+□ プリミティブセルを探す<br />
+<br />
+◆ cif2cell<br />
+&nbsp; VESTAで構造を入力して cif で出力し、cif2cell を用いて結晶構造に関するデータを用いて examples にあるファイルを書き換える。<br />
+1. cif2cell -p elk case.cif<br />
+2. GEOMETRY.OUT を得ることができる。<br />
+※ -p の後の elk を abinit などに変えれば、それに対応した出力がされる。<br />
+<br />
+◆ XcrySDen を用いたプリミティブセルの探し方<br />
+Display -&gt; Primitive Cell Mode<br />
+または、F3 (Primitive Cell Mode), F4(Conventional Cell Mode) を押してみてもよい。<br />
+<br />
+◆ spacegroup.in を用いたプリミティブセルの探し方 ( Elk に付属している）<br />
+1. spacegroup.in というファイルを作成する<br />
+&nbsp;&nbsp;docにある spacegroupのpdfを参考にして結晶構造のデータを入力する<br />
+&nbsp; 2x2x2 supercell&nbsp;を作成して欲しい場合には ncell に該当する行の1 1 1 を&nbsp;2 2 2 にする。<br />
+2. $HOME/elk-2.3.22/src/spacegrop/spacegroup<br />
+3. プリミティブセルでのGEOMETRY.OUTで得ることができる<br />
+<br />
+◆ International tables A, Sec 5.1&nbsp;に記載されている3x3の行列を用いてVESTAで変換する<br />
+Youtube動画; <a href="https://www.youtube.com/watch?v=PObyydj0GiU">https://www.youtube.com/watch?v=PObyydj0GiU</a><br />
+Youtube動画; <a href="https://www.youtube.com/watch?v=Aw7goppiUHk">https://www.youtube.com/watch?v=Aw7goppiUHk</a><br />
+-----<br />
+FCC -&gt; Primitive cell<br />
+0 1/2 1/2<br />
+1/2 0 1/2<br />
+1/2 1/2 0<br />
+-----<br />
+Primitive cell -&gt; FCC<br />
+-1 1 1<br />
+1 -1 1<br />
+1 1 -1<br />
+-----<br />
+BCC -&gt; Primitive cell<br />
+-1/2 1/2 1/2<br />
+1/2 -1/2 1/2<br />
+1/2 1/2 -1/2<br />
+-----<br />
+Primitive cell -&gt; BCC<br />
+0 1 1<br />
+1 0 1<br />
+1 1 0<br />
+-----<br />
+Primitive rhombohedral cell -&gt; triple hexagonal cell R1<br />
+1 0 1<br />
+-1 1 1<br />
+0 -1 1<br />
+-----<br />
+triple hexagonal cell R1 -&gt; Primitive rhombohedral cell<br />
+2/3 -1/3 -1/3<br />
+1/3 1/3 -2/3<br />
+1/3 1/3 1/3<br />
+-----<br />
+Primitive rhombohedral cell -&gt; C-centerd monoclinic cell, unique axis b, cell choice 1<br />
+0 0 1<br />
+-1 1 1<br />
+-1 -1 1<br />
+-----<br />
+C-centerd monoclinic cell, unique axis b, cell choice 1 -&gt; Primitive rhombohedral cell<br />
+1 -1/2 -1/2<br />
+0 1/2 1/2<br />
+1 0 0<br />
+-----<br />
+----------<br />
+□ 空間群を探す<br />
+<br />
+◆ 空間群を探してくれるサイト<br />
+FINDSYM: <a href="http://stokes.byu.edu/iso/findsym.php"><font color="#0000ff">http://stokes.byu.edu/iso/findsym.php</font></a> （2014年7月 2x2x2スーパーセルでは駄目だった）<br />
+ISOTROPY Software Suite: <a href="http://stokes.byu.edu/iso/isotropy.php"><font color="#0000ff">http://stokes.byu.edu/iso/isotropy.php</font></a><br />
+<br />
+◆ VESTA を用いて空間群を探す方法<br />
+1. bilbao crystallographic sever (<a href="http://www.cryst.ehu.es/">http://www.cryst.ehu.es/</a>) &gt; [MAXSUB] for low symmetry&nbsp; or [MINSUP] for high symmetry &gt; choose it -&gt; other IT number &gt; ...<br />
+2.&nbsp; VESTA: Remove symmetry &gt; Structure parameters dupliate atoms<br />
+&nbsp; Remove P1 strucutre (trc) &gt; Unit cell &gt; New IT number &gt; Apply &gt; Structure parameters dupliate atoms<br />
+3. Edit &gt; Edit Data &gt; Unit cell &gt; Space Group<br />
+----<br />
+VESTA &gt; case.cif &gt; Edit &gt; Edit Data &gt; Unit cell &gt; Space group: 230 + Apply &gt; 229 + Apply &gt; ...<br />
+&gt; stop when you can get nochange structure &gt; OK &gt; File &gt; Export Data.. &gt; cif<br />
+として、空間群の数値が高いところから低いところへと数値を下げていって、構造が同じとなる空間群を手作業で探す。<br />
+※ PやFCC, BCC, HCPということが分かっていれば、左欄のAbinit(input files)を参考にして空間群を更に絞り込むと良い。<br />
+※ 結晶構造にn回回転対称やミラー対称があると分かれば空間群の番号とともに記載されている記号から更に絞り込める。<br />
+※ see, International Tables Vol.A<br />
+------------------------------------------------------------------------------<br />
+□ spg.lib (<a href="http://spglib.sourceforge.net/">http://spglib.sourceforge.net/</a>)<br />
+<br />
+---- <a href="http://spglib.sourceforge.net/">http://spglib.sourceforge.net/</a> の簡単な日本語訳(2016/1/6) ----<br />
+Spglib<br />
+SpglibはC言語で書かれた結晶の対称性を探し、操作するためのライブラリーです。<br />
+python言語でのSpglibは「Spgllib for python」で見つけられます。<br />
+安定版はSpglib-1.7.4.x です。<br />
+最新版はSpglib-1.9.0です。APIのアップデートと変更、変数の定義は前バージョンに対して起こりえます。それらは℃ドキュメントに記載されています。<br />
+変更履歴は ChangeLog にまとめられています。<br />
+<br />
+News<br />
+pythonモジュールのpyspglibはバージョン1.9.0でspglibに名称変更しています。<br />
+1.8.x以前のバージョンで、python wrapper(pyspglib)はspglibの特別な拡張と考えており、独自に管理されています。しかし、1.9.x以降では通常の拡張としてspglibの一部となるようにし始めました。このpython wrapperはc-spglibの以後の各更新での作業で管理されることになるでしょう。パッケージの名称はspyglibからspglibに変更されます。この変更以後、python spglib モジュールのインポート手法は変更され、それはSpglib&nbsp; for python に記述されます。<br />
+<br />
+Features (特徴)<br />
+・対称操作の探索<br />
+・空間群の同定<br />
+・ワイコフ位置の割当（アサインメント）<br />
+・結晶構造の精緻化（リファイン）<br />
+・プリミティブセル（基本単位格子）の探索<br />
+・規約なk点の探索<br />
+・線形テトラヘドロン法（ドキュメントは準備されている）<br />
+<br />
+Algorithms (アルゴリズム)<br />
+・空間群の探索アルゴリズム：R. W. Grosse-Kunstleve, Acta Cryst., A55, 383-395 (1999)<br />
+・結晶の精緻化アルゴリズム：R. W. Grosse-Kunstleve and P. D. Adams, Acta Cryst., A58, 60-65 (2002)<br />
+<br />
+Install (インストール)<br />
+1. spglib のダウンロード<br />
+2. 解凍(Unzip), コンパイル条件の設定(configure), コンパイル（make）<br />
+&nbsp; tar zxfv spglib-1.7.4.tar.gz<br />
+&nbsp;&nbsp;cd spglib-1.7.4<br />
+&nbsp;&nbsp;./configure<br />
+&nbsp;&nbsp;make<br />
+3. ここであなたがOpenMPを使いたいならライブラリーをコピーする。もしあなたが &quot;make install&quot;をしないなら、そのライブラリーはsrc/.libsにある。<br />
+<br />
+OpenMP（並列計算）<br />
+対称操作の探索でのボトルネックをOpenMPスレーディングを使用して軽減させる。gcc (4.2よりも新しいバージョン)の場合、configureスクリプトを走らせる前に次の環境変数を設定する。<br />
+&nbsp; export LIBS=&#39;-lgomp&#39;<br />
+&nbsp; export CFLAGS=&#39;-fopenmp&#39;<br />
+原子の数が小さいとき、スレーディングのオーバーヘッドは相対的に大きくなる。それゆえ、原子数が1000以上のときに、スレーディングが有効に働く。<br />
+<br />
+Usage（利用）<br />
+1. include spglib.h<br />
+&nbsp; C言語に上記のように書き込むとこのspglibが利用可能になる。<br />
+2. libsymspg.a&nbsp;か libsymspg.so をC言語のコンパイル時にリンクさせるようにする。<br />
+3. example/README に編集例が記載されている。<br />
+<br />
+Example（例）<br />
+exampleディレクトリに少数の例があります。<br />
+<br />
+Python extension（Python拡張）<br />
+Pythonモジュールはptyhonディレクトリに用意してあります。Spglib for python の詳細を見てください。<br />
+<br />
+Ruby extension（Ruby拡張）<br />
+rubyディレクトリでのrubyスクリプト symPoscar.rbはVASP POSCARフォーマットのファイルを読み込み、空間群を探します。オプションの-1はわずかに歪んだ構造をオプション-sで定義した許容範囲で精緻化します。オプション -o は入力構造の対称操作を与えます。<br />
+&nbsp; ruby symPoscar.rb POSCAR -s 0.1 -o 1<br />
+幾つかのさらなるオプションは --help オプションで見られます。<br />
+&nbsp; ruby symPoscar.rb --help<br />
+rubyモジュールのコンパイル手法は ruby/READMEで示されています。<br />
+<br />
+Fortran interface (Fotranインターフェース)<br />
+Fortran インタフェース spglib_f08.f90 はexample ディレクトリで見つかります。このFortranインタフェースはDimitar Pashovから寄贈されました。spglib_f.c は廃止され、利用は勧められていません。<br />
+<br />
+API&amp;変数(API&amp;variables)<br />
+・spglibで使われる定義と規則<br />
+&nbsp; ・基本ベクトル(a, b, c)または(a1, a2, a3)<br />
+&nbsp; ・原子位置 x<br />
+&nbsp; ・対称操作 (W, w)<br />
+&nbsp; ・変換行列 P と原点シフト p<br />
+&nbsp; ・標準的な単位胞の規則<br />
+・API<br />
+・重要な変数<br />
+・Spglib for python<br />
+------------------------------------------------------------------------------

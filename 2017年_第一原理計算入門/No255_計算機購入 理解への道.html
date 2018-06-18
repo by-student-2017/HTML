@@ -1,0 +1,64 @@
+<p>　ここでは大学生及び社会人の方を対象とした最速の計算機構築への理解に必要な知識を参考文献を引用しながら紹介していきます。</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>■ CPUの選定</p>
+
+<p>　下記の文献などで情報が得られます。</p>
+
+<p>1) WIEN2kのベンチマークテストを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://www.wien2k.at/reg_user/benchmark/" rel="nofollow" sizcache="7" sizset="0" target="_blank"><span style="color: rgb(128, 0, 128);">http://www.wien2k.at/reg_user/benchmark/</span></a></p>
+
+<p sizcache="5" sizset="0">2) ABINITのベンチマークテストを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://www.abinit.org/documentation/benchmarks">http://www.abinit.org/documentation/benchmarks</a><br />
+3) Fireflyのperformanceを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://classic.chem.msu.su/gran/gamess/index.html">http://classic.chem.msu.su/gran/gamess/index.html</a><br />
+4)&nbsp;雑誌『日経WinPC』日経BP<br />
+5)&nbsp;WIEN2k　Benchmark Result&nbsp;<br />
+&nbsp; <a href="http://topsecret.hpc.co.jp/wiki/index.php/WIEN2k">http://topsecret.hpc.co.jp/wiki/index.php/WIEN2k</a></p>
+
+<p>&nbsp; 大学の付属図書館で閲覧したり、web上で購入可能（必要な記事のみ購入できる）<br />
+※ 私は個人的にCore i7-2700KやCorei7-2800Kが値段も演算スピードも速くて好き。<br />
+<br />
+■ CPUグリス<br />
+&nbsp; ノーマルグリスで十分です。安いので予算が余れば高熱伝導グリスも良いでしょう。</p>
+
+<p><br />
+■ CPUファン<br />
+&nbsp; CPUを全コアフル稼働させても、水冷でなくてもBTOでの最低限の空冷ファンでクーラーの無い部屋でも十分に動作します。気になる場合は、BTOの空冷でグレードの高いものを選べば良いでしょう。<br />
+<br />
+■ RAM Memoryの選定<br />
+&nbsp; 計算する規模にもよります。単位胞に数十原子であれば 4 GB程度で良いですが、数百原子であれば 8 GB以上が必要になります。24 GBや32 GB以上であれば色々とドープしてスーパーセルの計算も余裕を持って取り組めるでしょう。<br />
+&nbsp; BTOで購入すれば、メーカーは特に気にしなくて良いでしょう。&nbsp;&nbsp;&nbsp;<br />
+<br />
+■ HDD<br />
+&nbsp; BTOで変える最低限のHDDで十分です。パーティションは分割なし。SSDを選択した場合は、結果の出力場所のためにHDDを余分に付けておくと良いでしょう。SSDは読み出しは性能が良いですが、書き出し読み出しを繰り返すと処理速度が遅くなることが知られています。HDDにSCFサイクルのデータなどを書き込むようにアドレスや作業場所を指定しましょう。<br />
+<br />
+■ GPU（グラフィックボードです）<br />
+&nbsp; GPUで計算する場合以外は無くても十分です。つまり、オンボードでよい。GPUで計算可能なコードは解説もあまり多くないので、私は当分の間、オンボードか最低限のGPUで行くつもりです。<br />
+<br />
+■ 光学ドライブ<br />
+&nbsp; DVDが読める最低限のもので良いです。OSをインストールするために用いるだけです。<br />
+<br />
+■ 電源<br />
+&nbsp; 電源も最低限のもので十分です。理論計算でフルに使うことは無いですね。BTOで最低限のもので大丈夫です。私の場合、たぶん、GPUを使うことがない為だと思います。<br />
+<br />
+■ ブロードバンドポート<br />
+&nbsp; ギガビットLANポートで良いでしょう。ギガビット通信が可能なハブの値段がまだ高いので、それほど無理はしなくてよいと思います。特に1台のPCで並列計算を行う場合はBTOの最低限のもので良いです。<br />
+<br />
+■ OS<br />
+&nbsp; OSはLinuxなので無しで良いです。それにしても、LinuxでIgorが使えれば、全部OSをLinuxにするのに&hellip;&hellip;。<br />
+&nbsp;</p>
+
+<p>■ コンパイラとライブラリの選定</p>
+
+<p>　Intel Compiler + MKL がかなり速いようです。（現在、gfortran + GotoBLAS, gfortran + MKLを調査・研究しております）</p>
+
+<p>1) 数値計算ライブラリ</p>
+
+<div sizcache="7" sizset="1"><a href="http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=%BF%F4%C3%CD%B7%D7%BB%BB%A5%E9%A5%A4%A5%D6%A5%E9%A5%EA#p18">http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=%BF%F4%C3%CD%B7%D7%BB%BB%A5%E9%A5%A4%A5%D6%A5%E9%A5%EA#p18</a><br />
+&nbsp;2) PGI + ACML</div>
+
+<div sizcache="5" sizset="1">&nbsp;&nbsp;&nbsp; （現在、予算が無くて検証できない）</div>
+
+<p>------------------------------------------------------------------------------</p>

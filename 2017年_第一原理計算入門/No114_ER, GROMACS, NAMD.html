@@ -1,0 +1,71 @@
+　(準備中)ここでは古典的な分子動力学法であるAMBER, GROMACS, NAMDのセットアップから基本的な計算までを解説する予定。<br />
+-------------------------------------------------------------------------------<br />
+■ Information<br />
+各種比較：<br />
+[1] <a href="http://blog.livedoor.jp/ag_plusplus/archives/67924399.html">http://blog.livedoor.jp/ag_plusplus/archives/67924399.html</a><br />
+[2] <a href="http://www.phonon.t.u-tokyo.ac.jp/publications/Kashika2013.pdf">http://www.phonon.t.u-tokyo.ac.jp/publications/Kashika2013.pdf</a><br />
+[3] <a href="http://www.advancesoft.jp/topics/pdf/as_sim_magazine_v11.pdf">http://www.advancesoft.jp/topics/pdf/as_sim_magazine_v11.pdf</a><br />
+[4] <a href="http://www.hpc.co.jp/apply_chem.html">http://www.hpc.co.jp/apply_chem.html</a><br />
+[5] <a href="http://www.csrp.riken.jp/2014/20140226_REIN_K%E8%B3%87%E6%96%99.pdf">http://www.csrp.riken.jp/2014/20140226_REIN_K%E8%B3%87%E6%96%99.pdf</a><br />
+書籍などの情報含む： <a href="http://tkkoba.blog.fc2.com/blog-category-1.html">http://tkkoba.blog.fc2.com/blog-category-1.html</a><br />
+名大： <a href="http://www2.itc.nagoya-u.ac.jp/center/ja/UserGuide.pdf">http://www2.itc.nagoya-u.ac.jp/center/ja/UserGuide.pdf</a><br />
+北大（並列化の情報もある）：<a href="http://www.hucc.hokudai.ac.jp/iic-HPC/2013_28.pdf">http://www.hucc.hokudai.ac.jp/iic-HPC/2013_28.pdf</a><br />
+各種価格<br />
+[1] <a href="http://www.fiatlux.co.jp/product/lifescience/bakusoku/bakusoku-index.html">http://www.fiatlux.co.jp/product/lifescience/bakusoku/bakusoku-index.html</a><br />
+ベンチマーク<br />
+[1] <a href="http://www.hpctech.co.jp/lib/wp-content/uploads/2013/05/20130527MDGPU.pdf">http://www.hpctech.co.jp/lib/wp-content/uploads/2013/05/20130527MDGPU.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ AMBER （商用なのでこのHPでは取り扱わないことにした）<br />
+References<br />
+[1] 『すぐできる分子シミュレーションビギナーズマニュアル 』<br />
+[2] <a href="http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/md.html">http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/md.html</a><br />
+[3] info.: <a href="http://www.conflex.co.jp/prod_amber.html">http://www.conflex.co.jp/prod_amber.html</a><br />
+[4] info.: <a href="http://www.hpc.co.jp/amber.html">http://www.hpc.co.jp/amber.html</a><br />
+[5] info.: <a href="http://www.fiatlux.co.jp/product/lifescience/MFAMBER/MFamber-index.html">http://www.fiatlux.co.jp/product/lifescience/MFAMBER/MFamber-index.html</a>]<br />
+[6] <a href="http://tsubame.gsic.titech.ac.jp/docs/guides/isv-apps/amber/pdf/Amber.pdf">http://tsubame.gsic.titech.ac.jp/docs/guides/isv-apps/amber/pdf/Amber.pdf</a><br />
+[7] <a href="https://www.jstage.jst.go.jp/article/cicsj/24/5/24_5_162/_article/-char/ja/">https://www.jstage.jst.go.jp/article/cicsj/24/5/24_5_162/_article/-char/ja/</a><br />
+-------------------------------------------------------------------------------<br />
+■ GROMACS (free)<br />
+References<br />
+Install<br />
+[1] win(install): <a href="http://winmostar.com/jp/gmx4wm_jp.html">http://winmostar.com/jp/gmx4wm_jp.html</a><br />
+[2] win: <a href="http://ibio.jp/index.php?Gromacs%A5%C1%A5%E5%A1%BC%A5%C8%A5%EA%A5%A2%A5%EB">http://ibio.jp/index.php?Gromacs%A5%C1%A5%E5%A1%BC%A5%C8%A5%EA%A5%A2%A5%EB</a><br />
+[3] linux: <a href="http://bio-info.biz/tips/gromacs_install.html">http://bio-info.biz/tips/gromacs_install.html</a><br />
+[4] linux: <a href="http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/gromacs/gromacs.html">http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/gromacs/gromacs.html</a><br />
+[5] intel(install): <a href="https://software.intel.com/en-us/articles/gromacs-for-intel-xeon-phi-coprocessor">https://software.intel.com/en-us/articles/gromacs-for-intel-xeon-phi-coprocessor</a><br />
+[6] <a href="http://www.scls.riken.jp/scruise/software/gromacs.html">http://www.scls.riken.jp/scruise/software/gromacs.html</a><br />
+[7] <a href="http://www.imsbio.co.jp/md/1615/">http://www.imsbio.co.jp/md/1615/</a><br />
+[8] <a href="http://blog.livedoor.jp/ag_plusplus/archives/67928230.html">http://blog.livedoor.jp/ag_plusplus/archives/67928230.html</a><br />
+[9] <a href="http://tsubame.gsic.titech.ac.jp/node/164">http://tsubame.gsic.titech.ac.jp/node/164</a><br />
+[10] <a href="http://www.nersc.gov/users/software/applications/chemistry/gromacs/">http://www.nersc.gov/users/software/applications/chemistry/gromacs/</a><br />
+[11] <a href="http://www.archer.ac.uk/documentation/software/gromacs/">http://www.archer.ac.uk/documentation/software/gromacs/</a><br />
+[12] <a href="http://www.sk8tsoft.com/42/gromacs%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB/">http://www.sk8tsoft.com/42/gromacs%E3%81%AE%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%AB/</a><br />
+[13] YouTube: <a href="https://www.youtube.com/watch?v=vOJsmtFeSGk">https://www.youtube.com/watch?v=vOJsmtFeSGk</a> , <a href="https://www.youtube.com/watch?v=BZNzYt_DUB0">https://www.youtube.com/watch?v=BZNzYt_DUB0</a><br />
+[14] <a href="http://d.hatena.ne.jp/biochem_fan/20130806/1375789498">http://d.hatena.ne.jp/biochem_fan/20130806/1375789498</a><br />
+[15] <a href="http://www.sk8tsoft.com/492/gnu%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%A9%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6gromacs4-6-x%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8Bfedora/">http://www.sk8tsoft.com/492/gnu%E3%82%B3%E3%83%B3%E3%83%91%E3%82%A4%E3%83%A9%E3%82%92%E7%94%A8%E3%81%84%E3%81%A6gromacs4-6-x%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8Bfedora/</a><br />
+[16] <a href="http://biokids.org/?GROMACS%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://biokids.org/?GROMACS%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a>&nbsp;（色々な情報がある）<br />
+Running<br />
+[1] <a href="https://staff.aist.go.jp/makoto-yoneya/funcPhysChem/MDflow.html">https://staff.aist.go.jp/makoto-yoneya/funcPhysChem/MDflow.html</a><br />
+[2] <a href="http://www.arc.ox.ac.uk/content/running-gromacs">http://www.arc.ox.ac.uk/content/running-gromacs</a><br />
+[3] <a href="https://umbc.rnet.missouri.edu/resources/How2RunGROMACS.html">https://umbc.rnet.missouri.edu/resources/How2RunGROMACS.html</a><br />
+GUI<br />
+[1] GISP: <a href="http://www.ueda-lab.ynu.ac.jp/software.html">http://www.ueda-lab.ynu.ac.jp/software.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ NAMD (free)<br />
+References<br />
+Install<br />
+[1] <a href="http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/namd/namd.html">http://www2.rikkyo.ac.jp/web/tokiwa/menu/cps/md/namd/namd.html</a><br />
+[2] <a href="http://ywtao.pancakeapps.com/How-To-Compile-NAMD-MPI-Version.md">http://ywtao.pancakeapps.com/How-To-Compile-NAMD-MPI-Version.md</a><br />
+Running<br />
+[1] <a href="http://dna.engr.latech.edu/~bishop/Teaching/LASiGMA-MD/Docs-and-Man/NAMD-intro.pdf">http://dna.engr.latech.edu/~bishop/Teaching/LASiGMA-MD/Docs-and-Man/NAMD-intro.pdf</a><br />
+[2] MIT: <a href="http://web.mit.edu/vmd_v1.9.1/namd-tutorial-unix.pdf">http://web.mit.edu/vmd_v1.9.1/namd-tutorial-unix.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ Molby<br />
+[1] <a href="http://molby.sourceforge.jp/doc/ja/index.html">http://molby.sourceforge.jp/doc/ja/index.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ MOE (分子モデリングパッケージ)<br />
+-------------------------------------------------------------------------------<br />
+■ Maestro (分子モデリングパッケージ)<br />
+-------------------------------------------------------------------------------<br />
+<br />
+&nbsp;

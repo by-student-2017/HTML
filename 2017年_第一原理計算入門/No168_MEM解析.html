@@ -1,0 +1,1052 @@
+　ここではMEMを用いた解析に関連する情報を掲示していきます。<br />
+--------------------------------------------------------------------------------<br />
+■ 原子による散乱<br />
+･ 原子の散乱能は原子番号（電子の数）に比例する。<br />
+･ 水素は散乱能が最も低い。<br />
+･ 重金属は良く散乱する。<br />
+<br />
+■ 差Fourier合成法<br />
+･ モデルによる計算値との差分をフーリエ逆変換する。<br />
+&nbsp; &Delta;&rho;(x, y, z) = &rho;<sub>obs</sub>(x, y, z) -&nbsp;&rho;<sub>calc</sub>(x, y, z)&nbsp;&nbsp;<br />
+･球対称なモデルとの差分をとれば変形成分が現れて結合状態を議論できる。<br />
+※ 差フーリエは水素の位置や有無などを調べるのに用いられる<br />
+<br />
+■ MEM解析の特徴<br />
+･ フーリエ逆変換の式を使わないため、打ち切り効果の影響が少ないという利点がある。<br />
+･ Rietveld解析は自由原子モデルを用いており、結合電子の情報は含まれていない。したがって、結合電子による寄与が現れやすい低角部では残差が大きくなる。<br />
+･ MEMは結合電子による寄与もすべて含んだ結晶構造因子（F）に合う電子密度分布を求めている。<br />
+･ フーリエ逆変換の式を用いずに、与えた結晶構造因子の値にその誤差の範囲内で一致する結晶構造因子を再現する電子密度分布の中で、最も情報エントロピーが大きなものを解として求めている。<br />
+･ それゆえ、与える結晶構造因子のデータの信頼性が非常に重要である。モデルに強く依存する補正はできるだけ避けた方が良い。<br />
+･ 整合のとれないたった一つのデータが電子密度分布に影響を与えることがあるので注意する。<br />
+･ 誤差の範囲内で一致する解なので、厳密に言えば正しい解ではない。しかし、フーリエ変換を使った方法よりは真の解に近い解が得られると考えられる。<br />
+･ 情報エントロピーが最大である解＝最も平坦な電子密度分布を求めている。そのため、電子密度が高い・低いという構造をできるだけ出さないようにしており、原子核付近（電子密度分布の鋭いピーク部分）は再現が難しい。<br />
+･ 解析に用いた回折線の面間隔の最小値dminよりも細かいスケールの構造は再現できない。面間隔は見たい化学結合の結合距離の1/2のdが一つの目安と成る。<br />
+･ タンパク質の結晶構造解析ではよく「X.XÅ分解能で結晶構造を解いた」という言い方をする。<br />
+･ MEM電子密度解析のための回折データ測定においては、統計精度の高いデータが得られるように心がけることが重要。<br />
+･ MEM電子密度解析とRietveld解析を組み合わせることにより、大きな単位格子や複雑な結晶構造の解析、初期構造モデルの構築が可能である。<br />
+・ 通常の構造解析は散乱体を球として計算するために、観測値と計算値の差が大きくなる。MEMの場合は、ユニットセルを非常に細かく分割し、その一つ一つの小さなboxを散乱体としてみるので、細かなところまで表現することができ、観測値と計算値の差が小さくなる。<br />
+・ 共有結合電子の部分まで計算ができ、計算値と観測値の差が小さくなると、通常では見えにくい軽元素の電子密度が浮かび上がってくる。一方、差フーリエ合成だと、電子密度の計算において観測値と計算値の差が大きく、打ち切りによる波打の影響でぼやけが生じてしまう。<br />
+<br />
+■&nbsp;初期電子密度分布の問題<br />
+･&nbsp;MEM電子密度分布の解は初期電子密度分布の選び方に依存することが知られている。<br />
+･ Sakataらの解析法では、均一な電子密度分布を用いている。これは初期電子密度分布を選ぶ任意性が無くなり、誰が解析しても同じ一つの解に行き着く利点がある。<br />
+･ 一方、高圧における回折データの場合など、回折データの質が低く、データ数が少ない場合には、均一な電子密度分布からスタートするのは難しい。計算が収束しないこともある。<br />
+･ 自由電子モデルの結晶構造因子（原子散乱因子）から計算した電子密度分布を用いる方法もある。<br />
+<br />
+■ 粉末X線結晶構造解析の流れ<br />
+1. 指数付け<br />
+･ JCPDFなどによるデータベースを用いて検索。<br />
+･ 類似物質の結晶データからの推測<br />
+･ 指数付けプログラム<br />
+2. 構造モデルの構築　※<br />
+･ 類似物質の結晶構造からの推測<br />
+･ 未知構造解析プログラム<br />
+3. 構造の精密化<br />
+･ リートベルト法（格子定数や原子座標の精密化）<br />
+4. 電子密度解析&nbsp;<br />
+･ フーリエ変換、マキシマムエントロピー法、多極子展開法などによる化学結合解析<br />
+※ 指数付けの後に格子定数の精密化としてLe Bail法やPewley法によるパターン分解を行うこともある。<br />
+<br />
+■ 粉末回折法の注意点<br />
+･ MEMはモデルフリーの解析法であるので、モデルに強く依存する補正はできる限り避ける（消衰効果、吸収補正、選択配向など）。<br />
+□ 粉末回折法の利点<br />
+･ 単結晶を得ることができない、または得ることが困難な物質に対応可能<br />
+･ 測定が簡便。新奇物質の研究において素早く対応可能<br />
+･ データ全体の統計精度が高い<br />
+･ すべての回折線が同時に測定されるので、入射ビームの変動の影響を受けない<br />
+･ 測定中の稼働部が少なく、装置による統計誤差が混入しにくい（種々のアタッチメントの装着が比較的容易）<br />
+･ 消衰効果の補正が必要ない（吸収など補正が比較的容易）。<br />
+･ デバイリングから試料の質の評価が容易<br />
+□ 粉末回折法の欠点<br />
+･ 3次元の情報が1次元に重なり一部失われる<br />
+･ 単結晶に比べてパラメータの精度が悪い。非等方性熱振動の評価が難しい。<br />
+･ 電場や磁場に対する応答をみることができない（誘電歪みや磁歪など）。<br />
+<br />
+■ MEM/Rietveld解析[2,3]<br />
+&nbsp; 結合電子、ディスオーダーの構造、動的な構造など、通常構造モデルに表現しにくい電子・原子の空間的分布の情報を得ることができる可能性がある。<br />
+1. Rietveld解析の結果を用いて回折強度の再分配を行う<br />
+2. 個々の反射の積分反射強度を求める<br />
+3. Rietveld解析により得られたスケール因子を用いて、積分反射強度から結晶構造因子を求める（位相はRietveld解析に用いた構造モデルの位相を与える）。<br />
+<br />
+■ MEM/Rietveld解析の注意点<br />
+･ 予備的な解析のモデルが比較的良い近似モデルであることが重要。<br />
+（金属内包フラーレンでは炭素ゲージの形がほぼ分かっていること、多孔性配位高分子ではホスト骨格の構造がほぼ分かっていることが大事）<br />
+・ 通常、MEMのR因子は、リートベルトのR因子よりもほぼ同じか小さくなるが、イオン結晶のような閉殻を作るような物質ではR因子が悪くなることもある。<br />
+・ MPF解析が上手くいかないときは手作業でEの値を調整する。手作業は手間がかかり大変だが、最小二乗をPCにやらせるか人間にやらせるかの違いがあるだけである。<br />
+・ 手作業でEを決める場合には、cycle数が小さく、R因子が小さいものを採用する。さらに、e/Å<sup>3</sup>を大きくしたり小さくしたりして、ゴーストが生じていないかをチェックする。<br />
+・ ゴーストか軽元素か見分けが付かない場合は、マーデルングエネルギーを計算したり、理論計算と比較したり、中性子回折を用いたりして慎重に分析する。<br />
+※ cycle数が少ないと良い理由は、男女の関係と同じで、脈ありだとアプローチ回数が少ない、ということと同じだと考えれば良い（そう泉先生から教えて貰いました）。<br />
+<br />
+■ 熱散漫散乱(Thermal Diffuse Scattering: TDS)の影響<br />
+・ブラッグ反射には裾野が広がったTDSが重なる<br />
+・TDSは格子振動に起因しており、その強度は(sing&theta;/&lambda;)^2に比例する<br />
+・高次の反射では、熱振動のためにブラッグ反射の強度が減衰するのに対し、TDSは強くなる。その結果、格子面間隔dが小さくなるにつれてTDS強度/ブラッグ反射強度は増加する<br />
+・粉末回折データの処理では、スムーズなバックグラウンドを差し引いてもTDSを取りきれないため、通常、TDSを無視する。そのため、リートベルト解析やMEM解析の結果にはTDSを無視した悪影響が大なり小なり残る<br />
+□ リートベルト・MPF解析におけるTDS<br />
+・高角(小d)領域では反射同士の重なり、回折強度の低下、TDSの増加が同時に起こり、結晶構造に関する情報が劣化する。そのため、2&theta;(TOF)の範囲を変えると、Bや密度分布が変わる<br />
+・できるだけ低温で強度データを測定する<br />
+・短波長を使用した放射光回折データやTOF粉末中性子回折データ(J-PARC)の解析では、格子面間隔dが小さい反射は解析に含めない（MEM解析では、非ゼロの構造因子を推定させる）<br />
+<br />
+■ MEMの計算式[4-7]<br />
+□ Information entropy<br />
+&nbsp; S = -&Sigma;<sub>r</sub> &rho;&#39;(r) ln {&rho;&#39;(r)/&tau;&#39;(r)}<br />
+&nbsp; ここで&rho;&#39;(r) = &rho;(r)/&Sigma;<sub>r</sub>&rho;(r), &tau;&#39;(r)=&tau;(r)/&Sigma;<sub>r</sub>&tau;(r) である。電子密度ではなく確率電子密度を用ていることが特徴である。&tau;(r)は事前電子密度（prior density distribution）を表す。繰り返し計算（iteration）により解を求めるので、&tau;(r)はひとつ前のサイクルの電子密度となる。<br />
+&nbsp; S = -&rho;&#39;(r) ln {&rho;&#39;(r)/&tau;&#39;(r)} = &rho;&#39;(r) ln [{1/&rho;&#39;(r)}/{1/&tau;&#39;(r)}] = &rho;&#39;(r) ln {1/&rho;&#39;(r)} - &rho;&#39;(r) ln {1/&tau;&#39;(r)}<br />
+&nbsp; ここで大事なことは、事前電子密度の情報の分だけ情報量が少なくなっていることがわかる。<br />
+□ Constraint function<br />
+&nbsp; C = (1/N) &Sigma;<sub>k</sub>[|F<sub>calc</sub>(k) - F<sub>obs</sub>(k)|<sup>2</sup> / &sigma;<sub>F</sub><sup>2</sup>(k)]<br />
+&nbsp; ここで F<sub>calc</sub>(k) = V &Sigma;<sub>r</sub> &rho;(r) exp (-2&pi;ik・r) 、&sigma;<sub>F</sub><sup>2</sup>(k)はF<sub>obs</sub>(k)の測定誤差である。実験データF<sub>obs</sub>と電子密度分布から計算されるF<sub>calc</sub>とが誤差の範囲内で一致するという束縛条件をここで付けている。統計学的にはC=1となることが期待される。<br />
+□ Information entropy with constraint<br />
+&nbsp; Q(&lambda;) = -&Sigma;r &rho;&#39;(r) ln {&rho;&#39;(r)/&tau;&#39;(r)} + &lambda;(C-1)/2<br />
+&nbsp; 最大値問題をラグランジュの未定乗数法により解く。&lambda;はラグランジュの未定乗数。結果は&lambda;の値に依存しないことが分かっているが、大きすぎると計算が発散する。<br />
+&nbsp; &part;Q(&lambda;)/&part;&rho;&#39;(r) = 0 &larr; エントロピーが最大になる条件。&rho;(r) ではなく、&rho;&#39;(r)で偏微分することにより、近似なしで解くことができる。<br />
+□ Final MEM equation<br />
+&nbsp; &rho;(r) = exp[ ln &tau;(r) + (&lambda;/N) &Sigma;<sub>k</sub> {|F<sub>calc</sub>(k) - F<sub>obs</sub>(k)|<sup>2</sup>/&sigma;<sub>F</sub><sup>2</sup>(k)}exp(-2&pi;ik・r)]<br />
+□ 信頼度因子<br />
+&nbsp; R<sub>FMEM</sub> = &radic;[{&Sigma;<sub>k</sub> |F<sub>calc</sub>(k) - F<sub>obs</sub>(k)|<sup>2</sup>/&sigma;<sub>Fobs</sub><sup>2</sup>(k)}/{&Sigma;<sub>k</sub> F<sub>obs</sub><sup>2</sup>(k)/&sigma;<sub>Fobs</sub><sup>2</sup>(k)}]<br />
+<br />
+■ 電子密度の変換 (V. G. Tsirelson, Acta. Cryst. B58 (2002) 632-639.)<br />
+in &nabla;&rho;(r)=0 case,<br />
+Covalent type: &nabla;<sup>2</sup>&rho;(r) &lt; 0, h<sub>e</sub>(r) &lt; 0<br />
+Ionic type: &nabla;<sup><font size="2">2</font></sup>&rho;(r)&nbsp;&gt; 0, h<sub>e</sub>(r)&nbsp;&gt; 0<br />
+h<sub><font size="2">e</font></sub>(r): electronic energy density<br />
+<br />
+■&nbsp;MEM電子密度解析のプログラム[8]<br />
+･ ENIGMA [1]（並列処理MEM構造解析プログラム）<br />
+･ PRIMA （F. Izumi et al.） &rarr; Dysnomia (パスワードは speed710、泉先生に公開しても良いと言われたので記載。こんなに良いソフトが使えないなんて勿体無い)<br />
+■ 電子密度解析支援プログラム<br />
+･ GSAS （A. C. Larson &amp; R. B. Von Dreele）<br />
+･ Fullprof （J. Rodriguez-Carvajal）<br />
+･ Rietica　（B. Hunter）<br />
+･ JANA 2006　（M. Dusek et al.）<br />
+･ RIETAN-FP　（F. Izumi）<br />
+■ 電子密度の描画<br />
+･ VESTA　（F. Izumni et al.）<br />
+･ Limner （H. Tanaka et al.）<br />
+■ Powder Diffraction Software<br />
+&nbsp; <a href="http://www.ccp14.ac.uk/">http://www.ccp14.ac.uk/</a><br />
+<br />
+[1] H. Tanaka et al., J. Appl. Cryst. 35 (2002) 282.<br />
+[2] M. Tanaka et al., Nature 46 (1995) 377.<br />
+[3] M. Tanaka et al., Z. Kristallogr. 216 (2001) 71.<br />
+[4] <a href="http://www.netsu.org/j+/Jour_J/pdf/31/31-1-29.pdf">http://www.netsu.org/j+/Jour_J/pdf/31/31-1-29.pdf</a><br />
+[5] <a href="http://www2.itc.nagoya-u.ac.jp/pub/pdf/pdf/vol07_01/003_010campus.pdf">http://www2.itc.nagoya-u.ac.jp/pub/pdf/pdf/vol07_01/003_010campus.pdf</a><br />
+[6] <a href="http://tdl.libra.titech.ac.jp/z3950/gakuipdf/1706450/170645009.pdf">http://tdl.libra.titech.ac.jp/z3950/gakuipdf/1706450/170645009.pdf</a><br />
+[7] <a href="http://sbsp.jp/sbsp/Sb/sb72/028.pdf">http://sbsp.jp/sbsp/Sb/sb72/028.pdf</a><br />
+[8] <a href="http://crystruct.info/Rietveld/index.html">http://crystruct.info/Rietveld/index.html</a><br />
+[9] <a href="http://www.spring8.or.jp/ext/ja/iuss/htm/text/11file/glass_ceramic-2/yashima.pdf">http://www.spring8.or.jp/ext/ja/iuss/htm/text/11file/glass_ceramic-2/yashima.pdf</a><br />
+[10] Y. Kawamura、johokiko, 2014.<br />
+<br />
+※ 最強回折線のカウントと議論できる物性<br />
+・格子定数の決定：最強回折線の強度は500カウント以上<br />
+・リートベルト用のXRD：最強回折線の強度は5千から1万カウント程度以上<br />
+・MEM用のXRD：リートベルト用のXRDよりもさらに長時間測定したもの。<br />
+&nbsp; 放射光だと1回の測定5分程度で30万カウント程度（放射光は一回の測定で済む）。<br />
+&nbsp; 例として、放射光と同じ程度の精度で測定しようとすると実験室の装置では2から3日測定が必要<br />
+&nbsp; 私の経験だと、実験室の装置では4.5万カウントあたりから理論値と近い結果が得られるようになってくる（私の使っている実験室の装置だと、計数時間が10.0sで測定時間は18時間程度となり最強回折線の強度は4.5万カウント程度）。<br />
+<br />
+※ MEM測定の注意点<br />
+・低角度の回折が全て必要（その部分が結合に重要なところになる。それが無いと原子の間が平らになる）<br />
+・高角度側は熱などの影響（熱散漫散乱？）を考えて必要であれば除く。私の場合は2&theta;=20-120で理論値と整合性のある結果が得られた。<br />
+・信号/雑音比=S/N比が悪いとぼやけた像しか得られない。S/N比を高くして、ようやく結合の状態が議論できる。<br />
+・選択配向が無いこと。それがあると解析できない。<br />
+・出来るだけ単体（リートベルト解析したときに成分を指定して、MEMに持っていくことはできますが&hellip;&hellip;）<br />
+・議論をしやすくするために可能な限り低温で（といっても、実験室で低い温度にすることは難しい。液体窒素の温度にできれば、放射光と温度に関して同等になる。放射光の場合はHeガス（気体）（液体窒素ではなくHeガスでした）を吹き付けているだけですけど。それで77 K程度まで冷えます）<br />
+<br />
+※ リートベルト解析<br />
+&nbsp; 私はリートベルトを相の同定と、置換元素のサイト選択性、占有率を調べるために用いている。<br />
+&nbsp; 置換したときのXRDからの（Vegard則からの）原子間距離とXAFSでの局所的な原子間距離が一致しないことがあるのは当然なので、そこを指摘するレフェリーがいたら丁寧に答えてあげよう。H. Sato et al., Jpn. J. Appl. Phys. 31 (1992) 1118.を読んでください。<br />
+--------------------------------------------------------------------------------<br />
+■ VESTA (unit)<br />
+Unit: Please, show &quot;[17.4.2 Volumetric data] and [17.4.3 Structural and volumetric data]&quot; in VESTA_manual.pdf<br />
+・ Dysnomia (*.grid): Å<sup>-3</sup><br />
+・ WIEN2k: bohr<sup><font size="2">-3</font></sup><br />
+・ VASP (CHG, CHGCAR): bohr<sup><font size="2">-3</font></sup><br />
+・ Abinit (*.xsf): bohr<sup><font size="2">-3</font></sup><br />
+・ PWscf (*.xsf): The unit of primitive lattice vectors (PRIMVEC) and Cartesian coordinates is Å in the XSF format.<br />
+--------------------------------------------------------------------------------<br />
+■ VESTAでの分割数の算出の仕方<br />
+1. 粉末法の場合、限界球の直径は 4/&lambda; である。※1<br />
+2. Utilities -&gt; Model Electron Densities -&gt; Resoultion (Å) -&gt; 0.042 -&gt; OK<br />
+3. 下の部分に&nbsp;Dimentions として記述される。<br />
+※ 原子変位パラメーターが小さい場合や核密度の計算時には、分割数を細かくする。ただし、電子密度の計算では、原子散乱因子のパラメーターの信頼領域が sin&theta;/&lambda;= 6 Å<sup>-1</sup> （resolution指定で 0.042 Å相当）しかない。<br />
+[1] 中井泉、泉富士夫 編集、「粉末X線解析の実際 第2版」、朝倉書店<br />
+※1 例えば、フーリエ変換の場合、短波長のMoターゲットを使って測定した回折データでは 0.2 Å程度の間隔で電子密度を計算すれば十分で、それ以上細かく刻んでも、見栄えは良くなるが新しい情報は増えない。ただし、この話は電子密度図の分解能についてであり、原子間距離がどの精度で求まるかという話とは異なる。<br />
+[2] 門馬綱一、「電子・各密度分布の決定」、日本結晶学会講習会 「粉末X線解析の実際」、2013年7月10日<br />
+--------------------------------------------------------------------------------<br />
+■ Dysnomia [Dys1-3]<br />
+□ 解析手順（秀丸を用いた場合）<br />
+1. RITAN-FPでリートベルト解析を行う。<br />
+&nbsp; 空間群や構造が正しいかなどの確認のための荒い計算をする場合には6割以上解析が終わっていればよいが、RIETAN-FPでリートベルト解析を可能な限り収束させておく方が良い。<br />
+2. 原子の占有率や原子変位パラメーターは固定<br />
+3. XRDでおかしな部分以外、全ての低角のピークを int に入れる<br />
+4. リートベルト解析を実行する。値が収束するまでRIETANを押す<br />
+5. ins ファイルで、<br />
+&nbsp;&nbsp; NMEM = 1 を確認し、NPIXAからCを56（VESTAが推奨値を出すのでそれを入力する）へ。<br />
+&nbsp;&nbsp; NPIXA = 56: Number of pixels along the a axis.<br />
+&nbsp;&nbsp; NPIXB = 56: Number of pixels along the b axis.<br />
+&nbsp;&nbsp; NPIXC = 56: Number of pixels along the c axis.<br />
+6. lst ファイルから 密度の下に書かれている 全電子数をコピー<br />
+7. ins ファイルで、<br />
+&nbsp;&nbsp; TSCAT1 = 471.276: Total number of electrons (X-ray diffraction) or<br />
+　とあるTSCAT1に全電子数をペースト<br />
+8. RIETANを押す<br />
+9. prf を用意する。サンプルファイルにあるものを利用したりすると良い。<br />
+10. Dysnomia を押す<br />
+11. VESTAで pgrid ファイルを読み込む<br />
+&nbsp; Properties... &gt; Isosurfaces &gt; Render from front to back にチェックを入れる &gt; No. 1の欄を押して、 isosurface&nbsp;level:&nbsp;を変える。<br />
+&nbsp; 筆者の例だと、理論計算での出力ファイル case.rho で 0.041 / bohr<sup>3</sup>&nbsp;&nbsp;(= 0.276 / Å<sup>3</sup>&nbsp;)、Dysnomiaの出力ファイル case.pgrid で 0.45 /Å<sup>3</sup>&nbsp;にしている。<br />
+※ 他の系での報告でも MEM ： 0.3 /Å<sup>3</sup>、DFT ： 0.2 / Å<sup>3 </sup>で、MEMとDFTで 0.1 ～ 0.2 で違いが出ているようなので少し安心している。可能なら、情報やデータをもっと集めたいと思う。<br />
+<br />
+□ case.3ed<br />
+　File &gt; Export Data... &gt; ファイルの種類から*.3ed を選択する。<br />
+　電子数は当該原子（化学種）に対応するピクセルの電子密度の総和： <a href="http://www16.ocn.ne.jp/~structur/qa/qa.html">http://www16.ocn.ne.jp/~structur/qa/qa.html</a><br />
+<br />
+□ Line Profile<br />
+　Utilities &gt; Line Profile... &gt; internal coordinates (格子定数で割って1を最大とした座標で位置を記述)<br />
+<br />
+□ 2D Data Display<br />
+1. Utilities &gt; 2D Data Display...<br />
+2. Slice &gt; input hkl ( Distance from origin: の値に注意）<br />
+　Edit &gt; Lattice Planes...&nbsp;&gt; New &gt; input hkl, and ??? x d （Slice と同じなので、これでチェックする）<br />
+3. General &gt; input Max.: and Min.: ( e/Å<sup>3</sup>)<br />
+4. Contours &gt; Draw contour lines ( e/Å<sup>3</sup>)<br />
+<br />
+※ Dysnomiaでの等価面レベル（ Isosurface level）の単位はÅ<sup>-3</sup> である。値はÅ<sup>3 </sup>中の電子の数となる。<br />
+※ VASPのCHGCARは[e/bohr<sup>3</sup>]単位であるので注意（WIEN2kも同じisosurface levelで同様の分布になる）。<br />
+※ 1 [e/bohr<sup>3</sup>] = 6.748333 [e/Å<sup>3</sup>]<br />
+※ ドープした系での等価面レベル ＝ 無ドープの等価面レベル ＊ （無ドープの全電子数 / ドープした系での全電子数） ＊（無ドープの体積 / ドープした系での体積） (&larr; この式が正しいか確認が必要) であるが、ドープした系ではほとんど違いがなかった（等高線を描くときのラインの線幅程度しか変化がなかった）。<br />
+[Dys1] <a href="http://fujioizumi.verse.jp/visualization/visualization.html">http://fujioizumi.verse.jp/visualization/visualization.html</a><br />
+[Dys2] <a href="http://nano.kut.ac.kr/nanolab/images/b/bf/Kim_DH_2009_MRS_Pd_substitution_at_orthorhombic-NiSi_Si_%28010%29_epitaxial_interface_studied_by_density_functional_theory.pdf">http://nano.kut.ac.kr/nanolab/images/b/bf/Kim_DH_2009_MRS_Pd_substitution_at_orthorhombic-NiSi_Si_%28010%29_epitaxial_interface_studied_by_density_functional_theory.pdf</a><br />
+[Dys3] <a href="http://renqinzhang.weebly.com/uploads/9/6/1/9/9619514/charge_density_difference.pdf">http://renqinzhang.weebly.com/uploads/9/6/1/9/9619514/charge_density_difference.pdf</a><br />
+<br />
+□ パラメーターの設定<br />
+A. case.out を見て、高次のCn(n&gt;2)が1より極端に大きい場合、多重F制約条件（MEMの推定する誤差 (|Fo|-|F|)/&sigma; を改良する）である&lambda;n (n&gt;2)の値を大きくする。つまり、Fractions of lambda for generalized constraints での ID を 1 0 0 0 0 0 0 0 から 1 1 0 0 0 0 0 0 0 0 としたりする。<br />
+　残差のn次中心積率が表示されている部分で、右側の列はその自然対数となる。Cn≒1, lin(Cn)≒0となることが理想である。<br />
+B. case.raw を見て、ガウス分布に近い形になっているかをチェックする。中心から遠くでも値が大きく存在している場合は、多重F制約条件である&lambda;n (n&gt;2)の値を大きくする。<br />
+C. case.raw を見て、Number of cycles や、MEMの信頼度に関する出力である CONSTR,やCONSTRw、RFやwRFをチェックする。これらが小さい値を採用する。※1<br />
+D. MEM解析における信頼度因子RFがリートベルト解析における信頼度因子RFよりも小さくなることが望ましい。<br />
+E. MEM解析がただ収束すればよいというものではない。電子・原子核密度の等値曲面を精査し、必要なら、化学結合論的・結晶化学的に自然な密度分布となるようEを微調整しなければならない。Gaussian, WIEN2k, VASP, ABINITなどの電子状態計算プログラムで決定した電子密度分布とよく似た分布となるようにEを調節するという便法も、ときには有効であろう。[P1]<br />
+F. 結合がないところに電子密度があるものは解析をやり直す。ゴーストやリップルに注意する。<br />
+G. 高角領域では、反射同士の重なり、回折強度の低下、TDSの増加が同時におこるので、結晶に関する情報が劣化する。そのため、これらの影響が強くない角度までを解析するようにする。<br />
+[P1] 中井ら著、粉末X線回折の実際 第二版、朝倉書店<br />
+※ 金属でのMEMの論文や報告が少ないのは、X線では結合状態が見えるが、金属で研究している人が少ないこと、中性子では核を見ているのでディスオーダーがなければあまり面白くないという理由がある。金属のMEMでも信頼性は十分にある（例えば、東大院新領域の木村研の論文など）。<br />
+※ 固溶体を分析する場合、1%の置換量で占有率や結合状態をMEMで議論しては駄目だとは言えない。慎重に実験し、色々な（他の手法での）データと付き合せて議論する必要がある。<br />
+※ ただし、Eを大きくするほどR因子は小さくなるが、ゴースト（物理的におかしな部分に電荷密度があると表示される）が出やすくなる。理論計算と比較するなりして、物理的に正しいもののなかでNumber of cycles 及び 信頼度に関する出力の値が小さいものを探す。Eの最適値は入射ビーム強度、検出器の種類、試料、測定時間にも依存する。Eは通常、正常な範囲の&sigma;|Fo|を与え、かつMEMの反復回数が最小になるように設定する。[P1] 以下の手順も試してみるとよい。<br />
+※ 空孔サイトに何が存在しているかを明らかにするのは難しい。特に低角度側のデータが信頼できないものである場合には、空孔サイトに何の原子が存在しているかをMEMで議論するのは避けた方がよい。なぜなら、低角度側のデータを除くと、空孔サイトの電子密度が大きくなったりするからである。この件に関しては私の力不足で学生に多大な苦労をさせてしまうことになった。反省したい。<br />
+<br />
+◇ E値の決定法（Y. Kawamura、johokiko, 2014.）<br />
+1) 中性子の場合は&sigma;Fの値が1桁、放射光の場合は&sigma;Fが0.1程度となるEの値を探す。<br />
+　適当な反射（例えば、最強回折ピークなど）でF<sub>0</sub>/I<sub>0</sub>を計算する。この値が1桁になる1/Eを計算する。または、E=1.0としてcycle数を1にしてMEM計算する。実効したときに作成される*.outファイルを開き、その中に記述されている&sigma;Fを見る。E=100にすると&sigma;Fは1/10に、E=0.01とすると&sigma;Fは10倍になる。Eを変えて&sigma;Fが目的の値になるEを探す。<br />
+2) cycle数を10程度に変更して、Eの値を変えてみる。最初は90%程度の値から下がらなかったR値が一気に下がるＥの値を見つける。<br />
+3) cycle数を大幅に増やしてEの値を変えながら、出力された結果でcycle数とR値が小さくなる最適値を決定する。<br />
+※ R値が最小にならず、cycle数の増加でRが小さくなるような場合は、R値とcycle数をプロットして両者が一番小さくなる部分を探す。その後、e/Å<sup>3</sup>やfm/Å<sup>3</sup>を変えてゴーストが出にくいE値を採用する。<br />
+※ 構造解析でのRと同じになるEの値を見つけるのも一つの手段。<br />
+<br />
+□ 入力ファイル<br />
+&nbsp; 下記は、私が研究に用いているHH(No.216)またはFH(No.225)の試料に対して、WIEN2kでの電荷密度分布の&rdquo;変化の傾向&rdquo;（しかし絶対値は）とほぼ一致するパラメータを探した場合での結果である。<br />
+・ SPring-8 BL02B2 イメージングプレート利用（現在2017年はイメージングプレートではなくなったとの話を聴くのでパラメータEは第一原理計算の結果と合うように調製しなければならない）での場合（下記の二つが候補になった。他ではゴーストが出る）<br />
+　下記の2つのどれかを選ぶ。恐ろしいほどWIEN2kの結果と合うので驚く。また、電荷分布の微妙な変化も見つけられる（ただし、このパラメータ設定で良いかは分からない。現在、精力的に調査中である）<br />
+（※&nbsp;case.lst において、E、つまり、E(SCIO)が出力される。それを採用した場合、私の用いている試料や測定環境におけるデータでは、MEM計算においけるCycle数が多くなり、加えて、WIEN2kの結果からも大きく離れる結果となった）<br />
+<br />
+※ ちなみに、VESTAでは原子散乱因子を用いて結晶構造からモデル電子密度・核密度を得ることができる。分解能は実空間で0.042Å、逆格子空間で6Å<sup><font size="2">-1</font></sup>までで、それ以上に意味は無い。<br />
+※ 本物の水素は丸いし距離も良いところにある。逆にゴーストだと丸くないし距離も変なところに電荷がある。<br />
+<br />
+◆&nbsp;候補1<br />
+---------------------------------------------------------------<br />
+# The initial Lagrangian multiplier, lambda (dummy if LM_type = 1 or 2), and<br />
+# A parameter x to impose weighting factors on the basis of<br />
+# lattice-plane spacing.<br />
+0.001 2<br />
+# The coefficient, E, to adjust estimated standard uncertainty of<br />
+# structure factors.<br />
+0.1 から 1 の値（0.8を推奨か？）<br />
+---------------------------------------------------------------<br />
+<br />
+◆&nbsp;候補2<br />
+---------------------------------------------------------------<br />
+# The initial Lagrangian multiplier, lambda (dummy if LM_type = 1 or 2), and<br />
+# A parameter x to impose weighting factors on the basis of<br />
+# lattice-plane spacing.<br />
+0.001 0<br />
+# The coefficient, E, to adjust estimated standard uncertainty of<br />
+# structure factors.<br />
+0.05<br />
+---------------------------------------------------------------<br />
+<br />
+◆ 候補2でのprfファイルを検証と参考のために示す。下記はFeやNiなどの遷移金属を含むFm-3mまたはF-43mの物質に対して検証したものである（SPring-8 BL02B2 イメージングプレート利用でのデータを用いている）。<br />
+---------------------------------------------------------------<br />
+$PREFERENCES<br />
+<br />
+# The name of the MEM data set file, *.fos or *.mem.<br />
+case.fos<br />
+case.out<br />
+case.pgrid<br />
+case.fba<br />
+case_eps.raw<br />
+<br />
+# The type of the MEM data set file.<br />
+# 0. (a) X-ray diffraction data or (b) neutron diffraction data of a compound<br />
+#&nbsp;&nbsp;&nbsp; containing no element with a negative bc value.<br />
+# 1. Neutron diffraction data of a compound containing at least one element<br />
+#&nbsp;&nbsp;&nbsp; with a negative bc value.<br />
+0<br />
+<br />
+# From which densities will you start?<br />
+# 0. Uniform densities.<br />
+# 1. Densities recorded in the 3D densities file.<br />
+0<br />
+<br />
+# The approximation mode.<br />
+# 0. 0th order single-pixel approximation (ZSPA).<br />
+# 1. The Cambridge algorithm.<br />
+1<br />
+<br />
+# Will you use the G-constraint?.<br />
+# (This option is a dummy to keep backward compatibility with PRIMA.)<br />
+1<br />
+<br />
+# Which initial Lagrangian multiplier will you use (LM_type)?<br />
+# 0. The value written in this file.<br />
+# 1. The value calculated by Dysnomia.<br />
+# 2. The value written in the MEM data set file.<br />
+1<br />
+<br />
+# The initial Lagrangian multiplier, lambda (dummy if LM_type = 1 or 2), and<br />
+# A parameter x to impose weighting factors on the basis of<br />
+# lattice-plane spacing.<br />
+0.001 2<br />
+<br />
+# The coefficient, t, to adjust the Lagrangian multiplier.<br />
+0.05<br />
+<br />
+# The coefficient, E, to adjust estimated standard uncertainty of<br />
+# structure factors.<br />
+0.8<br />
+<br />
+# Will you save a feedback data file?<br />
+# 0. Yes (output only individual F data).<br />
+# 1. Yes (output all the F data including those for grouped reflections<br />
+#&nbsp;&nbsp;&nbsp; and estimated for unobserved reflections).<br />
+# 2. No.<br />
+1<br />
+<br />
+# Will you save a e(GAUSS) distribution data file?<br />
+# 0. Yes (raw data file, * eps.raw).<br />
+# 1. No.<br />
+0<br />
+<br />
+# Maximum number of cycles.<br />
+100000<br />
+<br />
+# Save output files (dummy)<br />
+1<br />
+<br />
+# Fractions of lambda for generalized constraints.<br />
+# (8 parameters; l_2, l_4, l_6, l_8, l_10, l_12, l_14, l_16)<br />
+1 0 0 0 0 0 0 0<br />
+<br />
+# Which prior densities will you use?<br />
+# 0. Uniform densities.<br />
+# 1. Densities recorded in the 3D densities file (*_prior.pgrid).<br />
+0<br />
+---------------------------------------------------------------<br />
+■ Dysnomia の入出力ファイル<br />
+<br />
+□ 入力ファイル<br />
+・ *.fos： RIETAN-FPから作られる&rdquo;観測構造因子&rdquo;。<br />
+　（*.itxで緑の線（ycal） でピークが描かれている反射に対する構造因子が作られている）<br />
+・ *.prf： MEMでの計算条件のファイル<br />
+<br />
+□ 出力ファイル<br />
+・ *.out： 計算結果の概要<br />
+・ *.pgrid： 電子・核密度データ<br />
+・ *.fba： 結晶構造因子のリスト<br />
+・ *.eps.raw： 観測構造因子と計算構造因子の残差<br />
+<br />
+□ ケンブリッジアルゴリズムが計算可能<br />
+&nbsp; 理論的に精度が高い方法で、厳密解が得られる方法であると言われている。<br />
+　エントロピーが最大になる解がえられる。<br />
+<br />
+□&nbsp;study （学習方法） J-Stage<br />
+[1] RIETAN徹底活用ガイド(3) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf">https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf</a><br />
+[2] RIETAN徹底活用ガイド(2) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf">https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf</a><br />
+[3] RIETAN徹底活用ガイド(1) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf">https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf</a><br />
+---------------------------------------------------------------<br />
+■ Charge Density Plots [CDDP1-2]<br />
+◇ VESTA &amp; WIEN2k or VASP&nbsp;[CDDP1-2]<br />
+1) case.cho, CHGCAR, or CHG<br />
+2) Edit &gt; Edite Data &gt; Volumetric Data...<br />
+3) Isosurfaces &gt; Import... &gt; case.cho, CHGCAR, or CHG &gt; Replace&nbsp;current data, Bohr^(-3) to Angstrom^(-3) &gt; OK &gt; OK<br />
+4) Edit &gt; Edite Data &gt; Volumetric Data... &gt; Structure parameters &gt; Import... &gt; case.cif &gt; OK &gt; OK<br />
+5) objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level: [Å^-3]<br />
+<br />
+■ Charge Density Difference Plots [CDDP1-2]<br />
+◇ VESTA &amp; Dysnomia (MEM)<br />
+1) case.pgrid<br />
+2) Edit &gt; Edite Data &gt; Volumetric Data...<br />
+3) Isosurfaces &gt; Import... &gt; other case.pgrid &gt; Subtract from current data &gt; OK &gt; OK<br />
+4) Edit &gt; Edite Data &gt; Volumetric Data... &gt; Structure parameters &gt; Import... &gt; case.cif &gt; OK &gt; OK<br />
+5) objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level: [Å^-3]<br />
+<br />
+[CDDP1] <a href="http://vaspnotes.blogspot.jp/2013/10/charge-density-difference-plots.html">http://vaspnotes.blogspot.jp/2013/10/charge-density-difference-plots.html</a><br />
+[CDDP2] <a href="http://renqinzhang.weebly.com/uploads/9/6/1/9/9619514/charge_density_difference.pdf">http://renqinzhang.weebly.com/uploads/9/6/1/9/9619514/charge_density_difference.pdf</a><br />
+---------------------------------------------------------------<br />
+■ Charge Density Plots [CDDP1-3]<br />
+◇ VESTA or XcrySDen &amp; Abinit [CDDP1-3]<br />
+1. mpirun -np 4 $HOME/abinit-6.8.2/bin/abinit &lt; case.in<br />
+2. $HOME/abinit-6.8.2/bin/cut3d<br />
+3. What is the name of the 3D function (density, potential or wavef) file ?<br />
+&nbsp; caseo.DEN<br />
+4. &nbsp; Does this file contain formatted 3D ASCII data (=0) &nbsp;<br />
+&nbsp;&nbsp; or unformatted binary header + 3D data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (=1) ?<br />
+&nbsp;&nbsp; or ETSF binary&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (=2) ?<br />
+&nbsp; 1<br />
+5. &nbsp; What is your choice ? Type:<br />
+&nbsp; 9 =&gt; output .xsf file for XCrysDen<br />
+&nbsp; 9<br />
+6. &nbsp; Enter the name of an output file:<br />
+&nbsp; case_cut3d.xsf<br />
+7. &nbsp;Do you want to shift the grid along the x,y or z axis (y/n)?<br />
+&nbsp; n<br />
+8. &nbsp; More analysis of the 3D file ? (1=default=yes,0=no)<br />
+&nbsp; 0<br />
+9.&nbsp; case_cut3d.xsf<br />
+10. Edit &gt; Edite Data &gt; Volumetric Data...<br />
+11. Isosurfaces &gt; Import... &gt; case_cut3d.xsf, CHGCAR, or CHG &gt; Replace&nbsp;current data, Bohr^(-3) to Angstrom^(-3) &gt; OK &gt; OK<br />
+12. Edit &gt; Edite Data &gt; Volumetric Data... &gt; Structure parameters &gt; Import... &gt; case.cif &gt; OK &gt; OK<br />
+13. objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level: [Å^-3]<br />
+[CDDP1-3] <a href="http://www.abinit.org/documentation/helpfiles/for-v5.8/tutorial/lesson_analysis_tools.html">http://www.abinit.org/documentation/helpfiles/for-v5.8/tutorial/lesson_analysis_tools.html</a><br />
+---------------------------------------------------------------<br />
+■ Charge Density Plots<br />
+◇ VESTA or XcrySDen &amp; PWscf<br />
+---------------------------------------------------------------<br />
+■ Charge Density Plots [CDDP1-3]<br />
+◇ VESTA or WIEN2k [CDDP1-3]<br />
+1. run_SCF<br />
+2. cd case<br />
+3. use wien2venus.py: <a href="http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html">http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html</a> &nbsp;(Japanease), <a href="http://www.nims.go.jp/cmsc/staff/arai/wien/venus.html">http://www.nims.go.jp/cmsc/staff/arai/wien/venus.html</a> &nbsp;(English)<br />
+4. wien2venus.py 56 56 56&nbsp; or wien2venus.py -c 56 56 56<br />
+5.&nbsp;mv case.cho3d case.cho<br />
+6. case.cho &gt; VESTA<br />
+7. Edit &gt; Edite Data &gt; Volumetric Data...<br />
+8. Isosurfaces &gt; Import... &gt; case_cut3d.xsf, CHGCAR, or CHG &gt; Replace&nbsp;current data, Bohr^(-3) to Angstrom^(-3) &gt; OK &gt; OK<br />
+9. Edit &gt; Edite Data &gt; Volumetric Data... &gt; Structure parameters &gt; Import... &gt; case.cif &gt; OK &gt; OK<br />
+10. objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level: [Å^-3]<br />
+<a href="http://www.abinit.org/documentation/helpfiles/for-v5.8/tutorial/lesson_analysis_tools.html">http://www.abinit.org/documentation/helpfiles/for-v5.8/tutorial/lesson_analysis_tools.html</a><br />
+---------------------------------------------------------------<br />
+■ Fourier Synthesis (Dysnomia + VESTA ver.3)<br />
+VESTA &amp; RIETAN-FP<br />
+1) case.ins<br />
+2) Utilities &gt; Fourier Synthesis... &gt; Import... &gt; case.fos &gt; Fo-Fc &gt; Calculate &gt; Close<br />
+3) objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level:<br />
+---------------------------------------------------------------<br />
+■&nbsp;Model Electron&nbsp;Densities<br />
+VESTA &amp; RIETAN-FP<br />
+1) case.ins<br />
+2) Utilities &gt; Model Electron&nbsp;Densities &gt;0.042 &gt; case.fos &gt; Fo-Fc &gt; Calculate &gt; Close<br />
+3) objects &gt; Proterties &gt; Isosurfaces... &gt; Render from front to back &gt; No. &gt; Isosurface level:<br />
+---------------------------------------------------------------<br />
+--------------------------------------------------------------------------------<br />
+■ MPF解析<br />
+1) RIETAN-FPでフィットさせる<br />
+2) case.fos を用いて Dysnomiaで解析（上記を参照）<br />
+3) case.ins で NMODE = 2 として、case.fba を用いて RIETAN-FPで計算<br />
+4) case.prf で下記のようにする。<br />
+# The coefficient, SCIO, to adjust estimated standard deviations.<br />
+_SCIO_<br />
+#E=200 300 400 などと、計算したいEの候補を複数記述<br />
+5) RIETAN_VENUS/Commands/MPF_multi.command を計算するフォルダーに入れる<br />
+&nbsp;(bash.exeのファイルに関連づけられていなければ、RIETAN_VENUS/Commands/bash.exeにあるbash.exeを関連付ける)<br />
+6) MPF_multi.command をダブルクリックして実行させる<br />
+何か聞かれたら RIETAN_VENUS/Commands/bash.exe を指定する<br />
+7) case.log を見て、正しく収束していてRwpが小さいものを探す<br />
+--------------------------------------------------------------------------------<br />
+■ VESTA + Dysnomia<br />
+　ホーエンベルグ・コーンの定理により、電子密度&rho;(r)とポテンシャル（エネルギー）が一対一対応する。そのため、実験的に電子密度分布が求まれば多くの情報を&quot;理論的には&quot;得られる。<br />
+※2014年4月時点で、VESTAに備えられているポテンシャル及びエネルギーの計算は&rho;(r)から計算する方法を用いている。有機分子に対しての報告ではあるが、DFTでの結果と比較的良い結果を示している（MEMはSrTiO3やBN、MgB2でも行われている）。[3-5] 一方、第一原理計算では、平面波にしてから運動エネルギーの計算を行っている（より厳密に運動エネルギーを求められるため）。<br />
+<br />
+◇ Dysnomia -&gt; VESTA で得られる情報 [1-3]<br />
+1. 電子密度 &rho;(r)のラプラシアン (Laplacian of the electron density *.led)： ▽<sup>2</sup>&rho;(r)<br />
+2. 電子運動エネルギー密度 (Electronic kinetic-energy density *.ked) ： g(r)<br />
+　&lambda;と k の2つの定数が存在する。これらの値は理論的に求められており、論文[3-5]やVESTAでは &lambda;=1/72 と k = 1/6。<br />
+3. 電子ポテンシャルエネルギー密度 (Electronic potential-energy density *.ped) ：&nbsp;v(r)<br />
+　正確な核の電荷Zが不明であるため、v(r) = ({h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)}<sup>2</sup> /&nbsp;4m) * ▽<sup>2</sup>&rho;(r)&nbsp;- 2*g(r) として求める。<br />
+4. 電子エネルギー密度 （Electronic energy density *.ted）： he(r)<br />
+　厳密な関係式&nbsp; 2* g(r) + v(r) = ({h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)}<sup>2</sup> /&nbsp;4m) * ▽<sup>2</sup>&rho;(r) を用いて、he(r) = g(r) + v(r) から求める。<br />
+5. Natural logarithm (*.lned)<br />
+※ 「▽<sup>2</sup>&rho;(r) 以外は Input data の単位に関わらず、bohr<sup>-3 </sup>で出力されるので注意」（確認中）VESTA manual [2] の 「Table 14.1: Units of converted volumetric data.」を参照。<br />
+※ 1 bohr = 0.529177 Å。1 [e/bohr<sup>3</sup>] = 6.748333 [e/Å<sup>3</sup>]。エネルギーの単位は hartree = 2 Ry = 27.211 eVである。<br />
+<br />
+◇ 変換方法<br />
+1. case.pgrid を VESTAに入れる<br />
+2. Utilities -&gt; Conversion of Electron Densities...<br />
+3. Files to be output で、欲しいデータにチェックを入れる。<br />
+<br />
+◇ 結合様式の評価 （he(r<sub>b</sub>) よりも▽<sup>2</sup>&rho;(r<sub>b</sub>)&nbsp;の使用を を推奨。r<sub>b</sub>は▽&rho;(r) = 0 となる位置）<br />
+・ shared-type atomic interactions : ▽<sup>2</sup>&rho;(r<sub>b</sub>) &lt; 0 (recommend) or he(r<sub>b</sub>) &lt;&nbsp;0<br />
+　電子が両側の電子によって共有されている。共有結合性の評価<br />
+・ closed-shell interactions : ▽<sup>2</sup>&rho;(r<sub>b</sub>)&nbsp;&gt; 0 (recommend) or he(r<sub>b</sub>)&nbsp;&gt;&nbsp;0<br />
+　閉殻タイプの原子間相互作用。イオン結合性の評価<br />
+※ ファインマンによると、電子密度分布からの結合様式は、原則同じ（+ と - で働く力で分かる）で程度が違うだけという。電子密度分布が分かれば、古典的に見て説明することもできる。（文献調査中）<br />
+※上記のように定量的に比較するか、または電子密度分布から視覚的に判断する。電子密度分布から視覚的に判断する場合、「イオン結合か？ 金属結合か？ 共有結合か？ 分子間か？」といったことを比較するのは、極端な場合を除いて、相対的な比較しかできない。<br />
+<br />
+◇ Atoms in molecules （VESTAに実装されているかは不明）<br />
+　▽&rho;(r) = 0 となる点で空間を区切って、その空間内で電子密度分布を総和する。<br />
+<br />
+[1] RIETAN徹底活用ガイド(3) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf">https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf</a><br />
+[2] K. Monma and F. Izumim, &quot;VESTA: a Three-Dimensional Visualization System<br />
+for Electronic and Structural Analysis&quot;, Oct. 22, 2013.: (14.13 Conversion of Electron Densities)&nbsp;in VESTAのマニュアル<br />
+[3] V. G. Tsirelson, Acta Crystallogr., Sect. B: Struct. Sci., 58 (2002) 632.: <a href="http://quant.distant.ru/files/pdf/papers/0004.PDF">http://quant.distant.ru/files/pdf/papers/0004.PDF</a>, <a href="http://books.google.co.jp/books?hl=ja&amp;lr=&amp;id=ud_DmLcBXZ4C&amp;oi=fnd&amp;pg=PR7&amp;dq=Vladimir+G.+Tsirelson&amp;ots=BcwuCtZWH1&amp;sig=P52iWWUWVZYYOr38-dD4xPQIo-g#v=onepage&amp;q&amp;f=false">http://books.google.co.jp/books?hl=ja&amp;lr=&amp;id=ud_DmLcBXZ4C&amp;oi=fnd&amp;pg=PR7&amp;dq=Vladimir+G.+Tsirelson&amp;ots=BcwuCtZWH1&amp;sig=P52iWWUWVZYYOr38-dD4xPQIo-g#v=onepage&amp;q&amp;f=false</a><br />
+[4] E. A. Zhurova et al., J. AM. CHEM. SOC. 128 (2006) 14728.: <a href="http://pubs.acs.org/doi/pdf/10.1021/ja0658620">http://pubs.acs.org/doi/pdf/10.1021/ja0658620</a><br />
+　CRSTAL98, B3LYP, 6-311G(d,p)&nbsp;での計算結果と比較。&nbsp;対象は Pentaerythritol tetranitrate (PETN) = C<sub>5</sub>H<sub>8</sub>O<sub>12</sub>N<sub>4</sub><br />
+[5]&nbsp;V. G. Tsirelson et al., &nbsp;Computational and Theoretical Chemistry 1006 (2013) 92.<br />
+[6] R. G. パールら、「原子・分子の密度汎関数法」、シュプリンガー・フェアラーク東京： 6章を参照のこと。<br />
+[7] W. Yang, Phys. Rev. A <strong>34</strong> (1986) 4575.<br />
+[8] W. Yang et al., Phys. Rev. A <b>34</b>&nbsp;(1986) 4586.<br />
+※ 素人的には、粒子密度をフーリエ変換して平面波にし、そこから運動エネルギーを計算する。ラプラシアン（Laplacian）から運動エネルギーを引けば、電子のエネルギーが求められる気がするが、そのような論文を簡単には見つけられなかった。<br />
+<br />
+◇付録 g(r) の式の詳細 [6]<br />
+第1項： Thomas-Fermi の運動エネルギー（一様な電子ガスのモデル）である。<br />
+第2項： 密度勾配での補正である。<br />
+　Weizsacker&nbsp;の考えでは、パラメータ &lambda;は 1&nbsp;であったが、その後の密度勾配展開によるやり方で&lambda;=1/9であることが示された。<br />
+　Wizsacker補正はVESTAマニュアルに記載のあるg(r)の第2項に1/8と&lambda;が掛けられる式となっている。<br />
+　VESTAではWizsacker補正で表れている&nbsp;1/8 に 1/9 を掛けて &lambda; = 1/72 としたものと一致している。<br />
+　この密度勾配の補正（&lambda;=1/9も含めて）は、1粒子のグリーン関数のWigner変換を半古典的に{h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)}展開することで得られる。その場合、高次の密度勾配補正が得られるが、原子や分子の場合には、これが正しいのは4次までである（原子の場合、6次の密度勾配補正は発散してしまうため）。<br />
+第3項： 1電子（または1粒子）のグリーン関数に対して平均経路の近似を行うとg(r)の結果が得られる。論文(Yang, 1986)[7]では1/12として記載されている(平均経路を使わない場合には1/6。1/6よりも1/12の方がHFの結果に近い事が論文[8]に記載されている)。VESTAでは1/2が既に掛けられており、k=1/6 とすることで論文[7]と一致する。<br />
+<br />
+希ガスでの運動エネルギーの比較[8]<br />
+希ガス：HF値：g(r) = TF-1/9W-1/12LH の値 ( { g(r) - HF値 } / HF値 * 100 [%])<br />
+He：2.862：2.931(2.42%)<br />
+Ne：128.546：129.08 (0.41%)<br />
+Ar：526.812：528.49 (0.32%)<br />
+Kr：2752.03：2749.39 (0.10%)<br />
+Xe：7232.14：7222.61 (0.13%)<br />
+<br />
+分子での運動エネルギーの比較[8]<br />
+分子：HF値：g(r) = TF-1/9W-1/12LH の値 ( { g(r) - HF値 } / HF値 * 100 [%])<br />
+H<sub>2</sub>：1.128：1.138(0.88%)<br />
+F<sub>2</sub>：198.5：199.23 (0.36%)<br />
+CO：112.7：113.51 (0.72%)<br />
+HF：100.0：100.56 (0.56%)<br />
+BF：124.2：125.07 (0.70%)<br />
+CO<sub>2</sub>：187.5：188.74&nbsp;(0.66%)<br />
+C<sub>2</sub>H<sub>2</sub>：76.70：77.55&nbsp;(1.11%)<br />
+※ 上記の結果から考えると、有機分子に関しては、HFと比較して運動エネルギーの誤差が3%内に収まる(分子なら約1%以内)。MEMで指定しなければならない誤差が真の値からどの程度異なっているかという問題を除けば、論文ではポジティブな結果を報告するものであるということを考えても、MEMの結果からかなりの精度で運動エネルギーや電子のエネルギーを求めることができると思われる。仕方ないのだが、HFよりはPBEで比較して欲しかった。<br />
+※ 金属に関する報告は未だ見つけていない。<br />
+--------------------------------------------------------------------------------<br />
+■ Maximum Entropy Patterson Method (MEPM): 最大エントロピーパターソン法 (ALBA)<br />
+1. case.ins (Le Bail) (change from Rietveld to Le Bail analysis） [2]<br />
+　NMODE = 4<br />
+　NPRINT = 2<br />
+　# O1/O- 1.000&nbsp;・・・・・・<br />
+　# O2/O- 1.000 ・・・・・・<br />
+　・・・・・・<br />
+　NINT = 1<br />
+　NRANGE = 0<br />
+　LBG = 1<br />
+　NAUTO = 2<br />
+　NSFF = 0<br />
+　NOPT = 1　<br />
+　NCYCL = 50<br />
+　LQUART = 0<br />
+　NUPDT = 0<br />
+　NDA = 0<br />
+　EPSD = 0.001<br />
+2. RIETAN or case.bat file<br />
+3. 入力ファイル case.alb を作成<br />
+----------<br />
+# Title. (CHARACTER*80)<br />
+SPring-8 X-ray<br />
+<br />
+# Unit cell parameters.<br />
+&nbsp;&nbsp; 6.09631&nbsp; 6.09631&nbsp; 6.09631&nbsp; 89.999&nbsp; 89.9984&nbsp; 90.0107<br />
+<br />
+# Space-group number, setting and number of pixels.<br />
+&nbsp; 216&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 56&nbsp;&nbsp; 56&nbsp; 56<br />
+<br />
+# Integrated intensities were determined from<br />
+# 0: X-ray diffraction data.<br />
+# 1: Neutron diffraction data of a compound containing no element<br />
+#&nbsp;&nbsp;&nbsp; with a negative coherent-scattering length.<br />
+0<br />
+<br />
+# The number of chemical species.<br />
+&nbsp;&nbsp;&nbsp; 3<br />
+<br />
+# Real chemical species and numbers of atoms in the unit cell.<br />
+&nbsp; Zr 4<br />
+　Ni 4<br />
+&nbsp; Sn 4<br />
+<br />
+# The name of an intensity data file including its absolute path.<br />
+# (*.ffo created by RIETAN-2000, *.hkl created by EXPO, or *.raw)<br />
+./case.ffo<br />
+<br />
+# Wavelength (dummy for *.ffo files)<br />
+0.45993<br />
+<br />
+# Which integrated intensities will you use?<br />
+# 0: The integrated intensity is defined as |F|^2.<br />
+# 1: The integrated intensity is defined as multiplicity X |F|^2.<br />
+0<br />
+<br />
+# The initial Lagrangian multiplier.<br />
+0.005<br />
+<br />
+# The coefficient, t, to adjust the Lagrangian multiplier.<br />
+0.01<br />
+<br />
+# The coefficient, SCIO, to adjust estimated standard deviations.<br />
+# (dummy for *.hkl created by EXPO)<br />
+&nbsp; 1000<br />
+<br />
+# Will you group overlapped reflections? (NGSW)<br />
+# 0: Yes (reflections overlapped heavily are grouped).<br />
+# 1: No (all the reflections are independently input).<br />
+0<br />
+<br />
+# Maximum difference in d/Angstrom in grouped reflections.<br />
+# (dummy if NGSW = 1)<br />
+&nbsp; 0.0003<br />
+<br />
+# Parameters (v, p, and b) to estimate standard deviations, s.<br />
+# s = v * sqrt[p*|F^2| + (b + |F^2|)/|F^2|].<br />
+# (dummy for *.ffo created by RIETAN-2000)<br />
+&nbsp; 1.000&nbsp; 0.0005&nbsp; 0.000<br />
+<br />
+# The maximum number of MEP iterations.<br />
+10000<br />
+----------<br />
+4. ALBA<br />
+5. VESTA で case.pri を開く。<br />
+※ 私のやり方が悪いと思うが、ハーフホイスラーでは本来空孔サイトであるはずなのに電荷密度が充填サイトと同じように表示される。<br />
+<a href="http://fujioizumi.verse.jp/visualization/VENUS.html#ALBA">http://fujioizumi.verse.jp/visualization/VENUS.html#ALBA</a><br />
+<a href="http://science.shinshu-u.ac.jp/~muki/VENUS.html">http://science.shinshu-u.ac.jp/~muki/VENUS.html:</a> ALBAのLinux版は配られている。羨ましい・・・・・・。<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;Charge&nbsp;Flipping&nbsp;Method&nbsp;(CFM): チャージフリッピング法<br />
+□ RIETAN &amp; VESTA &amp; SUPERFLIP [1]<br />
+・ superflip download &amp; set up<br />
+1. Superflip: <a href="http://superflip.fzu.cz/">http://superflip.fzu.cz/</a><br />
+2. zipped exectutable for Windows: download at the first Table<br />
+3. rename superflip_win to SUPERFLIP<br />
+3. copy&nbsp;SUPERFLIP&nbsp;to C:\Program Files\SUPERFLIP<br />
+・ EDMA download<br />
+1. Superflip: <a href="http://superflip.fzu.cz/">http://superflip.fzu.cz/</a>&nbsp;<br />
+2. zipped exectutable for Windows: download at&nbsp;the second Table<br />
+・ download&nbsp;python&nbsp;code and&nbsp;text file&nbsp;from [2]<br />
+1. fp2sflip.py<br />
+&nbsp; change&nbsp;fp2sflip.py code following<br />
+&nbsp;&nbsp;file3 = open(&#39;/Users/masami/sflip-symmetry.txt&#39;,&#39;r&#39;) &gt; file3 = open(&#39;./sflip-symmetry.txt&#39;,&#39;r&#39;)<br />
+2. sflip-symmetry.txt<br />
+・ use<br />
+1. case.ins (Le Bail)　(change from Rietveld to Le Bail analysis） [2]<br />
+　NMODE = 4<br />
+　NPRINT = 2<br />
+　# O1/O-　1.000&nbsp;・・・・・・<br />
+　# O2/O- 1.000 ・・・・・・<br />
+　・・・・・・<br />
+　NINT = 1<br />
+　NRANGE = 0<br />
+　LBG = 1<br />
+　NAUTO = 2<br />
+　NSFF = 0<br />
+　NOPT = 1<br />
+　NCYCL = 50<br />
+　LQUART = 0<br />
+　NUPDT = 0<br />
+　NDA = 0<br />
+　EPSD = 0.001<br />
+2. RIETAN or case.bat file<br />
+3. put fp2sflip.py&nbsp; and sflip-symmetry.txt in folder including case.ins<br />
+&nbsp; (input files are case.ffo and case.lst )<br />
+4.&nbsp;fp2sflip.py case.ffo (win) or ./fp2sflip.py case.ffo (linux)<br />
+&nbsp; 　（ option&nbsp;[2])<br />
+　　#composition Mg8 Si4 O16 &gt; composition your using atoms<br />
+　　#histogram composition &gt; histogram composition<br />
+5. check&nbsp;wheter or not the lattice constants (a, b, c) and angle (&nbsp;alpha, beta, gamma) in case.inflip are matching space group.&nbsp;<br />
+&nbsp; e.g. 89.9900 &gt; 90.0000<br />
+6. SUPERFLIP or superflip.exe case.inflip<br />
+EDMA<br />
+7. composition ### ### &gt; composition your using atoms<br />
+8. EDMA case.edma<br />
+9. case.cif to VESTA<br />
+※ 私が悪いのだろうが、superflip とEDMA でハーフホイスラーでは空孔サイトも充填サイトもほぼ同じ電荷密度で出力される。<br />
+※ EDMA ではドーピングした系に対して、原子の数を小数点を入れて指定したが、占有率が1での結果が出力された。<br />
+[1] <a href="http://superflip.fzu.cz/">http://superflip.fzu.cz/</a><br />
+[2] Superflip_and_RIETAN-FP: <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_and_RIETAN-FP">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_and_RIETAN-FP</a><br />
+-----<br />
+□&nbsp;Fox &amp; VESTA &amp; SUPERFLIP [3, 4]<br />
+・&nbsp;Fox download<br />
+1. download: <a href="http://fox.vincefn.net/Download">http://fox.vincefn.net/Download</a>&nbsp;<br />
+2. 解凍して .exe と記述のあるものを実行<br />
+・ fox2sflip.py<br />
+1. download: <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_plus_Fox">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_plus_Fox</a><br />
+・ use Fox (Le Bail analysis) （矢印をボックスなどに近づけると英文で説明が出るのでそれを参考にすると良い）<br />
+1. Object &gt; New Crystal<br />
+　（File &gt; open &gt; cif を選択しても良い）<br />
+2. SpaceGroup: に空間群の記号または数値を入力する。そうすると直ぐ上の行（格子定数と角度を入力する行）が変化する。<br />
+3. Object &gt; New PowderPattern<br />
+4. Data &gt; Import 2Theta-Obs Pattern (RIETANでのcase.int の最初の二行を除いたものを作成して読み込ませる）<br />
+5. Pattern &gt; Show Graph （回折パターンが表示されれば読み込みは上手くいっている） （フィッティングした結果が赤線で示される）<br />
+6. Phases &gt; Add Crystalline Phase<br />
+7. Phases &gt; Add Background &gt; 50<br />
+8. Radiation &gt; Monochromatic Wavelength<br />
+9. Max Sin (theta)/lambda: 0.400 （画面の中央のChi^2やGoF, Rwp,&nbsp;Rpのある行の上にある。値を大きくすると指数づけされる範囲が広がる。私の場合は高い角度まで考慮したいので 500000 にした。&nbsp;）<br />
+10. Profile &gt; Profile Fitting&nbsp; + Le Bail&nbsp;extraction &gt; Quick Fit (何度も押して前の画面の中央部分に記載されている Rwp が下がらなくなるまで押し続ける)&nbsp;&gt; Le Bail + Fit Profile ! &gt; File &gt; Save<br />
+11. put fox2sflip.py&nbsp;and sflip-symmetry.txt in folder<br />
+12.&nbsp;fox2sflip.py case.xml 0.05&nbsp;(win) or ./fox2sflip.py&nbsp;case.xml 0.05&nbsp;(linux)<br />
+　最後の数値は FWHM で FWHM/2の範囲でピークを分けることを指定する。ディフォルトは 0.1 となっている。<br />
+&nbsp; （ option&nbsp;[2])<br />
+#composition Mg8 Si4 O16 &gt; composition your using atoms<br />
+#histogram composition &gt; histogram composition<br />
+13. check&nbsp;wheter or not the lattice constants (a, b, c) and angle (&nbsp;alpha, beta, gamma) in case.inflip are matching space group.&nbsp;<br />
+&nbsp; e.g. 89.9900 &gt; 90.0000<br />
+14. SUPERFLIP or superflip.exe case.inflip<br />
+EDMA（未確認）<br />
+15. composition ### ### &gt; composition your using atoms<br />
+16. EDMA case.edma<br />
+17. case.cif to VESTA<br />
+[3] <a href="http://fox.vincefn.net/">http://fox.vincefn.net/</a><br />
+[4] Superflip_plus_Fox: <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_plus_Fox">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Superflip_plus_Fox</a><br />
+※ 同じ条件で何度か計算するが、フルホイスラー(FH)になったりハーフホイスラー(HH)になったりする。FHとなる確率は50％だった。<br />
+※ 高角度側を出来るだけ取り入れられないとMEMの結果には近づいていかない。<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;Appendix 1&nbsp;(Abinit での入力ファイル例）、&gamma;-CuI<br />
+<br />
+CuI.files<br />
+--------------<br />
+CuI.in<br />
+CuI.out<br />
+CuIi<br />
+CuIo<br />
+CuI<br />
+./I_fhi_pbe.psp<br />
+./Cu_fhi_pbe.psp<br />
+--------------<br />
+<br />
+CuI.in<br />
+--------------<br />
+#************************************************************<br />
+#*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Generated by cif2cell 1.0.10 2014-04-07 21:03&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *<br />
+#*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ()&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; *<br />
+#* Failed to get author information, No journal information *<br />
+#************************************************************<br />
+# Structural parameters<br />
+acell&nbsp;&nbsp; 3*11.5256284565<br />
+<br />
+rprim&nbsp;&nbsp;&nbsp;&nbsp; 1.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 1.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 1.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+natom&nbsp;&nbsp;&nbsp; 8<br />
+ntypat&nbsp;&nbsp; 2<br />
+typat&nbsp;&nbsp;&nbsp; 1 1 1 1 2 2 2 2<br />
+znucl&nbsp;&nbsp;&nbsp; 53 29<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.250000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.750000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000<br />
+#ionmov 3<br />
+#optcell 2<br />
+#ntime 10<br />
+#tolmxf 5.0d-4<br />
+prtcif 1<br />
+#nsppol 2<br />
+ecut 15<br />
+#pawecutdg 40<br />
+ixc 11<br />
+chkprim 0<br />
+#nsym 216<br />
+occopt 7<br />
+tsmear 0.01<br />
+kptopt 1<br />
+ngkpt 6 6 6<br />
+#toldfe 1.0d-5<br />
+toldff 5.0d-5<br />
+ecutsm 0.5 #<br />
+#nband 90<br />
+--------------<br />
+<br />
+■ ノルム保存型擬ポテンシャルファイルの準備<br />
+計算するフォルダに I_fhi_pbe.psp と Cu_fhi_pbe.psp の名称のテキストを作成する。<br />
+Atomic <span class="highlightedSearchTerm">d</span>ata/pseu<span class="highlightedSearchTerm">d</span>opotentials ( <a href="http://www.abinit.org/downloads/atomic-data-files">http://www.abinit.org/downloads/atomic-data-files</a>&nbsp;) &gt; <a class="internal-link" href="http://www.abinit.org/downloads/pseudopotentials" title="Pseudopotentials">Norm-conserving pseudopotentials</a> &gt; <a class="internal-link" href="http://www.abinit.org/downloads/psp-links/psp-links/gga_fhi" title="GGA_FHI">Fritz-Haber-Institute (FHI) pseudopotentials</a> for selected elements (Troullier-Martins scheme) &gt; GGA (PBE) pseudopotential files from FHI code &gt; 元素のボタンを押して、I_fhi_pbe.psp と Cu_fhi_pbe.psp にそれぞれの原子に対応するデータをコピー&amp;ペーストする。<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;Appendix 2<br />
+　神崎先生の<span lang="EN-US">HP（</span><a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/"><font color="#0000ff">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/</font></a><span lang="EN-US">）</span><span>にある</span><span lang="EN-US">fp2sflip.py</span><span>の</span><span lang="EN-US">python</span><span>スクリプトを書き換えて</span><span lang="EN-US">grd2xplor.py </span><span>を作成した。</span><br />
+　Dysnomia, etc&nbsp;&rarr; VESTA &rarr; *.grd &rarr; grd2xplor.py *.grd&nbsp;&rarr; *.xplor and *.edma<br />
+<span>として、EDMA 用の入力ファイルを作成できる。<br />
+0. python と numpy をPCにインストールする。<br />
+1. Dysnomia などで 電子密度分布を計算する。<br />
+2. VESTA で 電子密度分布のデータ（*.pgrid など)を *.3grd に指定してSAVEする。<br />
+3. 計算したいファイルに、EDMA.exe と </span>sflip-symmetry.txt, grd2xplor.py（下記をコピーしてテキストなどにペーストし、名称はgrd2xplor.pyにする） を入れる。<br />
+4. コマンドプロンプト（shift + 右クリック）やTerminalなどを開いて、<br />
+　grd2xplor.py case.grd<br />
+と入力すれば、*.edma と *.xplor ファイルが生成される。<br />
+5. *.edma の composition ### ###&nbsp;を composition 単位胞にある原子の種類と個数を記述<br />
+　（ *.edma の終わりには、centerofcharge yes も記述してみると良いだろう）<br />
+7. EDMA *.edma で計算が実行される。<br />
+8. *.coo に charge が記述されている。そこから占有している原子を推測してみるのも良い。<br />
+※ 自作のスクリプトにおけるHFでの結果では、composition で 単位胞にある原子の種類を記述すれば、概ね想定通りの位置に原子が配置されていると結果が出力される。<br />
+※ 私の技術では、いまのところ占有率が1の結果しか得られていない。ドーピングを行った系などでは、ドーピングして入る原子の位置は正しい結果となった。しかし、ドーピングのある位置の占有率は誤って出力される。加えて、原子間にあるような占有率も上手くはいかない。<br />
+※ *.coo に記述される charge がどのような計算方法で出力されているかは、いまのところ私の勉強不足で不明だが、HFでは（理想的には）空孔サイトの位置でも charge が出力されている。<br />
+<br />
+grd2xplor.py
+<p>#!/usr/bin/python<br />
+import sys,math<br />
+from numpy import *</p>
+
+<p># grd2xplor.py<br />
+# modified by&nbsp;**** from fp2flip.py (made by <a href="mailto:mkanzaki@me.com">mkanzaki@me.com</a>&nbsp;{Original version})<br />
+# This code reads .grd and .lst files produced by MEM analysis of<br />
+# Dysnomia (&amp; VESTA) and RIETAN-FP, respectively,<br />
+# which containing D(I1,I2,I3) list by MEM, and<br />
+# the code then produces an input file for EDMA.<br />
+# To get cell parameters, wave length, and space group<br />
+# information, the code also reads .lst file too.<br />
+# Now you can also produce an input file for EDMA too.<br />
+#<br />
+# This is for Mac. For other OS, you may need to modify<br />
+# first line, depending on your python directory<br />
+# You may also need to change mode of the file, as follow<br />
+# &gt; chmod 744 grd2xplor.py<br />
+#<br />
+# This code takes one parameter,<br />
+# .grd file name which Dysnomia (&amp; VESTA) porduced.<br />
+# This code requires &quot;sflip-symmetry.txt&quot; in same directory.<br />
+# Original code can be downloaded from my web site.<br />
+# <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/</a><br />
+#<br />
+# For use, type following from terminal<br />
+# Here I assume this code and grd file are in current directory.<br />
+#&nbsp; &gt; ./grd2xplor *.grd<br />
+# You will find *.xplor and *.edma.<br />
+# You need to edit obtained .edma. Currently composition is<br />
+# commented out. So you can run EDMA,<br />
+# composition is necessary, so you need to<br />
+# edit .edma file before run EDMA.<br />
+# then run EDMA,<br />
+# &gt; ./EDMA *.edma<br />
+#<br />
+# reading grd and lst file<br />
+if len(sys.argv) == 1:<br />
+&nbsp;print &#39;No file name provided!&#39;<br />
+&nbsp;print &#39;For example, &gt;./grd2xplor.py test.grd&#39;<br />
+&nbsp;print &#39;also see comment part of this code.&#39;<br />
+&nbsp;exit()<br />
+try:<br />
+&nbsp;base = sys.argv[1].rstrip(&#39;.grd&#39;)<br />
+&nbsp;f1 = base + &#39;.lst&#39;<br />
+&nbsp;f2 = base + &#39;.grd&#39;<br />
+&nbsp;file1 = open(f1,&#39;r&#39;)<br />
+&nbsp;file2 = open(f2,&#39;r&#39;)<br />
+except IOError, (errno, msg):<br />
+&nbsp;print &#39;lst file open error!&#39;<br />
+&nbsp;exit()</p>
+
+<p>f4 = base + &#39;.xplor&#39;<br />
+file4 = open(f4,&#39;w&#39;)<br />
+f5 = base + &#39;.edma&#39;<br />
+file5 = open(f5,&#39;w&#39;)</p>
+
+<p># Extract title from .lst<br />
+for line in file1:<br />
+&nbsp;if &#39;Title:&#39; in line :<br />
+&nbsp;&nbsp;s = line.index(&#39;Title:&#39;)<br />
+&nbsp;&nbsp;ti = line[s+7:len(line)-3].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;break<br />
+#file4.write(ti + &#39;\n&#39;)<br />
+#file4.write(&#39;#\n&#39;)<br />
+file5.write(&#39;inputfile &#39; + base + &#39;.xplor\n&#39;)</p>
+
+<p>for line in file1:<br />
+&nbsp;if &#39;Wavelength&#39; in line :<br />
+&nbsp;&nbsp;s = line.index(&#39;=&#39;)<br />
+&nbsp;&nbsp;wl = line[s+1:s+10].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;break</p>
+
+<p># Extract space group name from .lst<br />
+for line in file1:<br />
+&nbsp;if &#39;Space group:&#39; in line :<br />
+&nbsp;&nbsp;s = line.index(&#39;Space group:&#39;)<br />
+&nbsp;&nbsp;s2 = line.index(&#39;(&#39;)<br />
+&nbsp;&nbsp;sg = line[s+13:s2-1].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print sg<br />
+&nbsp;&nbsp;break</p>
+
+<p># Finding refined cell parameters from .lst<br />
+rfine = 0<br />
+for line in file1:<br />
+&nbsp;if &#39;*** R factors,&#39; in line :<br />
+&nbsp;&nbsp;rfine = 1<br />
+&nbsp;&nbsp;break<br />
+if rfine == 0 :<br />
+&nbsp;print &#39;No refined parameters&#39;</p>
+
+<p># Extract refined cell parameters from .lst<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, a&#39; in line :<br />
+&nbsp;&nbsp;cel1 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel1<br />
+&nbsp;&nbsp;a = float(cel1)<br />
+&nbsp;&nbsp;break<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, b&#39; in line :<br />
+&nbsp;&nbsp;cel2 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel2<br />
+&nbsp;&nbsp;b = float(cel2)<br />
+&nbsp;&nbsp;break<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, c&#39; in line :<br />
+&nbsp;&nbsp;cel3 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel3<br />
+&nbsp;&nbsp;c = float(cel3)<br />
+&nbsp;&nbsp;break<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, alpha&#39; in line :<br />
+&nbsp;&nbsp;cel4 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel4<br />
+&nbsp;&nbsp;alpha = float(cel4)<br />
+&nbsp;&nbsp;break<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, beta&#39; in line :<br />
+&nbsp;&nbsp;cel5 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel5<br />
+&nbsp;&nbsp;beta = float(cel5)<br />
+&nbsp;&nbsp;break<br />
+for line in file1:<br />
+&nbsp;if &#39;Lattice parameter, gamma&#39; in line :<br />
+&nbsp;&nbsp;cel6 = line[16:30].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;#print cel6<br />
+&nbsp;&nbsp;gamma = float(cel6)<br />
+&nbsp;&nbsp;break<br />
+file1.close()</p>
+
+<p># write to these parameters to .edma<br />
+#file4.write(&#39;cell &#39; + cel1 + &#39; &#39; + cel2 + &#39; &#39; + cel3 + &#39; &#39; + cel4 + &#39; &#39; + cel5 + &#39; &#39; + cel6 +&#39;\n&#39;)<br />
+file5.write(&#39;cell &#39; + cel1 + &#39; &#39; + cel2 + &#39; &#39; + cel3 + &#39; &#39; + cel4 + &#39; &#39; + cel5 + &#39; &#39; + cel6 +&#39;\n&#39;)<br />
+file5.write(&#39;export &#39; + base + &#39;.cif\n&#39;)<br />
+file5.write(&#39;# Chage composition below\n&#39;)<br />
+file5.write(&#39;# i.e., Mg8 Si4 O16\n&#39;)<br />
+file5.write(&#39;composition ### ###\n&#39;)<br />
+file5.write(&#39;\n&#39;)</p>
+
+<p># read sflip-symmetry.txt for space group<br />
+# change sflip-symmetry.txt directory if necessary<br />
+try:<br />
+&nbsp;file3 = open(&#39;./sflip-symmetry.txt&#39;,&#39;r&#39;)<br />
+except IOError, (errno, msg):<br />
+&nbsp;print &#39;File open error!&#39;<br />
+&nbsp;exit()<br />
+flag = &#39;n&#39;<br />
+for line in file3:<br />
+&nbsp;if line == &#39;&#39;:<br />
+&nbsp;&nbsp;print &#39;No space group match!&#39;<br />
+&nbsp;&nbsp;file3.close()<br />
+&nbsp;&nbsp;exit()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;if sg in line :<br />
+&nbsp;&nbsp;&nbsp;flag = &#39;y&#39;<br />
+&nbsp;&nbsp;if flag == &#39;y&#39;:<br />
+&nbsp;&nbsp;&nbsp;file5.write(line.rstrip() + &#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;if &#39;endcenters&#39; in line:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;break<br />
+file3.close()</p>
+
+<p># read charge density list<br />
+for line in file2:<br />
+&nbsp;file4.write(&#39;\n&#39;)<br />
+&nbsp;file4.write(&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&#39; + &#39;\n&#39;)<br />
+&nbsp;file4.write(line)<br />
+&nbsp;break</p>
+
+<p>for line in file2:<br />
+&nbsp;LCA = float( line[ 1: 8].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCB = float( line[ 9:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCC = float( line[18:26].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANA = float( line[27:35].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANB = float( line[36:44].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANG = float( line[45:53].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print LCA, LCB, LCC, ANA, ANB, ANG<br />
+&nbsp;break</p>
+
+<p>for line in file2:<br />
+&nbsp;PX = int( line[ 1: 5].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PY = int( line[ 6:11].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PZ = int( line[12:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print PX, PY, PZ<br />
+&nbsp;break</p>
+
+<p>file4.write(&quot;{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}&quot;.format(PX, 0, (PX-1), PY, 0, (PY-1), PZ, 0, (PZ-1)) )<br />
+file4.write(&#39;\n&#39;)<br />
+file4.write(&quot;{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}&quot;.format(LCA, LCB, LCC, ANA, ANB, ANG) )<br />
+file4.write(&#39;\n&#39;)<br />
+file4.write(&#39;ZYX&#39;)</p>
+
+<p>D = zeros([PX+10, PY+10, PZ+10])<br />
+sum = 0<br />
+var = 0<br />
+esd = 0</p>
+
+<p>I1 = 0<br />
+I2 = 0<br />
+I3 = 0<br />
+for line in file2:<br />
+&nbsp;for I0 in range(6):<br />
+&nbsp;&nbsp;den = line[ (1+15*I0):(15+15*I0)].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;if den &lt;&gt; &#39;&#39;:<br />
+&nbsp;&nbsp;&nbsp;D[I1][I2][I3+I0] = float(den)<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+0] = float( line[ 1:15].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+1] = float( line[16:30].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+2] = float( line[31:45].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+3] = float( line[46:60].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+4] = float( line[61:75].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D[I1][I2][I3+5] = float( line[76:90].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#print D[I1][I2][I3+I0]<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( D[I1][I2][I3+I0]) )<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;sum += float(den)<br />
+&nbsp;I3 += 6<br />
+&nbsp;if I3 &gt;= PZ :<br />
+&nbsp;&nbsp;I3 = 0<br />
+&nbsp;&nbsp;I2 += 1<br />
+&nbsp;&nbsp;if I2 &gt;= PY :<br />
+&nbsp;&nbsp;&nbsp;I2 = 0<br />
+&nbsp;&nbsp;&nbsp;I1 += 1<br />
+&nbsp;&nbsp;&nbsp;if I1 &gt;= PX :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;break</p>
+
+<p>sum /= (PX * PY * PZ)</p>
+
+<p>for I1 in range(PZ):<br />
+&nbsp;file4.write( &#39;\n&#39; )<br />
+&nbsp;file4.write(&quot;{: &gt;7d}&quot;.format( I1 ) )<br />
+&nbsp;I4 = 0<br />
+&nbsp;for I2 in range(PY):<br />
+&nbsp;&nbsp;for I3 in range(PZ):<br />
+&nbsp;&nbsp;&nbsp;if ( I4 % 6 ) == 0 :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;file4.write( &#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;file4.write(&quot;{: &gt;12.5e}&quot;.format( D[I1][I2][I3] ) )<br />
+&nbsp;&nbsp;&nbsp;var += ( D[I1][I2][I3] - sum )**2<br />
+&nbsp;&nbsp;&nbsp;I4 += 1</p>
+
+<p>file4.write( &#39;\n&#39; + &#39;-9999&#39; + &#39;\n&#39;)<br />
+var /= ((PX * PY * PZ) -1)<br />
+esd = sqrt(var)<br />
+file4.write( &quot;{: &gt;12.5e}{: &gt;12.5e}&quot;.format(sum, esd) )<br />
+file4.write(&#39;\n&#39;)</p>
+
+<p>#test<br />
+#print I4<br />
+#print ((PX-1) * (PY-1) * (PZ-1))</p>
+
+<p>file2.close()</p>
+
+<p>file4.close()<br />
+file5.close()</p>
+<br />
+--------------------------------------------------------------------------------

@@ -1,0 +1,59 @@
+Macro gaussian_borodening(x,y,FWHM,xmin,xmax,estep)<br />
+string x=&quot;eV&quot;;<br />
+string y=&quot;Si1&quot;;<br />
+variable FWHM=0.2;<br />
+variable xmin=-13, xmax=10,estep=0.02720;<br />
+silent 1; pauseupdate;<br />
+variable ndata, nstep;<br />
+variable i,j;<br />
+variable sigma;<br />
+sigma=FWHM/(2*sqrt(2*ln(2))); print &quot;sigma=&quot;,sigma, &quot;, sigma^2=&quot;, sigma^2;<br />
+ndata=(DimSize($x,0));<br />
+nstep=round((xmax-xmin)/estep); //print nstep;<br />
+make/O/N=(nstep) xgb,ygb;<br />
+i=0;<br />
+i=0;<br />
+do<br />
+&nbsp; xgb[i] = xmin + estep * i;<br />
+&nbsp; ygb[i] = 0.0<br />
+&nbsp; i=i+1;<br />
+while(i&lt;=nstep)<br />
+variable A=(1/(sqrt(2*3.1415926)*sigma))<br />
+variable B=(2*sigma^2)<br />
+variable four_sigma = 4*sigma<br />
+i=0;<br />
+do<br />
+&nbsp; j=0;<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if(xgb[i]+four_sigma&gt;=$x[j] &amp;&amp; $x[j]&gt;=xgb[i]-four_sigma)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ygb[i] = ygb[i] + $y[j]*A*exp(-(xgb[i]-$x[j])^2/B)<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; j=j+1;<br />
+&nbsp; while(j&lt;ndata)<br />
+&nbsp; i=i+1<br />
+while(i&lt;nstep)<br />
+//<br />
+Display $y vs $x<br />
+ModifyGraph rgb=(0,0,0),mode($y)=1<br />
+//<br />
+string new_xw, new_yw<br />
+new_xw = &quot;xgb_&quot; + y<br />
+new_yw = &quot;ygb_&quot; + y<br />
+make/O/N=(nstep) $new_xw,$new_yw;<br />
+$new_xw=xgb;<br />
+$new_yw=ygb;<br />
+killwaves xgb, ygb;<br />
+//<br />
+AppendToGraph $new_yw vs $new_xw<br />
+//AppendToGraph ygb vs xgb<br />
+ModifyGraph tick=2,mirror=1,fSize=18,standoff=0,font=&quot;Arial&quot;;DelayUpdate<br />
+Label left &quot;DOS, <a href="file://\\f02N\\f00\\M(\\F'Symbol'e\\F'Arial')&quot;;DelayUpdate">\\f02N\\f00\\M(\\F&#39;Symbol&#39;e\\F&#39;Arial&#39;)&quot;;DelayUpdate</a><br />
+Label bottom &quot;Energy, <a href="file://\\F'Symbol'\\f02e-e\\f00\\B\\F'Arial'f\\M">\\F&#39;Symbol&#39;\\f02e-e\\f00\\B\\F&#39;Arial&#39;f\\M</a> / eV&quot;<br />
+ModifyGraph width=340,height=227,gFont=&quot;Arial&quot;<br />
+ModifyGraph rgb=(0,0,0)<br />
+ModifyGraph lsize=2<br />
+//Legend/C/N=text0/J/F=0/B=1/A=MC &quot;<a href="file://\\s('total_DOSx0.5'">\\s(&#39;total_DOSx0.5&#39;</a>) Band calc. (FLPAW-GGA)&quot;<br />
+ModifyGraph gfSize=18,gmSize=18<br />
+SetAxis bottom xmin,xmax<br />
+SetAxis left 0.0,5<br />
+EndMacro

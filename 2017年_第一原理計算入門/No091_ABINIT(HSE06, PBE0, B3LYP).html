@@ -1,0 +1,122 @@
+<div>　ここではABINITを用いたHSE06, PBE0, B3LYP計算での入力ファイルとその結果を掲載していく。<br />
+Please, see /test/s/libxc/Input/t42.in and /test/s/libxc/Input/t41.in</div>
+--------------------------------------------------------------------------------<br />
+Ubuntu 12.04 (precise) 64-bit<br />
+プロセッサ: Intel&reg; Core&trade; i7-2700K CPU @ 3.50GHz &times; 8<br />
+メモリ: 15.7 GiB<br />
+Abinit 7.6.4<br />
+コンパイラ: gfortran<br />
+VESTA v.2.1.6<br />
+-----<br />
+PAW: <a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a>　<br />
+-----
+<p dir="ltr" style="line-height: 1.15; margin-top: 0pt; margin-bottom: 0pt;"><b style="font-weight: normal;"><span style="color: rgb(0, 0, 0); font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; background-color: transparent;">----------------------------------------------------------------------------------------------------------------------------</span></b><br />
+■ GW calculation type: gwcalctyp<br />
+<br />
+0-9: 1-shot<br />
+10-19: self-consistent (energy only)<br />
+20-29: self-consistent (energy and wavefunction)<br />
+<br />
+0: standard Plasmon-Pole model GW calculation&nbsp; (1-shot)<br />
+2: GW calculation using numerical integration (contour deformation method) (1-shot)<br />
+<br />
+10: standard Plasmon-Pole model GW calculation (self-consistent (energy only))<br />
+12: GW calculation using numerical integration (contour deformation method) (self-consistent (energy only))<br />
+<br />
+20: standard Plasmon-Pole model GW calculation (self-consistent)<br />
+22: GW calculation using numerical integration (contour deformation method) (self-consistent)<br />
+<br />
+HSE06: 105 (1-shot), 125 ( self-consistent）<br />
+PBE0: 205 (1-shot), 225 ( self-consistent )<br />
+B3LYP: 305 (1-shot), 325 ( self-consistent )<br />
+<b style="font-weight: normal;"><span style="color: rgb(0, 0, 0); font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; background-color: transparent;">----------------------------------------------------------------------------------------------------------------------------</span></b><br />
+■ SCF (HSE06, spin)<br />
+<br />
+□ case.files<br />
+-----<br />
+case.in<br />
+case.out<br />
+casei<br />
+caseo<br />
+casetmp<br />
+Fe.GGA_PBE-JTH.xml<br />
+V.GGA_PBE-JTH.xml<br />
+Al.GGA_PBE-JTH.xml<br />
+-----<br />
+<br />
+□ case.in<br />
+-----<br />
+# Hybrid functional calculation<br />
+# in a self-consistent approach<br />
+# Dataset 1: ground state calculation with WFK output<br />
+# Dataset 2: calculation of the HSE06 first iteration<br />
+#<br />
+ndtset&nbsp;&nbsp; 2<br />
+gwpara&nbsp;&nbsp; 2<br />
+enunit&nbsp;&nbsp; 1<br />
+gw_qprange -14&nbsp; # Compute correction for all the bands<br />
+<br />
+# Dataset1: usual self-consistent ground-state calculation<br />
+#Definition of the k-point grid<br />
+#occopt 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Semiconductor<br />
+occopt 3<br />
+tsmear 0.002<br />
+<br />
+# Definition of the k-point grid<br />
+kptopt 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Option for the automatic generation of k points, taking<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # into account the symmetry<br />
+ngkpt&nbsp;&nbsp; 4 4 4<br />
+nshiftk&nbsp; 1<br />
+shiftk&nbsp; 0.0 0.0 0.0&nbsp;&nbsp; # The mesh contains the Gamma point<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # so that we can evaluate the QP correction for this point.<br />
+istwfk&nbsp;&nbsp;&nbsp;&nbsp; *1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Option needed for Gamma<br />
+<br />
+# Common to all hybrid calculations<br />
+getkss&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Obtain KSS file from previous dataset<br />
+ecutwfn&nbsp;&nbsp;&nbsp;&nbsp; 11.5&nbsp;&nbsp;&nbsp;&nbsp; # Planewaves to be used to represent the wavefunctions<br />
+ecutsigx&nbsp;&nbsp;&nbsp; 11.5&nbsp;&nbsp;&nbsp;&nbsp; # Planewaves to be used to represent the exchange operator<br />
+#nkptgw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+#bdgw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; 8 &nbsp;<br />
+#kptgw&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.0<br />
+#symsigma&nbsp;&nbsp;&nbsp; 1<br />
+getqps&nbsp;&nbsp;&nbsp;&nbsp; -1<br />
+<br />
+# Dataset2: Calculation of the 1st HSE06 iteration<br />
+optdriver2&nbsp; 4<br />
+gwcalctyp&nbsp;&nbsp; 125<br />
+#gwcalctyp2&nbsp; 115<br />
+&nbsp;icutcoul2&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # short-range exchange only<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcut2&nbsp; 9.090909&nbsp;&nbsp; # corresponds to omega = 1/rc = 0.11 bohr^1<br />
+<br />
+# Dataset2: Calculation of the PBE0&nbsp; band gap<br />
+#optdriver2&nbsp; 4<br />
+#gwcalctyp2&nbsp; 215<br />
+# icutcoul2&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # full range exchange<br />
+<br />
+# Dataset2: Calculation of the B3LYP band gap<br />
+#optdriver2&nbsp; 4<br />
+#gwcalctyp2&nbsp; 315<br />
+# icutcoul2&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # full range exchange<br />
+<br />
+# Definition of the planewave basis set&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+# energy cutoff [Ha]:<br />
+ecut&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 24 # Maximal kinetic energy cut-off, in Hartree<br />
+#pawecutdg&nbsp;&nbsp;&nbsp; 24<br />
+<br />
+nsppol 2<br />
+<br />
+# Definition of the SCF procedure<br />
+nstep&nbsp;&nbsp; 250&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Maximal number of SCF cycles<br />
+diemac&nbsp; 12.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Although this is not mandatory, it is worth to<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # precondition the SCF cycle. The model dielectric<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # function used as the standard preconditioner<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # is described in the &quot;dielng&quot; input variable section.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Here, we follow the prescription for bulk silicon.<br />
+<br />
+tolvrs&nbsp;&nbsp; 1.0d-15<br />
+<br />
+# cif2cell start<br />
+<br />
+# cif2cell end<br />
+-----<br />
+<b style="font-weight: normal;"><span style="color: rgb(0, 0, 0); font-family: Arial; font-size: 15px; font-style: normal; font-variant: normal; font-weight: normal; text-decoration: none; vertical-align: baseline; background-color: transparent;">----------------------------------------------------------------------------------------------------------------------------</span></b></p>

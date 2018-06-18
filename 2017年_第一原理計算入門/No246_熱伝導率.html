@@ -1,0 +1,181 @@
+　ここでは熱伝導率の計算に関する情報を掲示する(私の勉強・調査不足で誤りがあるかもしれいない。情報収集の手がかりとして頂ければ幸いです)。<br />
+--------------------------------------------------------------------------------<br />
+■ 熱伝導率計算コード<br />
+・Project ALAMODE: <a href="http://alamode.readthedocs.org/en/latest/">http://alamode.readthedocs.org/en/latest/</a><br />
+・Phono3py: <a href="http://atztogo.github.io/phono3py/">http://atztogo.github.io/phono3py/</a><br />
+&nbsp;&nbsp; Visualization tool: <a href="http://henriquemiranda.github.io/phononwebsite/index.html">http://henriquemiranda.github.io/phononwebsite/index.html</a>&nbsp;<br />
+・ShengBTE: <a href="http://www.shengbte.org/">http://www.shengbte.org/</a><br />
+・PhonTS: <a href="http://phonts.mse.ufl.edu/">http://phonts.mse.ufl.edu/</a><br />
+--------------------------------------------------------------------------------<br />
+■ 各種計算方法&nbsp;<br />
+□ 格子動力学法（LD）<br />
+・Fermi&#39;s golden rule<br />
+・3-phonon process<br />
+<br />
+□ 平衡分子動力学法（グリーン-久保公式）<br />
+・スーパーセルでミクロカノニカル分子動力学<br />
+・各原子の力と速度から熱流束を計算<br />
+・ポテンシャルは摂動法から来ている<br />
+◇サイズ効果は下記の二つがある<br />
+1. サイズを大きくする &gt; 低周波数のフォノンが増える &gt; 熱伝導率が増加<br />
+2. サイズを大きくする &gt; フォノンのモードが多くなる（散乱選択則で）&gt; 熱伝導率が低下<br />
+<br />
+□ 非平衡分子動力学法<br />
+・サイズ効果がはっきりしている<br />
+　1/k(L) = 1/k<sub>&infin; </sub>+ A/L<br />
+・フーリエの法則を利用<br />
+・緩和時間によっては熱浴の設定の仕方で値が変わる<br />
+--------------------------------------------------------------------------------<br />
+■ 格子動力学法（LD）と分子動力学法（MD）の特徴<br />
+・LD: k空間、ボルツマン輸送方程式を利用<br />
+・MD: 実空間、線形応答（グリーン-久保公式）を利用<br />
+※ MDで緩和時間を計算 &gt; 得られた緩和時間をLDに用いてモードの成分を分析するとよい。<br />
+--------------------------------------------------------------------------------<br />
+■ MDでモードを見る方法<br />
+・Normal mode projection<br />
+・(Temporal) Spectral energy density<br />
+--------------------------------------------------------------------------------<br />
+■ 実際の系（合金）への応用 [1]<br />
+・仮想結晶近似（VCA)<br />
+　&Phi;<sub>A1-xBx</sub> = (1-x)&Phi;<sub>A</sub> + x&Phi;<sub>B</sub> と成分比で波動関数を混ぜる。<br />
+・局所仮想結晶近似+MD<br />
+・質量差の摂動(Tamuraモデル) [5]<br />
+--------------------------------------------------------------------------------<br />
+■ 計算での注意点（左欄にある「分子動力学 理解への道」も参照するとよい）<br />
+・擬ポテンシャルの作成において、非調和項を3次までにすると、最安定なポテンシャルでない方へと進んで上手くいかないことがある。これを防ぐには4次などの高次の偶関数を入れるようにする。<br />
+・高次の偶関数を入れた場合には、正しいDOSが得られるようにさらに丁寧にポテンシャルを調整することが必要。<br />
+・有限のk点によるサイズ効果：k点の規模を変えると線形で変化していく。これは理論的な理由が明らかになっている。<br />
+　k(T)/K<sub>0</sub>(T) = 1 - C<sub>0</sub>/N<sub>k</sub><br />
+　実際には、「k点多い &gt; 低周波数が得られる」ため、低周波数のフォノンが線形の変化で説明できるまでk点を取るようにする。<br />
+--------------------------------------------------------------------------------<br />
+■ 擬ポテンシャル<br />
+・多くのポテンシャル関数は、結合長、凝集エネルギー、弾性定数などを再現するために作られており、全エネルギーの高次の微分を対象としていない。約10年前くらいにそれに対処したポテンシャルが下記のように作られている。<br />
+・原子の平衡位置まわりの微分としてポテンシャルを4次程度までテイラー展開する。<br />
+・DFT（第一原理計算）で0.01Å程度を動かして力の計算をする。変位と力の関係が得られる。<br />
+　調和項を決めるにはある原子1つを動かす。非調和項を決めるには2つの原子を動かす。<br />
+　DFTで得られた変位と力の関係を満たすような擬ポテンシャルを作る。<br />
+・作成した擬ポテンシャルの応答、そして、力の応答もチェックする。<br />
+--------------------------------------------------------------------------------<br />
+■ フォノンの計算&nbsp;<br />
+<strong>・</strong>DFPT(Density Functional Pertubation Theroy) + 2n+1 theorem<br />
+　n次の波動関数 &gt; 2n+1次の全エネルギー微分<br />
+・実空間変位法（ブルートフォース）<br />
+　実空間法は原理的に任意の単結晶で可能<br />
+・DFPT（調和項）+ その差分<br />
+--------------------------------------------------------------------------------<br />
+■ 緩和時間の成分<br />
+・エネルギーおよび運動量保存<br />
+&nbsp; 運動量保存(Normal process and Umklapp process)<br />
+&nbsp; ※ エネルギーおよび運動量保存の両方が成り立つように値が変化する。<br />
+・フォノンポピュレーション<br />
+・散乱振幅強度<br />
+--------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] <a href="http://www.phonon.t.u-tokyo.ac.jp/resource/murakami_m2014.pdf">http://www.phonon.t.u-tokyo.ac.jp/resource/murakami_m2014.pdf</a><br />
+[2] <a href="http://www.mcc.uiuc.edu/summerschool/2006/presentations/Baroni_DFPT.pdf">http://www.mcc.uiuc.edu/summerschool/2006/presentations/Baroni_DFPT.pdf</a>　<br />
+[3] <a href="https://engineering.purdue.edu/~tsfisher/ME595M/Lattice%20Dynamics.pdf">https://engineering.purdue.edu/~tsfisher/ME595M/Lattice%20Dynamics.pdf</a>　<br />
+[4] <a href="http://www.netsubussei.jp/group/tamura.pdf">http://www.netsubussei.jp/group/tamura.pdf</a>&nbsp;<br />
+[5] <a href="http://www.photon.t.u-tokyo.ac.jp/~maruyama/papers/12/HTS49-Shiga.pdf">http://www.photon.t.u-tokyo.ac.jp/~maruyama/papers/12/HTS49-Shiga.pdf</a>&nbsp;<br />
+[6] <a href="http://www.phonon.t.u-tokyo.ac.jp/publications/kankyohatsuden2012.pdf">http://www.phonon.t.u-tokyo.ac.jp/publications/kankyohatsuden2012.pdf</a>&nbsp;<br />
+[7] <a href="http://www.photon.t.u-tokyo.ac.jp/~maruyama/papers/11/Hori-Si-Phonon.pdf">http://www.photon.t.u-tokyo.ac.jp/~maruyama/papers/11/Hori-Si-Phonon.pdf </a><br />
+[8] 日本熱電学会 計算＆データ研究会<br />
+--------------------------------------------------------------------------------<br />
+■ 熱伝導率の測定法<br />
+・薄膜： サーモリフレクタンス法<br />
+・バルク：レーザーフラッシュ法<br />
+・熱膨張係数：レーザー干渉式膨張計<br />
+□ データベース<br />
+・TPDS-web: <a href="http://tpds.db.aist.go.jp/tpds-web/">http://tpds.db.aist.go.jp/tpds-web/</a><br />
+・Springer Material<br />
+・GRANTA<br />
+・Matweb<br />
+・CINDAS LLC<br />
+--------------------------------------------------------------------------------<br />
+■ 熱伝導率と膜厚の関係<br />
+・[SK1]にある式によって、熱伝導率（縦軸）？と膜厚（横軸）の関係を得ることができる。<br />
+・外挿して横軸0での縦軸の開いたが界面熱抵抗となる。<br />
+・200から300 nmより薄いときになりたつ。<br />
+・フーリエの法則より得られるか？<br />
+・薄すぎると値が大きく下がって上手くフィットできない[SK3]。界面でのコンタクトが影響か？<br />
+[SK1] T. baba, Jpn. J. Appl. Phys. 48 (2009) 05EB04.: <a href="http://iopscience.iop.org/article/10.1143/JJAP.48.05EB04/meta">http://iopscience.iop.org/article/10.1143/JJAP.48.05EB04/meta</a><br />
+[SK2] 「伝熱工学の進展」<span class="st">養賢堂<br />
+[SK3]&nbsp; N. Oka et al., Thin Solid Filmes 518 (2010) 3119.</span><br />
+--------------------------------------------------------------------------------<br />
+■ Project ALAMODE<br />
+Step1: Calculation of harmonic force consntants<br />
+・density functional pertubation theory<br />
+・rela-space displacement method<br />
+・frozen phonon method<br />
+Step2: Calculation of harmonic phonon propeties<br />
+・specific heat<br />
+・group velocity<br />
+・scattering phase space (SPS) [PA1]<br />
+Step3: Relaxation time calculation using (SPS)<br />
+Step4: Determination of constante A<br />
+[PA1] L. Lindsay and DA. Broido., J. Phys. Condens. Mater 20 (2008) 165209.: http://iopscience.iop.org/article/10.1088/0953-8984/20/16/165209/meta<br />
+<br />
+□ 物理量<br />
+・フォノン分散： 調和項<br />
+・kやグリューナイゼン定数： 3次調和項<br />
+<br />
+□ コンパイルに必要なライブラリなど<br />
+・C++ compiler (intel gcc, gcc, g++, etc)<br />
+・LAPACK<br />
+・MPI (IntelMPI, OpenMPI, etc)<br />
+・Boost C++ library<br />
+<br />
+□ コンパイル手順<br />
+tar -zxvf alamode*<br />
+cd alm/<br />
+cp Makefile.linux Makefile<br />
+gedit Makefile<br />
+make<br />
+<br />
+□ ファイル<br />
+alm: 調和・非調和力定数（Interatomic force constant{IFC}）を最小自乗フィット<br />
+abogib: IFC, Ph分散, kph<br />
+tools: 補助スクリプト<br />
+<br />
+□ 計算の過程<br />
+・スーパーセルの結晶構造 + IFCの次数 + カットオフ半径 &gt; alm &gt; disp.pattern1, disp.pattern2, etc.<br />
+・POSCAR<br />
+&darr;<br />
+python<br />
+&darr;<br />
+disp1.POSCAR（変位データ）<br />
+&darr;<br />
+VASP or PWscf<br />
+&darr;<br />
+vasprun.xml (力のデータ)<br />
+&darr;<br />
+python<br />
+&darr;<br />
+学習データ<br />
+&darr;<br />
+alm<br />
+&darr;<br />
+フィッティング<br />
+&darr;<br />
+xml (&Phi;ij, &Phi;jik, etc)<br />
+&darr;<br />
+anphon<br />
+&darr;<br />
+kph分散、kph<br />
+--------------------------------------------------------------------------------<br />
+■ 他の考文献など<br />
+[1] CsCl型2元合金の熱伝導率：<a href="http://ci.nii.ac.jp/els/110001981681.pdf?id=ART0002126307&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459127824&amp;cp">http://ci.nii.ac.jp/els/110001981681.pdf?id=ART0002126307&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459127824&amp;cp</a>=<br />
+[2] 合金熱力学量と相平衡状態図の第一原理計算：<a href="http://ci.nii.ac.jp/els/110001492974.pdf?id=ART0001819378&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459127939&amp;cp">http://ci.nii.ac.jp/els/110001492974.pdf?id=ART0001819378&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459127939&amp;cp</a>=<br />
+[3] Cu-Pt合金の相安定性についての電子論的考察：<a href="http://ci.nii.ac.jp/els/110002053618.pdf?id=ART0002234849&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459128006&amp;cp">http://ci.nii.ac.jp/els/110002053618.pdf?id=ART0002234849&amp;type=pdf&amp;lang=en&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1459128006&amp;cp</a>=<br />
+[4] 新規化合物探索のための電子論計算に基づくAB二元系化合物の安定性評価と四元系金属間化合物への拡張：<a href="https://www.jstage.jst.go.jp/article/jinstmet/71/10/71_10_860/_pdf">https://www.jstage.jst.go.jp/article/jinstmet/71/10/71_10_860/_pdf</a><br />
+[5] 第一原理計算状態図と材料設計への応用：<a href="https://www.jstage.jst.go.jp/article/materia1962/31/7/31_7_626/_pdf">https://www.jstage.jst.go.jp/article/materia1962/31/7/31_7_626/_pdf</a><br />
+<br />
+◇ 平衡状態図を求めるとは、対象とする系に出現可能な相の自由エネルギーを求めるということと等価である。<br />
+◇ 系の自由エネルギー = 内部エネルギー + エントロピー<br />
+◇ 第一原理エネルギー計算は、極めて高い精度で相安定性を再現し得る。<br />
+◇ 理論計算においてエントロピー項を考慮して状態図を描く下記の問題を生じる<br />
+・規則-不規則変態温度が高温度側にズレる<br />
+・規則相単相領域が狭い<br />
+・固溶体単相領域が狭すぎる<br />
+　このような問題の最大の原因は、格子変形を一様変形のみに限定し、局所変形を導入していないことにある。このようにすると、固溶体やstoichiometryからずれた規則相の内部エネルギーが過大に評価される。この効果は原子サイズが大きく異なるような系でより顕著に現れてくる。<br />
+◇ 一般に結晶格子は、温度が高くなると熱膨張するが、これは高温では格子が柔らかくなることに対応している。柔らかい格子上では、たとえ大きさの異なる元素を局所緩和を許さずに配列するにしても、堅い格子上に配列するよりもエネルギーの増大は抑制されるはずである。<br />
+--------------------------------------------------------------------------------

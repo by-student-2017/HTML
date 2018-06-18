@@ -1,0 +1,149 @@
+-----------------------------------------------------------------------<br />
+◆ インストール<br />
+・阿部紀行：TEXインストーラ３; <a href="http://www.math.sci.hokudai.ac.jp/~abenori/soft/abtexinst.html">http://www.math.sci.hokudai.ac.jp/~abenori/soft/abtexinst.html</a><br />
+1. 解凍後、「abtexinst.exe」をダブルクリック　＞　次へ（N）をクリック（全て「次へ」で上手く動作した。<br />
+2. TeXworksは、Shift+右クリック」で「コマンドウィンドウをここで開く」にして、texworksと入力するか、C:\w32tex\share\texworksの中にあるTeXworks.exeをクリックすれば起動する。<br />
+（チェック 2017/11/07）<br />
+※ WindowsへのTeXインストール（簡単 W32TeX・前編）；<a href="http://acetaminophen.hatenablog.com/entry/2015/05/16/142557">http://acetaminophen.hatenablog.com/entry/2015/05/16/142557</a>、などを見ればよい。<br />
+TeXworksに入力後、[?]をクリックでPDFが作成される。<br />
+文字コードはUTF-8がお薦めです。<br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;TeXworks（Windows）<br />
+・TeXworksに入力後、[?]をクリックでPDFが作成される。<br />
+・文字コードはUTF-8がお薦めです。<br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;TeXShop（Mac）<br />
+・入力後、タイプセットをクリックでPDFが作成される。<br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;pLATEX<br />
+・platex -kanji=utf-8 case.tex<br />
+　上記のコマンドで、case.texをdivファイルに変換する。dvioutで見ることができる。<br />
+　その他のファイル：case.auxは補助ファイル、case.logはログファイルです。<br />
+・dvipdfmx case<br />
+　上記のコマンドでPDFが作成される。Sumatra PDFの方が作業効率がよくなる。<br />
+・dvips case<br />
+　上記のコマンドでcase.psとしてPostScriptファイルに変換される。Ghostscriptで閲覧できる。Adobe Distillerの設定をPDF/X-1aにしておけば、印刷所・出力センターでトラブルが起きにくいPDFになります。<br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;日本語のテキスト<br />
+----------<br />
+\documentclass{jarticle}<br />
+\begin{document}<br />
+　本文<br />
+\end{document}<br />
+----------<br />
+<br />
+----------<br />
+\documentclass{jsarticle}<br />
+\begin{document}<br />
+　新しいJISフォントメトリックで見栄えのバランスが良い。<br />
+\end{document}<br />
+----------<br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;論文を書いていて思ったこと<br />
+シンボル：$\alpha$<br />
+斜体+シンボル：{\sl X$\alpha$}<br />
+上付き：10$^{-3}$<br />
+下付き：A$_{0}$<br />
+2&nbsp;x 2&nbsp;x 2でのxの記号 ：$\times$<br />
+EPS-conv：DCT圧縮で品質90がおすすめとのこと。横長の図で行ったら半分しか示されず。私は運が悪い？（涙）<br />
+相互参照と参考文献；<a href="http://www002.upp.so-net.ne.jp/latex/sansho.html">http://www002.upp.so-net.ne.jp/latex/sansho.html</a><br />
+-----------------------------------------------------------------------<br />
+◆&nbsp;参考文献の付け方<br />
+　文章中に参考文献の番号を付けたいところで<br />
+\cite{x1}<br />
+を入力する。x1の部分は下の記述と対応させれば他の英数字でもよい。たとえば、\cite{x2}など。<br />
+\begin{thebibliography}{99}<br />
+\bibitem{x1}&nbsp;X. YZ et al., Jpn. J. Appl. Phys.&nbsp;XX (1999) L945.<br />
+\bibitem{x2} http://www.wien2k.at/<br />
+\end{thebibliography}<br />
+<br />
+[1] <a href="http://www.ic.daito.ac.jp/~mizutani/tex/drill/drillbook3.html">http://www.ic.daito.ac.jp/~mizutani/tex/drill/drillbook3.html</a><br />
+-----------------------------------------------------------------------<br />
+□ 各種テンプレート<br />
+----------------<br />
+◆ 東京大学　工学部　計数工学科（<a href="http://www.keisu.t.u-tokyo.ac.jp/research/latex/">http://www.keisu.t.u-tokyo.ac.jp/research/latex/</a>）<br />
+1. suribt-20141120.zip をダウンロード後、解凍する。<br />
+※ Shift_JIS = SJISで記述されている。<br />
+※ 文字化けしていた場合： 編集　＞　設定　＞　エディタ　＞　エンコーディングでShift_JISを選択<br />
+-------<br />
+◆ JSAP<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. JSAPのdownload（<a href="https://journals.jsap.jp/jjap/authors/downloads">https://journals.jsap.jp/jjap/authors/downloads</a>）から「LaTeX files」をクリック<br />
+3. ダウンロードした「jjap3.zip」を解凍<br />
+4. 「jjap_template_161006.tex」をTeXworksにドラッグ&amp;ドロップ<br />
+5. &nbsp;pdfLaTexかpdfpLaTeXを選択して、[?]をクリック<br />
+----------------<br />
+◆ Elsevier<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. LaTex TemplatesのElsevier&#39;s elsarticle Document Class（<a href="http://www.latextemplates.com/template/elseviers-elsarticle-document-class">http://www.latextemplates.com/template/elseviers-elsarticle-document-class</a>）から{Download Example Temprate.zip}をクリック<br />
+3. ダウンロードした「elsarticle_dummy.zip」を解凍<br />
+4. 「elsarticle-template-1-num.tex」をTeXworksにドラッグ&amp;ドロップ<br />
+5. pdfLaTexを選択して、[?]をクリック<br />
+----------------<br />
+◆ Journal&nbsp; Article<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. LaTex TemplatesのArticle &gt; Journal&nbsp; Article（<a href="http://www.latextemplates.com/template/journal-article">http://www.latextemplates.com/template/journal-article</a>）から{Download Example Temprate.zip}をクリック<br />
+3. ダウンロードした「article_2.zip」を解凍<br />
+4. 「article_2.tex」をTeXworksにドラッグ&amp;ドロップ<br />
+5. pdfLaTexを選択して、[?]をクリック<br />
+----------------<br />
+◆ Presentations (学会のプレゼンテーション用)<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. LaTex TemplatesのBeamer Presentation（<a href="http://www.latextemplates.com/template/beamer-presentation">http://www.latextemplates.com/template/beamer-presentation</a>）から{Download.zip}をクリック<br />
+3. ダウンロードした「presentation_1.zip」を解凍<br />
+4. 「presentation_1.tex」をTeXworksにドラッグ&amp;ドロップ<br />
+5. pdfLaTexを選択して、[?]をクリック<br />
+----------------<br />
+◆ Applied Physics Letter (APL)<br />
+1. TEXインストーラ３でTEX一式をインストール (※ w32TeXにはReVTeXが入っているとのこと[APL1])<br />
+2. AIP（<a href="https://publishing.aip.org/authors/journal-guidelines#apl">https://publishing.aip.org/authors/journal-guidelines#apl</a>）から{<a href="ftp://ftp.aip.org/revtex/revtex4-1.zip">REVTeX 4.1 APL style file.</a> }をクリック<br />
+3. ダウンロードした「revtex4-1.zip」を解凍　&gt;　「revtex4-1-tds.zip」を解凍<br />
+4. doc &gt; Latex &gt; revtex &gt; &nbsp;sample &gt; aip<br />
+5. 「aipsamp.tex」をTeXworksにドラッグ&amp;ドロップ<br />
+6.&nbsp;&nbsp;pdfpLaTeXを選択して、[?]をクリック<br />
+※ pdfLaTexだと380行目と387行目でEPS（画像ファイル）についてのエラーが表示される。<br />
+[APL1] <a href="https://texwiki.texjp.org/?REVTeX">https://texwiki.texjp.org/?REVTeX</a><br />
+----------------<br />
+◆ Applied Physics Letter (APL)&nbsp;(ShareLaTeXの登録が必要）<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. ShareLaTeX &gt; Journals &gt; American Institute of Physics AIP（<a href="http://www.latextemplates.com/template/beamer-presentation">http://www.latextemplates.com/template/beamer-presentation</a>）から{Open in ShareLaTeX}をクリック<br />
+3. 表示された内容をコピーしてTeXworksにペースト<br />
+　表示された画面で、コンパイルや再編集をクリックすると右側にPDFが表示される<br />
+4. &nbsp;pdfLaTexかpdfpLaTeXを選択して、[?]をクリック<br />
+----------------<br />
+◆&nbsp;Physical Review&nbsp;Letter (Phy. Rev. Letter)&nbsp;(ShareLaTeXの登録が必要）<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. ShareLaTeX &gt; Journals &gt; APS（<a href="https://ja.sharelatex.com/templates/journals/aps">https://ja.sharelatex.com/templates/journals/aps</a>）から{Open in ShareLaTeX}をクリック<br />
+3. 表示された内容をコピーしてTeXworksにペースト<br />
+　表示された画面で、コンパイルや再編集をクリックすると右側にPDFが表示される<br />
+4. &nbsp;pdfLaTexかpdfpLaTeXを選択して、[?]をクリック<br />
+----------------<br />
+◆ 卒業論文（graduate-thesis）<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. ShareLaTeX &gt;&nbsp;Thesis &gt; graduate-thesis（<a href="https://ja.sharelatex.com/templates/thesis/graduate-thesis">https://ja.sharelatex.com/templates/thesis/graduate-thesis</a>）から{Open in ShareLaTeX}をクリック<br />
+3. 表示された内容をコピーしてTeXworksにペースト<br />
+　表示された画面で、コンパイルや再編集をクリックすると右側にPDFが表示される<br />
+4. &nbsp;pdfLaTexかpdfpLaTeXを選択して、[?]をクリック<br />
+----------------<br />
+◆ 論文（puthesis）<br />
+1. TEXインストーラ３でTEX一式をインストール<br />
+2. ShareLaTeX &gt;&nbsp;Thesis &gt; puthesis（<a href="https://ja.sharelatex.com/templates/thesis/puthesis">https://ja.sharelatex.com/templates/thesis/puthesis</a>）から{Open in ShareLaTeX}をクリック<br />
+3. 表示された内容をコピーしてTeXworksにペースト<br />
+　表示された画面で、コンパイルや再編集をクリックすると右側にPDFが表示される<br />
+4. &nbsp;pdfLaTexかpdfpLaTeXを選択して、[?]をクリック<br />
+-----------------------------------------------------------------------<br />
+◆ テキスト（上記のテンプレートと比べながら書いてみるとよい）<br />
+・奥村晴彦「LaTeX2&epsilon;美文書作成入門」技術評論社<br />
+-----------------------------------------------------------------------<br />
+◆ お勧めのHP<br />
+・TeX を使ってみよう： <a href="http://oku.edu.mie-u.ac.jp/~okumura/texonweb/">http://oku.edu.mie-u.ac.jp/~okumura/texonweb/</a>　<br />
+・TeX入門： <a href="http://www.comp.tmu.ac.jp/tsakai/lectures/intro_tex.html">http://www.comp.tmu.ac.jp/tsakai/lectures/intro_tex.html</a>　<br />
+・TEX Wiki 学会スタイル等： <a href="https://texwiki.texjp.org/?%E5%AD%A6%E4%BC%9A%E3%82%B9%E3%82%BF%E3%82%A4%E3%83%AB%E7%AD%89#ab53bdf2">https://texwiki.texjp.org/?%E5%AD%A6%E4%BC%9A%E3%82%B9%E3%82%BF%E3%82%A4%E3%83%AB%E7%AD%89#ab53bdf2</a>　<br />
+・【簡略版】卒論をLaTeXで。： <a href="http://www.ketsuago.com/entry/2016/06/06/220342">http://www.ketsuago.com/entry/2016/06/06/220342</a>　<br />
+・Physical Review 投稿の覚書：<a href="http://apollon.issp.u-tokyo.ac.jp/~watanabe/tips/prsub.html">http://apollon.issp.u-tokyo.ac.jp/~watanabe/tips/prsub.html</a><br />
+・LaTeX Templates: <a href="http://www.latextemplates.com/">http://www.latextemplates.com/</a>&nbsp;&gt; academic journals; <a href="http://www.latextemplates.com/cat/academic-journals">http://www.latextemplates.com/cat/academic-journals</a><br />
+・ShareLaTex: <a href="https://ja.sharelatex.com/templates/journals/american-institute-of-physics-aip">https://ja.sharelatex.com/templates/journals/american-institute-of-physics-aip</a>、登録画面が出たらE-mailアドレスとあなたの好きなパスワードを入力すればよい。<br />
+・ReVTeX4; <a href="http://yang.amp.i.kyoto-u.ac.jp/~yyama/FreeBSD/tex/revtex-j.html">http://yang.amp.i.kyoto-u.ac.jp/~yyama/FreeBSD/tex/revtex-j.html</a>, <a href="http://blog.livedoor.jp/youyeah85/archives/1354393.html">http://blog.livedoor.jp/youyeah85/archives/1354393.html</a><br />
+・ReVTeX4(Mac); <a href="https://qiita.com/ryokbys/items/206e5a9bdfa5f174edb9">https://qiita.com/ryokbys/items/206e5a9bdfa5f174edb9</a><br />
+・TeX Live; <a href="https://texwiki.texjp.org/?TeX%20Live%2FWindows">https://texwiki.texjp.org/?TeX%20Live%2FWindows</a><br />
+-----------------------------------------------------------------------

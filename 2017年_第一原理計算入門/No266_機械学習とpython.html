@@ -1,0 +1,562 @@
+　理論や手法などは左欄にある「機械学習」をご参照ください。<br />
+-----------------------------------------------------------------------<br />
+◆ テキスト<br />
+・株式会社システム計画研究所「Pythonによる機械学習入門」オーム社<br />
+　pandasでのExcelデータ読み込みやその後の処理の方法が書かれている。<br />
+・株式会社フォワードネットワークら「実装ディープラーニング」オーム社<br />
+　いくつか難しいところもあるが、OSやcudaのインストール方法も図付きで説明されており、第一原理計算の導入にも役立つ情報が記載されている。学習係数の更新のための具体的な数式も記述されている。<br />
+・Sebastian Raschkaら「達人データサイエンティストによる理論と実践 Python機械学習プログラミング」インプレス<br />
+　Jupyter Notebookの基本的な使い方やmatplotlibによる可視化の基礎、行列の計算などについても書かれている。<br />
+・クジラ飛行机「Pythonによるスクレイピング&amp;機械学習」ソシム<br />
+　基本的なことが綺麗にまとまっているので、これを見ながらコードを打ち込む練習をすると機械学習の学習が容易になる。<br />
+-----------------------------------------------------------------------<br />
+◆ お勧めのHP<br />
+・OS毎python環境構築法（特におススメ）：<br />
+&nbsp;&nbsp; <a href="http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c">http://qiita.com/y__sama/items/5b62d31cb7e6ed50f02c</a><br />
+・日本語のDeep Learningの解説（機械学習の記述有り。特におススメ）：<br />
+&nbsp;&nbsp; <a href="https://www.slideshare.net/yasutomo57jp/python-deep-learning">https://www.slideshare.net/yasutomo57jp/python-deep-learning</a><br />
+&nbsp;&nbsp; <a href="https://www.slideshare.net/yasutomo57jp/pythondeep-learning-60544586">https://www.slideshare.net/yasutomo57jp/pythondeep-learning-60544586</a><br />
+　サンプルコード<br />
+　・<a href="https://github.com/yasutomo57jp/ssii2016_tutorial">https://github.com/yasutomo57jp/ssii2016_tutorial</a><br />
+　・<a href="https://github.com/yasutomo57jp/deeplearning_samples">https://github.com/yasutomo57jp/deeplearning_samples</a>&nbsp;<br />
+・日本語のpythonの解説（機械学習の記述有り。特におススメ）：<br />
+　<a href="http://www.turbare.net/transl/scipy-lecture-notes/index.html">http://www.turbare.net/transl/scipy-lecture-notes/index.html</a><br />
+・機械学習でなんとなく材料研究者の気分を味わおう<br />
+　<a href="http://qiita.com/KentoObata/items/7fd8c7527d586dffc329">http://qiita.com/KentoObata/items/7fd8c7527d586dffc329</a><br />
+　<a href="http://qiita.com/KentoObata/items/a909ecc42c8805594c89">http://qiita.com/KentoObata/items/a909ecc42c8805594c89</a> (pymatgen)<br />
+・Anaconda3を入れた後，python2.7を使いたくなった時の環境構築法<br />
+&nbsp;&nbsp; <a href="http://qiita.com/LittleWat/items/166f976cccf30bc63e62">http://qiita.com/LittleWat/items/166f976cccf30bc63e62</a><br />
+・各種の問題に適応した手法を記載したマップ<br />
+　<a href="http://scikit-learn.org/stable/tutorial/machine_learning_map/index.html">http://scikit-learn.org/stable/tutorial/machine_learning_map/index.html</a><br />
+・機械学習のpythonとの出会い<br />
+　<a href="http://www.kamishima.net/mlmpyja/">http://www.kamishima.net/mlmpyja/</a><br />
+・PyconJP2014でのチュートリアル<br />
+　<a href="https://www.slideshare.net/payashim/pyconjp-2014-opencv">https://www.slideshare.net/payashim/pyconjp-2014-opencv</a><br />
+・Deep learning JP<br />
+　<a href="http://deeplearning.jp/documents/">http://deeplearning.jp/documents/</a><br />
+・Keras<br />
+　<a href="https://keras.io/ja/">https://keras.io/ja/</a><br />
+&nbsp;&nbsp; <a href="https://keras.io/#getting-started-30-seconds-to-keras">https://keras.io/#getting-started-30-seconds-to-keras</a> (English version)<br />
+・KerasでVGG16を使う<br />
+　<a href="http://aidiary.hatenablog.com/entry/20170104/1483535144">http://aidiary.hatenablog.com/entry/20170104/1483535144</a><br />
+・線形回帰とは<br />
+&nbsp;&nbsp; <a href="http://pythondatascience.plavox.info/scikit-learn/%E7%B7%9A%E5%BD%A2%E5%9B%9E%E5%B8%B0">http://pythondatascience.plavox.info/scikit-learn/%E7%B7%9A%E5%BD%A2%E5%9B%9E%E5%B8%B0</a>　<br />
+・User guide: (sklearn)<br />
+&nbsp;&nbsp; <a href="http://scikit-learn.org/stable/user_guide.html">http://scikit-learn.org/stable/user_guide.html</a>　<br />
+・python (function)<br />
+&nbsp;&nbsp; <a href="https://docs.python.jp/3/library/functions.html">https://docs.python.jp/3/library/functions.html</a><br />
+・TensorFlow<br />
+&nbsp;&nbsp; <a href="https://www.tensorflow.org/get_started/mnist/beginners">https://www.tensorflow.org/get_started/mnist/beginners</a><br />
+・Convolution and Pooling<br />
+&nbsp;&nbsp; <a href="https://www.slideshare.net/beam2d/deep-learning-52872945">https://www.slideshare.net/beam2d/deep-learning-52872945</a><br />
+・Deep Learning基礎講座演習コンテンツ<br />
+　<a href="http://weblab.t.u-tokyo.ac.jp/en/deep-learning">http://weblab.t.u-tokyo.ac.jp/en/deep-learning</a>基礎講座演習コンテンツ-公開ページ/<br />
+-----------------------------------------------------------------------<br />
+◆ PCの構成（約18万円、2016年7月時点）[1]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 101.22px;">名称</td>
+			<td style="width: 234.22px;">構成</td>
+			<td style="width: 151.77px;">カスタマイズ</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">マザーボード</td>
+			<td style="width: 234.22px;">インテルH170チップセット ATX（映像出力端子付き）</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">メモリ</td>
+			<td style="width: 234.22px;">32 GB(DR4 SDRAM 16GBx2)</td>
+			<td style="width: 151.77px;">8 GBから32 GBへ変更</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">電源</td>
+			<td style="width: 234.22px;">700 W</td>
+			<td style="width: 151.77px;">500 Wから700 Wへ変更</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">CPU</td>
+			<td style="width: 234.22px;">インテル Core-i7 6700</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">SSD</td>
+			<td style="width: 234.22px;">250 GB</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">HDD</td>
+			<td style="width: 234.22px;">1TB (SATA3)</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">光学ドライブ</td>
+			<td style="width: 234.22px;">DVDスーパーマルチドライブ</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">GPU</td>
+			<td style="width: 234.22px;">NVIDIA GeForce GTX1070 8 GB</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">LAN</td>
+			<td style="width: 234.22px;">ギガビットLANポート（オンボード）</td>
+			<td style="width: 151.77px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 101.22px;">OS</td>
+			<td style="width: 234.22px;">Windows 10 HOME 64 bit</td>
+			<td style="width: 151.77px;">新しいHDDに変えて、Ubuntu Desktopをインストール</td>
+		</tr>
+	</tbody>
+</table>
+◇ 変更理由[1,2]<br />
+・ディープラーニングでは、モデルの学習や結果を推測するために、膨大な量の行列計算を行います。GPUを使用すると、CPUと比べて学習時は10～30倍、推測時は5～10倍程度の速度を得ることができます（実際のディープラーニングの学習では、モデルが数十パターン、一つのモデルの学習にGPUを使用しても10時間以上かかるような場合もあるため、ディープラーニングの実行にはGPUの利用が必須といえるでしょう）。<br />
+　NVIDIA社製のGPUには、単精度の計算を得意とするGeForce、単精度と倍精度の両方が得意なTeslaなどがあります。一般的に、ディープラーニングの演算精度は単精度で十分だといわれています。GeForce GTX 750 Tiはメモリ容量が2GBと少なめですが、外部電源が不要で、マザーボードにセットするだけでよいので、手軽にGPUの効果を試すことができます。<br />
+　CPUは、高度で複雑な演算には適しているものの、単純で膨大な計算処理には適さないと言われています。一方、GPUは複雑な処理は苦手ですが、一度に大量の単純計算を行う場合に圧倒的な速度を得ることができます。<br />
+　最近のCPUの70%の価格で、350倍以上のコアを搭載し、1秒あたり15倍以上の浮動小数点演算が可能なGPUを入手できる。<br />
+・ディープラーニング実行時、読み込んだデータを一旦実数化しますが、このときメモリ使用量が急増するのに対処するため、パソコンのメモリを多めにしている。パソコンのメモリやハードディスクの容量は、ディープラーニングで使用するモデルやデータ量に応じて増設する必要があります。<br />
+・電源は500 Wでも十分であるが、700 Wに増設している。<br />
+◇ ディープラーニングは半精度小数点演算で良い [3,4]<br />
+　ディープラーニングの高速化においては、計算量に加えて、メモリ容量やバス帯域などがボトルネックになりえます。メモリ容量の点で言うと、大量の重みパラメータや中間データをメモリに収めることを考慮する必要があります。また、バス帯域の点では、GPU（もしくはCPU）のバスを流れるデータが増加してある制限を超えると、そこがボトルネックになります。このようなケースを想定すると、ネットワークを流れるデータのビット数は、できるだけ小さくすることが望まれます。コンピュータでは実数を表現するために、主に64ビットや32ビットの浮動小数点が使われます。数を表現するために多くのビットを使うことで、数値計算時の誤差による影響は少なくなりますが、その分、計算の処理コストやメモリ使用量が増大し、バス帯域に負荷をかけます。数値精度（何ビットのデータで数値を表現するかということ）に関して、ディープラーニングで分かっていることは、ディープラーニングでは数値精度のビット数をそこまで必要としない、ということです。これは、ニューラルネットワークの重要な性質の一つです。この性質は、ニューラルネットワークのロバスト性によるものです。ここで言うロバスト性とは、たとえば、ニューラルネットワークは、入力画像に小さなノイズがのってしまっても、出力結果が変わらないような頑健な性質があるということです。そのようなロバスト性のおかげで、ネットワークを流れるデータを劣化させても、出力結果に与える影響は少ないと考えることができます。<br />
+　コンピュータ上で小数を表現するには、32ビットの単精度浮動小数点数や64ビットの倍精度浮動小数点などのフォーマットがありますが、これまでの実験によって、ディープラーニングにおいては、16ビットの半精度浮動小数点（half float）でも、問題なく学習ができることが分かっています[4]。実際、NVIDIAの次世代GPUであるPascalアーキテクチャでは、半精度浮動小数点の演算もサポートされるため、これからは半精度浮動小数点が標準的に用いられると考えられます。<br />
+　NVIDIAのMaxwell世代のGPUは、半精度浮動小数点はストレージ（データを保持する機能）としてはサポートしていましたが、演算自体は16ビットでは行っていませんでした。次世代のPascalアーキテクチャは、演算も含めて16ビットで行うため、単に半精度浮動小数点で計算を行うだけで、前世代のGPUと比較しておよそ2倍の高速化が期待できます。<br />
+　8bit演算としてTPUが存在する。これはgoogleのTensorFlow用に開発されている。Keras+TensorFlowで機械学習させる場合にはTPUが高い性能を発揮する可能性がある。私のような底辺研究者は「TensorFlow Research Cloud」（<a href="https://www.tensorflow.org/tfrc/">https://www.tensorflow.org/tfrc/</a>）で1,000個のCloud TPUを機械学習研究者に無償で提供して頂けるだけでは元になるデータを得るための計算ができず研究ができない。マテリアルインフォマティクスの研究者としてgoogleが引き抜いてくれないかな&hellip;&hellip;。<br />
+[1] 株式会社フォワードネットワークら「実装ディープラーニング」オーム社<br />
+[2] Sebastian Raschkaら「達人データサイエンティストによる理論と実践 Python機械学習プログラミング」インプレス<br />
+[3] 斎藤康毅「ゼロから作るDeep Learning」オライリー・ジャパン<br />
+[4] S. Gupta et al., Deep learning with limited numerical precision. CoRR, abs/1502.02551 392(2015).<br />
+[5] <a href="https://www.tensorflow.org/tfrc/">https://www.tensorflow.org/tfrc/</a><br />
+-----------------------------------------------------------------------<br />
+◆ インストールの理由<br />
+<br />
+1) Ununtu Desktop<br />
+　多くのディープラーニング用フレームワークがUbuntuに対応している。<br />
+2) CUDA Toolkit<br />
+　NVIDIA社が開発しているGPUを利用した演算を可能にするツール。CUDAを使用し、プログラム内の演算をGPU上で行うことで、計算処理を高速化できます。<br />
+3) cuDNN<br />
+　ディープラーニング用のライブラリです。CUDA同様、NVIDIA社が開発を行っています。このライブラリを利用することでGPU演算の速度をさらに向上させることができます。<br />
+4) Anaconda<br />
+　Pythonベースのフレームワークを使う場合に有用なツールです。Pythonベースのフレームワークを複数利用する場合、バージョンが競合することがあります。これを解消するのがAnacondaだと言われています。パッケージのインストールもスムーズに進めることができます。<br />
+<br />
+[1] 株式会社フォワードネットワークら「実装ディープラーニング」オーム社<br />
+-----------------------------------------------------------------------<br />
+◆ Install (python, sklearn, jupyter notebook, keras and TensorFlow) on Linux<br />
+※ Deep learningだけの場合は下記で良いですが、vasp+boltztrapをしようとするとaseなどのモジュールやprintの書式が異なるので動作しなくなります。pyenvを使用、または/usr/bin/python2.7 xxxx.py<span class="st">と</span>してください。<br />
+<br />
+◇ pyenv (下記はまだチェックしていません)<br />
+1. sudo apt-get install git<br />
+2. git clone https://github.com/yyuu/pyenv.git ~/.pyenv<br />
+3. gedit .bashrc<br />
+&nbsp;&nbsp;&nbsp; export PYENV_ROOT=&quot;$HOME/.pyenv&quot;<br />
+&nbsp;&nbsp;&nbsp; export PATH=&quot;$PYENV_ROOT/bin:$PATH&quot;<br />
+&nbsp;&nbsp;&nbsp; eval &quot;$(pyenv init -)&quot;<br />
+4. source .bashrc<br />
+5. pyenv install -l | grep ana<br />
+6. pyenv install anaconda3-X.X.X<br />
+7. pyenv rehash<br />
+8. pyenv global anaconda3-X.X.X<br />
+9. source .bashrc<br />
+10. gedit .bashrc<br />
+&nbsp; <span class="s1">alias activate=&quot;source $PYENV_ROOT/versions/anaconda3-X.X.X/bin/activate&quot;</span><br />
+11. source .bashrc<br />
+12. conda create -n py2 <span class="nv">python</span><span class="o">=</span><span class="m">2</span>.7<br />
+13. mkdir py2<br />
+14. cd py2<br />
+15. pyenv local anaconda3-X.X.X/envs/py2<br />
+16. python<br />
+<br />
+---------- 機械学習だけの方やpython 3.5のみを使用される方は下記----------<br />
+◇ Install Anaconda (Python 3.5 version)<br />
+(Anaconda include NumPy, SciPy, matplotlib, scikit-lean, pandas and h5py)<br />
+1. <a href="https://www.continuum.io/">https://www.continuum.io/</a><br />
+2. DOWALOAD ANACONDA<br />
+3. 64-BIT(X86)INSTALL<br />
+4. chmod +x Anaconda*.sh<br />
+5. python<br />
+6. enter<br />
+7. yes<br />
+8. yes<br />
+<br />
+◇ Install sklearn<br />
+1. python<br />
+2. import skleran<br />
+3. sklearn.__version__<br />
+<br />
+◇ Jupyther<br />
+1. jupyter notebook<br />
+2. New &gt; Python3<br />
+3. Wiew &gt; Toggle Line Numbers<br />
+<br />
+◇ Keras<br />
+1. pip install keras<br />
+<br />
+◇ TensorFlow<br />
+・CPU version<br />
+1. pip install tensorflow<br />
+・GPU version<br />
+1. pip install tensorflow-gpu<br />
+<br />
+◇ check install and &quot;backend&quot;: &quot;tensorflow&quot;<br />
+1. python<br />
+2. import keras<br />
+&nbsp; Using TensorFlow backend.<br />
+・ Other method<br />
+1. gedit ~/.keras/keras.json<br />
+------<br />
+{<br />
+&nbsp;&nbsp;&nbsp; &quot;floatx&quot;: &quot;float32&quot;,<br />
+&nbsp;&nbsp;&nbsp; &quot;epsilon&quot;: 1e-07,<br />
+&nbsp;&nbsp;&nbsp; &quot;backend&quot;: &quot;tensorflow&quot;,<br />
+&nbsp;&nbsp;&nbsp; &quot;image_data_format&quot;: &quot;channels_last&quot;<br />
+}<br />
+-----<br />
+<br />
+◇ Other Editer<br />
+・IPython<br />
+・Jupyter QtConsole<br />
+・Spyder<br />
+<br />
+[1] <a href="https://robotics.naist.jp/edu/text/?Robotics%2FKeras">https://robotics.naist.jp/edu/text/?Robotics%2FKeras</a><br />
+[2] <a href="http://amacbee.hatenablog.com/entry/2015/12/02/220414">http://amacbee.hatenablog.com/entry/2015/12/02/220414</a><br />
+[3] <a href="http://www.procrasist.com/entry/2017/01/07/154441">http://www.procrasist.com/entry/2017/01/07/154441</a><br />
+[4] <a href="http://qiita.com/samacoba/items/207f2650ee60fe1de25a">http://qiita.com/samacoba/items/207f2650ee60fe1de25a</a> (Windows)<br />
+[5] <a href="http://blog.amedama.jp/entry/2017/03/13/123742">http://blog.amedama.jp/entry/2017/03/13/123742</a> (cuda)<br />
+[6] <a href="https://hogehuga.com/post-1452/">https://hogehuga.com/post-1452/</a> (conda command in Anaconda, Mac)<br />
+----------------------------------------------------------------------<br />
+◆ Jupyther (sklearn)<br />
+<br />
+◇ 基本的な設定<br />
+----------<br />
+import numpy as np # 数値計算ライブラリ<br />
+from sklearn.datasets import load_digits # skleanにある読み込みデータの指定<br />
+from sklearn.model_selection import train_test_split as spl # 訓練データとテストデータに分割の指定<br />
+from sklearn.metrics import confusion_matrix as cfm # 混同行列<br />
+<br />
+from sklearn.svm import LinearSVC as classifier # 分類器(LinearSVM)の指定<br />
+clf = classifier(C=1.0) # 分類器(LinearSVM)の指定とパラメータの指定<br />
+<br />
+digits = load_digits() # データの読み込み<br />
+x_train, x_test, y_train, y_test = spl(digits.data, digits.target, test_size=0.2, random_state=0) # 訓練データとテストデータに分割<br />
+clf.fit(x_train, y_train) # 訓練データで学習<br />
+clf.score(x_test, y_test) # テストデータの評価<br />
+<br />
+y_pred = clf.predict(x_test) # 予測<br />
+cfm(y_test, y_pred) # 混同行列で評価<br />
+----------<br />
+<br />
+◇ 分類器を変えるときに書き換える部分<br />
+----------<br />
+from sklearn.svm import LinearSVC as&nbsp;classifier # 分類器(LinearSVM)の指定<br />
+clf = classifier(C=1.0) # 分類器(LinearSVM)の指定とパラメータの指定<br />
+---------<br />
+from sklearn.svm import SVC as classifier # 分類器(LinearSVM)の指定<br />
+clf = classifier() # 分類器の指定とパラメータの指定(ディフォルトの設定を使用)<br />
+---------<br />
+from sklearn.neighbors import KNeighborsClassifier as classifier<br />
+clf = classifier() # 分類器の指定とパラメータの指定(ディフォルトの設定を使用)<br />
+---------<br />
+from sklearn.ensemble import BaggingClassifier as classifier<br />
+clf = classifier(n_estimators=10) # 分類器(RandomForestClassifier)の指定とパラメータの指定<br />
+---------<br />
+from sklearn.ensemble import RandomForestClassifier as classifier<br />
+clf = classifier() # 分類器の指定とパラメータの指定(ディフォルトの設定を使用)<br />
+---------<br />
+from sklearn.ensemble import AdaBoostClassifier as classifier<br />
+clf = classifier(n_estimators=100) # 分類器(AdaBoostClassifier)の指定とパラメータの指定<br />
+----------<br />
+<br />
+◇ 評価の部分<br />
+----------<br />
+from sklearn.metrics import accuracy_score as acs<br />
+acs(y_test, y_pred)<br />
+----------<br />
+<br />
+[1] <a href="http://qh73xebitbucketorg.readthedocs.io/ja/latest/1.Programmings/python/LIB/scikit-learn/main/">http://qh73xebitbucketorg.readthedocs.io/ja/latest/1.Programmings/python/LIB/scikit-learn/main/</a><br />
+[2] <a href="http://scikit-learn.org/stable/user_guide.html">http://scikit-learn.org/stable/user_guide.html</a><br />
+----------------------------------------------------------------------<br />
+◆ Jupyther (sklean, gridsearch)<br />
+<br />
+◇ 基本的な設定<br />
+----------<br />
+import numpy as np # 数値計算ライブラリ<br />
+from sklearn.datasets import load_digits # skleanにある読み込みデータの指定<br />
+from sklearn.model_selection import train_test_split as spl # 訓練データとテストデータに分割の指定<br />
+<br />
+from sklearn.svm import SVC as classifier # 分類器(SVM)の指定<br />
+clf = classifier() # 分類器(SVM)の指定<br />
+<br />
+digits = load_digits() # データの読み込み<br />
+x_train, x_test, y_train, y_test = spl(digits.data, digits.target, test_size=0.2, random_state=0) # 訓練データとテストデータに分割<br />
+<br />
+from sklearn.grid_search import GridSearchCV<br />
+par = [<br />
+&nbsp;&nbsp;&nbsp; {&#39;kernel&#39;:[&#39;linear&#39;],&nbsp; &#39;C&#39;:[1,10,100,1000]},<br />
+&nbsp;&nbsp;&nbsp; {&#39;kernel&#39;:[&#39;rbf&#39;],&nbsp;&nbsp;&nbsp;&nbsp; &#39;C&#39;:[1,10,100,1000], &#39;gamma&#39;:[0.001, 0.0001]},<br />
+&nbsp;&nbsp;&nbsp; {&#39;kernel&#39;:[&#39;sigmoid&#39;], &#39;C&#39;:[1,10,100,1000], &#39;gamma&#39;:[0.001, 0.0001]},<br />
+&nbsp;&nbsp;&nbsp; {&#39;kernel&#39;:[&#39;poly&#39;],&nbsp;&nbsp;&nbsp; &#39;C&#39;:[1,10,100,1000], &#39;gamma&#39;:[0.001, 0.0001], &#39;degree&#39;:[2,3,4]}<br />
+&nbsp;&nbsp;&nbsp; ] # パラメータの指定<br />
+&nbsp;&nbsp; &nbsp;<br />
+#cv = GridSearchCV(clf, par, cv=5, scoring=&quot;accuracy&quot;, n_jobs=-1) # 1 line case<br />
+cv = GridSearchCV(<br />
+&nbsp;&nbsp;&nbsp; clf, # 分類器<br />
+&nbsp;&nbsp;&nbsp; par, # 最適化したいパラメータのセット<br />
+&nbsp;&nbsp;&nbsp; cv=5, # 交差検定の回数<br />
+&nbsp;&nbsp;&nbsp; scoring=&quot;accuracy&quot;, # モデルの評価関数の指定<br />
+&nbsp;&nbsp;&nbsp; n_jobs=-1) #並列数 (CPU), -1 auto<br />
+cv.fit(x_train, y_train)<br />
+----------<br />
+<br />
+◇ 評価の部分<br />
+----------<br />
+cv.grid_scores_ # 評価<br />
+----------<br />
+cv.best_params_ # 評価<br />
+----------<br />
+<br />
+[1] <a href="http://qiita.com/SE96UoC5AfUt7uY/items/c81f7cea72a44a7bfd3a">http://qiita.com/SE96UoC5AfUt7uY/items/c81f7cea72a44a7bfd3a</a> (Grid Search)<br />
+----------------------------------------------------------------------<br />
+◆ Jupyther (Keras)<br />
+<br />
+◇ 基本的な設定<br />
+----------<br />
+import numpy as np # 数値計算ライブラリ<br />
+from sklearn import datasets, preprocessing<br />
+<br />
+import keras<br />
+from keras.datasets import mnist # kerasにあるデータの指定(MINSTの指定)<br />
+from keras.models import Sequential<br />
+from keras.layers import Dense, Activation, Dropout<br />
+from keras.optimizers import Adam # 最適化の設定 (Adam method)<br />
+from keras.utils.np_utils import to_categorical<br />
+<br />
+#-----------load mnist-----------<br />
+num_classes = 10<br />
+<br />
+(x_train, y_train), (x_test, y_test) = mnist.load_data()<br />
+<br />
+x_train = x_train.reshape(60000, 784).astype(&#39;float32&#39;)<br />
+x_test = x_test.reshape(10000, 784).astype(&#39;float32&#39;)<br />
+x_train /= 255 # normalization for keras<br />
+x_test /= 255 # normalization for keras<br />
+<br />
+y_train = keras.utils.to_categorical(y_train, num_classes)<br />
+y_test = keras.utils.to_categorical(y_test, num_classes)<br />
+#-----------load mnist-----------<br />
+<br />
+# 層の指定<br />
+model = Sequential()<br />
+model.add(Dense(input_dim=784, units=64)) # 1st(input layer) and 2nd layer<br />
+model.add(Activation(&quot;relu&quot;)) # use ReLU function<br />
+model.add(Dropout(0.5)) # use dropout method<br />
+model.add(Dense(units=10)) # 3rd layer (output layer)<br />
+model.add(Activation(&quot;softmax&quot;)) # output normalization<br />
+<br />
+# 最適化の設定 (Adam法)<br />
+model.compile(loss=&#39;categorical_crossentropy&#39;, optimizer=Adam(lr=0.01), metrics=[&#39;accuracy&#39;])<br />
+# モデルの最適化 (ミニバッチ法)<br />
+hist = model.fit(x_train, y_train,<br />
+&nbsp;&nbsp;&nbsp; epochs=10, # Number of iteration<br />
+&nbsp;&nbsp;&nbsp; batch_size=100, # batch size<br />
+&nbsp;&nbsp;&nbsp; verbose=1) # visualization<br />
+<br />
+# モデルの評価<br />
+loss_and_metrics = model.evaluate(x_test, y_test, batch_size=100)<br />
+<br />
+# 予測<br />
+classes = model.predict_classes(x_test, batch_size=100)<br />
+proba = model.predict_proba(x_test, batch_size=100)<br />
+----------<br />
+<br />
+◇ 学習率を変更する手法の発展<br />
+&nbsp; SGD --&gt; AdaGrad --&gt; RMSprop --&gt; Adam<br />
+以上の順に発展しているので、最新の手法であるAdamを使えば良いと思います。<br />
+<br />
+◇ 評価の部分<br />
+----------<br />
+# 評価<br />
+score = model.evaluate(x_test, y_test, verbose=0)<br />
+print(&#39;test loss:&#39;, score[0])<br />
+print(&#39;test acc:&#39;, score[1])<br />
+<br />
+# plot results<br />
+%matplotlib inline<br />
+import matplotlib.pyplot as plt<br />
+<br />
+loss = hist.history[&#39;loss&#39;]<br />
+<br />
+epochs = len(loss) # get number of data<br />
+<br />
+plt.plot(range(epochs), loss, marker=&#39;.&#39;, label=&#39;loss&#39;)<br />
+plt.legend(loc=&#39;best&#39;)<br />
+plt.grid()<br />
+plt.xlabel(&#39;Epoch&#39;)<br />
+plt.ylabel(&#39;Loss&#39;)<br />
+plt.show()<br />
+----------<br />
+<br />
+Theano: number of channel x width x height<br />
+TensorFlow: width x height x number of channel<br />
+<br />
+[1] <a href="https://robotics.naist.jp/edu/text/?Robotics%2FKeras">https://robotics.naist.jp/edu/text/?Robotics%2FKeras</a><br />
+[2] <a href="http://amacbee.hatenablog.com/entry/2015/12/02/220414">http://amacbee.hatenablog.com/entry/2015/12/02/220414</a><br />
+[3] <a href="http://www.procrasist.com/entry/2017/01/07/154441">http://www.procrasist.com/entry/2017/01/07/154441</a><br />
+[4] <a href="http://qiita.com/samacoba/items/207f2650ee60fe1de25a">http://qiita.com/samacoba/items/207f2650ee60fe1de25a</a> (Windows)<br />
+[5] <a href="http://blog.amedama.jp/entry/2017/03/13/123742">http://blog.amedama.jp/entry/2017/03/13/123742</a> (cuda)<br />
+[6] <a href="https://hogehuga.com/post-1452/">https://hogehuga.com/post-1452/</a> (conda command in Anaconda, Mac)<br />
+[7] <a href="http://aidiary.hatenablog.com/entry/20160328/1459174455">http://aidiary.hatenablog.com/entry/20160328/1459174455</a><br />
+[8] <a href="http://aidiary.hatenablog.com/entry/20161120/1479640534">http://aidiary.hatenablog.com/entry/20161120/1479640534</a><br />
+----------------------------------------------------------------------<br />
+◆ Jupyther (Keras, Convolution and Pooling)<br />
+<br />
+◇ 基本的な設定 (under constructing)<br />
+----------<br />
+from keras.layers import Conv2D, MaxPooling2D, Flatten<br />
+<br />
+model.add(conv2D(32,3,3,border_mode=&#39;same&#39;),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; input_shape=(28,28,1))<br />
+model.add(Activation(&quot;relu&quot;))<br />
+model.add(MaxPooling2D(pool_size(3,3)),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; border_mode=&#39;same&#39;)<br />
+----------<br />
+・conv2Dは畳込みで、上記の例では3x3の行列の種類を変えて畳込んだものを32枚作る。<br />
+・MaxPooling2D は、指定した行列から最大値を抜き出す。上記の例では3x3行列の中から最大値を抜き出す。<br />
+<br />
+◇ 基本的な設定 (under constructing)<br />
+----------<br />
+def conv_feat_2_image(feats):<br />
+&nbsp;&nbsp;&nbsp; data=np.ndarray((len(feats),28,28,1),<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dtype=np.float32)<br />
+&nbsp;&nbsp;&nbsp; for i, f in enumerate(feats):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; data[i]=f.reshape(28,28,1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return data<br />
+----------<br />
+<br />
+◇ 基本的な設定 (under constructing)<br />
+----------<br />
+train_image = conv_feat_2_image(train_features)<br />
+----------<br />
+<br />
+[1] <a href="https://www.slideshare.net/yasutomo57jp/python-deep-learning">https://www.slideshare.net/yasutomo57jp/python-deep-learning</a><br />
+[2] <a href="https://keras.io/ja/applications/">https://keras.io/ja/applications/</a><br />
+[3] <a href="http://aidiary.hatenablog.com/entry/20170104/1483535144">http://aidiary.hatenablog.com/entry/20170104/1483535144</a><br />
+[4] <a href="http://aidiary.hatenablog.com/entry/20170110/1484057655">http://aidiary.hatenablog.com/entry/20170110/1484057655</a><br />
+----------------------------------------------------------------------<br />
+◆ Jupyther (Keras, Fine-tuning{Xception, VGG16, VGG19, ResNet50 and inceptionV3})<br />
+<br />
+◇ 基本的な設定 (under constructing)<br />
+----------<br />
+from keras.preprocessing import image<br />
+from keras.applications.vgg16 import VGG16<br />
+from keras.applications.vgg16 import preprocess_input<br />
+from keras.models import Model<br />
+import numpy as np<br />
+<br />
+img_path = &#39;/home/wien2k2/Pictures/elephant.jpg&#39;<br />
+img = image.load_img(img_path, target_size=(224, 224)) # resize to 224x224<br />
+x = image.img_to_array(img) # change array data<br />
+x = np.expand_dims(x, axis=0) # change （rows, cols, channels) to (samples, rows, cols, channels)<br />
+x = preprocess_input(x)<br />
+<br />
+basemodel = VGG16(weights=&#39;imagenet&#39;,include_top=False)<br />
+for layer in basemodel.layers:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; layer.trainable=False<br />
+xb=basemodel.output<br />
+xb=Dense(2,activation=&#39;softmax&#39;)(xb) # 2 node<br />
+model=Model(inputs=basemodel.input,outputs=xb) #Create your own model<br />
+----------<br />
+<br />
+[1] <a href="https://keras.io/ja/applications/">https://keras.io/ja/applications/</a><br />
+[2] <a href="http://aidiary.hatenablog.com/entry/20170104/1483535144">http://aidiary.hatenablog.com/entry/20170104/1483535144</a><br />
+[3] <a href="http://aidiary.hatenablog.com/entry/20170110/1484057655">http://aidiary.hatenablog.com/entry/20170110/1484057655</a><br />
+-----------------------------------------------------------------------<br />
+◆ データの読み込み<br />
+　PythonでCSV（要素をカンマで区切ったテキスト形式）データを扱うには、以下の４通りのアプローチがあります。<br />
+①ただのテキストファイルとして扱い、自力で読み取る<br />
+②Python csvモジュールを使う<br />
+③NumPy モジュールを使う<br />
+④pandas モジュールを使う<br />
+&nbsp;&nbsp; 大まかに見て、①から④に進むにつれて高機能な仕組みになりますが、その分使い方を覚えるのも難しくなります。センサのような数値データを扱っていく場合、データ分析用ライブラリであるpandasを取得しておくのは非常に有利です。<br />
+　pandasの主要なデータ構造は、SeriesとDataFrameです。Seriesは1次元配列を高機能化したような構造で、一方、DataFrameは２次元配列もしくはスプレッドシートに似た構造になっています。<br />
+<br />
+◇ 基本的な設定<br />
+----------<br />
+import pandas as pd<br />
+dt = pd.read_csv(<br />
+&nbsp;&nbsp;&nbsp; &#39;/home/wien2k2/Desktop/juyo-j.csv&#39;,<br />
+&nbsp;&nbsp;&nbsp; skiprows=1,<br />
+&nbsp;&nbsp;&nbsp; names=[&#39;date&#39;, &#39;time&#39;, &#39;comsumption&#39;])<br />
+----------<br />
+%matplotlib inline<br />
+import matplotlib.pyplot as plt<br />
+plt.scatter(dt[&#39;comsumption&#39;],dt[&#39;comsumption&#39;],s=0.1)<br />
+<br />
+plt.title(&quot;scatter plot&quot;)<br />
+plt.xlabel(&quot;x&quot;)<br />
+plt.ylabel(&quot;y&quot;)<br />
+plt.show()<br />
+----------<br />
+<br />
+References<br />
+[1] 株式会社システム計画研究所「Pythonによる機械学習入門」オーム社<br />
+[2] <a href="http://www.task-notes.com/entry/20151129/1448794509">http://www.task-notes.com/entry/20151129/1448794509</a>　 (Linux)<br />
+[3] <a href="http://pythondatascience.plavox.info/python%E3%81%AE%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83/jupyter-notebook%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86">http://pythondatascience.plavox.info/python%E3%81%AE%E9%96%8B%E7%99%BA%E7%92%B0%E5%A2%83/jupyter-notebook%E3%82%92%E4%BD%BF%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%88%E3%81%86</a>　 (Win and Mac)<br />
+[4] <a href="https://adtech.cyberagent.io/techblog/archives/2317">https://adtech.cyberagent.io/techblog/archives/2317</a>　 (tips)<br />
+-----------------------------------------------------------------------<br />
+◆ Jupyther (Graph)<br />
+<br />
+Memo: for copy&amp;paste<br />
+<br />
+◇ Gaussian scatter<br />
+----------<br />
+%matplotlib inline<br />
+import numpy as np<br />
+import matplotlib.pyplot as plt<br />
+<br />
+x = np.random.randn(1000)<br />
+y = np.random.randn(1000)<br />
+<br />
+plt.scatter(x,y)<br />
+<br />
+plt.title(&quot;gaussian scatter plot&quot;)<br />
+plt.xlabel(&quot;x&quot;)<br />
+plt.ylabel(&quot;y&quot;)<br />
+plt.show()<br />
+----------<br />
+<br />
+◇&nbsp; sin and scatter<br />
+----------<br />
+%matplotlib inline<br />
+import numpy as np<br />
+import matplotlib.pyplot as plt<br />
+<br />
+x = np.arange(-3,3,0.1)<br />
+y_sin = np.sin(x)<br />
+x_rand = np.random.rand(100)*6-3<br />
+y_rand = np.random.rand(100)*6-3<br />
+<br />
+plt.figure()<br />
+<br />
+plt.subplot(1,1,1)<br />
+<br />
+plt.plot(x, y_sin, marker=&#39;o&#39;, markersize=5, label=&#39;line&#39;)<br />
+plt.scatter(x_rand,y_rand,label=&#39;scatter&#39;)<br />
+plt.legend()<br />
+plt.grid(True)<br />
+plt.xlabel(&quot;x&quot;)<br />
+plt.ylabel(&quot;y&quot;)<br />
+plt.show()<br />
+----------<br />
+<br />
+[1] <a href="http://takemikami.com/2017/02/21/scikitlearnSVMiris.html">http://takemikami.com/2017/02/21/scikitlearnSVMiris.html</a><br />
+[2] <a href="http://pythondatascience.plavox.info/scikit-learn/scikit-learn%E3%81%AB%E4%BB%98%E5%B1%9E%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88">http://pythondatascience.plavox.info/scikit-learn/scikit-learn%E3%81%AB%E4%BB%98%E5%B1%9E%E3%81%97%E3%81%A6%E3%81%84%E3%82%8B%E3%83%87%E3%83%BC%E3%82%BF%E3%82%BB%E3%83%83%E3%83%88</a><br />
+[3] <a href="http://www.turbare.net/transl/scipy-lecture-notes/packages/scikit-learn/index.html">http://www.turbare.net/transl/scipy-lecture-notes/packages/scikit-learn/index.html</a><br />
+[4] <a href="http://sucrose.hatenablog.com/entry/2013/05/25/133021">http://sucrose.hatenablog.com/entry/2013/05/25/133021</a><br />
+[5] <a href="https://www.slideshare.net/tkm2261/scikit-learn">https://www.slideshare.net/tkm2261/scikit-learn</a><br />
+[6] <a href="http://dev.classmethod.jp/machine-learning/introduction-scikit-learn/">http://dev.classmethod.jp/machine-learning/introduction-scikit-learn/</a><br />
+[7] <a href="https://www.youtube.com/watch?v=yp6LIjcZgoQ">https://www.youtube.com/watch?v=yp6LIjcZgoQ</a><br />
+[8] <a href="https://www.youtube.com/watch?v=7GoaCheaERU">https://www.youtube.com/watch?v=7GoaCheaERU</a><br />
+[9] <a href="https://www.youtube.com/watch?v=oA6QfWUJj-8">https://www.youtube.com/watch?v=oA6QfWUJj-8</a><br />
+-----------------------------------------------------------------------

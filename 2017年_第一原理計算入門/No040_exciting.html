@@ -1,0 +1,550 @@
+　（編集中）ここではexcitingのセットアップから計算方法までを纏める。excitingは全電子計算法なのでWIEN2kが使用できない場合や擬ポテンシャル法のAbinitやPWscfと比較する場合に用いてみると良い。<br />
+-------------------------------------------------------------------------------<br />
+■ フルポテンシャル法<br />
+APW法やLAPW法が仮定するマフィンティンポテンシャル近似は対称性の低い系や表面・界面系では精度が低くなるばかりでなく、計算結果が仮定されるマフィンティン球の半径に大きく依存してしまう（例えば、マフィンティン球を用いたKKR法では、結晶中に存在する大きな隙間や表面や界面の何も無い空間にVacancyを入れると精度が良くなると言われている｛左欄のAkai-KKRを参照｝）。一方、フルポテンシャル化したFLAPW法ではこの問題が解決される。<br />
+参考：笠井秀明ら著、計算機マテリアルデザイン入門、大阪大学出版会<br />
+------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.2010.12.17 version）（学生様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a>　<br />
+Intel Fortran Compilerでの場合<br />
+1) tar xvf exciting.helium.2010.12.17.gz<br />
+2)&nbsp;cd exciting<br />
+3) make<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（学生様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a><br />
+Intel Fortran Compilerでの場合<br />
+1)&nbsp;tar xvf exciting.helium.3<br />
+2) cd exciting<br />
+3) make<br />
+4)&nbsp;8 ifort64.mkl&nbsp;を選択<br />
+5)&nbsp;mpi では No<br />
+6) SMP では yes<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（学生様向け）<br />
+Intel Fortran Compilerでのライブラリを指定する場合<br />
+<a href="http://exciting-code.org/how-to-compile">http://exciting-code.org/how-to-compile</a>&nbsp;に従えばよい。<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（業者様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a><br />
+gfortranでの場合<br />
+1) tar xvf exciting.helium.3<br />
+2) cd exciting<br />
+3) make<br />
+4)&nbsp;5 gfortran を選択<br />
+5) mpi では No<br />
+6) SMP では No<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（業者様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a><br />
+gfortranでMPIでのコンパイルを行う場合<br />
+1) tar xvf exciting.helium.3<br />
+2) cd exciting<br />
+3) make<br />
+4) 5 gfortran を選択<br />
+5) mpi では&nbsp;yes<br />
+6) SMP では No<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（業者様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a><br />
+gfortranでOpenMPIでのコンパイルを行う場合<br />
+0) exciting/build/make.inc で、MPIF90=mpif90.openmpi とする。<br />
+1) tar xvf exciting.helium.3<br />
+2) cd exciting<br />
+3) make<br />
+4) 5 gfortran を選択<br />
+5) mpi では yes<br />
+6) SMP では No<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （helium.3 version）（業者様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a>　<br />
+gfortranでMPIを行う場合<br />
+0)&nbsp;exciting/build/make.inc&nbsp;でSMP_LIBS= $(LIB_ARP) $(LIB_LPK) $(LIB_FFT) $(LIB_BZINT)<br />
+1) tar xvf exciting.helium.3<br />
+2) cd exciting<br />
+3) make<br />
+4) 5 gfortran を選択<br />
+5) mpi では yes<br />
+6) SMP では&nbsp;yes<br />
+※ コンパイルでエラーが出る。<br />
+-------------------------------------------------------------------------------<br />
+■ exciting のダウンロードとコンパイル （lithium version）（業者様向け）<br />
+exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a> 　<br />
+gfortranでMPIを行う場合<br />
+1) tar xvf exciting.lithium<br />
+2) cd exciting<br />
+3) make<br />
+4) 5 gfortran を選択<br />
+5) mpi では yes<br />
+6) SMP では yes<br />
+※ OpenMPIを用いたい場合は続いて下記のようにする。<br />
+7) make clean<br />
+8) exciting/build/make.inc で、MPIF90=mpif90.openmpi とする。<br />
+9) make<br />
+※ 64bit で計算をしたい場合は、make.inc でのF90_OPTSとCPP_ON_OPTの行の部分を下記のように書き換える。<br />
+F90_OPTS = -O3 -march=native -m64<br />
+CPP_ON_OPT = -cpp -DXS -DISO -DTETRA -DLIBXC -m64<br />
+-------------------------------------------------------------------------------<br />
+■ 並列計算したい場合<br />
+mpirun -np 2 excitingmpi<br />
+などとする。-np の後に並列するコア数を書き入れる。<br />
+-------------------------------------------------------------------------------<br />
+■&nbsp;excitingscriptsの解凍<br />
+1) cd $HOME/exciting<br />
+2)&nbsp;Download exciting tutorial scripts ( <a href="http://exciting.wdfiles.com/local--files/lithium-tutorial-scripts-and-environment-variables/excitingscripts.tar.gz">http://exciting.wdfiles.com/local--files/lithium-tutorial-scripts-and-environment-variables/excitingscripts.tar.gz</a> )<br />
+3) tar xfvp excitingscripts.tar.gz<br />
+4) cd excitingscripts<br />
+5) chmod u+x *<br />
+-------------------------------------------------------------------------------<br />
+■ xcrysdenを使用可能にする環境設定<br />
+<br />
+0) sudo apt-get install tcsh<br />
+<br />
+1) Home FolderでView &rarr; Show Hidden Files にチェックを入れる。<br />
+&nbsp;&nbsp;&nbsp; .bashrc に下記を書き込む。<br />
+#=====================================================================================<br />
+# The following shell variables are needed for executing scripts in exciting tutorials<br />
+#<br />
+export EXCITINGROOT=$HOME/exciting<br />
+export EXCITINGBIN=$EXCITINGROOT/bin<br />
+export EXCITINGRUNDIR=$HOME/tmpdir<br />
+export EXCITINGSCRIPTS=$EXCITINGROOT/excitingscripts<br />
+export EXCITINGATAT=$EXCITINGSCRIPTS/ATAT@exciting<br />
+export EXCITINGASE=$EXCITINGSCRIPTS/ase<br />
+export ATATROOT=$EXCITINGSCRIPTS/atat<br />
+#-------------------------------------------------------------------------------------<br />
+export TIMEFORMAT=&quot;&nbsp;&nbsp; Elapsed time = %0lR&quot;<br />
+#-------------------------------------------------------------------------------------<br />
+export PYTHONPATH=$PYTHONPATH:$EXCITINGASE<br />
+export PATH=$PATH:$EXCITINGSCRIPTS:$EXCITINGBIN<br />
+export PATH=$PATH:$EXCITINGATAT:$EXCITINGASE/tools<br />
+#========================================================================<br />
+<br />
+2) excitingを解凍したファイルのディレクトリでexcitingscriptsというファイルを作り、ex2xsf 名のテキストファイルを作る。<br />
+&nbsp;&nbsp;&nbsp; その中を下記のように書き込む。<br />
+&nbsp;&nbsp;&nbsp; --------------------------------------<br />
+&nbsp;&nbsp;&nbsp; #!/bin/tcsh<br />
+&nbsp;&nbsp;&nbsp; xsltproc $EXCITINGROOT/xml/inputfileconverter/xmlinput2xsf.xsl $1<br />
+&nbsp;&nbsp;&nbsp; --------------------------------------<br />
+&nbsp;&nbsp;&nbsp; SAVEしてファイルを閉じて、ターミナルでカレントディレクトリをexcitingを解凍したファイルにする。そして、下記のコマンドを入力する。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;chmod u+x ex2xsf<br />
+<br />
+3) Home FolderでView &rarr; Show Hidden Files にチェックを入れて./xcrysden ファイルにあるcustom-definitionsの最後に下記を追加する。<br />
+&nbsp;&nbsp;&nbsp; --------------------------------------<br />
+&nbsp;&nbsp;&nbsp; addOption --exciting $env(EXCITINGSCRIPTS)/ex2xsf {<br />
+&nbsp;&nbsp;&nbsp; load structure from exciting input.xml format<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; --------------------------------------<br />
+<br />
+4) input.xml を作ったファイルをカレントディレクトリにして下記を入力するとxcrysdenが起動する。<br />
+&nbsp;&nbsp;&nbsp; xcrysden --exciting input.xml<br />
+<br />
+-------------------------------------------------------------------------------<br />
+■ exciting での計算方法<br />
+input.xml の入力ファイルを作成したファイルをカレントディレクトリにして下記を入力すると計算が実行される。input.xml は、例えば exciting を解凍したファイルの中にworkという名のファイルを作り、計算する系の名前のファイルを作り、その中に入れれば良いだろう。<br />
+例えば、workファイルの中にAgのファイルを作るには、<br />
+&nbsp;&nbsp;&nbsp; cd $EXCITINGROOT<br />
+&nbsp;&nbsp;&nbsp; mkdir work<br />
+&nbsp;&nbsp;&nbsp; cd work<br />
+&nbsp;&nbsp;&nbsp; mkdir Ag<br />
+&nbsp;&nbsp;&nbsp; cd Ag<br />
+&nbsp; として、Agファイルの中にinput.xmlを入れて、<br />
+&nbsp; $EXCITINGROOT/bin/excitingser<br />
+&nbsp; と入力すればよい。<br />
+&nbsp;（ input.xmlの入力は、HPにある例をコピー&amp;ペーストして、書き換えればよい）<br />
+<br />
+以後の計算は、<a href="http://exciting-code.org/tutorials">http://exciting-code.org/tutorials</a>　や<br />
+<a href="http://exciting-code.org/cecam-talks-2012">http://exciting-code.org/cecam-talks-2012</a>&nbsp;を参考にすればよい。<br />
+-------------------------------------------------------------------------------<br />
+cif2cell を用いた入力ファイルの作成<br />
+■ 基本的な計算<br />
+1. VESTAで結晶構造を入力し、cifファイルでsaveする。<br />
+2. cif2cellを用いてcif ファイルからinput.xmlを得る。<br />
+3. &lt;title&gt; から &lt;/title&gt; までを計算する組成などの短い記述に変える。例えば、&lt;title&gt; SrTiO3 &lt;/title&gt; など。<br />
+4. case.xmlをwordなどで開き、&lt;structure の後に speciespath=&quot;/home/exciting/species&quot; を追加する。（注：homeの中でexcitingを解凍した場合）<br />
+5. &lt;crystal scale= の直ぐ後の数字を&quot; &quot;で囲む。例 &lt;crystal scale=&quot;7.388829051&quot;&gt;<br />
+6. 続いて、&lt;/structure&gt;の直後の行に、k点の指定となる &lt;groundstate ngridk=&quot;6&nbsp;6 6&quot;&gt;&lt;/groundstate&gt; を追加する。<br />
+7. excitingser で計算を実行させる。<br />
+※ フェルミ（Fermi）端と全エネルギー(total energy)はINFO.OUTに記載されている。<br />
+<br />
+■ 密度汎関数の変更<br />
+1. 無記入の場合には、GGAPBEsolが選択される。<br />
+2. &lt;groundstate の後に、xctype= と以下のどれかを入力する。<br />
+&quot;LDAPerdew-Zunger&quot;<br />
+&quot;LSDAPerdew-Wang&quot;<br />
+&quot;LDA-X-alpha&quot;<br />
+&quot;LSDA-Barth-Hedin&quot;<br />
+&quot;GGAPerdew-Burke-Ernzerhof&quot;<br />
+&quot;GGArevPBE&quot;<br />
+&quot;GGAPBEsol&quot;<br />
+&quot;GGA-Wu-Cohen&quot;<br />
+&quot;GGAArmiento-Mattsson&quot;<br />
+&quot;EXX&quot;<br />
+&quot;none&quot;<br />
+例 &lt;groundstate の後に xctype=&quot;GGArevPBE&quot; を追加。<br />
+ただし、半導体のギャップが最もよく再現されるEXXではxctype=&quot;EXX&quot; &lt;OEP maxitoep=&quot;100&quot;&gt; &lt;/OEP&gt; とする。<br />
+<br />
+■ 状態密度分布（DOS）（UPSや放射光を用いたXPSの結果と比較）<br />
+1. SCF計算後のinput.xml で &lt;groundstate の後に do=&quot;skip&quot;を追加する。<br />
+2. &lt;/groundstate&gt; の次の行に<br />
+&nbsp;&nbsp;&nbsp; &lt;properties&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;dos nsmdos=&quot;1&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/dos&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/properties&gt;<br />
+を追加する。<br />
+3. excitingser で計算を実行させる。<br />
+※ おそらく、do=&quot;skip&quot; はSCF計算しないという意味だろう。<br />
+※ TDOS.OUTにtotal DOS、PDOSに各原子でのDOS、IDOS.OUTにinterstitial DOSが記述される。<br />
+<br />
+■ バンド分散（角度分解光電子分光法の結果と比較）<br />
+1. SCF計算後のinput.xml で記入した&nbsp; &lt;dos nsmdos=&quot;1&quot;&gt;&lt;/dos&gt;の換わりに下記を入力する。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;bandstructure&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;plot1d&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;path steps=&quot;100&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.750&nbsp;&nbsp; 0.500&nbsp;&nbsp; 0.250&quot; label=&quot;W&quot;&nbsp;&nbsp;&nbsp; &gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.500&nbsp;&nbsp; 0.500&nbsp;&nbsp; 0.500&quot; label=&quot;L&quot;&nbsp;&nbsp;&nbsp; &gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.000&nbsp;&nbsp; 0.000&nbsp;&nbsp; 0.000&quot; label=&quot;GAMMA&quot;&gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.500&nbsp;&nbsp; 0.500&nbsp;&nbsp; 0.000&quot; label=&quot;X&quot;&nbsp;&nbsp;&nbsp; &gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.750&nbsp;&nbsp; 0.500&nbsp;&nbsp; 0.250&quot; label=&quot;W&quot;&nbsp;&nbsp;&nbsp; &gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0.750&nbsp;&nbsp; 0.375&nbsp;&nbsp; 0.375&quot; label=&quot;K&quot;&nbsp;&nbsp;&nbsp; &gt;&lt;/point&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/path&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/plot1d&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/bandstructure&gt;<br />
+2. excitingser で計算を実行させる。<br />
+3. xsltproc $EXCITINGROOT/xml/visualizationtemplates/xmlband2agr.xsl bandstructure.xml で出力されたxmlファイルをagrに変換できる。<br />
+4. xmgrace bandstructure.agr でバンド分散図が表示される。<br />
+※ steps=&quot;数字&quot;の数字を変えればバンド分散図を描く場合の刻みが変わる。<br />
+※ point coord の具体的な指定が分からなければ、XCrySDen でFile Display .......とある欄で Tools &rarr; k-path を用いて入力の参考にしてみると良い。<br />
+※ BAND.OUTをExcelなどで、スペースで区切るなどを選択して、Excel（散布図などを指定）やIgorなどでプロットすれば良い。<br />
+<br />
+■ 電荷密度分布（MEMの結果と比較）<br />
+1. 「■ 基本的な計算」を参考に入力ファイルを作成し、&lt;/groundstate&gt;の直後に下記を追加する。<br />
+&lt;properties&gt;<br />
+&nbsp; &lt;chargedensityplot&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;plot3d&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;box grid=&quot;40 40 40&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;origin coord=&quot;0 0 0&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;1 0 0 &quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0 1 0 &quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0 0 1&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/box&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/plot3d&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;plot2d&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;parallelogram grid=&quot;20 20&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;origin coord=&quot;0 0 0 &quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;1 0 0&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;point coord=&quot;0 1 0&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&lt;/parallelogram&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/plot2d&gt;<br />
+&nbsp; &lt;/chargedensityplot&gt;<br />
+&lt;/properties&gt;<br />
+2. 得られた結果の変換<br />
+&nbsp; xsltproc $EXCITINGROOT/xml/visualizationtemplates/plot3d2xsf.xsl&nbsp; RHO3D.xml &gt; density.xsf<br />
+&nbsp; xsltproc $EXCITINGROOT/xml/inputfileconverter/xmlinput2xsf.xsl input.xml &gt; struct.xsf<br />
+&nbsp; cat struct.xsf density.xsf &gt; plot.xsf<br />
+3. xsltproc $EXCITINGROOT/xml/visualizationtemplates/plot3d2xyz.xsl RHO3D.xml &gt; plot3d.xyz<br />
+4. xsltproc $EXCITINGROOT/xml/visualizationtemplates/plot2d2xyx.xsl&nbsp; RHO2D.xml &gt; plot2d.xyz<br />
+※ SCF計算している場合は、&lt;groundstate の後にdo=&quot;skip&quot; が記述されているかを確認しておこう！<br />
+※ WIEN2kでの手法と似ている。origin coord&nbsp;で原点、point coord でベクトルを指定し、原点から指定したベクトルまでの分割数をparallelogram grid で指定する。plot3dは3次元、plot2は2次元プロットを指定。<br />
+<br />
+■ 吸収スペクトル（BSE）（XANESやEELSの結果と比較）<br />
+1. 「■ 基本的な計算」を参考に入力ファイルを作成し、&lt;structureの直後に autormt=&quot;true&quot; を追加して、SCF計算する。<br />
+2. EVALCORE.OUTで遷移させる内殻に対応する電子のnとlでのエネルギーを調べる。<br />
+3. 内殻電子を遷移させる元素のxmlをコピーして、名称を元素.XANES.xmlとする。<br />
+4. 元素.XANES.xmlを開き、遷移させる内殻（nとl）の電子に対応する &lt;atomicState の行を探し、core=&quot;true&quot; を core=&quot;fales&quot; に変える。<br />
+5. 元素.XANES.xmlで&lt;/sp&gt;の前の行に下記を追加し、&lt;lorb l=&quot;0&quot;&gt;の部分をK-edgeなら&lt;lorb l=&quot;0&quot;&gt;、L2,3なら&lt;lorb l=&quot;2&quot;&gt;にする。<br />
+&nbsp; &lt;lorb l=&quot;0&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;wf matchingOrder=&quot;0&quot; trialEnergy=&quot;0.1500&quot; searchE=&quot;false&quot;/&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;wf matchingOrder=&quot;1&quot; trialEnergy=&quot;0.1500&quot; searchE=&quot;false&quot;/&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;wf matchingOrder=&quot;0&quot; trialEnergy=&quot;XXX&quot; searchE=&quot;true&quot;/&gt;<br />
+&nbsp; &lt;/lorb&gt;<br />
+6. さらに、&lt;wf matchingOrder=&quot;0&quot; trialEnergy=&quot;XXX&quot; searchE=&quot;true&quot;/&gt; のXXXの部分を先ほど調べた遷移させる内殻に対応する電子のエネルギーに書き換える。<br />
+7. input.xml に下記を追加する。<br />
+&nbsp;&nbsp;&nbsp; &lt;xs xstype=&quot;BSE&quot; nosym=&quot;true&quot; ngridk=&quot;2 2 2&quot; ngridq=&quot;2 2 2&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vkloff=&quot;0.05 0.15 0.25&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nempty=&quot;60&quot; lmaxapwwf=&quot;5&quot; lmaxemat=&quot;5&quot; gqmax=&quot;2.0&quot; broad=&quot;0.0183747&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tevout=&quot;true&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;energywindow intv=&quot;13.4 16.5&quot; points=&quot;1550&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;screening screentype=&quot;full&quot; nempty=&quot;115&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;BSE bsetype=&quot;singlet&quot; nstlbsemat=&quot;1 1 1 15&quot; nstlbse=&quot;1 1 1 15&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;qpointset&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;qpoint&gt;0.0 0.0 0.0&lt;/qpoint&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/qpointset&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/xs&gt;<br />
+※ nstlbsemat=&quot;1 1 1 15&quot; nstlbse=&quot;1 1 1 15&quot; が重要で、系によって最初の2つの数字を書き換える必要があり、遷移させる内殻に対応する電子のバンドの始まりと終わりを書き入れる。BNの場合はNが最も深いバンドであるため、N-K edgeを計算する場合、Nの1sのバンドに対応する1が指定される。<br />
+※ ngridk=&quot;2 2 2&quot; ngridq=&quot;2 2 2&quot; の値はともに&quot;8 8 8&quot;や&quot;10 10 10&quot;と大きな値を指定した方が良いと思う。<br />
+8. excitingser で計算を実行させる。<br />
+※ 広範囲での非占有準位が関係するためnempty は&quot;60&quot;や&quot;115&quot;が指定されたと思われる。他の系でもこの指定で良いだろう。<br />
+※ gqmaxは&quot;2.5&quot;や&quot;3.0&quot;が良いだろう。<br />
+※ vkloff に&quot;0.05 0.15 0.25&quot;を指定した理由は不明。vkloffが無くてもtutorialと似た結果が出力される。<br />
+<a href="http://exciting.wdfiles.com/local--files/cecam-talks-2012/2012_(L)APW_Draxl.pdf">http://exciting.wdfiles.com/local--files/cecam-talks-2012/2012_(L)APW_Draxl.pdf</a> も見ておくと良い。<br />
+※ EPSILON_BSEsinglet_SCRfull_OC11.OUT や LOSS_BSEsinglet_SCRfull_OC11.OUT が吸収の結果に対応する。<br />
+<br />
+■ single-shot GW計算（半導体のギャップ値の改善に用いられる）（exciting.lithiumから可能）<br />
+1. 「■ 基本的な計算」を参考に入力ファイルを作成する。<br />
+2. input.xml の&lt; groundstate へ<br />
+&nbsp;&nbsp; gmaxvr=&quot;14&quot; xctype=&quot;LSDAPerdew-Wang&quot; tetra=&quot;true&quot; nempty=&quot;17&quot;<br />
+を追加し、SCF計算をする。<br />
+3. SCF計算の後、&lt;/groundstate&gt; の後の行へ<br />
+&nbsp; &lt;gw taskname=&quot;gw&quot; nbgw=&quot;15&quot; &gt;&lt;/gw&gt;<br />
+を追加する。<br />
+4. excitingser で計算を実行させる。<br />
+5. taskname=&quot;band&quot; に書き換え、&lt;groundstate へdo=&quot;skip&quot; を加えて、上記の「■ バンド分散」を参考にすればバンド分散図が得られる。<br />
+※ nbgw はgwを計算する最大のバンドの番号。gw無しでバンド図を描いて表示されるバンドの数を入力すれば良いと思われるが、INFO.OUTにバンドの情報があるのでそれを用いても良いと思う。<br />
+※ おそらく、gwでの計算では xctypeがLSDAやLDAに限られると思われる。<br />
+※ SrTiO3を計算したが、gwの計算でSegmentation faultと出力される。<br />
+<br />
+■ TDDFT（UV-VISやプローブの入射エネルギーが0-50eV程度までのXASやEELSの結果と比較）<br />
+1. 「■ 基本的な計算」を参考に入力ファイルを作成し、SCF計算する。<br />
+2. input.xml の&lt; groundstate で do=&quot;skip&quot; を入力。<br />
+3. &lt;/groundstate&gt; の後の行に下記を追加。<br />
+&lt;xs xstype =&quot;TDDFT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ngridk=&quot;8 8 8&quot; vkloff=&quot;0.05 0.15 0.25&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; nempty=&quot;30&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; gqmax=&quot;2.0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; broad=&quot;0.004&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tevout=&quot;true&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;energywindow intv=&quot;0.0 2.0&quot; points=&quot;500&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;tddft fxctype=&quot;RPA&quot;/&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;qpointset&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;qpoint&gt; 0.0 0.0 0.0 &lt;/qpoint&gt;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &lt;/qpointset&gt;<br />
+&lt;/xs&gt;<br />
+4. excitingser &gt;&amp; outputXS.txt &amp;で計算。<br />
+※ 広範囲での非占有準位が関係するためnempty は&quot;30&quot;が指定されたと思われる。他の系でもこの指定で良いだろう。<br />
+※ gqmaxは&quot;2.5&quot;や&quot;3.0&quot;が良いだろう。<br />
+※ vkloff に&quot;0.05 0.15 0.25&quot;を指定した理由は不明。たしか、vkloffが無くてもtutorialと似た結果が出力される。<br />
+※ fxctype=&quot;RPA&quot; の他にfxctype=&quot;ALDA&quot;も指定できます。<br />
+※ 出力ファイルの説明は <a href="http://exciting-code.org/tddft-output-files">http://exciting-code.org/tddft-output-files</a> にもある。LOSS_FXCRPA_OC11_QMT001.OUT やLOSS_NLF_FXCRPA_OC11_QMT001.OUTを用いればよいだろう。<br />
+<br />
+■ スピン（磁性体の取り扱いが可能）<br />
+1.&nbsp;「■ 基本的な計算」を参考に入力ファイルを作成し、&nbsp; &lt;groundstate の直後に下記を追加する。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xctype=&quot;GGAPerdew-Burke-Ernzerhof&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stype= &quot;Methfessel-Paxton 1&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; swidth=&quot;0.01&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rgkmax=&quot;7.0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nempty=&quot;5&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;spin bfieldc=&quot;0.0 0.0 0.5&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; reducebf=&quot;0.5&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spinorb=&quot;false&quot;&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;/spin&gt;<br />
+&nbsp; &lt;/groundstate&gt;<br />
+&nbsp; &lt;properties&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;dos nsmdos=&quot;0&quot; winddos=&quot;-0.3 0.3&quot; /&gt;<br />
+&nbsp;&nbsp;&nbsp; &lt;LSJ/&gt;<br />
+&nbsp; &lt;/properties&gt;<br />
+2. spin orbit coupling を考慮に入れたい場合は&quot;true&quot;にする。<br />
+※ spin element が記述されるとspin polarizationの計算になる。<br />
+※ SCFサイクル毎に bfieldc&nbsp;が reducedbf&nbsp;倍される。最終的にbfieldはほぼゼロの値になる。<br />
+※ 非磁性の場合でSOC計算をしたい場合は bfieldc=&quot;0.0 0.0 0.0&quot;にして、spinorb=&quot;true&quot;にする。<br />
+※ nsmdos のディフォルトの値 0 が指定されている。<br />
+<br />
+※下記の構造最適化、フォノンの計算は動作を確認していない。<br />
+<br />
+■ 構造最適化<br />
+A) Volumeの最適化<br />
+1. 基本的な計算を行う場合と同じようにinput.xmlを作成。<br />
+2. SETUP-volume-optimization.pyを実行する。<br />
+3. チュートリアルの例と同じように11を入力（-5%から+5%までを分割する数を入力している）。<br />
+4. EXECUTE-volume-optimization.shを実行。<br />
+5. cd workdir<br />
+6. PLOT.psに結果が出力される。<br />
+7. CHECKFIT-energy-vs-volume.py を入力後、3.で入力した11を入力。その後、Others となる0を入力。<br />
+<br />
+B) Cubicでの構造最適化（原子位置の最適化）<br />
+1. 基本的な計算を行う場合と同じようにimput.xmlを作成。<br />
+2. &lt;/groundstate&gt;の後の行に&lt;structureoptimization&gt;&lt;/structureoptimization&gt;を追加。<br />
+3. EXECUTE-single.sh を実行。<br />
+<br />
+C) &nbsp;一般的な結晶での最適化<br />
+（未調査）<br />
+<br />
+■ フォノン（相転移の予測が可能）<br />
+A) 各点でのphonon<br />
+1. 基本的な計算を行う場合と同じようにimput.xmlを作成し、SCF計算する。<br />
+2. &lt;groundstate の後に、do=&quot;skip&quot;を追加する。<br />
+3. &lt;/groundstate&gt; の後に下記を追加する。<br />
+&lt;phonons ngridq=&quot;6 6 6&quot; &gt;<br />
+&nbsp; &lt;qpointset&gt;<br />
+&nbsp; &nbsp; &lt;qpoint&gt; 0.0 0.0 0.0 &lt;/qpoint&gt;<br />
+&nbsp; &nbsp; &lt;qpoint&gt; 0.5 0.5 0.0 &lt;/qpoint&gt;<br />
+&nbsp; &nbsp; &lt;qpoint&gt; 0.5 0.5 0.5 &lt;/qpoint&gt;<br />
+&nbsp; &lt;/qpointset&gt;<br />
+&lt;/phonons&gt;<br />
+※ &lt;qpoint&gt;の行は、上からそれぞれGAMMA, X, L phononsの結果を出力させる指定。<br />
+<br />
+B) DOS<br />
+1. 上記のA)各点でのphononでの計算を行う。<br />
+2. &nbsp;&lt;phonons do=&quot;skip&quot; ngridq=&quot;6 6 6&quot; &gt;の後に下記を追加する。<br />
+&nbsp; &nbsp;&lt;phonondos ngrdos=&quot;100&quot; nwdos=&quot;500&quot; ntemp=&quot;200&quot; /&gt;<br />
+3. SETUP-excitingroot.sh を実行する。<br />
+4. excitingser を実行する。<br />
+5. PLOT-phonon-dos.gnu を実行する。<br />
+6. xsltproc $EXCITINGROOT/xml/visualizationtemplates/xmlthermo2agr.xsl thermo.xml&nbsp;<br />
+※&nbsp;SETUP-excitingroot.shがどこにも見つからない。&nbsp;<br />
+<br />
+C) BAND<br />
+1. 上記のB) DOSの計算を行う。<br />
+2. &lt;phonondos ngrdos=&quot;100&quot; nwdos=&quot;500&quot; ntemp=&quot;200&quot; /&gt; を削除して下記を追加する。<br />
+&lt;phonondispplot&gt;<br />
+&nbsp; &lt;plot1d&gt;<br />
+&nbsp; &nbsp; &lt;path steps=&quot;200&quot; &gt;<br />
+&nbsp; &nbsp; &lt;point coord=&quot;0.0 &nbsp;0.0 -1.0&quot; /&gt;<br />
+&nbsp; &nbsp; &lt;point coord=&quot;0.5 &nbsp;0.5 &nbsp;0.0&quot; /&gt;<br />
+&nbsp; &nbsp; &lt;point coord=&quot;0.0 &nbsp;0.0 &nbsp;0.0&quot; /&gt;<br />
+&nbsp; &nbsp; &lt;point coord=&quot;0.5 &nbsp;0.5 &nbsp;0.5&quot; /&gt;<br />
+&nbsp; &lt;/plot1d&gt;<br />
+&lt;/phonondispplot&gt;<br />
+3. PLOT-phonon-dispersion.gnu 0 2000<br />
+<br />
+■ MEMO<br />
+□ 基本<br />
+A. ngridk はk点数の指定であり、半導体や絶縁体の場合は、金属で指定するよりも少ない値を指定してよい。計算時間はほぼk点の数に比例する。HPにあるAgやDiamondの計算結果の例を見ると、ngridk=&quot;6 6 6&quot; で良いようだ。結果に納得がいかなければもっと大きな値を設定する。<br />
+B. rgkmax は波動関数と固有値の精度に関連するパラメーター。無記入（ディフォルト）であれば7.0であり、通常はこれで良い。しかし、Forceを計算する場合には、8.0から9.0の値が信頼できる結果を得るために必要とされる。計算時間は9のrgkmax 乗に比例する。<br />
+C. maxscl=&quot;数値&quot;で SCF計算の回数を指定できる。<br />
+D. gmaxvrはinterstitial での電荷とポテンシャルの展開に関連するパラメーター。ディフォルトは12。ディフォルトの値で良いと思うが、計算結果の精度に不満足ならHPのDiamondの例にあるように14としてみるのも良いだろう。<br />
+E. nsmdosはDOSでのsmearingの指定をする。nsmdos=&quot;1&quot; で良さそうだ。ディフォルトは0でsmearingをしない場合での結果が得られる。<br />
+F. do は無記入（ディフォルト）では &quot;fromscratch&quot;である。<br />
+G. tetra はkとq点の生成と積分でLIBBZINTライブラリを用いるかを指定する。無記入（ディフォルト）では&quot;false&quot;。&quot;true&quot;にすると動作する。おそらくテトラへドロン法のことだと思われる。<br />
+H. nempty はenergy cutoff でディフォルトは&quot;5&quot;。<br />
+I. lradstep のディフォルトは&quot;4&quot;。小さい値の方が精度が良い。BSEの計算ではHPにて&quot;2&quot;が用いられている。<br />
+<br />
+□ 吸収スペクトル（BSE）<br />
+A. ngridq はq-point grid sizes.Default:&quot;1 1 1&quot;。ngrifkとほぼ同じ点数を指定すればよい。<br />
+B. scissor は伝導帯バンドのエネルギーを補正するためのscissors補正。ディフォルトは&quot;0.0d0&quot;。単位はHartree。<br />
+C. nosym is &quot;true&quot; if no symmetry information should be used for screening.Default:&quot;false&quot;<br />
+D. screentype はDefines which type of screening is to be used. Default:&quot;full&quot;で、その他に、&quot;diag&quot;, &quot;noinvdiag&quot;, &quot;longrange&quot;が指定できる。<br />
+E. basetype はDefines which parts of the BSE Hamiltonian are to be considered. Default:&quot;singlet&quot;で、その他に、&quot;IP&quot;, &quot;RPA&quot;, &quot;triplet&quot;が指定できる。<br />
+F. nstlbsemat はscreeningとBSEを解くために必要な行列要素を計算するバンドの範囲。一番目と二番目が価電子帯（最低のエネルギーから数える）、三番目と四番目が伝導帯（フェルミレベルから数える）で、計算する範囲をバンドの番号で指定。Default:&quot;0 0 0 0&quot;<br />
+G. nstlbse はRange of bands included for the BSE calculation. 一番目と二番目が価電子帯（最低のエネルギーから数える）、三番目と四番目が伝導帯（フェルミレベルから数える）で、計算する範囲をバンドの番号で指定。Default:&quot;0 0 0 0&quot;<br />
+H. aresbse はBSEスペクトルでの反共鳴部分を考慮する場合は&quot;true&quot;を指定する。ディフォルトは&quot;true&quot;<br />
+I. bfcmt はMuffin-tin external magnetic field in Cartesian coordinates. Default:&quot;0.0d0 0.0d0 0.0d0 0.0d0&quot;<br />
+J. swidth はWidth of the smooth approximation to the Dirac delta function (must be &gt; 0). Default:&quot;0.001d0&quot;。単位はHartree。<br />
+K. findlinetype はSelect method to determine the linearisation energies. Default:&quot;advanced&quot; であり、&quot;simple&quot;も指定できる。<br />
+L. mixer はSelect the mixing (relaxation) scheme for the SCF loop. One has the following options: Default:&quot;msec&quot;(Multisecant Broyden potential mixing)であり、&quot;lin&quot;(linear mixer), &quot;pulay&quot;(Pulay mixing)も指定できる。<br />
+M. autormt はIf &quot;true&quot;, the muffin-tin radius of each species is automatically set according to the variables specified by the attribute rmtapm. Default:&quot;false&quot;<br />
+<br />
+□ GW<br />
+A. taskname は無記入（ディフォルト）で&quot;gw&quot;。バンド分散図を得る場合には&quot;gw&quot;で計算の後に、&quot;band&quot;とする。<br />
+B. ibgw はGWの出力に対する最も小さいバンドの番号。ディフォルトは&quot;1&quot;。<br />
+C. nbgw はGWの出力に対する最も大きいバンドの番号。ディフォルトは&quot;1&quot;。<br />
+D. lmaxmb のディフォルトは&quot;3&quot;。（Mixed basis parameters. HPに特段の説明は無い）<br />
+E. epsmb のディフォルトは&quot;1.0d-4&quot;。（Mixed basis parameters. HPに特段の説明は無い）<br />
+F. gmb のディフォルトは&quot;1.0&quot;。（Mixed basis parameters. HPに特段の説明は無い）<br />
+<br />
+□ TDDFT<br />
+A. xstype は&quot;TDDFT&quot;か&quot;BSE&quot;を指定。<br />
+B. vkloff は(vkloff 1 /N 1 ,vkloff 2 /N 2 ,vkloff 3 /N 3 ) だけk点をシフトさせる。(N 1 ,N 2 ,N 3 )&nbsp; is the division of the k -point mesh。ディフォルトは&quot;0.0d0 0.0d0 0.0d0&quot;。<br />
+C. gqmax はLocal-field effects G-cutoff。ディフォルトは&quot;0.0d0&quot;。<br />
+D. broad はスペクトルに対するローレンチアンブロードニング。ディフォルトは&quot;0.01d0&quot; Hartree。<br />
+E. tevout はエネルギーの出力を eVにしたい場合に&quot;true&quot;を指定。<br />
+F.&nbsp;intv はエネルギー間隔の最小値と最大値。ディフォルトは&quot;-0.5d0 0.5d0&quot;。<br />
+G. points はintvで指定したエネルギー間隔の数。ディフォルトは&quot;500&quot;。<br />
+H. fxctype は下記のどれかを選択可能。<br />
+&nbsp;&nbsp; RPA<br />
+&nbsp;&nbsp; LRCstatic_NLF<br />
+&nbsp;&nbsp; LRCstatic<br />
+&nbsp;&nbsp; LRCdyn_NLF<br />
+&nbsp;&nbsp; LRCdyn<br />
+&nbsp;&nbsp; ALDA<br />
+&nbsp;&nbsp; MB1_NLF<br />
+&nbsp;&nbsp; MB1<br />
+ディフォルトは&quot;RPA&quot;。（主に&quot;RPA&quot;と&quot;ALDA&quot;が用いられると思う）<br />
+I. qpoint は逆格子空間内での座標で与えるq点。<br />
+J. lmaxapwwf はMaximum angular momentum for APW functions for q-dependent matrix elements.　Default:&quot;-1&quot;<br />
+K. lmaxemat はMaximum angular momentum for Rayleigh expansion of q -dependent plane wave factor.Default:&quot;3&quot;<br />
+L. intraband は&quot;true&quot;を指定することでplasmon ピークを含んだ結果を得ることが出来る。ディフォルトは&quot;false&quot;。<br />
+<br />
+□ スピン<br />
+A. bfieldc はinitial external field<br />
+B. reducebf は Default:&quot;1.0d0&quot;<br />
+C. spinorb はIf spinorb is &quot;true&quot;, then a &sigma;&sdot;L&nbsp; term is added to the second-variational Hamiltonian.<br />
+D. LSJ decompose the magnetic moments into spin and orbital contributions.<br />
+F. stype はThe attribute swidth determines the width of the approximate delta function. ult:&quot;Gaussian&quot;<br />
+<br />
+-------------------------------------------------------------------------------<br />
+■ excitingのGUI設定（調査中）<br />
+0) java に関するソフトをインストールする<br />
+&nbsp; sudo apt-get install gij<br />
+&nbsp; sudo apt-get install gcj<br />
+&nbsp; sudo apt-get install libxsltc-java<br />
+&nbsp; sudo apt-get install openjdk-6-jdk<br />
+1) eXist-db : <a href="http://exist-db.org/exist/index.xml;jsessionid=15clyqcyuqrdfrp8bwc00unor">http://exist-db.org/exist/index.xml;jsessionid=15clyqcyuqrdfrp8bwc00unor</a><br />
+2) java -jar eXist-setup-[version]-revXXXXX.jar<br />
+&nbsp; （例えば、eXist-setup-1.4.2-rev16251.jar）<br />
+3) cd eXist<br />
+4) eXist/tools/jetty/etc/jetty.xml を編集する。<br />
+&nbsp; 134行目：&lt;Arg&gt;/exist&lt;/Arg&gt; を &lt;Arg&gt;&lt;/Arg&gt; にしてSAVE<br />
+5) eXist/webapp/WEB-INF/controller-config.xml を編集する。<br />
+&nbsp; 34行目：&lt;root pattern=&quot;/tools&quot; path=&quot;xmldb:exist:///db/www&quot;/&gt; を&nbsp;：&lt;!--root pattern=&quot;/tools&quot; path=&quot;xmldb:exist:///db/www&quot;/--&gt;&nbsp;へ変更<br />
+&nbsp; 41行目：&lt;root pattern=&quot;.*&quot; path=&quot;/&quot;/&gt; を &lt;!--root pattern=&quot;.*&quot; path=&quot;/&quot;/--&gt; へ変更&nbsp;<br />
+&nbsp; 57行目：&lt;!--root pattern=&quot;/fs&quot; path=&quot;/&quot;/&gt;&nbsp;を&nbsp;&lt;root pattern=&quot;/fs&quot; path=&quot;/&quot;/&gt; へ変更<br />
+&nbsp; 58行目：&lt;root pattern=&quot;.*&quot; path=&quot;xmldb:exist:///db/www&quot;/--&gt; を &lt;root pattern=&quot;.*&quot; path=&quot;xmldb:exist:///db/xresult&quot;/&gt; へ変更<br />
+&nbsp; 以上の変更が終了したらSAVE<br />
+6) eXist/tools/jetty/etc/webdefault.xml を編集する<br />
+&nbsp; 285行目：&lt;session-timeout&gt;30&lt;/session-timeout&gt; を &lt;session-timeout&gt;300&lt;/session-timeout&gt; へ変更してSAVE<br />
+7) eXist/tools/wrapper/conf/wrapper.conf を編集する<br />
+&nbsp; 39行目：wrapper.java.maxmemory=128 を wrapper.java.maxmemory=1024 へ変更してSAVE<br />
+9) bin/startup.sh<br />
+&nbsp; ちなみに ctrl + c で実行が止まる。<br />
+10) 別のターミナルを開く<br />
+11) <a href="mailto:exciting@web">exciting@web</a> scripts: <a href="http://exciting.wdfiles.com/local--files/lithium-exciting-web/excitingatweb.tar.gz">http://exciting.wdfiles.com/local--files/lithium-exciting-web/excitingatweb.tar.gz</a><br />
+12) tar zxvf excitingatweb.tar.gz<br />
+13) excitingatweb/build.xml を編集する<br />
+&nbsp; 6行目：&lt;property name=&quot;xmldb.passwd&quot; value=&quot;&quot;/&gt; を &lt;property name=&quot;xmldb.passwd&quot; value=&quot;******&quot;/&gt; へ書き換える。******は好きな文字。<br />
+&nbsp; 8行目：&lt;property name=&quot;eXistpath&quot; value=&quot;/users/sol/chm/eXist/&quot;/&gt; で &quot;/users/sol/chm/eXist/&quot;&nbsp;を実際に eXist があるアドレスに書き換える。（例：/home/eXist/&quot;）&nbsp;<br />
+14) cd excitingatweb<br />
+15) sudo apt-get install ant<br />
+16) ant install<br />
+17) firefox などで URL に localhost:8080 と入力する。<br />
+※ sudo apt-get install openjdk-6-jdk が重要で、その他は無くて良いかも知れない。<br />
+※ 次回以降は、terminal などで $HOME/eXist/bin/startup.sh を入力して、localhost:8080 にアクセスすればよい。<br />
+<br />
+■ 計算を走らせる為の設定（調査中）<br />
+0. 必要なソフトをインストール<br />
+&nbsp; sudo apt-get install gridengine-client<br />
+&nbsp; sudo apt-get install torque-client-x11<br />
+&nbsp; sudo torque-client<br />
+1. cd $HOME/eXist/excitingatweb/hpcservice<br />
+2. troquejob.sh<br />
+&nbsp; /uses/sol/chm/git/ を $HOME/へ<br />
+3. python webserver.py<br />
+-------------------------------------------------------------------------------<br />
+■ この記述は廃止予定です。<br />
+1) 分割ダウンロードが可能なフリーソフトをインストール<br />
+Free download manager : <a href="http://www.freedownloadmanager.org/download.htm">http://www.freedownloadmanager.org/download.htm</a><br />
+<br />
+2) exciting@webにて下記をダウンロードする<br />
+exde.tgz : <a href="https://s3.amazonaws.com/exciting/exde.vdi.tgz">https://s3.amazonaws.com/exciting/exde.vdi.tgz</a><br />
+VirtualBox: <a href="http://www.virtualbox.org/wiki/Downloads">http://www.virtualbox.org/wiki/Downloads</a><br />
+<br />
+3) Explzhをインストール（窓の社よりダウンロード）し、exde.tgzを解凍する<br />
+Explzh : <a href="http://www.forest.impress.co.jp/lib/arc/archive/archiver/explzh.html">http://www.forest.impress.co.jp/lib/arc/archive/archiver/explzh.html</a> 　<br />
+<br />
+4)　chrome os のダウンロードは必要無い。<br />
+（chrome osを使いたい方向けに残しておきます）<br />
+For VMWare (.vmdk) : <a href="http://www.megaupload.com/?d=LSPBGNXK">http://www.megaupload.com/?d=LSPBGNXK</a><br />
+For VirtualBox (.vdi) : <a href="http://www.megaupload.com/?d=XIN4NSR0">http://www.megaupload.com/?d=XIN4NSR0</a><br />
+-------------------------------------------------------------------------------<br />
+■ ATAT<br />
+ATAT : <a href="http://www.its.caltech.edu/~avdw/atat/">http://www.its.caltech.edu/~avdw/atat/</a><br />
+<a href="mailto:ATAT@exciting">ATAT@exciting</a> : <a href="http://exciting-code.org/local--files/cluster-expansion-of-tial/ATAT@exciting_Nov_8_2010.tar">http://exciting-code.org/local--files/cluster-expansion-of-tial/ATAT@exciting_Nov_8_2010.tar</a><br />
+Install manual : <a href="http://www.its.caltech.edu/~avdw/atat/manual/node9.html">http://www.its.caltech.edu/~avdw/atat/manual/node9.html</a><br />
+(編集中)<br />
+-------------------------------------------------------------------------------<br />
+■ grace のダウンロードと環境設定<br />
+<a href="http://plasma-gate.weizmann.ac.il/Grace/doc/UsersGuide.html">http://plasma-gate.weizmann.ac.il/Grace/doc/UsersGuide.html</a><br />
+コンパイルが上手くいかない場合は、rpmでのインストールも考慮するとよい。例えば、CentOS5.5 32bitでrpmを用いた場合は下記のようになる。<br />
+rpm -i xdg-utils-1.0.2-2.el5.centos.noarch.rpm<br />
+rpm -i xbae-4.60.4-8.el5.i386.rpm<br />
+rpm -i t1lib-5.1.1-7.el5.i386.rpm<br />
+rpm -i openmotif-2.3.1-5.el5_5.1.i386.rpm<br />
+rpm -i netcdf-3.6.2-7.el5.i386.rpm<br />
+rpm -i libXp-1.0.0-8.1.el5.i386.rpm<br />
+rpm -i fftw2-2.1.5-15.el5.i386.rpm<br />
+rpm -i nedit-5.5-21.el5.i386.rpm<br />
+rpm -i grace-5.1.22-2.el5.i386.rpm<br />
+最後のrpm(ファイルフォーマット）が上手くインストール出来ると、xmgraceで様々なデータをプロットすることができるようになる。例えば、excitingのtutorialsにあるように、<br />
+xmgrace TDOS.OUT<br />
+でTotal Density of Statesを表示することができる。<br />
+-------------------------------------------------------------------------------

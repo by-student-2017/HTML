@@ -1,0 +1,531 @@
+　ここではPhaseを用いて状態密度分布やバンド図を描く方法などを解説する。（現在、windows7上での操作方法を確認中です）<br />
+<span style="color: black;">PHASE ver.11.00</span>:&nbsp;<a href="http://www.ciss.iis.u-tokyo.ac.jp/riss/dl/download/index.php">http://www.ciss.iis.u-tokyo.ac.jp/riss/dl/download/index.php</a><br />
+------------------------------------------------------------------------------<br />
+■ Phaseの利用方法<br />
+<br />
+□ マニュアルはCISSのHPから得られるので利用は難しくないと思います。<br />
+<br />
+□ VESTAを利用した入力の仕方<br />
+1) phase-viewer を立ち上げる。<br />
+2) samplesのところで右クリックしてcreate project を選択<br />
+&nbsp;&nbsp;&nbsp;&nbsp;project nameを入力し、create initial sub project にチェックを入れてok<br />
+3) initial input file で wizard にしてnextを押す。<br />
+4) select coords file においてVESTAで作成したcase.cifを選択<br />
+5) 以後は計算する系に該当した条件を選択していくだけで良い。<br />
+<br />
+□ 分子動力学（MD）の利用方法<br />
+MDが上手く動作しない場合は下記のようにすると計算できる場合があります。<br />
+1) basic settings<br />
+&nbsp;&nbsp;&nbsp;&nbsp;solver と charge mixing をdelete ボタンをして削除して下さい。<br />
+2) structural evolution<br />
+&nbsp;&nbsp;&nbsp;&nbsp;method で velocity_verlet を選択し、dt には100を入力。<br />
+以上で構造最適化計算が出来る場合がありますが、Max CPU time は 数日と余裕のある設定にすることをお勧め致します。<br />
+<br />
+□ ALDOSの計算方法<br />
+各原子の部分状態密度分布の出力方法<br />
+1) create input for PHASE (上記VESTAを利用した入力の仕方を参照）<br />
+&nbsp; この時点で入力を指定しておくとよい。<br />
+&nbsp;&nbsp;DOS<br />
+&nbsp;&nbsp;&nbsp; total dos:&nbsp;on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;method: tetrahedral<br />
+&nbsp;&nbsp;&nbsp;&nbsp;aldos: on<br />
+2) Preperation panel でのDOS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a)&nbsp;ALDOS: on<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b)&nbsp;critical distance: 6<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 状態密度分布を計算する場合に、どの距離まで計算させるかを入力するもので0だと結果が出ません。原子の大きさ程度の6 Bohrなどを入力しておくとよい。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;c) from atomとto atomがあります。出力させたい原子を選択します。入力しないと全ての原子に対して計算がなされます。原子の番号+1のALDOSが出力された場合は、critical distanceよりも外側の電子状態密度の分布です。その他、下の欄にあるaldosのチェックを表示させたい原子に対して入れて下さい。（WIEN2kと厳密には異なりますが、critical distanceはWIEN2kでのRMTだと考えると分かりやすいです。WIEN2kはRMTの範囲で各原子と各軌道の状態密度分布が出力されます。RMTを超える部分はinterstitial成分として状態密度分布が別に表示されます。全状態密度分布ではinterstitial成分も全て含まれて表示されます。WIEN2kもPhaseも各軌道及び各原子の状態密度分布を全部足しても全状態密度分布にはなりません。WIEN2kではinterstitial成分を、Phaseでは原子の番号+1のALDOSを足すことで全状態密度分布となります）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;d)&nbsp;DOSをなめらかに表示するには、basic settingsでのaccuracyの入力場面で、K point samplingでのmethodをmesh(monkでもよいかも)にして、Smearingでのmethodをtetrahedronに指定します。Meshを選択するとこれまでよりも収束するまでにかなりの時間が掛かります（meshを指定した場合には20&times;20&times;20を超えると計算されないことにも注意しておいて下さい）。<br />
+3) Phaseでは原子または各層での状態密度分布を出力させることができます。各軌道（s, p, d, f）を個別に出力させるプログラムはありませんが、どの軌道が支配的かは分かります。気になる場合は、計算できそうな系をWIEN2kで計算してみたり、DVXaで計算してみたりして、その殆どを特定の軌道が占めていることを確認してみるとよいでしょう。<br />
+4) ALDOSはSCF計算時に指定しないと計算されません。後からekcalで計算させると筆者の経験では容易に動かなかった。<br />
+<br />
+□ 収束状況の確認<br />
+以下の二種類がある<br />
+A.&nbsp; 計算中に exe での monitor を押す。次いで 右端（右から2つ目）にある三角（右矢印？）のアイコンを押す。さらに右側のアイコンがカラーになるので押す。そうすると収束上を示すグラフが表示される。計算が終わるとそのグラフは変化しなくなる。<br />
+B. &nbsp;「results」&rarr;「log」&rarr;「SCF」&rarr;「stdout(energy)」&rarr;Controlを押しながら「edel（全エネルギーの差分）」を選択し、下にある「quick plot」を押す。<br />
+<br />
+□ 利用上の注意点<br />
+&nbsp; Phase-viewer 320ではSCFでの経過を知ることはできますが、DOSやバンド分散の計算における経過を知ることはできません。途中でDOSやバンド分散に関する結果のデータを見ようとするとエラーで止まったりしてしまいます。CPUが計算しているかを知りたい場合は、「ctrl + Alt +&nbsp;Delete」でタスクマネージャーを開いて、パフォーマンスやプロセスを見ておくのも良いでしょう。数%CPUを使用してしまいますが、複数の人がPCを利用している場合や動作が心配な場合はこれを利用することをお勧めします。<br />
+<br />
+□ 「4.2節（SCFのこと）の計算を実行し、電荷密度を求める。k点サンプリングはMonkhorst-Pack法で求めておく。次に得られた電荷密度で固定し、tetrahedron法による状態密度の計算を実行する。このように、固定電荷の計算を行うにあたって、電荷密度を求めるために行った4.2節（SCFのこと）の計算の時に用いたk点サンプリング法やメッシュ数、バンド数は、同一である必要は無い」、小池聡、「第一原理バンド計算ソフトウェア Advance/PHASE」 、アドバンスシミュレーション、2011.10.Vol 9<br />
+<br />
+□ オススメの参考文献<br />
+[1] 「第一原理バンド計算ソフトウェア Advance/PHASE」 、アドバンスシミュレーション、2011.10.Vol 9<br />
+[2] 「第一原理バンド計算ソフトウェア Advance/PHASE」 、アドバンスシミュレーション、2013.1.Vol 14<br />
+[3] 第41回薄膜・表面物理基礎講座（2012年）「簡単に使えるようになります！　実験補完ツールとしての材料シミュレーション入門」 テキスト<br />
+<br />
+□ Phase Ver.3.1 にて、計算ユニットセルの自動最適化が可能になっている。それ以前のものは各格子定数での全エネルギーを計算して最適値を求める必要がある。<br />
+------------------------------------------------------------------------------<br />
+□ Windows7 Home での調査（周辺ソフトのインストールは左欄の Windows7 Home を参照 ）<br />
+<br />
+PCの構成（今回はTSUKUMOで購入）<br />
+1. OS: [64bit版] Windows 7 Home Premium 64-bit<br />
+2. CPU: Intel Core i5-2500<br />
+3. マザーボード: Intel H67 Express チップセット Micro ATX マザーボード<br />
+4. メモリ: DDR3-1333 DDR3 SDRAM 4GB &times; 4枚<br />
+5. 追加ビデオカード: ASUS GT430/1GB ENGT430/DI/1GD3<br />
+6. ハードディスク: 1TB 7200 rpm シリアルATA3 ハードディスク<br />
+7. パーティション分割: パーティション分割無し<br />
+8. 光学ドライブ: DL対応DVDスーパーマルチ（LG電子製 GH24NS70 / 書き込みソフト付き / SATA接続）<br />
+9. PCケース: eX.computerオリジナル MicroATXスリムタワーケースラック / EX1-7302T-S12F<br />
+10. ケースオプション: AeroSlim 用 12cm 冷却ファン<br />
+11. ケースオプション: AeroSlim 用 12cmフィルター（防塵エアロフィルター）<br />
+12. 入力機器: SRSET/YDKBU02BK-M2055R<br />
+詳細な設定は左欄の「windows7 home」 へ<br />
+<br />
+■ Phase viewer<br />
+0.&nbsp;Phase-viewerを入れる前に、ゴーストスクリプト（gs902w32.exe）をインストール。<br />
+1. CISSPHASE-Viewer_v320_winを解凍（例えば、ファイルをLhaplusに入れる）<br />
+2. setupwin32を起動<br />
+3. 格納場所が(x86)と付くので、そのままインストールしてみる。<br />
+4. Enter the maximum heap size in MB にて、<br />
+&nbsp; PCのメモリーが1GB以上あればディフォルトの512 MBで良い。<br />
+5. Install source code for third party softwares にチェックを入れる。<br />
+6. Phase_v1100またはuvsor_v341にあるwbinの中身を、C:\Program Files (x86)\CISS\PHASE-Viewer\bin　にある bin の中へコピーして入れる。uvsor_v341のwbinの中にはPhase_v1100のwbinの中身が入っている。tools/binの中身も必要であればコピーしてbinの中へ入れる。<br />
+7. gncpp2_paw.gzを解凍。さらに、中にあるファイルも解凍する。そのファイルの中に、PAW用のPPが入っている。&larr;これは上手くいかないかもしれない。<br />
+8. C:\Program Files (x86)\CISS\PHASE-Viewer\bin にある phase-viewer （windows用のバッチファイル）を起動する（ショートカットを作っておいてもよい）。 または、スタート&rarr;すべてのプログラム&rarr;CISS&rarr;PHASE-Viewer&rarr;PHASE-Viewerでも起動可能。<br />
+------------------------------------------------------------------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Ubuntu 11.10 (oneric) でのインストール<br />
+<br />
+Phase-Viewer<br />
+1. mkdir Phase_viewer<br />
+2. cd Phase_viewer<br />
+3. tar zxvf CISSPHASE-Viewer_v320_linux.tar.gz<br />
+4. setupLinux.bin<br />
+5. Directory Name: を /home/username/CISS/PHASE-Viewer<br />
+6. Enter the maximum heap size in MB を 512<br />
+7. Install source code for third party softwares にチェックを入れる<br />
+8. /home/username/CISS/PHASE-Viewer/bin/phase-viewer で実行可能<br />
+日本語の部分の文字化け対処方法（多くの方から情報を頂いて解決。感謝）。<br />
+1. cd $HOME/CISS/PHASE-Viewer/_jvm/lib/fonts<br />
+2. mkdir fallback<br />
+3. cd fallback<br />
+4. ln -s /usr/share/fonts/truetype/takao/Takao* ./<br />
+上記で駄目な場合<br />
+4. ln -s /usr/share/fonts/truetype/ttf-japanese* ./<br />
+4. ln -s /usr/share/fonts/truetype/sazanami/sazanami* ./<br />
+<br />
+-------------------------------------------------------------------------------------<br />
+■&nbsp;日本語の部分の文字化け対処方法（以下これまでの失敗例）。<br />
+1. Ubuntu Software Centerで OpenJDK Java 6 Runtime をダウンロード<br />
+2.&nbsp;cd /usr/lib/jvm/java-6-openjdk/jre/lib<br />
+3. cd fonts/fallback<br />
+&nbsp; cd $HOME/CISS/PHASE-Viewer/_jvm/lib/fonts でも失敗。<br />
+&nbsp; cd $HOME/CISS/PHASE-Viewer/_jvm/lib/oblique-fonts でも失敗。　<br />
+&nbsp; cd $HOME/CISS/PHASE-Viewer/_jvm/lib/fonts/fallback で成功。<br />
+4. sudo ln -s /usr/share/fonts/truetype/takao/Takao* ./<br />
+<a href="http://coffeecupman.blog28.fc2.com/blog-entry-5.html">http://coffeecupman.blog28.fc2.com/blog-entry-5.html</a>　<br />
+5. Ubuntu Software Centerで&nbsp;kochi系 をダウンロード<br />
+6. ln -s /usr/share/fonts/TTF/kochi-gothic-subset.ttf<br />
+7. ln -s /usr/share/fonts/TTF/kochi-mincho-subset.ttf<br />
+<a href="http://nekolinux.blogspot.jp/2009/05/java.html">http://nekolinux.blogspot.jp/2009/05/java.html</a><br />
+下記も試してみたが駄目だった。<br />
+wget -q https://www.ubuntulinux.jp/ubuntu-ja-archive-keyring.gpg -O- | sudo apt-key add -<br />
+wget -q https://www.ubuntulinux.jp/ubuntu-jp-ppa-keyring.gpg -O- | sudo apt-key add -<br />
+sudo wget https://www.ubuntulinux.jp/sources.list.d/oneiric.list -O /etc/apt/sources.list.d/ubuntu-ja.list<br />
+sudo apt-get update<br />
+<a href="http://www.ubuntulinux.jp/japanese">http://www.ubuntulinux.jp/japanese</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Phase のコンパイル<br />
+ifortとiccを用いる場合: <a href="http://www-fps.nifs.ac.jp/ito/memo/index.html">http://www-fps.nifs.ac.jp/ito/memo/index.html</a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Phase のコンパイル<br />
+<br />
+gfortran + ACML +&nbsp;FFTW3<br />
+<br />
+ACMLのダウンロード<br />
+amcl-5-1-0-gfrotran-64bit.tgz<br />
+amcl-5-1-0-gfrotran-64bit-int64.tgz : Integer * 8 の場合<br />
+2. mkdir acml<br />
+3. cd acml<br />
+4. tar zxvf amcl-5-1-0-gfrotran-64bit.tgz<br />
+5. install-acml-5-1-0-gfortran-64bit.sh<br />
+<a href="http://www.softek.co.jp/SPG/Pgi/TIPS/acml.html">http://www.softek.co.jp/SPG/Pgi/TIPS/acml.html</a>　<br />
+<br />
+FFTW3のダウンロード<br />
+1. ubuntu software center でfftw3-dev&nbsp;をインストール<br />
+または左欄の「ライブラリの設定」を参考にしてPCに最適な条件でライブラリを作成<br />
+<br />
+OpenMPIのダウンロード<br />
+1. ubuntu software center でopenmpi をインストール<br />
+または左欄の「ライブラリの設定」を参考にしてPCに最適な条件でOpenMPIを使用可能にする<br />
+<br />
+MPICH2のダウンロード<br />
+1. ubuntu software center でMPICH2 をインストール&nbsp;<br />
+または左欄の「ライブラリの設定」を参考にしてPCに最適な条件でMPICH2を使用可能にする<br />
+<br />
+◆ OpenMPI (gfortran) (ubuntu 12.04 64-bit)<br />
+0) ダウンロード<br />
+&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+&nbsp; sudo apt-get install emacs<br />
+1. tar zxvf phase_v1100.tar.gz<br />
+2. cd phase_v1100<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. 1) GNU Linux (EM64/AMD64)<br />
+6. 0) GNU compiler collection (gfortran)<br />
+7. 1) MPI parallel<br />
+8. 2) Open MPI<br />
+&nbsp;&nbsp; /usr<br />
+9. 0) Netlib BLAS/LAPACK<br />
+10. 0) Built-in FFT libraries<br />
+11. Do you want to use DGEMM.. [no]<br />
+12. Do you want to edit the makefile... [yes]<br />
+&nbsp;&nbsp; emacs<br />
+&nbsp;&nbsp; F90 のgfortran をmpif90.openmpi に書き換える0<br />
+&nbsp;&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp;&nbsp; LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F90FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F77FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp;&nbsp; LIBS の -I/usr/lib を -I/usr/lib/openmpi/lib に書き換える<br />
+13. Do you want to make PHASE now? [yes]<br />
+14. Do you want to check the installed programs? [yes]<br />
+15. /usr/bin/mpirun.openmpi -machinefile /home/*/hosts -np 2 /home/*/phase_v1100/bin/phase ne=1 nk=2<br />
+<br />
+◆ OpenMPI (gfortran) + ACML 5.3.0 + FFTW3 (ubuntu 12.04 64-bit)<br />
+0) ダウンロード<br />
+&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+&nbsp; sudo apt-get install emacs<br />
+ACMLのダウンロード<br />
+&nbsp; a. amcl-5-3-0-gfrotran-64bit.tgz<br />
+&nbsp; b. mkdir acml<br />
+&nbsp; c. cd acml<br />
+&nbsp; d. tar zxvf amcl-5-3-0-gfrotran-64bit.tgz<br />
+&nbsp; e. sudo ./install-acml-5-3-0-gfortran-64bit.sh<br />
+&nbsp; f. accept<br />
+&nbsp; g. /opt/acml5.3.0<br />
+&nbsp; h. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.0/gfortran64/lib を追加し、Terminal 上で bash を入力。<br />
+1. tar zxvf phase_v1100.tar.gz<br />
+2. cd phase_v1100<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. 1) GNU Linux (EM64/AMD64)<br />
+6. 0) GNU compiler collection (gfortran)<br />
+7. 1) MPI parallel<br />
+8. 2) Open MPI<br />
+&nbsp; /usr<br />
+9. 1) AMD Core Math Library (ACML)<br />
+&nbsp; /opt/acml5.3.0/gfortran64/lib<br />
+10. 0) Built-in FFT libraries<br />
+11. Do you want to use DGEMM.. [no]<br />
+12. Do you want to edit the makefile... [yes]<br />
+&nbsp;&nbsp; emacs<br />
+&nbsp;&nbsp; F90 のgfortran をmpif90.openmpi に書き換える0<br />
+&nbsp;&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp;&nbsp; LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F90FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F77FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp;&nbsp; LIBS の -I/usr/lib を -I/usr/lib/openmpi/lib に書き換える<br />
+13. Do you want to make PHASE now? [yes]<br />
+14. Do you want to check the installed programs? [yes]<br />
+15. /usr/bin/mpirun.openmpi -machinefile /home/*/hosts -np 2 /home/*/phase_v1100/bin/phase ne=1 nk=2<br />
+<br />
+◆ OpenMPI (gfortran) + ACML 5.3.0 + FFTW3 + OpenMP (ubuntu 12.04 64-bit)<br />
+0) ダウンロード<br />
+&nbsp;&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp;&nbsp; sudo apt-get install libopenmpi-dev<br />
+&nbsp;&nbsp; sudo apt-get install emacs<br />
+ACMLのダウンロード<br />
+&nbsp;&nbsp; a. amcl-5-3-0-gfrotran-64bit.tgz<br />
+&nbsp;&nbsp; b. mkdir acml<br />
+&nbsp;&nbsp; c. cd acml<br />
+&nbsp;&nbsp; d. tar zxvf amcl-5-3-0-gfrotran-64bit.tgz<br />
+&nbsp;&nbsp; e. sudo ./install-acml-5-3-0-gfortran-64bit.sh<br />
+&nbsp;&nbsp; f. accept<br />
+&nbsp;&nbsp; g. /opt/acml5.3.0<br />
+&nbsp;&nbsp; h. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.0/gfortran64_mp/libを追加し、Terminal 上で bash を入力。<br />
+&nbsp;&nbsp; i. .bashrc に export OMP_NUM_THREADS=2 を追加し、Terminal 上で bash を入力。<br />
+1. tar zxvf phase_v1100.tar.gz<br />
+2. cd phase_v1100<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. 1) GNU Linux (EM64/AMD64)<br />
+6. 0) GNU compiler collection (gfortran)<br />
+7. 1) MPI parallel<br />
+8. 2) Open MPI<br />
+&nbsp;&nbsp; /usr<br />
+9. 1) AMD Core Math Library (ACML)<br />
+&nbsp; /opt/acml5.3.0/gfortran64_mp/lib<br />
+10. 0) Built-in FFT libraries<br />
+11. Do you want to use DGEMM.. [no]<br />
+12. Do you want to edit the makefile... [yes]<br />
+&nbsp;&nbsp; emacs<br />
+&nbsp;&nbsp; F90 のgfortran をmpif90.openmpi に書き換える0<br />
+&nbsp;&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp;&nbsp; LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F90FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F77FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp;&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp;&nbsp; LIBS の -I/usr/lib を -I/usr/lib/openmpi/lib に書き換える<br />
+&nbsp;&nbsp; LIBS の -lacml を -lamcl_mp に書き換える<br />
+13. Do you want to make PHASE now? [yes]<br />
+14. Do you want to check the installed programs? [yes]<br />
+15. /usr/bin/mpirun.openmpi -machinefile /home/*/hosts -np 2 /home/*/phase_v1100/bin/phase ne=1 nk=2<br />
+------------------------------------------------------------------------------<br />
+◆ gfortran<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある&nbsp;write(nfout, &#39;(i,3f20.10)&#39;&nbsp;) を&nbsp;write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. ディフォルトでのコンパイルは成功する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+<a href="http://ameblo.jp/yakiniku-kuihoudai-001/entry-11147742426.html">http://ameblo.jp/yakiniku-kuihoudai-001/entry-11147742426.html</a> 　<br />
+<br />
+◆ gfortran&nbsp;+&nbsp;FFTW3<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1)&nbsp;とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+7. ディフォルトでのコンパイルは成功する。<br />
+8. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+<br />
+◆ gfortran + ACML 5.1.0 + FFTW3<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64/lib を追加し、Terminal 上で bash を入力。<br />
+7. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+8. ディフォルトでのコンパイルは成功する。<br />
+9. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML&nbsp;をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64/lib とした。<br />
+<a href="http://d.hatena.ne.jp/msr_humpy/20120421/1335025888">http://d.hatena.ne.jp/msr_humpy/20120421/1335025888</a>　<br />
+<a href="http://devgurus.amd.com/thread/125370">http://devgurus.amd.com/thread/125370</a>&nbsp;<br />
+<br />
+◆&nbsp;gfortran + ACML 5.1.0 + FFTW3 + OpenMP<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib&nbsp;を追加し、Terminal 上で bash を入力。&nbsp;<br />
+7. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+8.&nbsp;edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp; &nbsp;F90FLAGS と F77FLAGS 行の最後に -fopenmp を追加。<br />
+&nbsp;&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、この行の最後にある -lfftw3 の後に -lfftw3_threads -lfftw3_omp を追加して保存して閉じる。<br />
+9. ディフォルトでのコンパイルは成功する。<br />
+&nbsp;10. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+<br />
+◆ MPICH2(gfortran) + ACML 5.1.0 + FFTW3 (調査中)<br />
+0. MPICH2のダウンロード<br />
+&nbsp;&nbsp; sudo apt-get install mpich2<br />
+&nbsp;&nbsp; sudo apt-get install mpich-mpd-bin<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib を追加し、Terminal 上で bash を入力。<br />
+7. 1) MPI parallel を選択し、1) MPICH を選び、/usr と入力。<br />
+8. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+9. MPI parallel FFT? で yes を選択<br />
+10. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp;&nbsp;&nbsp; F90 と LINK のgfortran をmpif90.mpich2 に書き換える<br />
+&nbsp;&nbsp;&nbsp; CC の gcc を mpicc.mpich2 に書き換える<br />
+&nbsp;&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/mpich2/include に書き換える<br />
+&nbsp;&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/mpich2/include に書き換える<br />
+&nbsp;&nbsp;&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、-lfftw3 の後に -lfftw3_threads -lfftw3_mpi を追加し、-L/usr/lib を -L/usr/mpich2/lib に書き換えて保存して閉じる。<br />
+11. ディフォルトでのコンパイルは成功する。<br />
+12. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ checkでの計算は正常に動作したが並列化されているかは不明。<a href="http://www.arch.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?mpd%A4%CE%B5%AF%C6%B0">http://www.arch.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?mpd%A4%CE%B5%AF%C6%B0</a><br />
+<a href="http://www.nslabs.jp/mpi-setup.rhtml">http://www.nslabs.jp/mpi-setup.rhtml</a>　<br />
+<a href="http://am112705.blog.so-net.ne.jp/2009-09-13">http://am112705.blog.so-net.ne.jp/2009-09-13</a>&nbsp;<br />
+<a href="http://tech.ckme.co.jp/mpi.shtml">http://tech.ckme.co.jp/mpi.shtml</a><br />
+<br />
+◆ OpenMPI(gfortran) + ACML 5.1.0 +&nbsp;FFTW3 (調査中)<br />
+0. OpenMPIのダウンロード<br />
+&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp; sudo apt-get install&nbsp;libopenmpi-dev<br />
+&nbsp; 下記はもしかしたら必要かもしれない。<br />
+&nbsp; sudo apt-get install mpi-default-bin<br />
+&nbsp; sudo apt-get install yorick-mpy-openmpi<br />
+&nbsp; sudo apt-get install libhdf5-openmpi-dev<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib を追加し、Terminal 上で bash を入力。<br />
+7. 1) MPI parallel を選択し、2) Open MPI を選び、/usr と入力。<br />
+8. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+9. MPI parallel FFT? で yes を選択<br />
+10. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp;&nbsp; F90 と LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp;&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp;&nbsp; F90FLAGS&nbsp;の -I/usr/include&nbsp;を -I/usr/openmpi/include に書き換える<br />
+&nbsp;&nbsp; F77FLAGS の -I/usr/include&nbsp;を&nbsp;-I/usr/openmpi/include に書き換える<br />
+&nbsp;&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、-lfftw3 の後に -lfftw3_threads -lfftw3_mpi を追加し、-L/usr/lib を -L/usr/openmpi/lib に書き換えて保存して閉じる。<br />
+11. ディフォルトでのコンパイルは成功する。<br />
+12. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ checkでの計算は正常に動作したが並列化されているかは不明。<br />
+<br />
+◆ gfortran + ACML 5.1.0 + ACML FFTW3（調査中）<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64/lib を追加し、Terminal 上で bash を入力。<br />
+7. FFT のところで 2) とし、/opt/acml5.1.0/gfortran64/lib を入力する。<br />
+8. ディフォルトでのコンパイルは成功する。<br />
+9. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64/lib とした。<br />
+※ ソースコード中にACMLFFT用の書き込みが無い。m_FFTにてcontainsの部分と他のソースコードで use により呼ばれるサブルーチンの記述が無い。<br />
+<br />
+------------------------------------------------------------------------------<br />
+◆ 高速化<br />
+<br />
+◆ gfortran + ACML 5.1.0 + FFTW3 + OpenMP +&nbsp;コンパイルオプション<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib を追加し、Terminal 上で bash を入力。<br />
+7. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+8. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp; F90FLAGS と F77FLAGS 行の最後に -fopenmp -O2　-march=nocona -pipe を追加<br />
+&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える。<br />
+&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、この行の最後にある -lfftw3 の後に -lfftw3_threads -lfftw3_ompを追加して保存して閉じる。<br />
+9. ディフォルトでのコンパイルは成功する。<br />
+10. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ FFTW3を Ubuntu Software Center でダウンロードせずに、cpuに適切なオプションを用いてコンパイルする場合は、左欄のライブラリを参考にしてみるとよい。下記（付録：コンパイルオプションでの対策）を参照。この場合、上記7. では /usr/lib ではなく /usr/local/lib を指定するとディフォルトの指定になる。<br />
+※ -march のオプションのより詳細な記述は下記（付録：コンパイルオプションでの対策）を参照。<br />
+<br />
+◆ gfortran +&nbsp;GotoBLAS2 + FFTW3 + OpenMP + コンパイルオプション（調査中：失敗）<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+7. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp;&nbsp; F90FLAGS と F77FLAGS 行の最後に -fopenmp -O2　-march=nocona -pipe を追加<br />
+&nbsp;&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える。<br />
+&nbsp;&nbsp; LIBS 行で -L./ -llapack -lblas を -L/usr/local/lib&nbsp;-lgoto2&nbsp;-lgoto2_lapack -lgoto2_blas に書き換え、この行の最後にある -lfftw3 の後に -lfftw3_threads -lfftw3_ompを追加して保存して閉じる。<br />
+8. ディフォルトでのコンパイルは成功する。<br />
+9. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ FFTW3を Ubuntu Software Center でダウンロードせずに、cpuに適切なオプションを用いてコンパイルする場合は、左欄のライブラリを参考にしてみるとよい。下記（付録：コンパイルオプションでの対策）を参照。この場合、上記7. では /usr/lib ではなく /usr/local/lib を指定するとディフォルトの指定になる。<br />
+※ -march のオプションのより詳細な記述は下記（付録：コンパイルオプションでの対策）を参照。<br />
+※ undefined reference to &#39;omp_get_num_threads&#39;や&#39;omp_get_thread_num&#39;、&#39;GOMP_parallel_start&#39;、&#39;GOMP_parallel_end&#39; などが表示される。<br />
+<br />
+◆ gfortran +&nbsp;ATLAS + FFTW3 + OpenMP + コンパイルオプション（調査中）<br />
+今後調査してみる方法・要点<br />
+A) Netlib を選択<br />
+B) edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+C) LIBSの行を ATLASを用いたコンパイル形式に書き換える（左欄 ライブラリ参照）<br />
+<br />
+◆ MPICH2(gfortran) + ACML 5.1.0 + FFTW3 (調査中)<br />
+0. MPICH2のダウンロード<br />
+&nbsp;&nbsp;&nbsp; sudo apt-get install mpich2<br />
+&nbsp;&nbsp;&nbsp; sudo apt-get install mpich-mpd-bin<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib を追加し、Terminal 上で bash を入力。<br />
+7. 1) MPI parallel を選択し、1) MPICH を選び、/usr と入力。<br />
+8. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+9. MPI parallel FFT? で yes を選択<br />
+10. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp;&nbsp;&nbsp;&nbsp; F90 と LINK のgfortran をmpif90.mpich2 に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp; CC の gcc を mpicc.mpich2 に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/mpich2/include に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/mpich2/include に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp; F90FLAGS と F77FLAGS 行の最後に 、-O2　-march=nocona -pipe を追加する<br />
+&nbsp;&nbsp;&nbsp;&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、-lfftw3 の後に -lfftw3_threads -lfftw3_mpi を追加し、-L/usr/lib を -L/usr/mpich2/lib に書き換えて保存して閉じる。<br />
+11. ディフォルトでのコンパイルは成功する。<br />
+12. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ checkでの計算は正常に動作したが並列化されているかは不明。<br />
+<a href="http://www.arch.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?mpd%A4%CE%B5%AF%C6%B0">http://www.arch.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?mpd%A4%CE%B5%AF%C6%B0</a>　<br />
+<a href="http://www.nslabs.jp/mpi-setup.rhtml">http://www.nslabs.jp/mpi-setup.rhtml</a>　<br />
+<a href="http://am112705.blog.so-net.ne.jp/2009-09-13">http://am112705.blog.so-net.ne.jp/2009-09-13</a>　<br />
+<a href="http://tech.ckme.co.jp/mpi.shtml">http://tech.ckme.co.jp/mpi.shtml</a>　<br />
+<br />
+◆ OpenMPI(gfortran) + ACML 5.1.0 + FFTW3 (調査中)<br />
+0. OpenMPIのダウンロード<br />
+&nbsp;&nbsp; sudo apt-get install openmpi-bin<br />
+&nbsp;&nbsp; sudo apt-get install libopenmpi-dev<br />
+&nbsp;&nbsp; 下記はもしかしたら必要かもしれない。<br />
+&nbsp;&nbsp; sudo apt-get install mpi-default-bin<br />
+&nbsp;&nbsp; sudo apt-get install yorick-mpy-openmpi<br />
+&nbsp;&nbsp; sudo apt-get install libhdf5-openmpi-dev<br />
+1. tar zxvf phase_v1001.tar.gz<br />
+2. cd phase_v1001<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. src_phase にある m_constraints.F90 の 5262 と 5272行にある write(nfout, &#39;(i,3f20.10)&#39; ) を write(nfout, &#39;(i1,3f20.10)&#39; ) に変える。<br />
+6. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.1.0/gfortran64_mp/lib を追加し、Terminal 上で bash を入力。<br />
+7. 1) MPI parallel を選択し、2) Open MPI を選び、/usr と入力。<br />
+8. ubuntu software center でfftw3-dev をインストールした場合、FFT のところで 1) とし、/usr/lib を入力する。FFTW3をコンパイルした場合は /usr/local/lib を入力。<br />
+9. MPI parallel FFT? で yes を選択<br />
+10. edite the makefile のところで yes にして、 emacs か kwrite を入力<br />
+&nbsp;&nbsp;&nbsp; F90 と LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp;&nbsp;&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp;&nbsp;&nbsp; F90FLAGS の -I/usr/include を -I/usr/openmpi/include に書き換える<br />
+&nbsp;&nbsp;&nbsp; F77FLAGS の -I/usr/include を -I/usr/openmpi/include に書き換える<br />
+&nbsp;&nbsp;&nbsp; F90FLAGS と F77FLAGS 行の最後に 、-O2　-march=nocona -pipe を追加する<br />
+&nbsp;&nbsp;&nbsp; LIBS 行で -lacml を -lacml_mp に書き換え、-lfftw3 の後に -lfftw3_threads -lfftw3_mpi を追加し、-L/usr/lib を -L/usr/openmpi/lib に書き換えて保存して閉じる。<br />
+11. ディフォルトでのコンパイルは成功する。<br />
+12. .bashrc に export PATH=$HOME/phase_v1001/bin:$PATH を追加する。<br />
+※ check プログラムでは正常に動作したが、規模が大きくなると正常に動作するかは分からない。ソースコードの文脈から考えるに大丈夫だと思うが、iの出力が2桁以上だと i2 など桁数に応じた数をiの後に付け加えなければならない。<br />
+※ /opt/acml5.1.0 でない場所に ACML をインストールした場合には書き換える。筆者の場合、/home/acml5.1.0/gfortran64_mp/lib とした。<br />
+※ checkでの計算は正常に動作したが並列化されているかは不明。<br />
+&nbsp;<br />
+------------------------------------------------------------------------------<br />
+付録：コンパイルオプションでの対策<br />
+※ 指定されたCPUに対応したオプションを選定すると計算速度が速くなる。<br />
+◆ 一般的なIntel系CPUの場合<br />
+gfortran -march=nocona -pipe<br />
+gcc -march=nocoa -pipe<br />
+◆ Core2 の場合<br />
+gfortran -mtune=core2 -march=core2 -m64 -O3 -pipe -funroll-all-loops<br />
+gcc -mtune=core2 -march=core2 -m64 -O3 -pipe -funroll-all-loops<br />
+◆ Core i7 の場合<br />
+gfortran -mtune=corei7 -march=corei7 -m64 -O3 -pipe -funroll-all-loops<br />
+gcc -mtune=corei7 -march=corei7 -m64 -O3 -pipe -funroll-all-loops<br />
+※ 上手くコンパイルできない場合は、-funroll-all-loops を除いたり、-O3 を -O2 にしたりする。<br />
+<a href="http://www.cc.toin.ac.jp/sc/sugimoto/gfortran/gfor0610.pdf">http://www.cc.toin.ac.jp/sc/sugimoto/gfortran/gfor0610.pdf</a>　<br />
+◆ 一般的な Intel系CPUの場合（下記のオプションでは自動で最適なものを選んでくれる）<br />
+ifort -axSSE4.2,SSE4.1,SSSE3,SSE -mcmodel=large -i-dynamic -O2<br />
+icc -axSSE4.2,SSE4.1,SSSE3,SSE -mcmodel=large -i-dynamic -O2<br />
+※ -m64 や -mcmodel=large -i-dynamic は大規模計算の場合<br />
+※ 最適化のオプションは副作用の少ない -O2 が推奨。ただし、副作用の生じないコードを書けている自信がある場合はより計算速度が速くなると予測される -O3 などでも良い。<br />
+<a href="http://seismon.blog85.fc2.com/blog-entry-80.html">http://seismon.blog85.fc2.com/blog-entry-80.html</a>　<br />
+<a href="http://home.hiroshima-u.ac.jp/~tyoshida/pukiwiki/index.php?FortranTips">http://home.hiroshima-u.ac.jp/~tyoshida/pukiwiki/index.php?FortranTips</a>　<br />
+<a href="http://tsubame.gsic.titech.ac.jp/docs/guides/tsubame2/html/programming.html">http://tsubame.gsic.titech.ac.jp/docs/guides/tsubame2/html/programming.html</a>　<br />
+------------------------------------------------------------------------------

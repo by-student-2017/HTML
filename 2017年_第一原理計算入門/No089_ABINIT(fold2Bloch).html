@@ -1,0 +1,237 @@
+------------------------------------------------------------------------------<br />
+fold2Bloch (Abinit ver.8.0.6 and later)<br />
+1) scf and band calculation (super cell)<br />
+<br />
+Å† case.files<br />
+-----<br />
+case.in<br />
+case.out<br />
+casei<br />
+caseo<br />
+casetmp<br />
+C.GGA_PBE-JTH.xml<br />
+Ti.GGA_PBE-JTH.xml<br />
+-----<br />
+<br />
+Å† case.in<br />
+-----<br />
+# Fe2VAl Supercell<br />
+# Generates a supercell with the multiplicity of 2:2:2 (x:y:z)<br />
+<br />
+&nbsp;&nbsp; prtcif&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # If set to 1, a CIF file is output with the crystallographic data for the present run (cell size shape and atomic positions)<br />
+<br />
+ndtset 2 # There will be two datasets here: SCF run and the band structure<br />
+<br />
+# Dataset 2 : the band structure<br />
+iscf2&nbsp;&nbsp;&nbsp; -2<br />
+getden2&nbsp; -1 # get charge density from the 1st run<br />
+kptopt2&nbsp; -5 # band structure plot with 5 intervals<br />
+ndivk2&nbsp;&nbsp; 10 10 1 10 10 # number of divisors for each interval<br />
+<br />
+kptbounds2 -0.5&nbsp; 0.0&nbsp; 0.0&nbsp; # L point<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0&nbsp; 0.0&nbsp; 0.0&nbsp; # Gamma point<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5&nbsp; 0.0&nbsp; 0.0&nbsp; # L point<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.5 -0.5&nbsp; 0.0&nbsp; # X point<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0&nbsp; 0.0&nbsp; 0.0&nbsp; # Gamma<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5&nbsp; 0.5&nbsp; 0.0&nbsp; # X point<br />
+<br />
+#tolwfr2&nbsp; 1.0d-12<br />
+tolwfr2&nbsp; 1.0d-6 #low accuracy, test, check, and tutorial case<br />
+enunit2&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Will output the eigenenergies in eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+chkprim&nbsp;&nbsp; 0 # do not check for primitive cell<br />
+<br />
+#&nbsp; fband 0 # In case fband is 0.0d0, the code computes from the pseudopotential<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # files and the geometry data contained in the input file, the number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # of electrons present in the system. Then, it computes the minimum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # number of bands that can accommodate them, and use that value for _nband_<br />
+<br />
+#Definition of the plane wave basis set<br />
+&nbsp;&nbsp; ecut&nbsp; 15.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Maximum kinetic energy cutoff (Hartree)<br />
+pawecutdg 15 # PAW - Energy CUToff for the Double Grid<br />
+<br />
+#Definition of the k-point grid<br />
+&nbsp; ngkpt&nbsp;&nbsp; 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 2x2x2 Monkhorst-Pack grid<br />
+nshiftk&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Use one copy of grid only (default)<br />
+&nbsp;shiftk&nbsp;&nbsp; 0.0&nbsp; 0.0&nbsp; 0.0&nbsp; # Unshifted K-mesh<br />
+<br />
+#Definition of the self-consistency procedure<br />
+# diemac&nbsp;&nbsp; 9.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Model dielectric preconditioner<br />
+#&nbsp; nstep&nbsp;&nbsp; 999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Maxiumum number of SCF iterations<br />
+&nbsp;tolvrs&nbsp;&nbsp; 1.0d-6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # tolerance for potential residual<br />
+<br />
+#Common input data (Cif2cell)<br />
+# Structural parameters<br />
+-----<br />
+2) abinit &lt; case.files<br />
+3) energy_eig-abinit.sh<br />
+&nbsp; For ubuntu, change [#! /bin/sh] to [#! /bin/bash]<br />
+&nbsp; (/abinit/doc/tutorial/lesson_fold2Bloch/energy_eig-abinit.sh and plot_band.m)<br />
+4) fold2Bloch caseo_DS2_WFK 2:2:2<br />
+5) gedit ubs_dots.m<br />
+6) octave<br />
+7) ubs_dots<br />
+------------------------------------------------------------------------------<br />
+<br />
+Å† ubs_dots.m<br />
+----------<br />
+function ubs_dots<br />
+% Plot undolded band structure<br />
+%<br />
+% modified 21 Jan 2016<br />
+% modified&nbsp; 7 Jun 2016 (for octave and abinit(Ry -&gt; Ha, ry2ev &gt; ha2eV))<br />
+% importdata -&gt; load, scatter -&gt; ...<br />
+<br />
+%% Init. parameters<br />
+KPATH = [1/2 0 0; ...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0 0; ...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1/2 1/2 0]; % k-point path<br />
+FOLDS = [2 2 2]; % multiplicity in the corresponding directions used when constructing the super-cell<br />
+KLABEL = {&#39;L&#39;; &#39;G&#39;; &#39;X&#39;};<br />
+finpt = &#39;Fe2VAlo.f2b&#39;; % input file name<br />
+Ef = 0.37631; % Fermi (or HOMO) energy (hartree) form *.out<br />
+ERANGE = [Ef-1 Ef+0.4]; % energy range for plot (Ha)<br />
+ha2ev = 2*13.605698066; % Ha -&gt; eV conversion factor<br />
+pwr = 1/1; % power for result plotting<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % 1 - linear scale, 1/2 - sqrt, etc.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % 0 - folded bands (needs wth = 0)<br />
+msz = 10; % marker size for plot<br />
+lwdth = 0.5; % plot line width<br />
+PLTSZ = [1 1 600/1.5 300/1.5]; % plot size<br />
+wth = 0.05; % threshold weight<br />
+clrmp = jet;&nbsp;&nbsp;&nbsp; % flipud(gray)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % flipud(pink)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % flipud(hot)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % flipud(autumn)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % cool<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % flipud(bone)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % flipud(jet)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % jet<br />
+G = [ -0.045895&nbsp; 0.045895&nbsp; 0.045895;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.045895 -0.045895&nbsp; 0.045895;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.045895&nbsp; 0.045895 -0.045895]; % Reciprocal latt. vect. from *.out<br />
+<br />
+<br />
+%% INITIALIZATION<br />
+[KEIG, EIG, W] = readinput(finpt); % read input data from file<br />
+% EIG - energy eigenvalues<br />
+% KEIG - k-list for eigenvalues<br />
+% W - list of characters<br />
+<br />
+%% MAIN<br />
+L = [];<br />
+ENE = [];<br />
+WGHT = [];<br />
+for i=1 : 3<br />
+&nbsp;&nbsp;&nbsp; G(i,:)=G(i,:)*FOLDS(i); % rescale reciprocal lattice vectors<br />
+end&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; % from supercell to primitive cell<br />
+dl = 0; % cumulative length of the path<br />
+KPATH = coordTransform(KPATH,G);<br />
+KEIG = coordTransform(KEIG,G);<br />
+XTICKS = [0];<br />
+for ikp = 1 : size(KPATH,1)-1<br />
+&nbsp;&nbsp;&nbsp; B = KPATH(ikp,:) - KPATH(ikp+1,:);<br />
+&nbsp;&nbsp;&nbsp; dk = sqrt(dot(B,B));<br />
+&nbsp;&nbsp;&nbsp; XTICKS = [XTICKS; XTICKS(ikp)+dk];<br />
+&nbsp;&nbsp;&nbsp; for j = 1 : length(EIG)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if EIG(j) &gt; ERANGE(1) &amp;&amp; EIG(j) &lt; ERANGE(2) &amp;&amp; W(j) &gt;= wth<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dist = dp2l( KEIG(j,:) , KPATH(ikp,:) , KPATH(ikp+1,:) );<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if dist &lt; eps % k-point is on the path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; A = KPATH(ikp,:) - KEIG(j,:);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; x = dot(A,B)/dk;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if x &gt; 0&nbsp; &amp;&amp;&nbsp; x-dk &lt; eps % k-point is within the path range<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; L = [L; x+dl]; % append k-point coordinate along the path<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ENE = [ENE; EIG(j)]; % append energy list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WGHT = [WGHT; W(j)];<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp; dl = dl + dk;<br />
+end<br />
+if isempty(L)<br />
+&nbsp;&nbsp;&nbsp; msg = [&#39;No eigenvalues are selected for the plot. &#39;, ...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;The likely reason is that the energy range is &#39;, ...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;too restrictive (check ERANGE), or no k-points are located &#39;, ...<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;on the path selected (check KPATH)&#39;];<br />
+&nbsp;&nbsp;&nbsp; error(msg);<br />
+end<br />
+<br />
+<br />
+%% Plot results<br />
+hFig = figure(1);<br />
+<br />
+% Fig 1(a)<br />
+subplot(1,2,1);<br />
+set(hFig, &#39;Position&#39;, PLTSZ, &#39;PaperPositionMode&#39;,&#39;auto&#39;)<br />
+map = colormap(clrmp);<br />
+WGHTRS = rescale(WGHT,pwr);<br />
+scatter(L,(ENE-Ef)*ha2ev, WGHTRS*msz, WGHTRS,lwdth);<br />
+hold on;<br />
+axis([0 max(L) min((ENE-Ef)*ha2ev) max((ENE-Ef)*ha2ev)])<br />
+yticks = get(gca,&#39;ytick&#39;);<br />
+set(gca,&#39;YTick&#39;,yticks);<br />
+for i = 1 : length(yticks)<br />
+&nbsp;&nbsp;&nbsp; newYTick{i} = sprintf(&#39;%1.1f&#39;,yticks(i));<br />
+end<br />
+set(gca,&#39;YTickLabel&#39;,newYTick);<br />
+hline = plot([0 XTICKS(end)],[0 0]); % Fermi level<br />
+set(hline,&#39;Color&#39;,&#39;k&#39;,&#39;LineStyle&#39;,&#39;--&#39;);<br />
+set(gca,&#39;XTick&#39;,XTICKS);<br />
+set(gca,&#39;XTickLabel&#39;,KLABEL);<br />
+set(gca,&#39;XGrid&#39;,&#39;on&#39;, &#39;GridLineStyle&#39;,&#39;-&#39;);<br />
+caxis([0 1]); % normalize intensities to 1<br />
+xlabel(&#39;Wave vector&#39;)<br />
+ylabel(&#39;Energy (eV)&#39;)<br />
+axis([0 max(L) min((ENE-Ef)*ha2ev) max((ENE-Ef)*ha2ev)])<br />
+box on<br />
+hold off<br />
+<br />
+% Fig 1(b)<br />
+subplot(1,2,2);<br />
+DAT = linspace(0,1,10);<br />
+DATX = ones(size(DAT));<br />
+DATRS = rescale(DAT,pwr);<br />
+scatter(DATX,DAT, DATRS*msz, DATRS,lwdth);<br />
+caxis([0 1])<br />
+ylabel(&#39;Spectral weight&#39;)<br />
+<br />
+% SAVE plot as *.eps<br />
+print( [finpt &#39;.eps&#39;], &#39;-depsc&#39;)<br />
+<br />
+% -------------------------------------------------------------------------<br />
+function W = coordTransform(V,G)<br />
+% transform vector V(:,3) in G(3,3) coord. system -&gt; W(:,3) in Cartesian coordinates<br />
+% G vector elements are in columns!<br />
+W = zeros(size(V));<br />
+G = G&#39;; % transform G<br />
+for i = 1:length(V)<br />
+&nbsp;&nbsp;&nbsp; W(i,:) = G(1,:)*V(i,1) + G(2,:)*V(i,2) + G(3,:)*V(i,3);<br />
+end;<br />
+% -------------------------------------------------------------------------<br />
+function WRESCL = rescale(W,pwr)<br />
+% rescale weights using a power functio W^pwr<br />
+WRESCL=W.^(pwr); % rescale if needed to enhance<br />
+WRESCL = WRESCL + eps; % need eps to make plot &quot;heapy&quot;<br />
+% -------------------------------------------------------------------------<br />
+function [KEIG, EIG, W] = readinput(filename)<br />
+% read input data<br />
+DATA = load(filename);<br />
+KEIG = DATA(:,1:3);<br />
+EIG = DATA(:,4);<br />
+W = DATA(:,5);<br />
+% -------------------------------------------------------------------------<br />
+function RES = dp2l(X0,X1,X2) % distance from point {X0} to line {X1}-{X2}<br />
+% see http://mathworld.wolfram.com/Point-LineDistance3-Dimensional.html<br />
+denom = X2 - X1;<br />
+denomabs = sqrt(dot(denom,denom));<br />
+if denomabs &lt; eps<br />
+&nbsp;&nbsp;&nbsp; display(X1); display(X2);<br />
+&nbsp;&nbsp;&nbsp; error(&#39;X1 = X2&#39;);<br />
+end;<br />
+numer = cross( X0-X1 , X0-X2 );<br />
+numerabs = sqrt(dot(numer,numer));<br />
+RES = numerabs/denomabs;<br />
+% -------------------------------------------------------------------------<br />
+----------<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,352 @@
+------------------------------------------------------------------------------<br />
+■ 電子スピン共鳴 [1]<br />
+　電子スピン共鳴（ESR）は、不対電子が磁場の中に置かれたときの電子スピンのエネルギー準位の変化（ゼーマン分裂）を検出する分光学の一種であり、有機ラジカル、遷移金属イオン、高分子磁性体などを観測対象としている。<br />
+------------------------------------------------------------------------------<br />
+◇&nbsp;用語の定義&nbsp;[1]<br />
+<br />
+・広義<br />
+　電子スピンSが関わる磁気的な共鳴現象の総称としてESR（electron spin resonance; 電子スピン共鳴）を用いられる<br />
+<br />
+・狭義<br />
+　ESR（electron spin resonance）: 軌道角運動量Lからの寄与が極めて小さい場合<br />
+　EPR（electron paramagnetic resonace; 電子常磁性共鳴）: 軌道角運動量Lからの寄与がある場合<br />
+<br />
+　最近では、電子スピンが関係する共鳴現象の計測法をまとめてEMR（electron magnetic resonance; 電子磁気共鳴）と総称することもある。<br />
+------------------------------------------------------------------------------<br />
+◇ 電磁波の波長と種々の分光法 [2]<br />
+&nbsp;
+<table border="1" cellpadding="1" cellspacing="1" style="width: 550.83px;">
+	<tbody>
+		<tr>
+			<td style="width: 156.16px;">電磁波の波長</td>
+			<td style="width: 218.05px;">電磁波の名称</td>
+			<td style="width: 157.94px;">現象・分光法</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">100 km - 10 km</td>
+			<td style="width: 218.05px;">極長波（VLF）（ラジオ波）</td>
+			<td style="width: 157.94px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">10 km - 1 km</td>
+			<td style="width: 218.05px;">長波（LF）（ラジオ波）</td>
+			<td style="width: 157.94px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">1km - 100 m</td>
+			<td style="width: 218.05px;">中波（MF）（ラジオ波）</td>
+			<td style="width: 157.94px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">100 m - 10 m</td>
+			<td style="width: 218.05px;">短波（HF）（ラジオ波）</td>
+			<td style="width: 157.94px;">核磁気共鳴（NMR）<br />
+			　40 MHz など</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">10 m - 1 m</td>
+			<td style="width: 218.05px;">超短波（VHF）（テレビ波）</td>
+			<td style="width: 157.94px;">核磁気共鳴（NMR）<br />
+			　100 MHzなど</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">1 m - 100 mm</td>
+			<td style="width: 218.05px;">極超短波（UHF）（テレビ波）</td>
+			<td style="width: 157.94px;">核磁気共鳴（NMR）<br />
+			　600 MHzなど</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">100 mm - 10 mm</td>
+			<td style="width: 218.05px;">センチ波（SHP）（マイクロ波）</td>
+			<td style="width: 157.94px;">電子スピン共鳴（ESR）<br />
+			　9 GHz（X-band）</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">10 mm - 1 mm</td>
+			<td style="width: 218.05px;">ミリ波（EHF）</td>
+			<td style="width: 157.94px;">電子スピン共鳴（ESR）<br />
+			　96 GHz（W-band）<br />
+			マイクロ波分光</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">1 mm - 25 &mu;m<br />
+			25&nbsp;&mu;m - 2.5 &mu;m<br />
+			2.5&nbsp;&mu;m&nbsp;- 0.8 &mu;m</td>
+			<td style="width: 218.05px;">遠赤外（FIR）<br />
+			中赤外（MWIR）<br />
+			近赤外（NIR）</td>
+			<td style="width: 157.94px;">遠赤外分光（FIR）<br />
+			赤外分光（MWIR）<br />
+			近赤外分光（NIR）</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">0.81 &mu;m - 0.64 &mu;m<br />
+			0.64 &mu;m - 0.59 &mu;m<br />
+			0.59 &mu;m - 0.55 &mu;m<br />
+			0.55 &mu;m - 0.49 &mu;m<br />
+			0.49 &mu;m - 0.43 &mu;m<br />
+			0.43 &mu;m - 0.38 &mu;m</td>
+			<td style="width: 218.05px;">赤（可視光, vis）<br />
+			橙（可視光, vis）<br />
+			黄（可視光, vis）<br />
+			緑（可視光, vis）<br />
+			青（可視光, vis）<br />
+			紫（可視光, vis）</td>
+			<td style="width: 157.94px;">ラマン散乱<br />
+			可視・吸収・発光</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">0.38 &mu;m - 0.10 &mu;m</td>
+			<td style="width: 218.05px;">紫外線（UV）</td>
+			<td style="width: 157.94px;">紫外吸収</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">10 nm - 0.1 nm</td>
+			<td style="width: 218.05px;">&nbsp;</td>
+			<td style="width: 157.94px;">光電子分光</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">0.1 nm - 1 pm</td>
+			<td style="width: 218.05px;">&nbsp;</td>
+			<td style="width: 157.94px;">X線回折</td>
+		</tr>
+		<tr>
+			<td style="width: 156.16px;">1 pm - 0.1 pm</td>
+			<td style="width: 218.05px;">&gamma;線</td>
+			<td style="width: 157.94px;">メスバウアー分光</td>
+		</tr>
+	</tbody>
+</table>
+※ 赤外（IR）は、遠赤外、中赤外、遠赤外などに分かれる。文献[1,3]を参照。恐らく[3]だと思うが再チェックが必要。<br />
+------------------------------------------------------------------------------<br />
+◇ 装置 [1]<br />
+　ESR分光計は、基本的にはマイクロ波発振器、磁石、空洞共振器、マイクロ波検出器、増幅器、データ取得・解析システムからなり、マイクロ波発振器からマイクロ波検出器までは導波管で結ばれ、検出器で電気信号に変換される。<br />
+　CW-ESR測定では、外部磁場B（//z）中にある空洞共振器（cavity）の中央に試料を入れ、周波数&nu;のマイクロ波をx軸方向に連続的に照射し続け、磁場を掃引しながら、不対電子の磁気的応答をy軸方向から検出する。<br />
+　試料挿入部である共振器には円筒形（TE<sub>011</sub>モード）と矩形（TE<sub>102</sub>モード）のキャビティがある。その他、2個の空洞を持つdual cavity、溶液用のTM cavity、ループギャップジェネレーター、表面コイルなど目的に合わせて選択できる。<br />
+　キャビティ中心部に均一なマイクロ波磁場B<sub>1</sub>(//x)が印加されるようデザインされており、共振器がエネルギーを集中する性質をQ値で表す。Qが大きいほど感度は高い。一般に試料や試料管、デュワーなどを挿入するとQ値は下がる。試料ごとに最適条件を整える。<br />
+<br />
+・Xバンド分光計の他に種々の周波数帯を用いた分光計が市販されている。<br />
+高周波分光計：<br />
+　Kバンド（波長約1 cm, 25 GHz, 0.89 T）<br />
+　Qバンド（波長約8 mm, 35 GHz, 1.25 T）<br />
+　Wバンド（波長約3 mm, 95 GHz, 3.3 T）<br />
+低周波分光計：<br />
+　Sバンド（波長約10 cm, 3.2 GHz, 0.11 T）<br />
+　Lバンド（33 cm, 1 GHz, 0.03 T）<br />
+　低周波領域（300 MHz）<br />
+・生体試料の場合には、水分子による誘電損失を避けるため、また大きな試料サイズを可能にするため、低周波数分光計が必然となる。逆に、磁性体の研究、ナノ粒子の磁気的物性、スピンラベルを用いたタンパク質の局所運動性などの研究では、より高感度・高分解能が求められ、250 GHz以上の高周波数分光計の開発と応用が進んでいる<br />
+------------------------------------------------------------------------------<br />
+◇ 試料調製およびその留意点 [1]<br />
+<br />
+A. 試料管の選択<br />
+・内径 4 mmm（外径 5 mm）の石英試料管が一般的である<br />
+　（内径 3.2, 2.6, 1.3, 0.7 mmなっどの石英管やキャピラリーもある）<br />
+　※ パイレックスガラスなどは常磁性金属イオンやラジカルを含むので使わない<br />
+・溶媒の極性が高いほど内径を小さくし、溶媒による誘電損失を避ける。<br />
+　このため水溶液試料にはキャピラリーまたは専用のラットセル（60 x 10 x 0.25 mm<sup>3</sup>程度）を用いる。<br />
+・高エネルギー線照射には、照射によるラジカル生成が少ない特殊な石英試料管を用いる<br />
+<br />
+B. 濃度効果<br />
+・一般に0.1 mM以下の希釈溶液ではラジカル本来の線幅が検出される<br />
+　高濃度になるにつれてスピン間の双極子-双極子相互作用が生じ、さらに電子の軌道の重なりによるスピン交換相互作用も加わる<br />
+・スピン濃度上昇に伴ってスペクトルは下記のように変化する<br />
+　例えば、ニトリキシドラジカル（TEMPO）水溶液のESR線形の濃度依存性を例とした場合<br />
+　10<sup><font size="2">-4</font></sup> M&nbsp;から 10<sup>-2</sup> M程度 : 個々の線幅が広がる（dipolar broadening）<br />
+　10<sup>-1</sup> M程度: hfsの平均化と線幅の急激な増加（exchange broadening）<br />
+　1 M程度: 線幅の先鋭化（exchange narrowing）<br />
+・固体試料の場合は、反磁性の同型化合物で磁気希釈する<br />
+・濃度未知試料の試料の場合はいくつかの濃度で測定し確認する<br />
+<br />
+C. 脱O<sub>2</sub>効果<br />
+・酸素O<sub><font size="2">2</font></sub>は2個の不対電子を持ちESR活性である<br />
+・溶存酸素や雰囲気中または結晶（粉末試料）中に浸透した気体O<sub><font size="2">2</font></sub>は、双極子相互作用によって試料スピンの吸収線を広幅化する<br />
+・O<sub><font size="2">2</font></sub>脱気（または窒素置換など）により、検出感度の低下や微細な構造の見落としが避けられる<br />
+・77 K測定時、試料管内に液体酸素が溜まると高磁場側のベースラインが上がる<br />
+・キャビティ内の希薄O<sub><font size="2">2</font></sub>ガスはスパイク上のシグナルを与える<br />
+<br />
+D. 測定対象の拡大<br />
+・短寿命（マイクロ秒程度）ラジカルの場合には、スピントラップ法やflow法をも散る<br />
+・ESR不活性な高分子化合物に対しては電子スピンを持つ小分子で特定部位をラベルするかプローブする方法が用いられる<br />
+・ラベルまたはプローブとしては種々の特性を持ったニトロキシド（NO）ラジカルが市販されている<br />
+　目的に応じて選択する<br />
+・ラジカルが存在する場の水溶性/脂溶性の指標、ラジカルの回転運動相関時間（&tau;<sub>R</sub>）、ラジカルの拡散係数（D）などから場の特性が推定できる<br />
+・高磁場ESRとの組み合わせで、タンパク質の構造解析（アミノ酸側鎖間の距離の決定など）や生体膜の研究にスピンラベル法が再び使われ始めている<br />
+・反磁性の金属錯体の場合には、結晶場を損なわない程度（例えば、1/100）の常磁性イオンをドープすることによりESRによる計測が可能になる<br />
+------------------------------------------------------------------------------<br />
+◇ 測定パラメータ設定の留意点 [1]<br />
+<br />
+A. マイクロ波出力（P）<br />
+・Pが強すぎると、緩和過程による平衡状態への回復が間に合わず、信号強度が減少する（これを飽和という）<br />
+・飽和を避けるために&radic;(P)に対して信号強度が直線的に増加する範囲で測定する<br />
+・Pが大きく、緩和時間T<sub>1</sub>, T<sub>2</sub>が長いほど飽和し易い<br />
+・2種のラジカルが共存するときには、この飽和挙動の違いを用いて識別することができる<br />
+<br />
+B. 磁場変調幅（modulation, B<sub>m</sub>）<br />
+・ESRの吸収曲線は線幅が広いので、感度の向上および微妙な変化を強調するため、磁場変調を用いて一次微分曲線として検出する<br />
+・多数の超微細構造（hyperfine structure: hfs）線に分裂したスペクトルの解析には、線幅の狭い吸収スペクトルのように見える二次微分曲線が便利なこともある<br />
+　市販装置では、100 kHzで変調した後、80 Hzの変調をかけて二次微分曲線が得られる<br />
+・線幅はpeak-to-peak幅（W<sub>pp</sub>）、すなわち、吸収曲線の最大傾斜幅（W<sub>mst</sub>）で記載することが多い<br />
+・正しいスペクトル線形を得るにはB<sub>m</sub>を線幅の1/5から1/10程度とする<br />
+・線幅に比べて広い変調をかけると歪んだスペクトルになるが、信号の有無を確認する目的には大きめのB<sub>m</sub>を使う方がよい<br />
+<br />
+C. 感度検出の最適化と測定パラメータ<br />
+・ESRにおける検出感度（sensitivity）は、線形に歪みのない条件で検出できる最小濃度（N<sub>min</sub>）とラジカルの有無を識別できる二つの意味を持つ。一般的には前者を意味し、S/N=1のとき次式で表される。<br />
+　N<sub>min</sub> = {(*V<sub>c</sub>*k*T<sub>s</sub>*&Gamma;)/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>*g<sup>2</sup>*&beta;<sub>e</sub><sup>2</sup>*S*(S+1)*B<sub>r</sub>*Q<sub>U</sub>)}*{(F*k*T<sub>d</sub>*b)/P<sub>0</sub>}<sup>1/2</sup><br />
+ここでV<sub><font size="2">c</font></sub>はキャビティの容量（m<sup>3</sup>）、kはボルツマン定数（JK<sup>-1</sup>）、T<sub><font size="2">s</font></sub>は試料温度（K）、&Gamma;は吸収線の半値幅の半分（mT）、B<sub><font size="2">r</font></sub>は共鳴磁場（mT）、Q<sub><font size="2">U</font></sub>は無負荷時のQ値、T<sub><font size="2">d</font></sub>は検出器の温度（K）、bは検出・増幅系の全帯域幅（s<sup>-1</sup>）、P<sub><font size="2">0</font></sub>は入射マイクロ波出力（Js<sup>-1</sup>）、Fは熱ノイズ以外の原因によるノイズ因子（&gt;1）である。<br />
+・Xバンド装置（TE102Cavity, Q<sub><font size="2">U</font></sub>&nbsp;= 500, b = 1, P<sub><font size="2">0</font></sub>&nbsp;= 100 mW = 10<sup>-1</sup> Js<sup><font size="2">-1</font></sup>, F = 100）を用い300 Kでg = 2.00のラジカル（S=1/2, &Gamma; = 0.1 mT）を測定すると、N<sub><font size="2">min</font></sub>は約10<sup>11</sup>スピンとなる。<br />
+・N<sub><font size="2">min</font></sub>を求める上の式は線幅&Gamma;（mT）を含むので、検出感度は線幅1 mT当たりで定義されていることに注意<br />
+　線幅の広い信号の場合、それだけ感度が下がる<br />
+------------------------------------------------------------------------------<br />
+◇ EPSパラメータの算出 [1]<br />
+<br />
+A. g値<br />
+　g値を得るには、以下の二つの方法がある<br />
+1) 共鳴周波数&nu;<sub>e</sub>（MHz）を周波数測定器で、磁場B（mT）を磁場測定器で直接計測して、次式からg値を算出する<br />
+　g = h*&nu;<sub>e</sub> / (&beta;<sub>e</sub>*B) = 0.07144775*&nu;e（MHz）/ B (mT)<br />
+2) 標準物質のg値（g<sub><font size="2">std</font></sub>）を用いて次式からg値を算出する<br />
+　gx - g<sub><font size="2">std</font></sub> = -{(B<sub>x</sub> - B<sub>std</sub>)/B<sub>std</sub>}*g<sub><font size="2">std</font></sub><br />
+・標準物質のg値（g<sub>std</sub>）として下記が便利である<br />
+　DPPH（1,1-diphenylpicrylhydradyl）粉末：g = 2.0036<br />
+　DPPHベンゼン溶液：g = 2.00354<br />
+　Wurster&#39;s blue cation: g = 2.336051<br />
+・磁場掃引の標準<br />
+　MnO/MgO のMn（Ⅱ）の超微細構造（hyperfine structure: hfs）の中心2本の間隔（8.69 mT）<br />
+　Wurster&#39;s blue perchrolideのA値<br />
+<br />
+B. hfc値（&alpha;<sub>0</sub>, A）<br />
+・複数の線からなる超微細構造（hyperfine structure: hfs）を同定することが先決である。等価なプロトンによるhfsの場合、相互作用しているプロトンの数はhf線の強度比から、また、&alpha;値は分裂の大きさから得られる<br />
+・スペクトル上で得られたhfs（mT）は、文献値と直接比較できる絶対値ではないことに注意<br />
+・ESRにおけるエネルギー換算は常にg値に依存するのでMHzまたはmT単位に換算した後でないと文献値との比較はできない（一般的な共鳴条件の式[h*&nu; = g*&beta;<sub><font size="2">e</font></sub>*B&nbsp;または &omega; = 2*<span style="font-family: times new roman,times,serif;">&pi;</span>*&nu; = &gamma;<sub><font size="2">e</font></sub>*B、&gamma;<sub><font size="2">e</font></sub>は自由電子の時期回転比]のため）。A<sub>//</sub>とA<sub>&perp;</sub>はそれぞれg<sub><font size="2">//</font></sub>とg<sub><font size="2">&perp;</font></sub>を使って換算する<br />
+　&nu;<sub>e</sub>（MHz）= (g<sub>e</sub>*&beta;<sub>e</sub>*B/h)*(g/g<sub>e</sub>) = 28.02494*(g/g<sub>e</sub>)*&alpha;（mT）<br />
+　A/(h*c)（cm<sup>-1</sup>）= 0.3335641*10<sup>-4</sup>*A/h（MHz）= 9.3481153*10<sup>-4</sup>*A/(g<sub>e</sub>*&beta;<sub>e</sub>)（mT）<br />
+<br />
+C. スピン数の定量<br />
+・未知試料xの濃度[c]は、濃度既知の標準試料のスピン数[std]に対する相対値として次式により求める<br />
+　[c] = {A<sub>x</sub>*R<sub>x</sub>*(Scan<sub>x</sub>)<sup>2</sup>*G<sub>std</sub>*(B<sub>m</sub>)<sub>std</sub>*(g<sub>std</sub>)<sup>2</sup>*[S*(S+1)]<sub>std</sub>}/{A<sub><font size="2">std</font></sub>*R<sub><font size="2">std</font></sub>*(Scan<sub><font size="2">std</font></sub>)<sup><font size="2">2</font></sup>*G<sub><font size="2">x</font></sub>*(B<sub><font size="2">m</font></sub>)<sub><font size="2">x</font></sub>*(g<sub><font size="2">x</font></sub>)<sup><font size="2">2</font></sup>*[S*(S+1)]<sub><font size="2">x</font></sub>}[std]<br />
+　ここで、Scanはスペクトル横軸の単位長さ当たりの磁場（mT/cm）、Gは振幅の倍率、B<sub>m</sub>は磁場変調幅（mT）、Aは吸収曲線の面積、Rはhf分裂した吸収線の強度補正である。<br />
+・両試料の信号が重なり、別々に測定する場合には次の点に注意する<br />
+1) 測定条件（溶媒、試料量、マイクロ波出力P<sub><font size="2">0</font></sub>、温度、試料管など）を同じにする<br />
+2) 飽和しない範囲でP<sub><font size="2">0</font></sub>を最大にする<br />
+3) 磁場変調幅B<sub>m</sub>は&Delta;B<sub>pp</sub>の2から4倍程度に設定<br />
+4) 信号の中心から十分遠くまで測定<br />
+　吸収曲線の面積（A）を求めるために、ESRスペクトルを2回積分する。一次微分曲線の記録が途中で途切れてしまっていると、正しい面積を求められない。ガウス曲線の場合は&Delta;B<sub><font size="2">pp</font></sub>の&plusmn;4倍程度あれば全吸収面積の90%以上が保証されるが、ローレンツ曲線の場合は&Delta;B<sub><font size="2">pp</font></sub>の&plusmn;10倍まで積分したとしても90%は保証されないし、&plusmn;30倍まで積分したとしても数%の誤差は避け難い。<br />
+------------------------------------------------------------------------------<br />
+◇ ESRの測定例 [1]<br />
+<br />
+・ESRの測定対象は、有機ラジカル、遷移金属イオン、半導体など広範囲にわたる<br />
+・高分子を対象とした研究では、ラジカル反応の追跡、反応中間体ラジカルの検出、紫外線や高エネルギー線照射、または機械的破壊により分子中に生成される遊離基の同定、触媒表面での反応やトラップされた電子や有機ラジカル、電荷移動金属イオンの酸化状態や移動、高分子に錯結合した遷移金属イオンの電子状態やスピン交換などの磁気的相互作用の検出、ゲル化の視覚化（イメージング）などに応用されている<br />
+・35 GHz以上の超高周波（VHF: very high frequency）を用いるESR（VHF-EPR）は、g値の分解能の向上、速い再配向拡散速度の検出、広範囲の回転拡散速度の識別、感度の向上などの特徴がある<br />
+　例えば、スペクトル分解能（&Delta;B）（異なるg値（g<sub>1</sub>, g<sub>2</sub>）の信号の分解能）は、Xバンド（9.5 GHz）に比べてWバンド（95 GHz）では10倍になり、さらに95 GHzでは10<sup>8</sup>スピン以下のスピンが検出可能となった。<br />
+・低磁場in vivo ESR（生体応用）<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;ESRの原理と得られる情報 [1]<br />
+<br />
+◇ 磁場中での電子磁石の挙動<br />
+　電子の軌道運動とスピン（自転）により原子レベルの磁石が形成される。内殻電子や共有結合電子のような対電子は互いに逆向きの等価な磁石を形成するので、対電子の磁界は打ち消され外からは見えない（外部磁場中に置かれたとき生じる微小な磁界はNMRの化学シフトに影響する）。したがって、不対電子のみが原子レベルの磁石としての性質を外に発信でき、SERはこの情報を検出する手法である。<br />
+　1個の電子の軌道運動とスピンを、それぞれ、角運動量lとsで定義すれば、m（電子の質量）、e（電子の電荷）、c（光速）、h（プランク定数）、&beta;<sub>e</sub>（ボーア磁子）、g<sub>e</sub>（自由電子のg = 2.0023193）を用いて、これらの角運動量による磁石の強さ（磁気モーメント&mu;）は次式で記述できる。<br />
+　&mu; = &mu;<sub>l</sub> + &mu;<sub>s</sub> = -[{e*h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)}/(2*m*c)]*(l*+g<sub>e</sub>*s) = -&beta;<sub>e</sub>*(l + g<sub>e</sub>*s)<br />
+原子や遷移金属イオンの場合には、全角運動量j（= l + s）に基づく磁気モーメントを考えねばならないが、フリーラジカル中の不対電子の場合はlの寄与は小さいので主に&mu;<sub>s</sub>を考えればよい。<br />
+　不対電子が磁束密度Bの磁場（z方向とする）中に置かれると、電子スピンの磁気エネルギー（-&mu;<sub>s</sub>*B）は2つのゼーマン準位に分裂する。スピン角運動量sの大きさはs*h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)、電子スピン量子数s = 1/2、電子スピン磁気量子数m<sub>s</sub> = &plusmn;1/2なので、lの寄与が無視できる場合は、ゼーマン準位のエネルギーE<sub>&plusmn;</sub>とそれらのエネルギー差&Delta;Eは次式となる。<br />
+　&nbsp;E<sub><font size="2">&plusmn;</font></sub> =&nbsp;&beta;<sub><font size="2">e</font></sub>*g<sub><font size="2">e</font></sub>*m<sub>s</sub>*B = &plusmn;(&beta;<sub><font size="2">e</font></sub>*g<sub><font size="2">e</font></sub>*B)/2, &Delta;E = E<sub>+</sub> - E<sub>-</sub> = &beta;<sub>e</sub>*g<sub>e</sub>*B<br />
+　すなわち、m<sub>s</sub> = -1/2（sとBが逆平行）のときが、低いエネルギー状態に対応する。<br />
+　&Delta;E = h*&nu;を満たす周波数&nu;のマイクロ波が照射されると、ゼーマン準位間でスピンの反転を伴った遷移が生じる。この遷移に伴うエネルギーの授受を検出するのがESR法である。多くの系では角運動量lの寄与はゼロではなく、またスピン軌道相互作用（&lambda;*l・s）からの寄与もあるので、一般的な共鳴条件は、g<sub>e</sub>ではなくgを用いて、次式で表される。<br />
+　h*&nu; = g*&beta;<sub><font size="2">e</font></sub>*B&nbsp;または &omega; = 2*<span style="font-family: times new roman,times,serif;">&pi;</span>*&nu; = &gamma;<sub><font size="2">e</font></sub>*B<br />
+ここで&gamma;e（=&mu;<sub>s</sub>/(s*h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>))）は自由電子の磁気回転比（magnetogyric ratio）である。gは、g因子またはg値と呼ばれ、スペクトルから直接読み取る。g値はsとBの向きによって決まるテンソル量で、その主値は不対電子の存在する軌道や分子の構造の対称性、電子状態を反映する。遷移金属イオンや三重項状態ラジカルのような2個以上の不対電子を含む系では、sやlの代わりにS = &Sigma;S<sub>i</sub> や L = &Sigma; L<sub>i</sub> を次の式に代入して展開する。&nbsp;<br />
+　&mu; = &mu;<sub><font size="2">l</font></sub> + &mu;<sub><font size="2">s</font></sub> = -[{e*h/(2*<span style="font-family: times new roman,times,serif;">&pi;</span>)}/(2*m*c)]*(l*+g<sub><font size="2">e</font></sub>*s) = -&beta;<sub><font size="2">e</font></sub>*(l + g<sub><font size="2">e</font></sub>*s)<br />
+<br />
+◇ 電子スピンと核スピンとの相互作用：超微細相互作用<br />
+　電子の磁気モーメント（&mu;<sub>e</sub>）が近傍の核の磁気モーメント（&mu;<sub>n</sub>）と相互作用すると、スペクトルに超微細構造（hyperfine structure: hfs）が現われる。相手核の核スピン量子数をIとすれば、（2*I+1）本のhfsが現われ、その間隔から超微細結合定数（hyperfine coupling constant: hfc）、A値が得られる。（省略）<br />
+　不対電子が属する核によるhfsはラジカル中心の原子の種類を、他の原子の核スピンによるhfs（これをsuper-hyerfineとして区別する場合もある。日本語は超超微細ではく超微細で良い）は電子スピン密度の分布を、また異方性のhfsは混成軌道の割合を知る手がかりとなる。（省略）<br />
+　hf相互作用には二つの機構、結合電子を介したFermi接触相互作用と磁気的双極子-双極子相互作用とが関与している。Fermi接触相互作用は、核スピンの位置における電子スピン密度に依存し、不対電子が存在する軌道に含まれるs軌道性を反映した等方的な超微細結合定数hfc（&alpha;<sub>0</sub>）を与える。一方、双極子相互作用は、両スピン間の距離をr、核と電子を結ぶ方向と磁場のなす角を&theta;として（3*cos<sup>2</sup>&theta;-1）*r<sup>-3</sup>に比例し、不対電子軌道のp, d, f軌道を反映した異方的なhfc(A<sub>xx</sub>, A<sub>yy</sub>, A<sub>zz</sub>)を与える。多くの・C, ・N, ・Oラジカルでは、2p軌道による寄与がhfsに現われる。高磁場近似（ゼーマン分裂 &gt;&gt; hf分裂）の場合、hfc(A)はFermi項によるhfc(A<sub>F</sub>)と双極子項によるhfc(A<sub>p</sub>)との和、A = A<sub>F</sub> + A<sub>P</sub>*(3*cos<sup><font size="2">2</font></sup>&theta;-1)となる。A<sub><font size="2">//</font></sub>(&theta;=0)=A<sub><font size="2">F</font></sub>&nbsp;+ 2*A<sub><font size="2">P</font></sub>、A<sub>&perp;</sub>(&theta;=90)=A<sub>F</sub> - A<sub>P</sub>であるから、実測値A<sub>//</sub>とA<sub>&perp;</sub>からA<sub>F</sub>とA<sub>P</sub>が計算される。さらに、不対電子が一つの原子軌道に100%存在すれば生じるであろう中心核スピンによるhfc(A<sub>F100</sub>, A<sub>p100</sub>)と実測値（A<sub><font size="2">F</font></sub>, A<sub><font size="2">P</font></sub>）とを比較すれば、その軌道への不対電子スピンの存在確率（%）が求まり、混成軌道の割合が得られる。<br />
+----------<br />
+　例えば、2s, 2p軌道に存在する不対電子密度は以下のように算出される。<br />
+[<sup>14</sup>N核でA<sub>F</sub>=1.38 mT, A<sub>P</sub>=0.86 mT, A<sub>F100</sub>=55.7 mT, A<sub>P100</sub>=1.78 mT]と結果が得られた場合<br />
+　2s軌道に存在する不対電子密度 &alpha;<sub>2s</sub><sup>2</sup> = A<sub>F</sub>/A<sub>F100 </sub>= 1.38/55.7 = 0.025<br />
+　2p軌道に存在する不対電子密度&alpha;<sub>2p</sub><sup>2</sup> = A<sub>p</sub>/A<sub>p100</sub> = 0.86/1.78 = 0.483<br />
+　2s, 2p軌道に存在する不対電子密度の合計 = 0.025 + 0.483 = 0.507 （=51%）<br />
+　したがって、Nの2sと2p軌道の混成、&lambda;<sup>2</sup> = &alpha;<font size="2"><sub>2p</sub><sup>2</sup></font> / &alpha;<font size="2"><sub>2s</sub><sup>2</sup></font> = 19.5から、不対電子は大部分p軌道に存在する。さらに、不対電子の約51%がN核に、残りの49%は別の核（例えば、ニトロキシドラジカルの場合はO核で(N-O)<span style="font-family: times new roman,times,serif;">&pi;</span>軌道）に存在することがわかる。<br />
+----------<br />
+　気体や溶液のESRの場合、運動により双極子相互作用が平均化されるので異方性は消失し、等方的なスペクトルとなるが、得られる等方的なg<sub>0</sub>値、&alpha;<sub>0</sub>値と異方的な主値との間には次式が成立する。<br />
+　g<sub><font size="2">0</font></sub> = (g<sub>xx</sub> + g<sub>yy</sub> + g<sub>zz</sub>)/3, &alpha;<sub><font size="2">0</font></sub> = (A<sub><font size="2">xx</font></sub> + A<sub><font size="2">yy</font></sub> + A<sub><font size="2">zz</font></sub>)/3<br />
+温度を下げるなどして運動性を凍結すれば、異方性は復活する。<br />
+<br />
+◇ 電子スピン間の相互作用：微細構造<br />
+　三重項状態や遷移金属イオンなどのように、2個以上の不対電子を含む系（S=&Sigma;S<sub>i</sub>&gt;=1）では、電子スピンS<sub>i</sub>とS<sub>j</sub>の間の磁気的双極子-双極子相互作用によりエネルギー準位が分裂され、その結果スペクトルに微細構造（fine structure; fs）が現われる。この電子スピン間相互作用の大きさdは、高磁場近似で、d = -(3/2)*(&mu;<sub>0</sub>/(4*<span style="font-family: times new roman,times,serif;">&pi;</span>))*(g<sub>e</sub>*B<sub>e</sub>)<sup>2</sup>*(3*cos<sup><font size="2">2</font></sup>&theta;-1)/r<sub>12</sub><sup>3</sup>となり、角度依存性を示す。このため、d = D*(3*cos<sup><font size="2">2</font></sup>&theta;-1)と表した時の最大値をD、それに垂直な面内の異方性を示すEを用いてESRパラメータとする。スピン間軌道相互作用はゼロ磁場分裂も誘引する。<br />
+<br />
+◇ 有効スピンハミルトニアンとESRパラメータ<br />
+　不対電子系のエネルギー状態を決める現実のハミルトニアンHには、上で述べた3つの磁気的相互作用のほかに、電子の軌道エネルギー、周囲の分子との結合に伴う配位子場、スピン-軌道相互作用、および間接的には核スピンのゼーマン相互作用と核四極子相互作用が含まれる。これらの相互作用によるエネルギーは10<sup>5</sup> cm<sup>-1</sup>から10<sup>-4</sup> cm<sup>-1</sup>に分布しており、ESRスペクトルに対する寄与の程度が異なる。スペクトル解析を目的として、ハミルトニアンH中の軌道角運動量Lについてあらかじめ形式的に積分してパラメータ化し、スピンの変数だけを残した有効スピンハミルトニアンHが提案された。<br />
+　H =&Sigma;<sub>i</sub>[p<sub>i</sub><sup>2</sup>/(2*m)] + V<sub>0</sub> + &lambda;*L・S + V<sub>C</sub> + &beta;<sub>e</sub>*L・B<br />
+　　+ g<sub>e</sub>*&beta;<sub>e</sub>*S・B + V<sub>SS</sub> + V<sub>IS</sub> + V<sub>SS</sub> + V<sub>IS</sub> + g<sub>n</sub>*&beta;<sub>n</sub>*I・B&nbsp;+ V<sub>Q</sub><br />
+　H = &beta;*S・g・B + S・D・S + S・A・I + g<sub><font size="2">n</font></sub>*&beta;<sub><font size="2">n</font></sub>*I・B&nbsp;+ V<sub><font size="2">Q</font></sub><br />
+上の式に基づいてESRスペクトルからg値、A値、D値などが得られるが、これらの値は軌道角運動量Lの情報を含んでいるために、スペクトル情報から物質に固有な情報、特に電子の軌道エネルギー準位やスピン密度分布、スピン間相互作用などの情報へ変換できる。核スピンに関する項は二次摂動で有効になり、ゼーマン項はhfsの間隔を不均等にし、V<sub><font size="2">Q</font></sub>は禁制遷移をもたらす。<br />
+　不対電子の存在する軌道やスピン多重度、配位子場の強さと対称性などが違えば、スピンハミルトニアンに対する摂動論の適用が異なる。特に、d軌道やf軌道に複数の不対電子を持つ遷移金属イオンの取り扱いは複雑である。<br />
+　例として、Cu（Ⅱ）（最外殻電子配置：3d<sup>9</sup>）について配位子場の対称性と不対電子の存在する軌道、g値との関連を下の表に示す。近年、高分子に金属イオンを結合させた新しい機能性材料の開発やゲル化機構の解明において金属イオンのESRを取り扱う報告が増えている。<br />
+・電子配置d<sup>9</sup>イオンの基底状態と対称性によるgテンソル主値の相対的な順序
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 174.72px; text-align: center;">配位子場の対称性</td>
+			<td style="width: 142.27px; text-align: center;">基底状態</td>
+			<td style="text-align: center;">g値の相対的な順序</td>
+		</tr>
+		<tr>
+			<td style="width: 174.72px; text-align: center;">伸びた八面体、平面四辺形</td>
+			<td style="width: 142.27px; text-align: center;">d<sub>x<sup>2</sup>-y<sup>2</sup></sub></td>
+			<td style="text-align: center;">g<sub>//</sub> &gt; g<sub>&perp;</sub> &gt; g<sub>e</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 174.72px; text-align: center;">圧縮された八面体</td>
+			<td style="width: 142.27px; text-align: center;">d<sub>z<sup>2</sup></sub></td>
+			<td style="text-align: center;">g<sub>&perp;</sub> &gt; g<sub>//</sub>, g<sub>e</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 174.72px; text-align: center;">斜方形の八面体</td>
+			<td style="width: 142.27px; text-align: center;">d<sub>xy</sub> + d<sub><font size="2">x</font><sup><font size="1">2</font></sup><font size="2">-y</font><sup><font size="1">2</font></sup></sub></td>
+			<td style="text-align: center;">温度に依存する</td>
+		</tr>
+		<tr>
+			<td style="width: 174.72px; text-align: center;">三角両錘形</td>
+			<td style="width: 142.27px; text-align: center;">d<sub><font size="2">z</font><sup><font size="1">2</font></sup></sub></td>
+			<td style="text-align: center;">g<sub>&perp;</sub> &gt; g<sub>//</sub>, g<sub>e</sub></td>
+		</tr>
+	</tbody>
+</table>
+------------------------------------------------------------------------------<br />
+■ コラム [2]<br />
+<br />
+・色鮮やかな超薄膜テレビの鍵を握る電子スピン<br />
+　有機電界発光（EL）素子を用いた超薄型テレビが、2007年から市場に現われた。有機化合物が発光体になる有機ELは、バックライトが不要なので液晶よりも薄く製作でき、色のコントラストも鮮やかである。<br />
+　有機固体の伝導体を移動する電子と価電子帯を移動する正孔（電子のホール）が近づくとクーロン相互作用が有効に働き、エネルギー的に安定な電子-正孔対を形成する。スピンを持つ電子と正孔の対は、一重項あるいは三重項のラジカル対でもある。電子-正孔対から生成する発光中心（励起子）のスピン多重度は電子-成功対のものに等しい。一重項励起子の発光効率は高く、三重項励起子は著しく低いので、有機ELにとって電子-正孔対のスピン状態が重要な役割を果たす。<br />
+　時間分解ESRや光検出ESR法によって、電子-正孔対の構造やダイナミックスを調べることが可能になり、より効率の高い素子の開発が期待される。<br />
+<br />
+・タンパク質の構造解析<br />
+　タンパク質の構造解析にはX線やNMRが多く用いられている。しかし、X線では結晶化の必要があり、NMRでは分子量が大きくなると極めて困難になる。これに対して、ESRでは結晶化の必要がなく分子量の制限もない。ESRによるタンパク質の構造解析では、アミノ酸の一つであるシステインの側鎖SH基に特異的に結合するスピンラベル剤を、任意の2箇所に導入したタンパク質変異体を用い（スピンラベル法）、これらのスピン間の距離を測定する。<br />
+　パルスESR法を用いると、パルス系列の選択によってスピン間の相互作用をスペクトルから直接測定できるために、マイクロ波連続（CW）法で求められる距離（5 - 20 Å）より長い距離（15 - 80 Å）を高精度で決定し、距離の分布を求めることもできる。<br />
+　タンパク質中の長距離間測定を行うことは、機能の発現が、大きな距離の変化（スイッチやモーター動作）に起因するので、極めて重要である。<br />
+<br />
+・共鳴吸収の線形<br />
+　一般に共鳴線と呼んでいるが、実際には吸収は周波数や磁場などのエネルギー軸について幅を持っていて、エネルギーを変数とする関数で表される。この関数を共鳴線形または単に線形という。典型的な線形には2種類あって、一つはローレンツ線形（Lorentzian）、もう一つはガウス線形（Gaussian）である。ガウス線形になる例は、非常に多数の超微細相互作用で分裂し、強度分布が二項分布で近似できる場合である。この場合は、一つの共鳴線に見えるが、実際には多数の共鳴線の集合である。<br />
+<br />
+・ESRイメージング<br />
+　核スピンの分布は、核磁気共鳴（NMR）現象を巧みに使ったイメージング（MRI）法によって可視化できる。1972年にMRIの原理が報告され、医療の画像診断の分野に大きな進展をもたらした。<br />
+　電子スピンの分布も、電子スピン共鳴（ESR）現象を用いて画像化することができる。1979年に最初に報告された画像は、ダイヤモンド内の電子スピンを可視化したものである。生物のフリーラジカルの電子スピンが画像化されたのは、野菜のセロリからであった。<br />
+　一般に、生体の中で発生するフリーラジカル分子はわずかであるため、電子スピンの画像化は不対電子が少なく容易ではない。しかし、ダイヤモンドや動物でも、周りの環境に敏感なフリーラジカルをプローブ分子として用いると、電子スピンの空間分布だけでなく、酵素分圧やpH、酸化還元状態などを画像化することができる。<br />
+<br />
+・スピン量子コンピュータ<br />
+　同時に0でも1でもあるような状態の量子力学的な振る舞いを利用して計算を行い、スーパーコンピュータをしのぐ情報処理能力が発揮される。<br />
+　電子スピン系は、&alpha;と&beta;の二つのスピン状態を持ち、情報をこの二つを用いて符号化できる理想的な系である。パルスESR技術は、短い時間の中でスピン状態を操作し、情報を自在に変換することを可能にした。任意波形パルスESRと分子スピン系の設計技術により、電子スピンを操るスピン量子コンピュータが現実のものになりつつある。<br />
+------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] 野瀬卓平ら『若手研究者のための有機・高分子測定ラボガイド』講談社サイエンティフィック<br />
+[2] 日本化学会『電子スピン共鳴分光法』共立出版<br />
+[3] 尾崎幸洋『近赤外分光法』講談社<br />
+<br />
+さらなる理解のために<br />
+1) J. A. Weil et al., Electron Paramagnetic Resonace, Elementary Theroy and Practical Applications, Joh Wiley &amp; Sons (1994).: 理論的記述ばかりでなく、装置・測定法に関する記述も丁寧でESRの全容を知るには最適の書。改訂版にはパルスESRなど新しい測定法も追加されている<br />
+2) M. Symons, Chemical and Biological Aspects of Electron-Spin Resonace Spectroscopy, John Wiley &amp; Sons (1978).: 大学での講義録をまとめたもので、初心者向きの教科書的な良書。hfsの解釈などわかり易い。<br />
+3) 電子スピンサイエンス（SEST）学会監修『電子スピンサイエンス&amp;テクノロジー入門』日本学会事務センター（2003）.: 簡単な原理と多岐にわたる現在の応用例が取り上げられている<br />
+4) 桑田敬治ら『電子スピン共鳴入門』南江堂（1980）.: 理論的な背景を重視した中級以上の入門書<br />
+5) 大矢博昭ら『電子スピン共鳴』講談社（1989）.: 測定法についてくぁし意。応用例が多く初心者向き<br />
+6) ビデオ: 渡辺徳子ら『分析化学シリーズ 第19巻 電子スピン共鳴法および解説書』日本分析化学会.: 初心者向け。装置・測定法およびスペクトル解釈の基礎に関する映像と解説書<br />
+------------------------------------------------------------------------------

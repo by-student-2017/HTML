@@ -1,0 +1,33 @@
+------------------------------------------------------------------------------<br />
+Å° Install<br />
+1. tar zxvf cif2cell-1.2.10.tar.gz<br />
+2. cd cif2cell-1.2.10<br />
+3. gedit cif2cell<br />
+<br />
+before-----line 1608<br />
+incarfile = INCARFile(cd,docstring=docstring,vca=options.vca,prioritylist=prioritylist,encutfac=encutfac)<br />
+<br />
+after-------line 1608<br />
+incarfile = INCARFile(cd,docstring=docstring,potcardir=lib,vca=options.vca,prioritylist=prioritylist,encutfac=encutfac)<br />
+<br />
+4. sudo python setup.py install<br />
+------------------------------------------------------------------------------<br />
+Å° Usage<br />
+(delete --supercell=[2,2,2] or --no-reduce under your calculation conditions)<br />
+(modify -vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; in your environment)<br />
+<br />
+Åü VASP (version 5.x) (to get pirimitive cell)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations -f case.cif<br />
+<br />
+Åü VASP (version 5.x) (to get 2x2x2 pirimitive cell)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations --supercell=[2,2,2] -f case.cif<br />
+<br />
+Åü VASP (version 5.x)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations&nbsp; --supercell=[2,2,2] --no-reduce&nbsp; -f case.cif<br />
+<br />
+Åü PWscf<br />
+&nbsp; cif2cell -p pwscf --setup-all --print-symmetry-operations --pwscf-atomic-units --pwscf-pseudostring=.pbe-spn-kjpaw_psl.1.0.0.UPF --supercell=[2,2,2] --no-reduce&nbsp; -f case.cif<br />
+<br />
+Åü Abinit<br />
+&nbsp; cif2cell -p abinit --print-seitz-matrices --supercell=[2,2,2] --no-reduce -f case.cif<br />
+------------------------------------------------------------------------------

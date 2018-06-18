@@ -1,0 +1,102 @@
+&nbsp; ecalj は少ない平面波で高い精度の計算が可能なコードである。また、QSGW（GW近似）の計算も可能である。（調査中）<br />
+※ 「ねがてぃぶろぐ」さんの方が上を行っているので、そちらを参照して下さい。<br />
+------------------------------------------------------------------------------<br />
+■ 理論<br />
+1. PMT = (L)APW + (L)MTO で計算される。<br />
+※ <a href="http://research.physics.illinois.edu/ElectronicStructure/">http://research.physics.illinois.edu/ElectronicStructure/</a> も読んでおくと良い。<br />
+<br />
+■ Install (Ubuntu)<br />
+sudo apt-get install git&nbsp; gitk # version control and to get source from github<br />
+sudo apt-get install gitk #git gui &#39;gitk --all&#39; is useful. do it at ecal/.<br />
+sudo apt-get install gfortran&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # GFORTRAN<br />
+sudo apt-get install openmpi-bin openmpi-dev&nbsp;&nbsp;&nbsp;&nbsp; # MPI<br />
+sudo apt-get install libfftw3-3&nbsp;&nbsp;&nbsp;&nbsp; or something else # FFTW<br />
+sudo apt-get install libblas3gf&nbsp;&nbsp;&nbsp;&nbsp; or something else # BLAS<br />
+sudo apt-get install liblapack3gf&nbsp;&nbsp; or something else&nbsp; # LAPACK<br />
+sudo apt-get install etags csh bash tcsh&nbsp;&nbsp; # shells<br />
+or ACML<br />
+<br />
+■ set up<br />
+1. googleでgithub ecalj と検索: <a href="https://github.com/tkotani/ecalj">https://github.com/tkotani/ecalj</a><br />
+2. git clone <a href="https://github.com/tkotani/ecalj.git">https://github.com/tkotani/ecalj.git</a><br />
+&nbsp; HPの右下にある HTTPS clone URL の下の欄をコピー&amp;ペースト. Please. read ecalj/README.<br />
+3. mkdir bin<br />
+4. cd ecalj/lm7K<br />
+5. make PLATFORM=gfortran<br />
+&nbsp; or make PLATFORM=ifort.simple<br />
+6. make PLATFORM=gfortran_mpik<br />
+&nbsp; or make PLATFORM=ifort_mpik.simple<br />
+7. make install<br />
+8. cd ..<br />
+9. cd fpgw/exec<br />
+10. cp make.inc.gfortran make.inc<br />
+&nbsp; or cp make.inc.ifort.simple make.inc<br />
+10. make<br />
+11. make install<br />
+12. make install2<br />
+13. cd ..<br />
+14. cd TestInstall<br />
+15. write &quot;export PATH=$HOME/bin:$PATH&quot; in .bashrc<br />
+16. bash<br />
+17. make all<br />
+&nbsp; All tests will require ~10min.&nbsp; (nio_gwsc takes ~300sec)<br />
+※ $home/bin に実行ファイルが全て入る。Please, see $HOME/ecalj/lm7K/MAKEINC<br />
+<br />
+■ 入力ファイルの作り方<br />
+ctrls.case &rarr; ct<br />
+1. vasp2ctrl<br />
+&nbsp; vaspの入力ファイル(POSCAR)から ecaljの入力ファイルを作成してくれる。<br />
+2. CtrlgenMi.py case --nspin=2 --nk1=8 --nk2=8 -nk3=4&nbsp;--xcfun=pbe --systype=bulk<br />
+&nbsp; non-spinの計算の場合は --nspin=1、k点はx,y,zと同じであれば --nk1=8 で 8x8x8 として計算される（--nk2や--nk3を記入する必要は無い）。--systype=moleculeもある。<br />
+<br />
+■ SCF計算方法<br />
+1. lmfa case<br />
+2. lmf case<br />
+3. job_band_nspin1 case<br />
+4. job_materials.py<br />
+&nbsp; databaseを見る<br />
+<br />
+■ QSGW計算<br />
+1. mkGWIN_lmf2 case<br />
+&nbsp; テンプレートファイルが作成される。<br />
+2. cp GWinput.tmp GWinput<br />
+&nbsp; 入力ファイルである GWinput へテンプレートファイルをコピー。<br />
+3. gwsc 5 -np 2 case<br />
+&nbsp; gwsc (number of iteration+1) -np (number of nodes) (id of ctrl) の順に並んでいる。これがQSGW計算のコマンドである。<br />
+4. job_tdos case<br />
+5. job_pdos case<br />
+6. lmchk case<br />
+<br />
+■&nbsp;LDA(and/or QSGW)&nbsp;+ SO 計算<br />
+1. 通常の計算で収束させる。<br />
+2. 新しいディレクトリを作成する。<br />
+3. その中に、ctrl.case, rst.case, sigm.case, QGpsi, ESEAVR をコピー&amp;ペーストして入れる。<br />
+4. ctrl.case を下記のように編集する。<br />
+&nbsp; nspin=2<br />
+&nbsp; METAL=3<br />
+&nbsp; SO=1<br />
+&nbsp; Q=band (full self-consistent SO calculation の場合は記述しない)<br />
+5. lmf case &gt; &amp; llmf_SO<br />
+&nbsp; ctrlgenM1.py でctrlファイルを作成した場合は、下記のコマンドにする。<br />
+&nbsp; lmf --rs=1,0 case -vnit=1 -vso=1 -vnspin=2 -vmetal=3 --quit=band<br />
+6. grep gap llmf_SO<br />
+<br />
+□ QSGWの利点<br />
+ハイブリッド汎関数&nbsp;では Vxc = alpha * LDA + (1-alpha) *(Fock exchange) で alpha=0.25がよく使われる。一方、QSGWでは W(the screened Coulomb interaction)を自動的に調整（荒っぽく言えば、alphaを自動的に調節）していると言える。<br />
+1. 3dバンドに関連するO 2pバンドの相対的なシフトを再現できる。LDA+Uでは難しい。<br />
+2. LUMO-HOMO gap を与える off-site non-locality を再現できる。<br />
+<br />
+■ 入力ファイルの詳細<br />
+1. nspin: 0=non-spin, 1= spin<br />
+2. tratio = 0.97 (WIEN2kでのRMT半径を最大から何%にするか)<br />
+3. EH = -カイ^2 &larr;ハンケル関数でのカイの2乗をマイナスしたもの<br />
+4. RSMH = R/2&nbsp;R/2 R/2 &larr;&nbsp;Smooth Hankel function<br />
+<br />
+■ 出力ファイル<br />
+・ rst.case: 電荷密度分布<br />
+・ 頭文字にlが付いているのはlogファイル<br />
+<br />
+■ プログラム<br />
+・ lm7k: 一体問題を解くプログラム<br />
+・ fpgw: QSGW（GW近似）の計算プログラム<br />
+------------------------------------------------------------------------------

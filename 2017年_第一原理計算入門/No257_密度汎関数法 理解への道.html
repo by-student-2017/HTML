@@ -1,0 +1,366 @@
+&nbsp; ここでは密度汎関数法とそれに関連した交換相関項の情報について纏める。<br />
+-----------------------------------------------------------------------------<br />
+■&nbsp;何を採用すれば良いか？<br />
+・バンド計算（WIEN2k, elk, VASP, PWscf, Abinit など）ではPBE（またはグラファイトなどではLDA か GGA+vdw）<br />
+・分子軌道計算（GaussianやGAMESSなど）ではB3LYP（励起状態を使う場合はTDDFT）を選択<br />
+　計算に慣れてきたら、半導体や絶縁体の場合は、LDA+Uやハイブリッド汎関数、GW近似を採用してみよう。最近では遷移金属酸化物（例えばNiOなど）に対してより良い結果を示すLDA+DMFTがAbinitなどに導入されている（TB-mbjはWIEN2kに導入されている）。私の個人的意見としては擬ギャップ系が難しいと思う（実験的にも理論的にも真実を見極めるのが難しい）。<br />
+※ <a href="http://weblearningplaza.jst.go.jp/taikei/446/faq/index.html">http://weblearningplaza.jst.go.jp/taikei/446/faq/index.html</a> を参照すると良い。<br />
+-----------------------------------------------------------------------------<br />
+◆ レクチャー<br />
+Tutorial 3b: Materials Simulation by First-Principles Density Functional Theory II&nbsp; : <a href="https://www.youtube.com/watch?v=e2yzp_bYhlI">https://www.youtube.com/watch?v=e2yzp_bYhlI</a><br />
+<a href="http://www.riken.jp/qcl/members/tsuneda/web/dft05-sec2.pdf">http://www.riken.jp/qcl/members/tsuneda/web/dft05-sec2.pdf</a><br />
+<a href="http://www.hpc.co.jp/gaussian_help/k_dft.htm">http://www.hpc.co.jp/gaussian_help/k_dft.htm</a><br />
+-----------------------------------------------------------------------------<br />
+◆ 重要な点 [29, 30, 32]<br />
+・ 密度汎関数法： 一体問題の形式をしているが、厳密に多体問題を扱う枠組み。<br />
+　厳密な電子密度分布を与える「近似無しの平均場による一体形式で全てが書ける仮想系」（参照系という）が存在することは数学的に保証されいている（W. Kohn)。しかし、その参照系はどのようなものかは分からない。<br />
+・ 系のエネルギーは電荷密度によって一意に決まる（ホーエンベルグとコーンの定理）。<br />
+・ 交換相関項のヴァリエーションの違い<br />
+　a) 想定する対称系の違い： 固体周期系/分子系？ 金属/絶縁体？ 共有結合/イオン結合?<br />
+　b) 設計指針の違い： 満たすべき数理上の要請条件を満足するように作るか？ 実験事実を最もよくフィットするように作るか？<br />
+　c) 拡張指針の違い： 数理的視点からの拡張？ 物理的視点からの拡張？<br />
+・ 実験結果から得られるギャップの値は電子が始状態から終状態になるのに必要なエネルギーである。そのため、定常状態を計算している理論計算と合わないのは当然である。逆に、ギャップの値が一致する場合は励起状態を取り扱っていないのに不思議と思うことが大切。光触媒などでは励起した場合でのギャップの値を知りたいから、励起状態を扱うTDDFTやGW近似、BESで計算される（この他、ハイブリッド汎関数（HSE, PBE0）なども用いられる）。<br />
+・ 各種の密度汎関数の詳細は文献[<a href="http://rare-events.org/tsuneda/Kyoto-text.pdf">http://rare-events.org/tsuneda/Kyoto-text.pdf</a>&nbsp;（常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書 </span>）や<a href="http://www.tddft.org/TDDFT2014/school/Burke2.pdf">http://www.tddft.org/TDDFT2014/school/Burke2.pdf</a>]を参照すると良い。<br />
+・化学・生物分野の方は文献[山口ら『錯体化学会選書10 金属錯体の量子・計算化学』三共出版]を参照すると良い。<br />
+◇ 密度汎関数理論（DFT）は、基底状態のエネルギーを多電子波動関数による期待値として考えるのではなく、エネルギー汎関数の極小値であるとすることによって、多電子系の計算コストを削減することを基本概念としている。[43]<br />
+-----------------------------------------------------------------------------<br />
+◆ 代表的な交換相関ポテンシャル<br />
+<br />
+◇ X&alpha; [1]： 電子ガス系の計算結果。コーン・シャムの交換ポテンシャル&nbsp;= (2/3) * スレーターの交換ポテンシャル の関係がある。これより後の汎関数では精度が高い為に構造最適化が可能となる。しかし、X&alpha; でも幾つかの補正(SICなど)を入れることで比較的精度良く全エネルギーが議論できるようになる。<br />
+　小口多美夫先生の「バンド理論」を読めば導出方法が書かれている。X&alpha;が0.7や2/3になる理由も書かれている。式の導出から分かるとおり、系が自由電子であれば解は厳密になる。<br />
+<br />
+◇&nbsp;LDA [1,2] ： X&alpha; ポテンシャル +&nbsp;&nbsp;ウィグナー半径 r をパラメータに入れた交換相関ポテンシャル。実験値と比べ格子定数が短めの結果となりやすい[8]。しかし、格子定数の実験値との誤差は1%程度[8]。スピンを考慮にいれた場合はLSDAと記述されることもある。固体の格子定数や原子間の結合長を典型的に2～3%以内の精度で再現する[11]。固体の凝集エネルギーのずれは10～20%程度である。金属表面の系で実験値と良い結果が出易い。（表式：VWM, MJW, PZ81, PW92）<br />
+　電子ガス系で正しく成り立つように作ったもの[29]： VWN-3, VWN-5&nbsp;<br />
+　局所密度近似（LDA)は、各点での交換・相関エネルギー密度を一様電子ガスで求められたエネルギー密度で表す近似である。rでの値をパラメータとする関数である。これがLDAの「局所近似」と呼ばれる理由である。LDAはスピン分極した系にも拡張され、局所スピン密度近似(LSDA)と呼ばれている。L(S)DAはかなり大胆な近似であるにもかかわらず、物質の構造や電子構造を比較的良く再現する方法であるが、いくつかの問題点がある。[43][45]<br />
+1) 中性原子において、r-&gt; &infin;の極限で電子の感じるポテンシャルが -1/r より早くゼロになる<br />
+2) 原子間の結合エネルギーを過大評価する<br />
+3) 半導体や絶縁体のバンドギャップを過小評価する<br />
+4) 金属-絶縁体転移を正しく記述しない<br />
+5) 遷移金属酸化物FeO, CoO, あるいはLa2CuO4はLDA計算では金属状態になるが、実際は絶縁体である<br />
+6) 鉄の基底状態はLDA計算では常磁性面心立方格子となるが、実際は強磁性体心立法格子である。<br />
+<br />
+◇ GGA [1]：&nbsp;LDA&nbsp;+ &Delta;&rho;(r)をパラメータに入れた交換相関ポテンシャル。PW91はGGAの標準的な表式[8]。格子定数が長めになりやすい[8]。しかし、格子定数の実験値との誤差は1%程度[8]。その他、格子歪みも大きくなる結果になりやすい[8]。分子の原子化エネルギーや固体の凝集エネルギー、磁性の記述でLDAを改善する傾向があることが経験的に知られている[11]。酸化物や合金系で実験値と良い結果が出易い。（表式：B88, LYP, PW91）(表式の細かな違いは Histroy of GGA： <a href="http://www.tddft.org/TDDFT2014/school/Burke2.pdf">http://www.tddft.org/TDDFT2014/school/Burke2.pdf</a>&nbsp;を参照するとよい)<br />
+　分子系を想定した簡素な数式モデル系で正しく成り立つように作ったもの[29]： LYP, OP<br />
+　GGA相関汎関数は主に密度勾配展開型相関汎関数とコール・サルベッティー（CS）型相関汎関数の2種類に大別される。<br />
+　密度勾配型相関汎関数は、LDA汎関数を密度勾配補正する従来型の汎関数である。一般的なGGA相関汎関数は、相関エネルギーに対する基礎物理定数を満たすように基本的な定式を決定した後、それらの条件に合わせてパラメータをフィッティングして導出されている。この型の汎関数については、GGA交換汎関数と同様にPW91汎関数やPBE汎関数がよく利用される。密度勾配展開型汎関数の特徴は当然ながら多くの基礎物理定数を満たすことであり、問題点は定式の複雑さとパラメータの多さにある。<br />
+　CS型相関汎関数は、短距離電子間の相関カプス条件を満たす相関項を与える相関関数を、動的電子相関を含まない波動関数に掛けた相関波動関数より導出された汎関数である。この汎関数形の特徴は、相関関数を掛けるだけのモデルの単純さと分子の相関エネルギーの再現性の高さにある。問題点は、密度勾配展開型相関汎関数と異なり、導出において基礎物理条件が全く考慮されていないため、OP相関汎関数を除く汎関数については、基礎物理条件をほとんど満たさないことである。[33]<br />
+　GGAは、空間の各点での密度に加えて、密度の1次の勾配まで考慮した改良を交換・相関エネルギー密度に行う。固体物理の分野では、PBE汎関数と呼ばれる関数形がよく用いられる。revPBE汎関数やRPBE汎関数は、PBE汎関数の交換汎関数を修正したものである。[43]<br />
+　PredewとWangは、交換ホールの条件式を実空間の表現に対してさらに総和側を満たすように長距離の裾の振動部分を切断し、一方、相関エネルギーに対してはk空間でそれと相補的な形を要請した。これを一般化勾配展開近似(GGA)という。CoOを例にとると、LDAと比較して、GGAはポテンシャルの非対称性が増加し交換相関ポテンシャルが深くなり、バンドのエネルギーが下がる結果を与える。LSDAでは格子間隔は実験値に比べて5%ほど小さめに出るが、GGAではほぼ完全に一致する。この理由はフェルミエネルギー近傍のZ点およびK点をよびるバンドのエネルギーが交換相関ポテンシャルの非対称性により体積依存性が敏感になり安定性が図られるからである。<br />
+　A.D.Beckeは希薄な極限で正しい結果を与える交換エネルギーに対する密度勾配の式を、実空間における表示で提案した。これらの詳しい検討を経て相関エネルギーについても実空間で切断した式が提案されている。（省略）この計算結果は原子・分子および固体について詳しく述べられている。一般にこの汎関数は中性原子のポテンシャルのr&rarr;&infin;での振る舞いについては局所密度近似と同様に完全ではないが、非局所項の取り扱いを通して電子密度分布の非一様性、特に原子核周りの非球対称性成分をより正確に記述し、分子や固体の原子間距離や磁性、凝集エネルギーなどについてより満足のいく結果を与える。また計算による鉄の基底状態が強磁性体心立法であり、格子間隔の値もLDAの結果より大きく実験値との一致もよい。基底状態の物性に関してこの汎関数はLDAやLSDAより良い結果を与えることができる。しかし、絶縁体や遷移金属酸化物のバンドギャップの過小評価に対する改善にはなっていない。<br />
+<br />
+◇&nbsp;PBE：PW91を改良して用いられるパラメーター数を減らして簡略化したものであるが、多くの系で計算精度が高い[8,12]（※ GGAの分類に入るが、多くのコードで使われやすいので、見やすくするためにここに記している）。満たすべき基礎物理条件を重要なものだけに制限し、基礎物理定数を2個まで減らして、PW91交換汎関数の定式を簡単にした汎関数である。<br />
+<br />
+◇&nbsp;Wu-Cohen：格子定数をLDAやGGAよりもよく再現する[8,12]。re-parameterisation of PBE.[38] （表式：WC)<br />
+<br />
+◇&nbsp;revPBE： PBE交換汎関数のパラメータ値を修正（&mu;=0.967, &kappa;=0.235）した汎関数であり、PBE交換汎関数と同じ特徴を持つ。[33]<br />
+<br />
+◇&nbsp;PBEsol-GGA：GGA +&nbsp;&Delta;(&Delta;&rho;(r))をパラメータに入れた交換相関ポテンシャル。<br />
+　フォノン伝導計算ではLDAおよびGGA-PBE汎関数が広く用いられているが、これらはそれぞれの格子定数を過小および過大評価する傾向があるので、フォノン振動数や格子熱伝導率などの格子定数に敏感に依存する物理量を計算する場合には注意が必要である。近年（注：2017近辺）、格子定数の実験値をよく再現するGGA-PBEsol汎関数がかわりによく使われており、格子定数依存性が特に顕著なイオン結晶に対して予測精度が改善することが知られている。[47]<br />
+<br />
+◇&nbsp;MetaGGA ：PBEsol-GGAにKohn-sham運動エネルギーもパラメータとして考慮した交換相関ポテンシャル。（表式：PKZB, VSXC, TPSS）<br />
+<br />
+◇&nbsp;RPBE：表面系に対して有効[8,12]。<br />
+<br />
+◇&nbsp;HTBS：アルカリ原子を除いて、格子定数をLDAやGGAよりも比較的良く再現する。[12]<br />
+<br />
+◇ LYP： 分子の物性計算においてきわめて高精度な相関エネルギーを与えるため、2011年では量子化学計算で最もよく利用される相関汎関数となっている。密度ラプラシアン項&nabla;<sup>2</sup>&rho;を含むため、LYP相関汎関数はGGA相関汎関数ではないように見える。しかし、密度ラプラシアン項は部分積分によって密度勾配項に変換できるので、LYP相関汎関数はGGA相関汎関数として利用される。見落とされがちな問題点として、2電子密度行列の2次導関数項の符号が逆になっていることがある。これは相関エネルギー項を合わせるためと考えられるが、基礎物理条件を満足しない原因の1つとなっている。基礎物理条件を満足しないことは、固体物性計算でLYP相関汎関数がほとんど利用されない有力な理由となっている。[33]<br />
+<br />
+◇&nbsp;プログレッシブ汎関数（表式：PE, OP）： 併用する交換汎関数によって形を変える。[33]<br />
+<br />
+◇&nbsp;OP相関汎関数： 相関孔の排除体積が交換汎関数で決まる交換孔の排除体積に比例するとすることで、コール・サルベッティー（CS)型相関汎関数の物理的な妥当性を獲得した汎関数である。この汎関数では、反対スピン電子間の電子相関のみがあらわに取り込まれ、同スピン電子間は交換汎関数の存在によって副次的にしか取り込まれない。また、半経験的パラメーターを最低限の一つしか使わないように開発された。その結果、簡単な定式の相関汎関数が導出された。B88やPBE交換汎関数と併用する場合には、q&alpha;&beta;=2.367である。OP汎関数は、交換汎関数項K&sigma;意外には密度勾配項すら含まないので、交換汎関数がLDA交換汎関数であればLDA相関汎関数、GGA交換汎関数であればGGA相関汎関数といったように、併用する交換汎関数によって形を変える。OP汎関数は、簡単な定式でパラメータも1つしかないが、LYP相関汎関数と同じ精度の相関エネルギーを与える。またこの汎関数は、密度勾配展開型汎関数と違って基礎物理定数を導出の際に全く使っていないが、あらゆる相関汎関数のなかで最も基礎物理定数を満足する。[33]<br />
+<br />
+◇&nbsp;SIC [8,19-21] （self Interaction Correction: 自己相互作用補正）： LDAやGGAよりもギャップの値が改善される。（パラメータの設定に任意性があるため扱いが難しい。理由は不明｛下記のpseudo-SICと同じ粒かもしれない｝だが、KKRでは1/2とすると多くの絶縁体において実験値に近い結果を与える）。HF近似の場合はある電子が自分自身と相互作用する部分（&lt;&phi;j |&phi;i&gt;でj=iの場合のような項）は打ち消し合うが、LDAではそうはならないためにSICが導入される。プログラム中では、一度普通に計算した後、自分自身（各原子の各軌道）でのVxcによるエネルギーを後から差し引くことになる。<br />
+　ハートリー・フォック近似では、規格直交化された軌道について同一軌道間の静電相互作用と交換相互作用は、当然のことながら打ち消し合ってゼロになるようになっている。しかし局所密度近似ではそれは一般に満たされずセロでない値が残っている。１つの固有状態の中で電子間相互作用の寄与を数えているので、これを自分自身との相互作用という意味で自己相互作用と呼んでいる。このため、例えば孤立原子で原子核から遠く離れたところでのポテンシャルが-1/rとならなくてはいけないところが、指数関数的にゼロとなる。一般に自己相互作用のない密度汎関数の取扱は今のところ定式化されていないが、より簡便な方法として、局所密度近似によるポテンシャルから自己相互作用を引き去るという自己相互作用補正（SIC）の方法がある。<br />
+　自己相互作用エネルギーを見積もると（省略）である。広がった状態については全系の体積&Omega;-&gt;&infin;の極限で自己相互作用エネルギーは0になるが、自己相互作用補正は波動関数の局在した少数系では0でなく残ってしまうことがわかる。<br />
+　自己相互作用補正は数式から分かるように１電子軌道の選び方に依存するから、軌道関数のユニタリ変換に対し不変ではないし、また１電子ポテンシャルは軌道ごとに異なるので軌道エネルギーの対角化可能性も保証されない。したがって、軌道エネルギーはラグランジュの未定乗数としての意味しかなく、１電子軌道エネルギーとしてヤナックの定理のような物理的意味を持たない。ただし孤立した原子では軌道エネルギーの非対角要素は十分小さな値になることが確かめられている。<br />
+　自己相互作用補正を含める場合、それを含む全エネルギーを最小にするように最適な規格直交軌道を定めなくてはならないことが示された。ハバード・モデルについてそのように最適軌道を選択しLDAに対する自己相互作用補正の効果を調べると、クーロン相互作用の強さの広い領域にわたりバンドギャップや磁気双極子モーメントがLDAの結果を大きく改良し正確な解に近づいていることがわかる。また最高占有状態および最低非占有状態については自己相互作用補正によって、<br />
+　&epsilon;<sub>N</sub>(N)<sup>SIC</sup> ～E(N) - E(N-1)<br />
+　&epsilon;<sub>N</sub>(N+1)<sup>SIC</sup> ～E(N+1) - E(N)<br />
+の関係がほぼ回復されることが数値的に確かめられる。<br />
+　自己相互作用補正を考慮した場合、交換相関ホールは、（省略）、非局在効果のおかげで交換相関ホールのはるかに正確な表現が得られる。（省略）自己相互作用補正が占有状態のエネルギーを押し下げ、非占有状態に関しては自己相互作用の補正が働かないために結果的にバンド・ギャップを広げ全エネルギーを下げるためである。また、局在化の条件のために波動関数の空間的広がりも狭くなるので、磁性状態での飽和磁気モーメントが増加する。<br />
+　実際の系に自己相互作用補正を適用するには、局在した基底関数を用いた実空間における有効な計算法が必要である。ワニエ関数を用いる方法は、前述の例のように、その構成がほとんど自明である場合を除いてあまり有効ではない。（省略）自己相互作用補正を入れる以前の局所密度近似でのポテンシャルの形あるいはポテンシャルの非球対称成分の取り扱いに微妙に影響されていることが示されている。これは自己相互作用補正を加えたときの波動関数の形の合否を判定するほどの精度がエネルギーの絶対値にないことをによる。むしろ絶縁体となるものに対して、エネルギー的判定を行うことなくすべての軌道に自己相互作用補正を加え局在化した最適解を用いると、占有状態の成分については電子分光実験の結果と良い一致を示す結果が得られる。一方でバンド・ギャップは実験値より大きくなってしまう。<br />
+　自己相互作用補正を加えた電子間相互作用に対して遮蔽効果が十分でなく、自己相互作用補正という形で局所密度近似に対する拡張を行うと、問題の所在を不明確にしてしまうという欠点があることには注意しなくてはならない。（省略）f電子系では局在した後のf状態は深い準位に変わるので、全エネルギー見積もりに関してd電子系で見られた困難はない。[45]<br />
+<br />
+◇ pseudo-SIC [22, 39]<br />
+　（正しいか確認が必要）SICは計算負荷が大きいため、最初に各原子の各軌道についてハートリーと交換相関ポテンシャル項を計算しておき、それらの項が各原子の各軌道における電子密度に比例するとしてポテンシャルから差し引く方法。線形を仮定するのはハートリー項においては厳密である。交換相関項に関してはSICの部分で(&rho;<sup>1/3</sup> - &rho;)オーダーのエラーが存在する。これらの項が線形だとすると、エネルギーは(1/2)*&rho;<sup>2</sup>に比例する。そのため、ポテンシャルとして差し引く時にはあらかじめ(1/2)を掛ける。下記のように記述されることになる。<br />
+　Veff[&rho;<sub>i</sub>] = V<sub>H</sub>[&rho;<sub>i</sub>] + V<sub>XC</sub>[&rho;<sub>i</sub>] - V<sub>SIC</sub>[&rho;<sub>i,m</sub>]<br />
+　V<sub>SIC</sub>[&rho;<sub>i,m</sub>] = &Sigma;<sub>m</sub> (1/2) * (&rho;<sub>i,m</sub> /&rho;<sub>i,m</sub>initial ) * (V<sub>H</sub>[&rho;<sub>i,m</sub>initial] + Vxc[&rho;<sub>i,m</sub>initial])<br />
+ここで、iはある原子で、mはその軌道。<br />
+<br />
+◇&nbsp;混合Fnuctional（hybrid Functional）： DFTとHFの線形結合（つまり係数を掛けて足したもの）。screened full-hybrid functionals であるHSEやYS-PBE0はLDAよりも10-100倍計算コストが掛かる。HFは交換項を完全に取り込めるが相関項（スピンアップとダウンの反発の影響）が取り込めないためギャップが広くなる傾向の結果が出やすい。一方、DFT(LDAやGGAなど)は比較的均一的な電子の分布を考えており、相関項の影響も取り込めているためギャップが狭くなる傾向の結果が出やすい。&nbsp;混合Fnuctionalでは、HFとDFTの両者の傾向を上手く取り入れることでギャップ値を改善させている。a*[Hartree-Fock] + (1-a)*[LDA]&nbsp;で金属ではa=0、誘電率の低いものではa=1に近づく。a=0.25が固定値とされる汎関数もある。交換ホールをクーロンホールの代わりに用いるので磁性には不向きかもしれない。a=0.25では金属には不向きである[24]。<br />
+　Hybrid汎関数は、KS(Khon-Sham)方程式における独立した電子のKSエネルギーを完全に相互作用している場合のエネルギーに近づけるという断熱接続に基づいて、交換エネルギー汎関数に厳密なHartree-Fock(HF)交換積分を一定の割合で混合する汎関数である。分子系の計算ではB3LYP汎関数がよく用いられている。<br />
+　Hybrid汎関数には原子や分子の実験データと合わせるために経験的なパラメータが含まれている（B3LYPの場合は3個のパラメータ）ので、厳密な意味での第一原理ではなく、固体物理の第一原理計算ではあまり使われてこなかった。しかし、Hybrid汎関数を使うことにより、半導体のバンドギャップの計算値が実験結果に近づくことが知られ、HF交換積分をPBEに25%混合したPBE0汎関数やHF交換積分を短距離交換のみに混合するHSE06汎関数などが用いられるようになってきている。HSE06におけるパラメータ&alpha;の値は、PBE0と同じ0.25が用いられ、GGA交換項には&omega;PBEを用いている。[43]<br />
+<br />
+◇&nbsp;DFT+U [40](LDA+U及びGGA+U, PBE+U)：LDAやGGAなどと計算負荷はほぼ同等[8]。制限LDA法でU(effective U と呼ばれる)を第一原理的に求めることも可能である（Abinit）が、満足な結果を与えないことも多く、Uはしばしばパラメータとして取り扱われる[11]。計算方法はU=Etot(n+1)+Etot(n-1)-2Etot(n)となる[27,28]。実験値に合うようにUをパラメータとして変えていく場合はまずは1 eV 程度の刻で値を変えて調べていけばよいだろう。 Uは格子定数やバンドギャップ、形成エネルギー、吸収スペクトルを再現するように決定されることもある。WIEN2kで良く使われるSICではJ=0として、AMFとFLLではU-Jとして計算される（U is Hubbard U, J is the averaged intraatomic exchange parameter [27]）。AMFとFLLはほぼ同じ結果を与える。WIEN2kが呼んでいるSICとAMFやFLLはUを同じにしてJ=0とすれば同じになってよいはずだが、私の方では上手くいっていない。Uのパラメーターは磁気モーメントが実験値と合うようにして決める方法などがある。Uは孤立原子では17-27 eVと大きな値になるが、スクリーニングが強い系（固体など）になるとUは小さくなり、孤立原子の8%程度になることもある。ホイスラー系であれば文献[41, 42]が役に立つ。酸化物ではUの導入によって格子定数が実験値に近づくなどの報告があるが、Uを入れずにGGAの方がより実験値に近い報告もある。私がSPR-KKRで文献[42]のパラメーターで計算したところ、ゼーベック係数は実験値により近い値を示した。文献[42]のパラメーターは非常に好感の持てるものである。類似の系での計算ではほぼ同じUを用いてみるのが良い。論文を見れば、同じUで行なわれているものもある。<br />
+　 DFTにおけるLDAやGGAは、自己相互作用誤差のために電子を過剰に局在化させる傾向がある（もっとも単純なX&alpha;での式を見れば分かるが、電子密度&rho;が高い値ほどエネルギーは安定になる。そのため&rho;の高い場所にさらに電子が集まる）。この問題は、遷移金属酸化物や希土類を含む材料（強相関系や重い電子系と呼ばれる）のd電子やf電子のように、電子の局在性が強い系では深刻となる。局在化した軌道内の電子間に強い相互作用が働く効果を基底状態エネルギーに付加的に取り入れた補正として、LDA+UやGGA+Uと呼ばれる方法が開発された。LDA+UとGGA+Uを総称してDFT+Uと呼ばれることもある。<br />
+　DFT+Uでは軌道に依存した付加的な相互作用はHubbardモデルにおける相互作用Uと同じ形式で、同一サイトの局在化した原子軌道を占有した電子間の相互作用（オンサイトクーロン相互作用）のみを考慮して補正する。しかし、Hybrid汎関数の場合と同様に、オンサイトクーロン相互作用のUがパラメータとなり厳密な意味での第一原理計算の定義から外れることになる。[43]<br />
+　LDAやGGAは自己相互作用誤差のために電子を過剰に非局在化させる傾向がある。この問題は、遷移金属酸化物や希土類を含む材料（強相関系や重い電子系と呼ばれる）のd電子やf電子のように、電子の局在性が強い系では深刻となる。局在化した軌道内の電子間に強い相互作用が働く効果を基底状態エネルギーに付加的に取り入れた補正として、LDA+UやGGA+Uと呼ばれる方法が開発されている。<br />
+　LDA(GGA)+Uでは、軌道に依存した付加的な相互作用がHubbardモデルにおける相互作用のUと同じ形式で、同一サイト（オンサイト）の局在した原子軌道を占有した電子間の相互作用のみを考慮して補正する。しかし、オンサイトクーロン相互作用のUがパラメーターであるため、厳密な意味での第一原理計算の定義から外れることになる。[44]<br />
+　局所密度近似は一様電子ガスを出発とする平均場近似であるため、電子あるいはスピン密度揺らぎの効果が取り入れられていない。これに対して電子軌道が局在化した規格直交基底で表されているなら、密度汎関数に電子およびスピン密度による電子間クーロン反発および交換相互作用からの寄与をあからさまに書き、その代わりそれらの平均を差し引いておくことにより、スピン密度の揺らぎの効果を取り入れることができる。（省略）電子・電子相互作用およびU, Jは遮蔽効果を考慮した有効スレーター積分F<sup><font size="2">k</font></sup>で次のように書き表すことができる。<br />
+d-d相互作用<br />
+　U = F<sup>0</sup>(d,d)<br />
+　J = (1/14)*(F<sup>2</sup>(d,d) + F<sup>4</sup>(d,d))<br />
+f-f相互作用<br />
+　U = F<sup>0</sup>(f,f)<br />
+　J = (2/45)*F<sup>2</sup>(f,f) + (1/33)*F<sup>4</sup>(f,f) + (50/1287)*F<sup>6</sup>(f,f)<br />
+（省略）<br />
+多重占有軌道に関してはクーロン反発によるエネルギーの損および交換相互作用によるエネルギーの得が取り込まれている。さらに、LSDA+Uの定式化は軌道のユニタリ変換に関して不変であり、またd電子軌道の占有がちょうど半分であるときには全エネルギーはLSDAでのそれに一致する。式を書き換えると、占有状態と非占有状態の間に軌道mに依存する(U-J/2)(1/2-n<sup>&sigma;</sup><sub>mm</sub>)の不連続なポテンシャルの跳び、すなわち自己相互作用補正がn<font size="2"><sup>&sigma;</sup><sub>mm</sub></font>=0,1の間に存在する。<br />
+スレーター積分F<sup>k</sup>あるいはクーロン相互作用Uおよび交換相互作用Jは密度汎関数理論の枠内で求めることができる。そのため、バンド・ギャップの値には遮蔽効果が十分取り込まれ実験と良い一致を示す。（省略、LSDA+Uと反強磁性NiOの電子状態密度を比較した結果を見ると）絶縁体相での結果は満足のいくものであり、問題はむしろ金属・絶縁体転移近傍の金属側にある。LSDA+Uでは動的相関（多体相関による電荷とスピンの動的揺らぎ）が無視されているからである。[45]<br />
+<br />
+　（これは私の見解です）上記では難しく書いてしまったが（先生方には記載している文献通りに説明してください）、つまり、LDAやGGAでは、交換項と相関項において、交換項が厳密ではない。そこで、交換項が厳密なハートリフォック（HF）にある倍率(それがUである)を掛けてLDAの交換項に入れて、計算する系の交換項をより正しい値に近づけると考えればよい（DFT+Uではダブルカウンティング、つまり、DFTとHFで交換相関項の計算で二重に計算（二重計上）しているところがあるので二重計上を除くことも式の上では行っている）。ある倍率(U)を掛けて混ぜる量を調整するのは、系によって電子によるスクリーニング（遮蔽）が異なるためである（局在電子（電子の有効質量が重い）はスクリーニングが弱い、自由電子（電子の有効質量が軽い）はスクリーニングが強い傾向）。スクリーニングが強い系であればUの値は小さくなる。sp軌道のように自由電子に近い軌道で価電子帯が構成されていれば、X&alpha;法のところを読めば分かる通り、計算する系がより自由電子的であればLDAやGGAはより厳密な解を得られるためUは小さくなる。<br />
+　スクリーニングはXASやEELSでも重要になる。内殻を励起してコアホールを作ると、直ぐにスクリーニングされるかによって、XASやEELSを計算するときにどの程度のコアホールを入れれば良いかが変わってくる。例えば、MnOはMnのコアホールは1電子分空けるが、Cuでは0.5電子分空けると実験値に近くなる。コアホールを空ける量を変えて、実験値と比較してスクリーニングの強さを検討したり、扱っている系のスクリーニングの違いを別の方法で調べて、他の実験結果を予測することなども行なうと良いだろう。<br />
+　DFT+Uは理論と実験があわないからよく分からないUを入れてごまかしているというわけではなく、交換項がLDAやGGAでは厳密に取り扱えないので、HFを混ぜてより正しい交換項にしていると理解して欲しい。このUを自動で決めるために、GW、mBJなどといったものがあると理解しておけばよい。GWなどは励起状態を扱っているから、基底状態ではどうかというのが&hellip;&hellip;。酸化物半導体のギャップなどは紫外可視近赤外分光装置などで調べたりするので、ギャップは励起でのものを見ているとすると厳密にはどうなのかは疑問になりますが&hellip;&hellip;。<br />
+<br />
+補足：RPA遮蔽クーロン相互作用[45]: 電子が感じるクーロン相互作用の大きさは、その電子がどのような励起エネルギーを伴うものであるか、あるいは言い換えると、どの程度の時間の現象であるかに依存している。例えば非常に短い時間の現象（大きな励起エネルギーを伴う）であるならば、電子間クーロン相互作用を遮蔽する時間はないため、生のクーロン相互作用が現れてくる。一方、長い時間の現象であるなら電子励起に伴う正孔を遮蔽するに十分な時間があり、（金属であれば）伝導電子が遮蔽されて小さな値になっているはずである。原子の波動関数を使ってクーロンUの大きさを計算すれば、3d遷移金属ではおおむね15 eV程度の値となるが、一方でLDA+Uの計算で反強磁性絶縁体の計算をするときには約7 eV程度に決める。また金属状態の3d遷移金属単体結晶では、数eV程度の大きさが妥当とされている。<br />
+補足：RPA（乱雑位相近似）[45]<br />
+　分極を生じる密度の揺らぎが運動量成分(h/2&pi;)*kに限られるという制限を加え、それ以外の成分は位相の違いが全体として打ち消しあい、無視し得る程度の小さな寄与しか与えないと考える。<br />
+（省略）誘電関数は長波長の極限で<br />
+　&epsilon;<sub>RPA</sub>(k,&omega;) = 1 - (4&pi;e<sup>2</sup>n)/(m&omega;<sup>2</sup>) = 1 +&omega;<sup>2</sup><sub>p</sub>/&omega;<sup>2</sup><br />
+と変形することができ、誘電応答として&omega;=&omega;<sub>p</sub>の振動が存在することがわかる。これは電子密度揺らぎの疎密が振動しているものでプラズマ振動と呼ばれる。プラズマ振動のエネルギーは電子密度により決まり、典型的な金属においては、例えば、<br />
+　Al:&nbsp; (h/2&pi;)*&omega;<sub><font size="2">p </font></sub>～ 16 eV, K: (h/2&pi;)*&omega;<sub><font size="2">p</font></sub>&nbsp;～&nbsp;3.9 eV<br />
+である。1/&epsilon;(k,&omega;)から全体の誘電応答が分かる。（省略）RPAは長波長極限で正しい結果を与える。一方、短波長領域では交換相互作用はクーロン相互作用の半分を打ち消さねばならないが、これまでの結果はそうなっていない。Hubbardは交換相互作用の寄与を正しく見積もった。（省略）正確な全エネルギーのハートリー・フォック近似の結果との差を相関エネルギー（correlation energy）という。<br />
+<br />
+◇&nbsp;B3LYP [1] ：HF と LDA、B88、VWN3、LYP などの交換と相関ポテンシャルの線形結合。ハイブリッド型の汎関数。Gaussianなどを用いた論文で良く採用される汎関数。ハートリー・フォック交換積分の混合については、化学結合を強く見積もりすぎる原因であるLDA交換汎関数の不十分さを、一部ハートリー・フォック交換積分で置き換えることによって回復させるのが目的とされている。この汎関数は、小分子の化学物性計算における驚くほど高い精度の結果によって、より計算時間のかかるab initio波動関数の計算結果の正当性にも使われることすらある。しかし、化学反応計算や大規模分子の化学物性計算においては、さまざまな問題が指摘されているので注意が必要である。[33]<br />
+補足：HF法は結合性軌道の寄与が過大評価されるため、結合距離を過小評価し、振動数を過大評価する傾向がある。[46]<br />
+補足：DFT法では、LDA汎関数のSVWN, GGA汎関数のBLYP, HGGA汎関数のB3LYPのいずれも、結合距離をやや過小評価し、振動数を過大評価するというHF法とは逆の傾向があります。必ずしもLDA, GGA, HGGAという順に改善されるわけではないことに注意が必要です。[46]<br />
+<br />
+◇&nbsp;PBE0：ハイブリッド型の汎関数。ギャップの値も改善される。導入されるmixing parameter &alpha; はDFT+UのUに似ている。&alpha;は0.25で固定されている。PBE0[&rho;] = 交換相関項PBE[&rho;]&nbsp; - 0.25 * (交換項 HF[&Phi;]&nbsp; - 交換項PBE[&rho;]&nbsp; )。PBE交換・相関汎関数を参照関数とした断熱近似にもとづき、交換汎関数とハートリー・フォック交換積分とのエネルギー差を摂動として展開し、その3次展開項としてPBE交換の4分の1をハートリー・フォック交換積分で置き換えている。この汎関数については、パラメータを使っていないとされる（0はそれを意味する）が、PBE交換・相関汎関数には基礎物理定数が含まれる。その特徴は、定式が単純であること、パラメータが少ないこと、そして化学物性値の再現性の高さにある。しかし、この汎関数においてもB3LYP汎関数と同様の問題が指摘されている。[33]<br />
+<br />
+◇&nbsp;HSE：LDAやGGAよりもギャップの値が改善される。半導体などでのギャップの値は改善されるが計算コストが非常に掛る。ハートリー・フォック交換積分を短距離交換のみに混合することにより、PBE交換・相関汎関数を拡張した汎関数である。GGA交換汎関数の問題として長距離交換の欠如があることが確かめられている。しかし、GGA交換汎関数をハートリー・フォック交換積分の長距離部分で補正すると、固体バンド計算において、バンドギャップを大きく過大評価してしまう問題がしてきされてきた。それを逆手に取り、この汎関数は、GGA交換汎関数にハートリー・フォック交換積分の短距離部分のみを混合することで、バンドギャップを維持したまま固体の物性を改善することを目的としている。<br />
+&nbsp; HSE = a * 誤差関数で分割されたハートリー・フォック交換積分の短距離部分 + (1-a) *PBE交換項 + PBE相関項<br />
+となっており、PBE0と同じ理由でa = 1/4 が使われる。この汎関数の特徴は、固体バンド計算において、LDA汎関数のバンドギャップ値を維持もしくは改善しながら、LDA汎関数で問題とされてきた講師定数などの固体物性を大きく改善することが確認されている。問題点は、長距離交換を無視するモデルを物理的に正当化するのが難しいことである。ハートリー・フォック交換積分の長距離部分がバンドギャップを広げることは、同時に、長距離交換が重要であることを意味するはずである。[33] ZnOの場合には、a=0.375とすることで、格子定数やバンドギャップが実験値に近づくことが報告されている(PBE -&gt; PBE+U -&gt; HSE06 -&gt; HSE(a=0.375) となるほど格子定数とギャップ値が実験値に近づく)。[34]<br />
+<br />
+◇&nbsp;mBJ：modified Becke-Johnson。 ハイブリッド型の汎関数。ギャップの値も改善される[13]。DFT+UだとUを入れた軌道が大きく分裂するが、これが正しくない系に対して、mBJがXPSやXES, XASの結果をよく再現することがある[14]。二つのポテンシャルを混ぜ合わせる割合をcとし、cが|&nabla;&rho;|/&rho;の平均の1/2乗で直線的に変化するようにしたハイブリッド汎関数[25,26]。<br />
+<br />
+◇&nbsp;screened full-hybrid functionals：1/r = e^(-&lambda;*r)/r + (1 - e^(-&lambda;*r) )/r として、右辺第一項をshort-range、右辺第二項をlong-range に分けて、hybrid Functionの計算を行う。短距離と長距離は、exponential function (YS-PBE0など）ではなく error function （HSEなど）で分けられる場合もある。YS-PBE0 = 交換相関項PBE&nbsp; -&nbsp;&alpha; * (交換項 HF｛short-range｝&nbsp; - 交換項PBE{short-range}&nbsp; ) の計算を行う。&alpha;はパラメータ。<br />
+<br />
+◇&nbsp;YS-PBE0：HSEに似ている。ハイブリッド型の汎関数。ギャップの値も改善される。<br />
+<br />
+◇ OEP： 最適化有効ポテンシャル（Optimized Effective Potential, OEP）法は、軌道エネルギーを正しく再現するための代表的な方法の一つである。OEP法はポテンシャルをエネルギーと対応させる積分方程式を解いて求めた軌道依存な有効交換・相関ポテンシャルを使うコーン・シャム法である。コーン・シャム法において利用される交換・相関ポテンシャル汎関数は、期待値が交換・相関エネルギーに対応しない。タルマンとシャドウィックは、それが軌道エネルギーを再現しない原因と考え、軌道依存な有効交換・相関ポテンシャルを求める方法であるOEP法を開発した。OEP法についてはさまざまな実用上の問題が指摘されてきた。これまで利用されてきたOEP法の解法には、数値グリッドを使った求積法と既定関数を使った解析的解法の2通りがある。求積法は原子などの球形の系の計算に使えるが、分子や固体の計算には利用するのが難しい。基底関数を使った方法は分子や固体にも適用できるが、正しく収束する解を与えられないことが報告されている。これらの実用上の問題を解決するために提案されたのが、クーリーガー・リー・アイアフレート（KLI）近似である。KLI近似では積分方程式を解いて交換ポテンシャルを求める。この積分方程式は、単純に非局所的なハートリー・フォック交換ポテンシャルを局所化するおとに等しい。軌道エネルギーを正しく再現するには電子相関が必要である。なんらかの補正項なしにOEP法で軌道エネルギーを高精度に再現した例はないようである。さらに、OEP法にはSCF計算の収束性が悪く、著しく計算時間がかかるという重大な問題点がり、軌道エネルギー計算についてもほとんどの場合は原子や小分子に限られている。[33]<br />
+　絶縁体では本来、１電子ポテンシャルに跳びがなくてはならない。しかしコーン・シャム・ポテンシャルにそれは見られない。自己相互作用補正（SIC）の方法では、交換相関ポテンシャルは、個々の軌道に依存した。そもそも全エネルギーが電子密度の汎関数である必要性は必ずしもない、という考えから交換相関エネルギー汎関数を書いたらどうなるのか、ということが検討された。これが最適化された有効ポテンシャルの方法（Optimized Effective Potential method(OEP法)）である。交換相関ポテンシャルはすべての占有状態に関する依存性を持ったポテンシャル項の平均となる。交換相関エネルギーは、例えば、厳密な交換エネルギーおよびRPAによる相関エネルギーの和と仮定する。（省略）具体的な結果は、LDAに比べ、半導体のバンドギャップや遷移金属の磁気モーメントの大きさは改善される。しかし計算の負荷が重く、計算例は多くない。[45]<br />
+<br />
+◇&nbsp;EXX[23]：非局所厳密交換。LDAやGGAよりもギャップの値が改善される。ゲールリンクとレヴィによって提案されたもので、コーン・シャム軌道依存のポテンシャルである。この式は、OEP法をもとに開発されたものである。EXXポテンシャルでの価電子軌道のエネルギーはハートリー・フォック交換ポテンシャルとほとんど同じだが、内殻の軌道エネルギーは大きく異なる。ハートリー・フォック交換ポテンシャルと混成する(=a*V<sub>HF</sub> + {1-a}*V<sub>EXX</sub>)ことによって、内殻の軌道エネルギーが劇的に改善する。[33]<br />
+<br />
+◇&nbsp;PT2SC：クラスター展開法のCCSDT法レベルの高次の電子相関の効果を取り込んだ修正2次摂動法である。占有軌道と仮想軌道を個別に対角化することにより摂動項に占有・仮想軌道の組しか現れないようにした方法である。HF+EXX+PT2SCを使うと、占有軌道の軌道エネルギーをかなり正確に再現できる。この方法は、イオン化ポテンシャル実験値の逆符号に対して、占有軌道エネルギーを価電子軌道について0.2 eV以下、内殻軌道について 1 eV以下の平均誤差の化学的精度で算出している。ただし、交換ポテンシャルをEXXのみにすると、内殻エネルギーの再現性が著しく低下する。このことから、価電子軌道エネルギーを化学的精度をで再現するためにはクラスター展開法レベルの高次の電子相関を取り込んだポテンシャルが必要であり、さらに内殻軌道エネルギーを再現するにはそのレベルでも十分ではないことが明らかになった。&nbsp;[33]<br />
+<br />
+◇&nbsp;sx-LDA[8, 10]：交換相関エネルギーで遮蔽効果を考慮したハートリーフォック法。LDAやGGAよりもギャップの値が改善される。sx はScreened exchange の意味。<br />
+<br />
+◇&nbsp;GW近似 [6,7,16-18] ：LDAやGGAよりもギャップの値が改善される。種々の半導体・絶縁体のバンドギャップが10～15%程度以内のずれで実験値を再現することが知られている[11]。計算時間が非常に掛かるので、k点は数点だけにすることが多い。プラズマ振動による長距離の電荷揺らぎ、遮蔽効果を捉えるが、短距離相関の記述は不十分。QS(Quasi-particle Self-consistent)GW[24]の利用が現実的かもしれない。真空では比誘電率は1であるが、媒質によって異なる値を持つ。GW近似はこの比誘電率を計算し、電子間での相互作用（交換相関項）にこの比誘電率を考慮した計算を行う。比誘電率は距離と周波数により異なる値を持つため、&epsilon;(r, r&#39;&#39;, &omega;)という形式で記述される。自己エネルギーはグリーン関数とポテンシャルの掛け算となるが、GWでは比誘電率を考慮したポテンシャル(Wと記述される）をかける為に自己エネルギー＝i*G*Wとなる。そのため、GWはハートリー・フォックでのスクリーニング（電子による遮蔽効果）ヴァージョン以外の何ものでもない。&epsilon;は分極率（polarizability）&Chi;を用いる。乱雑位相近似（RPA）は、複雑な計算である分極率&Chi;を、i*G(1,2)*G(2,1)として単純な式にしたものである。[35]&nbsp; 厳密であるシュレーディンガー方程式で、誘電率を考慮に入れるようにすることで比較的高い精度で計算コストを小さくしている（それでも計算はかなり大変である）。こういったアイディアは、電気電子工学科や強電関係の出身の人間ならば誘電率を用いて多くの系を計算するので、系によって誘電率を入れて計算すればよいのでは？という考えは浮かび易いが、例えば、KKRで直ぐに得られるグリーン関数からGW近似を行うことでも大変な作業になる（プロでも2年は掛かる）ということは覚えておきたい。<br />
+　 密度汎関数理論は基底状態の取り扱いであって、励起状態については何も述べていない。しかし実際には、実験による励起スペクトルとコーン・シャム方程式から付随的にえら得る高いエネルギー状態のスペクトルは類似している。より一般的な立場から１電子励起スペクトルを取り扱う試みのひとつにGW近似がある。[45]<br />
+　最も低次の近似を採用し、かつグリーン関数と遮蔽クーロン相互作用にハートリー・フォック近似のそれらを用いるものを、GW近似と呼ぶ。G, Wはグリーン関数と遮蔽されたクーロン相互作用を意味し、文字通り自己エネルギーの近似の形を示す。（省略）自己エネルギー&sum;はバンド・ギャップを境にして、その下ではバンドを押し下げ、上では押し上げる。またギャップ・エネルギーは密度汎関数理論に比べて著しく改善されるが、このとき波動関数はほとんど変化しないことも好ましい。（省略）GW近似が良い結果を与えるのは、そのそおLDAの結果が良い結果を与えている場合が多い。しかし絶縁体であるべきなのにLDAの結果が金属になってしまう遷移金属酸化物のいくつか（例えばLaNiO3, LAFeO3）や、LSDA計算ではかろうじてバンド・ギャップが開き反強磁性絶縁体となるが価電子帯のトップの波動関数の由来が正しく得られないNiOなどでは良い結果を与えない。先に説明したLDA+UはGW近似の静的極限として得ることができる。[45]<br />
+<br />
+◇&nbsp;DMFT（動的平均場近似）法[45]: これまで電子間相互作用が強いため密度汎関数理論に新たに付け加えるべき効果を議論し、自己相互作用補正（SIC）、OEP法、LDA+U法、GW近似などを紹介してきた。しかしそれらはいずれも空間的な電子スピンの揺らぎは考慮しても、量子論的な揺らぎの効果を十分には取り入れることはできていなかった。電子間相互作用の強い系では、電子間クーロン相互作用Uが小さなときの金属相から、Uが大きくなるにつれて電子の有効質量の増大および電子の運動のコヒーレンスの消滅を伴った&rdquo;悪い金属&rdquo;状態から絶縁相への転移が見られる。これらがNiO, V2O3などを典型的な例とする遷移金属酸化物について見られる金属絶縁体転移である。<br />
+　簡単のため、各原子には軌道の縮退はなく、ただしスピンの自由度はあるので、１つの原子位置に電子が２個占めることができるような系を考えてみよう。各レベルのエネルギー準位が&epsilon;、同一原子内での電子間のクーロン相互作用はUであるとする。まず電子の原子間跳び移りがないとしよう。各原子に電子が１個あるならば、エネルギーは&epsilon;である。さらに電子を１個増やすとときは、２個目の電子は&epsilon;+Uのエネルギーが必要になる。すなわち、全系のエネルギースペクトルは、&epsilon;および&epsilon;+Uにそれぞれ（広がりのない）鋭いピークが立つことになる。さらに、電子の電子間跳び移りがあれば、&epsilon;および&epsilon;+Uの周りにそれに応じた幅Wが付くことになる。この単純な描像では、U&lt;Wでは２つの（各々&epsilon;および&epsilon;+Uの）バンドは重なり金属状態となる。一方、U&gt;Wでは２つのバンドは間にギャップを挟み、したがってそれぞれの原子当たり電子が１個の場合には、絶縁体状態となる。これが、これから問題にする電子相関に由来する金属-絶縁体転移である。２つの分離したバンドを（それぞれ、上部あるいは下部）ハバード（Hubbard）バンドという。<br />
+　動的平均場理論（Dynamical Mean Field Theory）では、強い電子間クーロン相互作用が働いているときの格子系の問題を&rdquo;相互作用を繰り込んだ有効媒質中におかれた孤立不純物&rdquo;の問題に射影する。系の次元が無限大である極限では、原子内クーロン相互作用に比べ原子間クーロン相互作用の効果は無視でき、DMFTは厳密な取扱となる。DMFTは厳密対角化やモンテカルロ法による直接的な方法の他（省略）によって解かれる。<br />
+<br />
+◇&nbsp;LDA+DMFT（動的平均場近似）法[45, 48]: 最近ではLDAとDMFTの統合の試みが行われている。<br />
+<br />
+◇&nbsp;GW + DMFT[18]： GW近似と動的平均場理論 DMFT を組み合わせた方法。<br />
+<br />
+◇&nbsp;TDDFT [5]：交換相関項で感受率（Polarizability：分極率）を考慮に入れることで電子励起エネルギーを比較的精度良く計算可能。EELSのスペクトル予測であれば比較的良い結果を示す。原理的には厳密な光吸収スペクトルが得られる[18]が、実際の計算では、交換相関が空間的にも時間的にも局所的とする断熱局所密度近似（断熱LDA=Adiabatic LDA = ADA）がよく用いられる。断熱LDAを用いたTDDFTは分子やクラスターなどの有限系に対して満足な結果を与える。系が大きくなるにつれて実験とのずれが顕著になる。<br />
+　TDDFTでは時間発展のプロパゲーターを用いる方法もある。この方法は、expとハミルトニアンHを用いるが、ハミルトニアンの各項は可換ではないので、2次や4次まで可換であるような方法（ルンゲ=クッタ法など）を用いないと波動関数は直交化しなくなる。そして、時間の刻み幅で結果が変わることになる。<br />
+<br />
+◇ TDDFT-LRC(long-range-correction) [36]<br />
+&nbsp; BSEの計算負荷が大きいために、長距離補正を入れたTDDFT。パラメーター&alpha;が存在するために、&alpha;をどうして決めたのかを説明する必要が生じる。<br />
+<br />
+◇ TDDFT-bootstrap [37]<br />
+　TDDFT-LRCで必要となったパラメーター&alpha;を必要としない方法。乱雑位相近似（RPA）とは異なった近似を導入している。GeやSiといった小さなバンドギャップをもつ系では高い精度を有する。大きなバンドギャップの系については、1 eVほど高いエネルギーにピークが示される。より正しいピーク位置を予測した場合にはBSEを利用するとよい（ArやNeのデータは？）。<br />
+<br />
+◇&nbsp;BSE [9]：Bethe-Salpeter Equation approach. 励起状態において電子-ホール対まで考慮した計算。固体における光吸収（数eV）でのスペクトル予測において比較的良い結果を示す。遷移金属のL2,3-edge（閉殻系を除く） や レアアースメタルのM4,5-edgeなどが上手く再現できない。<br />
+<br />
+◇&nbsp;vdW(Van der Waals｛分散力｝)補正[43]<br />
+　KS-DFTの相関汎関数では、ほとんどの場合はvan der Waals(vdW)力が電子相関として考慮されていない。vdW力とは、双極子-双極子相互作用、双極子-励起子相互作用、および分散力の総称であるが、双極子-双極子相互作用と双極子-励起子相互作用については、2電子間の静電相互作用やSCF計算によってKS計算法に取り込まれている。<br />
+　分散力は、空間的に隔てられた2つの電子分布の揺らぎによって2体間に相互作用が生じるので、1体の平均場近似では取り扱うことができない純粋な2体間の電子相関効果で、この効果はこれまでの相関汎関数によるKS計算法では取り扱うことができなかった。層状物質（グラファイトなど）や分子性結晶などを正確に取り扱うためには、この分散力をKS計算法に取り込むための補正が必要である。<br />
+　最も簡単に分散力を補正する方法は、KS-DFTによって計算された全エネルギーに、Londonの古典的な分散力ポテンシャルを加えることによって補正する方法(DFT-D)である。<br />
+　この方法は、エネルギーの補正だけでなく、ほとんど手間をかけることなく力の算出を行うことができるのが特徴である。しかし、電子論的な保障がなく、分散力係数をパラメータとして実験結果に合うように設定する必要があり、その結果は使用する交換・相関エネルギー汎関数によって大きく異なることも報告されている。<br />
+　KS法に基づく厳密な分散力の補正として、線形応答理論に基づく断熱接続・揺動散逸定理法があるが、実在の材料に適用しようとするとさまざまな近似を必要とし、膨大な計算時間を要することが知られている。Lundqvistらによって提案された汎関数（vdW-DF）は、2電子の空間座標、2電子の電子密度と密度勾配からなる関数を使った複雑な式を用いる。vdW-DFをもちいたSCF計算は、その定式から少し複雑である。vdW-DFには、より精度を増した補正方法としてLeeらによってvdW-DF2が提案されている。<br />
+<br />
+◇&nbsp;密度汎関数摂動論 [45]<br />
+　外場あるいは原子の微小変位を摂動として、系の全エネルギー変化を摂動論（密度汎関数摂動論）により調べてみよう。この摂動に対応するパラメーター&lambda;={&lambda;<sub>i</sub>}の変化による全エネルギーの変化を考える。ヘルマン・ファインマンの定理により基底状態のエネルギーE<sub><font size="2">DFT</font></sub>の１次および２次の変化率は<br />
+　&part;E<sub><font size="2">DFT</font></sub>/&part;&lambda;<sub>i</sub> = &int;dr (&part;v<sub>eff</sub>(r)/&part;&lambda;<sub>i</sub>)*n<sub>&lambda;</sub>(r)<br />
+　&part;<sup>2</sup>E<sub>DFT</sub>/(&part;&lambda;<sub>i</sub>&part;&lambda;<sub>j</sub>) = &int;dr (&part;<sup><font size="2">2</font></sup>v<sub>eff</sub>(r)/(&part;&lambda;<sub>i</sub>&part;&lambda;<sub><font size="2">j</font></sub>))*n<sub>&lambda;</sub>(r) + &int;dr (&part;v<sub><font size="2">eff</font></sub>(r)/&part;&lambda;<sub><font size="2">i</font></sub>)*(&part;n<sub><font size="2">&lambda;</font></sub>(r)/&part;&lambda;<sub><font size="2">j</font></sub>)<br />
+である。<br />
+（省略）<br />
+　&delta;&psi;<sub><font size="2">&alpha;</font></sub>(r)はコーン・シャム方程式（H<sub><font size="2">KS</font></sub>&nbsp;- &epsilon;<sub><font size="2">&alpha;</font></sub>）&psi;<sub><font size="2">&alpha;</font></sub> =0 から、その変分をとって<br />
+（H<sub>KS</sub>&nbsp;- &epsilon;<sub>&alpha;</sub>）&delta;&psi;<sub><font size="2">&alpha;</font></sub> = -(&delta;v<sub>eff</sub>&nbsp;- &delta;&epsilon;<sub><font size="2">&alpha;</font></sub>)&psi;<sub><font size="2">&alpha;</font></sub><br />
+により決められる。さらにコーン・シャム・ポテンシャルの１次変化&delta;veffおよびコーン・シャム固有エネルギーの１次変化&delta;&epsilon;&alpha;は、<br />
+　&delta;&epsilon;<sub>&alpha;</sub> = &lt;&psi;<sub>&alpha;</sub>|&delta;v<sub>eff</sub>|&psi;<sub>&alpha;</sub>&gt;<br />
+　&delta;v<sub>eff</sub>&nbsp;= &delta;&omega;<sub>ext</sub>(r) + e<sup>2</sup>*&int;dr &delta;n(r&#39;)/|r-r&#39;| + d&mu;<sub>xc</sub>/dn|<sub>n=n(r)</sub> *&delta;n(r)<br />
+である。<br />
+格子振動の振動周波数&omega;は、<br />
+　det|(1/&radic;(M<sub>I</sub>M<sub>J</sub>(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>) - &omega;<sup>2</sup>|=0<br />
+により決められる。さらに原子Iの原子核が周りの電子に及ぼすポテンシャルを<br />
+v<sub>I</sub>(r)、原子核-原子核相互作用エネルギーをE<sub>N</sub>と書くと、原子Iに働く力は<br />
+　F<sub>I</sub> = -&int;dr n(r)*&part;v<sub>I</sub>(r)/&part;R<sub>I</sub> - &part;E<sub>N</sub>/&part;R<sub>I</sub><br />
+であり、&part;<sup><font size="2">2</font></sup>E<sub><font size="2">DFT</font></sub>/(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>) = -&part;F<sub>I</sub>/&part;R<sub>I</sub>は<br />
+　&part;<sup><font size="2">2</font></sup>E<sub><font size="2">DFT</font></sub>/(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>) = &int;dr (&part;n(r)/&part;R<sub><font size="2">J</font></sub>)*v<sub><font size="2">I</font></sub>(r)/(&part;R<sub><font size="2">I</font></sub>) + &int;dr n(r)*(&part;<sup><font size="2">2</font></sup>v<sub><font size="2">I</font></sub>(r)/(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>)) + &part;<sup><font size="2">2</font></sup>E<sub><font size="2">N</font></sub>/(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>)<br />
+となる。ここで電子密度に関する1次の変化量は<br />
+　&delta;n(r) = 4*Re&Sigma;&psi;<sub><font size="2">&alpha;</font></sub><sup>*</sup>(r)&delta;&psi;<sub><font size="2">&alpha;</font></sub>(r) = &Sigma;&psi;<sub>&beta;</sub>(r)&lt;&psi;<sub><font size="2">&beta;</font></sub>|&delta;v<sub>eff</sub>|&psi;<sub><font size="2">&alpha;</font></sub>&gt;/（&epsilon;<sub><font size="2">&alpha;</font></sub>-&epsilon;<sub><font size="2">&beta;</font></sub>）<br />
+（&beta;が占有状態を取るとき、&alpha;と&beta;を取り替えると分母の（&epsilon;<sub><font size="2">&alpha;</font></sub>-&epsilon;<sub><font size="2">&beta;</font></sub>）のために全体の符号が換わり、この部分は0となる）<br />
+で与えられるので、&part;<sup><font size="2">2</font></sup>E<sub><font size="2">DFT</font></sub>/(&part;R<sub><font size="2">I</font></sub>&part;R<sub><font size="2">J</font></sub>)が計算でき、格子振動の振動周波数が求められる。<br />
+-------------------------------------------------------------------------<br />
+◆ 各表式での交換相関ポテンシャルを比較した論文<br />
+・ C. Filippi, D. J. Singh, and C. J. Umrigar, Phys. Rev. B&nbsp; <b>50</b>, (1994) 14947.: <a href="http://journals.aps.org/prb/abstract/10.1103/PhysRevB.50.14947">http://journals.aps.org/prb/abstract/10.1103/PhysRevB.50.14947</a><br />
+・ ABC of ground-state DFT： <a href="http://www.tddft.org/TDDFT2014/school/Burke2.pdf">http://www.tddft.org/TDDFT2014/school/Burke2.pdf</a><br />
+・ <span class="addmd">Jorge M. Seminario, </span>&quot;Recent Developments and Applications of Modern Density Functional Theory&quot;, Elsevier Science B. V, 1996.: <a href="http://books.google.co.jp/books?id=40wmZ0dku-UC&amp;pg=PA295&amp;lpg=PA295&amp;dq=Claudia+Filippi+1996+LDA&amp;source=bl&amp;ots=LRhFf355Km&amp;sig=npgYYaC2Ku2Bs2sxRi1fbxpRjcI&amp;hl=ja&amp;sa=X&amp;ei=CalRU7-KFIz8lAWsnoGADg&amp;ved=0CF8Q6AEwBg#v=onepage&amp;q=Claudia%20Filippi%201996%20LDA&amp;f=false">http://books.google.co.jp/books?id=40wmZ0dku-UC&amp;pg=PA295&amp;lpg=PA295&amp;dq=Claudia+Filippi+1996+LDA&amp;source=bl&amp;ots=LRhFf355Km&amp;sig=npgYYaC2Ku2Bs2sxRi1fbxpRjcI&amp;hl=ja&amp;sa=X&amp;ei=CalRU7-KFIz8lAWsnoGADg&amp;ved=0CF8Q6AEwBg#v=onepage&amp;q=Claudia%20Filippi%201996%20LDA&amp;f=false</a>&nbsp;on google books<br />
+　C. Filippi et al., Theor. Comp. Chem. 4 (1996) 295-327.<br />
+・ この他、各種の密度汎関数の詳細は文献[32]を参照すると良い。<br />
+-----------------------------------------------------------------------------<br />
+・ 交換相関項 [29]<br />
+◆ 交換汎関数： 統計性による避け合いの効果（交換項）<br />
+◆ 相関汎関数： 平均場で記述できない効果（電子相関）： Colle-Salvetti型(OP, LYP）、一般化勾配2次近似型（PW91, PBEなど）<br />
+<br />
+・ 平均場で記述できない多体効果の取り組み方 [29]<br />
+a) CI： 波動関数を改良して多体効果を取り扱う（励起状態の波動関数も含むなど）。<br />
+b) DFT： 実行ポテンシャル Vxc を改良して多体効果を取り扱う。<br />
+-----------------------------------------------------------------------------<br />
+[1] J. B. Foresman and A. Frisch 著、田崎建三訳、電子構造論による化学の探究 : 第二版、 Gaussian Inc., Pittsburgh、(1998).<br />
+[2] 和光システム研究所 著、固体の中の電子 : 改訂版、和光システム研究所、(2006).<br />
+[3] R. G. Parr and W. Yang 著、狩野覚、関元、吉田元二 監訳、原子・分子の密度汎関数法 : シュプリンガー・フェアラーク東京、（1997).<br />
+[4] N. W. Ashcroft and N. D. mermin : Solid State Physics, Saunders College, (1976).<br />
+[5] 実験化学講座12 計算化学 第五版、丸善、2004. この他、<a href="http://www.riken.jp/qcl/members/tsuneda/web/dft05-sec5.pdf">www.riken.jp/qcl/members/tsuneda/web/dft05-sec5.pdf</a>&nbsp;を参照。<br />
+[6] 今田正俊、固体物理、46 (2011) 351.<br />
+[7] 三宅隆、今田正俊、固体物理、46 (2011) 499.<br />
+[8] 第一原理計算、情報機構、2012.<br />
+[9] <a href="http://www.etsf.eu/system/files/users/SottileF/file_106.pdf">http://www.etsf.eu/system/files/users/SottileF/file_106.pdf</a> , <a href="http://theory.polytechnique.fr/codes/dp/tddft.pdf">http://theory.polytechnique.fr/codes/dp/tddft.pdf</a>, <a href="http://elk.sourceforge.net/CECAM/Castro-TDDFT.pdf">http://elk.sourceforge.net/CECAM/Castro-TDDFT.pdf</a><br />
+[10] <a href="http://portellen.phycmt.dur.ac.uk/sjc/thesis_mcg/node61.html">http://portellen.phycmt.dur.ac.uk/sjc/thesis_mcg/node61.html</a><br />
+[11] 今田正俊、固体物理、46 (2011) 499.<br />
+[12] P. Hass, F. Tran, P. Blaha, K. Schwars, Phys. Rev. B 83 (2011) 205117.<br />
+[13] F. Tran, P. Blaha, Phys. Rev. Lett. 102 (2009) 226401.<br />
+[14] E. Z. Kurmaev et al., Phys. Rev. B 77 (2008) 165127.<br />
+[15] <a href="http://weblearningplaza.jst.go.jp/">http://weblearningplaza.jst.go.jp/</a><br />
+[16] <a href="http://pmt.sakura.ne.jp/wiki/index.php?title=Main_Page#.2A.E9.98.AA.E5.A4.A7.E7.89.B9.E5.88.A5.E8.AC.9B.E7.BE.A9.E3.80.812010-July-28to30.E5.B0.8F.E8.B0.B7.40osaka-u.ac.jp">http://pmt.sakura.ne.jp/wiki/index.php?title=Main_Page#.2A.E9.98.AA.E5.A4.A7.E7.89.B9.E5.88.A5.E8.AC.9B.E7.BE.A9.E3.80.812010-July-28to30.E5.B0.8F.E8.B0.B7.40osaka-u.ac.jp</a><br />
+[17] <a href="http://ci.nii.ac.jp/els/110007161485.pdf?id=ART0009115367&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1377860547&amp;cp">http://ci.nii.ac.jp/els/110007161485.pdf?id=ART0009115367&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1377860547&amp;cp</a>=<br />
+[18] <a href="http://computics-material.jp/files/symposium/20120316/document/18_sakuma_document.pdf">http://computics-material.jp/files/symposium/20120316/document/18_sakuma_document.pdf</a><br />
+[19] J. P. Predew and A. Zunger, Phys. Rev. B 23 (1981) 5048.<br />
+[20] A. Fillipepetti and N. A. Spaldin, Phys. Rev. B 67 (2003) 125109.<br />
+[21] A. Fillipepetti and N. A. Spaldin, Phys. Rev. B 67 (2003) 045111.<br />
+[22] <a href="http://ci.nii.ac.jp/els/110006983128.pdf?id=ART0008895619&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1378785977&amp;cp">http://ci.nii.ac.jp/els/110006983128.pdf?id=ART0008895619&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1378785977&amp;cp</a>=&nbsp;<br />
+[23] T. Kotani and H. Akai, Phys. Rev. B 54 (1996) 16502.<br />
+[24] <a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;frm=1&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC4QFjAA&amp;url=http%3A%2F%2Fpmt.sakura.ne.jp%2Fwiki%2Fimages%2FMrsj2010v2.ppt&amp;ei=985lUtOuJITvlAXX_YAw&amp;usg=AFQjCNH5wV0KoVat9991SR7xuOLyw3XXKA&amp;sig2=Zg7lPAYQwaOs6WK0etfV8Q">http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;frm=1&amp;source=web&amp;cd=1&amp;cad=rja&amp;ved=0CC4QFjAA&amp;url=http%3A%2F%2Fpmt.sakura.ne.jp%2Fwiki%2Fimages%2FMrsj2010v2.ppt&amp;ei=985lUtOuJITvlAXX_YAw&amp;usg=AFQjCNH5wV0KoVat9991SR7xuOLyw3XXKA&amp;sig2=Zg7lPAYQwaOs6WK0etfV8Q</a><br />
+[25] F. Tran and P. Blaha, Phys. Rev. Lett. 102 (2009) 226401.<br />
+[26] M. Meinert, Phys. Rev. B 87 (2013) 045103.<br />
+[27] <a href="http://www.slideserve.com/Thomas/wien2k-software-package">http://www.slideserve.com/Thomas/wien2k-software-package</a><br />
+[28] G. C. Zhou et al., Phys. Lett. A 368 (2007) 112.<br />
+[29] R. Maezono, johokiko, 2013.<br />
+[30] 講義資料： <a href="http://www.cmp.sanken.osaka-u.ac.jp/~koun/Lecs/Material_Design13.pdf">http://www.cmp.sanken.osaka-u.ac.jp/~koun/Lecs/Material_Design13.pdf</a><br />
+[31] 固体電子構造-物質設計の基礎-：<a href="http://fujimac.t.u-tokyo.ac.jp/fujiwara/20101024_main.pdf">http://fujimac.t.u-tokyo.ac.jp/fujiwara/20101024_main.pdf</a><br />
+[32] 化学者のための密度汎関数理論： <a href="http://rare-events.org/tsuneda/Kyoto-text.pdf">http://rare-events.org/tsuneda/Kyoto-text.pdf</a><br />
+[33] 常田貴夫「密度汎関数法の基礎」講談社： P.64-65の式(2.83)は、波動関数での全ての軌道とスピンの組み合わせを計算して0とならずに残った項となる。 <a href="http://www.chem.ous.ac.jp/~waka/compchem/general_atom/ga-5.html">http://www.chem.ous.ac.jp/~waka/compchem/general_atom/ga-5.html</a> が参考になる。<br />
+[34] 大場史康、まてりあ、52 (2013) 350<br />
+[35] <a href="http://tddft.org/bmg/files/seminarios/127407.pdf">http://tddft.org/bmg/files/seminarios/127407.pdf</a><br />
+[36] L. Reining et al., Phys. Rev. Lett. 88, 066404 (2002)., S. Botti et al., Phys. Rev. B 72, 125203 (2005).<br />
+[37] <a href="http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.186401">http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.186401</a><br />
+[38] <a href="http://www.tcm.phy.cam.ac.uk/castep/oxford/xc.pdf">http://www.tcm.phy.cam.ac.uk/castep/oxford/xc.pdf</a><br />
+[39] <a href="http://arxiv.org/pdf/cond-mat/0303042.pdf">http://arxiv.org/pdf/cond-mat/0303042.pdf</a><br />
+[40] <a href="http://online.kitp.ucsb.edu/online/motterials07/lichtenstein/pdf/Lichtenstein_Motterials_LDA_U_KITP.pdf">http://online.kitp.ucsb.edu/online/motterials07/lichtenstein/pdf/Lichtenstein_Motterials_LDA_U_KITP.pdf</a><br />
+[41] <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.73.094422">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.73.094422</a><br />
+[42] http://arxiv.org/pdf/cond-mat/0611179.pdf, <a href="http://link.springer.com/chapter/10.1007/978-90-481-3832-6_7#page-6">http://link.springer.com/chapter/10.1007/978-90-481-3832-6_7#page-6</a><br />
+[43] アドバンスシミュレーション, 20 (2014) 75-85.(情報技術誌アドバンスシミュレーションは、アドバンスソフト株式会社ホームページのシミュレーション図書館からPDF形式がダウンロードできます)<br />
+[44] アドバンスシミュレーション, 23 (2016) 4-11.<br />
+[45] 藤原毅夫「固体電子構造論」内田老鶴圃<br />
+[46] 応用物理 第86巻 第9号 p.802 (2017)<br />
+[47] 塩見淳一郎ら「フォノンエンジニアリング」TNS<br />
+[48] The DFT+DMFT method and its implementation in Abinit (<a href="http://pitp.phas.ubc.ca/confs/sherbrooke2012/archives/DFTDMFT_Abinit_Amadon.pdf">http://pitp.phas.ubc.ca/confs/sherbrooke2012/archives/DFTDMFT_Abinit_Amadon.pdf</a>)<br />
+-----------------------------------------------------------------------------<br />
+密度汎関数法の理解には下記のHPも非常によい。<br />
+　<a href="http://www-tph.cheme.kyoto-u.ac.jp/c/ms2007/note/ogata2/chap2_DFT.pdf">http://www-tph.cheme.kyoto-u.ac.jp/c/ms2007/note/ogata2/chap2_DFT.pdf</a><br />
+-----------------------------------------------------------------------------<br />
+◆ Quasi Particle Band Structure<br />
+GW Approximation in Abinit code.<br />
+&nbsp; In the quasiparticle (QP) formalizm, the energies and wavefunctions are obtained by the Dyson equation:<br />
+&Sigma; self-energy ( a non-local and energy dependent operator) is the difference between the energies of bare particle and quasiparticle.<br />
+&nbsp; Within the GW approximation, &Sigma; is given by:<br />
+〔 -&nabla;<sup>2</sup>/2 + V<sub>ext</sub>(r) + V<sub>H</sub>(r) 〕* &phi;<sub>nk</sub>(r) +&nbsp;&int;dr&#39; &Sigma;(r, r&#39;, &omega;=&epsilon;<sup>QP</sup><sub>nk</sub>) * &phi;<sub>nk</sub>(r&#39;) = &epsilon;<sup>QP</sup><sub>nk</sub> * &phi;<sub>nk</sub>(r). QP equation<br />
+&Sigma;<sup>GW</sup>(r, r&#39;, &omega;) = 1/2&pi; * &int;d&omega;&#39; e<sup>-i&delta;&omega;&#39;</sup> * G(r, r&#39;, &omega;-&omega;&#39;）* W(r, r&#39;, &omega;&#39;). GW self-energy<br />
+Where, G(r, r&#39;, &omega;-&omega;&#39;） is Green Function, W(r, r&#39;, &omega;&#39;) is Dynamical Screened Interaction.<br />
+<br />
+Green function G corresponding to QP equation is<br />
+G(r, r&#39;; E) = G<sup>0</sup>(r, r&#39;; E) + ∬dr1dr2 G<sup>0</sup>(r, r<sub>1</sub>; E) * &Sigma; (r<sub>1</sub>, r<sub>2</sub>; E) * G(r<sub>2</sub>, r&#39; ; E)<br />
+Green function G may be qpproximated by the independent particle G0:<br />
+G<sup>0</sup>(r, r&#39;, &omega; ) = &Sigma;<sub>nk </sub>(&phi;<sup>DFT</sup><sub>n,k</sub>(r) * &phi;<sup>DFT*</sup><sub>n,k</sub>(r&#39;)) / (&omega; - &epsilon;<sup>DFT</sup><sub>n,k</sub> + i &delta; sgn (&epsilon;<sup>DFT</sup><sub>n,k</sub> - &mu;) )<br />
+The basci ingredient of G<sup>0</sup> is the Kohn-Sham electronic structure.<br />
+<br />
+W is approximated by RPA:<br />
+W<sub>G,G&#39;</sub>(q,&omega;) = &epsilon;<sup>-1</sup><sub>G, G&#39;</sub> (q, &omega;) * &nu;<sub>G&#39;</sub>(q). Dynamical Screened Interaction<br />
+Where, &epsilon;<sup>-1</sup><sub>G, G&#39; </sub>(q, &omega;)&nbsp; is Dielectric Matrix, &nu;<sub>G&#39;</sub>(q) is Coulomb Interaction.<br />
+<br />
+RPA approximation<br />
+&nu;<sub>G&#39;</sub>(q) = 4&pi; / |q+G&#39;|<sup>2</sup><br />
+<br />
+&epsilon;<sup>RPA</sup><sub>G,G&#39;</sub>(q, &omega;) = &delta;<sub>G, G&#39;</sub> - &nu;<sub>G</sub>(q) * &chi;<sup>0</sup><sub>G,G&#39;</sub>(q,&omega;)<br />
+<br />
+Adler-Wiser expression<br />
+&chi;<sup>0</sup><sub>G,G&#39;</sub>(q,&omega;) = 2 &Sigma;<sub>n, n&#39;,&nbsp;k</sub> (f<sub>n,k</sub> - f<sub>n&#39;, k+q</sub>) * &lt; &phi;<sup>D</sup><sup>FT</sup><sub>n&#39;, k+q</sub> | e<sup>-i(q+G)・r </sup>| &phi;<sup>DFT</sup><sub>n,k</sub> &gt;&lt; &phi;<sup>DFT</sup><sub>n,k</sub> | e<sup>i(q+G)・r </sup>| &phi;<sup>DFT</sup><sub>n&#39;, k+q</sub>&gt; / &nbsp;(&epsilon;<sup>DFT</sup><sub>n,k</sub> -&epsilon;<sup>DFT</sup><sub>n,k+q</sub> - &epsilon; - i &delta;)<br />
+<br />
+GWA correction to LDA<br />
+〔 -&nabla;<sup>2</sup>/2 + V<sub>ext</sub>(r) + V<sub>H</sub>(r) 〕* &phi;<sub>nk</sub>(r) +&nbsp;&int;dr&#39; &Sigma;(r, r&#39;, &omega;=&epsilon;<sup>QP</sup><sub>nk</sub>) * &phi;<sub>nk</sub>(r&#39;) = &epsilon;<sup>QP</sup><sub>nk</sub> * &phi;<sub>nk</sub>(r). QP equation<br />
+〔 -&nabla;<sup>2</sup>/2 + V<sub>ext</sub>(r) + V<sub>H</sub>(r) 〕* &phi;<sub>nk</sub>(r) +&nbsp;V<sub>xc</sub> * &phi;<sub>nk</sub>(r&#39;) = &epsilon;<sup>DFT</sup><sub>nk</sub> * &phi;<sub>nk</sub>(r).&nbsp;KS equation<br />
+<br />
+Difference = V<sub>xc</sub> is replaced by &Sigma;.<br />
+Thus GWA correction to the DFT KS eigenvalues by 1st order PT:<br />
+&epsilon;<sup>DFT</sup><sub>nk</sub> = &epsilon;<sup>DFT</sup><sub>nk</sub>&nbsp; * &lt; &phi;<sup>D</sup><sup>FT</sup><sub>n,&nbsp;k</sub> |&nbsp;&Sigma;(r, r&#39;, &omega;)&nbsp;- V<sub>xc</sub>(r)&nbsp;|&nbsp;&phi;<sup>D</sup><sup>FT</sup><sub>n, k </sub>&nbsp;&gt;<br />
+Non Self-Consistent G<sup>0</sup>W<sup>RPA</sup>, Plasmon Pole model.<br />
+-----------------------------------------------------------------------------<br />
+今田正俊、固体物理、46 (2011) 351.<br />
+◆ LDAの限界<br />
+（省略）<br />
+&nbsp; 典型的な強相関電子系は上述のように遷移金属化合物、有機導体、希土類化合物などに見られる。たとえば遷移金属化合物では通常、遷移金属原子のd軌道を主成分とするバンドがフェルミレベルEFを横切っている。また希土類化合物では希土類原子のf電子バンド、有機導体では分子軌道のp電子バンドがE<sub>F</sub>を横切り、それぞれに事情が異なる。しかし、それにもかかわらず、これらの強相関電子系には共通した特徴がある。共通性の第一は、フェルミレベルを横切るバンド群のバンド幅が狭く、第二はこのバンド群が他のバンドから離れて比較的良く孤立しているということである。バンドが狭い原因は、このバンドの主成分であるd, pやf軌道の広がりが、結晶格子定数に比べると相対的に小さく、隣り合う原子（分子）間でこれらの軌道に属する波動関数の重なりが小さいからである。波動関数の広がりが小さいということは、その軌道上の二つの電子間の局所クーロン相互作用を大きくする効果もある。第二の共通点は後にも述べるが、強相関電子系に属する物質群ではほぼ例外なしに、フェルミレベルを横切るバンドが少数であり、かつそれ以外のバンドからは孤立している。これは偶然ではなく、フェルミレベル付近のバンド数が少ないことが、互いの遮蔽を少なくし、有効クーロン相互作用を大きい値に保つことによって、強相関電子系を実現し得ることになる。実験的にはこれらの化合物はしばしば、「悪い金属」と呼ばれ、電気伝導の良くない金属となったり、絶縁体になることが知られている。バンド幅は電子の運動エネルギーをそのまま表すから、狭いバンド幅と相対的に強い電子間相互作用により、電子間相互作用/運動エネルギーの比が、半導体などに比べて大きな系（すなわち強相関電子系）ということになる。<br />
+&nbsp; これに加えて、強相関電子系では、磁性、誘電性、超伝導などのさまざまに多様な秩序化へのゆらぎが競合していることが、LDAのような平均場近似を成り立たなくさせる原因となっている。したがって電子相関を平均場を超えた高い精度で扱わなければならないため、強相関電子系の電子状態計算は現代科学におけるグランドチャレンジの一つとなっている。（中略）<br />
+&nbsp; 強相関物質群の中でも注目すべきは、複雑な系、単位胞に多数の原子を含むような、有機導体やゼオライトのような格子定数の大きな系や人工的に微細加工して作られる量子ドットのような系に見いだされる。これらの系では運動エネルギーに比して、相対的に電子相関効果が大きくなりやすい。これはユニットである大きな分子がファン・デア・ワールス相互作用のような相互作用で弱くカップルし（あるいは量子ドットのような人工構造単位が複数あるときその間が比較的遠く隔てられて）、隣り合う分子軌道間の電子の波動関数の間の重なりを小さくし得るからである。また有機分子において構造を安定化させるためにE<sub>F</sub>付近に大局的なギャップができやすく、EFを挟んでHOMO（最高位占有軌道）とLUMO（最低位非占有軌道）だけからなる単純で小数のバンドだけが見られるような典型例ではクーロン相互作用の遮蔽効果が少なくなる。<br />
+<br />
+◆ 電子相関を取り入れる方法の発展<br />
+&nbsp; 電子構造を計算する手法には大ざっぱに言って二通りある。その第一はすでに述べた密度汎関数法に基礎を置く方法であり、基底状態を電荷密度分布のみから求める方法である。もうひとつの方法は、波動関数法や相関関数法と呼ばれ、多体波動関数やグリーン関数のような相関関数をあらわに求めようとする方法である。波動関数法に属する最も簡単なものの例の一つとして、もちろん十分な方法ではないが、ハートレー・フォック法を挙げることができる。変分波動関数の方法として経路積分に基礎を置く量子モンテカルロ法も広い意味で波動関数法によるアプローチに分類できよう。<br />
+&nbsp; 密度汎関数法はコーン・シャム方程式を解くという手続きによって、解くべき問題を一体問題に還元する。ここで自己無撞着に決めるべきものは電荷密度分布であり、単純なハートレー・フォック法と比べても、計算の負荷は大変小さい。しかしながら密度汎関数法ではすでに述べたように電子相関をうまく扱う方法が知られておらず、そのための系統的な改良法もわかっていない。一方、波動関数法は計算の付加は大きいが、電子相関を扱うための系統的な改良を可能にするような柔軟性を持つ。限られた計算資源のもとで密度汎関数法は幅広く適用されてきたが、電子相関効果を本気で取り入れなければならない問題が増えてきたことと、計算機の能力の飛躍的な向上によって、波動関数法を中心とした、計算手法の再吟味と新たな開発が大きく進むこととなった。<br />
+電子相関効果は大きくなければ、標準的な多体摂動論によってある程度見積もることができる。一体描像によれば、電子が相互作用しあうとき、個々の電子は、他の電子集団による衣を着て、他の電子によって作られた雲の中を動くと見なすことができる。このようにして、衣を着た（あるいは雲の中を動く）電子は、「準粒子」と呼ばれる。相互作用のない時の裸の電子から断熱的に徐々に相互作用を大きくしていくという仮想実験の過程で、「準粒子」は粒子としての実体を断熱的に保持し続けられるという、ランダウの言う「断熱接続の仮定」が成り立つときに有効な概念である。<br />
+&nbsp; 断熱的につながってはいるが、準粒子は裸の電子とは異なる有効質量や分散を持つことになる。この効果は電子の自己エネルギー（&Sigma;で表す）として記述することができ、準粒子のグリーン関数の極で表される分散が、&omega; = &epsilon; * (k,&omega;)のように書け、裸の電子の分散 &omega; = &epsilon;(k)とは異なることになる。ここで、繰り込まれたエネルギー &epsilon;* は運動量 k と振動数&omega; に依存して &epsilon; * (k,&omega;) = &epsilon;(k) + &Sigma;(k, &omega;)のように与えられ、自己エネルギー&Sigma;と関連付けられる。詳細はもっと後で導出するので、ここでは概略だけにとどめるが、最低次の摂動論で、自己エネルギー&Sigma;は電子のグリーン関数G(k,&omega;)と遮蔽されたクーロン相互作用Wを用いて、GWのように両者の積で表される。ここで遮蔽クーロン相互作用は摂動論的には乱雑位相近似(RPA)によって与えられる。このような近似によって自己エネルギーを求める方法を第2回に詳述するようにGW近似と呼ぶ。半導体や絶縁体のバンドギャップをLDAは過小評価するという深刻な欠点が知られているが、摂動の出発点としての無摂動系にLDAの結果（コーンシャム方程式）を用いることによって、このGW法は華店を大幅に改良することが示されている。<br />
+（省略）<br />
+&nbsp; LDAが強相関電子系で失敗する原因は、LDAの想定を超えて、フェルミレベルEF付近の電子構造が電子間相互作用の効果で再構成されることに帰着される。フェルミレベルから遠く離れたエネルギー準位は、完全に埋められているか、空かのどちらかであり、強相関電子系といえども、分極することはない。電子の分極はフェルミレベル付近のみで大きく、電子相関効果はフェルミレベル付近のある幅のウィンドウ内の準位、具体的には遮蔽されたクーロン相互作用の大きさ程度の幅（典型的には数eV）のウィンドウ内準位を占める電子だけに効果を及ぼす。したがって、フェルミレベル付近のバンドのバンド幅がこの遮蔽有効相互作用と同程度かあるいはもっと小さくなると、このバンドの電子構造は全面的に再構成され、一体のバンド描像による出発点は根本的に怪しくなる。このような再構成はブリルアン・ゾーン全面で起きることになるから、再構成はむしろ実空間で局所的に生じ得ることになり、空間的に非一様に生じることになる。これが電子密度の一様性に依拠するLDAのフェルミレベル近傍での適用に限界を与えることになるのである。別の言葉で言えば、LDAは大局的な大きなエネルギースケールではバンド構造を妥当に予測しうるが、フェルミレベル近くの有効相互作用程度のエネルギー幅の領域では、LDAでは予測不能な電子状態の再構築を生むことになる。この階層構造が強相関電子系の持つ特徴である。現実にわれわれの目にする物質の物性は常温程度以下のエネルギースケールであり、階層構造の低エネルギー側の構造の中にすっかり埋め込まれている。<br />
+&nbsp; この階層構造を取り入れると、密度汎関数法から出発しながら、フェルミレベルEFから離れたエネルギーを持つ電子の自由度を、繰り込み群的な精神に従って部分状態和を取って繰り込んだうえで、消去する方法が可能になる。自由度を消去してヒルベルト空間を制限してゆくこの方法をダウンフォールディング法と読んでいる。ダウンフォールディングによってEF近傍の自由度のみから成る有効模型が導かれる。この有効模型は少数のバンドの自由度しか含まないので、これらの少数のバンドを「ターゲットバンド」と呼び、この模型は実空間の単位格子を格子点とする離散点上でターゲットバンドを構成する軌道自由度のみを含んでいる。すなわちこの格子模型は少数の軌道自由度を持つ、拡張はバード模型のハミルトニアンあるいはラグランジアンで表されることになる。ダウンフォールディングの過程で、ターゲットバンドに属する電子間の相互作用は、このときに消去される自由度による遅延効果が無視できるならば、有効模型は振動数依存性を持たない同時刻での有効相互作用を持つこととなり、ハミルトニアン形式で表すことが可能になる。遅延効果が無視できないならば、遅延相互作用を考慮してラグランジアンとして扱わなければならない。近年、ダウンフォールディングによって有効低エネルギー模型を導き、この有効模型を量子ゆらぎや強相関多体効果を十分に高精度で取り込んだ「低エネルギーソルバー」によって解く手法が急速に発展し、広く採用されてきている。<br />
+&nbsp; この方法は繰り込みを伴い、エネルギーについて多段構成（マルチスケール）で電子状態を解明する手法（Multiscale Ab initio scheme for Correlated Electrons、略してMACE）となっている。MACEによる電子状態計算の典型例では（省略）に図示するようにハイブリッド的な以下の3段階の手続きに従って行われる。<br />
+(i) LDAやGGAのような密度汎関数法やGW法による補正に基づいて、大局的なバンド構造を、フェルミレベルから遠くはなれたバンドも含めて計算する。<br />
+(ii) EFから離れた自由度についての部分状態和を取って消去する繰り込み操作（ダウンフォールディング）を行う。ダウンフォールディングによってフェルミレベル近傍の自由度のみを残した、低エネルギー有効模型が導かれる。<br />
+(iii) この有効模型を十分な精度の低エネルギーソルバーで解く。<br />
+低エネルギーソルバーで解いた後の結果を、再び大局的バンド構造を求める手続きにフィードバックして、逐次代入のループによって互いに自己無撞着になって収束するまで解く操作を付け加えることも、原理的には可能である。非常に大きな相互作用の効果によって、電子構造の再構成が低エネルギー有効模型のエネルギー領域に収まらない時には、このようなセルフコンシステントなループも必要となるであろうが、この必要性についての十分な吟味は行われておらず、将来の課題なのでこの連載では触れない。<br />
+&nbsp;&nbsp; 強相関効果は、いわゆる強相関電子系の典型物質だけではなく、弱相関系であると通常はみなされている半導体のような物質であっても、励起状態やダイナミックスが問題となるときには重要となる。これは励起子効果に最も典型的に現れるが、励起子は電子と正孔が強い引力相互作用で引き合うことによって生じる。また動的なゆらぎは低エネルギースケールでファン・デア・ワールス相互作用や分散力のような顕著な有効相互作用を生む。これらは、電子相関によって生じる動的な電子の分極が生み出す弱い有効相互作用である。しかし、力は弱いが、溶液中の複雑系や生体系などでは、機能や安定構造の決定に本質的な役割を果たしている。たとえば、たんぱく質やDNAの構造が生まれて上では決定的である。しかしながら、動的なゆらぎはLDAで扱える範囲を超えている。このような動的な効果は大変重要ではあるが、この解説では詳細には触れない。<br />
+-----------------------------------------------------------------------------<br />
+今田正俊、固体物理、46 (2011) 499.<br />
+◆ 密度汎関数理論<br />
+（省略）<br />
+{ -1/2 * &nabla;^2 + Veff(r) } * &Psi;k,j(r) =&nbsp;Ek,j * &Psi;k,j(r). (6)<br />
+ここで原子単位系を採用し、電子質量m=1、プランク定数h-bar=1とした。<br />
+（省略）<br />
+&nbsp; 電子構造に目を向けると、LDA・GGAは広い物質群に対して有用な情報を与える。金属のフェルミ面は、相関の強い場合でも特徴が捉えられる。半導体・絶縁体の電子構造も大域的性質がよく記述される。ただし、バンドギャップの値は一般に過小評価される。この傾向はシリコンなどの弱相関系でも見られる。強相関系では絶縁体のギャップがLDAでは消失するなど定性的な誤りも見られることは前回述べたとおりである。GGAは全エネルギーを改善することが多いが、バンド構造に関してはLDAの結果と大差ない。<br />
+&nbsp; DFTのギャップが実験値と一致しないのは何故だろうか？ 系の電子数をNとすると、ギャップはN電子系とN+1電子系の基底状態のエネルギー差である。この差は理論的にはDFTの全エネルギーから計算することができるが、現実には十分に大きなNに対する計算を実行することは難しい。通常のDFTのギャップと呼ぶものは、(6)式のKS固有値を波数に対しえ図示したバンド構造のバンドギャップである（これをKSギャップと呼ぶ）。注意すべきことは、KS方程式が表すのは補助的に導入された仮想系で、相互作用のある現実系とは異なる。したがって、仮に厳密な交換相関エネルギー汎関数を用いて基底エネルギーが厳密に再現される場合でも、仮想系の励起状態とのエネルギー差であるKSギャップが真のギャップと一致する保証はない。<br />
+（省略）<br />
+<br />
+◆ GW近似<br />
+前述で述べたとおり、DFTは電子励起状態の記述に困難を抱える。実例を挙げると、（省略）。その他の物質のバンドギャップも実験値の1/2～1/3程度に系統的に過小評価される。このずれは、前述の通り、KSギャップがN電子系のN番目とN+1番目の準位差で定義されており、ギャップ本来の定義である、電子を一個加えるのに要するエネルギーと異なることに起因すると考えられる。<br />
+（省略）<br />
+KS方程式の解を出発点として、GWの自己エネルギーとKS方程式の交換相関ポテンシャルの差を摂動項と見なして1次の摂動を行う。GW近似による第一原理計算は1980年代から固体に応用されるようになり、種々の半導体・絶縁体のバンドギャップが10～15%程度以内のずれで実験値を再現することが知られている。<br />
+&nbsp; GW近似のヘディンによる定式化では、自己エネルギー補正を反映したグリーン関数を用いてP, W, &Sigma;, Gが自己無撞着になるまで計算を続ける。これに対して汎用的な第一原理GW計算ではKS方程式の解から出発して自己エネルギーを一度計算するだけで、1 shot GW近似、あるちはG<sub>0</sub>W<sub>0</sub>近似と呼ばれる。この方法は弱相関系のギャップを求める方法として成功しているが、強相関電子系ではDFTがよい出発点とならないためにもかかわらずLDAが誤って金属と記述する場合には遮蔽が強く見積もられ、自己エネルギー補正が過小評価される。自己無撞着GW計算は解が出発点によらない、ベイム・カダノフの保存則を満たす等の利点を有する。しかしながら、いくつかの応用例を見ると、全エネルギーは正確であるものの、スペクトルについては結果が芳しくない。バンドギャップは過大評価され、準粒子ピークがぼやけバンド幅も広すぎる。計算量が大きいこともあり応用例はまだ少なく、さらなる検証が待たれる。<br />
+出発点を改善する試みとしては、GW近似で得られた自己エネルギーから（非局所な）交換相関ポテンシャルを作り、両者を自己無撞着に決める準粒子自己無撞着GW（QSGW）法も提案されている。周波数に依存した自己エネルギーから静的なポテンシャルを決定する方法には任意性が残るが、いくつかの方法が試されている。この方法により、遷移金属酸化物や希土類のスペクトルが1 shot GWに比べて大幅に改善することが報告されている。<br />
+&nbsp; 適用範囲を広げる上ではGW近似を簡単化して計算量を落とすことも課題に挙げられる。LDAは一般に遮蔽効果を過大評価し、HFは遮蔽効果を無視するので、両者を適当な割合で混ぜると真の答に近づくと期待される。この発想に基づいたハイブリッド法が近年注目を集め、一定の成功を収めている。ただし、遮蔽効果は物質に強く依存する。金属と絶縁体に至る広い物質群でハイブリッド法が有用か、注意深く検証する必要がある。<br />
+&nbsp; GW法はPRAという近似の範囲で、第一原理的に遮蔽効果を計算することができる。この点は本連載の次回にも議論する。<br />
+<br />
+◆ LDA+U法<br />
+&nbsp; モット絶縁体などの強相関系でLDA・GGAが失敗する主因は電子間の短距離反発の取り扱いにある。強い斥力のために電子が互いに近づくことができず局在するのがモット絶縁体の起源である。一方、KS方程式では電子分布の多体相関を考慮せず、交換相関ポテンシャルは軌道に依存しない。その結果、モットギャップが表現できず、モット絶縁体が誤って連続と記述される。反強磁性や軌道秩序などの対称性の破れを仮定すれば、スピンや軌道の各自由度は異なる有効ポテンシャルを感じ、異なる空間分布を示す。したがってHF理論のような簡単な近似でも対称性の破れを仮定すればギャップを再現することができる。<br />
+&nbsp; この考えに基づいて、アニシモフらはLDA+U法を考案した。LDA+U法では局在性の強い軌道に短距離反発を陽に導入し、HF理論の精神に基づいて取り扱う。LDA+U法のエネルギー汎関数はHK（ホーエンベルグとコーン）の汎関数ELDAtotに次のような補正項を加える。<br />
+&nbsp;E<sup>LDA+U</sup><sub>tot</sub> =&nbsp;E<sup>LDA</sup><sub>tot</sub> +&nbsp;E<sub>U</sub> - E<sub>DC</sub>. (30)<br />
+&nbsp;E<sub>U</sub> = 1/2 * U * &Sigma;<sub>i,&mu;&ne;&nu;&isin;d</sub> n<sub>i,&mu;</sub> * n<sub>i,&nu;</sub>. (31)<br />
+ここで、n<sub>i,&mu;</sub> はサイトi、軌道&mu;の密度で、（中略）。E<sub>U</sub>は同一サイト上の軌道&mu;と&nu;の間に働く短距離の電子反発項である。軌道&mu;、&nu;は遷移金属のd軌道や希土類のf軌道などの局在軌道である。(31) 式は電子反発エネルギーUの軌道依存性も交換項も無視した簡単な形であるが、E<sub>U</sub>には他にもいくつかの表式が提案されている。<br />
+&nbsp; E<sub>U</sub>は局在軌道の多体効果を表すが、これはHK汎関数では交換相関エネルギーE<sub>xc</sub>にLDAやGGAなどの近似ですでに考慮されている。(30) 式のE<sub>DC</sub>はこの二重勘定を取り除くための補正項で、具体的な表式として<br />
+&nbsp;E<sub>DC</sub> = 1/2 * U * &Sigma;<sub>i</sub> n<sub>di</sub> * (n<sub>di</sub> - 1), (32)<br />
+&nbsp;n<sub>di</sub> = &Sigma;<sub> i, &nu; &isin; d</sub> n<sub>i&nu;</sub>, (33)<br />
+がしばしば用いられる。ただし、密度の汎関数であるE<sub>xc</sub>のうち、注目する局在軌道間の多体効果の寄与を厳密に分離することができない。そのため二重勘定項を一意に定義することはできない。(32) 式の他にも表式が提案されている。<br />
+（省略）<br />
+また、軌道の一電子準位 E<sub>i,v </sub>は全エネルギー E<sub>tot </sub>と<br />
+&nbsp;E<sub>i,v</sub> =&nbsp;&part; E<sub>tot </sub>/ &part; n<sub>i,v</sub>. (35)<br />
+の関係にある。<br />
+（省略）<br />
+したがって、LDAの軌道エネルギーに比べて、占有軌道の準位はU/2下がり、非占有軌道準位はU/2上昇する。その結果、占有軌道と非占有軌道の間にUのエネルギー差を生じ、モット絶縁体の電荷ギャップが再現される。<br />
+（省略）<br />
+&nbsp; LDA+U法を現実物質に応用するにはUの値を決めなければならない。Uを第一原理的に決定する方法の一つは制限LDA法で、LDA+U法の初期の頃から広く用いられている。全エネルギー汎関数を見ると、Uは局在軌道の占有数nに関する2次の展開係数である。したがって、占有数を少し変化させた一連の計算から(30)式の全エネルギーの2次微分、あるいは(35)式を利用して軌道エネルギーの1次微分からUが得られる。ただし、局在軌道の占有数を固定した計算を行うには注目するサイトとその周辺のサイトの間のホッピングを人為的に切断する必要がある。この操作により電子構造が変形する。また、ホッピングの切断は注目する軌道自身による遮蔽効果を取り除く効果もあるが、この点には注意を要する。<br />
+&nbsp; LDA+U法は遷移金属化合物など多くの強相関物質に適用され、LDAによるギャップの過小評価を改善することが確かめられている。成功の一方で、いくつかの重要な課題も残っている。まず制限LDA法で求められるUが満足な結果を与えないことが多く、Uはしばしばパラメータとして取り扱われる。また、短距離力しか考慮しないLDA+U法の結果は局在基底の取り方に結果が依存するが、局在軌道の選び方には任意性が残る。さらに、E<sub>U</sub> の多体効果の取り扱いは平均場近似（HF近似）に基づき動的な量子ゆらぎが無視されるため、秩序が過大評価される。短距離反発のみ補正するので長距離の空間ゆらぎの記述が不十分であるという問題点も抱えている。これらは、いずれも本連載の主題であり、次回以降に講義する。<br />
+&nbsp; 以上、大域的な電子構造を求める方法としてDFTとGW近似を駆け足で紹介した。GW近似の説明で導入した遮蔽クーロン相互作用や自己エネルギーは、低エネルギーの有効模型を構築する際にも重要な役割を担う。このアイディアを掘り下げたダウンフォールディングという考え方を次回紹介する。<br />
+-----------------------------------------------------------------------------

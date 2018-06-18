@@ -1,0 +1,509 @@
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; Ç±Ç±Ç≈ÇÕMacÇ≈ÇÃWIEN2kÇÃÉZÉbÉgÉAÉbÉvÇ©ÇÁäÓñ{ìIÇ»åvéZÇ‹Ç≈Çâê‡Ç∑ÇÈÅBäÓñ{ìIÇ…ÇÕç∂óìÇ…Ç†ÇÈÉRÉìÉpÉCÉãÉIÉvÉVÉáÉìÇÃéwíËÇéQçlÇ…Ç∑ÇÍÇŒÇÊÇ¢ÅBÉRÉìÉpÉCÉãÇÕgfortranÇÃÇ›ÇópÇ¢ÇÈÅB<br />
+Å¶Ç±ÇÃÉyÅ[ÉWÇÕÉRÉìÉpÉCÉãÇÃÇ›Ç≈ìÆçÏÉ`ÉFÉbÉNÇÇµÇƒÇ¢Ç»Ç¢ÇÃÇ≈íçà”ÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB</span><br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-------------------------------------------------------------------------------</span><br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å° &nbsp;WIEN2k Install ( + LAPACK + FFTW3 + OpenMP + OpenMPI + ScaLAPACK)<br />
+(MacBook Air, OSX v10.8, 1.7GHz Intel Core i5, 4GB 1600 MHz DDR3, 11-inch, Mid 2012)</span><br />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† gfortran</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1.&nbsp;</span><a href="http://hpc.sourceforge.net/" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://hpc.sourceforge.net</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt;&nbsp;</span><i style="line-height: normal; font-family: optima,arial,&quot;sans serif&quot;;"><a href="http://prdownloads.sourceforge.net/hpc/gcc-4.9-bin.tar.gz?download" style="color: rgb(0, 0, 102); text-decoration: none;">gcc-4.9-bin.tar.gz</a></i><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. sudo tar zxvf $HOME/Downloads/gcc-4.9-bin.tar -C /</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† make</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">0. Apple ID ÇÃìoò^ÇÇµÇƒÇ≠ÇæÇ≥Ç¢ÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1.&nbsp;https://developer.apple.com/downloads/index.action# -&gt;&nbsp;Xcode 4.4</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. double-click xcode446938108a.dmg</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3. double-click&nbsp;Xcode.app</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4. äJÇ≠</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5. Agree</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6. Install</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7.&nbsp;ÉpÉXÉèÅ[ÉhÇì¸óÕ</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">8. Start Using Xcode</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">9. Xcode.app -&gt; Xcode -&gt; Preferences... -&gt; Downloads -&gt; command Line Tools</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">10. Install</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">11. ÉfÉXÉNÉgÉbÉvÇ…Ç†ÇÈXcode.appÇÉAÉvÉäÉPÅ[ÉVÉáÉìÇ…ì¸ÇÍÇ‹Ç∑</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">12.&nbsp;sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">References</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">[1]&nbsp;</span><a href="http://choreonoid.org/ja/install/build-macosx.html" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://choreonoid.org/ja/install/build-macosx.html</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">[2]&nbsp;</span><a href="http://deepfolte.hatenablog.com/entry/20120225/1330129212" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://deepfolte.hatenablog.com/entry/20120225/1330129212</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† OpenMPI</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1.&nbsp;</span><a href="http://www.open-mpi.org/software/ompi/v1.4/" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.open-mpi.org/software/ompi/v1.4/</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.open-mpi.org/software/ompi/v1.4/downloads/openmpi-1.4.5.tar.gz" style="color: rgb(102, 68, 0); line-height: normal; font-family: verdana,arial,helvetica; font-size: 12px; text-decoration: none;">openmpi-1.4.5.tar.gz</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar zxvf&nbsp;$HOME/Downloads/openmpi-1.4.5.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3. cd open*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4. ./configure</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5. make</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6. make check</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7. sudo make install</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† FFTW3</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1.&nbsp;</span><a href="http://www.fftw.org/download.html" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.fftw.org/download.html</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.fftw.org/fftw-3.3.4.tar.gz" style="color: rgb(170, 0, 0); line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">fftw-3.3.4.tar.gz</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar zxvf $HOME/Downloads/fftw-3.3.4.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3. cd fft*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4. ./configure&nbsp;&nbsp;F77=&quot;gfortran -m64 -mtune=native -O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2&quot; CC=&quot;gcc -O2 -ffast-math -m64 -ftree-vectorize&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-mtune=native</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-funroll-all-loops&nbsp;-msse4.2&quot;&nbsp;MPICC=&quot;mpicc -O2 -ffast-math -m64&nbsp;-ftree-vectorize</span><code>&nbsp;</code><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-mtune=native&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-funroll-all-loops&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-msse4.2&quot;&nbsp;--enable-silent-rules --enable-sse2 --enable-mpi --enable-threads</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5. make<br />
+6. make check</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7. sudo make install&nbsp;<br />
+<br />
+Å† LAPACK<br />
+1.&nbsp;</span><a href="http://www.netlib.org/lapack/" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.netlib.org/lapack/</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.netlib.org/lapack/lapack-3.5.0.tgz" style="color: fuchsia; line-height: normal; font-family: Georgia,serif; text-decoration: none;">lapack-3.5.0.tgz</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar -zxvf $HOME/Downloads/lapack-3.5.0.tar<br />
+3. cp lapack-3.5.0<br />
+4. cp make.inc.example make.inc<br />
+5 vi make.inc<br />
+&nbsp;&nbsp;</span>OPTS &nbsp; &nbsp; = -O2 -frecursive -m64&nbsp;<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2</span><br />
+&nbsp; CFLAGS = -O3&nbsp;<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-ffast-math -m64 -ftree-vectorize&nbsp;-mtune=native</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-funroll-all-loops&nbsp;-msse4.2</span><br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6. make blaslib<br />
+7. make lapacklib<br />
+8. sudo ln -s ~/lapack-3.5.0/librefblas.a /usr/local/lib/libblas.a</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; sudo ln -s ~/lapack-3.5.0/liblapack.a /usr/local/lib/liblapack.a<br />
+Å¶ ÉRÉìÉpÉCÉãÇµíºÇ∑Ç∆Ç´ÇÕÅAÇªÇÃëOÇ… make clean Çì¸óÕÇ∑ÇÈÅB<br />
+<br />
+Å† ScaLAPACK (+BLACS)</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">ScaLAPACK :&nbsp;</span><a href="http://www.netlib.org/scalapack/" style="color: blue; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.netlib.org/scalapack/</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1) tar zxvf $HOME/Downloads/scalapack-2.0.2.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2) cd scalapack-2.0.2</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3) cp SLmake.inc.example SLmake.inc</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4) vi SLmake.inc</span><br />
+&nbsp; FCFLAGS &nbsp; &nbsp; &nbsp; = -O3&nbsp;-m64&nbsp;<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2</span><br />
+&nbsp; CCFLAGS &nbsp; &nbsp; &nbsp; = -O3&nbsp;<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-ffast-math -m64 -ftree-vectorize&nbsp;-mtune=native</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-funroll-all-loops&nbsp;-msse4.2</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libblas.a</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/liblapack.a<br />
+5) esc<br />
+6) :wq</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7) make lib</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">8) sudo&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">ln -s ~/scalapack-2.0.2/libscalapack.a /usr/local/lib/libscalapack.a</span><br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å¶ ÉRÉìÉpÉCÉãÇµíºÇ∑Ç∆Ç´ÇÕÅAÇªÇÃëOÇ… make clean Çì¸óÕÇ∑ÇÈÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br />
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------</span><br style="font-family: Verdana;" />
+<span style="font-family: Verdana;">Å°</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;WIEN2k (WIEN2k_14.2)<br />
+1) mkdir WIEN2k_14</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2) cd WIEN2k_14</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3) cp $HOME/Downloads/WIEN2k_14.2.tar .</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4) tar -xvf WIEN2k_14.2.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5) gunzip *.gz</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6) chmod +x ./expand_lapw</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7) ./expand_lapw</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">8) continue (y/n) y</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">9) ./siteconfig_lapw<br />
+10)&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">continue or stop (c/s) c</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">11) v<br />
+12) gfortran<br />
+13) gcc<br />
+14)&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Current settings:</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;O &nbsp; Compiler options: &nbsp; &nbsp; &nbsp; &nbsp;-ffree-form -O2 -ffree-line-length-none&nbsp;-mpc80 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;F &nbsp; FFTW options: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DFFTW3 -I/usr/local/include</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;L &nbsp; Linker Flags: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;$(FOPT) -L/usr/local/lib</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;P &nbsp; Preprocessor flags &nbsp; &nbsp; &nbsp; &#39;-DParallel&#39;</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;R &nbsp; R_LIB (LAPACK+BLAS): &nbsp; &nbsp; -llapack -lblas&nbsp;-fopenmp</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;FL &nbsp;FFTW_LIBS: -lfftw3_mpi -lfftw3&nbsp;-L/usr/local/lib&nbsp;</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">15)&nbsp;<br />
+&nbsp;&nbsp; 1.&nbsp;Shared Memory Architecture? (y/n): y</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &nbsp;2. (like taskset -c). Enter N / your_specific_command:</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &nbsp;3. You need to KNOW dedtails about your installed MPI and FFTW ) y<br />
+&nbsp;&nbsp; 4.&nbsp;Set MPI_REMOTE to 0 / 1:<br />
+&nbsp;&nbsp; 5.&nbsp;Your compiler: mpif90<br />
+&nbsp; &nbsp;6.&nbsp;Please specify whether you want to use FFTW3 (default) or FFTW2&nbsp; (FFTW3 / FFTW2)</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp; FFTW3<br />
+&nbsp; &nbsp;7. Please specify the ROOT-path of your FFTW installation (like /opt/fftw3):</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp; /usr/local</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &nbsp;8. is this correct? enter Y (default) or n: y</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &nbsp;9. Current settings:<br />
+&nbsp;&nbsp; &nbsp; &nbsp;FPOPT(par.comp.options)&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-ffree-form -O2 -ffree-line-length-none&nbsp;-mpc80 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RP_LIB(SCALAPACK+PBLAS):&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">-lscalapack $(R_LIBS)</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">16) q<br />
+17) a<br />
+18) vi userconfig<br />
+19) :set nu<br />
+&nbsp;&nbsp;line 87<br />
+&nbsp;&nbsp;&lt;&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">set usershell = `getent passwd ${user} | awk -F: &#39;{print $NF}&#39;`</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;---</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &gt;&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">#set usershell = `getent passwd ${user} | awk -F: &#39;{print $NF}&#39;`</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; set usershell = bash</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">20)&nbsp;esc<br />
+21) :wq<br />
+22) ./userconfig<br />
+&nbsp;&nbsp;&nbsp; emacs -&gt; vi<br />
+23)&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Do you want to continue (Y/n)? y</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">24)&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Edit .rhosts file now? (y/N) N</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">25) vi ~/.bashrc<br />
+26) :set nu<br />
+&nbsp; line 55<br />
+&nbsp;&nbsp;&lt;&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">ulimit -s unlimited</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;---</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;&nbsp;&gt; #ulimit -s unlimited</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">27) esc<br />
+28) :wq<br />
+29) source ~/.bashrc<br />
+30) cd $HOME</span><span style="line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">/WIEN2k_14/SRC_w2web/htdocs/session</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">31)</span><span style="line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;change.cgi Ç™âÛÇÍÇƒÇ¢ÇÈèÍçáÇÕÅALinuxÇ≈âìÄÇµÇΩÇ‡ÇÃÇ…íuÇ´ä∑Ç¶ÇÈÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">32) cd&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">$HOME</span><span style="line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">/WIEN2k_14/SRC_w2web/htdocs/exec</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">34)&nbsp;</span><span style="line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">executor.pl&nbsp;</span><span style="line-height: normal; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Ç™âÛÇÍÇƒÇ¢ÇÈèÍçáÇÕÅALinuxÇ≈âìÄÇµÇΩÇ‡ÇÃÇ…íuÇ´ä∑Ç¶ÇÈÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">35)&nbsp;./w2web</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† gnuplot[1]&nbsp;<br />
+1. gnuplot-4.6.6.tar.gz :&nbsp;</span><a href="http://www.gnuplot.info/" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.gnuplot.info</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt; Download -&gt;&nbsp;</span><a href="http://www.gnuplot.info/download.html" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.gnuplot.info/download.html</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar zxvf $HOME/Downloads</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">/</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">gnuplot-4.6.6.tar<br />
+3. cd gnu*<br />
+4. ./configure -with-readline-builtin --enable-history-file<br />
+5. make<br />
+6. sudo make install</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">[1]&nbsp;</span><a href="http://macwiki.sourceforge.jp/wiki/index.php/gnuplot" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://macwiki.sourceforge.jp/wiki/index.php/gnuplot</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† ghostscript</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1. download [</span><span style="line-height: normal; font-family: &quot;Source Sans Pro&quot;,Calibri,sans-serif; font-size: medium;">Ghostscript 9.15 Source]</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">:&nbsp;http://www.ghostscript.com/download/gsdnld.html</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar zxvf $HOME/Downloads/ghostscript-9.15.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3. cd ghost*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4. configure</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5. make</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6. sudo make install</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">gs dosplot_1.ps</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Åû w2webÇÃèëÇ´ä∑Ç¶<br />
+x ÇÃCÉVÉFÉãÉvÉçÉOÉâÉÄÇ™ìÆÇ©Ç»Ç¢ÅBÇªÇÃÇΩÇﬂÅAèëÇ´ä∑Ç¶Çã≠çsÇµÇΩÅB<br />
+SRC_w2web/htdocs/exec Ç≈ÇÃ.plÉtÉ@ÉCÉãÇ≈ÅAÅu&quot;xÅv Ç Åu&quot;x_lapwÅvÇ…íuä∑Ç∑ÇÈÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å¶ Ç±ÇÍÇÕx Ç∆ x_lapw Ç™ëSÇ≠ìØÇ∂ì‡óeÇÃÉtÉ@ÉCÉãÇæÇ©ÇÁÇ≈Ç†ÇÈÅB</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">ÅE&nbsp;íuä∑Ç∑ÇÈÉtÉ@ÉCÉãÅF&nbsp;</span><font face="Verdana">initlapw.pl, dos.pl, band.pl(ïœä∑å„ÅA&quot;x_lapwcrysden&quot;Ç&quot;xcrysden&quot;Ç…íuä∑Ç∑ÇÈ), fphonons.pl, optic.pl, optimize.pl, rho_save.pl, rho.pl, single.pl, telnes2.pl, telnes3.pl, xspec.pl(ïœä∑å„ÅA&quot;x_lapwspec&quot;Ç&quot;xspec&quot;Ç…íuä∑Ç∑ÇÈ)</font><br />
+<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Åû</span><font face="Verdana">&nbsp;reload in reverse order Ç™è„éËÇ≠ìÆçÏÇµÇ»Ç¢èÍçá<br />
+vi ~/.bashrc Ç…ÇƒÅAalias tac=tail -r Çí«â¡Ç∑ÇÈÇ©ÅASRC_w2web/htdocs/util/dayfile.pl Ç‚ stdout.plÇ…ÇƒÅA$umps = qx( tac $DIR/$CASE.dayfile ); Ç $umps = qx(&nbsp;tail -r&nbsp;$DIR/$CASE.dayfile ); Ç…Ç∑ÇÈÅB<br />
+Å¶ STDOUTÇÕSTDOUTÉtÉ@ÉCÉãÇ™èoóÕÇ≥ÇÍÇƒÇ¢Ç»Ç¢ÇÃÇ≈å©ÇÍÇ»Ç¢ÅB</font><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Åû ñàâÒ source ~/.bashrc Çì¸óÕÇ∑ÇÈÇÃÇ™ñ ì|Ç»èÍçá[1]</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1. vi ~/.bash_profile</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; if [ -f ~/.bashrc ]; then</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; &nbsp; . ~/.bashrc</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; fi</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. :wq</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">[1]&nbsp;</span><a href="https://gist.github.com/disktnk/4104284" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">https://gist.github.com/disktnk/4104284</a><br />
+<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† DOSâÊëúÇÃï\é¶ï˚ñ@</span>
+<ul style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">
+	<li>dos.pl</li>
+</ul>
+line 420<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $umps = qx(gs -sDEVICE=jpeg -sOutputFile=$plotfile.jpg -dBATCH -dNOPAUSE $DIR/dos.ps);<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $umps = qx(gs -sDEVICE=jpeg -sOutputFile=$plotfile.jpg -dBATCH -dNOPAUSE -r60 -g500x350 -c -20 450 translate 0.8 0.8 scale -90 rotate -f $tempdir/$SID-$$.ps);<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $OUT .= &quot;&lt;br&gt;&lt;IMG SRC=/tmp/$SID-$$.jpg&gt;&lt;br clear=all&gt;&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $OUT .= &quot;&lt;A HREF= /tmp/$SID-$$.ps&gt;Download hardcopy in PostScript format&lt;A<br />
+&gt;&quot;;
+<ul style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">
+	<li><a href="/tmp/$SID-$$.ps">dosplot2_lapw</a></li>
+</ul>
+
+<div style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; margin-left: 20px;"><a href="/tmp/$SID-$$.ps">#set terminal png<br />
+<span style="line-height: 1.5;">#set output &quot;$out.png&quot;</span><br />
+<span style="line-height: 1.5;">set terminal postscript</span><br />
+<span style="line-height: 1.5;">set output &quot;$out.ps&quot;</span></a></div>
+
+<div style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;"><span style="line-height: 1.5;"><a href="/tmp/$SID-$$.ps">Å¶&nbsp;</a></span><a href="/tmp/$SID-$$.ps">-r60 -g500x350ÅFëÂÇ´Ç≥Ç∆ï\é¶îÕàÕÇéwíËÇµÇƒÇ¢ÇÈÅB[1]</a></div>
+
+<div style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;"><span style="line-height: 1.5;"><a href="/tmp/$SID-$$.ps">Å¶&nbsp;</a></span><a href="/tmp/$SID-$$.ps">-c -20 800 translate 0.8 0.8 scale -90 rotateÅFå¥ì_à íuÇ∆é⁄ìxÅAâÒì]ÇéwíËÇµÇƒÇ¢ÇÈÅB[2]<br />
+[1] http://ghostscript.com/doc/7.07/Use.htm<br />
+[2] http://denki.nara-edu.ac.jp/~yabu/soft/ps.html</a></div>
+<br />
+<a href="/tmp/$SID-$$.ps"><span style="font-family: Verdana;">-------------------------------------------------------------------------------</span><br style="font-family: Verdana;" />
+<span style="font-family: Verdana;">Å° cif2cell<br />
+1. download:&nbsp;</span>http://cif2cell.sourceforge.net&nbsp;-&gt;&nbsp;</a><strong style="line-height: 20.16px; font-family: sans-serif;"><a href="http://sourceforge.net/projects/cif2cell/files/">Download CIF2Cell files</a></strong><br />
+<span style="font-family: Verdana;">2. tar zxvf $HOME/Downloads/</span>cif2cell-1.2.2.tar<br />
+<span style="font-family: Verdana;">3. cd cif*<br />
+4. python setup.py install<br />
+<br />
+environmental setting<br />
+1. vi ~/.bashrc<br />
+2.&nbsp;</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">export PATH=$PATH:$HOME/cif2cell-1.2.2</span><br />
+<br />
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------<br />
+Å° fink [1] &amp; XcrySDen<br />
+1. download:&nbsp;</span>http://www.finkproject.org/download/srcdist.php&nbsp;<br />
+<span style="font-family: Verdana;">2. tar zxvf $HOME/Downloads/</span>fink-0.38.3.tar<br />
+<span style="font-family: Verdana;">3. cd fin*<br />
+4. ./bootstrap<br />
+5. all [enter]<br />
+6. </span>. /sw/bin/init.sh<br />
+<span style="font-family: Verdana;">7. fink selfupdate<br />
+8. 3<br />
+9. fink install xcrysden<br />
+10. [enter]<br />
+11. vi ~/.bashrc</span><br />
+XCRYSDEN_SCRATCH=/Users/mizutani-lab-Inukai/xcrys_tmp<br />
+export XCRYSDEN_SCRATCH<br />
+export PATH=$PATH:/sw/bin<br />
+<span style="font-family: Verdana;">12. esc<br />
+13. :wq</span><br />
+[1] http://www.stat.phys.titech.ac.jp/SATL_qe_tutorial/preparation.html<br />
+<br />
+<span style="font-family: Verdana;">xcrysden --with_struct case.struct</span><br />
+<br />
+<span style="font-family: Verdana;">Å°&nbsp;</span>WIEN2k Ç≈ [view struct] ÇìÆçÏÇ≥ÇπÇΩÇ¢èÍçá<br />
+<span style="font-family: Verdana;">1. vi ~/WIEN2k_14/SRC_w2web/htdocs/util/viewxcrys.pl</span><br />
+&lt; $umps = qx(echo $DISPLAY &amp;&amp; cd $DIR &amp;&amp; ${XCRYSDENDIR}xcrysden --wien_struct $DIR &nbsp;&amp;);<br />
+<span style="font-family: Verdana;">----</span><br />
+&gt; #$umps = qx(echo $DISPLAY &amp;&amp; cd $DIR &amp;&amp; ${XCRYSDENDIR}xcrysden --wien_struct $DIR &nbsp;&amp;);<br />
+&gt; $umps = qx(echo $DISPLAY &amp;&amp; cd $DIR &amp;&amp; /sw/bin/xcrysden --wien_struct $DIR &nbsp;&amp;);<br />
+<span style="font-family: Verdana;">2. esc<br />
+3. :wq</span><br />
+<br />
+Å†<span style="font-family: Verdana;">&nbsp;xcrysden<br />
+1. download:&nbsp;<br />
+2. tar zxvf $HOME/Downloads/</span>XCrySDen-1.5.23-bin-semishared.tar<br />
+3. ./xcConfigure<br />
+<br />
+Å†&nbsp;vi ~/.bashrc<br />
+#------------------------------------------------------------------------<br />
+# this is for XCRYSDEN 1.5.23; added by XCRYSDEN installation on<br />
+# 2015îN 1åé15ì˙ ñÿójì˙ 11éû19ï™13ïb JST<br />
+#------------------------------------------------------------------------<br />
+XCRYSDEN_TOPDIR=$HOME/XCrySDen-1.5.23-bin-semishared<br />
+XCRYSDEN_SCRATCH=$HOME/xcrys_tmp<br />
+export XCRYSDEN_TOPDIR XCRYSDEN_SCRATCH<br />
+PATH=&quot;$XCRYSDEN_TOPDIR:$PATH:$XCRYSDEN_TOPDIR/scripts:$XCRYSDEN_TOPDIR/util&quot;<br />
+<br />
+XCRYSDEN_SCRATCH=$HOME/xcrys_tmp<br />
+export XCRYSDEN_SCRATCH<br />
+export PATH=$PATH:/sw/bin<br />
+<font face="Verdana">-------------------------------------------------------------------------------<br />
+Å° Abinit (1 CPU calculation)<br />
+1. download:&nbsp;</font>http://www.abinit.org&nbsp;-&gt;&nbsp;ABINIT package -&gt; List all releases.... -&gt; ABINIT 7.8.1 -&gt; Sources and complete tests<br />
+<span style="font-family: Verdana;">2. tar zxvf $HOME/Downloads/abinit-7.8.1.tar<br />
+3. cd abinit*<br />
+4. vi build.ac<br />
+-----</span><br />
+FC=&quot;gfortran&quot;<br />
+F77=&quot;gfortran&quot;<br />
+FCFLAGS=&quot;-O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot;<br />
+CC=&quot;gcc&quot;<br />
+CFLAGS=&quot;-O2 -ffast-math -m64 -ftree-vectorize -mtune=native -funroll-all-loops -msse4.2 -g -ffree-line-length-none&quot;<br />
+CXX=&quot;g++&quot;<br />
+CXXFLAGS=&quot;-O2 -ffast-math -m64 -ftree-vectorize -mtune=native -funroll-all-loops -msse4.2 -g -ffree-line-length-none&quot;<br />
+enable_optim=&quot;aggressive&quot;<br />
+enable_gw_dpc=&quot;yes&quot;<br />
+enable_64bit_flags=&quot;yes&quot;<br />
+with_linalg_flavor=&quot;netlib&quot;<br />
+with_linalg_libs=&quot;-L/usr/local/lib -llapack -lblas&quot;<br />
+<span style="font-family: Verdana;">-----<br />
+5. ./configure --with-config-file=./build.ac<br />
+6. make<br />
+7. sudo make install</span><br />
+Å¶ see doc/config/build-config.ac<br />
+<br />
+<span style="font-family: monospace;">Å† test<br />
+1. cd tests<br />
+2. ./runtests.py fast</span><br />
+Test suite completed in 30.33 s (average time for test = 2.53 s, stdev = 2.66 s)<br />
+failed: 0, succeeded: 11, passed: 0, skipped: 0, disabled: 0<br />
+[fast][t27-t28-t29] has run_etime 8.47 s<br />
+Suite &nbsp; failed &nbsp;passed &nbsp;succeeded &nbsp;skipped &nbsp;disabled &nbsp;run_etime &nbsp;tot_etime<br />
+fast &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 11 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp;27.81 &nbsp; &nbsp; &nbsp;29.83<br />
+Test suite results in HTML format are available in Test_suite/suite_report.html<br style="font-family: Verdana;" />
+<font face="Verdana">-------------------------------------------------------------------------------<br />
+Å° Abinit (OpenMPI)</font><br />
+<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† OpenMPI</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1.&nbsp;</span><a href="http://www.open-mpi.org/software/ompi/v1.4/" style="color: rgb(102, 68, 0); font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; text-decoration: none;">http://www.open-mpi.org/software/ompi/v1.4/</a><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.open-mpi.org/software/ompi/v1.4/downloads/openmpi-1.4.5.tar.gz" style="color: rgb(102, 68, 0); line-height: normal; font-family: verdana,arial,helvetica; font-size: 12px; text-decoration: none;">openmpi-1.4.5.tar.gz</a><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. tar zxvf&nbsp;$HOME/Downloads/openmpi-1.4.5.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3. cd open*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4. ./configure --prefix=/usr/local/lib/openmpi</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5. make</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">6. make check</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">7. sudo make install<br />
+8. vi ~/.bashrc</span><br />
+<span style="font-family: monospace;">export PATH=/usr/local/lib/openmpi:$PATH</span><br style="font-family: monospace;" />
+<span style="font-family: monospace;">export LD_LIBRARY_PATH=/usr/local/lib/openmpi:$LD_LIBRARY_PATH</span><br />
+<br />
+<font face="Verdana">1. download:&nbsp;</font>http://www.abinit.org&nbsp;-&gt;&nbsp;ABINIT package -&gt; List all releases.... -&gt; ABINIT 7.8.1 -&gt; Sources and complete tests<br />
+<span style="font-family: Verdana;">2. tar zxvf $HOME/Downloads/abinit-7.8.1.tar<br />
+3. cd abinit*<br />
+4. vi build.ac<br />
+-----</span><br />
+#FC=&quot;gfortran&quot;<br />
+#F77=&quot;gfortran&quot;<br />
+FC=&quot;mpif90&quot;<br />
+F77=&quot;mpif90&quot;<br />
+FCFLAGS=&quot;-O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot;<br />
+#CC=&quot;gcc&quot;<br />
+CC=&quot;mpicc&quot;<br />
+CFLAGS=&quot;-O2 -ffast-math -m64 -ftree-vectorize -mtune=native -funroll-all-loops -msse4.2 -g -ffree-line-length-none&quot;<br />
+#CXX=&quot;g++&quot;<br />
+CXX=&quot;mpicxx&quot;<br />
+CXXFLAGS=&quot;-O2 -ffast-math -m64 -ftree-vectorize -mtune=native -funroll-all-loops -msse4.2 -g -ffree-line-length-none&quot;<br />
+#enable_optim=&quot;standard&quot;<br />
+enable_optim=&quot;aggressive&quot;<br />
+enable_gw_dpc=&quot;yes&quot;<br />
+enable_64bit_flags=&quot;yes&quot;<br />
+#with_trio_flavor=&quot;netcdf+etsf_io+fox&quot;<br />
+#with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+with_dft_flavor=&quot;wannier90&quot;<br />
+#with_linalg_flavor=&quot;netlib&quot;<br />
+#with_linalg_libs=&quot;-L/usr/local/lib -llapack -lblas&quot;<br />
+#with_fft_flavor=&quot;fftw3&quot;<br />
+#with_fft_libs=&quot;-L/usr/local/lib -lfftw3_threads -lfftw3&quot;<br />
+#with_fft_incs=&quot;-I/usr/local/include&quot;<br />
+enable_mpi=&quot;yes&quot;<br />
+enable_mpi_io=&quot;yes&quot;<br />
+with_mpi_prefix=&quot;/usr/local/lib/openmpi&quot;<br />
+with_linalg_flavor=&quot;netlib&quot;<br />
+with_linalg_libs=&quot;-L/usr/local/lib -lscalapack -llapack -lblas&quot;<br />
+#with_fft_flavor=&quot;fftw3-mpi&quot;<br />
+#with_fft_libs=&quot;-L/usr/local/lib -lfftw3_mpi -lfftw3_threads -lfftw3&quot;<br />
+#with_fft_incs=&quot;-I/usr/local/include&quot;<br />
+<span style="font-family: Verdana;">-----<br />
+5. ./configure --with-config-file=./build.ac<br />
+6. make<br />
+7. sudo make install</span><br />
+Å¶ see doc/config/build-config.ac<br />
+<br />
+<span style="font-family: monospace;">Å† test<br />
+1. cd tests<br />
+2. ./runtests.py -j 4 fast</span><br />
+Test suite completed in 14.54 s (average time for test = 3.46 s, stdev = 3.11 s)<br />
+failed: 0, succeeded: 11, passed: 0, skipped: 0, disabled: 0<br />
+Suite &nbsp; failed &nbsp;passed &nbsp;succeeded &nbsp;skipped &nbsp;disabled &nbsp;run_etime &nbsp;tot_etime<br />
+fast &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 11 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp;38.01 &nbsp; &nbsp; &nbsp;41.15<br />
+Test suite results in HTML format are available in Test_suite/suite_report.html<br style="font-family: Verdana;" />
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------<br />
+Å° PWscf (</span><span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">OpenMPI + FFTW3</span><span style="font-family: Verdana;">)<br />
+1. download:&nbsp;</span>http://www.quantum-espresso.org&nbsp;-&gt; DOWNLOAD -&gt;&nbsp;http://www.quantum-espresso.org/download/&nbsp;-&gt; download page -&gt;&nbsp;http://qe-forge.org/gf/project/q-e/frs/?action=FrsReleaseBrowse&amp;frs_package_id=18<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1) tar zxvf $HOME/Downloads/espresso-5.1.tar</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2) cd esp*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">3) tar zxvf $HOME/Downloads/tddfpt*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/pwcond*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/atomic*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/GWW*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/PWgui*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/PHonon*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/neb*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&nbsp; tar zxvf $HOME/Downloads/xspectra*</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">4) </span><span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">./configure FC=&quot;mpif90&quot; FCFLAGS=&quot;</span><span style="line-height: 28px;">-O3 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot; FFLAGS=</span><span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&quot;</span><span style="line-height: 28px;">-O3 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot;&nbsp;--with-internal-lapack&nbsp;--with-internal-blas&nbsp;--with-scalapack=no</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">5) make all</span><br />
+<br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† é¿çsï˚ñ@</span><br style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;" />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1. mpirun -np 4 ~/espresso-5.1/bin/pw.x <case.in> case.out<br />
+<br />
+Å† PWgui<br />
+1.&nbsp;</case.in></span>~/espresso-5.1/PWgui-5.1/pwgui&nbsp;&amp;<br />
+<br />
+Å† test<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">1. tar zxvf $HOME/Downloads/</span>espresso-4.3.2-examples.tar<br />
+<span style="font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">2. íÜêgÇëSÇƒÉRÉsÅ[Ç∑ÇÈÅBÉXÉLÉbÉvÇ‡çsÇ§ÅB<br />
+3. cd tests<br />
+4.&nbsp;</span>check-pw.x.j
+
+<div style="margin-left: 20px;">Total wall time (s) spent in this run: &nbsp;681.37</div>
+
+<div style="margin-left: 20px;">Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;851.06</div>
+
+<div>5.&nbsp;<span style="line-height: 1.5;">mpirun -np 4&nbsp;check-pw.x.j</span></div>
+
+<div style="margin-left: 20px;">Total wall time (s) spent in this run: &nbsp;217.87<br />
+Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;232.38<br />
+Total wall time (s) spent in this run: &nbsp;146.63<br />
+Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;367.18<br />
+Total wall time (s) spent in this run: &nbsp;141.29<br />
+Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;276.13<br />
+Total wall time (s) spent in this run: &nbsp;204.18<br />
+Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;296.64</div>
+
+<div><br />
+<span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">Å† compiling case 2</span></div>
+
+<ul>
+	<li><span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">./configure FC=&quot;mpif90&quot; FCFLAGS=&quot;</span><span style="line-height: 28px;">-O3 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot; FFLAGS=</span><span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&quot;</span><span style="line-height: 28px;">-O3 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot;&nbsp;--with-internal-lapack&nbsp;--with-internal-blas&nbsp;--with-scalapack=no&nbsp;</span>EXTLIB_FLAGS=<span style="line-height: 28px; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,OsakaÅ|ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif;">&quot;</span><span style="line-height: 28px;">-O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -ftree-vectorize -ffast-math -fno-protect-parens -msse4.2 -g -ffree-line-length-none&quot;</span></li>
+	<li>check-pw.x.j</li>
+</ul>
+
+<div style="margin-left: 20px;">Total wall time (s) spent in this run: &nbsp;647.13<br />
+Reference &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp;851.06</div>
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------<br />
+Å° </span>SPR-KKR (unsuccess)<br />
+<br />
+<span style="font-family: Verdana;">Å° xband</span><br />
+1) mkdir&nbsp;sprkkr<br />
+2) cd sprkkr<br />
+3) cp $HOME/Downloads/xband_6.3.tar ./sprkkr<br />
+4) tar -zxvf&nbsp;xband_6.3.tar<br />
+5) cd xband<br />
+6) gedit ~/.bashrc<br />
+&nbsp;&nbsp; export XBANDPATH=$HOME/sprkkr/xband<br />
+&nbsp;&nbsp; export PATH=$PATH:$XBANDPATH:<br />
+&nbsp;&nbsp; export XLIB_SKIP_ARGB_VISUALS=1<br />
+7) gfortran case<br />
+&nbsp;&nbsp; geometry/MakefileÅFFC=ifort -&gt;&nbsp;FC=gfortran<br />
+&nbsp;&nbsp; graphics/makefileÅFFC=ifort -&gt;&nbsp;FC=gfortran<br />
+&nbsp;&nbsp; spheres/makefileÅFFC=ifort -&gt;&nbsp;FC=gfortran<br />
+&nbsp; &nbsp;symmetry/makefileÅFFC=ifort -&gt;&nbsp;FC=gfortran<br />
+8) bash<br />
+9) xband<br />
+<br />
+Å° SPRKKR&nbsp;6.3<br />
+1) cp $HOME/Downloads/sprkkr6.3.2pub20121219.tgz ./sprkkr<br />
+2) cd sprkkr<br />
+3) tar -zxvf sprkkr6.3.2pub20121219.tgz<br />
+4) cp make.inc_example make.inc<br />
+5) vi make.inc<br />
+&nbsp; LIB=-L/usr/local/lib -llapack -lblas<br />
+&nbsp; INCLUDE = -I/usr/local/include<br />
+&nbsp; FFLAGS =&nbsp; -O2 -msse4.2 -ffast-math<br />
+&nbsp; FC = mpif90 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp; LINK = mpif90 $(FFLAGS) $(INCLUDE)<br />
+6) make scfmpiÅisingle type: make scf )<br />
+&nbsp;&nbsp; è„ãLÇÃçÏã∆Ç≈ binary Ç™çÏê¨Ç≥ÇÍÇÈÅBPCÇ™ 4 core ÇÃèÍçáÇÕâ∫ãLÇ∆Ç»ÇÈ<br />
+&nbsp;&nbsp;&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+7) Ç±ÇÃëºÇ…Ç‡ÉvÉçÉOÉâÉÄÇçÏê¨Ç∑ÇÈÇ±Ç∆Ç™Ç≈Ç´ÇÈ<br />
+&nbsp;&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf Ç™çÏê¨Ç≥ÇÍÇÈ<br />
+&nbsp;&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi Ç™çÏê¨Ç≥ÇÍÇÈ<br />
+&nbsp;&nbsp; c) Makefile Çå©ÇÈÇ∆àÍâûâ∫ãLÇÃÉRÉ}ÉìÉhÇ™Ç†ÇÈ<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make genmpi, make embscfmpi, make chi,<br />
+&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+-------------------------------------------------------------------------------<br />
+Å° Akai-KKR<br />
+1. download: http://kkr.phys.sci.osaka-u.ac.jp/jp/<br />
+2. tar zxvf $HOME/Downloads/cpa2002v009c.tar<br />
+3. cd cpa*<br />
+4. touch source/*.f<br />
+5. vi makefile<br />
+&nbsp; omp =&nbsp;<br />
+&nbsp; nomp =&nbsp;<br />
+&nbsp; fort = gfortran<br />
+&nbsp;&nbsp;flag = -m64 -O2 -funroll-loops&nbsp;-msse4.2<br />
+6. make<br />
+7. gfortran source/gpd.f -o gpd<br />
+<br />
+Å†&nbsp;using<br />
+specx &lt; in/fe2val<br />
+specx &lt; in/fe2val &gt; out/fe2val_dos<br />
+./gpd out/fe2val_dos<br />
+<br />
+source/specx.f<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (natmmx=10, ncmpmx=10, msizmx=99, mxlmx=3, nk1x=500, nk3x=50,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; msex=201, ngmx=15, nrpmx=650, ngpmx=650, npmx=350, msr=400)<br />
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------<br />
+Å° </span>OpenMX<br />
+1) tar zxvf openmx3.7.tar<br />
+2) cp ./patch3.7.8.tar.gz openmx3.7/source<br />
+3)&nbsp;cd openmx3.7/source<br />
+4) tar zxvf patch3.7.8.tar<br />
+5) gedit makefile<br />
+&nbsp; CC=mpicc -O3 -ffast-math -m64 -msse4.2 -funroll-loops -fopenmp -mtune=native -I/usr/local/include<br />
+&nbsp; FC=mpif90 -O3 -ffast-math -m64 -msse4.2 -funroll-loops -fopenmp -mtune=native -I/usr/local/include<br />
+&nbsp; LIB=-L/usr/local/lib -lfftw3 -llapack -lblas -lmpi_f77 -lmpi_f90 -lgfortran<br />
+6) make install<br />
+7) test<br />
+&nbsp; cd ../work<br />
+&nbsp; mpirun -np 1 openmx Methane.dat -nt 1 &gt; met.std &amp;<br />
+8) test<br />
+&nbsp; mpirun -np 4 openmx -runtest -nt 1<br />
+Åuruntest.resultÅvê‚ëŒç∑ï™(<font size="-1">diff Utot</font>)Ç™è¨êîì_à»â∫ÇVåÖà»ì‡Ç≈Ç†ÇÍÇŒÉCÉìÉXÉgÅ[ÉãÇÕê≥èÌÇ…çsÇÌÇÍÇΩÇ∆îªífÇ≈Ç´Ç‹Ç∑ÅB<br />
+9) cd ../source<br />
+&nbsp; make DosMain<br />
+&nbsp; make OpticalConductivityMain<br />
+&nbsp; make TranMain<br />
+&nbsp; make polB<br />
+&nbsp; make jx<br />
+&nbsp; gcc bandgnu13.c -lm -o bandgnu13<br />
+&nbsp; cp bandgnu13 ../work/bandgnu13<br />
+• before retry<br />
+make clean<br />
+<span style="font-family: Verdana;">-------------------------------------------------------------------------------</span>

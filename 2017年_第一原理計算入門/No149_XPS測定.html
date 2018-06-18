@@ -1,0 +1,270 @@
+　ここではXPSの情報について纏める。一番下にある「知っておくべきこと」をまず読まれたい。<br />
+--------------------------------------------------------------------------------<br />
+■ SPring-8 BL47XU測定（硬X線光電子分光法）<br />
+<br />
+□ 試料<br />
+優先順位（下記の条件が多い試料から原則として測定する）<br />
+a) 他の手法で測定した試料であるか？<br />
+b) 一連の試料であるか？（同一時期や他のプロセス条件が一連になって揃っているか？）<br />
+c)&nbsp;試料を取り出した入り、測定後の片付けで、試料が番号順に並ぶようになっているか？（取り出し、片付けで試料が分からなくなっては意味がない。試料のプロセス条件で優先順を決める場合は、測定時に順番を変え、ホルダー上ではなるべく番号順に並べる）<br />
+d) 一連の試料の中の小さな部分に固執せずに試料を並べているか？<br />
+上記の例外となる為の条件<br />
+a) 試料測定にあまりにも時間が掛かる場合は、重要なプロセス条件での試料を測定できるようにする。<br />
+<br />
+□ 測定の仕方<br />
+a)&nbsp;ホルダーを台に取り付ける。<br />
+裏面を見て、ねじ穴が凹んでいることを確認（ネジの銀色が裏面近くになっていないようにする）。銅基板1枚の時には、短いネジを使用。<br />
+b) ハネホルダーを台に取り付ける。<br />
+裏面を見て、ねじ穴が凹んでいることを確認（ネジの銀色が裏面近くになっていないようにする）。ハネホルダーの場合には、ハネホルダーの下に銅基板2枚を挟んで、中くらいの長さのネジを使って締める。<br />
+c) 試料を6mm程度の長さにして、ダイアモンドカッターで傷を付ける。傷の下に導線を敷いて、両端に圧力を掛けると、試料が割れる。割った試料を銀テープでハネホルダーに取り付ける。試料の端に銀テープで覆うようにする。光の経路をしっかりと確保しておく。厚みの違う試料や銀テープの厚みによって、光が遮断されないように、よく考えて、試料を貼り付ける。<br />
+<br />
+□ バルク敏感<br />
+1) Calibrationで得たC1sピーク位置でadd dimension 測定。<br />
+2) Igorでスペクトルを見て、C1sの位置と幅が変わっていないことを確認。変わっていたら、測定はせずに次の試料へ。<br />
+3) Wideで測定し、低い束縛エネルギーから順に（O1s, C1s, N1s, S2p）のピーク位置を調べ、次の測定でのCenterとして入力する。C1sの場合には-5 eVした値にする。測定シークエンスを設定する全体場面ではNumber of iteration を1にする。<br />
+&nbsp; O1s, C1s, S2pを測定。N1sもwideで見えた時には、測定に入れる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;wide (7000～7940, step energy = 0.5 eV )&nbsp; 1 Scan / 3 min<br />
+&nbsp; O 1s (W = 8 eV, step energy = 0.05 eV ) 3 Scan / 9 min<br />
+&nbsp; C 1s (W = 20 eV, step energy = 0.05 eV ) 3 Scan /&nbsp;9 min<br />
+&nbsp; Si 2p (W = 10 eV, step energy = 0.05 eV ) 1 Scan&nbsp;/ 4 min<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (* Si2sの方が光イオン化断面積は大きい)<br />
+&nbsp; VB (-1～30 eV, tep energy = 0.05 eV&nbsp;)&nbsp;5 Scan / 30 min<br />
+&nbsp; EF&nbsp;(-1～5 eV, step energy = 0.05 eV )&nbsp;20 Scan / 80 min<br />
+Wideの測定でもOとSとCの成分を見積もることが可能。特に内殻の情報が必要なければ、wideとC1sでも良いかどうか検討する。<br />
+&nbsp; 4) より詳細には以下となる<br />
+&nbsp;&nbsp;&nbsp; 理想的なサンプルサイズ : 横 6mm, 縦3mm(&gt;35&mu;m以上）<br />
+&nbsp;&nbsp;&nbsp; Si2pスペクトル取得に要する時間： 4 min / 1 scan (Si0, Si+1, Si+4の3成分分離程度）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 250000 count = 250 k count 以上 (内訳 Si 2p 200k, BG 50 k count)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA87 : 3 scan = 12 mim<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA15 : 6 scan (同じcount数にしたい場合は 15scan)　=&nbsp;24 min (60 min)<br />
+&nbsp;&nbsp;&nbsp; O1sスペクトル取得に要する時間：&nbsp;3 min / 1 scan (4成分分離程度)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;500000 count = 500 k count 以上 (内訳&nbsp;O1s 500k, BG 0 k count)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA87 : 3 scan =&nbsp;9 mim<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA15 : 6 scan (同じcount数にしたい場合は 15scan)　= 18 min (60 min)<br />
+&nbsp;&nbsp;&nbsp; C1sスペクトル取得に要する時間：&nbsp;3 min / 1 scan (7成分分離程度）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 500000 count = 500 k count 以上 (内訳&nbsp;C1s 500k, BG&nbsp;0 k count)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA87 : 3 scan =&nbsp;9 mim<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOA15 : 6 scan (同じcount数にしたい場合は 15scan)　= 18 min (60 min)<br />
+&nbsp;&nbsp;&nbsp; 一度の真空引きでセットできるサンプル数&nbsp;:&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14試料&times;4 = 60試料　(TOA87～TOA89),&nbsp;2試料&times;4 = 8試料 (TOA15)<br />
+&nbsp;&nbsp;&nbsp; 真空引き等、準備開始から初回測定までの大よその時間：2～4時間<br />
+&nbsp;&nbsp;&nbsp; サンプルトランスファーにかかる時間・手間 :<br />
+&nbsp;&nbsp;&nbsp; (手慣れている場合：30分、不慣れな場合：1時間30分)<br />
+&nbsp;&nbsp;&nbsp; 全エネルギー分解能<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BL47XU : 入射エネルギー 7939.91 eV 、エネルギー分解能 250 meV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BL27SU : 入射エネルギー 1200 eV、エネルギー分解能 145 meV<br />
+<br />
+□ 表面敏感<br />
+1) テーパーの付いたホルダーを用いる方法と試料ホルダーを回転させる方法がある。<br />
+<br />
+□ Gapの変え方<br />
+&nbsp;1) ミラーの跳ね上げ用の値をメモっておいて、慎重に、Gap調整用の画面をクリックしてアクティブにし、枠内に数値を入力する。このとき、ミラーの跳ね上げ用の入力に誤って数値が入っていないかを確認する。<br />
+2) 他のところにも数値の入力に誤りがないことを確認したら、Enterを押して、Gapを変える。<br />
+<br />
+□ 測定の心構え<br />
+a) 常に測定しながら、全部のデータを比較していく気力が必要。データが保存されていなかったり、チャージアップの兆候を見逃してしまったりする。<br />
+b)&nbsp;チャージアップが起きる要因がある場合と、起きない場合で、測定中の状況を考察できるようにしておくことが必要となる。（思い込みは厳禁）（よく論文などでは、奇麗に化学シフトしていたり、チャージアップしないようにして測定した結果を載せている為、自身が測定している場合に油断してチャージアップの兆候を見逃してしまったりする。色々な構造が混ざっている材料の場合、化学シフトはそれぞれの試料の部分部分でピーク位置が異なっているため、これらのピークをそれぞれの構造で比較することになると考えることが必要。構造全体が動いているなどの場合は、チャージアップの可能性があることも疑う。完全に構造が異なる試料であれば、ピーク位置や構造はシフトしていてもよいが、データブックで確認するなど、十分に注意しておきたい）<br />
+<br />
+□ チャージアップ<br />
+a)&nbsp;光電子によって、試料中の電子が光電子として外に飛び出すが、アースから電子を補充できないと、全ての構造が高い束縛エネルギー側にシフトする。<br />
+b)&nbsp;化学シフトと異なる為、ピークの位置変化に注意しなければならない。グラファイトだからと安心していて、エッジの多い端の部分に放射光を当てていても、チャージアップしていて、無駄な測定をしてしまった経験がある。<br />
+<br />
+□ チャージアップの判定法<br />
+a) 比較する材料があれば、チャージアップしない伝導性の取れている試料を先に測定し、チャージアップの懸念のある試料を測定して、ピーク位置が変わっていないかを確認する。<br />
+b) 比較する材料がなければ、VBを測定し、EFの値を金のEFと比較する。<br />
+<br />
+□ チャージアップ時の対処法<br />
+BL47XUでは、20nm程度のSiO2ならば、チャージアップしないで測定可能。<br />
+基板や試料での導通が取れない場合は、以下の手順を模索する。<br />
+a) add dimensionという各スキャン毎にデータを記録しておくモードにして、各スキャンでピークと構造の位置が変化しないことを粗くチェックする。もし、ピークと構造の位置が変化しなければ、正式な測定でadd diomensionモードにしてデータを得る。解析ではRelative Energyとして、何かを基準にデータを並べて議論する。<br />
+b) 上記a)の手法でダメな場合は、アンジュレータのギャップを変えて、入射光子のFluxを下げて、a)と同じように考察する。( 同じ試料で、入射光子のFluxを下げて、構造のFWHMの幅が変わらないかを調べる場合がある。この場合、a)のadd dimensionで変化がなければ、add dimensionでのチェックはせずに、正式な形でadd dimensionモードでの測定をする。放射光で、無駄な測定はしない）<br />
+c) 上記a), b) ともダメな場合は、中和銃を使って試料に電子を入射させる。そして、a)と同じように考察する。もしこれでも測定ができない場合はあきらめる。（注意：中和銃は使用方法を誤ると、蒸着した試料を壊したり、蒸着したものを飛ばしたり、アナライザーに電子が入り込み異常な現象が起こる。中和銃を用いる場合は、使用方法に気をつけられたい） 当然ながら、優先順位の高い試料から測定し、a) からb)と移っていくのか、試料を変えるのかの選択が求められる。<br />
+d) サンプル数が多い場合は、a) を試みて、ダメであれば、他の試料に移り、一通りa)の手法で測定が終わった後にb）の手法に移る。<br />
+e) 比較するためのデータが必要な場合は、b)の手法で測定する。<br />
+<br />
+□ 注意<br />
+硬X線の場合は、Auなどの金属でも表面との接触が悪ければチャージアップする。蒸着したAuなどを用いるのが安全である。<br />
+<br />
+□ スペクトル強度の角度依存<br />
+&theta;=-47(60度)　29000 cps<br />
+&theta;=-32(45度)　20000 cps<br />
+&theta;=-17(30度)　9000 cps（試料によっては7500 &ndash; 14500 cps）<br />
+&theta;= -2(15度)　3500 cps<br />
+<br />
+□ 全反射条件　C1s　5630 cps<br />
+2010年5月に作製した試料では、全反射条件でもSi2p, 2sが見える。Count数は&theta;=-2(15度)の倍。<br />
+<br />
+□ 光子数のギャップ値に対する依存性<br />
+ID 12.12 nm, Flux 50000 cps<br />
+ID 12.26 nm, Flux 27000 cps, 約1/2倍<br />
+ID 12.35 nm, Flux 17000 cps, 約1/3倍<br />
+ID 12.40 nm, Flux 13000 cps, 約1/4倍<br />
+<br />
+□ ビームダンプ時の対処方法<br />
+1) Experimentの掲示板が光る。<br />
+2) Gap調整のモニターで、ShiftがNormalに変わる。（Gapも自動的に設定した値に戻るが、戻らなかった場合は、ミラーの跳ね上げ用の値をメモっておいて、慎重に、Gap調整用の画面をクリックしてアクティブにし、枠内に数値を入力する。このとき、ミラーの跳ね上げ用の入力に誤って数値が入っていないかを確認する）<br />
+3) Gapの値が戻ったら、MBSの扉を開ける。その後、LN2によるミラーの温度が飽和するまで待つ。（その間に、アナライザーの電圧を上げておく）<br />
+4) ミラーが飽和したら、DSSを開けてCCDでの様子とイオンチャンバーの値を見る。CCDのモニター上で、枠に囲った部分に光が来ず、イオンチャンバーの値が戻らなかったら、ミラーの跳ね上げ用の入力画面をクリックして、アクティブにし、Relativeが紫色の枠で囲まれていることを確認して、数値のところにカーソルを合わせて、&uarr;及び&darr;を押して、はね上げ量を変えて、CCDのモニター上で、枠に囲った部分に光が来るようにする。<br />
+<br />
+□ XPS C1s&amp;O1s解析用のigor マクロの使い方（First版）<br />
+初期設定<br />
+&nbsp; More Extension / Curve fit / multipeak fit のファイルをigor extensionの中に入れる。<br />
+&nbsp; プロシージャー中で、cha = v &ndash;minloc をcha = 30 (fittingの終わり)にする。<br />
+&nbsp; ＊subshiry(270,cha,wname)　での270はShiry法で差し引く場合の開始点。<br />
+通常の解析<br />
+&nbsp; グラフを作成する。<br />
+&nbsp; マクロ / subbuk C1s or O1sでBGを差し引く。<br />
+&nbsp; テーブルを作成する。<br />
+&nbsp; Change wave スケーリングする。データ / ウェイブスケーリングを変更で、開始とデルタを入力。そうすると、X1_は自動計算でグラフを描画することが可能になる。<br />
+&nbsp; RTM / Open ExptPanle を選択し、C1s Fit with DSを選択する。Start fitting point も入力しておく。<br />
+&nbsp; RTM / Make coefficient table を選択。<br />
+&nbsp; RTM / Fitting test を選択。<br />
+&nbsp; CoefsTableが適切な値でないと、エラーが出る。<br />
+<br />
+□ 反跳効果<br />
+&nbsp; 1) Huang-rhys 因子S≒&delta;E/(h/2&pi;)w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ここで、wはデバイ振動数、&delta;Eは反跳のエネルギー（下記で表わされる値）。<br />
+&nbsp; 2) &delta;E=p*p/2M=Ek*m/M<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ここで、Ek=p*p/2mは光電子の運動エネルギー、mは電子の質量、Mは原子の質量である。<br />
+&nbsp; 3) 強結合 S&gt;&gt;1, 弱結合 S&lt; 1, その中間を中間結合（S≒3だと中間結合となる）<br />
+&nbsp; 4) 各物質のデバイ温度 w<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; グラフェン&nbsp;～2800 K<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ダイヤモンド 2000～2200 K<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;グラファイト 402 K<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pb 100 K<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Cu 348 K<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Al 426 K<br />
+<br />
+Q. graphiteとgrapheneで内殻のピーク幅は異なるか？<br />
+A. 参考文献[1]の図7からは、-12.4 [a.u.]においても0.4 [a.u.]の幅のバンド分散を確認することができる。1 [a.u.]=2 [Ry]=27.2116 [eV]であるから、-12.4 [a.u.]=337.42 [eV] となり、graphiteよりもgrapheneの方がC1sの半値半幅が小さくなると予測される。（しかし、grapheneを20層積んだ場合には、graphiteと同程度のエネルギー準位に分裂する可能性がある）<br />
+<br />
+[1] 堀口誠二、『基礎講座 実空間における固体のエネルギーバンド構造について』、応用物理、80 (2011) 236.<br />
+--------------------------------------------------------------------------------<br />
+SPring-8 BL27SU測定（軟X線光電子分光法）<br />
+--------------------------------------------------------------------------------<br />
+SPring-8 BL25SU測定（軟X線光電子分光法）<br />
+--------------------------------------------------------------------------------<br />
+SPring-8 BL23SU測定（軟X線光電子分光法）<br />
+--------------------------------------------------------------------------------<br />
+UVSOR&nbsp;BL5U測定（極端紫外光電子分光法）<br />
+--------------------------------------------------------------------------------<br />
+UVSOR&nbsp;BL7U測定（極端紫外光電子分光法）<br />
+--------------------------------------------------------------------------------<br />
+■ 立命館大学 SR Center&nbsp;BL-8測定（極端紫外光電子分光法）<br />
+&nbsp; 2006年6月のパンフレットには、Si酸化膜に対する光電子スペクトルの2p<sub>1/2,3/2</sub>を複数の成分に分離をした図（Si<sup>+</sup>～Si<sup>4+</sup>)が掲載されている。デバイス関係の業者様は調べてみるとよいかもしれない。<br />
+--------------------------------------------------------------------------------<br />
+[1] 光電子分光法によるSi系材料ナノ構造の評価については: 廣瀬和之、服部健雄、応用物理、80 (2011) 942.<br />
+--------------------------------------------------------------------------------<br />
+■ 電子の脱出深さの論文<br />
+&lt;350以上の実験データ&gt;<br />
+M. P. Seah, W. A. Dench, Surf. Interface Anal., 1,2 (1979).<br />
+&lt;減衰長さの経験式&gt;<br />
+H. Tokutaka, K. Nishimori and H. Hayashi, Surf. Sci., 149, 349 (1985).<br />
+Rdin, T.N.and Gadzuk, the Nature of the surface chemical bond (1979) 113.<br />
+Somorjai, G. A, &quot;Chemistry in two dimensions:Surface .&quot; Ithaca:Cornell. (1981).<br />
+&lt;減衰長さの理論式&gt;<br />
+S. Tanuma, C. J. Powell and D. R. Penn, Surf.Interface Anal, 1, 577 (1988).<br />
+Penn, D. R. ,Phys. Rev. B 13 (1976) 5248<br />
+&lt;実験データを用いた物質のエネルギー損失関数からの非弾性平均自由行程&gt;<br />
+S. Tanuma, C. J. Powell and D. R. Penn, Surf. Interface Anal, 21, 165 (1994).<br />
+&lt;これらを疑問視する論文&gt;<br />
+S. Tanuma, T. Sekine and K. Yoshihara, Surf. Interface Anal., 15, 466 (1990).<br />
+--------------------------------------------------------------------------------<br />
+◆ 知っておくべきこと<br />
+<br />
+■ 緩和時間<br />
+　内殻励起の緩和時間：10<sup>-16</sup> ～&nbsp;10<sup>-15</sup> s オーダー<br />
+　原子の動き（原子の振動）： 10<sup>-13</sup> s オーダー（phonon order）<br />
+　電子の動きは上記の二つの間程度のオーダーになる。そのため、内殻のエネルギーシフトでは、原子構造がほとんど変わらないと考えてよいことから、電子が動くことによる遮蔽効果が重要になってくる。<br />
+<br />
+■ 内殻のエネルギーシフト<br />
+　内殻のエネルギーシフトの要因は下記の2点がある。<br />
+<br />
+・ マーデルングポテンシャル<br />
+　化学結合して電子のやりとりが行われることによって生じる。光励起する前に、分子や結晶になったときに、A -&gt; B へと電子が移動していれば、光励起した後では、A に対する内殻のエネルギーシフトは高い束縛エネルギー側へと移動し、Bに対する内殻のエネルギーシフトは低い束縛エネルギー側へと移動する。<br />
+　第一原理計算で比較するのは、大雑把には通常の計算を行えば良い。<br />
+　マーデルングポテンシャルは静的なものであり、ファンデルワールスは動的なものである。<br />
+※ 例えば、NaClはNa+とCl-が並んでいて、この+と-の並びによるクーロン力が働く。これは時間変化をあまり考えなくても変化しない。非常に簡単で落ち着いて理解できる。一方、同じ元素からなるグラファイトはどうだろうか？ 同じ元素なので+と-の並びがあまり大きくないように見える。しかしながら、一重結合と二重結合の位置は時間的に変化している。時間的な変化をみると+と-が変化したクーロン力が発生している。この力は非常に齢が、グラファイトの層間にはそれが働いており、それがないと第一原理計算でGGAを用いた計算ではグラファイトの層間が離れていってしまう。<br />
+<br />
+・ 遮蔽効果<br />
+　光励起によって内殻に空いたホールに向かって、それよりも高いエネルギーにある電子や周りの原子にある電子が動き、空いたホールが遮蔽される効果。誘電率が高いほど遮蔽効果も大きい。<br />
+　第一原理計算で比較するには、コアホールを入れた計算をすればよい。ホールの大きさは電子1個分であったり、1/2個分であったりする。遮蔽効果が大きいとホールを入れなくても実験値と比較的良く一致することになる。XPSよりもXASにおいてよく見かけるが、金属はホールを入れず、分子や半導体などでは1/2個分のホール、絶縁体では1個分のホールを光励起する軌道に空けることが多い。<br />
+<br />
+■ スピン軌道相互作用<br />
+　スピン軌道相互作用によって軌道が分裂する。分裂する軌道にはupとdownの電子が入る。それらが占有する確率はクレプシュゴルダンで求められる。下記では2p軌道について見てみる。2p<sub>3/2</sub>と2p<sub>1/2</sub>にはupとdownのスピンが存在していることが分かる。<br />
+（※ 第一原理計算では簡単のためにspinのupとdownの軸を揃える。下記はz軸に揃えて考えている。もちろん、複雑なことを考えたい場合は他の方向にupとdownが向くように揃えても良い（実験屋としてもz軸に揃えた方が議論しやすいと思うが&hellip;&hellip;取り扱う方の系によってはもしかしたらということもあるので無理強いはしません）)<br />
+・ 2p軌道
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 40px; text-align: center;">l =1</td>
+			<td style="width: 59px; text-align: center;">s = 1/2</td>
+			<td style="width: 44px; text-align: center;">j</td>
+			<td colspan="2" rowspan="1" style="width: 172px; text-align: center;">j = 3/2</td>
+			<td colspan="2" rowspan="1" style="width: 77px; text-align: center;">j = 1/2</td>
+		</tr>
+		<tr>
+			<td style="width: 40px; text-align: center;">m</td>
+			<td style="width: 59px; text-align: center;">sz</td>
+			<td style="width: 44px; text-align: center;">jz</td>
+			<td style="width: 85px; text-align: center;">jz</td>
+			<td style="width: 81px; text-align: center;">m + sz</td>
+			<td style="width: 77px; text-align: center;">jz</td>
+			<td style="width: 77px; text-align: center;">m + sz</td>
+		</tr>
+		<tr>
+			<td colspan="1" rowspan="2" style="width: 40px; text-align: center;">+1</td>
+			<td style="width: 59px; text-align: center;">1/2</td>
+			<td style="width: 44px; text-align: center;">3/2</td>
+			<td style="width: 85px; text-align: center;">3/2</td>
+			<td style="width: 81px; text-align: center;">+1 +1/2</td>
+			<td style="width: 77px; text-align: center;">&nbsp;</td>
+			<td style="width: 77px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 59px; text-align: center;">-1/2</td>
+			<td style="width: 44px; text-align: center;">1/2</td>
+			<td colspan="1" rowspan="2" style="width: 85px; text-align: center;">1/2</td>
+			<td style="width: 81px; text-align: center;">+1 -1/2</td>
+			<td colspan="1" rowspan="2" style="width: 77px; text-align: center;">1/2</td>
+			<td style="width: 77px; text-align: center;">+1 -1/2</td>
+		</tr>
+		<tr>
+			<td colspan="1" rowspan="2" style="width: 40px; text-align: center;">0</td>
+			<td style="width: 59px; text-align: center;">1/2</td>
+			<td style="width: 44px; text-align: center;">1/2</td>
+			<td style="width: 81px; text-align: center;">0 +1/2</td>
+			<td style="width: 77px; text-align: center;">0 +1/2</td>
+		</tr>
+		<tr>
+			<td style="width: 59px; text-align: center;">-1/2</td>
+			<td style="width: 44px; text-align: center;">-1/2</td>
+			<td colspan="1" rowspan="2" style="width: 85px; text-align: center;">-1/2</td>
+			<td style="width: 81px; text-align: center;">0 -1/2</td>
+			<td colspan="1" rowspan="2" style="width: 77px; text-align: center;">-1/2</td>
+			<td style="width: 77px; text-align: center;">0 -1/2</td>
+		</tr>
+		<tr>
+			<td colspan="1" rowspan="2" style="width: 40px; text-align: center;">-1</td>
+			<td style="width: 59px; text-align: center;">1/2</td>
+			<td style="width: 44px; text-align: center;">-1/2</td>
+			<td style="width: 81px; text-align: center;">-1 +1/2</td>
+			<td style="width: 77px; text-align: center;">-1 +1/2</td>
+		</tr>
+		<tr>
+			<td style="width: 59px; text-align: center;">-1/2</td>
+			<td style="width: 44px; text-align: center;">-3/2</td>
+			<td style="width: 85px; text-align: center;">-3/2</td>
+			<td style="width: 81px; text-align: center;">-1 -1/2</td>
+			<td style="width: 77px; text-align: center;">&nbsp;</td>
+			<td style="width: 77px; text-align: center;">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+　jz = 1/2 と -1/2 は j=3/2かj=1/2にどれだけの割合で割り振られるかは、クレプシュゴルダンを計算する。<br />
+※ 2p<sub>3/2</sub>と2p<sub>1/2</sub>の成分比は2j+1で計算すると2:1となる。jzの数を比較しても良い。<br />
+※ フントの規則（フント則）を知っていると混乱を招くことになる。フントの規則は「経験則」であるということを忘れてはいけない。どこに適応できるかを知っておくことが必要である。授業でよく習う価電子帯については適応できることが多いと考える方が良い。<br />
+※ 第一原理計算では、spinを考慮に入れないときには、低いエネルギーにある軌道ひとつにつきupとdownの電子が1個ずつ入る。spinを入れるとそれがupとdownの電子からなる軌道に分かれる（厳密には軌道の混成があるので100% up, 100% down とは言えないだろうが・・・・・・）。スピン軌道相互作用を考慮に入れると実験で見られるようなエネルギー差で分かれる。<br />
+--------------------------------------------------------------------------------<br />
+<a href="http://www.sasj.jp/JSA/CONTENTS/vol.11_2/Vol.11%20No.2/Vol.11%20No.2%2091-116.pdf">http://www.sasj.jp/JSA/CONTENTS/vol.11_2/Vol.11%20No.2/Vol.11%20No.2%2091-116.pdf</a><br />
+--------------------------------------------------------------------------------

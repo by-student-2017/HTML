@@ -1,0 +1,85 @@
+　GAMESSやGaussianに対する有用なGUIを下記に紹介する。ここでは、GAMESSやopenMOPAC及び下記のGUIの導入が容易なWindows OSに対して解説を行う。<br />
+------------------------------------------------------------------------------<br />
+※1 研究資金があれば、計算速度の速いGaussianを購入するほうが良い。資金が無くLinux OSを扱うことができれば、GAMESSをコンパイルして使用。windowsしか扱えなければ、Fireflyを選択し、それでも駄目であればGAMESSを選択する。<br />
+※2 NMRの結果は系にもよるがGaussianの方が計算速度が110倍程度早い。Gaussianで3分の計算もGAMESSでは350分程度かかる。Gaussianは周期系の計算も行え、特定の原子を固定しての構造最適化もし易い。<br />
+※3 それでもGAMESSおよびFireflyを選択したい方のために色々と記述していきます。<br />
+------------------------------------------------------------------------------<br />
+無償で利用可能なGUI<br />
+<br />
+a) Winmostar : <a href="http://winmostar.com/">http://winmostar.com/</a><br />
+&nbsp; マニュアルも読んでおくと良いし、下記のソフトも導入しておくと良い。<br />
+&nbsp; openMOPAC : <a href="http://openmopac.net/index.html">http://openmopac.net/index.html</a><br />
+&nbsp; Youtube では操作方法も公開されている。<br />
+&nbsp; <a href="http://www.youtube.com/watch?v=ajdGnlLr2y4">http://www.youtube.com/watch?v=ajdGnlLr2y4</a><br />
+<br />
+b) Facio : <a href="http://www1.bbiq.jp/zzzfelis/">http://www1.bbiq.jp/zzzfelis/</a><br />
+<br />
+c) Ascalaph Quantum :&nbsp;<a href="http://jaist.dl.sourceforge.net/project/ascalaphquantum/AscalaphQuantum.zip">http://jaist.dl.sourceforge.net/project/ascalaphquantum/AscalaphQuantum.zip</a>　<br />
+CP2kが即座に利用可能。PC GAMESS / Firefily, CP2k, NWChemに対応<br />
+<br />
+d) GaussSum : <a href="http://gausssum.sourceforge.net/">http://gausssum.sourceforge.net/</a><br />
+&nbsp; GaussianやGAMESSで計算した結果から状態密度分布(DOS）や全エネルギーの変化をプロットできる。<br />
+<br />
+以下のコードも手に入れておくと便利であろう。<br />
+a) Molworks : <a href="http://www.molworks.com/en/">http://www.molworks.com/en/</a><br />
+<br />
+参考文献 :<br />
+<a href="http://www.jstage.jst.go.jp/article/cicsj/23/5/139/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/cicsj/23/5/139/_pdf/-char/ja/</a><br />
+<a href="http://www.jstage.jst.go.jp/article/jccj/5/1/23/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jccj/5/1/23/_pdf/-char/ja/</a><br />
+<a href="http://j-molsci.jp/np/NP009.pdf">http://j-molsci.jp/np/NP009.pdf</a><br />
+<br />
+WinGAMESS QM/MM計算<br />
+参考HP : <a href="http://pc-chem.info/a00/a02gamess/wingamessqmmm_2.html">http://pc-chem.info/a00/a02gamess/wingamessqmmm_2.html</a><br />
+------------------------------------------------------------------------------<br />
+GAMESSのコンパイル<br />
+セットアップから使用方法まで下記のHPの方が私のHPよりも詳しい（感謝）。<br />
+[1] <a href="https://sites.google.com/site/octaphyrin/documents/gamess/getgamess">https://sites.google.com/site/octaphyrin/documents/gamess/getgamess</a><br />
+[2] <a href="https://sites.google.com/site/beiwangluzhendongwunonetazhang/gamess-dao-ru-shi-yong-fa-guan-lian">https://sites.google.com/site/beiwangluzhendongwunonetazhang/gamess-dao-ru-shi-yong-fa-guan-lian</a>　<br />
+[3] <a href="http://www3.u-toyama.ac.jp/kihara/cc/wm/">http://www3.u-toyama.ac.jp/kihara/cc/wm/</a><br />
+[4] <a href="https://sites.google.com/site/harano2011/mu-ci/windows7-64-bit-degamess-bing-lie-chu-li">https://sites.google.com/site/harano2011/mu-ci/windows7-64-bit-degamess-bing-lie-chu-li</a><br />
+[5] <a href="https://sites.google.com/site/harano2011/cccccc/saba/firefly">https://sites.google.com/site/harano2011/cccccc/saba/firefly</a><br />
+[6] <a href="http://www.sccj.net/publications/JCCJ/v4n1/a11/document.pdf">http://www.sccj.net/publications/JCCJ/v4n1/a11/document.pdf</a><br />
+[7] <a href="http://staff.aist.go.jp/d.g.fedorov/fmo/GAMESS-FMO_J.pdf">http://staff.aist.go.jp/d.g.fedorov/fmo/GAMESS-FMO_J.pdf</a><br />
+[8] <a href="http://winmostar.com/pio/pio_man.pdf">http://winmostar.com/pio/pio_man.pdf</a><br />
+[9] <a href="http://pc-chem.info/a00/a02gamess/">http://pc-chem.info/a00/a02gamess/</a><br />
+[10] <a href="http://excelqc.web.fc2.com/index.html">http://excelqc.web.fc2.com/index.html</a><br />
+[11] <a href="http://beken.cc.miyakonojo-nct.ac.jp/wordpress/md/2008/10/19/wingamess%EF%BC%88%E9%9D%9E%E7%B5%8C%E9%A8%93%E7%9A%84%E5%88%86%E5%AD%90%E8%BB%8C%E9%81%93%E8%A8%88%E7%AE%97%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%EF%BC%89%E3%81%AE%E3%82%BB%E3%83%83%E3%83%88/">http://beken.cc.miyakonojo-nct.ac.jp/wordpress/md/2008/10/19/wingamess%EF%BC%88%E9%9D%9E%E7%B5%8C%E9%A8%93%E7%9A%84%E5%88%86%E5%AD%90%E8%BB%8C%E9%81%93%E8%A8%88%E7%AE%97%E3%83%97%E3%83%AD%E3%82%B0%E3%83%A9%E3%83%A0%EF%BC%89%E3%81%AE%E3%82%BB%E3%83%83%E3%83%88/</a><br />
+------------------------------------------------------------------------------<br />
+GAMESSの利用<br />
+『すぐできる 量子化学計算ビギナーズマニュアル 』<br />
+『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から実験値との比較まで 』（NMRの計算に関する記述がある）<br />
+&nbsp; 使用方法は上記の文献を参考にすれば良いが、Raman分光の計算をする方法については詳細に解説さていない。そのため、本解説では、特にWinmostarを用いたRaman分光の計算方法を採り上げる。<br />
+&nbsp; さらにアドヴァンスドとして、情報機構主催の『GAMESS実践Q&amp;Aセミナー』や『Gaussian実践Q&amp;Aセミナー』に参加すると良いだろう。講師の株式会社 クロスアビリティ 代表取締役社長の古賀氏や株式会社 Transition State Technology 代表取締役社長 山口氏、株式会社 テンキューブ研究所 代表取締役社長 千田氏が丁寧に回答して下さる。<br />
+右記のHPも良い: http://pc-chem.info/a00/a02gamess/<br />
+<br />
+WinmostarによるRaman分光の結果の得方<br />
+1) RUNTYP=OPTIMIZEで計算<br />
+2) RUNTYP=HESSIANで計算<br />
+3) case.pun（case=ファイル名）にある$HESS ～ $ENDまでをコピーして、<br />
+&nbsp; GAMESS Setupの一番上の空欄にペースト<br />
+4) $STARTでHESSをREADにする<br />
+5) RUNTYP=RAMANで計算<br />
+<br />
+FacioWinmostarによるRaman分光の結果の得方<br />
+計算方法は下記のHPに記載されている。<br />
+（下記のまとめは、参考文献　<a href="http://egfinal.jp/another/gamess.html">http://egfinal.jp/another/gamess.html</a> より作成）<br />
+「 振動解析：File&gt;Load new gamess output for optimized geometry&rarr;$CONTROLのRUNTYPをHessianに変更して計算。<br />
+Raman：Hessian演算後、File&gt;Get HESS grout from gamess punchでHessian演算の結果を読み取り&rarr;RUNTYPをRAMANに変更して計算」<br />
+<br />
+TDDFTを用いた紫外・可視光吸収スペクトルの計算方法（編集中）<br />
+<br />
+電場の掛け方（調査中）<br />
+下記を入力ファイルに加える。(a.u. 単位）<br />
+$EFIELD EVEC=0.0 0.0 0.001 $END<br />
+参考HP : <a href="http://phoenix.liu.edu/~nmatsuna/gamess/input/EFIELD.html">http://phoenix.liu.edu/~nmatsuna/gamess/input/EFIELD.html</a><br />
+<br />
+GAMESSとTINKERの併用<br />
+参考HP : <a href="http://blog.3016.net/2006/04/gamesstinkerqmmm.html">http://blog.3016.net/2006/04/gamesstinkerqmmm.html</a><br />
+<br />
+GAMESSによるFMO計算<br />
+参考HP : <a href="http://ccinfo.ims.ac.jp/nanogc/coop/coop2.html">http://ccinfo.ims.ac.jp/nanogc/coop/coop2.html</a><br />
+<br />
+GAMESS 関係のGUI<br />
+<a href="http://www.msg.ameslab.gov/graphics/other.html">http://www.msg.ameslab.gov/graphics/other.html</a><br />
+<br />
+------------------------------------------------------------------------------
