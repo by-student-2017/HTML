@@ -8,17 +8,20 @@
 &nbsp; XANESやEELSでの実験結果と計算結果を比較するとピークの数と位置は&rdquo;大体&rdquo;は合う。現在、ピークの数や位置、そして、ピーク強度の比率がより実験結果と合うように理論的な研究が進められている。現状を以下にまとめる。<br />
 <br />
 □ 内殻に正孔を導入して吸収スペクトルを計算する場合（一粒子計算＝DFT-LDA/GGA計算）<br />
-・典型元素の金属における K-edge（及び非遷移金属元素のL<sub>2,3</sub>-edge&larr;確認中） であれば、3x3x3のスーパーセルを用いた計算で比較的実験結果と良く合う結果が得られ易い。<br />
+・典型元素の金属における K-edge（及び非遷移金属元素のL<sub>2,3</sub>-edge&larr;確認中） であれば、一般的に8Åから10Åのスーパーセル（約100原子程度）を用いればよい。例えば3x3x3のスーパーセルを用いた計算で比較的に実験結果と良く合う結果が得られ易い。<br />
 ・下記に示すような物質では、より精度の高いBSEやCIが実験結果と似たスペクトルを予測するが、解釈には実空間のイメージが容易な一粒子で行うと良いだろう。そういう意味で、一粒子での計算はピーク強度やピーク位置はズレていても解釈に役立て易い。（※ あまり強度は気にせず、何のedgeなのかを気にする）<br />
 ※ 内殻に空孔を入れると、遮蔽が無くなって、電子がぐっと引き寄せられて局在化した形になる。<br />
 <br />
-□ BSE(Bethe-Salpeter equation)で吸収スペクトルを計算する場合 （エキシトンの効果が取り入れられる）<br />
+□ BSE (Bethe-Salpeter equation)で吸収スペクトルを計算する場合 （エキシトンの効果が取り入れられる）(二粒子計算)<br />
 ・遷移金属のL<sub>2,3</sub>-edge（閉殻のみ） であれば比較的実験結果と合う結果が得られ易い。<br />
 ・軽元素のK端（内殻空孔と遷移した電子のエネルギー差が小さく、電子-ホール｛エキシトン｝の相互作用を取り入れる必要がある）[9]<br />
 ・軽元素（Li、Be, B等）のK-edge、軽金属元素（Na～Alの100 eV以下）のL<sub>2,3</sub>-edge はBSEで計算して確認を取っておくとよい。<br />
-・二粒子効果がどんなもので必要になるかはまだ良く分かっていない。軽元素でもBSEなしと同じ結果であることもある。<br />
+・励起する内殻から伝導帯まで約100 eV以上離れていれば通常の計算ではBSE計算は必要ない。しかし、エキシトンの効果が大きくなる系（ペロブスカイト型構造）ではBSEがないとわずかにピーク位置がズレる。<br />
+・エキシトンの効果は、バンドの分散がフラット（＝移動度が小さい）、次元が下がるとき（例えば低次元結合になるなど）、で大きくなる。<br />
+・遷移エネルギーはBSE計算では&times;。BSE-GWやDFT-GGA計算が良い。<br />
+・BSEは金属は&times;。<br />
 <br />
-□ CIで吸収スペクトルを計算する場合<br />
+□ CIで吸収スペクトルを計算する場合（多粒子計算）<br />
 ・クラスター計算｛DVME｝などで精力的に研究されている。原子番号50以上は相対論も導入が必要。<br />
 ・ホワイトラインと呼ばれる<em>3d</em>遷移金属のL<sub>2,3</sub>-edgeやM<sub><font size="2">2,3</font></sub>-edgeとレアアースメタル（ランタノイド） M<sub>4,5</sub>-edge、アクチノイドN<sub>4,t</sub>-edge<br />
 ・エキシトンに加えて、部分的に占有された<em>3d</em>軌道や<em>4f</em>軌道に存在する電子との相互作用も影響している。そのような多粒子の計算にはスレーター行列式の線形結合を多電子波動関数の基底としたConfiguration Interaction(CI)計算が必要になる。[9]<br />
@@ -28,6 +31,7 @@
 ◆&nbsp;エネルギー位置について<br />
 □ 第一原理計算を用いた場合、遷移エネルギーの1%程度、理論値が実験値よりもズレることが知られています（※1, 2）。逆に、FEFFは（吸収での横軸が）正確である（と言われている）。<br />
 （※ &Delta;-SCF-calculation ( = E(N) - E(N-1) ) とするとXPSの予測におてはより実験値に近い値（0.1%程度のズレ）になる場合もある。XAFSにおいて適応できるかは不明。<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf</a>&nbsp;を参照してみるとよい)<br />
+・遷移エネルギーはBSE計算では&times;。BSE-GWやDFT-GGA計算が良い。<br />
 <br />
 ※1 交換・相関ポテンシャル（HF + EXX + PT2SC)を使うと、占有軌道の軌道エネルギーをかなり正確に再現できる。（省略）この方法は、イオン化ポテンシャル実験値の逆符号に対して、占有軌道エネルギーを価電子軌道について 0.2 eV以下、内殻軌道について1 eV以下の平均誤差の化学的精度で算出している。（省略）このことから、価電子軌道エネルギーを化学的精度で再現するためにはクラスター展開法レベルの高次の電子相関を取り込んだポテンシャルが必要であり、さらに内殻軌道エネルギーを再現するにはそのレベルでも十分ではないことが明らかになった。（常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書</span>）<br />
 <br />
@@ -45,11 +49,10 @@
 ・&nbsp;FEFFでは、ATOMS on the Web [9]も利用してみると良いだろう。<br />
 ・&nbsp;多重項が計算可能なFEFF8においては、日本語のマニュアルが存在する[リンク先消失]。<br />
 ※ クラスター法のDVXaと似ていて表面効果が入ってくる。球対称（MT）を用いているので、クローズドパックな系であれば比較的高い精度で計算できる。SiO<sub>2</sub>はFEFFでは&times;。<br />
+・FEFFでフルポテンシャル計算を行いたい場合は、富山大学の畑田先生に相談してみる。<br />
 <br />
 ◆ pre-edge peak[6-7]<br />
 　吸収端より低いエネルギー側では周囲の構造の対称性を反映する。構造に依存したり、選択則が成り立つ軌道が混成したりすることでプリエッジピークの形状と強度が変化する。<br />
-<br />
-◆ FEFF8 による LDOS<br />
 <br />
 ◆&nbsp;解析での近似[8]<br />
 □ マフィンティン近似： 原子ポテンシャルを簡単な球対称クーロン型で表し、原子間領域は平らなポテンシャルとする。<br />
@@ -64,8 +67,24 @@
 ◆ MCD<br />
 ・実験では円偏光を入れて、右回転ではl からl+1 へ遷移し、左回転ではlからl-1へと遷移することを利用して、両者のスペクトルを差分することが行われる。<br />
 ・理論計算ではゼーマンエネルギーを計算してMCDのスペクトルが予測される。<br />
-H = H0 + Hzeeman<br />
+H = H<sub>0</sub> + Hzeeman<br />
 Hzeeman = &mu; (l + 2s)B<br />
+<br />
+◆ 液体のELNES計算<br />
+1. MDで計算する（当然ながらスーパーセルを用いる）<br />
+2. 適当なところで止めて、そのときのスーパーセルをELNES計算の入力にする<br />
+3. そのスーパーセルを用いて各サイトの原子に対してELNES計算を行う（メタノールやアセトンなら16コ。32コでは変化なし）<br />
+　（クラスターではなくスーパーセルを用いることが大切。クラスターでは上手く再現できない）<br />
+4. 得られたスペクトルの平均を実験結果と比較する<br />
+※ Y. Matsui et al., Sci. Rep. (2013). を参照すると良い。文献に記載されているMDの計算条件は下記となる。<br />
+&nbsp; 2x2x1 supercell comprising the unit cell of solid methanol, which contains 16 methanol molecules, was used as the initial structure for the MD simulation.&nbsp; An MD simulation using the empirical force field potential was performed to obtain the liquid structure, and the COMPASS&nbsp;force field was employed in the MD calculations.&nbsp; The time step was set at 0.01 fs, and the simulation time was set&nbsp; to 10 ps.&nbsp; The standard NPT ensemble was used: 1,000,000 steps were simulated at the respective temperatures. (省略)<br />
+　一方、ELNESはCASTEPでC1sにコアホールを入れた擬ポテンシャルを用いて計算している（カットオフエネルギーは500 eV）。<br />
+※ 実験も理論も温度でスペクトルが変わる（これは液体でなくても固体アルミナでも変わるので注意）。測定条件での温度は大切に記録しておきたい。<br />
+<br />
+◆ ファン・デル・ワールス（vdW）力の計算<br />
+・vdW力は電荷密度から計算可能（A. Tkatchenko and M. Scheffler, Phys. Rev. Lett. 102 (2009) 073005.を参照）<br />
+・vdW力を考慮するとピーク構造は0.1 eV程度低エネルギー側にシフトする。これは基底状態（core holeなし）と励起状態（core holeあり)でvdWの大きさが異なることによる（励起状態でvdW効果大&rarr;低エネルギーへシフト）。<br />
+・vdW力が重要になってくる材料（グラフェンなどの二次元化合物、van der Waals 結晶、熱電材料、炭化ケイ素（SiC）(多形の安定性）など）<br />
 <br />
 [1] 3d遷移金属のX線吸収スペクトルのプレエッジピークは電気四重極遷移か電気双極子遷移か？（<a href="http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf">http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf</a>）<br />
 [2]&nbsp;透過電子顕微鏡と電子エネルギー損失分光法による材料評価の最先端（<a href="http://www.nims.go.jp/AEMG/research/eels-j.html">http://www.nims.go.jp/AEMG/research/eels-j.html</a>）<br />
@@ -79,6 +98,7 @@ Hzeeman = &mu; (l + 2s)B<br />
 [10] SPring-8 利用推進協議会（<a href="http://www.jasri.jp/iuss/">http://www.jasri.jp/iuss/</a>）<br />
 [11] 第一原理計算の基礎とEELS計算への応用（<a href="http://microscopy.or.jp/archive/magazine/50_1/pdf/50-1-16.pdf">http://microscopy.or.jp/archive/magazine/50_1/pdf/50-1-16.pdf</a>） (recommend)<br />
 [12] XANESと理論計算による二次電池、振動、エキシトンおよびvan der Waals力の解析（<a href="http://www.ritsumei.ac.jp/acd/re/src/RitsSR_sympo_20161111/20161111_RitsSR_sympo_Mizoguchi.pdf">http://www.ritsumei.ac.jp/acd/re/src/RitsSR_sympo_20161111/20161111_RitsSR_sympo_Mizoguchi.pdf</a>）<br />
+[13] JFCC 計算セミナー 配布資料（2018）<br />
 <br />
 ※ FEFFも第一原理計算といわれたので呼び方は考えておいたほうが良い。<br />
 ------------------------------------------------------------------------------<br />
@@ -94,7 +114,7 @@ Hzeeman = &mu; (l + 2s)B<br />
 ・ 誘電率とスクリーニングは関係しており、誘電率が高いほどスクリーニングは大きくなる（※ Abinit だと、誘電率に関するパラメーターが 、絶縁体 2.0～4.0、（孤立）分子 1.5 ～ 3.0、Siや半導体 12.0、金属では10<sup>6</sup> となっている）。<br />
 ・ スクリーニングはCu基板など電子の共有がしやすい物質が隣接していると大きくなる（※ 左欄の「XPS」も読んでおくとよい）。<br />
 ・ 金属のように自由電子密度の高い物質では、伝導帯バンドの自由電子によりコアホールの電荷が遮蔽される。絶縁体ではコアホールの効果がそのまま伝導帯バンドに影響して基底状態とは異なる部分状態密度になる。<br />
-・ 最近の報告[2]では理論的なXAS吸収スペクトルの計算において、各第一原理計算コードにおける大きな差異は見られていない。しかし、欠陥モデルに依存して各ピーク位置・強度やスペクトル形状が異なっている。<br />
+・ 最近の報告[2]では理論的なXAS吸収スペクトルの計算において、各種の第一原理計算コードにおける大きな差異は見られていない。しかし、欠陥モデルに依存して各ピーク位置・強度やスペクトル形状が異なっている。<br />
 <br />
 □ ピークの解釈 [5]<br />
 ・ 非占有準位の電子状態密度分布が対応します。LDOS（各原子に対する状態密度分布：局所状態密度分布）やPDOS（各軌道に対する状態密度分布：部分状態密度分布）を比較する。⊿l = &plusmn;1 などの選択則を忘れないように！<br />
