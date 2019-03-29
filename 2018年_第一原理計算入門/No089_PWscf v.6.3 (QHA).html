@@ -1,0 +1,121 @@
+　QHA (Quasi Harmonic Approximation)&nbsp; calculation<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;Install<br />
+<br />
+◇ Intel fortran (ifort)<br />
+1. cd $HOME/q-e-qe-6.3/QHA<br />
+2. Compile<br />
+<br />
+◇ gfortran<br />
+1. cd $HOME/q-e-qe-6.3/QHA<br />
+2. rewrite Makefile in Debye, Phonon_DOS and SRC<br />
+　FC = gfortran<br />
+&nbsp; FFLAGS = -O2<br />
+3. Compile<br />
+<br />
+※ Intel fortran であれば、gfortranのようにコンパイルやそのオプションの書き換えは必要ない。<br />
+--------------------------------------------------------------------------------<br />
+■ Usage (Examples)<br />
+<br />
+◇ Si<br />
+1. cd $HOME/q-e-qe-6.3/QHA/Examples<br />
+2. cd Si<br />
+3. Run_Me<br />
+4. gedit Si.QHA.out<br />
+&nbsp;you can get&nbsp;&quot;Zero vibraton energy&quot;<br />
+&nbsp;you can see&nbsp;T (temperature, K), E_internal (Ry/cell), F_vibration (Ry/cell), Specific heat (Cv) and Entropy<br />
+<br />
+※ projected_DOS は各原子に対するphonon DOS<br />
+※ Displacements は各原子に対する変位<br />
+※ PHDOS.out はphonon DOS<br />
+※ Theta_D は温度（K）とデバイ温度、右の二列のデータは私は分からない<br />
+※ Cv は定容比熱。定圧比熱のCpは体積を変化させてphonopyで計算する<br />
+<br />
+※ 他の系で計算する場合は、通常のフォノンの計算（例えば、DFPTでの計算）で *.fc を得て、Edit_Meを書き換える。Edit_Meはフォノン計算をしたときの条件と同じになるように書き換えればよい。DFPTでも*.fcは得られると思う。<br />
+※ Edit_Meは英文を読めば入力パラメータの書き方が分かるようになっている。<br />
+　温度（temperature）の計算範囲では、開始温度、終了温度、温度のステップ（増加量）と指定する。<br />
+　デバイ温度の計算範囲は、ちょっと見た限り私は良く分からない。<br />
+　どちらにおいても、「500」のところを変更して好きな値（例えば、より高温の800や1000）にすれば良いだろう。<br />
+※ phonopyはPWscfのDFPTに対応していないので、この方法で計算すればよいだろう。phonopyが計算できる物性と同じくらい多くの種類の物性値とPDOSが計算できるようになったのは嬉しい。unfoldingをしてくれる機能を見つけていないので、それだけが残念<br />
+--------------------------------------------------------------------------------<br />
+■ QHA_compilig
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/wfqGkWooRus" width="560"></iframe></div>
+<br />
+◇ compiling QHA folder on gfortran<br />
+1. cd<br />
+&nbsp; drag &amp; drop /q-e-qe-6.3/QHA<br />
+2. cd Debye<br />
+3. gedit Makefile<br />
+&nbsp; FC = gfortran<br />
+&nbsp; FFLAGS = -O2<br />
+4. cd ..<br />
+5. cd Phonon_DOS<br />
+6. gedit Makefile<br />
+&nbsp; FC = gfortran<br />
+&nbsp; FFLAGS = -O2<br />
+7. cd ..<br />
+8 cd SRC<br />
+9. gedit Makefile<br />
+&nbsp; FC = gfortran<br />
+10. cd ..<br />
+11. Compile<br />
+--------------------------------------------------------------------------------<br />
+■ Usage (Examples)
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/XAxPJT7LIQk" width="560"></iframe></div>
+<br />
+◇ Si<br />
+&nbsp; Cv, Debye, dis. and Phonon PDOS calculation<br />
+1. cd<br />
+&nbsp; drag &amp; drop /q-e-qe-6.3/QHA<br />
+2. cd Examples<br />
+3. cd Si<br />
+4. Run_Me<br />
+--------------------------------------------------------------------------------<br />
+■ DFPT and QHA calculation for AlAs
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/cyMb_8AtXuA" width="560"></iframe></div>
+<br />
+◇ DFPT and QHA calculation (Example AsAl)<br />
+<br />
+・&nbsp;DFPT (step 1)<br />
+-----<br />
+A1. cd<br />
+&nbsp; drag &amp; drop q-e-qe-6.3<br />
+A2. cd PHonon<br />
+A3. cd examples<br />
+A4. cd example02<br />
+A5. run_example<br />
+&nbsp; in other system case,<br />
+&nbsp; rewrite scf.in, ph.in, q2r.in, matdyn.in,<br />
+&nbsp; plotband.i, gnuplot.tmp, phdos.in and gnuplot1.tmp<br />
+&nbsp; (from cat to EOF area)<br />
+-----<br />
+<br />
+・ QHA (step 2)<br />
+-----<br />
+B1. cd<br />
+&nbsp; drag &amp; drop q-e-qe-6.3<br />
+B2. cd QHA<br />
+B3. cd Examples<br />
+B4. cd AlAs<br />
+B5. copy *.fc form DFPT (e.g. example02)<br />
+B6. gedit Edit_Me<br />
+&nbsp; compare Edit_Me (in AlAs) with run_example (in example02)<br />
+&nbsp; write following parameter values,<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp;&nbsp;&nbsp; SysInfo<br />
+&nbsp;&nbsp;&nbsp; Sysname<br />
+&nbsp;&nbsp;&nbsp; FC_file<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp;&nbsp;&nbsp; ibrav<br />
+&nbsp;&nbsp;&nbsp; atoms<br />
+&nbsp;&nbsp;&nbsp; mass<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp;&nbsp;&nbsp; amass<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp;&nbsp;&nbsp; 500<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+B7. Run_Me<br />
+-----<br />
+<br />
+※ 動画では。B4のところでタイプミスしたので、ドラッグ&amp;ドロップで目的のディレクトリに入った。<br />
+--------------------------------------------------------------------------------

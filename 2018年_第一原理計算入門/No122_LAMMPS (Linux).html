@@ -1,0 +1,519 @@
+　ここでは古典的な分子動力学法であるLAMMPSのセットアップから基本的な計算までを解説する。<br />
+-------------------------------------------------------------------------------<br />
+■ LAMMPS Install (CentOS 6.4, x86_64)<br />
+<br />
+□ git<br />
+1. su<br />
+2. yum install git<br />
+※ which git で git がインストールされたアドレスが分かる。/usr/bin/git となる。<br />
+<br />
+□ OpenMPIやFFTW は左欄の「ライブラリ」やUbuntu や CentOS の記述を参考にしてください。<br />
+<br />
+□ LAMMPS (git install case)<br />
+1.<span style="font-family: monospace;"> </span>git clone<span style="font-family: monospace;"> </span>https://github.com/lammps/lammps lammps<br />
+&nbsp;or git clone<span style="font-family: monospace;"> </span>https://bitbucket.org/akohlmey/lammps lammps<br />
+※ 「Secondary mirrors」で問題なくダウンロードできた。<br />
+<br />
+□ LAMMPS ( I recommend this case)<br />
+1. download: <a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version (<a href="http://lammps.sandia.gov/download.html#tar">http://lammps.sandia.gov/download.html#tar</a>)<br />
+2. Download Now<br />
+3. tar zxvf lammps-stable.tar.gz<br />
+※ ○&nbsp;<a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version -&gt; ● <a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version にして、「Download Now」を押す。<br />
+<br />
+□ Compiling (very simple case)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make mpi<br />
+※ mpirun -np 4 lmp_mpi<br />
+<br />
+□ Compiling (lammps-stable.tar.gz, lammps-30oct14 case)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. gedit $HOME/lam*/src/MAKE/Makefile.mpi<br />
+◇ ifort case<br />
+&nbsp; cp $HOME/lam*/src/MAKE/OPTIONS/Makefile.intel_cpu $HOME/lam*/src/MAKE/Makefile.mpi<br />
+&nbsp; gedit $HOME/lam*/src/MAKE/Makefile.mpi<br />
+&nbsp; CC =&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mpiicpc&nbsp; -&gt; CC =&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mpicxx<br />
+&nbsp; LINK =&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mpiicpc -&gt; LINK =&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;mpicxx<br />
+&nbsp; LMP_INC =&nbsp;&nbsp; &nbsp;-DLAMMPS_GZIP -DLAMMPS_JPEG -&gt; LMP_INC =&nbsp;&nbsp; &nbsp;-DLAMMPS_GZIP<br />
+&nbsp; JPG_LIB =&nbsp;&nbsp; &nbsp;-ljpeg -&gt; JPG_LIB =<br />
+◇ using fftw3 that you compiled<br />
+&nbsp; cp $HOME/lam*/src/MAKE/OPTIONS/Makefile.fftw $HOME/lam*/src/MAKE/Makefile.mpi<br />
+◇ cuda (GPU) case<br />
+&nbsp; cp $HOME/lam*/src/MAKE/OPTIONS/Makefile.kokkos_cuda $HOME/lam*/src/MAKE/Makefile.mpi<br />
+4. make mpi<br />
+※ Please, see $HOME/lam*/src/MAKE/MACHINES&#39;<br />
+※ mpirun -np 4 lmp_mpi &lt; input.file<br />
+<br />
+□ benchmark test<br />
+1. cd lam*<br />
+2. cd src<br />
+3. cp lmp_mpi ../bench<br />
+4. cd ../bench<br />
+5. mpirun -np 4 lmp_mpi &lt; in.lj<br />
+<br />
+□ standard (after compiling meam, etc. see below)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make package-status<br />
+&nbsp; or make ps<br />
+4. make yes-std<br />
+5. make no-gpu<br />
+6. make no-kim<br />
+7. make no-voronoi<br />
+8. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ standard (after compiling KIM API and VORONOI, see below)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make package-status<br />
+&nbsp; or make ps<br />
+4. make yes-std<br />
+5. make no-gpu<br />
+6. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+※ (unsuccess for kim library) make clean-all -&gt; make no-kim -&gt; make mpi<br />
+<br />
+□ standard (after compiling meam, VORONOI, etc. see below)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make package-status<br />
+&nbsp; or make ps<br />
+4. make yes-std<br />
+5. make no-poems<br />
+6. make no-gpu<br />
+7. make no-kim<br />
+8. make makelib<br />
+9. make makeshlib<br />
+10. make stubs<br />
+11. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+-------------------------------------------------------------------------------<br />
+■ libraries and tools<br />
+<br />
+□ libraries
+<ul>
+	<li>atc (libatc.a): atomistic-to-continuum methods</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/atc<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.mpic++
+<ul>
+	<li>linalg (liblinalg.a): set of BLAS and LAPACK routines needed by USER-ATC packag</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/linalg<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran
+<ul>
+	<li>poems (libpoems.a): POEMS rigid-body integration package</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/poems<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.g++<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.icc
+<ul>
+	<li>meam (libmean.a): modified embedded atom method (MEAM) potential</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/meam<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.ifort
+<ul>
+	<li>reax (libreax.a): ReaxFF potential</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/reax<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.ifort
+<ul>
+	<li>qmmm: quantum mechanics/molecular mechanics coupling interface</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/qmmm<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran
+<ul>
+	<li>colvars (libcolvars.a): collective variable module (Metadynamics, ABF and more)</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/colvars<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.g++
+<ul>
+	<li>awpmd (libawpmd.a): antisymmetrized wave packet molecular dynamics, AWPMD package</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/lam*/lib/awpmd<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.mpicc<br />
+※ Please, see $HOME/lam*/lib/README<br />
+<br />
+□ select library<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make package-status<br />
+&nbsp;&nbsp;&nbsp; make no-all<br />
+&nbsp;&nbsp;&nbsp; make yes-meam<br />
+&nbsp;&nbsp;&nbsp; make yes-reax<br />
+4. make package-status<br />
+5. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ tools<br />
+1. cd lam*<br />
+2. cd tools<br />
+3. make<br />
+<br />
+□ KIM API (openkim-api-v1.3.1)<br />
+1. download: <a href="https://openkim.org">https://openkim.org</a> -&gt; <a href="https://openkim.org/kim-api/#download">https://openkim.org/kim-api/#download</a><br />
+&nbsp; &quot;kim-api-vX.X.X.tgz&quot;<br />
+2. tar zxvf openkim-api-v1.3.1.tgz<br />
+3. cd openkim-api-v1.3.1<br />
+4. cp Makefile.KIM_Config.example Makefile.KIM_Config<br />
+5. printf &quot;g/^KIM_DIR/d\\ni\nKIM_DIR = `pwd`\n.\nw\nq\n&quot; | ed Makefile.KIM_Config<br />
+6. gedit Makefile.KIM_Config (intel compiler case)<br />
+&nbsp; KIM_COMPILERSUITE = GCC -&gt; KIM_COMPILERSUITE = INTEL<br />
+7. make<br />
+8. gedit $HOME/lam*/src/KIM/Makefile.lammps<br />
+&nbsp; kim_SYSINC = -I/home/username/openkim-api-v1.3.1/KIM_API<br />
+&nbsp; kim_SYSLIB = -lkim<br />
+&nbsp; kim_SYSPATH = -L/home/username/openkim-api-v1.3.1/KIM_API<br />
+※ tar zxvf openkim-api-v1.4.1.tgz needs gfortran &gt; 4.7.0<br />
+※ (unsuccess for now) make install -&gt; kim_SYSINC = -I/usr/local/lib/openkim-api-v1.3.1/KIM_API, etc.<br />
+<br />
+□ KIM API (openkim-api-v1.7.0) (Intel compiler case, success)<br />
+1. download: <a href="https://openkim.org">https://openkim.org</a> -&gt; <a href="https://openkim.org/kim-api/#download">https://openkim.org/kim-api/#download</a><br />
+&nbsp; &quot;kim-api-vX.X.X.tgz&quot;<br />
+2. tar zxvf openkim-api-v1.7.0.tgz<br />
+3. cd openkim-api-v1.7.0<br />
+4. cp Makefile.KIM_Config.example Makefile.KIM_Config<br />
+5. printf &quot;g/^KIM_DIR/d\\ni\nKIM_DIR = `pwd`\n.\nw\nq\n&quot; | ed Makefile.KIM_Config<br />
+6. gedit Makefile.KIM_Config (intel compiler case)<br />
+&nbsp; KIM_COMPILERSUITE = INTEL<br />
+7. make<br />
+8. gedit $HOME/lam*/src/KIM/Makefile.lammps<br />
+&nbsp; kim_SYSINC = -I/home/username/kim-api-v1.7.0/src<br />
+&nbsp; kim_SYSLIB = -lkim-api-v1.7.0+INTEL.linux.64bit.dynamic-load<br />
+&nbsp; kim_SYSPATH = -L/home/username/kim-api-v1.7.0/src<br />
+<br />
+□ VORONOI (voro++-0.4.6)<br />
+1. download: <a href="http://math.lbl.gov/voro++/download/">http://math.lbl.gov/voro++/download/</a><br />
+2. tar zxvf voro++-0.4.6.tar.gz<br />
+3. cd vor*<br />
+4. gedit config.mk&nbsp;&nbsp;(is not need to change this file for g++ case)<br />
+&nbsp; Intel compiler case: CXX=g++ -&gt; CXX=icpc<br />
+5. make<br />
+6. su<br />
+7. make install<br />
+8. gedit $HOME/lam*/src/VORONOI/Makefile.lammps&nbsp;&nbsp;(is not need to change this file)<br />
+<br />
+□ python ($HOME/lam*/python) (unsuccess)<br />
+1. cd lam*<br />
+2. cd src<br />
+3. make makeshlib<br />
+4. make -f Makefile.shlib mpi<br />
+5. make install-python<br />
+<br />
+[1] <a href="http://piyajk.com/archives/334">http://piyajk.com/archives/334</a><br />
+[2] <a href="http://seesaawiki.jp/qolo/d/LAMMPS%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://seesaawiki.jp/qolo/d/LAMMPS%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a><br />
+[3] <a href="http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?LAMMPS%A4%CE%BE%F0%CA%F3">http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?LAMMPS%A4%CE%BE%F0%CA%F3</a><br />
+[4] <a href="http://lammps.sandia.gov/tutorials/italy14/Compiling_LAMMPS.pdf">http://lammps.sandia.gov/tutorials/italy14/Compiling_LAMMPS.pdf</a><br />
+[5] <a href="http://levlafayette.com/node/121">http://levlafayette.com/node/121</a><br />
+[6] <a href="http://math.digi2.jp/math/lammps/installation/lammps-30Oct14-for-mac-os-x-03Nov2014.pdf">http://math.digi2.jp/math/lammps/installation/lammps-30Oct14-for-mac-os-x-03Nov2014.pdf</a><br />
+[7] <a href="http://qolo.sblo.jp/article/86235047.html">http://qolo.sblo.jp/article/86235047.html</a><br />
+[8] <a href="http://www.kyphd.xyz/?p=1062">http://www.kyphd.xyz/?p=1062</a><br />
+-------------------------------------------------------------------------------<br />
+■ GUI
+<ul>
+	<li>octa (Win, Mac, or Linux)</li>
+</ul>
+
+<div style="margin-left: 20px;">1. download:&nbsp;http://www.octa.jp/index_jp.html<br />
+2. pass word: Please, see &quot;What is OCTA (first line)&quot; at&nbsp;http://www.octa.jp/OCTA/whatsOCTA.html</div>
+
+<div>-------------------------------------------------------------------------------<br />
+■ graphic</div>
+
+<ul>
+	<li>VMD</li>
+</ul>
+
+<div style="margin-left: 20px;">1. download:&nbsp;http://www.ks.uiuc.edu/Research/vmd/&nbsp;-&gt;&nbsp;http://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD&nbsp;-&gt;&nbsp;Version 1.8.6 (2007-04-07) Platforms:&nbsp;-&gt;&nbsp;<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?UserID=&amp;AccessCode=&amp;ArchiveID=920">LINUX_64 OpenGL</a><br />
+※ Username, Password を入力 -&gt; New User Registration になる。<br />
+2. tar zxvf vmd-1.8.6.bin.LINUXAMD64.opengl.tar.gz<br />
+3. cd vmd*<br />
+4. su<br />
+5. ./configure; cd src; make install<br />
+References<br />
+http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf<br />
+http://sstxp.ee.ous.ac.jp/dokuwiki/doku.php?id=software:vmd<br />
+http://fujima.sci.ibaraki.ac.jp/faq/segment-error.html<br />
+<br />
+Run (Macでは上手くいくが、Linuxでは上手くいかない。Version 1.8.6 ではダメか？）<br />
+1. vmd<br />
+2. VMD Main -&gt; File -&gt; New Molecule...&nbsp;<br />
+3. Browse... -&gt;&nbsp;<br />
+4. Enable: All files<br />
+5. case.dump or dump.case<br />
+6. Determine file type: LAMMPS Trajectory -&gt; Load<br />
+7. VMD Main -&gt; speed (center)&nbsp;-&gt; click arrow<br />
+&nbsp;</div>
+
+<ul>
+	<li>Pizza -&gt; Paraview</li>
+</ul>
+
+<div style="margin-left: 20px;">&bull; Pizza</div>
+
+<div style="margin-left: 20px;">1. download:&nbsp;http://sourceforge.net/projects/pizza-py/files/&nbsp;-&gt;&nbsp;<strong style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(85, 85, 85); line-height: 18px; font-family: sans-serif; font-size: 13px; vertical-align: baseline; background-color: transparent;"><a href="http://sourceforge.net/projects/pizza-py/files/latest/download?source=files" style="margin: 0px; padding: 0px; color: rgb(0, 102, 153); text-decoration: none; vertical-align: baseline; background-color: transparent;" title="/pizza-py/pizza-1Oct06/pizza-1Oct06.tar.gz:  released on 2006-09-27 22:03:57 UTC"><span style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; vertical-align: baseline; background-color: transparent;">Download pizza-1Oct06.tar.gz (2.4 MB)</span></a></strong><br />
+2. tar zxvf pizza-1Oct06.tar.gz<br />
+3.&nbsp;ln -s pizza-1Oct06 pizza<br />
+4. cd pizza/src<br />
+5. python -i pizza.py<br />
+※ エラーが出るので下記のモジュールをインストールする。<br />
+&nbsp;</div>
+
+<div style="margin-left: 20px;">&bull; PIL (Image Tk)<br />
+1. download:&nbsp;http://www.pythonware.com/products/pil/&nbsp;-&gt;&nbsp;<a href="http://www.pythonware.com/products/pil/#pil117" style="line-height: normal;">PIL 1.1.7</a>&nbsp;-&gt;&nbsp;<a href="http://effbot.org/downloads/Imaging-1.1.7.tar.gz" style="line-height: normal;"><b>Python Imaging Library 1.1.7 Source Kit</b></a><br />
+2. tar zxvf Imaging-1.1.7.tar.gz<br />
+3. cd Ima*<br />
+4. su<br />
+5. sudo python setup.py install<br />
+<br />
+&bull; Numeric<br />
+1. cd $HOME/pizza/src<br />
+2. geidt dump.py<br />
+3. import Numeric -&gt; import numpy.oldnumeric as Numeric<br />
+※ 書き換えるのは172行目のところ<br />
+<br />
+&bull; gl (OpenGL.Tk)<br />
+私も参考HPの症状と同じになった。対策方法は見つからない。gl.pyとgl.pycをsrcから出す。<br />
+1. cd pizza/src<br />
+2. mv gl.py ../<br />
+3. mv gl.pyc ../<br />
+<br />
+OpenGL (unsuccess for pizza)<br />
+1. su<br />
+2. yum install freeglut<br />
+3. yum install freeglut-devel<br />
+References (install OpenGL)<br />
+Ubuntu case: http://makkareru.hatenablog.com/entry/2013/04/05/013652<br />
+Fedora case: http://blog.livedoor.jp/vine_user/archives/50289862.html<br />
+using: http://ysflight.in.coocan.jp/programming/fssimplewindow/j.html<br />
+<br />
+PyOpenGL (unsuccess for pizza)<br />
+1. download: http://pyopengl.sourceforge.net/documentation/installation.html -&gt; https://pypi.python.org/pypi/PyOpenGL -&gt; <a href="https://pypi.python.org/pypi/PyOpenGL/3.1.0">PyOpenGL&nbsp;3.1.0</a> -&gt; <span style="white-space: nowrap;"><a href="https://pypi.python.org/packages/source/P/PyOpenGL/PyOpenGL-3.1.0.tar.gz#md5=0de021941018d46d91e5a8c11c071693">PyOpenGL-3.1.0.tar.gz</a> </span><br />
+2. tar zxvf PyOpenGL-3.1.0.tar.gz<br />
+3. cd PyOpenGL-3.*<br />
+4. su<br />
+5. python setup.py install<br />
+References<br />
+http://pyopengl.sourceforge.net/documentation/installation.html<br />
+<br />
+Togl (I dropped out)<br />
+1. download: http://togl.sourceforge.net/ -&gt; http://togl.sourceforge.net/download.html -&gt; http://sourceforge.net/projects/togl/files/ -&gt; <strong><a href="http://sourceforge.net/projects/togl/files/latest/download?source=files" title="/Togl/2.0/Togl2.0-8.4-Linux64.tar.gz:  released on 2008-04-22 00:25:33 UTC"><span>Download Togl2.0-8.4-Linux64.tar.gz (46.8 kB)</span></a></strong><br />
+2. tar zxvf Togl2.0-8.4-Linux64.tar.gz<br />
+3. cd Tog*<br />
+途中であきらめた。<br />
+<br />
+PyOpenGL-2.0.2.01 (unsuccess)<br />
+1. download: http://sourceforge.jp/projects/sfnet_pyopengl/downloads/PyOpenGL/2.0.2.01%20%28alpha%29/PyOpenGL-2.0.2.01.tar.gz/ -&gt; <a class="mirror_link" href="http://sourceforge.jp/frs/g_redir.php?m=jaist&amp;f=%2Fpyopengl%2FPyOpenGL%2F2.0.2.01+%28alpha%29%2FPyOpenGL-2.0.2.01.tar.gz" rel="nofollow" target="_brank">PyOpenGL-2.0.2.01.tar.gz</a><br />
+2. cd PyOpenGL-2.*<br />
+3. su<br />
+4. python setup.py install<br />
+※ /usr/bin/ld: cannot find -lXi<br />
+<br />
+&bull; Pmw<br />
+1. download:&nbsp;http://pmw.sourceforge.net&nbsp;-&gt;&nbsp;<a href="http://sourceforge.net/project/showfiles.php?group_id=10743" style="line-height: normal;">Download the latest version of Pmw as tar.gz file (with full documentation)</a>&nbsp;-&gt;&nbsp;<strong style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(85, 85, 85); line-height: 18px; font-family: sans-serif; font-size: 13px; vertical-align: baseline; background-color: transparent;"><a href="http://sourceforge.net/projects/pmw/files/latest/download?source=files" style="margin: 0px; padding: 0px; color: rgb(0, 102, 153); text-decoration: none; vertical-align: baseline; background-color: transparent;" title="/Pmw-2.0.0.tar.gz:  released on 2014-03-29 18:10:07 UTC"><span style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; vertical-align: baseline; background-color: transparent;">Download Pmw-2.0.0.tar.gz (804.1 kB)</span></a></strong><br />
+2.&nbsp;tar zxvf Pmw-2.0.0.tar.gz<br />
+3. cd Pm*<br />
+4. su<br />
+5. python setup.py install<br />
+<br />
+&bull; Pizza (using)&nbsp;<br />
+1. mpirun -np 4 lmp_mpi &lt; in.case<br />
+2. python -i $HOME/pizza/src/pizza.py<br />
+3. d = dump(&quot;dump.case&quot;)<br />
+4. v = vtk(d)<br />
+5. v.many(&quot;case&quot;)<br />
+<br />
+・Paraview<br />
+1. download: http://www.paraview.org/download/<br />
+&nbsp; Version of ParaView: v4.2<br />
+&nbsp; Type of download: Paraview binary Installers<br />
+&nbsp; Perating System: Linux 64-bit<br />
+&nbsp; File to Download: ParaView-4.2.0-Linux-64bit.tar.gz<br />
+2. Download<br />
+3. tar zxvf ParaView-4.2.0-Linux-64bit.tar.gz<br />
+4. cd Para*<br />
+5. $HOME/Para*/bin/paraview<br />
+http://www.paraview.org/Wiki/ParaView:Build_And_Install<br />
+<br />
+Paraview (Run)<br />
+1. File -&gt; Open... -&gt; File name: case..vtk -&gt; files of type: Legacy VTK files(*.vtk) -&gt; OK<br />
+2. Apply<br />
+3. Time: に値を入力する<br />
+※ *.dump, *.eam, *.meam, *.rigid, *.lammps も選択できる。<br />
+&nbsp;</div>
+[1] <a href="http://www.octa.jp/index_jp.html">http://www.octa.jp/index_jp.html</a><br />
+[2] <a href="http://lammps.sandia.gov/prepost.html">http://lammps.sandia.gov/prepost.html</a><br />
+[3] <a href="http://lammps.sandia.gov/viz.html">http://lammps.sandia.gov/viz.html</a><br />
+[4] <a href="http://sourceforge.net/projects/pizza-py/files/">http://sourceforge.net/projects/pizza-py/files/</a><br />
+[5] <a href="http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf">http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ YouTube
+<ul>
+	<li>HPC molecular simulations using LAMMPS: <a href="https://www.youtube.com/watch?v=itoZtYmjV-A">https://www.youtube.com/watch?v=itoZtYmjV-A</a></li>
+</ul>
+-------------------------------------------------------------------------------<br />
+■ tutorial<br />
+[1] http://lammps.sandia.gov/tutorials.html -&gt; <a href="https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials">https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials</a><br />
+[2] <a href="http://lammps.sandia.gov/tutorials/italy14/italy_examples_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_examples_Mar14.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ potentials
+<ul>
+	<li>Interatinuc Potentials Repository Project (NIST):&nbsp;<a href="http://www.ctcms.nist.gov/potentials/">http://www.ctcms.nist.gov/potentials/</a></li>
+	<li>Lammps/potentials: $HOME/Documents/Workspace/LAMMPS/lam*/potentials</li>
+	<li>EAM:</li>
+</ul>
+
+<div style="margin-left: 20px;"><a href="https://sites.google.com/site/eampotentials/Home">https://sites.google.com/site/eampotentials/Home</a></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;">http://www.ctcms.nist.gov/potentials</span></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;">http://cst-www.nrl.navy.mil/ccm6/ap</span></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;">http://enpub.fulton.asu.edu/cms/potentials/main/main.htm</span></div>
+
+<div><br />
+<span style="line-height: 1.5;">[1] </span><a href="http://lammps.sandia.gov/tutorials/italy14/italy_overview_Mar14.pdf" style="line-height: 1.5;">http://lammps.sandia.gov/tutorials/italy14/italy_overview_Mar14.pdf</a></div>
+[2] <a href="http://atsimpotentials.readthedocs.org/en/latest/potentials/eam_tabulation.html">http://atsimpotentials.readthedocs.org/en/latest/potentials/eam_tabulation.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ Input files
+<ul>
+	<li>potential file</li>
+	<li>case.in</li>
+	<li>case.pbs</li>
+</ul>
+□ case.in<br />
+□ case.pbs<br />
+[1] <a href="https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Help">https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Help</a><br />
+[2] <a href="http://lammps.sandia.gov/doc/Section_commands.html">http://lammps.sandia.gov/doc/Section_commands.html</a><br />
+[3] <a href="http://wolverton.northwestern.edu/classes/458/lammps-input">http://wolverton.northwestern.edu/classes/458/lammps-input</a><br />
+-------------------------------------------------------------------------------<br />
+■ using<br />
+<br />
+□ thermal conductivity (kappa)<br />
+&nbsp; The NEMD methods use the formula kappa = dQ * dZ/dTemp where dQ =<br />
+energy flux, and dTemp/dZ = temperature gradient.<br />
+&nbsp; The NEMD systems have 8000 atoms with a box length 2x larger in z, the<br />
+non-equilibrium direction.<br />
+<br />
+◇ Non-equilibrium methods (NEMD case):
+<ul>
+	<li>Direct thermosatting method ($HOME/lam*/examples/KAPPA/in.langevin)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/lam*/src/lmp_mpi &lt; in.langevin<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp; XXX = ave of total in/out energy for 2 regions normalized by # of atoms (Step Temp Thot Tcold hot cold tdiff ave -&gt; ( XXX = (cold - hot)/2 at last step)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; atoms * XXX / (run time in tau) / (x * y) / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp</div>
+
+<ul>
+	<li>Muller-Plathe reverse perturbation method ($HOME/lam*/examples/KAPPA/in.mp)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/lam*/src/lmp_mpi &lt; in.mp<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp; XXX = cumulative delta energy, tallied by fix thermal/conductivity (Step Temp E_pair TotEng 3 tdiff ave&nbsp; -&gt; XXX = value for 3 at last step)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; XXX / (run time in tau) / (x * y) / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp</div>
+
+<ul>
+	<li>Variant of Muller-Plathe reverse perturbation method ($HOME/lam*/examples/KAPPA/in.heat)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/lam*/src/lmp_mpi &lt; in.heat<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; # 2nd equilibration<br />
+&nbsp;&nbsp;&nbsp; fix heat = [fix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hot all heat 1 100.0 region hot] = 100.0<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; (run time in tau) * (fix heat) / (run time in tau) / (x * y) / 2 = (fix heat) / (x * y)&nbsp; / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp<br />
+&nbsp;</div>
+
+<div>◇ Equilibrium method</div>
+
+<ul>
+	<li>Green-Kubo equilibrium method ($HOME/lam*/examples/KAPPA/in.heatflux)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/lam*/src/lmp_mpi &lt; in.heatflux<br />
+tail log.lammps or gedit log.lammps<br />
+running average conductivity: 3.2000083037132</div>
+
+<div>&nbsp;</div>
+
+<div>[1] <a href="http://lammps.sandia.gov/tutorials.html">http://lammps.sandia.gov/tutorials.html</a> -&gt; <a href="http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf</a></div>
+-------------------------------------------------------------------------------<br />
+■ 熱伝導度<br />
+<br />
+　分子動力学法による熱伝導度の計算は、解析的方法とは異なり、取り込む非調和項の次数を決定することなく、またフォノン散乱の独立性を仮定することなく（原子間ポテンシャルを仮定するのみで）熱伝導度を定量的に計算できる。
+<ul>
+	<li>セル内に温度勾配を設ける直接法</li>
+</ul>
+
+<div style="margin-left: 20px;">人工的なフォノン散乱が生じるため過小評価される性質がある。</div>
+
+<ul>
+	<li>Green-Kubo公式を用いた平衡法</li>
+</ul>
+
+<div style="margin-left: 20px;">イオン性固体の場合には熱的な揺動によるノイズが大きく、正確な値を評価する為には非常に長い時間のシミュレーションが必要。</div>
+
+<ul>
+	<li>摂動法</li>
+</ul>
+
+<div style="margin-left: 20px;">上記2つの手法の問題が解決される。</div>
+<br />
+Reference:<br />
+[1] <a href="http://ci.nii.ac.jp/els/110002188027.pdf?id=ART0002441111&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1412212064&amp;cp">http://ci.nii.ac.jp/els/110002188027.pdf?id=ART0002441111&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1412212064&amp;cp</a>=<br />
+[2] <a href="http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/25491_%E8%AB%96%E6%96%87.pdf">http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/25491_%E8%AB%96%E6%96%87.pdf</a><br />
+[3] <a href="http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf">http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf</a><br />
+[4] <a href="http://lammps.sandia.gov/tutorials.html">http://lammps.sandia.gov/tutorials.html</a> -&gt; <a href="http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ その他<br />
+Free Energy: <a href="http://www.utdallas.edu/~son051000/comp/FreeE.pdf">http://www.utdallas.edu/~son051000/comp/FreeE.pdf</a>&nbsp;<br />
+ICME Workshop: Molecular Dynamics witl LAMMPS by Andrew Ferguson: <a href="https://www.youtube.com/watch?v=TTDXJXJJi18">https://www.youtube.com/watch?v=TTDXJXJJi18</a><br />
+Introduction to Molecular Dynamics: <a href="https://www.youtube.com/watch?v=_TiQYNWJwYg">https://www.youtube.com/watch?v=_TiQYNWJwYg</a> , <a href="https://www.youtube.com/watch?v=1y4qDhzmWPw">https://www.youtube.com/watch?v=1y4qDhzmWPw</a><br />
+VMD Tutorial for Beginners: <a href="https://www.youtube.com/watch?v=Fl3hmqCHYU4">https://www.youtube.com/watch?v=Fl3hmqCHYU4</a><br />
+GULP: <a href="https://nanochemistry.curtin.edu.au/gulp/">https://nanochemistry.curtin.edu.au/gulp/</a><br />
+&nbsp; <a href="http://accelrys.co.jp/resource-center/datasheets/Materials-Studio/gulp-jp.pdf">http://accelrys.co.jp/resource-center/datasheets/Materials-Studio/gulp-jp.pdf</a><br />
+GROMOS: <a href="http://www.gromos.net/">http://www.gromos.net/</a><br />
+&nbsp; <a href="https://www.youtube.com/watch?v=vOJsmtFeSGk">https://www.youtube.com/watch?v=vOJsmtFeSGk</a><br />
+&nbsp; <a href="https://www.youtube.com/watch?v=BZNzYt_DUB0">https://www.youtube.com/watch?v=BZNzYt_DUB0</a><br />
+Atomeye: <a href="http://li.mit.edu/Archive/Graphics/A/">http://li.mit.edu/Archive/Graphics/A/</a><br />
+&nbsp; <a href="http://d.hatena.ne.jp/sumoak/20120615/1339769817">http://d.hatena.ne.jp/sumoak/20120615/1339769817</a><br />
+&nbsp; <a href="http://www.fml.t.u-tokyo.ac.jp/~izumi/CMS/AtomEye_Jpn.pdf">http://www.fml.t.u-tokyo.ac.jp/~izumi/CMS/AtomEye_Jpn.pdf</a><br />
+&nbsp; <a href="http://mm4.scitec.kobe-u.ac.jp/~yashiro/edu/atomeye/atomeye.html">http://mm4.scitec.kobe-u.ac.jp/~yashiro/edu/atomeye/atomeye.html</a><br />
+-------------------------------------------------------------------------------<br />
+&nbsp;

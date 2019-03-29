@@ -1,0 +1,73 @@
+　ここでは高速化の方法を解説していく。加えて、FortranとC言語でのチューニング方法も採り上げる。<br />
+--------------------------------------------------------------------------------<br />
+■ コンパイルオプションでの対策<br />
+※ 指定されたCPUに対応したオプションを選定すると計算速度が速くなる。<br />
+◆ 一般的なIntel系CPUの場合<br />
+&nbsp; gfortran -march=nocona -pipe<br />
+&nbsp; gcc -march=nocoa -pipe<br />
+◆ Core i7 の場合<br />
+&nbsp; gfortran -mtune=corei7 -march=corei7 -m64 -O2<br />
+&nbsp; gcc -mtune=corei7 -march=corei7 -m64 -O2<br />
+◆ 一般的な Intel系CPUの場合（下記のオプションでは自動で最適なものを選んでくれる）<br />
+&nbsp; ifort -axSSE4.2,SSE4.1,SSSE3,SSE -mcmodel=large -i-dynamic -O2<br />
+&nbsp;&nbsp;icc -axSSE4.2,SSE4.1,SSSE3,SSE -mcmodel=large -i-dynamic -O2<br />
+※ -m64 や -mcmodel=large -i-dynamic は大規模計算の場合<br />
+※ 最適化のオプションは副作用の少ない -O2 が推奨。ただし、副作用の生じないコードを書けている自信がある場合はより計算速度が速くなると予測される -O3 などでも良い。<br />
+<a href="http://seismon.blog85.fc2.com/blog-entry-80.html">http://seismon.blog85.fc2.com/blog-entry-80.html</a><br />
+--------------------------------------------------------------------------------<br />
+■ 計算速度の高速化1（プログラミングでの対策）<br />
+<br />
+a ) 連続アクセスにする<br />
+FortranとC言語では、2元以上の配列でデータの格納の仕方が異なる。Fortranでは左側の添字が先に動くようにプログラムを作る。一方、C言語では右側の添字が先に動くようにする。まとめると下記のようになる。<br />
+&nbsp;Fortran : a[1][1], a[2][1], a[3][1], &hellip;&hellip;<br />
+&nbsp;C&nbsp;: a[0][0], a[0][1], a[0][2], &hellip;&hellip;<br />
+このようにして、連続アクセスにするだけでも大規模な配列の場合にはかなりの高速化となる。（第一原理計算の計算速度が1割程度早くなった例もある）<br />
+<br />
+b) 高速な演算に換える<br />
+1979年には、各演算で計算コストがどのようになるか報告されている[1]。<br />
+コスト :&nbsp;演算 :　演算の例<br />
+1 : 整数の代入 : I = 10<br />
+1.5 : 整数の加算、減算&nbsp;: I&nbsp;+ J<br />
+2 : 実数の代入 : A = 10.0<br />
+3 : 実数の加算、減算 :&nbsp; A + B<br />
+5: 実数の乗算 :&nbsp; A * B<br />
+6 : 実数から実数への変換 :&nbsp; A = I<br />
+8 : 整数の乗算 : I * J<br />
+9 : 除算 : I / J, A / B<br />
+35 : 整数の指数計算 : I**J<br />
+115 : 実数の指数計算 : A**B, I**B<br />
+以上から分かるように、指数演算は多くの計算コストが必要となることから、二乗の計算では乗算を用いた方が計算が速くなる。また、除算を用いずに乗算で計算するようにするのも高速化となる。<br />
+<br />
+Fortran Tip集 : <a href="http://www.nag-j.co.jp/fortran/FI_18.html">http://www.nag-j.co.jp/fortran/FI_18.html</a><br />
+Fortranコンパイラの速度比較 :<br />
+<a href="http://handasse.blogspot.com/2008/12/fortran.html">http://handasse.blogspot.com/2008/12/fortran.html</a><br />
+Fortranにおけるファイル入出力の高速化 :<br />
+<a href="http://www.cc.u-tokyo.ac.jp/publication/news/VOL8/No4/data_no2_0607.pdf">http://www.cc.u-tokyo.ac.jp/publication/news/VOL8/No4/data_no2_0607.pdf</a><br />
+<br />
+参考文献<br />
+[1] P. Heath and B. Meek, &quot;Guide to Good Programming Practice&quot;, Ellis Horwood, 1979.<br />
+--------------------------------------------------------------------------------<br />
+■ 計算速度の高速化2（デーモンの停止）<br />
+<br />
+Linux OSを用いている場合は、バックで走っているデーモンを停止させることで計算速度を向上させることができる。どのデーモンを停止すればよいかは、下記の参考文献[1, 2]を参照するとよい。ここでは、第一原理計算に有用となるデーモンの停止方法を採り上げる。<br />
+<br />
+a) 停止してもよいサービス<br />
+avahi-daemon : ネットワークの選定を簡略化するためのサービスです。ネットワークの設定が済んでいて変更がないなら、停止しても問題ありません。<br />
+nfslock, rpcgssd, rpcidmapd, rpcibind : Unix系OSでよく使われているNFSによるファイル共有を使う場合には必要になります。<br />
+<br />
+b) 場合によっては停止してもよいサービス<br />
+NetworkManager : ネットワーク接続を保持するためのサービスです。主にデスクトップ用途で無線LAN接続の設定などに使用しますが、networkスクリプトでネットワーク接続の設定をしている場合は停止しても大丈夫です。<br />
+bluetooth : Bluetooth機器を使うためのサービスです。Bluetooth機器を使わない場合は停止しても大丈夫です。<br />
+cups : プリントアウトのためのサーバーです。プリンタを使わない場合は停止しても大丈夫です。<br />
+pcscd : スマートカードのためのサービスです。スマートカードを使わない場合には停止しても大丈夫です。<br />
+sshd : 別のパソコンからログインするためのサーバーです。ログイン情報や操作内容が暗号化されているので、安全な通信を行えますが、別のパソコンからログインして操作する必要がない場合は停止しましょう。<br />
+<br />
+コマンドはCentOSやFedoraで下記のようになる。xxxxに上記のデーモンを入力する。<br />
+/etc/rc.d/init.d/xxxx stop<br />
+<br />
+参考文献<br />
+[1] 辻秀典 著、『できるPRO CentOSサーバー　CentOS 5対応』<br />
+[2] 辻秀典 著、『できるPRO Fedra 12 Linux 完全活用編』<br />
+参考HP : <a href="http://www.kozupon.com/etc/daemon.html">http://www.kozupon.com/etc/daemon.html</a><br />
+<a href="http://www.obenri.com/_minset_cent5/daemon_cent5.html">http://www.obenri.com/_minset_cent5/daemon_cent5.html</a><br />
+--------------------------------------------------------------------------------

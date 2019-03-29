@@ -1,0 +1,988 @@
+　フッ化水素（HF）やフッ化水素酸は非常に危険（触れたり浸透したりした部分を切り落とすことになったり、死亡したりする）なので教員や上司の許可なく用いないこと！（他の試薬も危険です。危険性と取り扱い方法を調べてから使いましょう！）<br />
+------------------------------------------------------------------------------<br />
+■ ICP発光分析装置の感度干渉 [1]<br />
+<br />
+　ICP発光分析装置を用いて分析を行ううえでの基本的な情報として、各元素の大まかな測定感度および干渉についての要点のみをまとめる。下の表に最近のICP発光装置において各元素の測定に広く用いられる測定波長とその次数および検出限界を示す。<br />
+<br />
+・ 最新のICP発光装置の典型的な感度（検出限界値）<br />
+（希酸で元素が溶解するような系での値）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 475.33px;">
+	<tbody>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">元素記号</td>
+			<td style="width: 103.98px; text-align: center;">元素名</td>
+			<td style="width: 132.01px; text-align: center;">波長（nm） [次数]</td>
+			<td style="width: 141.33px; text-align: center;">検出限界（&mu;g/L）</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ag</td>
+			<td style="width: 103.98px; text-align: center;">銀</td>
+			<td style="width: 132.01px; text-align: center;">328.162 [1]</td>
+			<td style="width: 141.33px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Al</td>
+			<td style="width: 103.98px; text-align: center;">アルミニウム</td>
+			<td style="width: 132.01px; text-align: center;">167.079 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">As</td>
+			<td style="width: 103.98px; text-align: center;">ヒ素</td>
+			<td style="width: 132.01px; text-align: center;">189.040 [1]</td>
+			<td style="width: 141.33px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Au</td>
+			<td style="width: 103.98px; text-align: center;">金</td>
+			<td style="width: 132.01px; text-align: center;">242.795 [3]</td>
+			<td style="width: 141.33px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">B</td>
+			<td style="width: 103.98px; text-align: center;">ホウ素</td>
+			<td style="width: 132.01px; text-align: center;">249.773 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ba</td>
+			<td style="width: 103.98px; text-align: center;">バリウム</td>
+			<td style="width: 132.01px; text-align: center;">455.403 [2]</td>
+			<td style="width: 141.33px; text-align: center;">0.05</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Be</td>
+			<td style="width: 103.98px; text-align: center;">ベリリウム</td>
+			<td style="width: 132.01px; text-align: center;">313.042 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.04</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Bi</td>
+			<td style="width: 103.98px; text-align: center;">ビスマス</td>
+			<td style="width: 132.01px; text-align: center;">223.061 [3]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Br</td>
+			<td style="width: 103.98px; text-align: center;">臭素</td>
+			<td style="width: 132.01px; text-align: center;">154.065 [1]</td>
+			<td style="width: 141.33px; text-align: center;">30</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ca</td>
+			<td style="width: 103.98px; text-align: center;">カルシウム</td>
+			<td style="width: 132.01px; text-align: center;">393.366 [2]</td>
+			<td style="width: 141.33px; text-align: center;">0.04</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Cd</td>
+			<td style="width: 103.98px; text-align: center;">カドミウム</td>
+			<td style="width: 132.01px; text-align: center;">214.438 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ce</td>
+			<td style="width: 103.98px; text-align: center;">セリウム</td>
+			<td style="width: 132.01px; text-align: center;">413.765 [2]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Cl</td>
+			<td style="width: 103.98px; text-align: center;">塩素</td>
+			<td style="width: 132.01px; text-align: center;">134.724 [1]</td>
+			<td style="width: 141.33px; text-align: center;">80</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Co</td>
+			<td style="width: 103.98px; text-align: center;">コバルト</td>
+			<td style="width: 132.01px; text-align: center;">228.616 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Cu</td>
+			<td style="width: 103.98px; text-align: center;">銅</td>
+			<td style="width: 132.01px; text-align: center;">324.847 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Cr</td>
+			<td style="width: 103.98px; text-align: center;">クロム</td>
+			<td style="width: 132.01px; text-align: center;">205.552 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Fe</td>
+			<td style="width: 103.98px; text-align: center;">鉄</td>
+			<td style="width: 132.01px; text-align: center;">259.940 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.2</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ga</td>
+			<td style="width: 103.98px; text-align: center;">ガリウム</td>
+			<td style="width: 132.01px; text-align: center;">294.450 [1]</td>
+			<td style="width: 141.33px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Gd</td>
+			<td style="width: 103.98px; text-align: center;">ガドリニウム</td>
+			<td style="width: 132.01px; text-align: center;">342.247 [2]</td>
+			<td style="width: 141.33px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ge</td>
+			<td style="width: 103.98px; text-align: center;">ゲルマニウム</td>
+			<td style="width: 132.01px; text-align: center;">209.426 [3]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Hg</td>
+			<td style="width: 103.98px; text-align: center;">水銀</td>
+			<td style="width: 132.01px; text-align: center;">194.227 [3]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Hf</td>
+			<td style="width: 103.98px; text-align: center;">ハフニウム</td>
+			<td style="width: 132.01px; text-align: center;">277.336 [3]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">K</td>
+			<td style="width: 103.98px; text-align: center;">カリウム</td>
+			<td style="width: 132.01px; text-align: center;">766.940 [1]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">La</td>
+			<td style="width: 103.98px; text-align: center;">ランタン</td>
+			<td style="width: 132.01px; text-align: center;">379.844 [2]</td>
+			<td style="width: 141.33px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Li</td>
+			<td style="width: 103.98px; text-align: center;">リチウム</td>
+			<td style="width: 132.01px; text-align: center;">670.784 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.04</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Mg</td>
+			<td style="width: 103.98px; text-align: center;">マグネシウム</td>
+			<td style="width: 132.01px; text-align: center;">279.553 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.05</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Mn</td>
+			<td style="width: 103.98px; text-align: center;">マンガン</td>
+			<td style="width: 132.01px; text-align: center;">257.610 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Mo</td>
+			<td style="width: 103.98px; text-align: center;">モリブデン</td>
+			<td style="width: 132.01px; text-align: center;">202.630 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Na</td>
+			<td style="width: 103.98px; text-align: center;">ナトリウム</td>
+			<td style="width: 132.01px; text-align: center;">588.995 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.2</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Nb</td>
+			<td style="width: 103.98px; text-align: center;">ニオブ</td>
+			<td style="width: 132.01px; text-align: center;">309.418 [2]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Nd</td>
+			<td style="width: 103.98px; text-align: center;">ネオジム</td>
+			<td style="width: 132.01px; text-align: center;">401.252 [2]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ni</td>
+			<td style="width: 103.98px; text-align: center;">ニッケル</td>
+			<td style="width: 132.01px; text-align: center;">221.647 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">P</td>
+			<td style="width: 103.98px; text-align: center;">リン</td>
+			<td style="width: 132.01px; text-align: center;">178.289 [1]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Pb</td>
+			<td style="width: 103.98px; text-align: center;">鉛</td>
+			<td style="width: 132.01px; text-align: center;">220.353 [3]</td>
+			<td style="width: 141.33px; text-align: center;">2</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Pd</td>
+			<td style="width: 103.98px; text-align: center;">パラジウム</td>
+			<td style="width: 132.01px; text-align: center;">340.458 [2]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Pr</td>
+			<td style="width: 103.98px; text-align: center;">プラセオジム</td>
+			<td style="width: 132.01px; text-align: center;">390.844 [2]</td>
+			<td style="width: 141.33px; text-align: center;">6</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Pt</td>
+			<td style="width: 103.98px; text-align: center;">白金</td>
+			<td style="width: 132.01px; text-align: center;">214.423 [3]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">S</td>
+			<td style="width: 103.98px; text-align: center;">イオウ</td>
+			<td style="width: 132.01px; text-align: center;">180.734 [1]</td>
+			<td style="width: 141.33px; text-align: center;">4</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Sb</td>
+			<td style="width: 103.98px; text-align: center;">アンチモン</td>
+			<td style="width: 132.01px; text-align: center;">206.833 [3]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Se</td>
+			<td style="width: 103.98px; text-align: center;">セレン</td>
+			<td style="width: 132.01px; text-align: center;">196.090 [2]</td>
+			<td style="width: 141.33px; text-align: center;">6</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Si</td>
+			<td style="width: 103.98px; text-align: center;">ケイ素</td>
+			<td style="width: 132.01px; text-align: center;">251.611 [3]</td>
+			<td style="width: 141.33px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Sn</td>
+			<td style="width: 103.98px; text-align: center;">錫</td>
+			<td style="width: 132.01px; text-align: center;">189.989 [2]</td>
+			<td style="width: 141.33px; text-align: center;">6</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ta</td>
+			<td style="width: 103.98px; text-align: center;">タンタル</td>
+			<td style="width: 132.01px; text-align: center;">226.230 [3]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Te</td>
+			<td style="width: 103.98px; text-align: center;">テルル</td>
+			<td style="width: 132.01px; text-align: center;">214.281 [3]</td>
+			<td style="width: 141.33px; text-align: center;">6</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Th</td>
+			<td style="width: 103.98px; text-align: center;">トリウム</td>
+			<td style="width: 132.01px; text-align: center;">401.913 [2]</td>
+			<td style="width: 141.33px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Ti</td>
+			<td style="width: 103.98px; text-align: center;">チタン</td>
+			<td style="width: 132.01px; text-align: center;">334.941 [2]</td>
+			<td style="width: 141.33px; text-align: center;">0.3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Tl</td>
+			<td style="width: 103.98px; text-align: center;">タリウム</td>
+			<td style="width: 132.01px; text-align: center;">190.855 [1]</td>
+			<td style="width: 141.33px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">V</td>
+			<td style="width: 103.98px; text-align: center;">バナジウム</td>
+			<td style="width: 132.01px; text-align: center;">309.401 [1]</td>
+			<td style="width: 141.33px; text-align: center;">0.5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">W</td>
+			<td style="width: 103.98px; text-align: center;">タングステン</td>
+			<td style="width: 132.01px; text-align: center;">207.911 [3]</td>
+			<td style="width: 141.33px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Y</td>
+			<td style="width: 103.98px; text-align: center;">イットリウム</td>
+			<td style="width: 132.01px; text-align: center;">371.030 [2]</td>
+			<td style="width: 141.33px; text-align: center;">0.2</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Zn</td>
+			<td style="width: 103.98px; text-align: center;">亜鉛</td>
+			<td style="width: 132.01px; text-align: center;">213.856 [3]</td>
+			<td style="width: 141.33px; text-align: center;">0.1</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">Zr</td>
+			<td style="width: 103.98px; text-align: center;">ジルコニウム</td>
+			<td style="width: 132.01px; text-align: center;">343.823 [2]</td>
+			<td style="width: 141.33px; text-align: center;">0.5</td>
+		</tr>
+		<tr>
+			<td style="width: 74.41px; text-align: center;">U</td>
+			<td style="width: 103.98px; text-align: center;">ウラン</td>
+			<td style="width: 132.01px; text-align: center;">367.007 [2]</td>
+			<td style="width: 141.33px; text-align: center;">10</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+　この検出下限は各波長におけるブランク強度の3&sigma;に相当する濃度であり、実施に測定して得られた例である。ICP発光分析ではおおむねサブppb～ppbの濃度を検出限界として、0.1%程度の高濃度のものまで測定することができる。さらに高感度な分析法であるICP質量分析法では、ICP発光分析法よりも3桁程度高感度であるが、高濃度の試料の直接測定には適さない場合が多く、両分析法を補完的に適用することで、主成分元素から超微量元素までの分析が可能である。上の表で示した値は、装置の性能を表す検出限界であり、大雑把に言えば、実際にこの濃度の試料を測定した場合には測定精度が50%程度となるような値である。測定精度を20%程度で測定しようとする場合には、検出限界よりも3倍程度高い値を定量の目安（定量限界）と考えたほうがよい。また、これらの値は希酸に元素が溶存するような系を測定した場合の値であり、マトリックスなどを含む実試料の分析では、さまざまな干渉の影響を受けて定量限界はさらに劣化する。実際の分析では、それぞれの試料において定量限界を十分に検討することが必要である。<br />
+　分光分析における干渉は、物理干渉、化学干渉、イオン化干渉、分光干渉に大別される。<br />
+----------<br />
+・ 物理干渉<br />
+　試料の密度や粘性の違いなどにより試料導入量が変化することに起因する物理的な干渉<br />
+・ 化学干渉<br />
+　プラズマ中での元素とその酸化物の解離平衡により測定対象元素の原子存在数が変化することに起因する干渉<br />
+　ICP発光分析では励起源であるプラズマの温度が高いため化学干渉はほとんど問題とならない。現実問題として明確にこの干渉あ現れた例はない。<br />
+・ イオン化干渉<br />
+　プラズマ中にイオン化されやすいマトリックスが導入された際に測定対象元素の原子とイオンの平衡が変化することに起因する干渉<br />
+・ 分光干渉<br />
+　プラズマ中に存在する元素や分子の発光線や連続発光が相互に重なることに起因する干渉<br />
+----------<br />
+このうち、ICP発光分析では、物理干渉と分光干渉が測定に大きな影響を及ぼすことが知られている。分光干渉に関しては、分光器の分解能を高めることが基本的な干渉回避策であるが、現実的には高分解能分光器でも対応が難しい場合も多く、ICP発光分析ではさまざまな工夫を凝らして干渉の除去や回避が行われている。<br />
+------------------------------------------------------------------------------<br />
+■ 分析線波長の選択 [1]<br />
+<br />
+　ICP発光分析でもさまざまな干渉が存在する。なかでも分光干渉を受けた場合には、分析値が本来の値とかけ離れた値となってしまうことが多くあり、最大限の注意を払う必要がある。<br />
+　分光干渉の有無の判断はスペクトルプロファイルの形状から判断するのが原則である。当然、分解能が高い分光器を使用したほうが分光干渉を最小にするのに有利となるが、現在市販の装置に使用されている分光器の分解能はピークの半値幅で4～10 pm程度であり、分光器の分解能のみですべての分光干渉を避けることはできない。このため測定元素ごとの分析波長の選択は分析値の正確さを確保するために重要となる。<br />
+----------<br />
+・ シーケンシャル型装置を用いる場合の波長選択<br />
+　シーケンシャル型の装置では定量分析は測定時間との関係もあり、1測定元素について最適な分析波長1波長で行われることが多い。このため、定量分析を実行する前に最適な波長を検索する作業が必要となる。通常はブランク溶液、標準液、試料溶液のスペクトルを重ね合わせて表示することにより、最適な波長を選択し、合わせてバックグラウンド補正位置などを決定する。現在市販されている装置はコンピュータによって制御されているので、この検討結果は分析条件表などとして保存される。作成した分析条件表を使用して定量分析を実行すれば同一マトリックスの試料は問題なく分析できるはずである。<br />
+・ マルチチャンネル型装置を用いる場合の波長選択<br />
+　現在市販されている半導体検出器搭載のマルチチャンネル型の装置では1測定元素あたり複数個の分析波長を選択し、同時に測定できる。半導体検出器ではピークの強度値だけでなくスペクトル全体を同時に測定するため、定量分析のデータ中にスペクトルプロファイルが完全な形で含まれる。したがって、分析波長の検討は定量分析結果のスペクトルプロファイルを確認することによって行い、最適と思われる波長での測定結果を分析結果として採用する。バックグラウンド補正位置（波長）の設定も測定後に変更・再計算が可能である。<br />
+----------<br />
+　以上述べたようにシーケンシャル型では定量分析を行う前の検討が、マルチチャンネル型では定量分析の結果の取得後の検討が重要である。とはいっても原則は複数の測定波長に対するスペクトルの観察と検討であり、最適な波長を選択するという点で大きな違いがあるわけではない。<br />
+（省略）<br />
+　最適な波長の選択や分光干渉の有無の判断を正確に行うためには、マトリックス成分がわかっていて、その純粋な溶液があることが理想的である。<br />
+（省略）ICP発光分析では存在するほとんどすべての元素は発光し、各元素の測定波長による発光強度比もほぼ維持され、特定の波長だけ強度が極端に増大することはない。したがって波長が異なっても分光干渉を受けない限り、標準液に対する比率はほぼ一定となるはずである。これに対し、分析波長が分光干渉を受ける場合には、標準液に対する比率がほかの波長より高くなる傾向があるので、見かけ上高い結果を与えている波長は使用できないことが多い。むろん近傍線の有無を確認する必要などもある。これらの手順をまとめ。<br />
+1) スペクトルを確認して近接線の有無を確認する<br />
+2) ピーク位置の発光強度から標準液強度と比較した場合の推定濃度値を求める。推定濃度が低い波長を第一候補として選択する<br />
+・ バックグラウンド補正位置の決定<br />
+　標準液のマトリックスと試料のマトリックスが完全に一致していない場合には、バックグラウンド補正を行う必要がある。ICP発光分析では、一般的にピークの裾の強度を測定し、この値をピーク強度から差し引いて正味強度を算出するOff-Peakバックグラウンド補正を行っている。この方法ではバックグラウンドの測定位置によって微妙に測定結果が変化してしまうことがある。また、バックグラウンドの測定位置に分光干渉が発生することあるので十分に注意する。バックグラウンドの測定位置の決定方法には一般則と言えるものはない。濃度既知の標準物質や合成試料を用いてその正しさを検証する。<br />
+・ 分光干渉の事例<br />
+　分光干渉が起きた場合、干渉を与えている元素が何であるかを特定することが一般的には重要である。このようなときに有効なのが波長表である。最近の装置ではこれらの波長表をデータベースとして内臓しているものもあり、こういった装置では比較的簡単な操作で干渉元素を特定できることもある。<br />
+　表（表は省略）には各元素の代表的な測定波長と干渉元素の一例を示す。干渉はマトリックス濃度が高いほど危険性は高くなる。特に金属材料中の微量元素を分析対象とする場合には特段の注意が必要となる。マトリックス成分となったときに分光干渉を多く与える元素としてはTa, Mo, Nb, Zr, ランタニド希土類元素（特にCe, Pr, Nd, Smなど）Fe, Co, Niなどがあげられる。むろんこれ以外の元素でも注意が必要なのは言うまでもない。<br />
+------------------------------------------------------------------------------<br />
+■ 測定データの整理と分析値の提示 [2]<br />
+<br />
+　ICP-AESまたはICP-MSでは、多くの場合、測定された数値の桁数は測定者でカスタマイズできる。提示される数値は、4桁にもい5桁にもなることがあるが、これらの方法では2桁ないし3桁が分析値として報告できる実力値である。分析結果は、加減乗除を経て算出されるが、分析工程において天秤、ピペット、全量フラスコなど多くの器具類を使用するため、器具類の有効数字についても考慮し計算しなければならない。最終的な分析値は、通常JIS Z 8401の数値の丸め方を参考に報告するのがよい。<br />
+------------------------------------------------------------------------------<br />
+■ 金属材料 [2]<br />
+<br />
+　金属の分析では、鉄、非鉄を含めて測定対象が主成分なのか、不純物成分なのか、あるいは極微量成分なのかで前処理を含めた分析手法が異なる。これは測定系での妨害や干渉、そして感度を考慮しなければならないことと、主成分分析では大きな問題にならない分析における汚染が極微量成分分析では大きな問題となるからである。分析では、金属試料を固体のまま直接分析できる手法を除いて、多くの場合溶液化しなければならないため、主成分と測定対象元素を考慮した分解、そして、その後の分離・測定系に最適な方法を適用していく必要がある。<br />
+　金属分析法としては、JISに金属の種類ごとに分析法が規定されており、まずこれらの公定法をトレースしてみることが得策となる。極微量成分分析では、これらの方法をそのまま適用することは汚染対策および感度という点で事実上できないため、各分析機関は独自の前処理法を開発・検討していく必要も求められる。極微量成分の分析では、JISなどの分析法を参考にして分析法を設計し、汚染の低減策と分離・濃縮のアイディアが出せるかが大きなポイントとなる。<br />
+　下の図（図は省略）は一般的な分析法のフローチャートである。一般的な金属分析のフローは、大きく分けて次の3通りが考えられる。<br />
+A) 試料のサンプリング &rarr; 秤量 &rarr; 分解 &rarr; 分離 &rarr; 測定<br />
+B) 試料のサンプリング &rarr; 秤量 &rarr; 分解 &rarr; 測定<br />
+C) 試料のサンプリング &rarr; 秤量 &rarr; 測定<br />
+　どのようなデザインで分析を行うかは、分析の目的と測定系を考慮して決定していくことになる。<br />
+<br />
+◇ 金属試料の性状<br />
+　金属材料の中で鉄鋼材料は、一般に炭素鋼、低合金鋼、ステンレス鋼に大別される。非鉄金属材料は、鉄鋼材料以外のすべてであり純金属とその合金をあわせると膨大な種類となる。鉄鋼材料の大量生産方式に比べると非鉄材料は比較的少量生産方式であるが、純金属でも多様な用途があり、その合金と併せて現在の先端技術において欠かせない機能材料として利用されている。金属試料は、取り扱ううえで溶融状態と固体状態に分けられるが、ここでは固体状態に限って取り扱う。<br />
+<br />
+◇ 金属試料のサンプリングと保管<br />
+　分析試料は、インゴットなどの試料から母集団を代表し分析に適した量を採取しなければならない。試料のサンプリング法は、細かな点について金属の種類によって異なり一概にいえないため、JISに記載されている分析方法通則を参考にするとよい。分析者が入手した試料の履歴については、依頼者または生産者から情報を入手し最適なサンプリング法を選択する必要がある。<br />
+1) 試料の切断、切削など<br />
+　試料は、さまざまな形状のものがあり、そのままでは分析に供することのできない場合が多い。すなわち、試料を秤量するまでに切断・洗浄などの処理を行なう必要がある。試料が分析に適した形になっていないときは、粉砕・破砕・切削・ボーリングなどの方法で分析に適した形態にすることが必要である。固体試料は、偏析している場合が多いので試料を細かくすることによって均一化され、また分解が容易になる。このために使用する器具としては、ハサミ、ペンチ、ドリル、各種の粉砕器（ミル類）などがある。器具については、使用前にエタノールやアセトンなどで洗って表面の油や付着物を取り除き、器具からの汚染に注意する必要がある。なお、微量成分分析の場合には細心の注意が必要である。分析成分と同じ元素でできた器具はできるだけ避けるように努める。例えば、金中の鉄を分析するとき、金を切断するハサミは鉄製ではなくニッケル製やセラミック製のハサミが望ましい。また、ガス分析の際は、試料調製時の酸化、窒化にも注意する。<br />
+2) 試料の洗浄<br />
+　分析試料の大部分は、インゴットなどから切り出されることが多く、入手するまでには比較的長時間清浄とはいえない雰囲気に曝されるので、分析の目的成分が混入している場合がある。したがって、不純物の分析に際しては、混入物を取り除き試料表面を清浄にしておかなければならない。JISの分析方法通則では、エタノールまたはアセトンで洗うことが示されている例が多いが、微量成分分析の場合には酸により清浄な試料に調製する。洗浄の例を下の表に示す。いずれも洗浄後、純水で洗浄し、さらにアセトンで洗浄後乾燥する。<br />
+・試料洗浄法の例（M = mol/dm<sup>3</sup>）
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 368.5px;">
+	<tbody>
+		<tr>
+			<td style="width: 147.47px; text-align: center;">金属</td>
+			<td style="width: 207.5px; text-align: center;">洗浄法</td>
+		</tr>
+		<tr>
+			<td style="width: 147.47px;">Au, Cd, Co, Ga, Pt, Zn</td>
+			<td style="width: 207.5px;">　王水 + 水</td>
+		</tr>
+		<tr>
+			<td style="width: 147.47px;">Mo, Nb, Ta, Ti, Zr</td>
+			<td style="width: 207.5px;">　4 M 硝酸 - 5 M フッ化水素酸</td>
+		</tr>
+		<tr>
+			<td style="width: 147.47px;">In, Ni</td>
+			<td style="width: 207.5px;">　7 M 硝酸</td>
+		</tr>
+		<tr>
+			<td style="width: 147.47px;">Cu</td>
+			<td style="width: 207.5px;">　2 M 硝酸</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+3) 試料の保管<br />
+　試料保管では、保管時の温度、空気、空気中の水分などで変質することに注意しなければならない。保管に使用するものとしては、蓋つきのガラス瓶、プラスチック製の袋などがある。長期間の保管では、変質を防ぐために不活性ガスなどで内部を置換することも必要である。<br />
+<br />
+◇ 金属試料の秤量<br />
+　金属試料の秤量では、サンプリング後適切に保管された試料を化学天秤や電子天秤で秤量する。近年は、電子天秤が普及しており日常的に使用されていることが多い。天秤は、標準分銅により校正されたものを使用する。電子天秤の使用では、天秤の設置場所により重力加速度が変化するので、設置場所で校正を行ったものを使用する。また、電子天秤は、温度補償機能を有しているものが多いが、室内温度が激しい場合やウォーミングアップが行われていないと測定値に影響を与えるので注意する。<br />
+<br />
+◇ 金属試料の前処理<br />
+1) 分解<br />
+　試料の分解においては、金属試料が多種類であることからそれぞれの化学的、物理的性質をよく理解し、試料を完全に分解できる方法を選択することはもちろんのことであり、溶液中の化学形態を把握し、その後の分離条件を考慮した最適な方法を選択する必要がある。微量分析の分解の際に汚染を最小限にするためには、入手しやすい高純度の酸を用いた分解を行うことが望ましいが、試料や定量目的成分により融解操作を伴う場合もある。融剤は、高純度試薬を用いることが肝要であり、あらかじめ試薬中の不純物レベルをチェックし、目的とする定量下限を満足するかを吟味しておく必要がある。<br />
+・ 酸による分解<br />
+・ 融解による分解<br />
+2) 分離<br />
+　分離は、測定系での妨害除去および感度向上のための濃縮を目的として行われる。特に微量不純物の測定を行う場合は、ICP分析での物理、分光干渉を取り除き測定装置の能力を最大限に発揮できるメリットがある。ただし、分離は、前処理の中でも比較的長時間を要し分析の律速段階ともなる。測定系は、干渉抑制および感度向上の進歩も目覚しく、分離した試料溶液を直接測定できる場合も多い。分析コストを勘案し、最適な方法を選択すべきである。<br />
+　分離法としては、溶媒抽出法、イオン交換法、揮散法、共沈法などがある。分離では、定量目的物質に最適な方法を選択することになる。<br />
+・ 溶媒抽出法<br />
+　二つの混ざり合わない溶媒間での溶質の分配を利用する方法である。抽出は、三つのタイプに類別され、イオン対、金属器レートおよび中性分子がある。イオン対の抽出では、6 M塩酸系でFe（Ⅲ）がジエチルエーテルに抽出される例が代表的であり、高純度のFeを評価するにも最適な方法である。この他、フッ化物系、臭化水素酸系、ヨウ化物系などがある。<br />
+・ イオン交換法<br />
+　溶液中のイオンが溶液とイオン交換樹脂の間で分配される現象を利用した方法である。試料溶液の液性と酸濃度およびイオン交換樹脂の種類を適切に選択することにより、単純な操作で多くの元素を分離できる。高純度金属の分析では、汚染が少ないこともあり応用しやすい方法である。ただし、分離時間としては、比較的長時間を要する。<br />
+・ 揮散法<br />
+　蒸気圧の差を利用した分離法である。ケイ素をフッ化物として揮散さｓる方法が代表的である。揮散法では、ハロゲン化物、酸化物、有機物など適切な化合物を生成させることにより、加熱のみで分解後の試料溶液から直接分離できる。ただし、微量成分分析では、揮散分離に長時間を要する場合、雰囲気からの汚染を低減させる対策も必要である。<br />
+・ 共沈法<br />
+　試料溶液に目的元素ととみに沈殿する元素（担体）を添加して適切なpHに調整して沈殿を生成させることにより、マトリックスから分離する方法である。例えば、JIS H 1101では、銅溶液中のBi, As, Sb, Pbなどを水酸化鉄および水酸化ランタンを担体として共沈捕集し銅から分離する。この方法は、試料量を多く採取できることから、比較的低濃度の不純物を測定可能である。<br />
+3) 微量成分分析における前処理<br />
+・ 前処理における汚染<br />
+　（省略）<br />
+・ 雰囲気からの汚染<br />
+　一連の分析操作は、雰囲気からの汚染の変動性が高いため、実験室の塵埃ができるだけ少ない場所で行う必要がある。そのため微量成分分析においては、クラス1000（数値は1立方フィート（ft<sup>3</sup>）の空気中に含まれる0.5&mu;m以上の粒子数を意味する）前後のクリーンルームやクリーンベンチの設置が必要となる。（省略。我々の生活する環境の塵埃量は、場所により異なるもののクラス10<sup>6</sup>から10<sup>7</sup>に相当するといわれている）<br />
+　通常の実験室においては、Na, K, Ca, Feなどが比較的高い濃度で検出された（この他にも、Al, Zn, Mg, Pb, Cr, Ni等も検出される）。また、簡易フード（3～30 &mu;mの粒子除去ができるグラスフィルターを吸気口に取り付けたもの）の設置は、雰囲気からの汚染を低減する効果が認められるが、通常の実験室では微量成分分析を行うことは困難であることが（文献[2]の図の結果から）わかる。<br />
+　クリーンルームにおいては、Na, K, Caなどが検出されており、これらの元素は、人体を発塵源としているものと考えられる。人間からの発塵量（0.3 &mu;m以上）は、服装などにより異なるが、静止状態で10<sup>5</sup>個/min、ゆっくり歩行で5*10<sup>6</sup>個/min、早歩きで10<sup>7</sup>個/minといわれる。したがって、清浄度の高いクリーンルームにおいても人体の発塵からの汚染には注意しなければならない。下の表には、ある試料をクリーンルームで分析した場合のZnの空試験値について、作業人員との関係について調べた例が示されている。<br />
+----------<br />
+　作業人員と汚染量（Zn）の関係（平行分析の結果）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 313.72px;">
+	<tbody>
+		<tr>
+			<td style="width: 97.02px; text-align: center;">作業人員</td>
+			<td style="width: 62.72px; text-align: center;">1人</td>
+			<td style="width: 61.94px; text-align: center;">2人</td>
+			<td style="width: 67.72px; text-align: center;">3人</td>
+		</tr>
+		<tr>
+			<td style="width: 97.02px; text-align: center;">空試験値/&mu;g</td>
+			<td style="width: 62.72px; text-align: center;">0.06 0.06</td>
+			<td style="width: 61.94px; text-align: center;">0.26 0.12</td>
+			<td style="width: 67.72px; text-align: center;">0.22 0.14</td>
+		</tr>
+	</tbody>
+</table>
+----------<br />
+作業人員が少ない方が汚染が少ないことがわかり、人からの汚染を最小限にするためにも1人1部屋が効果的である。<br />
+　試料の分解、マトリックスの分離、濃縮といった操作中の汚染の低減策としては、分析操作を密閉化したり単純化する対策が必要である。分析操作すべてにわたり完全な密閉化をすることは簡単にはできないが、開発した分析法において分析のステップを減らしたり工程ごとで密閉化することは可能である。（省略）分析操作の単純化としては、移し入れなどの操作を少なくして器具との接触の機会を減らすような分析法の設計を行うことが重要である。また分離操作においては、測定での干渉の度合いを勘案して必要以上のマトリックスの分離を避けるといった対策も必要である。<br />
+<br />
+・ 試薬からの汚染<br />
+　（省略）<br />
+　塩酸、硝酸、フッ化水素酸など使用頻度の高い試薬は、市販の高純度試薬を入手することも可能であるが、クリーンルームなど清浄度の高い実験室で非沸騰型蒸留装置により精製することができる。水も同様な方法で精製できるが、水は器具の洗浄から分析操作に至るまで多量に消費することから、超純水製造装置を導入するなどして分析室の環境を整備したほうがよい。<br />
+　（省略）<br />
+　精製した試薬は、保存容器ｋらの汚染にも注意しなければならない。試薬メーカーによれば、試薬を保存するフッ素樹脂製（PFA）容器について金属の溶出試験を行った結果、同じ原料を使用しても容器の製造メーカー間でFe, Cr, Ni, Cuの溶出量が数ng～数十ngの範囲で異なる結果を得ている。また、新品のPFAボトルを硝酸で加熱処理して金属の溶出が減ってきたところで、塩酸で加熱処理を行なったところ、Feの溶出が大きく増え、かつ、ボトル間にばらつきが見られるという報告がある。したがって、保存容器は十分に吟味して使用し、試薬の長期保管を避けることが肝要である。<br />
+・ 器具および装置からの汚染<br />
+　微量成分分析では、石英製またはフッ素樹脂製の器具を使用するのが一般的である。必要に応じて白金器具の使用もあるが、フッ素樹脂製器具と同様にある程度の不純物を含んでいる場合があり、Al, Fe, Ca, Mgは比較的高い濃度で検出されているので注意する必要がある。<br />
+　器具は、試料の種類ごとに専用化することが望ましい。これは、マトリックス元素が測定対象元素となった場合に器具の洗浄を相当念入りに行う必要があるためで、器具洗浄に長時間を費やすより得策である。<br />
+　洗浄法は、器具の使用履歴などにより異なってくるものと考えられるが、使用中の器具洗浄法の一例として、6 M塩酸で1日加熱（これは省いてもよい）、硝酸で3日以上加熱、0.1 M硝酸で3日以上加熱後、乾燥が必要のないものは、0.01 M硝酸中に保存する。<br />
+　器具の形状については、単純なものを用いたほうがよい。形状が複雑な器具は、洗浄しにくく器具からの汚染を生じやすい。例えば、分液ロートのコックなどすり合わせ部からの汚染は問題となることが多いため、石英製試薬管を用いて抽出操作を行うこともある。最近の装置の高感度化を考えれば、少量の試料採取で目的とする定量下限を満足できる場合も多く、開発した分析法においても可能なかぎり器具のダウンサイジングを行って汚染を最小限にする工夫も必要である。<br />
+　測定装置の設置場所は、クリーンルームなどの空気清浄度の高い場所を選び、測定操作中の雰囲気からの汚染防止に留意する必要がある。ICP-MSでは、試料導入系からの汚染には注意する必要がある。メモリー効果を避けるため、インターフェースまで（根無頼ザーからスキマーコーン）のユニットをいくつか用意して頻?に交換する使い方などが有効である。<br />
+・ 分析技術<br />
+　微量成分分析では、以上のような汚染を最小限にする対策を行うだけでなく、分析者自身の技術・技能の向上が必要である。下の表には、熟練者と未熟練者が同じ方法・設備を用いて分析したときの空試験値の比較を示した。<br />
+----------<br />
+　熟練者と未熟練者の空試験の差
+<table border="1" cellpadding="1" cellspacing="1" style="width: 232.86px;">
+	<tbody>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">&nbsp;</td>
+			<td style="width: 76.28px; text-align: center;">空試験値</td>
+			<td style="width: 83.86px; text-align: center;">空試験値</td>
+		</tr>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">元素</td>
+			<td style="width: 76.28px; text-align: center;">熟練者</td>
+			<td style="width: 83.86px; text-align: center;">未熟練者</td>
+		</tr>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">Cu/ng</td>
+			<td style="width: 76.28px; text-align: center;">4, 2</td>
+			<td style="width: 83.86px; text-align: center;">48, 12</td>
+		</tr>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">Zn/ng</td>
+			<td style="width: 76.28px; text-align: center;">4, 3</td>
+			<td style="width: 83.86px; text-align: center;">93, 82</td>
+		</tr>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">U/pg</td>
+			<td style="width: 76.28px; text-align: center;">0.2</td>
+			<td style="width: 83.86px; text-align: center;">1.5</td>
+		</tr>
+		<tr>
+			<td style="width: 54.29px; text-align: center;">Th/pg</td>
+			<td style="width: 76.28px; text-align: center;">1.9</td>
+			<td style="width: 83.86px; text-align: center;">12.1</td>
+		</tr>
+	</tbody>
+</table>
+　熟練者： 分析経験30年<br />
+　未熟練者： 分析経験1年<br />
+----------<br />
+熟練者と未熟練者の注意力の差がこのような空試験値の差を引き起こす。例えば、分析用手袋を装着した後超純水で洗わなかった、ビーカーを直接試料台に置いた、ビーカーの口を持った、マスクをしなかったなどそれぞれの行動の違いが最終的には大きな差を示すものと考えられる。<br />
+　下の表は、一般の化学分析を20年以上経験した分析者をクリーンルーム内での作業、超微量成分分析についての教育と実習した後、実試料の分析を2～3回日ごとに行った際の空試験値の変化を示したもので、技能の向上とともに空試験値が低下していることがわかる。<br />
+・ 習熟度による空試験値の低下（数値は10回の平均〔ng/2.5mL〕）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 298.94px;">
+	<tbody>
+		<tr>
+			<td style="width: 44.72px; text-align: center;">&nbsp;</td>
+			<td style="width: 75.86px; text-align: center;">分析回数</td>
+			<td style="width: 77.47px; text-align: center;">分析回数</td>
+			<td style="width: 76.94px; text-align: center;">分析回数</td>
+		</tr>
+		<tr>
+			<td style="width: 44.72px; text-align: center;">元素</td>
+			<td style="width: 75.86px; text-align: center;">1～10回</td>
+			<td style="width: 77.47px; text-align: center;">10～20回</td>
+			<td style="width: 76.94px; text-align: center;">20～30回</td>
+		</tr>
+		<tr>
+			<td style="width: 44.72px; text-align: center;">Na</td>
+			<td style="width: 75.86px; text-align: center;">2.8</td>
+			<td style="width: 77.47px; text-align: center;">1.0</td>
+			<td style="width: 76.94px; text-align: center;">&lt; 0.2</td>
+		</tr>
+		<tr>
+			<td style="width: 44.72px; text-align: center;">K</td>
+			<td style="width: 75.86px; text-align: center;">1.7</td>
+			<td style="width: 77.47px; text-align: center;">0.4</td>
+			<td style="width: 76.94px; text-align: center;">&lt; 0.4</td>
+		</tr>
+	</tbody>
+</table>
+　このように、分析者自身の注意力は、経験とともに培われるものであるが、分析値の精確さを左右する大きな要因でもある。<br />
+<br />
+◇ 標準液の調製<br />
+　標準溶液の調製は、相対分析を行うICP分析法において分析値を大きく左右する。可能な限りトレーサビリティの取れた標準物質を用いて調製するのが望ましい。JCSS標章の付いた標準液は、トレーサビリティ体系と濃度決定法が示されており、実用標準物質として多くの分析現場で使用されている。<br />
+　標準物質の入手の困難な元素については、各実験室で調製する必要がある。金属標準溶液の調製では、少なくとも純度99,9%以上の金属を入手し、試料溶液の液性を考慮した分解法を適用する。また、マトリックスマッチング用の金属は、分析する試料を考慮した分析試料よりも純度の高い物質を準備する。<br />
+　希釈で用いる水は、JIS K 0557で規定された水を参考に分析目的に適したものを使用する。主成分分析と微量成分分析では、適用する水のランクも考慮する必要がある。例えば主成分分析で必要以上に純度の高い水を用いることは、分析コストの増大に繋がるだけである。<br />
+　標準溶液の調製では、入手した個々の元素標準液を相互に混合した場合の沈殿生成に注意する。混合ができない場合は、混合できるグループごとの標準溶液を調製する必要もある。<br />
+<br />
+◇ ICP-AESおよびICP-MSを用いた測定<br />
+・ 測定法<br />
+&nbsp;ICP分析を行う際は、物理干渉および分光干渉を補正するうえで試料溶液と標準溶液の酸濃度およびマトリックス濃度を合わせたマトリックスマッチング法を適用したほうがよい。ただし、金属中の不純物を測定する際の主成分マッチング用金属は、分析する試料よりも高純度な物質を入手しなければならないので注意する。入手が困難な場合は、標準添加法を採用するなどの対策を行う。<br />
+　ICP分析法における測定法は、図（図は省略）に示すように検量線法、内標準法および標準添加法がある。それぞれの測定法での注意点を述べる。なお、ICP-MSでは、高マトリックスを含む試料溶液の導入は干渉の問題が大きいので、希釈またはマトリックス分離を適用する場合が多い。（省略）ここでは、ICP-AESの測定上の注意点を中心に示す。<br />
+a) 検量線法<br />
+　標準溶液で作成した検量線溶液を調製し、発光強度と濃度の関係線を作成して未知試料の元素濃度を求める手法である。この方法では、マトリックスマッチングを行わない場合と行う場合がある。<br />
+　マトリックスマッチングを行わない場合は、干渉がないか、干渉が定量目的成分に対して無視できる場合に適用される。目安としては、金属マトリックスが総濃度で1000 ppm以下の試料溶液に適用する。ただし、酸濃度はマッチングさせておく必要がある。<br />
+　マトリックスマッチングを行う場合は、試料溶液中のマトリックス成分が既知の場合に適用できる。特に分光干渉が大きく通常のバックグラウンド補正だけでは分光干渉の補正が完全にできない場合には、この方法が必須になる。高融点金属（W, Ta, Zr, Tiなど）や鉄などの分光干渉を起こしやすい試料の分析では、マトリックスマッチングにより干渉の抑制が有効な場合が多い。なお、酸濃度はマッチングさせておく。<br />
+b) 内標準法<br />
+　内標準法（強度比法）は、試料溶液および検量線作成用標準液のすべてに同一濃度で特定の元素を添加し、これを内標準元素として測定対象元素の発光強度と内標準元素の発光強度の比を求め、発光強度比と濃度の関係線を作成し定量値を得る手法である。内標準元素に求められる条件は、次のとおりである。<br />
+1) 試料中に含有されていないこと<br />
+2) 分光干渉を生じないこと<br />
+3) 測定元素に類似した分光特性を持つこと（イオン線、原子線、励起エネルギーが類似）<br />
+　内標準法の使用目的の第一は物理干渉の補正である。注意点として補正は信号成分に対してのみ有効であるので、分析対象成分の濃度が低い場合には必ずバックグラウンド補正をする、内標準元素の添加量はS/B比で少なくとも20以上になるようにする。内標準として多用される元素としては、Y, In, Teなどがある。内標準の第二の目的は繰り返し性の向上である。この場合は分析対象元素と内標準元素のプラズマ中での挙動が一致していることが望ましく、内標準元素およびその波長の選択が重要となる。この方法は、主成分を精確に分析したい場合などに適用し、濃度域は繰り返し性が確保しやすい領域で行う必要がある。<br />
+c) 標準添加法<br />
+　標準添加法は、マトリックスによる干渉が除去できない場合に適用する。試料溶液に測定対象元素の濃度とほぼ同じレベルの濃度で3点程度濃度を変えて標準溶液を添加し、標準溶液を添加していない試料溶液を含めて発光強度を測定する。発光強度と添加濃度の関係線を求め、得られた関係線を外挿してX軸（濃度軸）切片の値から資料中の濃度を求める。ICP-AESでは、バックグラウンドの発光強度を必ず持つために、標準添加法を適用するには必ずバックグラウンド補正を行わなければならない。測定濃度が微量の場合にはバックグラウンド補正の誤差が測定値に与える影響を評価するなどの注意は必須である。標準添加法の注意点をまとめると次のとおりである。<br />
+1) 測定濃度範囲での直線性が確保されていること<br />
+2) 測定波長での分光干渉やバックグラウンドの変動がないこと<br />
+3) 標準溶液の添加で沈殿などを生じないこと<br />
+4) バックグラウンド補正を必ず行うこと<br />
+・ 融解した試料の測定<br />
+　（省略）<br />
+・ 最小二乗法で作成された検量線から計算された測定値について<br />
+　検量線の作成では、測定信号（y）と濃度（x）との間に直線関係があり、検量線用標準液の濃度を考慮せず測定信号（y）のみに誤差があると仮定して、各校正店を通る最良の直製を計算する方法として最小二乗法が用いられる。この方法では、y方向での実験点と計算点との間の偏差（y残差）を最小にする線を求める。すなわち、残差平方和を最小にする直線を求めることになる。この直線は必ず重心（x, y）を通り、直線の傾斜bと切片aはそれぞれ次式で与えられる。<br />
+　<img src="data:image/png;base64,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" /><br />
+　<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFwAAAAdCAYAAAAn6wuRAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAKqSURBVGhD7Zk7ctswEIaXOYvkQqMTgCdI3Lhymw4s4yZdbpCGKuUubSo1Jm/gE2RShLwLsgAWfACghHEIDJ3BN4ORiRG5uz8WuxRcCAQyyfhAn5lEZMETkwVPTBbcoYdTWUBR6FG1NL0SuWku0VZQfAJoxBk+0tQabFJwmVmhxHFfZvkeno4NiLMr97/4t8mSIp0MHXHo4PcrADvs6XqOz4+lYZNruI/2As/A4PF+RxPrcUPwFipqHkV5wo1mriv8KzL9CUppa9a1qKGt3cks2sszpvcj3O8m8RclnHr6gsLji9dnC0x7L13N5H4QrO7MhOCcC4ZzwBs9F4mGow1pRw5WC/IA6UTN5DwX8TxoBFd2GcZKdjB2FbfxxVyrwYSSaDp3RR+v4EZs+z4jxNLzzH0hY1jIRZbExXk+XYSVscUldOwkrqHhFEuDvoYlgSs4GfQJoo3GzK453iDRP35zsd6OTho3Rn/sJiksH6/g1PD2+xO8AodvX+yG0cOfX/jBDuDv3euzP+DSW7QvAF8d30b6U0k19/Yo50UZ6eHlJ76e8Afr3Xsp9h3cHeXnEe5C+ysJr7mS3eP2iZddNk5pQx+itg+K37VBdd1jXPsYnuFzwZWovpvDts66NRyhRdZxog9YK2OyVE6WRcXaXWOJC40HmQm+9GDTLO1GEp3JrupqHpxFb0XFacd4tafJxaFkDNx6ngyfPlw/jDfjlkoR+IAJFgOL2Sg1OsaZsB6x1aJIcSflbWyo8hnuDpnivKUM2awGZTsZni9GAozdVDtrEqcerniDPtOMpkT1fd9m46eF+EuvAjh7DpDeKxs+S5E/nS/w8B+JLdmU4Oodejiz+QzwY92z6E2gCstGGPvH7Vr4Xsn/8UlMPg9PTBY8MVnwxGTBE5MFTwrAXzdYBZGUiBgNAAAAAElFTkSuQmCC" /><br />
+（省略）したがって、この検量線は、試料の測定信号が回帰線の重心において最も精密な結果を与える。重心から遠ざかるほど濃度の信頼限界は広くなることがわかり、特に低濃度域での濃度に対する影響の度合いは大きくなる。すなわち、この検量線で低濃度域を測定した場合には、調製した検量線溶液濃度と計算される測定濃度の乖離が大きくなることに注意が必要である。<br />
+　多くの分析では、相対標準偏差がある程度の濃度範囲でほぼ一定である。すなわち、絶対誤差はすべての濃度で同じ値ではなく、濃度とともに増加する。回帰計算において、誤差が分析種の濃度にほぼ比例するという場合において、校正線上のいろいろな点での誤差を誤差棒で表すと（図は省略）、濃度が増すほど棒は大きくなる。したがって、誤差棒のより小さい点に、より大きい重みがかかるように回帰線を計算する必要がある。<br />
+　重み付け計算の方法としては、各点にそれぞれの分散s<sup>2</sup>に逆比例する重みをかける。個々の点をn組の（x1, y1）、（x2, y2）、...で表し、対応する標準偏差をs1, s2で表すと、それぞれの点の重みw1, w2, ...は次式で与えられる。<br />
+　<img src="data:image/png;base64,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" /><br />
+重み付け回帰線の傾斜と切片は、次式で与えられる。<br />
+　<img src="data:image/png;base64,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" /><br />
+　<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAGsAAAAhCAYAAADefFUGAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAMsSURBVGhD7Zo9ltowEMfHOQtQ8DiBfYKEhmrb7UQZmu1ygzR2yXZpU9FgnyCcII9i7bsooy8sWza2wV/a6PeenkGL0Wj+MxoJr0cRcFjBF3l1WIATyyKcWBbhxLIIJ5ZFOLEeIoMo8MDzRNsnsntg3Nb9GZI9eN8AYnqEr7JrSGYpFovWtkxnPsuuJRw2MdBjUaqh7J/lMsgm0LZNRwrXC4C/Xsr3OVV21rUuuJr1KMkJ3sGHl+1CdgxPg1gJ7GUR9YIIE1+93+OrgckiCNhYheotC/tYFf0Oyekd0+oFtgvNR14AUSY/UGVr5Zw6gKlYSRr6LEepH6aqgxJCqI99QGLRNxAxwTHYOKz5IZUWICkNfdZP6LAWNBFTwm3z0R/SFvQP9w2zV73mzafchXrfg/6rFEsJVf5O5cS6sdR9bdotCGqpEwb7iS7gBOjCyC6G8I8UR3TIucY4l+cDzBRLGlLlTGHMeFFtTJ6B9pFGoYdFBKXpB9M/KuBKc3gQo2YlPw9wAQI/vpcLZwYff/Hir8Hc/wzDco1hUyI5A7wZtrUniwJZX5pbkBcgjQzOv3EbSHals1WVfxaw2rDrBlZ97EOkaII7WZWn9HhRbSzHaMPA5bIZ6SPTDlnHSn8Qc+gns4picUGqvrhdOvdbsxAZIGL+aAOu/VNTtwRWi4K1KsRlu+18GyiIVRcFamNRLqiDo2VzGpJeovNZuC/KfqhZkWLcPccq0HtYEioySx9UDETiPMVHdZpyAk566k2FQPihIEpJKC4mE0ZbsvONB7vfzMq2GLvBWxbxJrNMGlQUcgTUuGNn9D00X4hWdP7Nf3omySSoWj67YIg1LzASa5cPVUdzB6is58t57X1z4DHbZywWm1BTJLLP6Nmv6i0r7LPJxRq62z6rH3L5Gej2G+QrwK+m50TsHHOBa8rOh1fYYEFhZNEHrJ44i41Dd9tnJVbKnjlcDrD0TrCjf6CNv/nB+bSH0+4IO96TwBm2ozwMfJbOtssMsxZ9jc93XXbQ1fZP8DxrA+GbikUfwnScR+z90M129z8YFvEJMuv/wYllEU4si3BiWYQTyxoA/gEQH2Vtbd1l7gAAAABJRU5ErkJggg==" /><br />
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABoAAAAgCAYAAAAMq2gFAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAFGSURBVEhL7ZYxcoMwEEW/chaHIsMJ5BNk3LjKEUSZKqdII0pfIRWN4QacIOPC4i6yVkgDBqzY0iRNeI3QwvBZ9n8Gpg34A57c+uusQtGsQtHMcsQYc0f3cW8M/01gO5RbBlY0bm/oSmzNa72qPQK9uiuU1NyU6RTAtVSTmqj76x5kLuSphb0xl7WWXOi42w/cFtLKCIy6SiRghg2ynNYc2cYWkgi67vnFTAbfOHf9PoWAUIMj3iDQ4uuYrnRTqCkqZO87UFPtSblqAm5Wllo4+xrHeRfbGsh1tRZ2jWMuNM2Ks3kv5vGOHGpKCutOJfli1gL2/gkSGwfax8DkbiEPQdeFIfu3oPE1nyfkoq925dnMdp6HBCFn/6pAtT9gbyvk1B1e7fEE11kU43kMplkmqSP6asgP//wcUh2WuzGsf6rRrEKRABfr/7txLC7CrAAAAABJRU5ErkJggg==" />と<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABsAAAAhCAYAAAAoNdCeAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAF7SURBVEhL7ZY9doJAFIXvZC1iwXEFsIIcG3aQbii1cRU0Q2m67IBGZwVhBRwKYC+TNzCJQkbECccmfAU8nsL1/VyOTBF4Ei/m/BQWsVlYxGbB6jPGmInu84hN/6OpmxQhtZPF0iQ0DdJwmJuOVUzG9EBvj1xfFBVJDHjP4CSnZ2anViIAzZOrs8l0UJ4LOj7OyMxWWG/0uUB1XVpzQulv6dPHGV0Qzw9MdEGegMPORWrSNuYoaxPKGNl651SVZlRs1fXRQJtYRTi+mksHJlSmF7IhJyTA9g9KxLiY56OdWpkgwQGOo/phUmV54TsvRQ9jgRucFed9l1347cNacCXIgLUIFCz33TH10NBD9HeCVoAUVAAT012iC3r02tikIViY0t5JxOwN+DhifCW08TtryKTEhnfZJq2wtrS9J1aX9DbM9/BYhkh9TlqI1vgZ+S86ImozEids7T/SVOjM9XzO3PYuvTBpG8fZQBy+6wgg6tutX/5+z8IiNgPAFw/K5jwrp3heAAAAAElFTkSuQmCC" />は、重み付き重心の座標を表し、重み付き回帰線は必ずこの点を通る。重み付き回帰線で求められる濃度の信頼限界の一般形は（図は省略）、濃度の低い試料に対する信頼限界は重み付けない回帰計算値より小さく、濃い濃度では大きい。この結果は、重み付けない検量線で濃度を測定する場合は、重心で最も精密な分析が可能になること、および低濃度域での信頼限界が大きくなることに注意が必要である。<br />
+------------------------------------------------------------------------------<br />
+■ セラミックス [2]<br />
+<br />
+◇ ファインセラミックス試料の性状<br />
+　セラミックスの分析では、主要な構成元素の化学組成の分析と、添加成分や不純物などを対象とする微量成分分析に分けられる。組成分析は（表は省略、JISによる）標準化がなされている。<br />
+　一方、窒化ケイ素や炭化ケイ素などのいわゆるファインセラミックスでは微量の無機成分が硬度、耐熱性、電気的特性などの機能特性を制御する上で重要である。微量の無機成分は原料として添加したもの以外に、原料由来の不純物として、また、製造プロセスにおける調合・粉砕行程での容器やボールミルからの磨耗による混入や、さらに焼結工程での炉材など周辺環境からの混入がある。材料開発や工程管理から要求される定量下限は、半導体材料や高純度金属など他先端材料に比較して、やや高い場合が多く、半導体材料などの分析および汚染管理が応用できる。一方、実際の分析では、セラミックス材料の難分解性および汚染・混入対策以外にマトリックスの残留による影響が問題となることが多い。<br />
+<br />
+◇ セラミックス試料の分解方法<br />
+　セラミックスは、硬度が高く粉砕しにくく、溶融点、化学的耐性が高いため分解・溶液化が困難な試料が多い。したがって、分解できる手法は限られている。前処理は、<br />
+1) 試料の粉砕<br />
+2) 粉末試料の分解・溶液化<br />
+3) マトリックスの除去、濃縮<br />
+の手順による。<br />
+<br />
+◇ セラミックス試料の粉砕<br />
+　セラミックス試料の粉砕には<br />
+1) 高硬度材料の乳鉢による粉砕<br />
+2) 振動ミル、アトライターなどによる機械粉砕<br />
+が用いられる。乳鉢および粉砕容器の材料には、炭化ホウ素（ボロンカーバイド）、炭化タングステン（タングステンカーバイド）、酸化アルミニウム（アルミナ）、メノウ（天然）、セラミックスなどが用いられるが、セラミックス試料の硬度が高いため、乳鉢の材料が粉砕時に割れて試料に混入する。下の表に示すように、乳鉢の材料には主成分以外に焼結や硬度の増強効果のあるコバルト、クロムなどの微量成分が含まれており、それが汚染となるので注意する。<br />
+<br />
+・セラミックスの粉砕器具に用いる材料と混入元素
+<table border="1" cellpadding="1" cellspacing="1" style="width: 262.29px;">
+	<tbody>
+		<tr>
+			<td style="width: 131.67px; text-align: center;">粉砕器具材料</td>
+			<td style="width: 117.29px; text-align: center;">混入元素</td>
+		</tr>
+		<tr>
+			<td style="width: 131.67px;">　炭化ホウ素</td>
+			<td style="width: 117.29px;">　B, Co, Zn</td>
+		</tr>
+		<tr>
+			<td style="width: 131.67px;">　酸化アルミニウム</td>
+			<td style="width: 117.29px;">　Al, Cr, Fe, Si</td>
+		</tr>
+		<tr>
+			<td style="width: 131.67px;">　天然メノウ</td>
+			<td style="width: 117.29px;">　Si, Al, Fe, Cu</td>
+		</tr>
+		<tr>
+			<td style="width: 131.67px;">　炭化タングステン</td>
+			<td style="width: 117.29px;">　W, Co, Ti, Ta, Fe</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+また、粉砕時間に比例し汚染は増加する。メノウは天然材料であり、個々に硬度や不純物混入の挙動が異なる場合がある。<br />
+　一方、粉砕後の分解操作では、試料の粒度が小さいほど分解しやすく残渣も残りにくい。ふるい分けにより細かいものを試料とする場合があるが、粉砕しにくく粒度が大きい部分と不純物組成が異なることがあるので、ふるい分けで残ったものも再度粉砕して混合して試料とするとよい。<br />
+<br />
+◇ セラミックス試料の分解・溶液化<br />
+　セラミック試料の分解・溶液化には以下の方法が用いられる（下の表を参照）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 556.2px;">
+	<tbody>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">試料</td>
+			<td style="width: 83.54px; text-align: center;">酸分解</td>
+			<td style="width: 183.47px; text-align: center;">加圧酸分解</td>
+			<td style="width: 135.52px; text-align: center;">融解</td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">Si<sub>3</sub>N<sub>4</sub></td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">* HF+HNO<sub>3</sub>（160℃, 16h）<br />
+			* H<sub>2</sub>SO<sub>4</sub>+HF（160℃, 16h）</td>
+			<td style="width: 135.52px; text-align: center;">* NaCO<sub>3</sub><br />
+			* Na<sub>2</sub>CO<sub>3</sub>+H<sub>3</sub>BO<sub>3</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">SiC</td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">* HF+HNO<sub>3</sub>（160℃, 16h）<br />
+			HNO<sub>3</sub>+HClO<sub>4</sub>+HF（180℃, 3h）</td>
+			<td style="width: 135.52px; text-align: center;">* NaCO<sub>3</sub><br />
+			* NaCO<sub>3</sub>+H<sub>3</sub>BO<sub>3</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">AlN</td>
+			<td style="width: 83.54px; text-align: center;">NaOH（4%）</td>
+			<td style="width: 183.47px; text-align: center;">H<sub>2</sub>SO<sub>4</sub>（200℃, 16h）<br />
+			HCl（200℃, 3h）</td>
+			<td style="width: 135.52px; text-align: center;">―</td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">Al<sub>2</sub>O<sub>3</sub></td>
+			<td style="width: 83.54px; text-align: center;">H<sub>2</sub>SO<sub>4</sub>+H<sub>3</sub>PO<sub>4</sub></td>
+			<td style="width: 183.47px; text-align: center;">H<sub>2</sub>SO<sub>4</sub>（220℃, 16h）<br />
+			NaOH （10%）（220℃, 16h）</td>
+			<td style="width: 135.52px; text-align: center;">Na<sub>2</sub>CO<sub>3</sub>+K<sub>2</sub>CO<sub>3</sub><br />
+			Na(Li)<sub>2</sub>CO<sub>3</sub>+H<sub>3</sub>BO<sub>3</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">TiB</td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">―</td>
+			<td style="width: 135.52px; text-align: center;">Na<sub>2</sub>CO<sub>3</sub>+KNO<sub>3</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">ZrO<sub>2</sub></td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">H<sub>2</sub>SO<sub>4</sub>（230℃, 16h）<br />
+			H<sub>2</sub>SO<sub>4</sub>+HF（150℃, 11h）</td>
+			<td style="width: 135.52px; text-align: center;">(NH<sub>4</sub>)<sub>2</sub>SO<sub>4</sub>+H<sub>2</sub>SO<sub>4</sub><br />
+			Na<sub>2</sub>CO<sub>3</sub>+Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">ZrB<sub>2</sub></td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">H<sub>2</sub>SO<sub>4</sub>+HNO<sub>3</sub>（150℃, 3h）</td>
+			<td style="width: 135.52px; text-align: center;">―</td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">BN</td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">HNO<sub>3</sub>+HF（150℃, 11h）</td>
+			<td style="width: 135.52px; text-align: center;">Na<sub>2</sub>CO<sub>3</sub>+Na<sub>2</sub>O<sub>2</sub><br />
+			Na<sub>2</sub>CO<sub>3</sub>+Na<sub>2</sub>B<sub>4</sub>O<sub>7</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">PZT（圧電体）</td>
+			<td style="width: 83.54px; text-align: center;">HF+HNO<sub>3</sub></td>
+			<td style="width: 183.47px; text-align: center;">―</td>
+			<td style="width: 135.52px; text-align: center;">Na<sub>2</sub>CO<sub>3</sub>+H<sub>3</sub>BO<sub>3</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">ZnOバリスター</td>
+			<td style="width: 83.54px; text-align: center;">HCl</td>
+			<td style="width: 183.47px; text-align: center;">―</td>
+			<td style="width: 135.52px; text-align: center;">―</td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">Y系酸化物超伝導体</td>
+			<td style="width: 83.54px; text-align: center;">HCl</td>
+			<td style="width: 183.47px; text-align: center;">―</td>
+			<td style="width: 135.52px; text-align: center;">―</td>
+		</tr>
+		<tr>
+			<td style="width: 123.86px; text-align: center;">SrTiO<sub>3</sub></td>
+			<td style="width: 83.54px; text-align: center;">―</td>
+			<td style="width: 183.47px; text-align: center;">HCl+HF（200℃, 4h）</td>
+			<td style="width: 135.52px; text-align: center;">―</td>
+		</tr>
+	</tbody>
+</table>
+----------<br />
+・ 酸分解法<br />
+　ブランクは小さいが分解力が小さく難分解性のセラミックは分解できない<br />
+・ 加圧酸分解法<br />
+　酸分解法と同様にブランクは低く、融解法ほどではないが分解力もあるので広く用いられている<br />
+・ 融解法<br />
+　白金るつぼ、白金皿などに試料を取り融剤を加え、高温に加熱して融解させた後に水抽出する方法で、分解力が強く、試料量が多く取れる特長がある。しかし、添加する量が試料量に比較して多く、融剤からの不純物、白金皿などからの溶出のため、ブランクが高く、微量成分分析には適用しにくいことが多い<br />
+----------<br />
+　ファインセラミックス試料の微量成分分析では、主に酸分解法と加圧酸分解法が用いられている。<br />
+<br />
+◇ ファインセラミックスの微量成分分析<br />
+・ ファインセラミックス試料の融解法による分解<br />
+　難溶解性の試料でも、溶融法により分解できる場合が多い。試料を粉砕後、白金るつぼ（JIS H 6201 化学分析用白金るつぼ20番（20 mL）など）または白金皿（JIS H 6202 化学分析用白金皿50番（50 mL）～100番（100 mL）など）に0.1～0.5 g秤り取る。試料量が多いと分解が遅くなり失敗しやすいので少なめに取る。試料の3から5倍量の融剤を加え、プラスチック製または白金製のスパチュラでよく混合する。混合が十分でないと壁面への這い上がりや突沸が起こりやすいので注意する。混合後に、一部を取り置きした融剤をふりかける方法もある。十分混合した後、ガスバーナー、電気炉などで徐々に温度を上げる。温度を上げ水分を十分に蒸発させてから、さらに温度を上げ1000℃程度で融解し分解する。還元炎に触れたり、酸素が入らない還元性状態にならないように注意する。融剤には比較的不純物が少ない炭酸ナトリウム、炭酸ナトリウム+ホウ酸系が用いられるがブランク値は酸分解に比較し多く、融剤量により変化するため添加量は正確に管理する。冷却後固化した融剤は、硝酸、塩酸などの酸で融解して定容し試料液とする。SiO<sub>2</sub>、添加元素が多い試料では経時変化による沈殿生成があり、試料液はなるべく速やかに測定を行う。主成分の組成分析には、主にICP-AESが、不純物にはICP-AESおよびICP-MSが用いられる。<br />
+　これらの分析法では、融剤に含まれる多量のNaなどアルカリ金属元素の測定に与える影響が大きく、測定対象濃度を考慮した適切な希釈、マトリックスマッチング、内部標準添加が必要である。最近、Na塩よりプラズマ温度、マトリックス効果などの影響が比較的少ないLi塩のメタホウ酸リチウム（LiBO<sub>2</sub>）や四ホウ酸リチウム（LiB<sub>4</sub>O<sub>7</sub>）との混合系が用いられる。また、融剤とぬれにくく熱膨張率が異なり、分解後冷却固化した融剤が剥がれやすい白金・金白金（Au： 5%）るつぼも使用されはじめている。<br />
+・ ファインセラミックス試料の加圧酸分解<br />
+　試料を粉砕後、加圧分解容器のフッ素樹製内容器に秤り取り、下の表に示す分解用酸を加え、静かにかき混ぜ分散させる。<br />
+----------<br />
+　ファインセラミックス試料の加圧分解例
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 118.5px; text-align: center;">試料</td>
+			<td style="width: 238.38px; text-align: center;">分解に用いる酸</td>
+			<td style="width: 123.61px; text-align: center;">分解条件</td>
+		</tr>
+		<tr>
+			<td style="width: 118.5px;">窒化ケイ素</td>
+			<td style="width: 238.38px;">・ HF 10 mL + HNO<sub>3</sub> 5 mL</td>
+			<td style="width: 123.61px;">160℃, 1夜間</td>
+		</tr>
+		<tr>
+			<td style="width: 118.5px;">炭化ケイ素</td>
+			<td style="width: 238.38px;">・ HF 10 mL + HNO<sub>3</sub>&nbsp;2 mL<br />
+			　（酸抽出法）</td>
+			<td style="width: 123.61px;">170℃, 16時間</td>
+		</tr>
+		<tr>
+			<td style="width: 118.5px;">窒化アルミニウム</td>
+			<td style="width: 238.38px;">・ HCl 10 mL<br />
+			・ H<sub>2</sub>SO<sub>4</sub> 5 mL + HNO<sub>3</sub> 5 mL</td>
+			<td style="width: 123.61px;">200℃, 3時間<br />
+			150℃, 16時間</td>
+		</tr>
+		<tr>
+			<td style="width: 118.5px;">酸化アルミニウム</td>
+			<td style="width: 238.38px;">・ H<sub>2</sub>SO<sub>4</sub> (1+4) 15 mL<br />
+			・ KOH（30%）</td>
+			<td style="width: 123.61px;">220℃, 1夜間<br />
+			220℃, 4時間</td>
+		</tr>
+		<tr>
+			<td style="width: 118.5px;">酸化ジルコニウム</td>
+			<td style="width: 238.38px;">・ H<sub>2</sub>SO<sub>4</sub> (1+1) 5 mL<br />
+			・ HF (1+1) 2.5 mL + HCl 2.5 mL</td>
+			<td style="width: 123.61px;">230℃, 16時間<br />
+			150℃, 5時間</td>
+		</tr>
+	</tbody>
+</table>
+* 試料0.5 gを秤量した場合の分解時間<br />
+----------<br />
+このときにフッ素樹脂容器の壁に這い上がらないように注意し、蓋をしてステンレス製外容器に入れ規定トルクで締め付け密閉する。あらかじめ表に示す温度に設定した乾燥機、オーブン中に入れ分解する。容器の移動は斜めになってフッ素樹脂容器の蓋の接合部に酸が付着すると滲み出しステンレス容器の腐食および汚染量の増加を生じるので注意する。ブランクが高い場合は二重のフッ素樹脂容器を用い、間には純水を少量入れるとよい。<br />
+　冷却後、マトリックス除去、濃縮を行い、ICP-AESおよびICP-MSで測定する。分析値の信頼性の確認には、（社）日本セラミックス協会などで作成された標準試料を使用する。<br />
+・ セラミックス薄膜の酸分解<br />
+　セラミックス薄膜、高誘電体薄膜、超伝導材料は、試料量が少ないため、組成分析にも高感度測定が利用される。粒度が十分に小さいセラミックス試料と同じように酸分解法、加圧酸分解法による分解が可能である。下の表に示す条件で組成が測定できる。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 155.28px; text-align: center;">分析試料</td>
+			<td style="width: 87.33px; text-align: center;">試料量/枚</td>
+			<td style="width: 96.07px; text-align: center;">前処理</td>
+			<td style="width: 135.92px; text-align: center;">測定成分</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">Sr(Ba)TiO<sub>3</sub></td>
+			<td style="width: 87.33px;">1 ～ 20 mg</td>
+			<td style="width: 96.07px;">HCl+H<sub>2</sub>O<sub>2</sub></td>
+			<td style="width: 135.92px;">Sr, Ba, Ti</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">PbZr(T)O<sub>3</sub></td>
+			<td style="width: 87.33px;">1 ～ 20 mg</td>
+			<td style="width: 96.07px;">HCl+H<sub>2</sub>O<sub>2</sub></td>
+			<td style="width: 135.92px;">Pb, Zr, Ti</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">MoSi/WSi</td>
+			<td style="width: 87.33px;">1 ～ 5 mg</td>
+			<td style="width: 96.07px;">HNO<sub>3</sub>+HF</td>
+			<td style="width: 135.92px;">Mo, Si, W</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">SiO<sub>2</sub></td>
+			<td style="width: 87.33px;">&nbsp;～ 1 mg</td>
+			<td style="width: 96.07px;">HF</td>
+			<td style="width: 135.92px;">Si, Fe, Cu</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">Si<sub>3</sub>N<sub>4</sub></td>
+			<td style="width: 87.33px;">&nbsp;～ 1 mg</td>
+			<td style="width: 96.07px;">HCl+HF</td>
+			<td style="width: 135.92px;">Si, Fe, Cu</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">酸化物超伝導体（Y系）</td>
+			<td style="width: 87.33px;">&nbsp;5 ～ 20 mg</td>
+			<td style="width: 96.07px;">HCl</td>
+			<td style="width: 135.92px;">Y, Ba, Cu, Fe</td>
+		</tr>
+		<tr>
+			<td style="width: 155.28px;">酸化物超伝導体（Bi系）</td>
+			<td style="width: 87.33px;">&nbsp;5 ～ 20 mg</td>
+			<td style="width: 96.07px;">HNO<sub>3</sub></td>
+			<td style="width: 135.92px;">Bi, Sr, Pb, Ca, Cu, Fe</td>
+		</tr>
+	</tbody>
+</table>
+------------------------------------------------------------------------------<br />
+■ 有機材料 [1]<br />
+<br />
+◇ 有機材料分析の流れ<br />
+　有機溶媒を分析する流れに関しても（鉄鋼材料の分解と）ほぼ同様である。まず、サンプリングであるが、有機材料は鉄鋼、非鉄、およびセラミックス材料とは大きく異なり、比較的簡単にハサミやニッパーを使い試料を切ることができる。推奨される方法は粉砕である。有機物の粉砕は、試料を液体窒素で冷却して固めたものをステンレス製の棒で激しく叩くことにより粉末化する「フリーザーミル」を用いる。ただし、ステンレスを使用するため、その主成分である鉄、ニッケル、およびクロムがコンタミネーションする場合がある。特にRoHS指令に関する分析で全クロムを測定する場合には注意を要する。<br />
+　洗浄に関しては、溶剤で洗浄を行うと有機材料の表面が変質してしまうことがあるため、原則的にはサンプリング後の試料の洗浄は行わない。どうしても洗浄の必要がある場合は、希塩酸と純水、あるいは純水のみで洗浄を行い、真空乾燥を行う。<br />
+　分解に関しては、有機材料の場合、他の材料とは異なり、有機物を前処理の過程で完全に系内から除去することを目的とする。この有機物の除去とは、有機物を酸化させて二酸化炭素にして気化させることを示す。有機物を酸化させる方法は乾式、すなわち熱をかけて有機物を燃やす方法と、湿式、すなわち硝酸などの酸化剤により酸化させる方法の二通りがある。IEC 62321でも対象とする成分、および材料によってこれらを使い分けている。<br />
+<br />
+◇ 乾式灰化法<br />
+　乾式灰化法とは、試料を秤量した後、バーナーやマッフル炉で試料を直接燃やし、残存した灰分を酸やアルカリにより分解して分析を行う方法である。本分解法はフッ素系の樹脂をはじめ、すべての有機物で適用が可能である。いきなり高熱をかけて燃焼させると、炎が上がり、試料が舞ってしまう場合があるため、低温から徐々に温度を上げるようにする。乾式灰化による分解は手軽ではあるが、温度によっては測定を目的とする成分自体も揮発をしてしまう危険性があることに注意する。RoHS指令で既成されている成分では、水銀と臭素はほぼすべてが、カドミウムや鉛も化学形態によっては一部が揮発する。本指令の規制対象成分以外でも、ヒ素、セレン、ホウ素、スズ、モリブデンなど、多くの元素が乾式で燃焼を行うと揮発をしてしまう場合が多い。ただし、このような揮発は温度により制御をすることも可能で、IEC 62321では、550℃で有機物を乾式灰化し、灰分を硝酸で分解し、鉛、およびカドミウムを測定することが規格化されている。ハロゲンを含む有機物はこの温度では完全に燃焼することができないため、適用することはできない。<br />
+　乾式灰化により揮発してしまう元素が多いことを述べたが、この性質を逆に利用して、分析を目的とする成分を気化させて、その後、溶液に吸収することにより分離、溶液化をすることもよく行われる。水銀、臭素をはじめとするハロゲン、イオウは酸素雰囲気中で、高温で燃焼をさせるとほぼすべてが揮発する。石英管やアルミナ管を酸素で充填し、この中で試料を燃焼させて、揮発した成分のガスをキャリアガスで搬送し、吸収液に吸収させる（環状炉燃焼法）か、酸素を充填したフラスコに吸収液と試料を入れて密閉し、試料を引火させて燃焼した後に攪拌する（フラスコ燃焼法）ことにより、水銀、ハロゲン、イオウを定量的に回収することが可能である。水銀の場合は、過マンガン酸カリウムと硝酸、硫酸の混合溶液を吸収液として使う。さらに、水銀は蒸気のまま、原子吸光分析装置のセルに搬送し、原子吸光法により直接定量分析を行うことも可能である。ハロゲンとイオウの場合は希アルカリ性とした過酸化水素水を吸収液とする。過酸化水素水は燃焼によってBr<sub>2</sub>, Cl<sub>2</sub>となったものをHBr, HClに還元する役割と、同じく燃焼によってSO2, SO3となったものをSO4に酸化する役割を担う。最近は環状炉燃焼法がよく行われる場合が多いが、試料にアルカリ金属やアルカリ土類金属が多量に含まれると、ハロゲン化アルカリ塩や硫酸塩となってしまい、完全に気化させることができない場合がある。このような場合はフラスコ燃焼法を行う。<br />
+<br />
+◇ 湿式による分解<br />
+A) 開放系酸分解法<br />
+　開放系酸分解法は有機物の分解方法としては最も一般的に利用されている。試料を秤量した後、硫酸と硝酸（場合によっては過酸化水素水を加える）を加えて加熱することにより分解を行う。硫酸は大変強い脱水作用があるため、有機物が触れると脱水、すなわちHとOが取られることにより炭化される。この作用は硫酸の沸点付近で激しく起こる。そこに硫酸を滴下すると、炭酸が二酸化炭素に酸化され、除去される。この操作を繰り返し行うことにより、最終的に有機物を除去することができる。過酸化水素水は炭化物の酸化により硝酸が還元されて亜硝酸などとなったものを再び硝酸に酸化するために加えられる場合があるが、通常の分解では硫酸と硝酸のみで適用が可能である。RoHS指定により規制されている成分の中ではカドミウム、および全クロムがこの方法で容易に分解をすることが可能である。水銀は開放系酸分解を行うと揮発してしまうことがあるため、還流器をつけて、揮発した水銀が逃げないようにする必要がある。<br />
+　開放系酸分解を迅速に行うため、次の三つのことに留意する必要がある。一つ目は加熱する温度をできるだけ高くすることである。なるべく高い温度で硫酸を加熱し、硫酸の蒸気が濃厚な白煙となって多量に発生する程度まで加熱を行うことにより脱水反応が迅速に進む。以前はよくバーナーの直火を加熱に用いていたが、最近は電気によるホットプレートを使う場合が多い。このとき、あまり温度が高くならないホットプレートは使用せず、高温になるものを用意する。二つ目は、硫酸による脱水処理を十分に行なうことである。これが不十分のうちに硝酸を加えてしまうと、その後の脱水反応が起こりにくくなり、結果的に多くの時間がかかってしまう場合がある。試料を硫酸により加熱すると、炭化により試料全体が黒くなるが、これがペースト状となって全体的に広がるまでは硝酸を加えずに、炭化を進めることが望ましい。三つ目は、硝酸をなるべく熱いうちに加えることである。硫酸の白煙が発生しているうちに加えることが最も望ましいが、これにより激しく反応が起こり、溶液が突沸する場合も少なくない。これを避けるためには、スポイトやピペットを用いて、硝酸を1滴ずつ容器の壁を伝えて加えるとよい。どうしても突沸を防げないような場合は、試料を熱源から離して、ある程度冷めてから硝酸を加え、再び加熱する操作を繰り返すとよい。<br />
+　開放系酸分解において最も大きな問題となるのが、硫酸と接することにより難溶性塩を作ってしまう成分は測定ができないということである。この塩を作る成分として、鉛、バリウム、ストロンチウム、多量のカルシウムがあげられるが、特に鉛はRoHS指令で規制対象となっている成分である。硫酸鉛の水への溶解度積（難溶性塩の飽和溶液中における陽イオン濃度と陰イオン濃度の積。この値を超えると沈殿が生じ始める）は1.7*10<sup>-8</sup>程度であり、酸の中ではこれよりも高いとされている。したがって、鉛イオンと硫酸イオンの量の積が溶解度積以下であれば、難溶性塩の生成を回避できることがある。ただし、硫酸鉛が生成する条件にはさまざまな因子が絡むため、溶解度積だけを考えればよいということではない。特に、硫酸鉛は他の沈殿物と共沈しやすいので、共存する成分によっては、溶解度積以下のイオン量であっても難溶性塩の生成による回収率の低下を招く。硫酸バリウム（BaSO<sub>4</sub>）とは最もよく共沈する。IEC 62321でも共沈に関連することが触れられており、Baの硫酸塩、Agの塩化物、Alの酸化物、およびAlの酸化物水和物は沈殿を生じ、鉛だけではなく他の成分も含め、共沈を起こすことがあると記載されている。したがって、鉛を分析するときには、マイクロ波加熱酸分解法を利用するか、このような場合はIEC 62321に一部規格化されている次のような方法を用いるとよい。<br />
+　試料をるつぼやビーカーに秤量した後、硫酸を加える。IEC 62321では5～15 mL加えるとあるが、その後の操作を考慮し、硫酸はできるだけ少量のほうが望ましい。ホットプレート上で加熱を行うことにより、試料が硫酸により脱水され炭化するが、これと同時に試料に含まれる鉛は硫酸鉛となる。硫酸鉛の融点は1150～1200℃と極めて高いため、試料が炭化し、硫酸がほとんど揮発した後であれば、ある程度高い温度で灰化を行っても鉛の損失はない（ただし、温度を550℃以上に上げる場合、カドミウムは一部が気化してしまうため、一緒に測定することはできない）。炭化物を灰化した後の灰分には、バリウム、ストロンチウム、多量のカルシウムが共存していなければ、硫酸鉛以外の硫酸や硫酸塩は含まれないため、残った硫酸鉛は無機酸で容易に分解することができる。IEC 62321ではこの分解に硝酸を使用している。なお、本方法を行っても、バリウム、ストロンチウム、多量のカルシウムが共存していると鉛が共沈する場合がある。このような場合には上記の操作を白金製容器を用いて行い、配分を無機酸ではなくアルカリ溶融することにより溶液化することができる。酸化ケイ素化合物が含まれる場合はフッ化水素酸で分解し、加熱乾固する（場合によって硫酸を数滴加えて加熱乾固する）ことにより、酸化ケイ素、およびフッ化水素酸自身を除去することができ、乾固した試料を無機酸により分解を行うことができる。<br />
+B) マイクロ波加熱酸分解法<br />
+　マイクロ波加熱酸分解法は一般的な加熱方法と異なり、分析対象試料にエネルギーを与えることにより、試料そのものがそのエネルギーを吸収して発熱体となり、自ら分解をしていく方法である。（省略）開放系酸分解よりも手軽であることから、マイクロ波加熱酸分解の適用も飛躍的に伸びた。IEC 62321でもマイクロ波加熱酸分解法が一部規格化されている。マイクロ波加熱酸分解の利点として、迅速に分解が終了すること、密閉系での分解であるためコンタミネーションの影響を最小にできること、同じく密閉系での分解であるため揮発性の成分を損失なく回収することができることの3点がまずあげられる。さらにもう一つの大きなメリットとして、硫酸を使うことなく、硝酸のみ、あるいは硝酸とフッ化水素酸との混酸で迅速に有機物の分解を行うことができる場合があることがあげられる。これは硫酸と接すると難溶性塩を作ってしまう鉛の分析には極めて有効である。一方、デメリットも多く、容器の耐性の問題から長時間の分解ができず、完全分解に至らない場合があること、開放系酸分解と比較して一度に分解できる試料の量が少ないこと、利点としてあげた硫酸を使わないで分解ができるという特徴はすべての有機物に適用されるわけではないこと、場合によっては爆発を起こす危険性があることなどがあげられる（ただし爆発の危険性に関しては、最近の装置は内圧をモニターして異常の場合には安全弁が開き、爆発を回避する安全対策がなされている）。特に硫酸を使わないと完全分解に達しないケースは多々あり、このような場合は試料の量を減らして再度分解をするか、残さをアルカリ融解法で処理を行なう必要がある。あるいは硝酸と過塩素酸との混酸により分解を行う場合もある。ただし、過塩素酸単独で有機物と高温で接すると爆発的な反応が起こる。この反応による爆発は過去に度々大事故の原因となっており、安全装置などではまったく回避ができないほど大きなものであるため十分に注意をしなければならない。硝酸が共存していればこの反応を抑えることができるため、マイクロ波加熱酸分解時にか塩素酸を使用する場合は、必ず硝酸を入れなければならない。<br />
+<br />
+◇ ICP-AESによる有機物の直接測定<br />
+（省略）ICP-AESは水溶液だけではなく、有機溶媒を直接導入することができるといったメリットを持つ。したがって、オイルなどに含まれる金属成分は、オイルを溶媒で希釈して直接ICP-AESに導入して分析を行うことができる。ここで注意をしなければならない点は、溶媒により希釈したときに、分析を対象とする成分が必ず溶解をしていなければならないということである。したがって、磨耗粉などの固形成分や溶媒による希釈により沈殿をしてしまう成分は分析ができない。<br />
+　希釈溶媒は一般に高沸点のものが利用される場合が多く、ケロシン、トルエン、キシレン、4-メチル-2-ペンタノン（MIBK）などがよく利用されているが、最近の装置はかなり低沸点のものでも測定ができるようになってきた。（省略）その他の有機溶媒でも、ケロシンやキシレンで希釈することにより、同様の分析ができることが多い。標準物質には有機金属錯体などの有機化合物を利用するが、SCP SCIENCE社から販売されているコノスタンシリーズは、油中にさまざまな元素が既知濃度で入っており、さらに基油も販売されているため、これを用いることにより、簡単に標準溶液を作成することができる。<br />
+　有機溶媒をICP-AESに導入するときの条件は水溶液を導入するときとは異なるために注意する。高周波出力は水溶液のときはおおむね1.3 kW程度であるが、これよりも大きくしないと安定性が悪くなる。一般には2 kW程度まで上げる必要がある。このように出力を大きくすることによりプラズマが安定化しくにくくなるため、冷却ガスを増量して安定化をはかる必要があある。逆に水溶液よりも吸込み量が多くなることから、キャリアガスは少なめに設定する。プラズマガスの調整は最も重要であり、トーチ管に有機溶媒の煤がたまらないように設定を行う必要がある。<br />
+------------------------------------------------------------------------------<br />
+■ Q&amp;A [2]<br />
+<br />
+◇ 装置<br />
+----------<br />
+Q1. ICP発光分析装置は原子吸光分装置（AAS）とどう違うのでしょうか。<br />
+A1. どちらの装置も、特定の波長における原子の発光と吸光という表裏の現象を利用した原子スペクトル分析装置であるわけですが、装置の特徴としての顕著な相違点を挙げてみましょう。<br />
+・ 原子吸光分析装置： 光源があり、そのパルス点灯により吸光陵は変調増幅されます。すなわち光源と同期した原子吸収の信号だけを選択するため、測定は比較的容易です。また光源からの1本の輝線を選択できる程度の分解能を有する分光器を備えていればよいので、廉価な分光系が構築できます。一方、低い原子化温度により共存成分による干渉が比較的顕著であることや、原則として単元素ごとの測定になるので多元素定量のパフォーマンスが悪い、などの短所があります。<br />
+・ ICP発光分析装置： 測定元素からの発光スペクトルがそのまま検出器に導かれるため、原子発光以外のさまざまな光（分子発光、散乱光など）が検出器で増幅されることになります。すなわち、検出信号の質が原子吸光分析とは異なります。また、高温のアルゴンプラズマ（5000～6000 K）からの膨大な発光線から1本の原子発光スペクトルを選択しなければならないため、原子吸光よりもはるかに高分解能の分光器が必要です。さらに、スペクトルの同定に基礎知識を要するなど、使用者が克服すべき技術的要素はありますが、多元素迅速または同時定量が可能であることも相まって、今では代表的な原子スペクトル分析装置として位置づけられているのは本文で示したとおりです。<br />
+　以上より、両装置とも使用経験がないか、ルーティン分析を主体とするラボならまず原子吸光分析（特にフレーム原子吸光分析）をお勧めします。そのうえで、ICP発光分析装置へと進んでいくのが自然であるとお考えください。ICP発光分析装置は、本文で言及しているように装置のハードウェに特性が深く依存しているため、その特性と使用目的を把握したうえでの機種選択が不可欠であると考えられます。<br />
+<br />
+Q2.. ICP-ASEやICP-MSはどんなところに設置すればよいのでしょうか。<br />
+A2. できる限り塵埃や振動の少ない実験室に設置すべきであるのは機器分析装置に共通ですが、特にICP発光分析装置は&plusmn;1℃程度似室温が維持された部屋に設置することが望ましいと思います。温度変化によって分光器にわずかな歪みが生じ、ベースラインの変動や波長描画の再現性低下をもたらすからです。分光器を恒温槽に入れたタイプの機種もありますが、やはり連続運転できる空調はあったほうがよいでしょう。空調の吹出しが装置に直接あたらないように留意します。ICP質量分析装置は、環境からの汚染を防ぐ対策が重要であり、クリーンルームあるいは局所クリーン環境を維持することが良好なデータ取得の前提とお考えください。特に、セクター型高分解能ICP-MSでは、四重極型より高感度なためクリーンルームへの設定が不可欠ですが、さらに磁場セクターの安定化を考慮して、装置が要求する電磁波の制限条項（例えば、NMRなどが近くにないこと、近隣を電車が走っていないこと）などもチェックします。<br />
+<br />
+Q3. ICP-AESは多機種市販されていますが、どのような観点で選べばいいのでしょうか。<br />
+A3. 一般に分析装置は、高度化・先鋭化するほど適用範囲が絞られてくるケースが多いとお考えください。逆にいうと、多目的に使用できる機種は、装置の能力を限界まで引き出しての測定には向かないことが多いです。使用目的と実験者の技量という観点で選ぶべきで、例えばカメラを選択する際の観点（全自動か露出の手動調整か、オートフォーカスかマニュアルフォーカスかなど）に若干似ているかもしれません。とにかく「これ1台で万能」ということはあり得ないことを肝に銘じていただければと思います。これはICP-MSでも同様です。<br />
+<br />
+Q4. ICP-AESにおいて、軸方向測光の機種にするか半径方向測光のそれにするか迷っています。どのように判断すればよいのでしょうか。<br />
+A4. 軸方向測光（アキシャルビューイング）では大幅な高感度化が期待できる反面、本文の解説にあるとおり、非スペクトル性干渉の度合いが大きい。アウタートーチの内側（特に上部）が冒されやすいなどの短所があります。したがって、高マトリックス試料の直接噴霧が多い材料分析分野などでは、プラズマを縦に点灯させて半径方向に測光する、オーソドックスな方式を選択したほうがメンテナンスが容易であるという考え方もあります。最近は横向きに点灯して、光ファイバーケーブルを用いて両方向の測光を可能にした機種もあります。それぞれ一長一短ですので、A3と同じ結論ではありますが、使用目的と技量に応じて検討していただければ幸いです。なお、以前はアキシャルビューイングが「アキシャルプラズマ」と表現されていましたが、プラズマがアキシャルなのではなく、測光がプラズマに対して軸方向（アキシャル）であるので、この表現は奇妙であることを捕捉しておきます。<br />
+<br />
+Q5. 特定の元素のピークの有無をどのように判断するのでしょうか。<br />
+A5. ずばり、人の目で判断するのが最も確実です。ICP-MSにおいては、ある質量範囲をスキャン（走査）してスペクトルファイルを調べるのは当然の操作と考えられていますが、ICP-AESにおいては意外と測定されていないことがあります。最近の装置で見かける「半定量」モードなどでは、特定波長とその近傍波長の2点（もしくは3点）の強度差から単純に濃度を見積もる場合があり、分光干渉が考慮されないので誤定性のおそれがあります。実際に、誤定性の事例も少なくありません。スペクトルプロファイルを実測して、比較的幅の狭い左右対称形のスペクトルが得られているかを肉眼で確認するのが最も確実であり、特に前例のない試料やマトリックスの複雑な試料では励行すべきです。<br />
+<br />
+Q6. 測定されたピークの帰属（同定）をどのように判断するのでしょうか。<br />
+A6. ICP-AESでは装置に付属したコンピューターに登録されている代表的な発光線以外に、いくつかの波長表が刊行されているので参考になりますが、実測してみるとデーターベースに記載されていないピークも出現するものです。複数のスペクトル（できれば3本程度）を調べて同定を確実にしたほうが良く、試料に標準溶液を添加してピークの変化を実験的に調べることも、確実な同定に向けた重要な操作の一つであるといえます。ICP-MSでもQMSでは事情はほぼ同じで、液性によって多原子イオンの分光干渉パターンは多彩になるので、最後は実験的に詰めていきます。<br />
+<br />
+Q7. スペクトル干渉、物理干渉、化学干渉に対する具体的な対処の仕方を教えてください。<br />
+A7. これら干渉挙動の概念の説明は本文中にあるので、まずはご参照ください。スペクトル干渉については、ICP-AES, ICP-MSとも、干渉のないピークを探索するのが原則です。ICP-AESでは、数多い発光線から、強度が少し弱くてもスペクトルオーバーラップのない波長を選び出します。ICP-MSでも同様ですが、安定核種が単一である場合は、高分解能装置やコリジョン・リアクションセルなどの抜本的解決手段を検討する必要があります。物理干渉への対処については、どちらの分析法においても内標準法が原則です。ICP-AESではプラズマ中での励起挙動が類似した元素の同じ遷移パターン（原子線同士、あるいはイオン線同士）の発光線を使用するのが好ましいです。ICP-MSでは質量数が比較的近接した元素を選びます。化学干渉はいわゆる主成分（マトリックス）干渉と総称する場合が多いですが、試料溶液と標準溶液の組成を同じくするマトリックスマッチング法を用いるか標準添加法によって対処します。<br />
+<br />
+Q8. スペクトルのバックグラウンド補正の必要性について教えてください。<br />
+A8. ICP-AES, ICP-MS（QMS）とも、ピークの両端にはバックグラウンドとしての信号が存在し、液性・共存成分やプラズマ条件で変動する可能性があります。ピークの信号強度は原理的にもバックグラウンドとピークトップの強度差から算出すべきであり、バックグラウンド補正は必須といえましょう。試料溶液と標準溶液を寸分違わず同一組成にすれば不要という見解もあるようですが、そのような調製は実際のところ容易ではなく、あえてリスクを冒す必要はないと思います。バックグラウンド補正点の指定は、どの機種でも簡単にできる操作です。<br />
+<br />
+Q9. 装置の検出限界（検出下限）はどれくらいと考えればよいでしょうか。<br />
+A9. 測定元素の検出限界値は、ブランク試料を繰り返し測定した際のばらつき（標準偏差）の3倍に相当する濃度と定義されています。装置付属の資料や成書には、元素ごとのこれらの値が記載されていることもありますが、それらは標準溶液を用いて算出されていることが多く、あくまでも目安程度に考えるべきです。実際には試料の液性や共存成分で変動するため、測定試料で実測することをお勧めします。特にスクリーニング分析などでは検出限界値は重要な意味を持つことに留意してください。詳細は既刊の成書（（社）日本分析化学会編、平井昭司監修： 現場で役立つ化学分析の基礎、オーム社（2006））をご参照ください。<br />
+<br />
+Q10. ICP発光分析法の略称は何というのでしょうか？ ICP, ICP-OES, ICP-AESなど、資料や文献には各種記載されているのですが。<br />
+A10. これは結構やっかいな問題です。まず、「ICP」というのは、本書の題名にもあるとおりICP発光分析法とICP質量分析法がありますので、分析方法の略称としては不十分なことはおわかりでしょう。次に「ICP-OES」ですが、これはOptical Emission Spectrometryの略称で、もともとはグロー放電（GD）やスパーク放電を励起源とする発光分析法で使用されてきました。しかし、分光分析（Spectrometry）なのにOpticalと付けると、&#39;cold ice&#39;と書くような冗長な感じがしないでもありません。「ICP-AES」はAtomic Emission Spectrometryの略称で、原子吸光分析（Atomic Absorption Spectrometry）に端を発しています。AAS, ICP-AES, ICP-MSをまとめてAtomic Spectrometryと分類できることも使われる理由の一つです。しかし、プラズマ中で多くの元素はかなりイオン化しているので、&#39;atomic&#39;ではない、という論があります。さらに、オージェ電子分光法もAES（Auger Electron Spectroscopy）と呼ぶことがあるので混同する、という意見も見られるようです。ちなみに、ISO 12235では、この議論を避けて「O」や「A」をなくした「ICP-ES」という表現を推奨しています。<br />
+　以上のことを踏まえたうえで、本書では読者に最もなじみがあると思われる「ICP-AES」を使用しています。なお、ICP-AESという記載も希にはありますが、用いないほうが賢明です。<br />
+----------<br />
+<br />
+<br />
+◇ 金属材料<br />
+----------<br />
+Q1. 塩酸-硝酸の混酸で分解できることがわかっている金属にまず硝酸を、次いで塩酸を加えて混酸としましたが、試料は分解しませんでした。なぜでしょうか？<br />
+A1. このような現象は、ステンレス鋼のようなクロム含有率の高い試料に見られます。濃硝酸を加えた段階で試料表面に酸化皮膜が生成し、この後農塩酸を添加して王水となっても、さらに酸化被膜成長が促進することになります。酸化被膜が生成した場合は、極めて反応は緩慢になり、分解は進行しなくなります。このような現象はよく目にしますが、試薬調製は必ず別のビーカーで行うべきです。<br />
+<br />
+Q2. 鉄やアルミニウムなどの金属粉を、多量に塩酸で分解すると吹きこぼれてしまいます。吹きこぼれないようにするにはどうしたらよいでしょうか？<br />
+A2. イオン化傾向の大きい元素は、分解速度も速く酸による容易な分解が可能です。また、金属粉は、酸との接触面積も広く、反応により温度も上昇するため分解が促進されます。このような場合は、まず金属粉が浸る程度に塩酸を加えそれから徐々に加えていきます。激しい反応が終わったら、再度塩酸を加えて様子を見ながら全分解させます。マグネシウムなども反応が激しいので、注意する必要があります。<br />
+<br />
+Q3. 過塩素酸による有機物の分解は危険と聞きますが本当ですか？<br />
+A3. 大変危険です。過塩素酸と有機物（特に固体）が高温で共存している場合は、爆発のメカニズムは詳しくわかっていませんが大爆発を起こします。必ず硝酸を共存させながら分解を行う必要があります。高温で加熱していると沸点の差より、硝酸が早く蒸発してしまうので目を離さないほうがよいでしょう。<br />
+<br />
+Q4. 塩酸溶液を加熱濃縮することにより、濃塩酸溶液にできませんか？<br />
+A4. 塩酸は、塩化水素ガスが水に溶けた水溶液で、その溶解飽和濃度は質量分率約39%（12.8 M）です。この濃度以下で任意の濃度に調製された塩酸について考えてみます。塩酸の敦沸混合物は6.1 Mの濃度で、沸点が108.6℃です。どのような酸でも同様ですが、酸を加熱濃縮した場合は、共沸混合物以上の濃度にすることができません。すなわち、加熱濃縮により、塩酸は6.1 M以上の濃度にすることができないということになります。<br />
+<br />
+Q5. 白金るつぼを用い、炭酸ナトリウムと硝酸カリウムの混合融剤でケイ酸塩の融解を行ったところ、るつぼに穴があいてしまいました。どうすべきだったでしょうか？<br />
+A5. 炭酸ナトリウムの分解力は、酸化剤（アルカリ硝酸塩）の添加により著しく高まり、白金るつぼの損傷が大きいことが知られています。アルカリ硝酸塩の混合比率は少ないほど白金るつぼの損傷は少ないですが、るつぼの選択で問題がなければニッケルやジルコニウム製を用いたほうが安全です。<br />
+<br />
+Q6. るつぼで融解後の融生物を水または酸で溶かすのに長時間を要しています。早く溶かす方法はないのでしょうか？<br />
+A6. るつぼの底部に融生物が固着しているため、水または酸を添加しても融生物との接触面積が小さいことが原因です。融解操作において、まだ融生物の流動性があるうちにるつぼを傾け、るつぼの内壁に融生物を薄くはりつけるようにすれば、接触面積が広くなるので早く溶かせるようになります。<br />
+<br />
+Q7. 微量成分分析のいて、ブランクが下がらないで困っています。どうしたらよいでしょうか？<br />
+A7. ブランクの原因は、試薬、器具および雰囲気の三つに大別されます。これら三つの要因について、汚染源となっているものはないかを確認しましょう。大きな落とし穴となるのは、水と分析者自身です。水は、きれいに精製されたものを使用しているはずですが、思わぬところで汚染していたり、精製装置のメンテナンスが悪かったりする場合があります。また、分析者は、汗をかいたり、化粧をしたりなどで汚染源になる場合があります。これらの要因も忘れずにブランクの評価を行うことが必要です。<br />
+<br />
+Q8. 微量成分分析では、試薬、器具および雰囲気について気をつけています。しかし、ブランクが下がりません。ブランク値を下げたいのですが、どのようなアプローチをしたらよいのでしょうか。<br />
+A8. まず、分析フローを工程ごとに分解してみましょう。空試験を工程ごとに調査してみると、どこで汚染が発生しているかを突き止められる場合が多いです。試薬、器具、雰囲気に注意している場合は、分析者の動作が関与している場合があります。特に、器具使用前の水による洗浄回数が少なかったり、器具類を覗き込んだりといった何気ない動作が汚染原因だったりします。Na, Kの微量分析では、上記のような動作による汚染に注意が必要です。<br />
+----------<br />
+<br />
+◇ 半導体材料・セラミックス<br />
+----------<br />
+Q1. 半導体材料の分解に用いる容器の選択はどのような観点で選べばよいのでしょうか？<br />
+A1. 試料を分解するときの温度と分解試薬に対する耐性、分析対象物質と必要なブランクのレベルを基に選択します。以下に試料ごとに例と注意点を述べます。<br />
+　主にフッ素樹脂、ポリプロピレン、ポリエチレン、石英ガラス、ホウケイ酸ガラス、白金などが用いられますが、温度に対する耐性は、ポリエチレン、ポリプロピレン、フッ素樹脂、ホウケイ酸ガラス、石英ガラス、白金の順で高くなり、ブランクは不純物によるので一般的な材料では、洗浄後、白金、ホウケイ酸ガラス、ポリプロピレン、ポリエチレン、石英ガラス、フッ素樹脂の順で溶出量が少なくなります。例をあげると、<br />
+・ Siウェーハ、多結晶<br />
+　フッ素樹脂の分解容器を用います。フッ化水素酸を分解に用いるので石英ガラス、ホウケイ酸ガラスは使えません。ポリプロピレン、ポリエチレンは温度が高くなる場合は使えません<br />
+・ 封止樹脂、レジスト<br />
+　分解しにくいものは、高温に耐え過塩素酸に犯されない石英ガラスの分解容器を使います。ブランクに問題がない場合には、ホウケイ酸ガラスも使用できます。加圧・高周波などにより比較的定温で分解する場合にはフッ素樹脂の分解容器を用います。ポリプロピレン、ポリエチレンは分解温度、耐溶媒性の観点から使えません。<br />
+<br />
+Q2. 使用する純水の管理はどのようにしたらよいのでしょうか<br />
+A2. 分析したい濃度により管理の方法が異なりますが、不純物の平均的なレベルと突発的な汚染の混入を管理する必要があります。例えば、pptレベルでは、半導体製造クリーンルーム内で循環精製されている超純水の使用が望ましいですが、小型の純水製造装置を使用する場合には、流し始めの水は使用せず、可能であれば常に少量の水を流した状態で使用するとブランクが低減できます。また、容器の移し替え、保管は避けます。<br />
+<br />
+（その他も重要であるが省略）<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ プラズマ特性の測定 [1]<br />
+<br />
+◇ 熱平衡プラズマ<br />
+　プラズマ中の各種粒子の衝突頻度が十分に高く、発せられた光もプラズマ中で吸収されるほどプラズマ密度が濃い場合、プラズマは熱平衡状態となる。本書で取り扱うICPは十分に高密度ではないし、空間的な温度勾配も大きいのでこの条件を十分には満たさないが、熱平衡プラズマの理論はICPの特性の理解にも貴重な情報となる。<br />
+（省略）熱平衡プラズマでは非平衡プラズマなどと比べると、理論的取り扱いを著しく単純化することが可能である。<br />
+<br />
+◇ 分光法による温度測定法<br />
+　プラズマには、励起温度（T<sub>exc</sub>）、電子温度（T<sub>e</sub>）、イオン化温度（T<sub>ion</sub>）、ガス温度（T<sub>gas</sub>）、回転温度（T<sub>rot</sub>）など、いくつかの温度が定義されている。熱平衡が成温ときにはこれらのすべての温度は一致する。しかし、実際の大気圧ICPでは熱平衡が成立していないために、これらの温度は完全に一致することはなく、T<sub>e</sub> &gt; T<sub>ion</sub> &gt; T<sub>exc</sub> &gt; T<sub>gas</sub>, T<sub>rot</sub> となることが多い。（省略）<br />
+（省略）実際の大気圧プラズマではアルゴンプラズマのイオン化温度のほうがヘリウムよりも高くなる。このような理由により、励起やイオン化エネルギーが高いハロゲンなどの分析にはヘリウムプラズマが有利であるが、その他の多くの金属元素の分析にはアルゴンプラズマが有利であることが説明できる。<br />
+・ 電子密度<br />
+　スペクトル線のシュタルク広がり（Stark broadening）を用いる方法があり、広く使用されている。孤立した1個の原子の場合、束縛電子は原子核の周りを一定の軌道で運動しているが、プラズマ中では発光原子の近くに存在する多数の電子やイオンの作る微視的な電界の影響を受け、電子の軌道は複雑に変化する。この結果、エネルギー準位の広がりやずれを生じ、放射される線スペクトルに広がり（Stark broadening）や波長のずれ（Stark shift）が生じる。電子密度neと線スペクトルの広がりの間には<br />
+　<img src="data:image/png;base64,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" /><br />
+が成立する。ここで、Cはn<sub>e</sub>とTの間によりわずかに変化する定数である。数値はGriemらによって理論的に計算されている。<br />
+　一方、本書で対象とするような分析用プラズマなど、溶液試料を導入するプラズマでは、スペクトルの広がりの比較的大きい水素のH<sub>&beta;</sub>線（486.133 nm）を用いることが多い。（省略）プラズマの温度が既知であれば、スペクトルの形状や半値幅から電子密度を求めることができる。<br />
+------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] 千葉光一ら『機器分析編 4 ICP発光分析』共立出版<br />
+[2]&nbsp;上本道久 監修『ICP発光分析・ICP質量分析の基礎と実際』Ohmsha<br />
+------------------------------------------------------------------------------

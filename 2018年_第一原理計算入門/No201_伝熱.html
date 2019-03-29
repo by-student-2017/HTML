@@ -1,0 +1,338 @@
+<p>　ここでは伝熱の研究に関する情報を掲示していきます。まず、有限要素法（FEM）によるものから説明していきます。<br />
+--------------------------------------------------------------------------------<br />
+■ 有限要素法[17]<br />
+1. プリプロセス(preprocess)： 問題領域を有限要素に分割する<br />
+&nbsp; CAE[Computer ASided Engineering(計算機支援工学)]の環境があれば自動メッシュ生成機能などを用いて容易に実行できる場合がある。<br />
+2. 要素の定式化： 要素に関する方程式<br />
+3. アセンブリ(assembly)： それぞれの要素に関する代数方程式から、全体系の代数方程式を組み立てる<br />
+4. 全体系の代数方程式の求解<br />
+5. ポストプロセス(postprocess)： 応力やひずみなどの物理量を求め、解析結果を可視化する<br />
+有限要素法の理解については文献[17-21]が役に立つ。<br />
+<br />
+■ Gmsh : <a href="http://www.geuz.org/gmsh/">http://www.geuz.org/gmsh/</a><br />
+&nbsp; calculiXを用いて四面体（テトラ）要素でメッシュを作成する場合に必要となる。<br />
+□ 基本的な構造の作成<br />
+1. Download にある Current stable release: の行にある各OSに対するプログラムから対応するものをダウンロードする。<br />
+2. gmsh.exe をクリックすると実行される。<br />
+使用方法<br />
+1. File &rarr; New &rarr; ファイル名.geo を入力<br />
+2. Geometry &rarr; Elementary entities &rarr; Add &rarr; Point<br />
+3. X, Y, Z に値を入力し、Prescribed mesh element size at point を 0.5 にして&nbsp;Add を押す。（ (0,0,0) (1,0,0) (1,1,0) (0,1,0)の四点を作成する ）<br />
+&nbsp; カーソルで位置をしていしたい場合：&nbsp;画面中にカーソルを移動 &rarr; e を押す。 Shift を押すと固定されるのでカーソルを動かしてAddを押す。<br />
+4. Straight line &rarr; 作成した点をクリックする（始点と終点の二つをクリックし終わると線が引かれる）<br />
+5. Plane surface &rarr; 辺をクリックすると赤色になる &rarr; OKならば e を押す。<br />
+6. Translate &rarr; Extrude surface &rarr; 押し出したい方向に値を入力する &rarr; 点線の部分をクリック &rarr; e を押す。<br />
+&nbsp; 真ん中にホイールマウスがある場合は回転させると拡大縮小が可能になる。全体の移動は Shift を押してマウスを動かすと可能になる。<br />
+7. Mesh &rarr; 3D<br />
+&nbsp; 可能であれば Set order 2&nbsp;も押す。&nbsp;<br />
+8. File &rarr; Save As... &rarr; Mesh - Gmsh MSH (*.msh)<br />
+&nbsp; Version 2 ASCII Format, Save all (ignore physical groups)<br />
+&nbsp; (File &rarr; Save As... &rarr; *.inp で保存(abaqus)はCalculiX25では読んでくれなかった)<br />
+<br />
+□ SAVEしたデータを CalculiX で読めるように Excel で加工する。<br />
+1. Microsoft Excel &rarr; 全てのファイル &rarr; カンマやタブなどの区切り文字によって（省略） &rarr; 次へ &rarr; スペースで区切る &rarr; 完了<br />
+2. 最初の行を *NODE NSET=Nall にして、1, 2 と数値が並ぶ前まで除く。<br />
+*NODE NSET=Nall<br />
+1 0 0 0<br />
+2 1 0 0<br />
+以上の並びとなる<br />
+3.　真ん中あたりに、$EndNodes と書かれた行と、次に $Elements が書かれたところがある。<br />
+&nbsp; そこで $EndNodes と %Element&nbsp;と$Elementsの次の行&nbsp;を除いて、*Element TYPE=C3D4 Elset=Eall を入力する。<br />
+&nbsp; TYPE=C3D4 は テトラ一次要素<br />
+4. 次の行からさらに4面体要素以外の指定を削除する。<br />
+&nbsp; 左から二番目の数値が要素のタイプを示している。4がテトラ要素に対応するので、それ以外を削除する。<br />
+5. *Element のある次の行の左から二番目から6番目までを削除する。<br />
+6. 最後にある $EndElements を削除する。<br />
+7. CSV(カンマ区切り)(*.csv)にして、cgx.exe があるファイルを指定して保存。<br />
+8. cgx.exe があるファイルを探して、Shift を押しながら右クリックすると「コマンドウインドウをここで開く」が表示されるので選択。<br />
+9. cgx -c あなたがSAVEした名称.csv<br />
+<br />
+■ CalculiX [6,7,8,9, 14] : <a href="http://www.dhondt.de/">http://www.dhondt.de/</a>&nbsp; (OS: Windows, Linux)<br />
+□ Install<br />
+CalculiXforWin (windows7版）<br />
+1. download: <a href="http://sourceforge.net/projects/calculixforwin/">http://sourceforge.net/projects/calculixforwin/</a><br />
+2. calculixforwin の中に Readme.pdf がある。Download some Examples and scripts here の下にあるファイルをダウンロードして解凍する(解凍はShift-JIS（Windows/Mac）とCRLF(Windows)を双方とも選んでみた)。<br />
+bConverged CalculiX for Windows<br />
+1. download: <a href="http://www.bconverged.com/products.php">http://www.bconverged.com/products.php</a><br />
+2. Current Version を全てダウンロードして解凍する。<br />
+3. 好きなところに仕事用のフォルダを作成する。<br />
+4. CalculiX_2_5_win_007.exe を実行する。<br />
+&nbsp; bConverged_5.1.001_Engauge.exe もインストールできる。<br />
+5. ccx_2.5_tests にある *.inp ファイルをダブルクリックすれば画面が表示される。<br />
+<br />
+■ Abaqus [16,17, 21] (SIMULIA Learning Community に登録すると無料になるらしい)<br />
+<br />
+■ SALOME-MECA [11,12,13] (OS: Linux)<br />
+<br />
+■ SecDATA &amp; Therm3D （廉価、または書籍がある場合はプログラムが付いている）<br />
+※ チェックボックスについて細かく記してあるのは、window7 64 bit で行うと、書籍のものは記述が真黒で何も分からない為（コンパイルし直せば正常に動作するかもしれない）。そんなに高価なソフトではないので最新版を購入するという手段もある。<br />
+SectDATA<br />
+□ 元データ<br />
+1. SectData &rarr; 元データ &rarr; データ入力・修正<br />
+2. 基本的な形を描くための点と点を結ぶ線の数と、線を結ぶための点の数を入力する<br />
+&nbsp; （面倒ですがどのソフトもほぼ同じように二点間を指定して線を引くので仕方ないです）<br />
+&nbsp; ※ 正方形の場合：線分定義数 4, 点の定義数 4<br />
+&nbsp; ※ 円の場合：線分定義数 2, 点の定義数 4<br />
+3. MeshAut2<br />
+&nbsp; 二点間を結ぶ線を種類分けして番号を付けます。それが線分番号です。<br />
+&nbsp; 各線は二点の間で結ばれますから（円弧の場合を除く）、その二点の番号をを点1番号と点2番号に入力します。<br />
+&nbsp; 入力が終了したら設定を押します。<br />
+&nbsp;&nbsp;※ 正方形の場合<br />
+&nbsp;&nbsp;線分番号、指定区分、点1番号、点2番号、点3番号<br />
+&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp; ※ 円の場合<br />
+&nbsp; 線分番号、指定区分、点1番号、点2番号、点3番号<br />
+&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3<br />
+&nbsp;&nbsp;2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br />
+4. データの入力<br />
+&nbsp; 計算したい大きさのX座標とY座標を入力します。どうもm単位のようです。<br />
+&nbsp; 入力が終了したら設定を押します。そして、SAVEします。<br />
+&nbsp;&nbsp;※ 正方形の場合<br />
+&nbsp;&nbsp;点番号、X座標、Y座標<br />
+&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp; 0<br />
+&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0002&nbsp; 0<br />
+&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0002&nbsp;&nbsp;0.0002<br />
+&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0002<br />
+&nbsp; ※ 円の場合<br />
+&nbsp;&nbsp;点番号、X座標、Y座標<br />
+&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-.00015<br />
+&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .00015&nbsp; 0<br />
+&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.00015<br />
+&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-.00015&nbsp;0<br />
+5. 元データ &rarr; 元図の作画 &rarr; MeshAutD<br />
+　チェックボックスの上から二番目を選択して、全線分描画を押すと、入力した構造がどのようになっているかを確認できます。<br />
+6. 元データ &rarr; メッシュ生成<br />
+※ 正方形の場合: &nbsp;XYメッシュ<br />
+&nbsp; X軸のメッシュ数（左側）とY軸のメッシュ数（右側）を入力します。入力が終了したら設定を押します。<br />
+※ 円の場合: 放射メッシュ（下記のように入力欄がある）<br />
+&nbsp; 放射メッシュ数（4以上）（半径メッシュ線の数、中心穴なしでは偶数）、サブメッシュ数（放射メッシュ線によるカット長の分割数） &larr; 20, 4 が良いか？<br />
+&nbsp; 中心のXB 座標、中心のYB座標<br />
+&nbsp; 放射メッシュ開始角（&deg;）（断面のXB軸に対する左回り角度）、放射メッシュ終了角（&deg;）<br />
+<br />
+□ 断面データ<br />
+1. 断面データ &rarr; データ入力・修正<br />
+&nbsp; 要素番号は各メッシュに区切った一つの面を1番、2番と番号付けしたもの。<br />
+&nbsp; 各要素に接する点を節点と呼ぶ。全要素に対する全ての節点の数を入力する。<br />
+&nbsp; 入力が終了したら設定を押します。<br />
+2. 要素データの入力<br />
+&nbsp;&nbsp;&nbsp;節点は各要素番号に接する点で、節点1から節点8まで反時計順に記述する。<br />
+&nbsp; 入力が終了したら設定を押します。<br />
+3. 節点データの入力<br />
+&nbsp; X座標とY座標を入力する。<br />
+&nbsp; 入力が終了したら設定を押します。そして、最初に戻るのですべて確定を押す。<br />
+4. 中間節点自動計算<br />
+&nbsp; これは、四角形の頂点節点の座標をきちんと入力しておけば、直線の辺の中間にある節点に適当な座標をいれておいても、自動計算できるようにしている。<br />
+5. 構造の作画<br />
+&nbsp;&nbsp; チェックボックスの上から二番目を選択して、全線分描画を押すと、入力した構造がどのようになっているかを確認できます。<br />
+<br />
+Therm3D (Th3DMenu)<br />
+□ 部分データ<br />
+断面データはSectDataで作成した断面のメッシュデータを作図して確認するためのもの。<br />
+1. 部分データ &rarr; 仕様データ &rarr; データ入力・修正<br />
+2. MeshAuz1<br />
+&nbsp;&nbsp;欄は左から、「構造の種類」、「両端面の種類」、「両端面の接続」、「両端面のメッシュ数」の順に記述されている。<br />
+&nbsp; ・構造の種類<br />
+&nbsp;&nbsp;&nbsp;&nbsp;上のチェックボックスが「柱状体」、下が「軸回転体」<br />
+&nbsp; ・両端面の種類<br />
+&nbsp;&nbsp;&nbsp; 上が「同一」、真中が「相似」、下が「異形」<br />
+&nbsp; ・両端面の接続<br />
+&nbsp;&nbsp;&nbsp; 上が「直線」、下が「曲線」<br />
+&nbsp; ・両端面のメッシュ数（その下が「右捩れ角（&deg;）」、さらにその下がある場合は「右端面の相似倍率」）<br />
+&nbsp; 入力が終了したら設定を押します。MeshAuz2 に画面が移る。<br />
+3. MeshAuz2<br />
+&nbsp; ・端面の断面基準位置入力<br />
+&nbsp;&nbsp;&nbsp; XB座標、YB座標ともに0<br />
+&nbsp; ・両端面の方向余弦入力<br />
+　&nbsp;&nbsp;左端面と右端面ともに、CX1は0、CX2は-1、CX3は0、CY1は0、CY2は0、CY3は1<br />
+&nbsp;&nbsp;&nbsp; これは断面をどの方向に置くかに関わってくる。※<br />
+&nbsp; ・メッシュ面の位置入力<br />
+&nbsp;&nbsp;&nbsp; 左から見た断面と右から見た断面の番号が断面No.として書かれている表が示される。柱状の場合は、二番目の行のX座標に計算したい構造の長さ（横長になる）を記入する。他は0にすれば良いだろう。<br />
+4. 部分メッシュ生成<br />
+5. 構造の作画<br />
+※ 例えば、CX1を1に、CY2を1にして、その他を0にすると、メッシュ面の位置入力の時には、Z座標に計算したい構造の長さを記入することになる。Elem3DDrawではパース（奥行き）が付いて表示され、右下の角度の指定も面倒なので、テキストにはCX2を-1に、CY3を1にしたのではないかと考えている。<br />
+<br />
+□ 全体データ　（定常解析の場合）<br />
+1. 全体データ &rarr; ファイル読み込み<br />
+2. データ入力・修正<br />
+&nbsp; 節点数や要素数は自動で読み込まれる。<br />
+&nbsp; 画面構成は下記のようになっている。<br />
+&nbsp; タイトル<br />
+&nbsp; 節点数　境界条件のステップ数<br />
+&nbsp; 要素数　（定常解析ではステップ数は1）<br />
+&nbsp; 材料データ数　熱伝達境界の面数<br />
+&nbsp; 温度固定節点数　熱放射境界の面数<br />
+&nbsp; 温度固定境界の面の数　内部発熱の要素数<br />
+&nbsp; 熱流束境界の面の数　初期値データ（なし=0、有り=1)<br />
+&nbsp; ※ 温度を固定する面は要素の数で入れなければならない。<br />
+3. 要素データの入力（これ以降は、構造の作図で得られる情報を利用してみると良い）<br />
+&nbsp; 定常解析では全ての材料番号に1を入れる。<br />
+4. 節点データの入力（直線だけで構成されている場合には特に変更は必要無い）<br />
+5. 材料物性区数の入力<br />
+6. 温度固定境界面の入力<br />
+&nbsp; 熱伝達係数や熱伝導率をKの単位で入力すれば、入力する温度はKの単位になる。℃であれば℃に統一する。<br />
+7. 材料データの入力<br />
+&nbsp; 密度の単位はkg/m^3なので通常何千という値で入力することになると思います。<br />
+8. すべて確定<br />
+9. 中間節点自動計算<br />
+10. データチェック<br />
+&nbsp; エラーが出なければ良い<br />
+<br />
+□ 計算（定常解析の場合）<br />
+1. 定常解析（標準）を選択する。<br />
+<br />
+□ 後処理<br />
+1. 等温線図の作画<br />
+&nbsp; 中央にあるカラーフィルは下のチェックボックスの有りにする。<br />
+&nbsp; 右の共通辺の表示を下のチェックボックスの有りにする。<br />
+<br />
+■ ADVENTURE [4,10] （ADVENTURE_Thermal：有料？）<br />
+■ Marc [5] (有料のよう・・・・・・)<br />
+--------------------------------------------------------------------------------<br />
+■ 有限要素法<br />
+□ 使用要素<br />
+&nbsp; 有限要素法はどのような要素を使用するかが重要なポイントとなる。3次元の場合、四面体要素に始まり、五面体要素（三角柱）、六面体要素がある。六面体要素は境界条件の設定が容易である（SectDATA&nbsp;と Therm3D では六面体要素を用いるため、節点が20になる）。<br />
+□ アイソパラメトリック要素<br />
+&nbsp; 要素の幾何学的形状と変量が同一の内挿関数で表される要素のこと。各辺に中間節点のある要素は二次要素と呼ばれ、中間節点のない1次要素に比べてはるかに少ない要素数で精度良く計算できる。<br />
+□ 局所座標<br />
+&nbsp; 六面体要素の中央部に無次元かされた座標。この局所座標を利用して各要素の積分が行われる。局所座標に変換して積分が行われるため、大学の数学の事業で習う座標変換とヤコビアンを用いることになる。（大学院の入試問題でヤコビアンを用いて複雑な構造を簡単な構造に変換して積分を手計算で解いたことが懐かしい。その約10年後に再びヤコビアンを用いることになるとは・・・・・・。色々と勉強しておくものである）<br />
+□ 要素の積分<br />
+&nbsp; 一般的に、ガウス・ルジャンドルの数値積分が用いられる。ガウス積分点数は1軸あたり2点であると精度が悪いために、3点が用いられる。積分点数が増えても、有限要素法では全体マトリックスのソルバー計算に最も時間が掛かるため、全所要時間の差はわずかである。<br />
+□ バンドマトリックス計算法[14]<br />
+&nbsp; ガウスの消去法を用いたプログラム。計算時間が節点変数の約3乗で増加する。<br />
+□ ICCG(Incomplete Cholesky Conjugate Gradient)法<br />
+&nbsp; 大規模FEM計算に適したプログラム。計算時間は節点変数の約1.5乗以下の増加にとどまる。<br />
+&nbsp; 前処理付き共役勾配法の1種となり、対称行列に適用する。共役勾配法は最適化の勾配法を連立方程式解法に用いたもので、繰り返し計算で収束させて方程式を解く。共役勾配法に前処理を追加することで、収束性を向上させている。前処理の方法はいくつがあるが、ICCG法では不完全コレスキー分解を利用している。<br />
+<br />
+■ 熱伝導に関する方程式<br />
+□ 定常熱伝導方程式<br />
+&nbsp; p*c*&part;T/&part;t = &part;q / &part;t<br />
+&nbsp; ここで p は密度[kg/m^3]、c は比熱[J/(kg*K)]、Tは温度[K]、tは時間[s]、qは熱流速[W/m^2]である。<br />
+□ 非定常熱伝導方程式<br />
+&nbsp; p * c *&part;T/&part;t + &lambda;* &Delta;T&nbsp;= &part;q / &part;t<br />
+&nbsp; ここで &lambda;は熱伝導率[W/mK]である。<br />
+□ 熱伝達境界の式<br />
+&nbsp; q = &alpha; * ( T - Tc )<br />
+&nbsp; ここで、&alpha;は熱伝達率（係数）、Tは境界面温度[K]、Tcは外部温度[K]。<br />
+□ 熱放射境界の式 [25]<br />
+&nbsp; q = &epsilon;* &sigma; * F * ( T^4 - Tr^4 )<br />
+&nbsp; ここで、&epsilon;は放射率、&sigma;はステファンボルツマン定数(5.67x10^-8 [W/(m^2*K^4])、Fは形状係数、Frは外部放射源温度{K]<br />
+&nbsp; Therm3Dでは入力データとて下記の放射係数 Cr を用いる。<br />
+&nbsp; Cr = &epsilon;* &sigma; * F<br />
+　鉄片を加熱していくと800 K くらいになると肉眼でも観察できる赤色に変色してくる。さらに1000 K を超えると黄色になり、1500 K になると白色になる。[Radi1]（さらに、温度を上げると、融解や火花が生じる）<br />
+　（省略）他の金属片でも同様に観察され、（省略）鉄と同様に赤色、黄色、白色のように放射光を変えながら高温になっていく。（省略）固体からの放射は溶けて液体になるときまで、あるいは燃えて気体になるまでは同じような光を発する特性がある。液体あるいは気体になると発光の特性が異なって、発光エネルギーも変化する。<br />
+　[Radi1] 久保田浪之介、「伝熱学 基礎のきそ」、日刊工業新聞社<br />
+□ フーリエの法則<br />
+&nbsp; J = - &lambda;・ &nabla;T<br />
+&nbsp; ここで、J は熱流速密度 [W/m^2]<br />
+※ 熱輸送方向のナノ構造の大きさLがフォノンの平均自由行程lより小さくなり、通常拡散的な熱伝導現象が弾道的な輸送になると、拡散的な熱輸送（フーリエの式）が大前提とされている熱伝導方程式では扱えなくなる[22-24]。<br />
+※ 熱伝導率は温度によって変化します。このため、実際の伝熱計算では、熱伝導率に温度変化を考慮すると計算が煩雑になるので、それを避けるために定数として平均温度の熱伝導率を使います[T4]。<br />
+※ 形態係数 &lt;= 1, 放射率&epsilon; &lt;= 1,&nbsp; 形状係数はかなりの幅がある（十数[m] ?)<br />
+※ 垂直平板における自然対流熱伝達（伝熱量も含めて）は面積が同じであれば縦横比を変えてもほぼ等しい値になる(～5 [W/(m^2 *K)] ?)。<br />
+<br />
+■ 境界条件<br />
+1. 温度固定境界：　一定温度となるもの。<br />
+2. 熱流束境界： 一定の熱量が流出入するもの。<br />
+3. 熱伝達境界： 外部の一定温度体と熱伝達するもの。<br />
+4. 熱放射境界： 外部放射源との間で熱放射するもの。<br />
+5. 内部発熱： 物体内部で一定熱量を発熱するもの。<br />
+<br />
+■ 垂直平板での自然対流熱伝達[T4]<br />
+・膜温度Tf（film temperature）＝（伝熱面温度Ts + 主流温度T&infin;）/2<br />
+・体積膨張率&beta;＝1/主流温度T&infin;<br />
+・レイリー数Ra＝g*&beta;*(Ts-T&infin;)*Lc^3*Pr/v^2<br />
+ここで、gは重力加速度[m/s^2]（通常、9.81m/s^2を用いる）、&beta;は体積膨張率[1/K]、Lcは長さ[m]、Prはプラントル数、vは動粘度[m^2/s]である。<br />
+・ヌッセルト数Nu＝h*Lc/&lambda;＝[0.825 + (0.387*Ra^(1/6) ) / [1+(0.492/Pr)^(9/16)]^(8/27)]^2&nbsp;<br />
+ここでhは熱伝達率。<br />
+・伝熱量Q＝h*A*（Ts-T&infin;）<br />
+ここでAは面積で、A＝長さ（高さ）Lc*幅 Wとなる。<br />
+<br />
+■ ICCG法の計算式<br />
+・定義<br />
+有限要素法の行列方程式を次のように定義する。<br />
+Ax=b<br />
+ここで、Aは対称正定値行列（要素をaij）、xは解ベクトル、bは右辺ベクトル。<br />
+対称正定値行列は、ゼロベクトル以外の任意のベクトルvに対して、v<sup>T</sup>Av &gt; 0 となるAを指す。<br />
+次に、不完全コレスキー分解を行って、Aを次のように定義する。<br />
+A=LDL<sup>T</sup>=C<br />
+ここで、Lは左下三角行列（要素 lij）、Dは対角行列(対角要素 di）、Cは前処理行列。行列LとDの各要素は次のようにする。<br />
+lii=aii - &Sigma; dj * lij^2<br />
+di = 1/ lii<br />
+lii = aij - &Sigma; dk + lik * ljk<br />
+ただし、aij &ne; 0 についてのみ計算する。<br />
+・計算手順<br />
+1) 初期値x0を設定し、次式によりベクトルr0とp0を算出する。<br />
+r0=b-Ax0<br />
+p0=C<sup>-1</sup>r0<br />
+2) k=0,1,2,......について収束するまで下記を繰り返す。<br />
+ak=pk<sup>T</sup>rk / pk<sup>T</sup>Apk<br />
+xk+1=xk + akpk<br />
+rk+1 = rk - akApk<br />
+&beta;k = - (C<sup>-1</sup>rk+1)<sup>T</sup>Apk / pk<sup>T</sup>Apk<br />
+pk+1 = C<sup>-1</sup>rk+1 + &beta;kpk<br />
+C<sup>-1</sup>r は下記のようにして求められる。<br />
+q = C<sup>-1</sup>r = (LDL<sup>T</sup>)<sup>-1</sup>r<br />
+(LDL<sup>T</sup>)q = r<br />
+L(DL<sup>T</sup>q) = r<br />
+(DL<sup>T</sup>q) はLが左下三角行列なので、行列の1行目から順番に前進代入することで算出できる。D<sup>-1</sup>はDが対角行列のために簡単に求めることが出来る。qはL<sup>T</sup>が右上三角行列なので、行列の最終行から順番に後退代入によって算出できる。<br />
+<br />
+参考文献<br />
+[T1] 黒田英夫、&rdquo;Visual Basicによる3次元熱伝導解析プログラム&rdquo;、CQ出版社<br />
+[T2] 黒田英夫、&rdquo;基礎からの数値計算&rdquo;、I/O BOOKS<br />
+[T3] 今仁和武、&rdquo;パソコンによる熱解析&rdquo;、工業調査会<br />
+[T4] 小山敏行、&rdquo;例題で学ぶ伝熱工学&rdquo;、森北出版株式会社<br />
+[T5] 中村博、&rdquo;Fortran77による伝熱解析プログラム&rdquo;、サイエンス社<br />
+[T6] 門出正則、茂地徹、&rdquo;熱力学&rdquo;、朝倉書店<br />
+--------------------------------------------------------------------------------<br />
+■ Visual Basic 2010 Express Edition 無料版<br />
+この他のプログラム言語も無料の様です。<br />
+--------------------------------------------------------------------------------<br />
+■ 放射率 [R1-R7]<br />
+Al： 0.02-0.1<br />
+Fe(酸化面）： 0.5-0.9<br />
+セラミック：0.95<br />
+[R1] 分散型熱物性データベース： <a href="http://tpds.db.aist.go.jp/prop_mat_summary_j.html">http://tpds.db.aist.go.jp/prop_mat_summary_j.html</a><br />
+[R2] 放射率、wikipedia<br />
+[R3] 各種物質の性質：表面の放射率： <a href="http://www.hakko.co.jp/qa/qakit/html/h01070.htm">http://www.hakko.co.jp/qa/qakit/html/h01070.htm</a><br />
+[R4] 各種物質の放射率（吸収率）： <a href="http://www.fintech.co.jp/etc-data/housharitsu.htm">http://www.fintech.co.jp/etc-data/housharitsu.htm</a><br />
+[R5] 放射率表： <a href="http://www.chino.co.jp/support/technique/thermometers/housyaritsu.html">http://www.chino.co.jp/support/technique/thermometers/housyaritsu.html</a><br />
+[R6] Q&amp;A： <a href="http://www.hayashidenko.co.jp/about_rtHousya.html">http://www.hayashidenko.co.jp/about_rtHousya.html</a><br />
+[R7] 溶融金属および鉄合金の有効放射率： <a href="http://ci.nii.ac.jp/els/110001462235.pdf?id=ART0001784920&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1396523701&amp;cp">http://ci.nii.ac.jp/els/110001462235.pdf?id=ART0001784920&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1396523701&amp;cp</a>=<br />
+--------------------------------------------------------------------------------<br />
+下記のHPがとても参考になった。感謝。<br />
+<a href="http://freecaetester.blog62.fc2.com/blog-category-9.html">http://freecaetester.blog62.fc2.com/blog-category-9.html</a><br />
+[1] <a href="http://fluid.precious-info.net/">http://fluid.precious-info.net/</a><br />
+[2] <a href="http://jikosoft.com/software/xfem/download.html">http://jikosoft.com/software/xfem/download.html</a><br />
+[3] <a href="http://www.cc.u-ryukyu.ac.jp/news/kouhou/No6/pdf/04.pdf">http://www.cc.u-ryukyu.ac.jp/news/kouhou/No6/pdf/04.pdf</a><br />
+[4] <a href="http://www.cc.u-ryukyu.ac.jp/news/kouhou/No6/pdf/04.pdf">http://www.cc.u-ryukyu.ac.jp/news/kouhou/No6/pdf/04.pdf</a><br />
+[5] <a href="http://www.ss.isc.tohoku.ac.jp/refer/pdf_data/v38-2p15-32.pdf">http://www.ss.isc.tohoku.ac.jp/refer/pdf_data/v38-2p15-32.pdf</a><br />
+[6] <a href="http://www.str.ce.akita-u.ac.jp/~chida/calculix.html">http://www.str.ce.akita-u.ac.jp/~chida/calculix.html</a><br />
+[7] <a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=CalculiX&amp;source=web&amp;cd=8&amp;ved=0CFMQFjAH&amp;url=http%3A%2F%">http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=CalculiX&amp;source=web&amp;cd=8&amp;ved=0CFMQFjAH&amp;url=http%3A%2F%</a><br />
+[8] <a href="http://www.youtube.com/watch?v=6tjHhF4srQg">http://www.youtube.com/watch?v=6tjHhF4srQg</a><br />
+[9] <a href="http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=CalculiX&amp;source=web&amp;cd=13&amp;ved=0CDkQFjACOAo&amp;url=http%3A%2F%2Fwww.opencae.jp%2Fraw-attachment%2Fwiki%2F%25E3%2582%25AA%25E3%2583%25BC%25E3%2583%2597%25E3%2583%25B3CAE%25E3%2582%25B7%25E3%2583%25B3%25E3%2583%259D%25E3%2582%25B8%25E3%2582%25A6%25E3%2583%25A02012%25E3%2583%2597%25E3%2583%25AD%25E3%2582%25B0%25E3%2583%25A9%25E3%2583%25A0%2FSymposium2012_Structure_Sakai.pdf&amp;ei=LZDBUZHRLonzkQXZ4oDACQ&amp;usg=AFQjCNFZGmUxcs0E6CtGxrjG7IRA-K7Ysw">http://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=CalculiX&amp;source=web&amp;cd=13&amp;ved=0CDkQFjACOAo&amp;url=http%3A%2F%2Fwww.opencae.jp%2Fraw-attachment%2Fwiki%2F%25E3%2582%25AA%25E3%2583%25BC%25E3%2583%2597%25E3%2583%25B3CAE%25E3%2582%25B7%25E3%2583%25B3%25E3%2583%259D%25E3%2582%25B8%25E3%2582%25A6%25E3%2583%25A02012%25E3%2583%2597%25E3%2583%25AD%25E3%2582%25B0%25E3%2583%25A9%25E3%2583%25A0%2FSymposium2012_Structure_Sakai.pdf&amp;ei=LZDBUZHRLonzkQXZ4oDACQ&amp;usg=AFQjCNFZGmUxcs0E6CtGxrjG7IRA-K7Ysw</a><br />
+[10] <a href="http://adventure.sys.t.u-tokyo.ac.jp/jp/">http://adventure.sys.t.u-tokyo.ac.jp/jp/</a><br />
+[11] <a href="https://sites.google.com/site/codeastersalomemeca/">https://sites.google.com/site/codeastersalomemeca/</a><br />
+[12] <a href="http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?SALOME-Meca%A4%CE%BB%C8%CD%D1%CB%A1%B2%F2%C0%E2">http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?SALOME-Meca%A4%CE%BB%C8%CD%D1%CB%A1%B2%F2%C0%E2</a><br />
+[13] <a href="http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?SALOME-Meca%A4%CE%B3%E8%CD%D1%B5%BB%BD%D1">http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?SALOME-Meca%A4%CE%B3%E8%CD%D1%B5%BB%BD%D1</a><br />
+[14] <a href="http://www.libremechanics.com/?q=node/9">http://www.libremechanics.com/?q=node/9</a><br />
+[15] <a href="http://nkl.cc.u-tokyo.ac.jp/09e/CE02/CE02.pdf">http://nkl.cc.u-tokyo.ac.jp/09e/CE02/CE02.pdf</a><br />
+[16] <a href="http://jikosoftcom.blog25.fc2.com/blog-entry-1198.html">http://jikosoftcom.blog25.fc2.com/blog-entry-1198.html</a><br />
+[17] 山田貴博ら、&rdquo;有限要素法&rdquo;、丸善出版、第6刷発行<br />
+[18] <a href="http://www.jsce.or.jp/committee/struct/civil_edu_home/irai/H24_FEM_1_1.pdf">http://www.jsce.or.jp/committee/struct/civil_edu_home/irai/H24_FEM_1_1.pdf</a><br />
+[19] <a href="http://monoist.atmarkit.co.jp/mn/kw/fem.html">http://monoist.atmarkit.co.jp/mn/kw/fem.html</a><br />
+[20] <a href="http://monoist.atmarkit.co.jp/mn/kw/zairiki.html">http://monoist.atmarkit.co.jp/mn/kw/zairiki.html</a><br />
+[21] <a href="http://jikosoft.com/">http://jikosoft.com/</a><br />
+[22] <a href="http://www.jst.go.jp/kisoken/nano/pdf/nanobioyokosyu_0122.pdf">http://www.jst.go.jp/kisoken/nano/pdf/nanobioyokosyu_0122.pdf</a><br />
+[23] <a href="http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/f_2011-25491h.pdf">http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/f_2011-25491h.pdf</a><br />
+[24] <a href="http://www.ess.sci.osaka-u.ac.jp/pdf/Sotsuken/2010master.pdf">http://www.ess.sci.osaka-u.ac.jp/pdf/Sotsuken/2010master.pdf</a>&nbsp;<br />
+[25] <a href="http://weblearningplaza.jst.go.jp/cgi-bin/user/lesson_start.pl?course_code=452&amp;lesson_code=4022&amp;now_course=452&amp;type=force">http://weblearningplaza.jst.go.jp/cgi-bin/user/lesson_start.pl?course_code=452&amp;lesson_code=4022&amp;now_course=452&amp;type=force</a><br />
+<br />
+□ よいテキスト<br />
+[1] <a href="http://freeplanets.ship.jp/">http://freeplanets.ship.jp/</a><br />
+[2] <a href="https://staff.aist.go.jp/tezuka.akira/FEM.intro.pdf">https://staff.aist.go.jp/tezuka.akira/FEM.intro.pdf</a>&nbsp;<br />
+[3] <a href="http://eddy.pu-toyama.ac.jp/?action=cabinet_action_main_download&amp;block_id=99&amp;room_id=1&amp;cabinet_id=1&amp;file_id=107&amp;upload_id=208">http://eddy.pu-toyama.ac.jp/?action=cabinet_action_main_download&amp;block_id=99&amp;room_id=1&amp;cabinet_id=1&amp;file_id=107&amp;upload_id=208</a><br />
+[4] <a href="http://cae21.info/jswg/files/9814/1553/4786/Salome-Meca.pdf">http://cae21.info/jswg/files/9814/1553/4786/Salome-Meca.pdf</a><br />
+[5] <a href="http://oshima.eng.niigata-u.ac.jp/Elmer/ElmerOverview.pdf">http://oshima.eng.niigata-u.ac.jp/Elmer/ElmerOverview.pdf</a><br />
+[6] <a href="http://freeplanets.ship.jp/FEM/Elmer/Elmer.html">http://freeplanets.ship.jp/FEM/Elmer/Elmer.html</a></p>

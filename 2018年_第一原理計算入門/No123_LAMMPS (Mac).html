@@ -1,0 +1,962 @@
+　ここでは古典的な分子動力学法であるLAMMPSのセットアップから基本的な計算までを解説する。<br />
+-------------------------------------------------------------------------------<br />
+■ LAMMPS Install (MacBook Air, OSX v10.8, 1.7GHz Intel Core i5, 4GB 1600 MHz DDR3, 11-inch, Mid 2012)<br />
+<br />
+□ git<br />
+1.&nbsp;<a href="http://code.google.com/p/git-osx-installer/">http://code.google.com/p/git-osx-installer/</a> -&gt;&nbsp;<a href="https://sourceforge.net/projects/git-osx-installer/files/" rel="nofollow" style="color: rgb(0, 0, 204); line-height: 16px; font-family: arial, sans-serif; font-size: 13px;">Download the installers here</a><span style="line-height: 16px; font-family: arial, sans-serif; font-size: 13px;">.</span><br />
+2.&nbsp;<strong style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(85, 85, 85); line-height: 18px; font-family: sans-serif; font-size: 13px; vertical-align: baseline;"><span style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(0, 153, 204); vertical-align: baseline; background-color: transparent;"><a href="http://sourceforge.net/projects/git-osx-installer/files/latest/download?source=files" style="margin: 0px; padding: 0px; color: rgb(0, 153, 204); vertical-align: baseline; background-color: transparent;" title="/git-2.0.1-intel-universal-snow-leopard.dmg:  released on 2014-06-29 20:24:48 UTC">Download git-2.0.1-intel-universal-snow-leopard.dmg (10.8 MB)</a>&nbsp;</span></strong><br />
+3. Double-click<br />
+4. Double-click git-2.0.1-intel-universal-snow-leopard.pkg<br />
+5. 続ける<br />
+6. インストール<br />
+7. パスワードを入力<br />
+8. 閉じる<br />
+※ 移動 -&gt; ユーティリティ -&gt; ターミナル.app で which git と入力すると git がインストールされたアドレスが分かる。/usr/local/git/bin/git となる。<br />
+※ 面倒なので、ターミナル.appを押しながらデスクトップに移動させておくとよいだろう。<br />
+<br />
+□ gfortran<br />
+1.&nbsp;<a href="http://hpc.sourceforge.net">http://hpc.sourceforge.net</a> -&gt;&nbsp;<i style="line-height: normal; font-family: optima, arial, &quot;sans serif&quot;;"><a href="http://prdownloads.sourceforge.net/hpc/gcc-4.9-bin.tar.gz?download" style="color: rgb(0, 0, 102); text-decoration: none;">gcc-4.9-bin.tar.gz</a></i><br />
+2. sudo tar zxvf $HOME/Downloads/gcc-4.9-bin.tar -C /<br />
+<br />
+□ make<br />
+0. Apple ID の登録をしてください。<br />
+1.&nbsp;https://developer.apple.com/downloads/index.action# -&gt;&nbsp;Xcode 4.4<br />
+2. double-click xcode446938108a.dmg<br />
+3. double-click&nbsp;Xcode.app<br />
+4. 開く<br />
+5. Agree<br />
+6. Install<br />
+7.&nbsp;パスワードを入力<br />
+8. Start Using Xcode<br />
+9. Xcode.app -&gt; Xcode -&gt; Preferences... -&gt; Downloads -&gt; command Line Tools<br />
+10. Install<br />
+11. デスクトップにあるXcode.appをアプリケーションに入れます<br />
+12.&nbsp;sudo xcode-select -switch /Applications/Xcode.app/Contents/Developer<br />
+References<br />
+[1]&nbsp;<a href="http://choreonoid.org/ja/install/build-macosx.html">http://choreonoid.org/ja/install/build-macosx.html</a><br />
+[2]&nbsp;<a href="http://deepfolte.hatenablog.com/entry/20120225/1330129212">http://deepfolte.hatenablog.com/entry/20120225/1330129212</a><br />
+<br />
+□ OpenMPI<br />
+1.&nbsp;<a href="http://www.open-mpi.org/software/ompi/v1.4/">http://www.open-mpi.org/software/ompi/v1.4/</a> -&gt;&nbsp;<a href="http://www.open-mpi.org/software/ompi/v1.4/downloads/openmpi-1.4.5.tar.gz" style="line-height: normal; font-family: verdana, arial, helvetica; font-size: 12px;">openmpi-1.4.5.tar.gz</a><br />
+2. cd $HOME<br />
+3. cd Documents<br />
+4. mkdir Workspace<br />
+5. cd Workspace<br />
+6. mkdir LAMMPS<br />
+7. cd LAMMPS<br />
+8. mkdir OpenMPI<br />
+9. cd OpenMPI<br />
+10. tar zxvf&nbsp;$HOME/Downloads/openmpi-1.4.5.tar<br />
+11. cd open*<br />
+12. ./configure<br />
+13. make<br />
+14. make check<br />
+15. sudo make install<br />
+<br />
+□ FFTW3<br />
+1.&nbsp;<a href="http://www.fftw.org/download.html">http://www.fftw.org/download.html</a>&nbsp;-&gt;&nbsp;<a href="http://www.fftw.org/fftw-3.3.4.tar.gz" style="color: rgb(170, 0, 0); line-height: normal;">fftw-3.3.4.tar.gz</a><br />
+2. cd $HOME/Documents/Workspace/LAMMPS<br />
+3. tar zxvf $HOME/Downloads/fftw-3.3.4.tar<br />
+4. cd fft*<br />
+5. ./configure&nbsp;&nbsp;--enable-mpi&nbsp;--enable-threads<br />
+6. make<br />
+7. make check<br />
+8. sudo make install&nbsp;<br />
+<br />
+□ LAMMPS (git install case)<br />
+1. cd Document<br />
+2. mkdir Workspace<br />
+3. cd Workspace<br />
+4. mkdir LAMMPS<br />
+5. cd LAMMPS<br />
+6.&nbsp;git clone<span style="font-family: monospace;">&nbsp;</span>https://github.com/lammps/lammps lammps<br />
+&nbsp;or git clone<span style="font-family: monospace;">&nbsp;</span>https://bitbucket.org/akohlmey/lammps lammps<br />
+※ネットワークは専門外なので、凄く暇な時に調べる予定。<br />
+<br />
+□ LAMMPS ( I recommend this case)<br />
+1. download: <a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version (<a href="http://lammps.sandia.gov/download.html#tar">http://lammps.sandia.gov/download.html#tar</a>)<br />
+2. Download Now<br />
+3. cd&nbsp;$HOME/Documents/Workspace/LAMMPS<br />
+4. tar zxvf $HOME/Downloads/lammps-30Oct14.tar<br />
+※ ○&nbsp;<a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version -&gt; ● <a href="http://lammps.sandia.gov/doc/Manual.html">LAMMPS</a> --- Stable version にして、「Download Now」を押す。<br />
+<br />
+□ Compiling (very simple case)<br />
+1. cd $HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make mpi<br />
+※ mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/src/lmp_mpi &lt; case.in<br />
+<br />
+□ Compiling (lammps-stable.tar.gz, lammps-30oct14 case)<br />
+1. cd $HOME/Documents/Workspace/LAMMPS/lam*/<br />
+2. cd&nbsp;src<br />
+3.&nbsp;vi $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/Makefile.mpi<br />
+◇ ifort case<br />
+&nbsp; cp $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/OPTIONS/Makefile.intel_cpu $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/Makefile.mpi<br />
+◇ using fftw3 that you compiled<br />
+&nbsp; cp $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/OPTIONS/Makefile.fftw $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/Makefile.mpi<br />
+◇ cuda (GPU) case<br />
+&nbsp; cp $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/OPTIONS/Makefile..kokkos_cuda $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/Makefile.mpi<br />
+4. make mpi<br />
+※ Please, see $HOME/Documents/Workspace/LAMMPS/lam*/src/MAKE/MACHINES&#39;<br />
+※ mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/srclmp_mpi &lt; input.file<br />
+<br />
+□ benchmark test<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. cp lmp_mpi ../bench<br />
+4. cd ../bench<br />
+5. mpirun -np 4 lmp_mpi &lt; in.lj<br />
+<br />
+□ standard (after compiling meam, etc. see below) (no check)<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make package-status<br />
+4. make yes-std<br />
+5. make no-gpu<br />
+6. make no-kim<br />
+7. make no-voronoi<br />
+8. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ standard (after compiling meam, VORONOI, etc. see below)<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make no-all<br />
+4. make package-status<br />
+5. make yes-std<br />
+6. make no-gpu<br />
+7. make no-kim<br />
+8. make no-kokkos<br />
+9. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ standard (after compiling meam, VORONOI, etc. see below) (unsuccess)<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make package-status<br />
+4. make yes-std<br />
+5. make no-poems<br />
+6. make no-gpu<br />
+7. make no-kim<br />
+8. make makelib<br />
+9. make makeshlib<br />
+10. make stubs<br />
+11. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ standard (after compiling KIM API and VORONOI, see below)<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make package-status<br />
+4. make yes-std<br />
+5. make no-gpu<br />
+6. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+※ (unsuccess for kim library) make clean-all -&gt; make no-kim -&gt; make mpi<br />
+-------------------------------------------------------------------------------<br />
+■ writer<br />
+□ vi<br />
+　使えるようになると本当に高速で書き換えたり編集できるので、是非ともマスターして欲しい。初めてプロの操作を見たとき、本当に同じソフトで人間が行える動作なのかと驚いた。MacやLinuxで既にインストールされているので是非ともプロ級まで使いこなして欲しい。<br />
+[1] <a href="http://www.envinfo.uee.kyoto-u.ac.jp/user/susaki/command/vi.html">http://www.envinfo.uee.kyoto-u.ac.jp/user/susaki/command/vi.html</a><br />
+[2] <a href="http://net-newbie.com/linux/commands/vi.html">http://net-newbie.com/linux/commands/vi.html</a>　<br />
+[3] <a href="http://www.insnet.co.jp/homepage/technical/vi/">http://www.insnet.co.jp/homepage/technical/vi/</a>&nbsp;<br />
+[4] <a href="http://motw.mods.jp/Vim/command.html">http://motw.mods.jp/Vim/command.html</a>&nbsp;<br />
+[5] <a href="http://d.hatena.ne.jp/language_and_engineering/20121207/p1">http://d.hatena.ne.jp/language_and_engineering/20121207/p1</a><br />
+□ emacs<br />
+[1] <a href="http://www.wakayama-u.ac.jp/~takehiko/webprg/03.html">http://www.wakayama-u.ac.jp/~takehiko/webprg/03.html</a>&nbsp;<br />
+[2] <a href="http://hogehoge.konjiki.jp/">http://hogehoge.konjiki.jp/</a>&nbsp;<br />
+[3] <a href="https://www.shido.info/lisp/scheme_emacs.html">https://www.shido.info/lisp/scheme_emacs.html</a><br />
+[4] <a href="http://yohshiy.blog.fc2.com/blog-entry-256.html">http://yohshiy.blog.fc2.com/blog-entry-256.html</a>&nbsp;<br />
+[5] <a href="http://sourceforge.jp/magazine/09/04/06/1138226/2">http://sourceforge.jp/magazine/09/04/06/1138226/2</a><br />
+[6] <a href="http://nigohiroki.hatenablog.com/entry/2012/09/16/005841">http://nigohiroki.hatenablog.com/entry/2012/09/16/005841</a><br />
+-------------------------------------------------------------------------------<br />
+■ libraries and tools<br />
+<br />
+□ libraries
+<ul>
+	<li>atc (libatc.a): atomistic-to-continuum methods</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/atc<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.mpic++
+<ul>
+	<li>linalg (liblinalg.a): set of BLAS and LAPACK routines needed by USER-ATC packag</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/linalg<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran
+<div style="margin-left: 20px;">(unsuccess)</div>
+
+<ul>
+	<li>poems (libpoems.a): POEMS rigid-body integration package</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/poems<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.g++<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.icc
+<ul>
+	<li>meam (libmean.a): modified embedded atom method (MEAM) potential</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/meam<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.ifort
+<ul>
+	<li>reax (libreax.a): ReaxFF potential</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/reax<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp; or make -f Makefile.ifort
+<ul>
+	<li>qmmm: quantum mechanics/molecular mechanics coupling interface</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/qmmm<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.gfortran
+<ul>
+	<li>colvars (libcolvars.a): collective variable module (Metadynamics, ABF and more)</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/colvars<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.g++
+<ul>
+	<li>awpmd (libawpmd.a): antisymmetrized wave packet molecular dynamics, AWPMD package</li>
+</ul>
+&nbsp;&nbsp;&nbsp;&nbsp; cd $HOME/Documents/Workspace/LAMMPS/lam*/lib/awpmd<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make -f Makefile.mpicc<br />
+※ Please, see $HOME/Documents/Workspace/LAMMPS/lam*/lib/README<br />
+<br />
+□ select library<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make package-status<br />
+&nbsp;&nbsp;&nbsp; make no-all<br />
+&nbsp;&nbsp;&nbsp; make yes-meam<br />
+&nbsp;&nbsp;&nbsp; make yes-reax<br />
+4. make package-status<br />
+5. make mpi<br />
+※ retry: make clean-all -&gt; make or make yes-std ......<br />
+<br />
+□ tools<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd tools<br />
+3. make<br />
+<br />
+□ KIM API (kim-api-v1.6.3) (unsuccess)　（金属系を扱う場合には使えるようにしておきたい）<br />
+1. download: <a href="https://openkim.org">https://openkim.org</a> -&gt; <a href="https://openkim.org/kim-api/#download">https://openkim.org/kim-api/#download</a><br />
+&nbsp; &quot;kim-api-vX.X.X.tgz&quot;<br />
+2. cd&nbsp;$HOME/Documents/Workspace/LAMMPS<br />
+3. tar zxvf $HOME/Downloads/kim-api-v1.6.3.tar<br />
+4. cd kim*<br />
+5. cp Makefile.KIM_Config.example Makefile.KIM_Config<br />
+6. printf &quot;g/^KIM_DIR/d\\ni\nKIM_DIR = `pwd`\n.\nw\nq\n&quot; | ed Makefile.KIM_Config<br />
+7. make<br />
+8.&nbsp;vi $HOME/Documents/Workspace/LAMMPS/lam*/src/KIM/Makefile.lammps<br />
+&nbsp; kim_SYSINC = -I/usr/local/kim-api-v1.6.3/KIM_API<br />
+&nbsp; kim_SYSLIB = -lkim<br />
+&nbsp; kim_SYSPATH = -L/usr/local/kim-api-v1.6.3/KIM_API<br />
+※ tar zxvf openkim-api-v1.4.1.tgz needs gfortran &gt; 4.7.0<br />
+※ (unsuccess for now) make install -&gt; kim_SYSINC = -I/usr/local/lib/openkim-api-v1.3.1/KIM_API, etc.<br />
+<br />
+□ VORONOI (voro++-0.4.6)<br />
+1. download: <a href="http://math.lbl.gov/voro++/download/">http://math.lbl.gov/voro++/download/</a><br />
+2. cd&nbsp;$HOME/Documents/Workspace/LAMMPS<br />
+3. tar zxvf $HOME/Downloads/voro++-0.4.6.tar<br />
+4. cd vor*<br />
+5.&nbsp;vi config.mk<br />
+&nbsp; &nbsp;(is not need to change this file)<br />
+6. make<br />
+7. sudo make install<br />
+10.&nbsp;vi $HOME/Documents/Workspace/LAMMPS/lam*/src/VORONOI/Makefile.lammps<br />
+&nbsp; &nbsp;(is not need to change this file)<br />
+<br />
+□ python ($HOME/Documents/Workspace/LAMMPS/lam*/python) (unsuccess)<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/lam*<br />
+2. cd src<br />
+3. make makeshlib<br />
+4. make -f Makefile.shlib mpi<br />
+5. make install-python<br />
+<br />
+□&nbsp;xmoive<br />
+X11<br />
+1.&nbsp;<a href="http://xquartz.macosforge.org/landing/">http://xquartz.macosforge.org/landing/</a> -&gt;&nbsp;<a href="http://xquartz.macosforge.org/downloads/SL/XQuartz-2.7.7.dmg" style="color: black; line-height: normal; font-family: Times, &quot;Times New Roman&quot;, FreeSerif, serif; white-space: nowrap;">XQuartz-2.7.7.dmg</a><br />
+2. double-click XQuartz-2.7.7.dmg<br />
+3. double-click XQuartz.pkg<br />
+<a href="http://macperson.net/mac-x11-xquartz/">http://macperson.net/mac-x11-xquartz/</a><br />
+xmovie (unsuccess)<br />
+1. $HOME/Documents/Workspace/LAMMPS/lam*/tools/xmovie<br />
+2. vi Makefile<br />
+3.&nbsp;LIBS&nbsp;&nbsp; &nbsp;= $(XLIBDIR) -lX11 -lXaw -lm -&gt;&nbsp;LIBS&nbsp;&nbsp; &nbsp;= $(XLIBDIR) -lX11 -lXaw -lXt -lXext -lXmu -lXpm<br />
+4. make<br />
+Run: $HOME/Documents/Workspace/LAMMPS/lam*/tools/xmovie/xmovie -scale dump.case<br />
+<br />
+[1] <a href="http://piyajk.com/archives/334">http://piyajk.com/archives/334</a><br />
+[2] <a href="http://seesaawiki.jp/qolo/d/LAMMPS%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://seesaawiki.jp/qolo/d/LAMMPS%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a><br />
+[3] <a href="http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?LAMMPS%A4%CE%BE%F0%CA%F3">http://opencae.gifu-nct.ac.jp/pukiwiki/index.php?LAMMPS%A4%CE%BE%F0%CA%F3</a><br />
+[4] <a href="http://lammps.sandia.gov/tutorials/italy14/Compiling_LAMMPS.pdf">http://lammps.sandia.gov/tutorials/italy14/Compiling_LAMMPS.pdf</a><br />
+[5] <a href="http://levlafayette.com/node/121">http://levlafayette.com/node/121</a><br />
+-------------------------------------------------------------------------------<br />
+■ GUI
+<ul>
+	<li>octa (Win, Mac, or Linux)</li>
+</ul>
+
+<div style="margin-left: 20px;">1. download:&nbsp;<a href="http://www.octa.jp/index_jp.html">http://www.octa.jp/index_jp.html</a><br />
+2. pass word: Please, see &quot;What is OCTA (first line)&quot; at&nbsp;<a href="http://www.octa.jp/OCTA/whatsOCTA.html">http://www.octa.jp/OCTA/whatsOCTA.html</a><br />
+3. OCTA(HP) -&gt; OCTA-BBS&nbsp;-&gt; LOGIN<br />
+4. OCTA2013 -&gt; OCTA2013 for Mac OS X 10.8 (Mountain lion)<br />
+5. download:&nbsp;OCTA2013 MacOSX&nbsp;.img<br />
+6. OCTA2013 MacOSX -&gt;&nbsp;OCTA2013 MAC Binary Installer .pkg<br />
+<br />
+Run<br />
+1. ターミナル -&gt; gourmet</div>
+
+<div>-------------------------------------------------------------------------------<br />
+■ graphic</div>
+
+<ul>
+	<li>VMD</li>
+</ul>
+
+<div style="margin-left: 20px;">1. download:&nbsp;<a href="http://www.ks.uiuc.edu/Research/vmd/">http://www.ks.uiuc.edu/Research/vmd/</a> -&gt;&nbsp;<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi">http://www.ks.uiuc.edu/Development/Download/download.cgi</a>? PackageName=VMD&nbsp;-&gt;&nbsp;Version 1.9.1 (2012-02-04) Platforms:&nbsp;-&gt;&nbsp;<a href="http://www.ks.uiuc.edu/Development/Download/download.cgi?UserID=321794&amp;AccessCode=48138152997484381867494414876252&amp;ArchiveID=1192" style="margin: 0px; padding: 0px; color: rgb(0, 51, 102); line-height: 16.25px; font-family: Arial, Helvetica, sans-serif; font-weight: bold; text-decoration: none;">MacOS X OpenGL (32-bit Intel x86)</a><br />
+※ Username, Password を入力 -&gt; New User Registration になる。<br />
+2. double-click vmd191macx86nocuda.dmg<br />
+3. double-click&nbsp;VMD 1.9.1.app<br />
+<br />
+Run<br />
+1.&nbsp;double-click&nbsp;VMD 1.9.1.app<br />
+2. VMD Main -&gt; File -&gt; New Molecule...&nbsp;<br />
+3. Browse... -&gt;&nbsp;<br />
+4. Enable: All files<br />
+5. case.dump or dump.case<br />
+6. Determine file type: LAMMPS Trajectory -&gt; Load<br />
+7. VMD Main -&gt; speed (center)&nbsp;-&gt; click arrow<br />
+<a href="http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf">http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf</a><br />
+<br />
+download: case.pdb file&nbsp;<br />
+1.&nbsp;double-click&nbsp;VMD 1.9.1.app<br />
+2. VMD Main -&gt; File -&gt; New Molecule...&nbsp;<br />
+3. Browse... -&gt;&nbsp;<br />
+4. 1ubq.pdb<br />
+5. Load<br />
+6. VMD Main -&gt; Graphics -&gt; Representations<br />
+7. Drawing Method -&gt; NewCartoon<br />
+※ case.psf or case.pdb&nbsp;を読み込ませる。<br />
+<br />
+clear<br />
+1. VMD Main -&gt; case.pdb<br />
+2. Molecule -&gt;&nbsp;Delet Molecule&nbsp;<br />
+&nbsp;</div>
+
+<ul>
+	<li>Pizza -&gt; Paraview</li>
+</ul>
+
+<div style="margin-left: 20px;">&bull; Pizza</div>
+
+<div style="margin-left: 20px;">1. download:&nbsp;<a href="http://sourceforge.net/projects/pizza-py/files/">http://sourceforge.net/projects/pizza-py/files/</a> -&gt;&nbsp;<strong style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(85, 85, 85); line-height: 18px; font-family: sans-serif; font-size: 13px; vertical-align: baseline; background-color: transparent;"><a href="http://sourceforge.net/projects/pizza-py/files/latest/download?source=files" style="margin: 0px; padding: 0px; color: rgb(0, 102, 153); text-decoration: none; vertical-align: baseline; background-color: transparent;" title="/pizza-py/pizza-1Oct06/pizza-1Oct06.tar.gz:  released on 2006-09-27 22:03:57 UTC"><span style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; vertical-align: baseline; background-color: transparent;">Download pizza-1Oct06.tar.gz (2.4 MB)</span></a></strong><br />
+2. cd $HOME/Documents/Workspace/LAMMPS<br />
+3. tar zxvf $HOME/Downloads/pizza-1Oct06.tar<br />
+4.&nbsp;ln -s pizza-1Oct06 pizza<br />
+5. cd pizza/src<br />
+6. python -i pizza.py<br />
+※ エラーが出るので下記のモジュールをインストールする。<br />
+&nbsp;</div>
+
+<div style="margin-left: 20px;">&bull; PIL (Image Tk)<br />
+1. download:&nbsp;<a href="http://www.pythonware.com/products/pil/">http://www.pythonware.com/products/pil/</a> -&gt;&nbsp;<a href="http://www.pythonware.com/products/pil/#pil117" style="line-height: normal;">PIL 1.1.7</a>&nbsp;-&gt;&nbsp;<a href="http://effbot.org/downloads/Imaging-1.1.7.tar.gz" style="line-height: normal;"><b>Python Imaging Library 1.1.7 Source Kit</b></a><br />
+2. cd $HOME/Documents/Workspace/LAMMPS<br />
+3. tar zxvf $HOME/Downloads/Imaging-1.1.7.tar<br />
+4. cd Ima*<br />
+5. sudo python setup.py install<br />
+<br />
+&bull; Numeric<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/pizza/src<br />
+2. vi dump.py<br />
+3. import Numeric -&gt; import numpy.oldnumeric as Numeric<br />
+<br />
+&bull; gl (OpenGL.Tk)<br />
+私も参考HPの症状と同じになった。対策方法は見つからない。gl.pyとgl.pycをsrcから出す。<br />
+1. cd&nbsp;$HOME/Documents/Workspace/LAMMPS/pizza/src<br />
+2. mv gl.py ../<br />
+3. mv gl.pyc ../<br />
+<br />
+&bull; Pmw<br />
+1. download:&nbsp;<a href="http://pmw.sourceforge.net">http://pmw.sourceforge.net</a> -&gt;&nbsp;<a href="http://sourceforge.net/project/showfiles.php?group_id=10743" style="line-height: normal;">Download the latest version of Pmw as tar.gz file (with full documentation)</a>&nbsp;-&gt;&nbsp;<strong style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; color: rgb(85, 85, 85); line-height: 18px; font-family: sans-serif; font-size: 13px; vertical-align: baseline; background-color: transparent;"><a href="http://sourceforge.net/projects/pmw/files/latest/download?source=files" style="margin: 0px; padding: 0px; color: rgb(0, 102, 153); text-decoration: none; vertical-align: baseline; background-color: transparent;" title="/Pmw-2.0.0.tar.gz:  released on 2014-03-29 18:10:07 UTC"><span style="margin: 0px; padding: 0px; outline: 0px; border: 0px currentColor; border-image: none; vertical-align: baseline; background-color: transparent;">Download Pmw-2.0.0.tar.gz (804.1 kB)</span></a></strong><br />
+2. cd&nbsp;$HOME/Documents/Workspace/LAMMPS<br />
+3.&nbsp;tar zxvf $HOME/Downloads/Pmw-2.0.0.tar<br />
+4. cd Pm*<br />
+5. sudo python setup.py install<br />
+<br />
+&bull; Pizza (using)&nbsp;<br />
+1. mpirun -np 4 lmp_mpi &lt; in.case<br />
+2. python -i $HOME/Documents/Workspace/LAMMPS/pizza/src/pizza.py<br />
+3. d = dump(&quot;dump.case&quot;)<br />
+4. v = vtk(d)<br />
+5. v.many(&quot;case&quot;)<br />
+<br />
+&bull; Paraview<br />
+1. download: <a href="http://www.paraview.org/download/">http://www.paraview.org/download/</a><br />
+&nbsp; Version of ParaView: v4.2<br />
+&nbsp; Type of download: Paraview binary Installers<br />
+&nbsp; Perating System: Mac OS X<br />
+&nbsp; File to Download: ParaView-4.2.0-Darwin-64bit.dmg<br />
+2. Download<br />
+3. double-click&nbsp;ParaView-4.2.0-Darwin-64bit.dmg<br />
+4.&nbsp;double-click&nbsp;paraview.app<br />
+※ セキュリティで開けない場合：&nbsp;システム環境設定 -&gt;&nbsp;セキュリティとプライバシー -&gt; 下の鍵を開ける -&gt; すべてのアプリケーションを許可にチェックを入れる -&gt; 次回から&nbsp;double-click&nbsp;paraview.app で動作する。<br />
+<a href="http://www.paraview.org/Wiki/ParaView:Build_And_Install">http://www.paraview.org/Wiki/ParaView:Build_And_Install</a><br />
+<br />
+Paraview (Run)<br />
+1. File -&gt; Open... -&gt; File name: case..vtk -&gt; files of type: Legacy VTK files(*.vtk) -&gt; OK<br />
+※ 開くファイルは Machintosh HD -&gt; Users -&gt; あなたのPC名 -&gt; Documents -&gt; Workspace -&gt; LAMMPS -&gt; lammps-と進めていく。<br />
+2. Apply<br />
+3. Time: に値を入力する<br />
+※ *.dump, *.eam, *.meam, *.rigid, *.lammps も選択できる。</div>
+<br />
+[1] <a href="http://www.octa.jp/index_jp.html">http://www.octa.jp/index_jp.html</a><br />
+[2] <a href="http://lammps.sandia.gov/prepost.html">http://lammps.sandia.gov/prepost.html</a><br />
+[3] <a href="http://lammps.sandia.gov/viz.html">http://lammps.sandia.gov/viz.html</a><br />
+[4] <a href="http://sourceforge.net/projects/pizza-py/files/">http://sourceforge.net/projects/pizza-py/files/</a><br />
+[5]&nbsp;<a href="http://nozawashinichi.sakura.ne.jp/fs/2009/07/macopengl.html">http://nozawashinichi.sakura.ne.jp/fs/2009/07/macopengl.html</a><br />
+[6]&nbsp;<a href="http://keiorogiken.wordpress.com/2013/02/10/startopengl/">http://keiorogiken.wordpress.com/2013/02/10/startopengl/</a><br />
+[7]&nbsp;<a href="http://sourceforge.net/p/pizza-py/mailman/message/30349641/">http://sourceforge.net/p/pizza-py/mailman/message/30349641/</a><br />
+[8] <a href="http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf">http://lammps.sandia.gov/tutorials/italy14/VMD_Visualization_Scripting_TopoTools.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ YouTube
+<ul>
+	<li>HPC molecular simulations using LAMMPS: <a href="https://www.youtube.com/watch?v=itoZtYmjV-A">https://www.youtube.com/watch?v=itoZtYmjV-A</a></li>
+</ul>
+-------------------------------------------------------------------------------<br />
+■ tutorial<br />
+[1] <a href="http://lammps.sandia.gov/tutorials.html">http://lammps.sandia.gov/tutorials.html</a> -&gt; <a href="https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials">https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials</a><br />
+[2] <a href="http://lammps.sandia.gov/tutorials/italy14/italy_examples_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_examples_Mar14.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ potentials
+<ul>
+	<li>Interatinuc Potentials Repository Project (NIST): <a href="http://www.ctcms.nist.gov/potentials/">http://www.ctcms.nist.gov/potentials/</a></li>
+	<li>Lammps/potentials: $HOME/Documents/Workspace/LAMMPS/lam*/potentials</li>
+	<li>EAM:</li>
+</ul>
+
+<div style="margin-left: 20px;"><a href="https://sites.google.com/site/eampotentials/Home">https://sites.google.com/site/eampotentials/Home</a></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;"><a href="http://www.ctcms.nist.gov/potentials">http://www.ctcms.nist.gov/potentials</a> </span></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;"><a href="http://cst-www.nrl.navy.mil/ccm6/ap">http://cst-www.nrl.navy.mil/ccm6/ap</a> </span></div>
+
+<div style="margin-left: 20px;"><span style="line-height: normal;"><a href="http://enpub.fulton.asu.edu/cms/potentials/main/main.htm">http://enpub.fulton.asu.edu/cms/potentials/main/main.htm</a> </span></div>
+
+<div>&nbsp;</div>
+[1] <a href="http://lammps.sandia.gov/tutorials/italy14/italy_overview_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_overview_Mar14.pdf</a><br />
+[2] <a href="http://atsimpotentials.readthedocs.org/en/latest/potentials/eam_tabulation.html">http://atsimpotentials.readthedocs.org/en/latest/potentials/eam_tabulation.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ Input files
+<ul>
+	<li>potential file</li>
+	<li>in.case (or case.in)</li>
+	<li>data.case (or case.data)</li>
+	<li>case.pbs</li>
+</ul>
+<br />
+□ in.case (or case.in)<br />
+◇入力ファイルの構成 （詳細はManual.pdf を参照すると良い）<br />
+　概ね下記の順番で計算条件を記述していく（examples にある入力ファイルと見比べながら勉強していくとよい）。<br />
+※ # を付けるとその後がコメントになります（examplesの入力ファイルでよく見かけますので注意してみてください）。<br />
+<br />
+1. 空間の次元・粒子の定義<br />
+・ 無記入（ディフォルト）では3次元空間
+<div style="margin-left: 20px;">二次元にする場合は dimension 2、三次元にする場合は dimension 3 にする。</div>
+・ units AA<br />
+　　物理量の尺度をAAで指定した単位系にする。
+<div style="margin-left: 20px;">AAには、lj =「Lennard-Jones」単位系 , real=「real」単位系、などがある。</div>
+
+<div style="margin-left: 20px;">unitsが無記入（ディフォルト）であると lj =「Lennard-Jones」単位系となる。<br />
+※ AA = lj or real or metal or si or cgs or electron or micro or nano</div>
+
+<div>・ boundary x y z</div>
+
+<div style="margin-left: 20px;">各x, y, z軸方向の境界をどのようにするかを設定する。<br />
+x, y, zは、それぞれ p か f, s, m、またはこれらの二つの組み合わせになる。<br />
+pは周期的な構造になる<br />
+fは非周期で固定された境界<br />
+sは非周期で収縮包装される<br />
+mは非周期で最小の体積で収縮包装される。<br />
+※ 主に、pかsが用いられる。結晶であれば boundary p p p にすればよいだろう。</div>
+・ atom_style BB
+
+<div style="margin-left: 20px;">計算での粒子の属性をBBの指定にする。BBはatomic や bond, sphere, full&nbsp;がある。<br />
+・ atomicでは「位置、速度、番号、型」の情報を各粒子が持つ。<br />
+・ bondでは「位置、速度、番号、型、ボンドでの粒子の番号」の情報を各粒子が持つ。<br />
+・ sphereｄでは「位置、速度、番号、型、直径、質量、角運動量」の情報を各粒子が持つ。<br />
+・ full では、「位置、速度、番号、型、ボンドでの粒子の番号、結合角での粒子の番号、二面角での粒子の番号、通常以外での二面角での番号、電荷」の情報を各粒子が持つ。<br />
+※ どのような系にBBを設定すれば良いかはManual.pdf（p.289）の表に記載されている。<br />
+※ atomic では ディフォルトの値のみが用いられる。これが用いられる系は coarse-grain liquidsや固体、金属である。</div>
+<br />
+2. 初期条件<br />
+・ read_data data.case
+<div style="margin-left: 20px;">data.caseに記載されている原子座標のデータが読み込まれる。</div>
+・ 層を積み重ねる場合には、replicate nx ny nz を用いる。replicate 1 1 2とすると z方向に2個積み重ねられる。&nbsp;<br />
+・ lattice AA B.BBB
+<div style="margin-left: 20px;">AAは格子の種類（fccやbcc, hcp, scなど）、B.BBBは規格化密度（充填率）である。充填率は格子点に半径rの球を詰めたときに、格子定数が目的の値になるように決める。</div>
+・ region&nbsp;box block a0 a1 b0 b1 c0 c1
+
+<div style="margin-left: 20px;">名称boxでの直方の領域を定義する。<br />
+領域の範囲は a軸の範囲[a0, a1]、b軸の範囲 [b0, b1]、c軸の範囲 [c0, c1] と設定される。</div>
+・ create_box&nbsp;1 box
+
+<div style="margin-left: 20px;">名称boxの領域に型1の粒子を使って計算する。</div>
+・ create_atoms 1 box
+
+<div style="margin-left: 20px;">名称boxの領域に型1の粒子を配置する。配置される位置は、latticeで定義した格子点上。</div>
+・ mass 1 A.A
+
+<div style="margin-left: 20px;">型1の粒子の質量をA.Aにする。</div>
+<br />
+3. 相互作用の定義 (LJ や COLLOID などを定義する)<br />
+・ pair_style　AA B.B　
+<div style="margin-left: 20px;">粒子間の相互作用のポテンシャルを設定する。<br />
+AAにはlj や collid などがある。/を入れてさらに詳細なポテンシャルの指定が可能になる（例えば、lj/cut など）。<br />
+/を入れて詳細なポテンシャルの指定をした分、それに関するパラメータを（例えば、B.Bのように）AAの後に記述する。<br />
+※ どのような記述が可能かは Manual.pdf の「pair_style command」に記述がある。沢山の種類があるので驚くが、高分子であれば lj の付いたもの、金属であればeamやmeam, kim関連を調べれば良いだろう。pair_styleに対応したpair_coeffの設定の仕方も記述されている。</div>
+・ pair_coeff　A B C
+
+<div style="margin-left: 20px;">型Aの粒子と型Bの粒子の間のポテンシャルのパラメーターC(ときにはポテンシャルファイルのアドレスと原子)を設定する。<br />
+Bの後にpair_styleで設定した粒子間の相互作用のポテンシャルに関するパラメーターCを設定する。<br />
+A B を * * にすると、全ての粒子対に対してパラメーターの設定が行われる（*は「任意」とか「全ての」という意味）。例えば、A * にすると型Aの粒子と全ての型の粒子の間のという設定にしたりできる。<br />
+※ meamの場合<br />
+-----<br />
+units metal<br />
+pair_style meam<br />
+pair_coeff * * library.mean 元素名1 元素名2 etc parameter.meam 元素名1 元素名2 etc<br />
+-----<br />
+meam では パラメーターファイル（＝parameter.mean=case.mean）をNULLにして使用しないようにできる。しかし、NULLにすると、libraryファイルでの情報から得られなかった元素の相互作用を考慮できないために、化合物のような系ではがっかりした結果になる。<br />
+※ KIMの場合(Ref. https://openkim.org/files/TD_887699523131_000/lammps.in.template)<br />
+-----<br />
+pair_style kim LAMMPSvirial sed_model_string<br />
+pair_coeff * * sed_species_string<br />
+-----</div>
+・ bond_style harmonic
+
+<div style="margin-left: 20px;">ボンドポテンシャルを harmonic にする。</div>
+・ bond_coeff A K r<sub>0</sub>
+
+<div style="margin-left: 20px;">型 A のボンドポテンシャルを harmonic にする。他のパラメーターは、E = K ( r - r<sub>0 </sub>)<sup>2</sup> に関係したものとなる。</div>
+
+<div>・ angle_style charmm</div>
+
+<div style="margin-left: 20px;">結合角のポテンシャルを charmm にする。E = K(&theta;- &theta;<sub>0</sub>)<sup>2</sup> + K<sub>UB</sub> (r -r<sub>UB</sub>)<sup>2</sup></div>
+
+<div>・ dihedral_style charmm</div>
+
+<div style="margin-left: 20px;">二面角のポテンシャルを charmm にする。E = K[1 + cos(n&phi;-d)]</div>
+
+<div>・ improper_style harmonic</div>
+
+<div style="margin-left: 20px;">通常以外の二面角のポテンシャルを&nbsp;harmonic にする。 E = K (&chi; - &chi;<sub>0</sub>)<sup>2</sup></div>
+
+<div>・ kspace_style pppm A.AAAA</div>
+
+<div style="margin-left: 20px;">荷電粒子の受けるクーロン力を「particle-particle particle-mesh法」で求める。<br />
+計算精度は相対（1Å離れた単位点電荷が及ぼしあう力の大きさに対しての）誤差がA.AAAA以下となるように設定する。</div>
+・ velocity all create A.AA BBBBB
+
+<div style="margin-left: 20px;">全て（=all）の粒子に規格化した運動エネルギーがA.AAになるように速度を割り当てる。割り当て方は乱数の初期値はBBBBBによる。</div>
+・ neighbor A.A B
+
+<div style="margin-left: 20px;">ある粒子について、カットオフ半径 rc から A.A *&nbsp;&sigma; の&nbsp;距離内になる粒子で neighbor-list を構成する。A.A * &sigma;の領域はskinと呼ばれる。<br />
+B には bin や multi がある。<br />
+bin = binning の構成アルゴリズムを用いることを示す。このアルゴリズムは計算時間が全粒子数/CPU数に比例する。<br />
+multi = binning法の改良版。カットオフ長に大きなバラツキがあるときに有効。</div>
+・ neigh_modify every AA delay&nbsp;B check no
+
+<div style="margin-left: 20px;">neighbor-listの最後の構成からBステップまで再構成をせず、BステップからAA ステップ後にneighbor-listの再構成を行う。<br />
+check yes にすると、skinの厚さの半分の距離を粒子が移動したら再構成を行う。一度構成したら、そのシミュレーション中には再構成を行わない。</div>
+
+<div>・ comm_modify mode multi</div>
+
+<div style="margin-left: 20px;">粒子は、相手の粒子の型により複数のneighbor-listを構成する。これにより、短いカットオフ長の粒子の数えすぎを防ぐことができる。</div>
+
+<div><br />
+4. 時間積分の定義 (NVE や NPT を定義する)</div>
+
+<div>・ fix&nbsp;A all nve</div>
+
+<div style="margin-left: 20px;">A(は通常数値が記入されている)という名称で、全て(=all)の粒子に対して、NVE(=nve)積分で位置と速度を更新する。ここで、Nは粒子数、Vは体積、Eはエネルギーとなる。全系はミクロカノニカルの軌道を生成する。</div>
+・ fix&nbsp;A all npt temp&nbsp;AAA.A&nbsp;BBB.B&nbsp;C.C iso 3.0 3.0 10.0
+
+<div style="margin-left: 20px;">Aという名称で、全て(=all)の粒子に対して、NPT積分を行う。温度（=temp)は、計算開始時はAAA.A、終了時はBBB.B、温度制御の強さは無次元時間でC.Cに達するようにする。</div>
+
+<div>・ fix A all temp/rescale BB C.CC D.DD F.FF G.G</div>
+
+<div style="margin-left: 20px;">Aという名称で、全て(=all)の粒子に対して、BBステップ毎に、速度をスケールし直すかを検討する。目標の温度は、計算開始時 C.CC、終了時にD.DDとなるようにする。目標値からF.FFズレていたらスケールし直す。ズレの大きさの割合G.Gだけ修正する。</div>
+
+<div>・ fix A all adapt BB pair soft a * * v_prefactor</div>
+
+<div style="margin-left: 20px;">Aという名称で、全て(=all)の粒子に対して、BBステップ毎に、全て（* *）の粒子対の相互作用ポテンシャル soft のパラメーター a を変数 prefactor にする。</div>
+
+<div>・ fix A all enforce2d</div>
+
+<div style="margin-left: 20px;">Aという名称で、全て(=all)の粒子に対して、z方向の速度と力を0にする。<br />
+dimension 2 を設定したときによく用いられる。</div>
+
+<div>・ unfix A</div>
+
+<div style="margin-left: 20px;">Aの名称の操作を取り消す</div>
+
+<div>・ variable AAA equal ramp(x, y)
+<div style="margin-left: 20px;">変数名 AAA を関数 ramp(x, y)で定義する。このramp関数は、シミュレーション中にxからyまで滑らかに変化する。</div>
+</div>
+<br />
+5. 出力の定義<br />
+・ group AAA type &lt;= BB
+<div style="margin-left: 20px;">AAAという名称で、型 BB以下の粒子をグループ化する。</div>
+・ dump id all atom&nbsp;AA dump.lammpstrj&nbsp;
+
+<div style="margin-left: 20px;">id という名称で、全て（=all）の粒子に対して、粒子の位置と型の情報を、AAステップ毎に、dump.lammpstrj という名称でファイルに書き込む。<br />
+※&nbsp;dump.lammpstrj としているのはVMDで読み取りやすくするため。exampleファイルにある入力ファイルも dump.lammpstrj に変えると良い。</div>
+
+<div>・ timestep　AA</div>
+
+<div style="margin-left: 20px;">無次元化した時間ステップをAAとする。時間分解能を上げるにはこの値を小さくする。ディフォルトは0.005</div>
+
+<div>・ run XXX</div>
+
+<div style="margin-left: 20px;">シミュレーションをXXXステップの行う。単位は無次元化した時間ステップとなる</div>
+
+<div>・ thermo_style AA</div>
+
+<div style="margin-left: 20px;">出力する熱力学量をAAに設定する。AAにはmultiがある。<br />
+multiでは「運動エネルギー、温度、ポテンシャルエネルギー、結合エネルギー、二面角エネルギー、通常以外の二面角エネルギー、ファンデルワールス力、クーロン力、長距離のk空間エネルギー、圧力」が出力される。</div>
+
+<div>・ thermo YY&nbsp;</div>
+
+<div style="margin-left: 20px;">最初と最後、そして、YYステップ毎に、熱力学量（温度、エネルギー、圧力など）を出力する</div>
+
+<div><br />
+□ data.case (or case.data)<br />
+　計算に必要な粒子の属性や相互作用の種類を定義する。ヘッダーとボディーから構成される。ヘッダーで構成要素を与え、ボディでそれらを詳述する。<br />
+<br />
+・ ヘッダー：</div>
+
+<div style="margin-left: 20px;">最初の行は飛ばされる。</div>
+
+<div style="margin-left: 20px;">ヘッダーの部分は、数値、データの種類、 の順に並び、数値が先に来る。</div>
+
+<div style="margin-left: 20px;">データの種類のキーワードが空白を含む場合は、スペース1個分だけの空白にする。<br />
+ヘッダーではシミュレーション領域も定義可能。下記のAAAやBBBなどには数値が入る。<br />
+・AAA atoms : 粒子数 AAA<br />
+・AAA bonds : ボンド数 AAA<br />
+・AAA angles&nbsp;: 結合角数 AAA<br />
+・AAA dihedral : 二面角数 AAA<br />
+・AAA impropers : 通常以外の二面角数 AAA<br />
+・AAA atom types : 粒子の型の数 AAA<br />
+・AAA bond types : ボンドの型の数 AAA<br />
+・AAA angle types : 結合角の型の数 AAA<br />
+・AAA dihedral types : 二面角の型の数 AAA<br />
+・AAA improper types : 通常以外の二面角の型の数 AAA<br />
+・A.AA&nbsp;B.BB xlo xhi&nbsp;: x方向の計算領域 [A.AA, B.BB]<br />
+・A.AA&nbsp;B.BB ylo yhi&nbsp;: y方向の計算領域 [A.AA, B.BB]<br />
+・A.AA&nbsp;B.BB zlo zhi&nbsp;: z方向の計算領域 [A.AA, B.BB]</div>
+
+<div><br />
+・ ボディー：</div>
+
+<div style="margin-left: 20px;">データの種類、数値の順に並び、文字が先に来る。</div>
+
+<div style="margin-left: 20px;">データの種類のキーワードを読み込んだら、その次の行を飛ばし、残りの行で数値を読む（下記の例でのAやB, C, D, x, y, zなどは数値）。キーワードの最初は大文字。<br />
+・Masses</div>
+
+<div style="margin-left: 40px;">A B.BBB<br />
+型Aの粒子の質量がB.BBB</div>
+
+<div style="margin-left: 20px;">・Atoms</div>
+
+<div style="margin-left: 40px;">A B C x y z<br />
+番号Aの粒子が分子Bに属し、粒子の型はCで、座標はx, y, zとなる。</div>
+
+<div style="margin-left: 20px;">・Velocities</div>
+
+<div style="margin-left: 40px;">A vx vy vz<br />
+粒子Aの速度をx, y, z方向に対して、それぞれ、vx、vy、vzに設定する。</div>
+
+<div style="margin-left: 20px;">・Bonds</div>
+
+<div style="margin-left: 40px;">A B C D<br />
+番号Aのボンドがボンドの型Bに属し、粒子Cと粒子Dを結びつける。</div>
+
+<div style="margin-left: 20px;">・Angles</div>
+
+<div style="margin-left: 40px;">A B C D E<br />
+結合角Aが型Bに属し、粒子Cと粒子Dと粒子Eを結びつける。</div>
+
+<div style="margin-left: 20px;">・Dihedrals</div>
+
+<div style="margin-left: 40px;">A B C D E F G<br />
+二面角Aが型Bに属し、粒子Dと粒子Eと粒子Fと粒子Gを結びつける。</div>
+
+<div style="margin-left: 20px;">・Impropers</div>
+
+<div style="margin-left: 40px;">A B C D E F G<br />
+通常以外の二面角Aが型Bに属し、粒子Dと粒子Eと粒子Fと粒子Gを結びつける。</div>
+
+<div style="margin-left: 20px;">・Pair Coeffs</div>
+
+<div style="margin-left: 40px;">A B C D E<br />
+型Aの相互作用のポテンシャルで、パラメーターをB, C, D, Eに設定する。</div>
+
+<div style="margin-left: 20px;">・Bond Coeffs</div>
+
+<div style="margin-left: 40px;">A B C</div>
+
+<div style="margin-left: 40px;">型Aのボンドポテンシャルで、パラメーターをB, Cに設定する。</div>
+
+<div style="margin-left: 20px;">・Angle Coeffs</div>
+
+<div style="margin-left: 40px;">A B C D E<br />
+型Aの結合角のポテンシャルで、パラメーターをB, C, D, Eに設定する。</div>
+
+<div style="margin-left: 20px;">・Dihedral Coeffs</div>
+
+<div style="margin-left: 40px;">A B C D E<br />
+型Aの二面角のポテンシャルで、パラメーターをB, C, D, Eに設定する。</div>
+
+<div style="margin-left: 20px;">・Improper Coeffs</div>
+
+<div style="margin-left: 40px;">A B C<br />
+型Aの通常以外の二面角のポテンシャルで、パラメーターをB, Cに設定する。</div>
+
+<div>&nbsp;</div>
+
+<div>□ potential file</div>
+
+<ul>
+	<li>case.eam</li>
+</ul>
+
+<div style="margin-left: 20px;">1行目: コメント<br />
+2行目: 原子番号、質量、格子定数、格子タイプ（FCCなど）<br />
+3行目: Nrho, drho, Nr, dr, cutoff</div>
+
+<ul>
+	<li>case.meam</li>
+</ul>
+
+<div style="margin-left: 20px;">ファイルの構造については Manual.pdfの「pair_style meam command」の「Other parameters in the MEAM library file correspond to single-element potential parameters」に書かれている。<br />
+examples/meamでのparameterファイルであるSiC.meamと比べれば良い。</div>
+
+<div>----------<br />
+■&nbsp;単位系 (units) (Manual.pdfの「units command」(p.1319)に記述がある）<br />
+<br />
+・lj 単位系</div>
+
+<div style="margin-left: 20px;">質量： m<br />
+長さ： &sigma;<br />
+時間： &tau; = &radic;(m&sigma;2/&epsilon;)<br />
+エネルギー： &epsilon;<br />
+速度： &sigma;/&tau;<br />
+力： &epsilon;/&sigma;<br />
+トルク： &epsilon;<br />
+温度： &epsilon;/k<sub>B</sub><br />
+圧力： &epsilon;/&sigma;<sup>3</sup><br />
+動粘性率： &epsilon;&tau;/&sigma;<sup>3</sup><br />
+電荷： &radic;(4&pi;&sigma;&epsilon;<sub>0</sub>&epsilon;)<br />
+電気双極子モーメント： &radic;(4&pi;&sigma;<sup>3</sup>&epsilon;<sub>0</sub>&epsilon;)<br />
+電場： &epsilon;/&radic;(4&pi;&sigma;<sup>3</sup>&epsilon;<sub>0</sub>)<br />
+密度： 1/&sigma;<sup>3</sup><br />
+ステップ時間： dt = 0.005&tau;<br />
+skinの厚さ： 0.3&sigma;</div>
+
+<div><br />
+・real 単位系</div>
+
+<div style="margin-left: 20px;">質量： g/mol<br />
+長さ： Å<br />
+時間： fs<br />
+エネルギー： Kcal/mol<br />
+速度： Å/fs<br />
+力： Kcal/mol/Å<br />
+トルク： Kcal/mol<br />
+温度： K<br />
+圧力： atom<br />
+動粘性率： Poise<br />
+電荷： +e<br />
+電気双極子モーメント： +e * Å<br />
+電場： V/Å<br />
+密度： g/cm<sup>3</sup><br />
+ステップ時間： dt = 1 fs<br />
+skinの厚さ： 2Å</div>
+
+<div><br />
+・metal 単位系</div>
+
+<div style="margin-left: 20px;">質量： g/mol<br />
+長さ： Å<br />
+時間： ps<br />
+エネルギー： eV<br />
+速度： Å/ps<br />
+力： eV/Å<br />
+トルク： eV<br />
+温度： K<br />
+圧力： bars<br />
+動粘性率： Poise<br />
+電荷： +e (=multiple of electron charge (1.0 is a proton))<br />
+電気双極子モーメント： 電荷 * Å<br />
+電場： V/Å<br />
+密度： g/cm<sup>3</sup></div>
+
+<div><br />
+・si 単位系 (=SI単位系)</div>
+
+<div style="margin-left: 20px;">質量： kg<br />
+長さ： m<br />
+時間： s<br />
+エネルギー： J<br />
+速度： m/s<br />
+力： N (=Newtons)<br />
+トルク： Nm<br />
+温度： K<br />
+圧力： Pa<br />
+動粘性率：Pa * s<br />
+電荷： C (=Coulombs (1.6021765e-19 is a proton))<br />
+電気双極子モーメント： C * m<br />
+電場： V/m<br />
+密度： kg/m<sup>3</sup><br />
+&nbsp;</div>
+
+<div>[1] <a href="https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Help">https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Help</a><br />
+[2] <a href="http://lammps.sandia.gov/doc/Section_commands.html">http://lammps.sandia.gov/doc/Section_commands.html</a><br />
+[3] <a href="http://wolverton.northwestern.edu/classes/458/lammps-input">http://wolverton.northwestern.edu/classes/458/lammps-input</a><br />
+[4] LAMMPS研究会での配布資料（詳細を知りたい場合は LAMMPS研究会に参加すると良い）<br />
+-------------------------------------------------------------------------------<br />
+■ 収束<br />
+・ 低分子系： 格子上に分子を配置し、温度を高めにして緩和時間の数倍待てばおおよそ緩和する。<br />
+・ 高分子系： 緩和時間が分子量に強く依存。Kremer-Grest mode では、粒子数 N &lt; 100までなら格子上に並べて長時間緩和でなんとかなる場合もあるが、N &gt; 1000はほぼ無理。温度や圧力を上げてから下げてもだめ。<br />
+※ 分子量の3.4乗に比例するとして収束を見極める。からみあいなどがあるため、エネルギーの収束だけで判断するのは危険。<br />
+・平衡初期構造は必要だが難しい。局所か大域的構造のどちらかで、両方を満たすのは難しい。<br />
+・高分子メルト（ビーズ：液体的な局所的構造、バネ：大域的にはランダムウォーク的構造）</div>
+
+<div>-------------------------------------------------------------------------------<br />
+■ using<br />
+<br />
+□ thermal conductivity (kappa)<br />
+&nbsp; The NEMD methods use the formula kappa = dQ * dZ/dTemp where dQ =<br />
+energy flux, and dTemp/dZ = temperature gradient.<br />
+&nbsp; The NEMD systems have 8000 atoms with a box length 2x larger in z, the<br />
+non-equilibrium direction.<br />
+※ timestep (default) = 0.005</div>
+
+<div style="margin-left: 20px;">&nbsp;</div>
+
+<div>◇ Non-equilibrium methods (NEMD case):</div>
+
+<ul>
+	<li>Direct thermosatting method ($HOME/Documents/Workspace/LAMMPS/lam*/examples/KAPPA/in.langevin)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/src/lmp_mpi &lt; in.langevin<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp; XXX = ave of total in/out energy for 2 regions normalized by # of atoms (Step Temp Thot Tcold hot cold tdiff ave -&gt; ( XXX = (cold - hot)/2 at last step)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; atoms * XXX / (run time in tau) / (x * y) / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp</div>
+
+<ul>
+	<li>Muller-Plathe reverse perturbation method ($HOME/Documents/Workspace/LAMMPS/lam*/examples/KAPPA/in.mp)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/src/lmp_mpi &lt; in.mp<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp; XXX = cumulative delta energy, tallied by fix thermal/conductivity (Step Temp E_pair TotEng 3 tdiff ave&nbsp; -&gt; XXX = value for 3 at last step)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; XXX / (run time in tau) / (x * y) / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp</div>
+
+<ul>
+	<li>Variant of Muller-Plathe reverse perturbation method ($HOME/Documents/Workspace/LAMMPS/lam*/examples/KAPPA/in.heat)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/src/lmp_mpi &lt; in.heat<br />
+・ log.lammps file (# setup problem)<br />
+&nbsp;&nbsp;&nbsp; Lattice spacing in x,y,z -&gt; dZ<br />
+・ log.lammps file<br />
+&nbsp;&nbsp;&nbsp; # 2nd equilibration<br />
+&nbsp;&nbsp;&nbsp; fix heat = [fix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; hot all heat 1 100.0 region hot] = 100.0<br />
+&nbsp;&nbsp;&nbsp; # thermal conductivity calculation<br />
+&nbsp;&nbsp;&nbsp; Loop time of 39.8134 on 4 procs (4 MPI x 1 OpenMP) for 20000 steps with 8000 atoms<br />
+&nbsp;&nbsp;&nbsp;&nbsp;run time in tau = 20,000 steps at 0.005 tau timestep =&nbsp; 100<br />
+&nbsp;&nbsp;&nbsp; # setup problem<br />
+&nbsp;&nbsp;&nbsp; x = Lattice spacing in x<br />
+&nbsp;&nbsp;&nbsp; y = Lattice spacing in y<br />
+&nbsp;&nbsp;&nbsp; (run time in tau) * (fix heat) / (run time in tau) / (x * y) / 2 = (fix heat) / (x * y)&nbsp; / 2 -&gt; dQ<br />
+&nbsp;&nbsp;&nbsp; Step Temp Thot Tcold tdiff ave -&gt; ave -&gt; dTemp<br />
+・kappa = dQ * dZ/dTemp<br />
+&nbsp;</div>
+
+<div>◇ Equilibrium method</div>
+
+<ul>
+	<li>Green-Kubo equilibrium method ($HOME/Documents/Workspace/LAMMPS/lam*/examples/KAPPA/in.heatflux)</li>
+</ul>
+
+<div style="margin-left: 20px;">mpirun -np 4 $HOME/Documents/Workspace/LAMMPS/lam*/src/lmp_mpi &lt; in.heatflux<br />
+tail log.lammps or&nbsp;vi log.lammps<br />
+running average conductivity: 3.2000083037132</div>
+
+<div>&nbsp;</div>
+
+<div>[1] <a href="http://lammps.sandia.gov/tutorials.html">http://lammps.sandia.gov/tutorials.html</a> -&gt; <a href="http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf</a></div>
+-------------------------------------------------------------------------------<br />
+■ 熱伝導度<br />
+<br />
+　分子動力学法による熱伝導度の計算は、解析的方法とは異なり、取り込む非調和項の次数を決定することなく、またフォノン散乱の独立性を仮定することなく（原子間ポテンシャルを仮定するのみで）熱伝導度を定量的に計算できる。
+<ul>
+	<li>セル内に温度勾配を設ける直接法</li>
+</ul>
+
+<div style="margin-left: 20px;">人工的なフォノン散乱が生じるため過小評価される性質がある。</div>
+
+<ul>
+	<li>Green-Kubo公式を用いた平衡法</li>
+</ul>
+
+<div style="margin-left: 20px;">イオン性固体の場合には熱的な揺動によるノイズが大きく、正確な値を評価する為には非常に長い時間のシミュレーションが必要。</div>
+
+<ul>
+	<li>摂動法</li>
+</ul>
+
+<div style="margin-left: 20px;">上記2つの手法の問題が解決される。</div>
+<br />
+Reference:<br />
+[1] <a href="http://ci.nii.ac.jp/els/110002188027.pdf?id=ART0002441111&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1412212064&amp;cp">http://ci.nii.ac.jp/els/110002188027.pdf?id=ART0002441111&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1412212064&amp;cp</a>=<br />
+[2] <a href="http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/25491_%E8%AB%96%E6%96%87.pdf">http://ir.library.osaka-u.ac.jp/dspace/bitstream/11094/787/1/25491_%E8%AB%96%E6%96%87.pdf</a><br />
+[3] <a href="http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf">http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf</a><br />
+[4] <a href="http://lammps.sandia.gov/tutorials.html">http://lammps.sandia.gov/tutorials.html</a> -&gt; <a href="http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf">http://lammps.sandia.gov/tutorials/italy14/italy_kappa_viscosity_Mar14.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ その他<br />
+Free Energy: <a href="http://www.utdallas.edu/~son051000/comp/FreeE.pdf">http://www.utdallas.edu/~son051000/comp/FreeE.pdf</a>&nbsp;<br />
+ICME Workshop: Molecular Dynamics witl LAMMPS by Andrew Ferguson: <a href="https://www.youtube.com/watch?v=TTDXJXJJi18">https://www.youtube.com/watch?v=TTDXJXJJi18</a><br />
+Introduction to Molecular Dynamics: <a href="https://www.youtube.com/watch?v=_TiQYNWJwYg">https://www.youtube.com/watch?v=_TiQYNWJwYg</a> , <a href="https://www.youtube.com/watch?v=1y4qDhzmWPw">https://www.youtube.com/watch?v=1y4qDhzmWPw</a><br />
+VMD Tutorial for Beginners: <a href="https://www.youtube.com/watch?v=Fl3hmqCHYU4">https://www.youtube.com/watch?v=Fl3hmqCHYU4</a><br />
+GULP: <a href="https://nanochemistry.curtin.edu.au/gulp/">https://nanochemistry.curtin.edu.au/gulp/</a><br />
+&nbsp; <a href="http://accelrys.co.jp/resource-center/datasheets/Materials-Studio/gulp-jp.pdf">http://accelrys.co.jp/resource-center/datasheets/Materials-Studio/gulp-jp.pdf</a><br />
+GROMOS: <a href="http://www.gromos.net/">http://www.gromos.net/</a><br />
+&nbsp; <a href="https://www.youtube.com/watch?v=vOJsmtFeSGk">https://www.youtube.com/watch?v=vOJsmtFeSGk</a><br />
+&nbsp; <a href="https://www.youtube.com/watch?v=BZNzYt_DUB0">https://www.youtube.com/watch?v=BZNzYt_DUB0</a><br />
+Atomeye: <a href="http://li.mit.edu/Archive/Graphics/A/">http://li.mit.edu/Archive/Graphics/A/</a><br />
+&nbsp; <a href="http://d.hatena.ne.jp/sumoak/20120615/1339769817">http://d.hatena.ne.jp/sumoak/20120615/1339769817</a><br />
+&nbsp; <a href="http://www.fml.t.u-tokyo.ac.jp/~izumi/CMS/AtomEye_Jpn.pdf">http://www.fml.t.u-tokyo.ac.jp/~izumi/CMS/AtomEye_Jpn.pdf</a><br />
+&nbsp; <a href="http://mm4.scitec.kobe-u.ac.jp/~yashiro/edu/atomeye/atomeye.html">http://mm4.scitec.kobe-u.ac.jp/~yashiro/edu/atomeye/atomeye.html</a><br />
+-------------------------------------------------------------------------------<br />
+&nbsp;

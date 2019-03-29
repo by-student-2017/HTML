@@ -1,0 +1,383 @@
+WIEN2k tips (WIEN2k workshop 2015 Q&amp;A )<br />
+------------------------------------------------------------------------------<br />
+<a href="http://www.wien2k.at/events/ws2015/">http://www.wien2k.at/events/ws2015/</a><br />
+<a href="http://www.wien2k.at/reg_user/faq/">http://www.wien2k.at/reg_user/faq/</a><br />
+------------------------------------------------------------------------------<br />
+Å° Isolated oxygen calculation (Cohesive energy needs it)<br />
+<br />
+Åû general setting
+<div class="msg-body inner  undoreset" id="yui_3_2_0_1_14355386028125841">
+<div id="yiv760254192">
+<div dir="ltr" id="yui_3_2_0_1_14355386028125840">
+<div id="yui_3_2_0_1_14355386028125839">
+<div>
+<ul>
+	<li>FCC</li>
+	<li>a, b, c = 30.0, 30.1, 30.2 bohr &lt;-&nbsp;&nbsp;to resolve a degeneracy</li>
+	<li>1 k-point</li>
+	<li>spinploraized calculation</li>
+</ul>
+
+<div><br />
+Åû case.in2 (isolated oxygen successfully run)<br />
+-----</div>
+</div>
+</div>
+TOT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (TOT,FOR,QTL,EFG,FERMI)<br />
+&nbsp; -12.00&nbsp;&nbsp;&nbsp; 6.00&nbsp;&nbsp; 0.50 0.05&nbsp; 1&nbsp;&nbsp; EMIN, NE, ESEPERMIN, ESEPER0, iqtlsave<br />
+TEMP&nbsp;&nbsp;&nbsp; 0.002&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GAUSS,ROOT,TEMP,TETRA,ALL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eval)<br />
+&nbsp; 0 0&nbsp; 2 0&nbsp; 2 2&nbsp; 4 0&nbsp; 4 2&nbsp; 4 4&nbsp; 6 0&nbsp; 6 2&nbsp; 6 4&nbsp; 6 6<br />
+&nbsp;12.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GMAX<br />
+NOFILE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FILE/NOFILE&nbsp; write recprlist
+<div>-----<br />
+<br />
+Åû treatments for error<br />
+1. QLT-B error</div>
+
+<div>
+<div>-----</div>
+EF in case.scf2up -&gt; EF in case.in1<br />
+all orbital in case.in1-&gt; EF -0.2 in case.in1<br />
+-----<br />
+2. co-worker say &quot;deduce RMT.&quot;<br />
+<br />
+Åû example (Isolated oxygen calculation)<br />
+Å† structure generation
+<div id="yui_3_2_0_1_14355386028125420">
+<div id="yui_3_2_0_1_14355386028125424">-----</div>
+
+<div id="yui_3_2_0_1_14355386028125419"><em>View only mode</em> --&gt;<a href="http://10.217.172.231:7890/util/structstart.pl?SID=256609" rel="nofollow" target="_blank">edit STRUCT file</a><br />
+<br />
+<b>Title:&nbsp; </b> <input name="s_title" readonly="readonly" size="40" value="Title" />
+<table>
+	<tbody>
+		<tr>
+			<td><b>Lattice:</b><br />
+			Type: F</td>
+		</tr>
+	</tbody>
+</table>
+
+<table>
+	<tbody>
+		<tr>
+			<td><a href="http://www.cryst.ehu.es/cgi-bin/cryst/programs/nph-wp-list" rel="nofollow" target="_blank">Spacegroups from<br />
+			Bilbao Cryst Server</a></td>
+		</tr>
+	</tbody>
+</table>
+<b>Lattice parameters </b>in<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a=<input name="s_a" readonly="readonly" size="10" value="30.000000" /> b=<input name="s_b" readonly="readonly" size="10" value="30.100000" /> c=<input name="s_c" readonly="readonly" size="10" value="30.200000" /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &alpha;=<input name="s_aa" readonly="readonly" size="10" value="90.000000" /> &beta;=<input name="s_bb" readonly="readonly" size="10" value="90.000000" /> &gamma;=<input name="s_cc" readonly="readonly" size="10" value="90.000000" /><br />
+<br />
+<b>Inequivalent Atoms: 1</b><br />
+<b>Atom 1</b>: <input maxlength="2" readonly="readonly" size="3" value="O " /> <input readonly="readonly" size="8" value="" /> Z=<input readonly="readonly" size="4" value="8.0 " /> RMT=<input readonly="readonly" size="5" value="2.5000" /><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Pos 1: x=<input readonly="readonly" size="10" value="0.00000000 " /> y=<input readonly="readonly" size="10" value="0.00000000 " /> z=<input readonly="readonly" size="10" value="0.00000000" /><br />
+-----<br />
+<br />
+Å† fast mode<br />
+<input checked="checked" name="expert_spinpol" type="checkbox" value="1" /> select spin-polarized calculation<br />
+<input name="expert_red" size="5" type="text" value="" /> RMT reduction by X % (default: RMT not changed)<br />
+<input name="expert_vxc" size="5" type="text" value="" /> VXC option (13=PBE, 5=LDA, 11=WC, 19=PBEsol) [default=13]<br />
+<input name="expert_ecut" size="5" type="text" value="" /> energy seperation between core/valence (default: -6.0 Ry)<br />
+<input name="expert_rkmax" size="5" type="text" value="4" /> RKMAX (default: 7.0) <a href="http://www.wien2k.at/reg_user/faq/rkmax.html" rel="nofollow" target="_blank">Click here for more info</a>)<br />
+<input name="expert_fermit" size="5" type="text" value="0.002" /> use TEMP with smearing by X Ry (default: TETRA)<br />
+<input name="expert_numk" size="5" type="text" value="1" /> use X k-points in full BZ (default: 1000; <a href="http://www.wien2k.at/reg_user/faq/kgen.html" rel="nofollow" target="_blank">Click here for more info</a>)<br />
+-----
+<div id="yui_3_2_0_1_14355386028125419"><br />
+Å† case.in1<br />
+-----<br />
+WFFIL&nbsp; EF=-.390264287975&nbsp;&nbsp; (WFFIL, WFPRI, ENFIL, SUPWF)<br />
+&nbsp;4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 4 (R-MT*K-MAX; MAX L IN WF, V-NMT<br />
+&nbsp;-0.90&nbsp;&nbsp;&nbsp; 3&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GLOBAL E-PARAMETER WITH n OTHER CHOICES, global APW/LAPW)<br />
+&nbsp;0&nbsp;&nbsp; -1.75&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.002 CONT 1<br />
+&nbsp;0&nbsp;&nbsp; -0.90&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+&nbsp;1&nbsp;&nbsp; -0.90&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+K-VECTORS FROM UNIT:4&nbsp;&nbsp; -9.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1.5&nbsp;&nbsp;&nbsp; 17&nbsp;&nbsp; emin / de (emax=Ef+de) / nband</div>
+
+<div id="yui_3_2_0_1_14355386028125971">-----
+<div>Note: ( QLT-B error (EF in case.scf2up -&gt; EF in case.in1, all orbital in case.in1 -&gt; EF -0.2 in case.in1 ))<br />
+<br />
+Å† fast mode (once again)<br />
+<input checked="checked" name="expert_spinpol" type="checkbox" value="1" /> select spin-polarized calculation<br />
+<input name="expert_red" size="5" type="text" value="" /> RMT reduction by X % (default: RMT not changed)<br />
+<input name="expert_vxc" size="5" type="text" value="" /> VXC option (13=PBE, 5=LDA, 11=WC, 19=PBEsol) [default=13]<br />
+<input name="expert_ecut" size="5" type="text" value="" /> energy seperation between core/valence (default: -6.0 Ry)<br />
+<input name="expert_rkmax" size="5" type="text" value="4" /> RKMAX (default: 7.0) <a href="http://www.wien2k.at/reg_user/faq/rkmax.html" rel="nofollow" target="_blank">Click here for more info</a>)<br />
+<input name="expert_fermit" size="5" type="text" value="0.002" /> use TEMP with smearing by X Ry (default: TETRA)<br />
+<input name="expert_numk" size="5" type="text" value="1" /> use X k-points in full BZ (default: 1000; <a href="http://www.wien2k.at/reg_user/faq/kgen.html" rel="nofollow" target="_blank">Click here for more info</a>)<br />
+-----</div>
+<br />
+Å† results ( 1 cycle / 2 min.)<br />
+-----&nbsp;</div>
+</div>
+
+<div id="yui_3_2_0_1_14355386028125971">
+<pre id="yui_3_2_0_1_14355386028125975">
+&gt;   stop
+
+:CHARGE convergence:  1 0.001 -.0000039
+:ENERGY convergence:  1 0.001 .0000226500000000
+&gt;   mixer   	(13:04:12) 0.671u 0.092s 0:00.76 100.0%	0+0k 0+10232io 0pf+0w
+&gt;   lcore -dn	(13:04:12) 0.012u 0.008s 0:00.02 50.0%	0+0k 0+144io 0pf+0w
+&gt;   lcore -up	(13:04:12) 0.016u 0.004s 0:00.02 50.0%	0+0k 0+136io 0pf+0w
+&gt;   lapw2 -dn       	(13:04:10) 1.549u 0.040s 0:01.59 99.3%	0+0k 0+6136io 0pf+0w
+&gt;   lapw2 -up       	(13:04:08) 1.854u 0.056s 0:01.91 99.4%	0+0k 0+6136io 0pf+0w
+&gt;   lapw1  -dn      	(13:04:07) 0.872u 0.032s 0:00.90 100.0%	0+0k 0+1400io 0pf+0w
+&gt;   lapw1  -up      	(13:04:06) 1.065u 0.028s 0:01.09 99.0%	0+0k 0+1408io 0pf+0w
+&gt;   lapw0 	(13:03:06) 58.927u 0.616s 0:59.52 100.0%	0+0k 0+6504io 0pf+0w
+
+    cycle 19 	(Fri Jun 26 13:03:06 SGT 2015) 	(22/81 to go)
+
+:CHARGE convergence:  0 0.001 .0073864
+:ENERGY convergence:  1 0.001 .0009363450000000
+&gt;   mixer   	(13:03:05) 0.675u 0.068s 0:00.74 98.6%	0+0k 0+10232io 0pf+0w
+&gt;   lcore -dn	(13:03:05) 0.020u 0.000s 0:00.02 100.0%	0+0k 0+136io 0pf+0w
+&gt;   lcore -up	(13:03:05) 0.020u 0.000s 0:00.02 100.0%	0+0k 0+136io 0pf+0w
+&gt;   lapw2 -dn       	(13:03:02) 2.078u 0.060s 0:02.14 99.5%	0+0k 0+6144io 0pf+0w
+&gt;   lapw2 -up       	(13:03:00) 2.043u 0.068s 0:02.13 98.5%	0+0k 0+6136io 0pf+0w
+&gt;   lapw1  -dn      	(13:02:59) 1.072u 0.024s 0:01.10 99.0%	0+0k 0+1408io 0pf+0w
+&gt;   lapw1  -up      	(13:02:58) 0.870u 0.044s 0:00.92 98.9%	0+0k 0+1400io 0pf+0w
+&gt;   lapw0 	(13:01:59) 58.024u 0.692s 0:58.69 100.0%	0+0k 0+6504io 0pf+0w
+
+    cycle 18 	(Fri Jun 26 13:01:59 SGT 2015) 	(23/82 to go)</pre>
+-----</div>
+</div>
+</div>
+
+<div><br />
+Å° WIEN2k lattice<br />
+WIEN2k automatically change lattice structure.<br />
+-----</div>
+
+<div>input: conventional lattice</div>
+
+<div>scf: primitive lattice</div>
+
+<div>output: conventional lattice</div>
+
+<div>-----<br />
+&nbsp;
+<div>Å° Automatic determination of RMTs</div>
+
+<div>RMT of A in new is larger than old scheme one.</div>
+
+<div>RMT of B in new is smaller than old scheme one.<br />
+-----<br />
+example<br />
+new: RMT(A atom) 2.2, RMT(B atom) 1.5<br />
+old: RMT(A atom) 1.9, RMT(B atom) 1.8<br />
+-----<br />
+new: fast scf calculation, but bit unsafety.<br />
+-----</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>Å° save memory and mandaitly<br />
+-----</div>
+
+<div>1. usual scf calculation</div>
+
+<div>&nbsp; RKmax 5, small k point</div>
+
+<div>2. lstart</div>
+
+<div>&nbsp; -6 Ry -&gt; -3 Ry</div>
+
+<div>3. RKmax 7</div>
+
+<div>4. small k point -&gt; many k point<br />
+5. run SCF</div>
+
+<div>-----<br />
+Note 1:&nbsp;you chainging lstart from -6 Ry&nbsp;to -3 Ry, WIEN2k automatically change case.inc ( core and semicore:T, valence:F) and case.in1. Its scf calulation speed is slow or maginally fast.<br />
+Note 2: Positive value in lstart:separate semicore and&nbsp;core by q/sphere.<br />
+Note 3: cputime<br />
+Basis set scales with RKmax^3<br />
+cputime scales with Npw^3<br />
+increasing RKmax by 10% -&gt; doubles cputime<br />
+-----<br />
+<br />
+Å° case.in1<br />
+-----<br />
+principal number is different&nbsp;at same orbit and atom in case.in1.<br />
+FE=0.500&nbsp; is changed by every scf cycle. (refine)<br />
+0 0.3 0.000 CONT 1 Es &lt;- 3p
+<div>0 -3.72 0.005 STOP 1 Es-LO &lt;- 2p</div>
+
+<div>(Start El energy equal -3.72 Ry)<br />
+(STOP prevent orbital (for example, unoccupied state) being infinite energy.)</div>
+
+<div id="yui_3_2_0_1_14355386028126459">valence -6 Ry &gt; semicore -9 Ry &gt; core<br />
+-----<br />
+<br />
+Å° RKmax<br />
+Maximum of RKmax is&nbsp;12,&nbsp;because of its&nbsp;linear dependency.<br />
+Overcompleteness</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>Å° AFM calculation<br />
+afminput<br />
+------</div>
+
+<div>Cr1 (0, 0, 0)</div>
+
+<div>Cr2 (1/2, 1/2, 1/2)<br />
+&nbsp;</div>
+
+<div>identity + (1/2, 1/2, 1/2)</div>
+
+<div>identity = (1/2, 0, 0), (0, 1/2, 0) or (0, 0, 1/2).</div>
+
+<div>------<br />
+<br />
+Å° structure optimization</div>
+
+<div>PORT2.0</div>
+
+<div>0.0 x y z &lt;- 0.0 = constrain<br />
+<br />
+Å° Work function (WF)<br />
+case.scf<br />
+----<br />
+:FER &lt;- vacuume<br />
+:VZERO &lt;- solid<br />
+----<br />
+Note: WF = :VZERO - :FER<br />
+&nbsp;
+<div>Å° GW calculation code<br />
+FHI-gap for WIEN2<br />
+&nbsp;</div>
+
+<div>Å° SOC</div>
+
+<div>Åû case.outsmso -&gt; pointgroup, e.g. 4/mmm&nbsp;
+<div>Åû xcysden have primitive cell mode<br />
+-----</div>
+
+<div>2nd line B, F, H, P, etc&nbsp;in case.struct link xcrysden,&nbsp;wien2k&nbsp;and octave.</div>
+
+<div>(you changing B -&gt; P, remove (1/2, 1/2, 1/2)&nbsp;from atomic positions.)<br />
+-----<br />
+&nbsp;</div>
+Åû symmetry operation<br />
+Å† relationship: Symmetry operations in case.sturcut relate &quot;International Tables Vol. A.&quot; and bilbao crystallographic server: <a href="http://www.cryst.ehu.es/">http://www.cryst.ehu.es/</a>.<br />
+Å† change space group ( [001] magnetic direction )
+<div>No.197(I23) -&gt; SOC -&gt; structs_so -&gt; <a href="http://www.cryst.ehu.es/cryst/maxsub.html" rel="nofollow" target="_blank">http://www.cryst.ehu.es/cryst/maxsub.html</a> -&gt; Transformed 23(I222) + (1/2, 1/2, 1/2) (2nd line B in case.struct)</div>
+
+<div>No.197(I23) -&gt; SOC -&gt; structs_so -&gt;&nbsp; <a href="http://www.cryst.ehu.es/cgi-bin/cryst/programs/checkgr.pl?tipog=gesp" rel="nofollow" target="_blank">http://www.cryst.ehu.es/cgi-bin/cryst/programs/checkgr.pl?tipog=gesp</a> -&gt; 16(P222) (2nd line P in case.struct)<br />
+<br />
+Åû symmetry operation for SOC calc.<br />
+A -&gt; keep<br />
+B -&gt; keep (time inversion symmetry&nbsp;exist) or remove<br />
+C -&gt; remove</div>
+</div>
+
+<div>(C type change magnetization direction)</div>
+
+<div>&nbsp;</div>
+
+<div>symmetso: This program helps to setup spin-orbit itcalculations in magnetic systems. Since SO may break symmetry in certain spacegroups, it classifies your symmetry operations into operations A , which do not invert the magnetization (identity, inversion, rotations with the rotation axis parallel to magnetization), B, which invert it (mirror planes) and C , which change the magnetization in some other way. (Note: magnetization is a result of a circular current, or equivalently, an axial vector resulting from a vector product . symmetso will keep all A-type and throw away all C-type symmetry operations. Depending on the presence of inversion <span>symmetry </span>it will keep (inversion is present) or remove the B-type operations. Finally, symmetso uses the remaining symmetry operations to check/generate equivalent atomic positions (it can happen that some equivalent atoms become non-equivalent after inclusion of SO interaction).<br />
+&nbsp;
+<div style="font-family: sans-serif; font-size: 14.54px;">
+<div style="font-family: sans-serif; font-size: 14.54px;">
+<div style="font-family: sans-serif; font-size: 14.54px;">
+<div>Åû symmetso (messages)</div>
+
+<div>------
+<pre>
+ gamma not equal 90
+ gamma not equal 90
+   gamma not equal 90
+   gamma not equal 90
+ gamma not equal 90
+ gamma not equal 90
+ gamma not equal 90
+ alpha(3) .gt. 91.0; reset to 90.1
+0.448u 0.032s 0:00.48 97.9%	0+0k 0+9088io 0pf+0w
+
+</pre>
+
+<pre>
+Ignoring above message is OK !
+</pre>
+-----</div>
+</div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>Åû P<sub>1/2</sub> LO (heavy elements) including condition<br />
+-----</div>
+
+<div>EF</div>
+
+<div>Valence: hybridized orbital region &lt;- not include P1/2</div>
+
+<div>Valence: almost isolated P1/2 orbital &lt;- include P1/2</div>
+
+<div>semi-core: T in case.inc</div>
+
+<div>core: T in case.inc</div>
+
+<div>-----</div>
+
+<div><br />
+Å° DFT+U</div>
+
+<div>AMF: metal</div>
+
+<div>SIC: no metal</div>
+
+<div id="yui_3_2_0_1_14355386028125977">HMF: fast scf calculation speed, but not recommend</div>
+
+<div>When you set same Ueffect, its relationship is gap(AMF) &lt; gap(SIC).<br />
+<br />
+Å° octave (free soft, support WEIN2k struct file)<br />
+Åû basic run</div>
+octave<br />
+s=loadstruct(&quot;*.struct&quot;) &lt;- (s is structure variable)<br />
+showstruct(s) &lt;- xcrysden run<br />
+help makesupercell<br />
+a=[1 1 0; -1 1 0; 005]<br />
+ss=makesupercell(sc.a)<br />
+savestruct(ss, &quot;test.struct&quot;)<br />
+exit<br />
+-----<br />
+Note: script adress&nbsp;(SRC_structediter/bin)<br />
+<br />
+Åû help<br />
+-----<br />
+helpstruct<br />
+help slabs<br />
+help mergestruct<br />
+help rotate<br />
+help rotateatomlist<br />
+help rescale_c(ss.70)<br />
+etc<br />
+-----<br />
+<br />
+Åû information<br />
+-----<br />
+s.a &lt;- show lattice constant<br />
+s.pos &lt;- show postion<br />
+s.aname &lt;- show atomic nam<br />
+s.alpha<br />
+s.bralt<br />
+ssur=makesurface(ss,n,1,z,20.0)<br />
+ssur1=makesurface(ss,n,1,z/2,20.0)<br />
+slabs=slabs(ssur, ssur1)<br />
+etc<br />
+----<br />
+<br />
+Åû IDOS (maybe Tetrahedron method)<br />
+see outputt, outputtup or outputtdn<br />
+------------------------------------------------------------------------------</div>
+</div>
+</div>
+</div>

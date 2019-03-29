@@ -1,0 +1,89 @@
+<p>　ここでは結果の解釈方法及び第一原理計算で何を明らかにし、学会でどのようなことが議論可能なのかを解説していきます。<br />
+------------------------------------------------------------------------------<br />
+□ 構造最適化<br />
+1) 未だ明らかになっていない安定な構造を予測して、実験結果と比較することが可能になります。金属内包フラーレンやアモルファスの構造などが記憶に新しいところです。<br />
+2) グラファイトの層間やエッジにLiなどがどのような状態で存在するのかを議論することが可能です（openMOPACを用いても議論ができます）。また、結合エネルギーの大きさなどを比較することで、解離のしやすさなども議論できます。<br />
+3) 全エネルギーの変化と比較したりすることで、メモリの動作機構の解明や光ディスク材料の高速相変化を議論することができます。<br />
+4) 計算コードによっては、電界や磁界を掛けた計算が出来ますので、原子や分子の吸着の様子などに関する蓄電池の研究が可能です。<br />
+5) 物質における低温相、高温相で安定となる理由を議論できます。『第一原理シミュレータ入門』に記述があります。<br />
+------------------------------------------------------------------------------<br />
+□ 電荷密度分布<br />
+1) フロンティア軌道論を用いて、化学反応を予測したりすることが可能になります。<br />
+2) 電気伝導のパスを空間的に明らかにすることができます。<br />
+------------------------------------------------------------------------------<br />
+□ 状態密度分布(DOS)<br />
+1) ある物質にドープすることで、バンドギャップがどのように変化するかを予測することができます。TiO2にNやSをドープした予測が有名です。<br />
+2) スピンを分けてフェルミ端近傍の状態密度分布を比較することで、スピンデバイスなどの利用が可能かを議論することができます。MgO関連が有名。<br />
+3) XPSなどでは、励起光のエネルギーを変えて、散乱断面積の違いを利用することで、どのエネルギー準位にどの原子の電子状態が存在しているかを実験的に明らかにできます。この結果と理論計算の結果を比較することが可能になります。4)&nbsp;XESでは選択則によって元素選択的に状態密度分布を得ることができます。この結果と理論計算の結果を比較することが可能になります。<br />
+5) 非占有準位もある程度分りますので、XASの結果ととも比較可能です。また、XESででは、共鳴時の非弾性散乱スペクトルからフェルミ準位に相当するエネルギー差し引くことで、損失したエネルギーを求めることが可能です。これは、非占有準位の結果を得ることになるため、理論計算による非占有準位の結果と比較が可能になります。<br />
+6) &nbsp;超伝導材料 :<br />
+<a href="http://mp.okayama-u.ac.jp/~hayashi/tmp/19_yanagisawa.pdf">http://mp.okayama-u.ac.jp/~hayashi/tmp/19_yanagisawa.pdf</a><br />
+<a href="http://nsrc.jaea.go.jp/irises/IRiSes2009_v12.files/Presentation24/17_nakamura.pdf">http://nsrc.jaea.go.jp/irises/IRiSes2009_v12.files/Presentation24/17_nakamura.pdf</a>　<br />
+------------------------------------------------------------------------------<br />
+□ バンド分散<br />
+1) 角度分解光電子分光法（ARPES）で得られた結果を比較することが可能です。<br />
+2) グラフェンなどでは、基板との相互作用で、ギャップが開くかどうかを議論することが可能です。SiO2上にグラフェンを成長させた場合にギャップが開く予測が有名。<br />
+3) 電場をかけることでバンド構造が変化するかを議論することが可能です。<br />
+4) Rashba効果の検討が可能。スピンデバイスへの応用を検討することが可能となる。<br />
+&nbsp; WIEN2kやexcitingを用いるのが良いだろう。2008年にはWIEN2kを用いてspin orbit couplingの計算をせずに、spinを考慮に入れて通常デフォルトで計算されるscalar relativesticで議論されている例がある。Rashba効果は下記HPを参照 : <a href="http://cphys.s.kanazawa-u.ac.jp/20090303press/rashba.html">http://cphys.s.kanazawa-u.ac.jp/20090303press/rashba.html</a>　<br />
+5) 超伝導材料（以下のようなコードを用いた報告がある）<br />
+&nbsp; a) A. I. Coldea et al., Phys. Rev. Lett. 101 (2008) 216402.<br />
+　&nbsp; LaFePO :<br />
+　　Band : WIEN2k + spin orbit coupling<br />
+&nbsp; b) A. Tamai et al., Phys. Rev. Lett. 104 (2010) 097002.<br />
+　&nbsp; FeSe0.42Te0.58 :<br />
+　　Band : WIEN2k<br />
+&nbsp; c) K. Ueda et al., J. Appl. Phys. 98 (2005) 043506.<br />
+　&nbsp; LaCuOCh(Ch=S, Se and Te) :<br />
+　　DOS : ABCAP<br />
+------------------------------------------------------------------------------<br />
+□ 化学ポテンシャル<br />
+1) 温度依存性を調べることで、ゼーベック係数の変化などを議論することができます。<br />
+参考文献<br />
+[1] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD14/abcap_Mg2Si.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD14/abcap_Mg2Si.pdf</a><br />
+下記はABCAPコードの利用の仕方<br />
+[2] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner2.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner2.pdf</a><br />
+[3] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner3.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner3.pdf</a><br />
+[4] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/band_cal_p.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/band_cal_p.pdf</a><br />
+------------------------------------------------------------------------------<br />
+□ XAS(XANES) &amp; EELS(ELNES)<br />
+1) XASやEELSなどの実験で得られたスペクトルと比較することで、実験で測定した物質の構造を明らかにします。DV-X alpha法でのMgOなどが良い例になります。<br />
+2) XASでの励起光の偏光と角度による違いを利用することで、吸着種の配向を予測することが可能です。その結果を理論とも比較できます。<br />
+------------------------------------------------------------------------------<br />
+□ IR &amp; Raman<br />
+1) openMOPACなどを用いて、どのような原子配置になっているかを明らかにすることができます。Si上でのHの吸着例が有名です。<br />
+------------------------------------------------------------------------------<br />
+□ Phonon<br />
+1) 超伝導材料の計算などで用いられます。<br />
+&nbsp; a ) D. J. Singh et al., Phys. Rev. Lett. 100 (2008) 237003.<br />
+&nbsp;&nbsp;&nbsp; LaFeAsO<sub>1-x</sub>F<sub>x </sub>:&nbsp;<br />
+　　Band : WIEN2k<br />
+　　Transport properties : WIEN2k + BOLZTRAP<br />
+　　Phonon dispersion : ESPRESSO<br />
+&nbsp; b)&nbsp;鉄系の超伝導材料<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://nsrc.jaea.go.jp/irises/IRiSes2009_v12.files/Presentation24/17_nakamura.pdf">http://nsrc.jaea.go.jp/irises/IRiSes2009_v12.files/Presentation24/17_nakamura.pdf</a><br />
+　　補足資料：<a href="http://mp.okayama-u.ac.jp/~hayashi/tmp/19_yanagisawa.pdf">http://mp.okayama-u.ac.jp/~hayashi/tmp/19_yanagisawa.pdf</a>　<br />
+2) フォノン分散をプロットして、負の値が出た場合は、相転移を検討してください。<br />
+------------------------------------------------------------------------------<br />
+□ STM<br />
+1) STMの結果と比較することで原子種を分けて構造を議論可能です。<br />
+&nbsp; a)&nbsp; ESPRESSO (PWscf)<br />
+　&nbsp; X. Duan et&nbsp;al., Phys. Rev. B 75&nbsp;(2007) 035338.<br />
+　　<a href="http://prb.aps.org/abstract/PRB/v75/i3/e035338">http://prb.aps.org/abstract/PRB/v75/i3/e035338</a>&nbsp;<br />
+&nbsp; b)&nbsp;WIEN2k<br />
+&nbsp;&nbsp;&nbsp; E. Duverger et al., Surface Science 595 (2005) 40.<br />
+&nbsp; c)&nbsp;GPAW<br />
+&nbsp;&nbsp;&nbsp; F. Yin et&nbsp;al., Phys. Rev.&nbsp;Lett 102 (2009) 106102.<br />
+　　<a href="http://prl.aps.org/abstract/PRL/v102/i10/e106102">http://prl.aps.org/abstract/PRL/v102/i10/e106102</a>　<br />
+&nbsp; d) VASP<br />
+　&nbsp; M. Krajci et al., Phys. Rev. B 73 (2006) 024202.<br />
+　　<a href="http://prb.aps.org/abstract/PRB/v73/i2/e024202">http://prb.aps.org/abstract/PRB/v73/i2/e024202</a><br />
+------------------------------------------------------------------------------<br />
+□ 波数のエネルギー依存性<br />
+1) e/aを計算することが可能になります。<br />
+------------------------------------------------------------------------------<br />
+磁性材料<br />
+　1) <a href="http://www.apph.tohoku.ac.jp/sakuma-lab/docs/ndfeb.pdf">http://www.apph.tohoku.ac.jp/sakuma-lab/docs/ndfeb.pdf</a>&nbsp;<br />
+　　　有用な文献 : <a href="http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf">http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf</a>&nbsp;<br />
+&nbsp;&nbsp;2)&nbsp;伝導電子が高度にスピン偏極した磁性体を探す<br />
+------------------------------------------------------------------------------</p>

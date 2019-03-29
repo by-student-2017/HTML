@@ -1,0 +1,669 @@
+------------------------------------------------------------------------------<br />
+■ 光散乱<br />
+　光散乱現象を利用して、液体、溶液、縣濁液のさまざまな構造や物性を調べることができる。<br />
+　低分子系にも適用でき、密度や濃度の揺らぎに関する情報（例えば、等温圧縮率や浸透圧縮率）が得られるが、溶液中のコロイドや高分子は低分子に比べて光を散乱する能力が高いので、光散乱法は高分子・コロイド溶液の研究に適した測定法である。また、光の波長が高分子の大きさ（10 - 数百 mm）を測定するのに適していることも、高分子・コロイド研究に光散乱法がよく用いられる理由である。<br />
+　光散乱法には、静的光散乱と動的光散乱の２種類の方法がある。<br />
+------------------------------------------------------------------------------<br />
+◆ 静的光散乱（Static Light Scattering: SLS）<br />
+<br />
+◇ 分子量<br />
+・静的光散乱法は、高分子・コロイド試料の分子量測定の最も標準的な方法である。サイズ排除クロマトグラフィーなどのように分子量が既知の標準試料を必要とせず、粘度法のように粘度式が文献に与えられている必要もない絶対測定法であり、新規な高分子・コロイドの分子量（モル質量）決定が可能である。<br />
+・質量分析やNMR法は、かなり高分子量の試料の絶対分子量測定が可能になってきたが、分子量分布のある試料では分子量によってイオン化される度合いが異なっていたり、末端基が明確に定まってない試料などの場合には正確な（平均）分子量が得られない。また、10<sup>6</sup>を超える高分子量試料の絶対分子量測定には静的光散乱法以外の適当な測定法がないのが現状である。<br />
+・光散乱法によって分子量が測定できるのは、試料の試料濃度（単位:g/cm<sup>3</sup>)が一定の溶液では、分子量が高いほど散乱光強度が強くなる性質に起因している。<br />
+・1個の高分子あるいはコロイド粒子から散乱される光の電場の振幅は1粒子を構成する電子数（すなわち分子量）に比例する。電場の2乗に比例する光の強度は分子量の２乗に比例する。散乱体積内の全粒子からの散乱光強度は粒子数に比例する。質量濃度が一定の溶液では粒子の数濃度は分子量に反比例して減少する。以上の結果、散乱体積内の全粒子からの散乱光強度は分子量に比例することになる。<br />
+・以上の議論は同一あるいは異なる粒子に属する別の構成単位から散乱された光が干渉することを無視している。これらの粒子内および粒子間の干渉効果は、それぞれ散乱角あるいは粒子濃度をゼロに外挿することによって消すことができる。<br />
+・溶液全体からの散乱光強度は粒子と溶媒からの散乱光強度の和として与えられるので、粒子成分から散乱された光に対するレイリー比は、溶液と溶媒のレイリー比の差（過剰レイリー比と呼ぶ）&Delta;R<sub>&theta;</sub>によって与えられる。これより次式が成立する。<br />
+　lim <sub>&theta;,c&rarr;0</sub> &Delta;R<sub>&theta;</sub>/c = K*M<br />
+ここで、cは粒子の質量濃度、Mは分子量、Kは光学定数と呼ばれる比例係数で、次式で定義される。<br />
+　K &equiv; ((4*<span style="font-family: times new roman,times,serif;">&pi;</span><sup>2</sup>*n<sup>2</sup>)/(N<sub>A</sub>*&lambda;<sup>4</sup>))*(&part;n/&part;c)<sup>2</sup><br />
+ここで、N<sub>A</sub>はアボガドロ定数、また&part;n/&part;cは溶液の屈折率の濃度増分で、構成単位の光散乱能と関係した量である。この&part;n/&part;cは、溶液と溶媒との屈折率差を精密に測定できる示差屈折率計を用いて実験的に求めることで、Kを実験的に決定し、分子量を求めることができる。ただし、試料と溶媒の屈折率が等しく、&part;n/&part;cがゼロの特別の場合には、試料に光散乱能がなく、光散乱実験は行えない。<br />
+・試料に分子量分布がある場合には、Mは重量平均分子量で置き換えられる。複数種類の構成単位からなるコポリマー試料については。組成分布があると、一般には正しい分子量が求まらない（タンパク質のように組成分布のない場合にはその限りではない）。<br />
+・構成単位の過剰屈折率が近い場合には、それほどの分子量の誤差は生じないが、厳密には屈折率の異なる最低3種類の溶媒を用いて光散乱（および示差屈折率）測定を行い、それぞれで得られた見かけの分子量から真の分子量を評価する方法がある。<br />
+・混合溶媒を用いて光散乱測定をする場合には、選択的溶媒和と呼ばれる現象が起こり、粒子の近傍の溶媒組成は平均の組成とは異なっている可能性がある。その場合には、通常の方法で測定した&part;n/&part;cは構成単位の光散乱能を正確に表しておらず、計算式から正しい分子量を見積もれない。この困難は、透析と呼ばれる手法を用いて解消することができる。<br />
+・透析とは溶媒成分のみが透過でき、粒子は透過できない半透膜を隔てて、溶液と大量の溶媒を接触させ、平衡化させる操作である。選択的溶媒和が起こっていれば、溶液中の粒子との親和性がより高い溶媒成分が流れ込み、溶液側の溶媒組成が変化する。この透析した溶液と溶媒を使って測定した&part;n/&part;cを計算式に代入して計算したKを使うと、正しい分子量が得られることが熱力学的に証明されている。<br />
+・厳密には光散乱測定もこの透析した溶液について行うべきであるが、一般に、光散乱測定結果は透析前後でほとんど変化しないので、未透析の溶液についての&Delta;R<sub>&theta;</sub>で代用しても有意の誤差は生じない。<br />
+・光散乱で分子量を求める際に生じる測定誤差は、散乱角度と試料濃度の外挿操作に起因することが多い。外挿のしかたについてはいろいろな方法が提案されている。高分子電解質の水溶液系は、長距離の静電相互作用によって粒子間の干渉効果を消すことが難しい。通常は低分子塩を0.1 M程度添加して静電相互作用を遮蔽して分子量測定が行われる。<br />
+<br />
+◇ 分子量測定の注意点<br />
+・分子量測定は、散乱光量の絶対値を計測するため、分散状態は安定、分子量分布も狭い状態のサンプルが必要<br />
+　特定の時間に大きなピークが集中：フィルター処理を実施する<br />
+　大きくうねるようなバックグラウンドがある：温度平衡時間を設ける<br />
+・Debye plotは希釈系列から、濃度0のY軸切片を算出する方法、そのため、高濃度からの直線近似ではなく、できる限り希薄な状態での直線近似が好ましい<br />
+<br />
+◇ 粒子の形状・コンホメーション<br />
+・粒子サイズが10 nm程度以上になると、同一粒子内の異なる部位から散乱された光が干渉を起こす。この効果を利用して、散乱粒子のサイズや形状を調べることができる。<br />
+・位相のずれは、散乱光源である散乱要素間の相対位置によって決まるので、散乱体内の構成要素の分布状態で粒子内干渉効果は規程されている。<br />
+・異方的な粒子の場合は、溶液中でいろいろな方向を向いているので、この干渉効果は粒子配向に関して平均化する必要がある。具体的な計算方法は省略するが、さまざまな形状（構成要素の分布）の粒子について粒子内干渉効果の計算が行われている。結果は式で定義される粒子散乱関数（分子内干渉因子あるいは形状因子とも呼ばれる）P(&theta;)によって記述される。<br />
+　lim <sub><font size="2">c&rarr;0</font></sub> &Delta;R<sub><font size="2">&theta;</font></sub>/(K*c) = M*P(&theta;)<br />
+ここで、試料濃度をゼロに外挿する操作は、粒子間の干渉効果を消すためである。上式のMに[lim <sub><font size="2">&theta;,c&rarr;0</font></sub> &Delta;R<sub><font size="2">&theta;</font></sub>/c = K*M]を代入すると、両辺のKが消失するので、P(&theta;)を求めるには、&part;n/&part;cの値は必要ない。<br />
+　構成要素が均一に分布したさまざまな幾何学的形状を持つ粒子や、高分子のモデル鎖であるガウス鎖やみみず鎖に対するP(&theta;)の具体的な関数が知られている。これｒなお関数型と光散乱実験により得られたP(&theta;)の実測値とを比較することにより、試料粒子の形状を推定できる。ただし、多分散性の試料の場合には、サイズ分布を考慮して理論と実験との比較をする必要がある。一般に、P(&theta;)はサイズ分布の影響を強く受けるので注意したい。<br />
+・通常、P(&theta;)は単調な関数なので、粒子形状を一つの試料に対するP(&theta;)の曲線から一義的に決定することは困難な場合が多い。また、研究対象の粒子に対する適当なP(&theta;)の理論式がない場合も多い。そのようなときには、P(&theta;)そのものではなく、P(&theta;)対q<sup>2</sup>のプロットの初期勾配より次の式を使って計算される平均2乗回転半径&lt;S<sup>2</sup>&gt;と呼ばれる量を用いて粒子の形状を議論するのが有効である。<br />
+　P(&theta;) = 1 - (1/3)*&lt;S<sup><font size="2">2</font></sup>&gt;*q<sup>2</sup> + &Omicron;(q<sup>4</sup>)<br />
+この&lt;S<sup><font size="2">2</font></sup>&gt;は粒子の形状とは無関係に次式で定義される量である。<br />
+　&lt;S<sup><font size="2">2</font></sup>&gt; &equiv; (1/N<sub>0</sub>)*&Sigma;<sub>i=1</sub><sup>N<sub>0</sub></sup>&lt;S<sub>Gi</sub><sup><font size="2">2</font></sup>&gt;<br />
+ただし、N<sub>0</sub>は1粒子中の構成要素数（重合度）、S<sub><font size="2">Gi</font></sub>は粒子の重心からi番目の構成要素までの距離を表す。角かっこは粒子（例えば高分子鎖）の内部自由度に関する平均を表す（剛体の場合には平均操作は必要ない）。この定義により&lt;S<sup><font size="2">2</font></sup>&gt;<sup>1/2</sup>は粒子の有効な半径とみなすことができる。<br />
+・同種類で、分子量（すなわちN<sub>0</sub>）だけが異なっている高分子・コロイド試料について、&lt;S<sup><font size="2">2</font></sup>&gt;とMを光散乱より測定し、両者の関係がわかると、試料粒子の形状・コンホメーションに関する知見が得られる。均一密度の球状粒子の場合には、半径RはMの1/3乗に比例するので、&lt;S<sup><font size="2">2</font></sup>&gt;はMの2/3乗に比例する。<br />
+・良溶媒中での屈曲性高分子は、分子内排除体積効果のためにガウス鎖としてふるまわずに、&lt;S<sup><font size="2">2</font></sup>&gt;はMの1.2乗に比例することが知られている。したがって、&lt;S<sup><font size="2">2</font></sup>&gt;対Mの両対数プロットを作り、その傾きを見積もると粒子形状（形態）を知ることができる。<br />
+・ブロックコポリマーのP(&theta;)あるいは&lt;S<sup><font size="2">2</font></sup>&gt;は、各ブロック鎖の(&part;n/&part;c)<sup>2</sup>の重みがついた平均量として与えられる。特別な場合として、片方のブロック鎖の(&part;n/&part;c)がゼロの場合には、散乱能のあるブロック鎖だけのP(&theta;)あるいは&lt;S<sup><font size="2">2</font></sup>&gt;が求められる。<br />
+・さまざまな形状の散乱体の粒子散乱関数と回転半径に関する文献<br />
+　H. Yamakawa, Modern Theroy of Polymer Solutions, Chap. V, Haper &amp; Row (1971)<br />
+　斉藤信彦、高分子物理学、裳華房 (1967)<br />
+　倉田道夫、近代工業化学18, 高分子工業化学Ⅲ, 朝倉書店 (1975)<br />
+　M. B. Huglin (ed.), Light Scattering from Polymer Solutions, Academic Press (1972)<br />
+<br />
+◇ 溶液中での粒子間相互作用<br />
+・光散乱法では、粒子間の干渉効果を利用して、溶液中での粒子間に働く相互作用の知見を得ることができる。粒子間干渉効果を考慮に入れた2成分溶液の過剰レイリー比の式を次に示す。<br />
+&nbsp;lim <sub>&theta;&rarr;0</sub>(K*c)/&Delta;R<sub>&theta;</sub> = (1/(R*T))*(&part;&Pi;/&part;c) = 1/M + 2*A<sub>2</sub>*c + 3*A<sub>3</sub>*c^2 + ...<br />
+　ここで、R*Tは気体定数と絶対温度の積、&Pi;は溶液の浸透圧（&part;&Pi;/&part;cは浸透圧縮率の逆数と呼ばれる）、またA<sub>2</sub>とA<sub>3</sub>は第2、第3ビリアル係数である。後ろの等式は、浸透圧のビリアル展開より得られる。散乱角をゼロに外挿するのは、粒子内乾燥効果を消すためである。<br />
+・分子量分布を有する試料の場合には、上式中のMは重量平均量、A<sub>2</sub>とA<sub>3</sub>についても分子量分布に関するある平均量となるが、&part;&Pi;/&part;cとの関係式は厳密には成立しなくなる。<br />
+・溶液中での粒子間には、一般に斥力と引力が働く。良溶媒中では引力が弱く、貧溶媒中では強い。第2ビリアル係数は斥力項と引力項とからなっており、引力の弱い良溶媒中ではA<sub>2</sub>の値が大きく、貧溶媒中では小さい。<br />
+・高分子溶液の場合にはA<sub>2</sub>がちょうどゼロとなるときをシータ状態と呼び、一種の理想状態とみなす。見掛け上、高分子間の相互作用が消失した状態で、分子内排除体積効果も同時に消失して、屈曲性高分子鎖はガウス鎖としてふるまう。ただし、このシータ状態でも高次のビリアル係数項まで含んだ&part;&Pi;/&part;cを濃度の関係として求め、適当な統計力学理論を利用すると、粒子間の斥力と引力を分離評価できる。<br />
+　Y. Jinbo <em>et al.</em>, Macromolecules, 27(1994)6080.<br />
+　R. Koyama, T. Sato, Macromolecules, 35(2002)2235.<br />
+・A<sub><font size="2">2</font></sub> &gt; 0: 「親溶媒性」、溶媒と溶質の馴染みが良い（分散状態良好）<br />
+・A<sub><font size="2">2</font></sub>&nbsp;&lt; 0: 「親溶質性」、溶媒と溶質の馴染みが悪い（凝集傾向）<br />
+※ 「親溶媒性」と「親溶質性」は、媒と質の一字違いなので見間違えないように注意。<br />
+<br />
+◇ 高次構造<br />
+・低分子液体に対してX線散乱実験を行うと、結晶ほど鋭くはないが数本の回折ピークが観測される。これは、液体中で分子は主として斥力相互作用により近距離の規則的な配列をとっている証拠である。濃厚な縣濁液中の球状ラテックスでも、スケールが違うが、同様な「液体構造」をとっており、これは光散乱によって検出できる。<br />
+・低イオン強度の水溶液中で、電荷を有する球状や棒状粒子は、長距離の強い静電相互作用によって、秩序性の高い規則的配置をとる。<br />
+・有限濃度での剛体粒子系では、粒子間干渉効果のために次式で表される。<br />
+　&Delta;R<sub>&theta;</sub>/(K*c) = M*P(&theta;)*S(q)<br />
+ここで、S(q)は静的構造因子と呼ばれる系内の秩序構造を表す関数である。粒子形状が濃度に依存しないときには、M*P(&theta;)は濃度外挿より求められて、実際の&Delta;R<sub>&theta;</sub>/(K*c)とM*P(&theta;)よりS(q)を求めることができる。<br />
+・剛耐球や剛体棒の系に対するS(q)の計算方法は下記文献を参照。<br />
+　E. E. Maier et al., Macromolecules, 25 (1992) 1125.<br />
+　J. P. Hansen, I. R. McDonald, Theory of Simple Liquids, Academic Press (1986).<br />
+・高分子容器では濃度が高くなると高分子鎖どうしは相互貫入できるので球状粒子のような規則構造はとらない。高分子の濃厚溶液に対する過剰レイリー比は通常、次式で解析される。<br />
+　(K*c)/&Delta;R<sub>&theta;</sub> = (1/(R*T))*(&part;&Pi;/&part;c)*[1 + (1/3)*&xi;<sup>2</sup>*q<sup>2</sup> + &Omicron;(q<sup>4</sup>)]<br />
+　ここで、&xi;は相関長と呼ばれる量で、高分子濃度溶液の性質を議論するときの基本量としてしばしば利用される。<br />
+<br />
+◇ 粒子内・粒子間の配向相関（異方性散乱）<br />
+・検出器の前に水平偏向のみを透過するように偏光板（検光子）を挿入すると、異方性散乱成分&Delta;R&theta;,HVだけを検出できる。この&Delta;R<sub>&theta;,HV</sub>は散乱要素間の配向相関と関係する量である。無限希釈状態では粒子内の要素間の配向相関のみが反映され、<br />
+　lim<sub>c,&theta;&rarr;0</sub>&Delta;R<sub>&theta;,HV</sub>/(K*c)より粒子の形態に関する知見が得られる。<br />
+・例えば高分子では、limc,&theta;&rarr;0&Delta;R&theta;,HV/(K*c)は棒状形態では分子量に比例し、屈曲性鎖では分子量に依存しないので、その分子量依存性を調べれば高分子鎖の剛直性を評価できる。<br />
+・液晶状態にある系や液晶相転移近傍の等方相系では、分子間に長距離の配向相関があるので、異方性光散乱によって、液晶の弾性率や配向揺らぎ、熱力学的安定性などについての知見が得られる。<br />
+・スピノーダル点（配向揺らぎの発散点）を評価できる<br />
+<br />
+◇ SLS測定の注意点<br />
+・粒子径の結果からSLSが測定できるかどうかを判断する場合<br />
+　多分散指数（PdI）が0.2以下が好ましい（小さいほどよい）<br />
+・測定時の濃度は、できるだけ低濃度の領域で測定する<br />
+　高濃度領域では分子間相互作用によってDebye plotの傾きが変わるため<br />
+　※ Debye plot: 角度固定で、c（濃度）に対して(K*c)/R<sub>&theta;</sub>をプロットしたもの<br />
+・分子量分布が広い（≒凝集体含む）のは苦手<br />
+　大きな分子の散乱光が支配的になってしまうため<br />
+・解析には試料の&part;n/&part;c値が必要<br />
+・測定する試料の濃度情報(mg/mL)も必要<br />
+・粒子を混ぜたときのピーク比<br />
+　散乱強度基準：体積比率が明確に分けられない<br />
+　体積基準：散乱強度基準に比べ体積比率が確認しやすい<br />
+<br />
+◇ SLS解析の注意点<br />
+・4点以上で測定してみる<br />
+　1点が直線から外れるデータであった場合、残りの3点で直線を引くことができるため<br />
+・通常の角セルでは問題ないが、特注の小容量セルを使用する場合には光路長の幅に注意する<br />
+　セルのエッジが散乱光を不安定にし、測定結果が安定に得られなくなる<br />
+・キュムラントフィットと粒子径分布フィットが共に一致しているかを確認する<br />
+　キュムラントフィットが一致していないとキュムラント径（Z-Average）は信頼性が低くなる<br />
+・粒子濃度を高くしたとき<br />
+　粒子濃度でピーク形状が変わらない場合：粒度補正をするとピークが一致する。粒子間相互作用の影響はない。<br />
+　粒子濃度でピーク形状が変わる場合：粒子間相互作用の影響がある<br />
+・粒子間拡散は濃度に応じてピークの形状が異なる<br />
+・制限拡散（粒子の拡散が遅くなる）は濃度が変化してもピークの形状は変化しない<br />
+------------------------------------------------------------------------------<br />
+◆ 動的光散乱（Dynamic Light Scattering: DLC）<br />
+<br />
+◇ 動的光散乱で分かること<br />
+　光の散乱は、透明な試料中の誘電率（すなわち屈折率）の揺らぎ（不均一な空間分布）によって生じる。動的光散乱で測定可能な主な試料と分かることは下記のようになる。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 546.52px;">
+	<tbody>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">試料</td>
+			<td style="width: 229.72px; text-align: center;">直接測定する主な現象</td>
+			<td style="width: 158.52px; text-align: center;">得られる主な知見</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">微粒子分散液</td>
+			<td style="width: 229.72px; text-align: center;">並進拡散、回転拡散</td>
+			<td style="width: 158.52px; text-align: center;">流体力学的半径<br />
+			形状異方性</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">高分子溶液（希薄）</td>
+			<td style="width: 229.72px; text-align: center;">重心運動、分子内運動</td>
+			<td style="width: 158.52px; text-align: center;">鎖の広がり方<br />
+			鎖と溶媒の相互作用</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">高分子溶液（準希薄）</td>
+			<td style="width: 229.72px; text-align: center;">濃度揺らぎ</td>
+			<td style="width: 158.52px; text-align: center;">擬似網目のサイズ<br />
+			絡み合いの緩和</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">高分子溶液（濃厚）、融液</td>
+			<td style="width: 229.72px; text-align: center;">分子内運動、分子間協同運動</td>
+			<td style="width: 158.52px; text-align: center;">鎖の運動性<br />
+			ガラス転移過程</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">ゲル</td>
+			<td style="width: 229.72px; text-align: center;">網目の協同拡散、クラスターの運動</td>
+			<td style="width: 158.52px; text-align: center;">網目のサイズ<br />
+			ゾル-ゲル転移過程</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">ミセル</td>
+			<td style="width: 229.72px; text-align: center;">並進拡散、回転拡散、濃度揺らぎ、</td>
+			<td style="width: 158.52px; text-align: center;">孤立ミセルの形状<br />
+			巨大ミセルの構造</td>
+		</tr>
+		<tr>
+			<td style="width: 145.33px; text-align: center;">液晶</td>
+			<td style="width: 229.72px; text-align: center;">分子配向秩序の揺らぎ、濃度ゆらぎ</td>
+			<td style="width: 158.52px; text-align: center;">弾性定数<br />
+			相転移近傍での臨界緩和</td>
+		</tr>
+	</tbody>
+</table>
+注: この表はレーリー散乱の光子相関関数を測定する方法についてまとめた。広義の光散乱には、ブリュアン散乱やラマン散乱なども含まれる。<br />
+<br />
+◇ 概要<br />
+・動的光散乱は試料にレーザー光を入射し、試料から散乱された光を測定して、その時間変化を分析する。散乱光の時間変化は、試料内部で起こっているブラウン運動の速さに対応している。<br />
+・溶媒中の粒子サイズが大きいとブラウン運動による拡散運動が穏やかなので、散乱光強度の揺らぐ速さが遅くなる。このとき動的光散乱では、散乱光の時間変化あら相関関数を算出する。相関関数から求められる緩和時間から、ブラウン運動の速さが見積もられる。<br />
+・粒子が大きい：運動が遅いので散乱光強度の揺らぐ速さが遅く緩和時間が長くなり<br />
+・粒子が小さい：運動が速いので散乱光強度の揺らぐ速さが速く緩和時間が短くなる<br />
+・一般的な動的光散乱の装置で測定できる相関時間の範囲は10<sup>-6</sup>から10<sup>2</sup>秒程度である。<br />
+・粒子の拡散係数を反映した散乱光のゆらぎを検出し、粒子径を測定する方法。拡散係数を求める方法は2つあり、光子相関法と周波数解析法に分類される。一般的に光子相関法を採用しているメーカーが多い。<br />
+・光子相関法：相関計（コリレーター）を用いて自己相関関数を導き、この自己相関関数から、平均粒子径および多分散指数を得る方法<br />
+・周波数解析法：散乱光の周波数変化をフーリエ変換し、そこから平均粒子径および多分散指数を得る方法<br />
+<br />
+◇ 装置<br />
+・可視レーザー光（出力は数10 mWから1 W程度）を試料に入射し、試料から散乱される散乱光を検出する<br />
+・入射光の進行方向と散乱光の進行方向の成す角が散乱角&theta;である<br />
+・散乱装置の設定によって散乱ベクトルqの大きさが次のように定まる<br />
+　|<strong>q</strong>| = ((4*<span style="font-family: times new roman,times,serif;">&pi;</span>*n)/&lambda;)*sin(&theta;/2)<br />
+ここで、nは試料の屈折率、&lambda;はレーザー光の波長である。<br />
+・散乱光は微弱光の検出に優れた光電子増倍管やアバランシェフォトダイオードによって検出する。<br />
+・微弱な光は、光子パルスとして測定されるため、プリアンプ/ディスクリミネーターによってパルスの増幅と整形/ノイズ除去を行なった後、デジタル通信としてコリレーター（相関計）に入力する<br />
+・コリレーターは光子パルス信号から、散乱光の自己相関関数を計算する<br />
+・計算手順の一例を下に示す<br />
+1. 入力された光パルスを一定のゲート時間ts間隔でカウントする<br />
+2. 散乱光強度の時間変化n(i)をデジタルデータとしてメモリに取り込む<br />
+3. デジタル計算によって光パルスの時間自己相関関数C(j*ts)を計算する<br />
+　C(j*ts) = &lt;n(i)*n(i+j)&gt; = (1/N) * &Sigma;{n(i)*n(i+j)}<br />
+ここでNはデータn(i)の総数であり、&lt;&gt;は時間平均を表す。<br />
+　&tau; = j*tsとすると、相関関数は相関時間&tau;の関数C(&tau;)となる。&tau; = 0のときには、相関関数は散乱光強度n(i)の2乗の平均C(0) = &lt;n<sup>2</sup>&gt;になり、&tau; = &infin;のときには、相関関数は散乱光強度n(i)の平均の2乗 C(&infin;) = &lt;n&gt;<sup><font size="2">2</font></sup>になる。一般に、光子パルスの信号列n(i)はガウス統計に従うので、&lt;n<sup><font size="2">2</font></sup>&gt; = 2*&lt;n&gt;<sup><font size="2">2</font></sup>、すなわち、C(0) = 2*C(&infin;)という関係が成り立つ。この関係があるので、C(&tau;)は次式によって規格化される。<br />
+　c(&tau;) = C(&tau;) / C(&infin;)<br />
+<br />
+◇ 相関関数<br />
+　動的光散乱で直接測定されるのは散乱光強度の揺らぎである。散乱光強度は散乱電場の2乗なので、散乱光強度の自己相関関数c(&tau;)は通常、散乱電場の2次の（2乗の）相関関数という意味で、g<sup>(2)</sup>(q,&tau;)と書かれる。すなわち、c(&tau;) = g<sup><font size="2">(2)</font></sup>(q,&tau;)である。<br />
+　一方、散乱電場の（1次の）自己相関関数g<sup><font size="2">(1)</font></sup>(q,&tau;)はg<sup><font size="2">(2)</font></sup>(q,&tau;)と次の関係がある。<br />
+　g<sup><font size="2">(1)</font></sup>(q,&tau;) = &radic;{1 + g<sup><font size="2">(2)</font></sup>(q,&tau;) - g<sup><font size="2">(2)</font></sup>(q,&tau;)} = &radic;{c(&tau;) - 1}<br />
+　動的光散乱の理論によれば、試料内部の複素誘電率の変化量を&delta;&epsilon;(q,t)とすると<br />
+　g<sup><font size="2">(1)</font></sup>(q,&tau;) &prop; &lt;&delta;&epsilon;*(q,&tau;)&delta;&epsilon;(q,t+&tau;)&gt;<br />
+　g<sup><font size="2">(2)</font></sup>(q,&tau;) &prop; &lt;|&delta;&epsilon;*(q,&tau;)|<sup>2</sup>|&delta;&epsilon;(q,t+&tau;)|<sup><font size="2">2</font></sup>&gt;<br />
+という関係がある。誘電率の時間変化は試料内部の濃度（あるいは密度）の動的な揺らぎと関係があるので、相関関数を観測することで試料の内部に関する知見をえることができる。例えば式[g<sup><font size="2">(1)</font></sup>(q,&tau;) &prop; &lt;&delta;&epsilon;*(q,&tau;)&delta;&epsilon;(q,t+&tau;)&gt;]は、g<sup><font size="2">(1)</font></sup>(q,&tau;)が試料内部の濃度揺らぎに比例していることを示している。したがって、動的光散乱では直接測定される散乱光強度の自己相関関数c(&tau;)からg<sup><font size="2">(1)</font></sup>(q,&tau;)を求め、g<sup><font size="2">(1)</font></sup>(q,&tau;)を分析することで試料内部の動的な揺らぎについての知見を得ようとすることが多い。<br />
+<br />
+◇ 動的光散乱と拡散係数<br />
+　試料内のブラウン運動によって微粒子の（並進）拡散が起きているときには、相関関数 g(q,&tau;)に対して次式を用いて解析を行い、初期緩和速度&Gamma;を決定できる。<br />
+　&Gamma; = -lim <sub><font size="2">&tau;&rarr;0</font></sub> [&part;ln( g(q,&tau;) )/&part;&tau;]<br />
+　具体的にはln( g(q,&tau;) )を&tau;に対してプロットすると、&tau;=0 における接線の傾きが-&Gamma;となる。このとき、緩和時間は&tau;<sub>R</sub> = 1/&Gamma; として求められ、&tau;<sub>R</sub>から微粒子の（並進）拡散係数を決定できる。<br />
+　入射光が照射された領域の内部には多数の微粒子が存在し、それぞれの粒子からの散乱光が合わさって検出器に届く。散乱光どうしは互いに干渉し合うので、微粒子の空間分布が時間変化すると検出器から出力される散乱光強度の大きさが時間変化する。動的光散乱はこのような原理によって試料中の微粒子の拡散過程を検出する。<br />
+　次に試料内部の微粒子の拡散過程について考える。時刻tにおける微粒子の位置をr(t)と表すと、微粒子がブラウン運動によって拡散しているとき、その微粒子の移動距離の2乗の平均は経過時間&tau;に比例するので、拡散の式は次式と表される。<br />
+　&lt;|r(t) - r(t+&tau;)|<sup>2</sup>&gt; =～ 6*D*&tau;<br />
+ここでDは拡散係数である。一方、散乱現象において隣接する微粒子からのそれぞれの散乱光が干渉によって強め合うときの微粒子間距離は2*<span style="font-family: times new roman,times,serif;">&pi;</span>/qである。そこで、緩和時間&tau;<sub>R</sub>は微粒子が強め合う位置から弱め合う位置に距離 <span style="font-family: times new roman,times,serif;">&pi;</span>/q だけ移動するのに要する時間であると考える。すなわち、&lt;|r(t) - r(t+&tau;)|<sup><font size="2">2</font></sup>&gt; ～ <span style="font-family: times new roman,times,serif;">&pi;</span>/qを用いると拡散の式から直ちに、次式の関係式が得られる（数係数の詳細な計算は割愛）。<br />
+　D = 1/(q<sup>2</sup>*&tau;<sub>R</sub>)<br />
+このことから緩和時間&tau;<sub>R</sub>から拡散係数Dを決定できることがわかる。ところで、微粒子が剛体球のときには、Einstein-Stokesの式を用いることができる。<br />
+　D = k<sub><font size="2">B</font></sub>*T / (6*<span style="font-family: times new roman,times,serif;">&pi;</span>*&eta;*&alpha;)<br />
+ここで、k<sub><font size="2">B</font></sub>はBoltzmann定数、Tは絶対温度、&eta;は溶媒の粘性率、&alpha;は剛体球の半径である。したがって、この式と[ D = 1/(q<sup><font size="2">2</font></sup>*&tau;<sub><font size="2">R</font></sub>) ]を用いることによって緩和時間&tau;<sub>R</sub>から微粒子の半径&alpha;が直ちに求まることが分かる。<br />
+<br />
+◇ 試料作製法<br />
+　動的光散乱を行なうために必要な試料の量は測定装置に依存するが、だいたい1から5 ml程度あれば測定が可能である。希薄な溶液の場合には濃度が1%以下でも有効な測定が十分可能なので、必要な溶質の量はだいたい0.1g以下である。<br />
+　試料の調製にあたっては、塵の影響を考慮する必要がある。試料中に塵が含まれていると、そのブラウン運動を同時に測定することになってしまう。試料セルはあからじめ塵の含まれていない溶媒で洗浄し、試料セル内部に試料を入れる際にメンブランフィルター（孔径0.2 &mu;m程度）を通す。試料の性質上、フィルターの使用が困難な場合には、それに代わる工夫をするとともに、試料内部に塵が含まれている可能性を常に念頭におく必要がある。溶媒のみを試料として測定し、どの程度塵が含まれているか確認する方法もある。<br />
+<br />
+◇ 測定例<br />
+・微粒子分散液<br />
+　球形の微粒子の測定の場合は、緩和時間から微粒子の半径を決定することができる。粒径に分布がある場合には、簡便な方法としては、キュムラント解析法がある。これは次式のような式によって非線形最小二乗法によるフィッティングを行なう。<br />
+　g(q,&tau;) = exp(-&Gamma;*&tau; + (K<sub>2</sub>/2)*&tau;<sup>2</sup> + (K<sub>3</sub>/6)*&tau;<sup>3</sup>)<br />
+ここで、K<sub>2</sub>、K<sub>3</sub>は定数である。このとき緩和時間の分散はだいたいK<sub>2</sub>/&Gamma;<sup>2</sup>で与えられ、粒径分布の目安となる。<br />
+　溶液中の粒子が並進拡散しているときは、緩和速度&Gamma;が角度依存性を持つので複数の角度で測定を行い、D=1/(q<sup>2</sup>*&tau;<sub>R</sub>)に基づいて、縦軸に緩和速度（&Gamma;/s<sup>-1</sup>）を横軸に（散乱ベクトル）<sup>2</sup> q<sup>2</sup>/m<sup>-2</sup> としてプロットすると、グラフの傾きから拡散係数を正確に決定することができる。<br />
+　溶液中の粒子が棒状で光学的異方性を持つ場合には、偏光解消散乱（偏光子と検光子をクロスニコルの位置にして行なう光散乱）で測定をし、&Gamma; = -lim <sub>&tau;&rarr;0</sub> [&part;ln( g(q,&tau;) )/&part;&tau;] で解析を行なう。得られた緩和時間&Gamma;を散乱ベクトルの2乗に対してプロットするとグラフの傾きから並進拡散係数D<sub>t</sub>, 切片から回転拡散係数Drが求まる。Kirkwood-Risemannの式より下記の関係がある。<br />
+　D<sub>t</sub> = [k<sub>B</sub>*T / (3*<span style="font-family: times new roman,times,serif;">&pi;</span>*&eta;*L)]*ln(L/d)<br />
+　D<sub>r</sub> = [3*k<sub><font size="2">B</font></sub>*T / (<span style="font-family: times new roman,times,serif;">&pi;</span>*&eta;*L<sup>3</sup>)]*ln(L/d)<br />
+ここでLは棒の長さ、dは直径である。この解析から粒子の異方性を表すアスペクト比 L/d を決定できる。<br />
+・高分子溶液（希薄）<br />
+　高分子溶液の測定は濃度によっていくつかの領域に分けることができる。高分子の系では、高分子の鎖どうしの溶液中での接触が無視できなくなる重なり合い濃度c*（cは高分子溶液の濃度）を境に高分子鎖の挙動が変化する。<br />
+　重なり合い濃度より低い濃度（c &lt; c*)の高分子溶液を希薄溶液と呼ぶ。希薄溶液では高分子鎖は孤立した鎖としてブラウン運動をする。動的光散乱で測定される散乱係数は次式となる。<br />
+　D = {k<sub>B</sub>*T / (6*<span style="font-family: times new roman,times,serif;">&pi;</span>*&eta;*R<sub>H</sub>)}*(1+k&#39;*c)<br />
+ここでR<sub>H</sub>は流体力学的半径、k&#39;は濃度依存性の係数である。測定される拡散係数は濃度に依存するので、複数の濃度で測定し、c &rarr; 0 に外挿することで流体力学的半径R<sub>H</sub>を決定できる。<br />
+　q &gt; 1/R<sub>H</sub> となる条件で測定した場合には、高分子の分子内の緩和モードが測定され、拡散の緩和時間よりも速く緩和する。<br />
+・高分子溶液（準希薄）<br />
+　重なり合い濃度以上では、溶液中に過渡的な網目構造が形成される。しばしば二つの緩和過程が測定されるので、次式のような二つの緩和速度を持つ式を相関関数にフィッティングして解析が行なわれる。<br />
+　g(q,&tau;) = A*exp(-&Gamma;<sub>1</sub>*&tau;) + (1-A)*exp(-&Gamma;<sub>2</sub>*&tau;)<br />
+ここでAは係数（|A|=&lt;1）、&Gamma;<sub>1</sub>と&Gamma;<sub>2</sub>はそれぞれ速い緩和速度と遅い緩和速度である。重なり合い濃度以上では、鎖のブラウン運動は過渡的な網目構造で分断され、網目の協同拡散（ゲルモード）に起因する速い緩和&Gamma;c(=&Gamma;1)が測定される。&Gamma;cは濃度依存性があり、良溶媒のときには図（省略）に示すような挙動を示す。過渡的な網目のサイズは高分子ゲルの場合と同様にして求めることができる。また同時に、過渡的網目構造の中を拡散する鎖の自己拡散に起因する遅い緩和&Gamma;G(=&Gamma;2)が測定される。粘性率の濃度依存性からもc*を決定できるが、動的光散乱で決定したc*よりも高濃度であることが多い。動的光散乱のほうが鎖どうしの重なり合いの効果が低濃度で現われるためであると考えられる。<br />
+・高分子溶液（濃厚領域、融液）<br />
+　濃厚な場合の相関関数は、緩和時間が広い分布を持つようになるので、Kohlraush-Williams-Watts(KWW)型の伸長指数関数にフィッティングをして解析が行なわれる。<br />
+　g(q,&tau;) = exp {-(&tau;/&tau;<sub>R</sub>)<sup>&beta;</sup>}<br />
+ここで&beta;(=&lt;1)はパラメータで、&beta;=1のとき上式は普通の指数関数に一致する。&beta;が1より小さいほど、緩和時間の分布が広いと解釈される。一般にこの式を用いた解析によって内部の緩和時間を調べることができるが、内部構造についての直接的な知見を得ることは難しい。<br />
+・高分子ゲル<br />
+　高分子ゲルは、高分子の鎖どうしが架橋点によって網目構造を形成している。このとき動的光散乱によって網目の協同拡散（ゲルモード）に起因する緩和&Gamma;<sub>c</sub>(=&Gamma;<sub>1</sub>)が測定される。&Gamma;<sub>c</sub>からは協同拡散係数Dc = &Gamma;<sub>c</sub>/q<sup>2</sup>が決定できる。このとき、Einstein-Stokesの式を用いると、ゲルの網目サイズ2&xi;を見積もることができる。<br />
+　Dc = k<sub>B</sub>*T/(6*<span style="font-family: times new roman,times,serif;">&pi;</span>*&eta;*&xi;)<br />
+また、架橋が不十分であったり、絡み合いが生じたりして網目に欠陥が多い場合や、架橋点が生成消滅する物理ゲルの場合には、遅い緩和が同時に観測されることがある。このことから、遅い緩和成分の有無や大小によってゲル化の進行ぐあいを観測することができる。<br />
+<br />
+◇ DLC測定の注意点<br />
+・分布の広いサンプルは再現性が悪く苦手（例えば、1 nmと100 nmの混合物）<br />
+・必要であれば、遠心処理やフィルター処理などで粗大粒子を除く<br />
+・分散媒の粘度値が重要。必ず入力する必要がある<br />
+・粘度が重要なため温度も重要（保温力、熱平衡）<br />
+・蛍光体は苦手、蛍光は揺らがず、散乱光よりも大きいため<br />
+　（バンドフィルターやレーザーの波長を変える）<br />
+・分散している（サスペンジョン）状態が必要。沈降する粒子は難しい。<br />
+・TEMやSEMの結果と比較するのであれば個数基準（Number）が良い<br />
+　散乱強度基準（Intensity）を体積基準（Volume）、個数基準（Number）に変換するためには屈折率が必要<br />
+　Volume = number * 1000<br />
+　Intensity = number * 1000 * 1000<br />
+&nbsp;&nbsp; と粒子径によって差が出ることがある。そのため、どの基準にするかは大事。<br />
+<br />
+◇ 粒子径測定時の溶媒の選択<br />
+・液中に分散していること<br />
+・溶媒で必要なこと（下記）<br />
+　・溶媒自体は光を透過すること<br />
+　・粒子と屈折率差があること<br />
+　・液中で粒子が溶けない、膨潤しない、凝集しない<br />
+　・粒子が中でブラウン運動する粘度<br />
+　・粘度と屈折率が既知である（0.5%以内の精度が望ましい）<br />
+　・溶媒が清浄である（フィルタリングできればなお良い）<br />
+<br />
+◇ 測定可能濃度<br />
+・多重散乱しないこと<br />
+　NIBS<sup>(R)</sup>ではほとんどが回避可能<br />
+　NIBS<sup><font size="2">(R)</font></sup>: Non-Invasive Back-Scatter<br />
+　　Non-Invasive; サンプルと測定部が非接触<br />
+　　Back-Scatter; 後方散乱方式（173&deg;）<br />
+　　試料によるが、広い濃度範囲（0.00001 vol.%(0.1ppm) - 20 vol.%）と高感度（0.6nmから）測定が実現<br />
+・散乱光量が得られること（散乱光量は粒子径に依存）<br />
+・粒子がブラウン運動できること<br />
+・粒子間相互作用が起こらないこと<br />
+<br />
+◇ 測定用のセル<br />
+・ガラス：非水系、値段が高い<br />
+・プラスチック：水系、値段が安い<br />
+※ ゼータサイザーでは、下から8mmのところでレーザーが通る。下から15mmのところまでが温度コントロール範囲。そのため試料は下から10-15mmの範囲まで満たすのが良い。<br />
+※ 大事なこととして、セルは上半分を持つこと！<br />
+<br />
+◇ 減衰器（Attenuator）<br />
+1: 光量落とした状態<br />
+2-4: レーザーの光量少ない方、希釈OK<br />
+7-10: Transmission 1%-30%<br />
+11: レーザーの光すべて<br />
+・&nbsp;濃度指標
+<table border="1" cellpadding="1" cellspacing="1" style="width: 339.72px;">
+	<tbody>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">Attenuator<br />
+			Index</td>
+			<td style="width: 124.92px; text-align: center;">Attenuation<br />
+			(% Nominal)</td>
+			<td style="width: 112.72px; text-align: center;">Transmission<br />
+			(% Nominal)</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">1</td>
+			<td style="width: 124.92px; text-align: center;">99.9997</td>
+			<td style="width: 112.72px; text-align: center;">0.0003</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">2</td>
+			<td style="width: 124.92px; text-align: center;">99.997</td>
+			<td style="width: 112.72px; text-align: center;">0.03</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">3</td>
+			<td style="width: 124.92px; text-align: center;">99.99</td>
+			<td style="width: 112.72px; text-align: center;">0.01</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">4</td>
+			<td style="width: 124.92px; text-align: center;">99.97</td>
+			<td style="width: 112.72px; text-align: center;">0.03</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">5</td>
+			<td style="width: 124.92px; text-align: center;">99.9</td>
+			<td style="width: 112.72px; text-align: center;">0.1</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">6</td>
+			<td style="width: 124.92px; text-align: center;">99.7</td>
+			<td style="width: 112.72px; text-align: center;">0.3</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">7</td>
+			<td style="width: 124.92px; text-align: center;">97</td>
+			<td style="width: 112.72px; text-align: center;">1</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">8</td>
+			<td style="width: 124.92px; text-align: center;">90</td>
+			<td style="width: 112.72px; text-align: center;">3</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">9</td>
+			<td style="width: 124.92px; text-align: center;">90</td>
+			<td style="width: 112.72px; text-align: center;">10</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">10</td>
+			<td style="width: 124.92px; text-align: center;">70</td>
+			<td style="width: 112.72px; text-align: center;">30</td>
+		</tr>
+		<tr>
+			<td style="width: 86.52px; text-align: center;">11</td>
+			<td style="width: 124.92px; text-align: center;">0</td>
+			<td style="width: 112.72px; text-align: center;">100</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+◇ 分散系
+<table border="1" cellpadding="1" cellspacing="1" style="width: 515.72px;">
+	<tbody>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">分散相</td>
+			<td style="width: 53.93px; text-align: center;">分散媒</td>
+			<td style="width: 145.52px; text-align: center;">名称</td>
+			<td style="width: 243.72px; text-align: center;">例</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">液体</td>
+			<td style="width: 53.93px; text-align: center;">気体</td>
+			<td style="width: 145.52px; text-align: center;">液体エアロゾル</td>
+			<td style="width: 243.72px; text-align: center;">霧、しぶき、スプレーの殺虫剤</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">固体</td>
+			<td style="width: 53.93px; text-align: center;">気体</td>
+			<td style="width: 145.52px; text-align: center;">固体エアロゾル</td>
+			<td style="width: 243.72px; text-align: center;">煤煙、ほこり</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">気体</td>
+			<td style="width: 53.93px; text-align: center;">液体</td>
+			<td style="width: 145.52px; text-align: center;">気泡、泡沫</td>
+			<td style="width: 243.72px; text-align: center;">ホイップクリーム、シャンプーの泡</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">液体</td>
+			<td style="width: 53.93px; text-align: center;">液体</td>
+			<td style="width: 145.52px; text-align: center;">エマルション（乳化）</td>
+			<td style="width: 243.72px; text-align: center;">牛乳、バター、燃料（油/水混合燃料）</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">固体</td>
+			<td style="width: 53.93px; text-align: center;">液体</td>
+			<td style="width: 145.52px; text-align: center;">コロイド</td>
+			<td style="width: 243.72px; text-align: center;">シリカゾル、金ゾル、アルミナゾル、塗料</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">気体</td>
+			<td style="width: 53.93px; text-align: center;">固体</td>
+			<td style="width: 145.52px; text-align: center;">固体コロイド</td>
+			<td style="width: 243.72px; text-align: center;">軽石、木炭、ウレタンフォーム</td>
+		</tr>
+		<tr>
+			<td style="width: 53.72px; text-align: center;">固体</td>
+			<td style="width: 53.93px; text-align: center;">固体</td>
+			<td style="width: 145.52px; text-align: center;">固体サスペンション</td>
+			<td style="width: 243.72px; text-align: center;">着色ガラス、着色プラスチック</td>
+		</tr>
+	</tbody>
+</table>
+評価方法の変化例：<br />
+ホイップクリーム等：粘性、粘弾性<br />
+牛乳：粒子径<br />
+<br />
+◇ 自己相関関数の判断基準<br />
+・Y軸切片：1に近いほど安定、0.3以下は濃度不足、1を超えると粒子沈降が疑われる<br />
+・落ち込み開始の時間が最小粒子径を示している<br />
+・落ち込みの角度が分布の幅を表している<br />
+　垂直に近いと分布は狭い、水平に近いと分布は広い<br />
+・ベースラインにノイズがあると粗大粒子や凝集、塵が混在している可能性がある<br />
+<br />
+◇ 光散乱の判断基準<br />
+・スパイクのある状態：粗大粒子・凝集粒子の混在が示唆される<br />
+・細かく変化した状態：安定した状態<br />
+・変動した状態：サンプルの対流・揺れ、熱平衡が取れてない<br />
+<br />
+◇ 液中の粒子の凝集<br />
+・微粒子の液中における凝集現象は、粒子のブラウン運動、粒子間相互作用、粒子と流体の相対運動によって発生する分散力などによって支配される<br />
+・微粒子ほどブラウン運動が激しくなり、粒子が接近・衝突する機会が増え、粒子間反発作用に比べファンデルワールス引力の影響が大きくなるため、凝集しやすくなる。特に、粒子径がサブミクロン以下になると、特別な粒子間反発相互作用が働かなければ凝集が起きる。<br />
+<br />
+◇ 液中で働く粒子間相互作用力とその発生機構
+<table border="1" cellpadding="1" cellspacing="1" style="width: 514.52px;">
+	<tbody>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">相互作用力</td>
+			<td style="width: 351.52px; text-align: center;">発生機構</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">ファンデルワールス力</td>
+			<td style="width: 351.52px; text-align: center;">物質間に働く普遍的な引力</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">界面静電相互作用</td>
+			<td style="width: 351.52px; text-align: center;">粒子表面帯電に起因する界面電気２重層の重なりにより発生する斥力&rarr;ゼータ電位</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">立体障害効果</td>
+			<td style="width: 351.52px; text-align: center;">界面活性剤など粒子表面に吸着した分子層による粒子接近防止効果</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">架橋形成作用</td>
+			<td style="width: 351.52px; text-align: center;">高分子などが粒子間に架橋を作ることで発生する引力</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">溶媒分子の構造形成力</td>
+			<td style="width: 351.52px; text-align: center;">溶媒分子が粒子表面近傍結合構造を作り、立体障害的な作用を示す効果。水分子の水和斥力</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">Depletion効果</td>
+			<td style="width: 351.52px; text-align: center;">表面吸着しなかった高分子が粒子間に存在し、粒子の接近と凝集分散に影響する効果</td>
+		</tr>
+		<tr>
+			<td style="width: 153.12px; text-align: center;">流体力学的作用</td>
+			<td style="width: 351.52px; text-align: center;">粒子運動により粒子間にある流体が排除、侵入する際に生じる流体からの作用。引力にも斥力にもなる</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+◇ DLVO理論での分散・凝集評価<br />
+・粒子間距離に対するポテンシャルの図を見ると、極大点（エネルギー障壁）を超えてしまうと、粒子は凝集傾向になる。<br />
+・極大点が大きい状態は粒子が凝集しない≒分散している<br />
+・イオン濃度が高くなると、極大点が小さくなる<br />
+　イオン濃度が高いほど粒子は凝集傾向にある<br />
+・表面電位（ゼータ電位）が小さくなると、極大点が小さくなる<br />
+　表面が電位が低いと粒子は凝集傾向にある<br />
+<br />
+◇ 反発力<br />
+　粒子が近づくことで局所的にイオン濃度の高い領域が形成される。この領域は不安定であり、イオン濃度を低くするために溶媒がはいりこみ粒子同士が離れる<br />
+<br />
+◇ 多分散指数（Polydispersity Index）<br />
+0.1 - 0.2: 単分散<br />
+0.2 - 0.7: 多分散<br />
+0.7以上: 再現性なしのデータになる。分級や遠心沈降が必要。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 103.32px;">Polydispersity Index Value</td>
+			<td style="width: 387.67px;">Comments</td>
+		</tr>
+		<tr>
+			<td style="width: 103.32px;">&lt; 0.05</td>
+			<td style="width: 387.67px;">Only normally encountered with latex standarsds or particles made to be monodisperse</td>
+		</tr>
+		<tr>
+			<td style="width: 103.32px;">&lt; 0.08</td>
+			<td style="width: 387.67px;">Nearly monodisperse sample.&nbsp; Normally, DLS can only give a monomodal distribution within this range</td>
+		</tr>
+		<tr>
+			<td style="width: 103.32px;">0.08 to 0.7</td>
+			<td style="width: 387.67px;">Mid-range value of PdI.&nbsp; It is the range over which the distribution algorithms best operate over</td>
+		</tr>
+		<tr>
+			<td style="width: 103.32px;">&gt; 0.7</td>
+			<td style="width: 387.67px;">Indicates a very broad distribution of particle sizes</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+-----------------------------------------------------------------------------<br />
+■&nbsp;ゼータ電位<br />
+<br />
+◆ ゼータ電位（Zeta potential）<br />
+・電気二重層のすべり面の電位（表面電位ではない）<br />
+・液中での粒子同士の反発性の指標<br />
+・ゼータ電位が0 mV（等電点）に近い場合には凝集や沈殿を起こす<br />
+・ゼータ電位が&plusmn;30 mV以上の場合には分散安定性が良好<br />
+<br />
+◆ 電気二重層
+<table border="1" cellpadding="1" cellspacing="1" style="width: 252.25px;">
+	<tbody>
+		<tr>
+			<td style="width: 40.25px; text-align: center;">低い</td>
+			<td style="width: 28.05px; text-align: center;">&larr;</td>
+			<td style="width: 81.25px; text-align: center;">電解質濃度</td>
+			<td style="width: 25.65px; text-align: center;">&rarr;</td>
+			<td style="width: 53.25px; text-align: center;">高い</td>
+		</tr>
+		<tr>
+			<td style="width: 40.25px; text-align: center;">長い</td>
+			<td style="width: 28.05px; text-align: center;">&larr;</td>
+			<td style="width: 81.25px; text-align: center;">1/&kappa;</td>
+			<td style="width: 25.65px; text-align: center;">&rarr;</td>
+			<td style="width: 53.25px; text-align: center;">短い</td>
+		</tr>
+	</tbody>
+</table>
+　低電解質濃度だと電場は遠くまで届くが、高電解質濃度だと電場は近くにしか届かない &gt; 高電解質濃度領域下では電気泳動しづらい（電場が届かないから）<br />
+◇ 電気二重層の目安（z-z型）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 145.45px;">
+	<tbody>
+		<tr>
+			<td style="width: 66.25px; text-align: center;">濃度</td>
+			<td style="width: 68.45px; text-align: center;">1/&kappa;</td>
+		</tr>
+		<tr>
+			<td style="width: 66.25px; text-align: center;">0.1 M</td>
+			<td style="width: 68.45px; text-align: center;">1 nm</td>
+		</tr>
+		<tr>
+			<td style="width: 66.25px; text-align: center;">0.01 M</td>
+			<td style="width: 68.45px; text-align: center;">3 nm</td>
+		</tr>
+		<tr>
+			<td style="width: 66.25px; text-align: center;">0.001 M</td>
+			<td style="width: 68.45px; text-align: center;">10 nm</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+<br />
+◆ 測定原理<br />
+・動いている粒子に対して一定周波数の光（レーザー光）を照射する。散乱された光の周波数が、粒子が動く速度に応じて変化するドップラーシフトを利用<br />
+・周波数のシフト&Delta;f = 2*v*sin(&theta;/2)/&lambda;<br />
+　ここでvは粒子の速度、&theta;は散乱角、&lambda;はレーザーの波長である。実際には、レーザー光を2つに分けて、試料の入ったセルを通らない光の周波数F<sub><font size="2">1</font></sub>と試料からの散乱光の周波数F<sub><font size="2">2</font></sub>を比較して、周波数変化&Delta;f (=F<sub>1</sub> - F<sub>2</sub>)を求める（PALS法）。<br />
+◇ ヘンリーの式<br />
+　ゼータ電位は計測した電気泳動移動度より次のヘンリーの式を用いて求められる。<br />
+　U<sub>E</sub> = (2*&epsilon;*z*F(Ka)/(3*&eta;)<br />
+ここで、U<sub>E</sub>は電気泳動移動度、zはゼータ電位、&epsilon;は誘電率、&eta;は粘度、F(ka)はHenry係数（水系・非水系で切り分け）。<br />
+　粒子径のパラメータはヘンリーの式に存在していない。電気泳動中は大きな粒子も小さな粒子も一定（移動度）の動きをする。<br />
+<br />
+◆ 測定結果の注意点<br />
+　理想的ではないPhase plotが得られた場合、以下の理由が考えられる<br />
+<br />
+◇ ゼータ電位値が低い<br />
+・pHを前後に振って、変化するかを確認<br />
+・pHを酸性側とアルカリ側に変化させた場合に、チャージが反転する場合は、最初のサンプルは等電点付近で、もともとチャージが弱かったたために、Phase plotの凹凸が小さかった可能性がある<br />
+<br />
+◇ 粒子濃度が高く、電気泳動しづらい環境下にある<br />
+・周波数グラフを確認。必要であれば希釈してみる<br />
+・電気泳動している粒子は一定に動く（≒周波数変化も一定）。一定の周波数でピークが変化しているか確認する。確認できれば粒子が同じ速度で動いており、電気泳動している粒子を計測できている<br />
+・一定の周波数でピークが変化していることが確認できない場合、粒子が様々な速度で動いており、電気泳動している粒子を計測できない<br />
+・サンプルの濃度が高い状態で電気泳動させると、電位泳動、粒子同士の衝突、ブラウン運動など様々な粒子の動きが発生する。そのため周波数の変化が一定でなくなる。<br />
+<br />
+◇ セル電極と装置電極の接続が悪く、電場が安定的に形成されていない<br />
+・電流/電圧結果のグラフを確認する<br />
+・電圧が反転したときに電流もそれに応じて反転しているかを確認する。電極同士が接触いしていない場合、電流が0付近で変化してないことが確認できる。必要であればセルを変える<br />
+<br />
+◆ 試料濃度の影響<br />
+・高濃度でも周波数変化が確認されるが、ゼータ電位が小さくなる場合がある<br />
+　この場合には、粒子間相互作用の影響が示唆される。粒子間相互作用の影響により粒子が動けず電気泳動しづらい場合には、希釈することで粒子間相互作用が弱まり電気泳動し易くなる。<br />
+　原液などでは、粒子がほとんど動いてはいないが、周波数変化が一定の変化をしていることがある。希釈すると、動き出してゼータ電位値が大きくなる。<br />
+<br />
+◆ 測定範囲（ゼータサイザーの場合）<br />
+◇ 粒子径<br />
+・粒子径：3.8 nm - 100 &mu;m<br />
+・粒子の光学的特性（屈折率など）に影響される<br />
+・5 nm以下の粒子径の場合、濃度等の制約が大きくなる<br />
+・測定できる粒子径の上限は、沈降するかどうか<br />
+・単一組成の粒子の場合、粒子径が異なっても、ゼータ電位は同じであると考えられる<br />
+◇ サンプル濃度<br />
+・サンプル濃度は、光がセルを通り抜けること（13&deg;の前方散乱を捉えるため）<br />
+・サンプルによって測定可能な濃度が異なる<br />
+　粒子径、粒度分布の広さ、光学的特性（屈折率など）、濁度<br />
+・測定に必要な散乱光量が得られること<br />
+　10 kcps以上の散乱光量が望ましい<br />
+　粒子径が大きくなれば、より薄い濃度でも測定できる<br />
+　濃すぎても光がセルを通り抜けられなくなるので測定不可<br />
+　粒子径が大きくなると、より薄い濃度でも、光が通り抜けられなくなる<br />
+・粒子の電気泳動をお互いに阻害しないこと<br />
+◇ 粘度<br />
+・粘度が高くなりすぎると電気泳動されなくなる<br />
+・サンプル濃度が高すぎるとサンプル粘度が高くなることがある<br />
+・濃度・粘度等に問題がある場合は、希釈によって測定が可能になることがある。このときpH, 電気伝導度（イオン濃度）、添加剤濃度に注意が必要<br />
+◇ 電気伝導度<br />
+・200 mS/cm 以下<br />
+・ジュール熱、電気分解が起きないこと、電極へのダメージ、サンプルへのダメージといった問題が防げること<br />
+・電気伝導度と設定電圧<br />
+　&lt; 5 mS/cm: 150 V<br />
+　5 to 30 mS/cm: 50 V<br />
+　&gt; 30 mS/cm: 10 V<br />
+◇ 誘電率<br />
+・10以下の場合、もしくは、ポリカーボネイトを溶解させる溶媒を使用するときには、ユニバーサルディップセル（セル材質: PEEK、非水系メイン、水系も使用可能）が必要<br />
+・キャプラリーセル（セル材質：PC、水系メイン、低級アルコールは使用可能｛メタノール、エタノール、イソプロピルアルコール｝）が使用できるのは、誘電率が10以上の場合で、ポリカーボネートが溶解しないとき<br />
+・比誘電率11以上は水系として考えても大丈夫<br />
+<br />
+◆ 環境によるゼータ電位の変化<br />
+・pHが変われば、ゼータ電位は変わる<br />
+　アルミナの場合は下記のようになる。<br />
+　□ 酸性溶液中では、表面のプロトン化によってプラス<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Al-H<sub>2</sub>O<font size="2"><sup>+</sup></font><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; O<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Al-H<sub><font size="2">2</font></sub>O<font size="2"><sup>+</sup></font><br />
+　□ 塩基性溶液中では、表面からプロトンが乖離してマイナス<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Al-O<sup>-</sup><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;\<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; O<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Al-O<sup>-</sup><br />
+・イオン濃度が増加すると、同じ距離での反発エネルギーは減少し、ゼータ電位は低くなる<br />
+・イオンの種類によっては吸着する場合もある<br />
+　「等電点が変化している &gt; 表面が変化している &gt; イオンが吸着している」となる<br />
+・ゼータ電位の減少 &gt; ・リポソームが電気泳動しづらくなっている<br />
+　ポリマーによる立体障害は、電荷密度によって異なり、電荷密度が低いと架橋、高いと粒子の電荷を中和する方向に進む<br />
+※ 分散媒が異なるとゼータ電位値が異なる。符号が反転する場合もある。<br />
+※ 添加剤は入れすぎてもよくない。<br />
+<br />
+◆ 電気泳動移動度の求め方<br />
+・移動速度 = distance （電極間距離）/ time = &mu;m/s<br />
+・電場強度 = volts (印加電圧） / distance = V/cm<br />
+・電気泳動移動度の単位 = 移動速度 / 電場強度 = m<sup>2</sup>V<sup>-1</sup>s<sup>-1</sup> * 10-8 or &mu;mcmV<sup>-1</sup>s<sup>-1</sup><br />
+------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] 野瀬卓平ら『若手研究者のための有機・高分子測定ラボガイド』講談社サイエンティフィック<br />
+[2] ゼータサイザーナノ講習会資料、Malvern・Panalytical<br />
+[3] 微粒子工学大系 第1巻 基本技術<br />
+-----------------------------------------------------------------------

@@ -1,0 +1,1361 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：<br />
+基本的な使い方： <a href="https://www.youtube.com/edit?o=U&amp;video_id=hUjqeb8_f6I">https://www.youtube.com/edit?o=U&amp;video_id=hUjqeb8_f6I</a><br />
+------------------------------------------------------------------------------<br />
+■ setting<br />
+1. chmod +x vasp_autoset_run_boltztrap<br />
+2. gedit vasp_autoset_run_boltztrap<br />
+change<br />
+------<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set pseudo_potential_adress = $HOME&#39;/vasp/potpaw_PBE&#39;<br />
+------<br />
+3. gedit vasp_run_boltztrap<br />
+If you get libraries form Ubuntu Software center, I reccommend below,<br />
+------before<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------after<br />
+#set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+(References: <a href="https://www.youtube.com/watch?v=3lFXLBdVzWc">https://www.youtube.com/watch?v=3lFXLBdVzWc</a>)<br />
+1. chmod +x vasp_autoset_run_boltztrap<br />
+2. put vasp_autoset_run_boltztrap and cif files in same directory.<br />
+3. vasp_autoset_run_boltztrap_phonopy<br />
+4. (see left column) vasp_boltztrap_run<br />
+------------------------------------------------------------------------------<br />
+■ vasp_autoset_run_boltztrap<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+# user settting<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+set pseudo_potential_adress = $HOME&#39;/vasp/potpaw_PBE&#39;<br />
+#set standard_input_adress = $HOME&#39;/Desktop/Link to vasp_work/standard_input_files&#39;<br />
+# boltztrap<br />
+set boltztrap_adress = $HOME&#39;/boltztrap-1.2.5&#39;<br />
+#<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+#<br />
+# check standard_input_files<br />
+if ( -d standard_input_files ) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;standard_input_files Exists, OK&quot;<br />
+&nbsp;&nbsp;&nbsp; cd&nbsp; standard_input_files<br />
+&nbsp;&nbsp;&nbsp; set standard_input_adress = `pwd`<br />
+&nbsp;&nbsp;&nbsp; cd ..<br />
+else<br />
+&nbsp;&nbsp;&nbsp; echo &quot;No such file&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;make standard_input_files directory&quot;<br />
+&nbsp;&nbsp;&nbsp; mkdir standard_input_files<br />
+&nbsp;&nbsp;&nbsp; cd&nbsp; standard_input_files<br />
+&nbsp;&nbsp;&nbsp; set standard_input_adress = `pwd`<br />
+&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp; #<br />
+#---------- INCAR_opt_template start<br />
+cat &lt;&lt; EOF &gt; INCAR_opt_template<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy, eV unit<br />
+#ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+NSW = 100<br />
+IBRION = 2<br />
+ICHARG = 1<br />
+LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+#NBANDS = 580<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+#EMIN = -15.0<br />
+#EMAX = 15.0<br />
+#NEDOS = 6001<br />
+<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+EOF<br />
+#---------- INCAR_opt_template end<br />
+#<br />
+#<br />
+#---------- INCAR_opt_template start<br />
+cat &lt;&lt; EOF &gt; INCAR_scf_template<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy<br />
+ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+ISMEAR = -5<br />
+SIGMA = 0.2<br />
+NSW = 100<br />
+IBRION = 2<br />
+ICHARG = 1<br />
+LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+#ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+#NBANDS = 580<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+#EMIN = -15.0<br />
+#EMAX = 15.0<br />
+#NEDOS = 6001<br />
+<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+EOF<br />
+#---------- INCAR_opt_template end<br />
+#<br />
+#<br />
+#---------- INCAR_opt_template start<br />
+cat &lt;&lt; EOF &gt; INCAR_dos_template<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy<br />
+ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+#NSW = 100<br />
+#IBRION = 2<br />
+#ICHARG = 1<br />
+#LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+#ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+NBANDS = #NB#<br />
+<br />
+#DOS<br />
+ISMEAR = -5<br />
+NSW = 0<br />
+IBRION = -1<br />
+ICHARG = 11<br />
+LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+EMIN = #ELOW#<br />
+EMAX = #EHIGH#<br />
+NEDOS = 4500<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+EOF<br />
+#---------- INCAR_opt_template end<br />
+&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp; #<br />
+#---------- vasp2cif start<br />
+cat &lt;&lt; EOF &gt; vasp2cif<br />
+#!/usr/bin/env python<br />
+# ***********************************************************<br />
+#&nbsp;&nbsp; File: vasp2cif[.py]<br />
+#&nbsp;&nbsp; Description: a tool to make CIF format files out of<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VASP POSCAR+POTCAR/OUTCAR files.<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Output files acquire a .cif extension<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; example: POSCAR --&gt; POSCAR.cif<br />
+#<br />
+#&nbsp;&nbsp; Copyright 2008-2013 Peter Larsson<br />
+#<br />
+#&nbsp;&nbsp; Licensed under the Apache License, Version 2.0 (the &quot;License&quot;);<br />
+#&nbsp;&nbsp; you may not use this file except in compliance with the License.<br />
+#&nbsp;&nbsp; You may obtain a copy of the License at<br />
+#<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; http://www.apache.org/licenses/LICENSE-2.0<br />
+#<br />
+#&nbsp;&nbsp; Unless required by applicable law or agreed to in writing, software<br />
+#&nbsp;&nbsp; distributed under the License is distributed on an &quot;AS IS&quot; BASIS,<br />
+#&nbsp;&nbsp; WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.<br />
+#&nbsp;&nbsp; See the License for the specific language governing permissions and<br />
+#&nbsp;&nbsp; limitations under the License.<br />
+#<br />
+#&nbsp;&nbsp; Revision history:<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2013-07-14&nbsp; Torbjorn Bjorkman<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Runs Harold Stoke&#39;s FINDSYM program (if available)<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; to determine the space group and standard setting.<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2012-12-15&nbsp; Torbjorn Bjorkman<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Extracts geometries also from OUTCAR files to a<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set of blocks in a single CIF file. Useful for<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; visualization of a relaxation or MD run.<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2011-05-06&nbsp; Torbjorn Bjorkman<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - You can now give many input POSCAR files and they<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; will be generated as separate data blocks in the<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; output CIF. Useful for visualization.<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Support for cartesian coordinates also for non-<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; orthorhombic systems.<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2010-01-08&nbsp; Peter Larsson<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Support for VASP 5 style CONTCAR files<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2009-09-29&nbsp; Peter Larsson<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - More descriptive help for command line options<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2009-04-17&nbsp; Peter Larsson<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - More robust error handling and support<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for Cartesian coordinates in orthorhombic cells<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2008-10-13&nbsp; Peter Larsson<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Ported to Python and added support for<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;Selective Dynamics&quot; format in POSCAR and<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; volume scaling<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2006-10-24&nbsp; Peter Larsson<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - Original version in Ruby.<br />
+# ***********************************************************<br />
+<br />
+import os<br />
+import sys<br />
+import commands<br />
+import math<br />
+import re<br />
+from subprocess import Popen,call,PIPE<br />
+from optparse import OptionParser<br />
+<br />
+# Input parser<br />
+parser = OptionParser()<br />
+parser.add_option(&quot;-v&quot;,&quot;--verbose&quot;,dest=&quot;verbose&quot;,help=&quot;Print CIF to stdout&quot;,action=&quot;store_true&quot;)<br />
+parser.add_option(&quot;-o&quot;,&quot;--output&quot;,dest=&quot;output&quot;,help=&quot;Save CIF to named file&quot;,metavar=&quot;FILE&quot;)<br />
+parser.add_option(&quot;-e&quot;,&quot;--elements&quot;,dest=&quot;elements&quot;,help=&quot;&quot;&quot;Supply elements if no POTCAR is present. Example: --elements=&quot;Fe,Co,Ni&quot; &quot;&quot;&quot;,metavar=&quot;list of elements&quot;)<br />
+parser.add_option(&quot;--findsym-tolerance&quot;,dest=&quot;findsymtol&quot;,help=&quot;&quot;&quot;Tolerance used for FINDSYM (default=0, minimal value).&quot;&quot;&quot;)<br />
+parser.add_option(&quot;--no-findsym&quot;,dest=&quot;nofindsym&quot;,help=&quot;&quot;&quot;Don&#39;t run FINDSYM to find symmetry of the crystal.&quot;&quot;&quot;)<br />
+(options,args) = parser.parse_args()<br />
+<br />
+####### FINDSYM ######<br />
+# Check if FINDSYM is up and running<br />
+global findsym<br />
+global findsymtolerance<br />
+full2shortHM = { &#39;2/m 2/m 2/m&#39; : &#39;mmm&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;4/m 2/m 2/m&#39; : &#39;4/mmm&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;-3 2/m&#39; : &#39;-3m&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;6/m 2/m 2/m&#39; : &#39;6/mmm&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;2/m -3&#39; : &#39;m-3&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;4/m -3 2/m&#39; : &#39;m-3m&#39;}<br />
+fullHMlist = [&#39;4/m -3 2/m&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;2/m -3&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;6/m 2/m 2/m&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;-3 2/m&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;4/m 2/m 2/m&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &#39;2/m 2/m 2/m&#39;]<br />
+if options.findsymtol:<br />
+&nbsp;&nbsp;&nbsp; findsymtolerance = float(options.findsymtol)<br />
+else:<br />
+&nbsp;&nbsp;&nbsp; findsymtolerance = 0<br />
+try:<br />
+&nbsp;&nbsp;&nbsp; p=Popen([&quot;findsym&quot;],stdin=PIPE,stdout=PIPE)<br />
+&nbsp;&nbsp;&nbsp; p.stdin.write(&quot;blah\n0\n2\n1 1 1 90 90 90\n1\n1 0 0\n0 1 0\n0 0 1\n1\n1\n0 0 0&quot;)<br />
+&nbsp;&nbsp;&nbsp; output = p.communicate()[0]<br />
+&nbsp;&nbsp;&nbsp; if p.returncode != 0:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsym = False<br />
+&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Check if it worked<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re.match(&quot;Error&quot;,output):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsym = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # If we get here everything should be OK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsym = True<br />
+except:<br />
+&nbsp;&nbsp;&nbsp; findsym = False<br />
+if options.nofindsym:<br />
+&nbsp;&nbsp;&nbsp; findsym = False<br />
+<br />
+# Classes<br />
+class Cell:<br />
+&nbsp;&nbsp;&nbsp; def __init__(self):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; label = &quot;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; latticevectors = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; alpha = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; beta = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gamma = None<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; HMSymbol = &quot;&#39;P 1&#39;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sites = [] # list of (elementname, x, y, z) tuples<br />
+<br />
+def ciffilestring(cell):<br />
+&nbsp;&nbsp;&nbsp; # Make CIF header with cell parameters and coord record info<br />
+&nbsp;&nbsp;&nbsp; outstring = &quot;&quot;<br />
+&nbsp;&nbsp;&nbsp; nofindsym = not findsym<br />
+&nbsp;&nbsp;&nbsp; if findsym:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Construct FINDSYM input<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring = &quot; \n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(findsymtolerance)+&quot;\n&quot;<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;2\n&quot;<br />
+#&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(cell.a)+&quot; &quot;+str(cell.b)+&quot; &quot;+str(cell.c)+&quot; &quot;+str(cell.alpha)+&quot; &quot;+str(cell.beta)+&quot; &quot;+str(cell.gamma)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;1\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(cell.latticevectors[0][0])+&quot; &quot;+str(cell.latticevectors[0][1])+&quot; &quot;+str(cell.latticevectors[0][2])+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(cell.latticevectors[1][0])+&quot; &quot;+str(cell.latticevectors[1][1])+&quot; &quot;+str(cell.latticevectors[1][2])+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(cell.latticevectors[2][0])+&quot; &quot;+str(cell.latticevectors[2][1])+&quot; &quot;+str(cell.latticevectors[2][2])+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;1\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;1 0 0\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;0 1 0\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;0 0 1\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += str(len(cell.sites))+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for a in cell.sites:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += a[0]+&quot; &quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for a in cell.sites:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymstring += &quot;%1.15f&nbsp;&nbsp; %1.15f&nbsp;&nbsp; %1.15f\n&quot;%(a[1],a[2],a[3])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Call findsym with input and catch output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p=Popen([&quot;findsym&quot;],stdin=PIPE,stdout=PIPE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; p.stdin.write(findsymstring)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymoutput=p.communicate()[0]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; findsymoutlines = findsymoutput.split(&quot;\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Delete log<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; call([&#39;rm&#39;,&#39;-f&#39;,&#39;findsym.log&#39;])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Check that FINDSYM returned a cif at the end<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifout = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in findsymoutlines:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re.match(&#39;_audit_creation_method&#39;,line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifout = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if not cifout:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; print &quot;***Error: FINDSYM failed to produce a CIF file, no symmetrization done.&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nofindsym = True<br />
+<br />
+&nbsp;&nbsp;&nbsp; outstring += &quot;data_&quot; + cell.label.strip(&quot; &quot;)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp; if nofindsym:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_audit_creation_method&nbsp;&nbsp; &#39;vasp2cif&#39;\n&quot;<br />
+&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_audit_creation_method&nbsp;&nbsp; &#39;vasp2cif/FINDSYM&#39;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Append FINDSYM cif to outstring.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in findsymoutlines[i:]:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Convert to short version of H-M symbol.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re.match(&#39;_symmetry_space_group_name_H-M&#39;,line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tmp = line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for k in fullHMlist:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re.search(k,tmp):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tmp = tmp.replace(k,full2shortHM[k])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += tmp+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += line+&quot;\n&quot;<br />
+<br />
+&nbsp;&nbsp;&nbsp; if nofindsym:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Construct outstring<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_length_a&nbsp;&nbsp;&nbsp; &quot; + str(cell.a)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_length_b&nbsp;&nbsp;&nbsp; &quot; + str(cell.b)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_length_c&nbsp;&nbsp;&nbsp; &quot; + str(cell.c)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_angle_alpha&nbsp;&nbsp;&nbsp; &quot; + str(cell.alpha)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_angle_beta&nbsp;&nbsp;&nbsp; &quot; + str(cell.beta)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_cell_angle_gamma&nbsp;&nbsp;&nbsp; &quot; + str(cell.gamma)+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_symmetry_space_group_name_H-M&nbsp;&nbsp;&nbsp; &quot;+cell.HMSymb+&quot;\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;loop_\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_label\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_type_symbol\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_fract_x\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_fract_y\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_fract_z\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;_atom_site_occupancy\n&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for a in cell.sites:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;%s%i&nbsp;&nbsp; %s&nbsp;&nbsp; %1.15f&nbsp;&nbsp; %1.15f&nbsp;&nbsp; %1.15f&nbsp;&nbsp; 1.0\n&quot; % (a[0], i, a[0], a[1], a[2], a[3])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; outstring += &quot;\n\n&quot;<br />
+&nbsp;&nbsp;&nbsp; return outstring<br />
+<br />
+def gstrip(s):<br />
+&nbsp;&nbsp;&nbsp; #Strip all whitespace in string s<br />
+&nbsp;&nbsp;&nbsp; return re.sub(&quot;\s+&quot; , &quot;&quot;, s)<br />
+<br />
+# Return OUTCAR or POSCAR depending on file type.<br />
+# If not identified, return UNKNOWN<br />
+def filetype(f):<br />
+&nbsp;&nbsp;&nbsp; filetype = &quot;UNKNOWN&quot;<br />
+&nbsp;&nbsp;&nbsp; # Something that should recognize an OUTCAR file<br />
+&nbsp;&nbsp;&nbsp; sym = re.compile(&quot;Analysis of symmetry for&quot;)<br />
+&nbsp;&nbsp;&nbsp; # POSCAR identified if line 2-5 can be interpreted as<br />
+&nbsp;&nbsp;&nbsp; # a length scale followed by three lattice vectors<br />
+&nbsp;&nbsp;&nbsp; lines = []<br />
+&nbsp;&nbsp;&nbsp; for i in range(6):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lines.append(f.readline())<br />
+&nbsp;&nbsp;&nbsp; try:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t = float(lines[1].split()[0])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for i in range(2,5):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t = [float(s) for s in lines[i].split()[:3]]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filetype = &quot;POSCAR&quot;<br />
+&nbsp;&nbsp;&nbsp; except:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in f:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if sym.match(line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; filetype = &quot;OUTCAR&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp; f.seek(0) # Rewind file<br />
+&nbsp;&nbsp;&nbsp; return filetype<br />
+&nbsp;&nbsp; &nbsp;<br />
+def mvmult3(mat,vec):<br />
+&nbsp;&nbsp;&nbsp; # matrix-vector multiplication<br />
+&nbsp;&nbsp;&nbsp; w = []<br />
+&nbsp;&nbsp;&nbsp; for i in range(3):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for j in range(3):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; t += mat[j][i]*vec[j]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; w.append(t)<br />
+&nbsp;&nbsp;&nbsp; return w<br />
+<br />
+def det3(m):<br />
+&nbsp;&nbsp;&nbsp; # Determinant of 3x3 dimensional matrix<br />
+&nbsp;&nbsp;&nbsp; a = m[1][1]*m[2][2]-m[1][2]*m[2][1]<br />
+&nbsp;&nbsp;&nbsp; b = m[1][2]*m[2][0]-m[1][0]*m[2][2]<br />
+&nbsp;&nbsp;&nbsp; c = m[1][0]*m[2][1]-m[1][1]*m[2][0]<br />
+&nbsp;&nbsp;&nbsp; return m[0][0]*a + m[0][1]*b + m[0][2]*c<br />
+<br />
+def minv3(m):<br />
+&nbsp;&nbsp;&nbsp; # Inverse of 3x3 dimensional matrix<br />
+&nbsp;&nbsp;&nbsp; det = det3(m)<br />
+&nbsp;&nbsp;&nbsp; w = [[(m[1][1]*m[2][2]-m[1][2]*m[2][1])/det, (m[0][2]*m[2][1]-m[0][1]*m[2][2])/det, (m[0][1]*m[1][2]-m[0][2]*m[1][1])/det],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [(m[1][2]*m[2][0]-m[1][0]*m[2][2])/det, (m[0][0]*m[2][2]-m[0][2]*m[2][0])/det, (m[0][2]*m[1][0]-m[0][0]*m[1][2])/det],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; [(m[1][0]*m[2][1]-m[1][1]*m[2][0])/det, (m[0][1]*m[2][0]-m[0][0]*m[2][1])/det, (m[0][0]*m[1][1]-m[0][1]*m[1][0])/det]]<br />
+&nbsp;&nbsp;&nbsp; return w<br />
+<br />
+<br />
+#Let&#39;s get started, read input files.<br />
+# Store in lists as (inputfile,filename) tuples.<br />
+if len(args) == 0:<br />
+&nbsp;&nbsp;&nbsp; #Pipe mode, read and write to stdin and stdout<br />
+&nbsp;&nbsp;&nbsp; input_files = [(sys.stdin,None)]<br />
+&nbsp;&nbsp;&nbsp; cif_file = sys.stdout<br />
+elif len(args) == 1:<br />
+&nbsp;&nbsp;&nbsp; #Write to input.cif<br />
+&nbsp;&nbsp;&nbsp; input_files = [(file(arg,&#39;r&#39;),arg) for arg in args]<br />
+&nbsp;&nbsp;&nbsp; if options.output:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file = file(options.output,&#39;w&#39;)<br />
+&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file = file(args[0] + &quot;.cif&quot;,&#39;w&#39;)<br />
+else:<br />
+&nbsp;&nbsp;&nbsp; #Write to input.cif<br />
+&nbsp;&nbsp;&nbsp; input_files = [(file(arg,&#39;r&#39;),arg) for arg in args[0:]]<br />
+&nbsp;&nbsp;&nbsp; if options.output:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file = file(options.output,&#39;w&#39;)<br />
+&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file = file(args[0] + &quot;_etc.cif&quot;,&#39;w&#39;)<br />
+<br />
+# Initialize Cell object.<br />
+cell = Cell()<br />
+cell.HMSymb = &quot;&#39;P 1&#39;&quot;<br />
+# loop over input files<br />
+inputfilenr = 1<br />
+cifblocknr = 1<br />
+for input_file,filename in input_files:<br />
+&nbsp;&nbsp;&nbsp; if filetype(input_file) == &quot;POSCAR&quot;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; poscar = input_file.readlines()<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # CIF block number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.label = str(cifblocknr)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #We need to determine the data format, VASP 5 stores element names in line 5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if gstrip(poscar[5]).isdigit():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Old school format<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vasp5 = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; offset = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elif gstrip(poscar[5]).isalpha() and gstrip(poscar[6]).isdigit():<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Looks like vasp5 like format<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vasp5 = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; offset = 1<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #First deal with potential POTCAR problems<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if options.elements:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Read atoms from supplied string, eg &quot;Li,Fe,Si,O&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms = options.elements.split(&quot;,&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; assert(len(atoms) &gt; 0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if vasp5:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Read elements from line 5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words = poscar[5].split()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms = [w.strip() for w in words]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Try to read atoms from POTCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if not os.path.exists(&quot;POTCAR&quot;):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write(&quot;ERROR: Cannot find POTCAR. Please supply atom labels with the -e flag.\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit(1)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; potcar_lines = commands.getoutput(&quot;grep TITEL POTCAR&quot;).split(&quot;\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if len(potcar_lines) == 0:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write(&quot;ERROR: POTCAR file exists, but is empty? Supply atom labels with the -e flag.\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit(1)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in potcar_lines:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words = line.split()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; assert(words[0] == &#39;TITEL&#39;)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Note, we need the split _ to deal with names like &quot;Li_sv&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms.append(words[3].split(&quot;_&quot;)[0])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Lattice scaling factor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lattice_constant = float(poscar[1].strip())<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Dealing with volume scaling in POSCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; final_volume = -lattice_constant<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scale_volume = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if lattice_constant &lt; 0.0:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lattice_constant = 1.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scale_volume = True<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Read cell vectors<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.append(lattice_constant*float(poscar[2].split()[0].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.append(lattice_constant*float(poscar[2].split()[1].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a.append(lattice_constant*float(poscar[2].split()[2].strip()))<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.append(lattice_constant*float(poscar[3].split()[0].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.append(lattice_constant*float(poscar[3].split()[1].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b.append(lattice_constant*float(poscar[3].split()[2].strip()))<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c.append(lattice_constant*float(poscar[4].split()[0].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c.append(lattice_constant*float(poscar[4].split()[1].strip()))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c.append(lattice_constant*float(poscar[4].split()[2].strip()))<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; unscaled_volume = a[0]*b[1]*c[2]-a[0]*b[2]*c[1]+a[1]*b[2]*c[0]-a[1]*b[0]*c[2]+a[2]*b[0]*c[1]-a[2]*b[1]*c[0]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if scale_volume:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lattice_constant = (final_volume/unscaled_volume)**(1.0/3.0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a = map(lambda x: lattice_constant*x,a)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b = map(lambda x: lattice_constant*x,b)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = map(lambda x: lattice_constant*x,c)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; volume = a[0]*b[1]*c[2]-a[0]*b[2]*c[1]+a[1]*b[2]*c[0]-a[1]*b[0]*c[2]+a[2]*b[0]*c[1]-a[2]*b[1]*c[0]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.a = math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.b = math.sqrt(b[0]*b[0]+b[1]*b[1]+b[2]*b[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.c = math.sqrt(c[0]*c[0]+c[1]*c[1]+c[2]*c[2])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.alpha = math.acos((b[0]*c[0]+b[1]*c[1]+b[2]*c[2])/(cell.b*cell.c))*180/math.pi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.beta = math.acos((a[0]*c[0]+a[1]*c[1]+a[2]*c[2])/(cell.a*cell.c))*180/math.pi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.gamma = math.acos((b[0]*a[0]+b[1]*a[1]+b[2]*a[2])/(cell.a*cell.b))*180/math.pi<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.latticevectors = [a,b,c]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Read atoms counts and make label array<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atomlabels = []<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atomcounts = poscar[5+offset].split()<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if len(atomcounts) != len(atoms):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write(&quot;ERROR: Not the same number of atom species in POTCAR and POSCAR. Please check.\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit(1)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n_atoms = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for i in range(0,len(atomcounts)):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n = int(atomcounts[i].strip())<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; n_atoms = n_atoms + n<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for j in range(0,n):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atomlabels.append(atoms[i])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Check for selective dynamics<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if poscar[6+offset].upper()[0] == &#39;S&#39;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; offset = offset + 7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; offset = offset + 6<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Check for direct coordinates<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; direct_coordinates = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if poscar[offset].upper()[0] == &#39;D&#39;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; direct_coordinates = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if poscar[offset].upper()[0] == &#39;C&#39;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; direct_coordinates = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lattice_vectors = [a,b,c]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inverse_lattice_vectors = minv3(lattice_vectors)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Scan and print atomic positions from offset<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if len(atomlabels) &gt; (len(poscar)-offset):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write((&quot;WARNING: vasp2cif expected to find %d coordinates, but there are only %d coordinate lines in the file!\n&quot;) % (len(atomlabels),len(poscar)-offset))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atomlabels = atomlabels[0:len(poscar)-offset-1]<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.sites = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for i in range(0,len(atomlabels)):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #extract first three fields in POSCAR line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coords = map(float,poscar[i+offset+1].split()[0:3])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if not direct_coordinates:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coords = mvmult3(inverse_lattice_vectors, coords)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.sites.append((atomlabels[i],coords[0],coords[1],coords[2]))<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Print cell to cif files<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifstring = ciffilestring(cell)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file.write(cifstring)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if options.verbose:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stdout.write(cifstring)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # increment cif block counter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifblocknr += 1<br />
+&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp; elif filetype(input_file) == &quot;OUTCAR&quot;:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # First find elements and how many of each.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; titellines = commands.getoutput(&quot;grep TITEL &quot;+filename).split(&quot;\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if len(titellines) == 0:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write(&quot;ERROR: Cannot read elements. Damaged OUTCAR file?\n&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit(1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in titellines:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; words = line.split()<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; assert(words[0] == &#39;TITEL&#39;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #Note, we need the split _ to deal with names like &quot;Li_sv&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; atoms.append(words[3].split(&quot;_&quot;)[0])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # How many of each?<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; natoms = [int(s) for s in commands.getoutput(&quot;grep &#39;ions per type =&#39; &quot;+filename).split()[4:]]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Set up initial position array<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.sites = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for a in atoms:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for j in range(natoms[i]):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.sites.append((a,0.0,0.0,0.0))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Precompiled regular expressions.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re_iter = re.compile(&quot;aborting loop because EDIFF is reached&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re_lattice = re.compile(&quot;direct lattice vectors&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; re_positions = re.compile(&quot;POSITION&quot;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; latticevectors = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; introread = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vectorsread = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; positionsread = False<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vecline = 5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; posline = sum(natoms)+1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; linenr = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for line in input_file:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; linenr += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Start for lattices and positions after the end of first iteration.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if not introread:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re_iter.search(line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; introread = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Get lattice vectors.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re_lattice.search(line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vecline = 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; latticevectors = []<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if vecline &lt;= 3:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; latticevectors.append([float(s) for s in line.split()[0:3]])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if vecline == 4:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Lattice vectors read, set parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vectorsread = True<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.latticevectors = latticevectors<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; inverse_lattice_vectors = minv3(latticevectors)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a,b,c = latticevectors[0],latticevectors[1],latticevectors[2]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # crystallographic parameters<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.a = math.sqrt(a[0]*a[0]+a[1]*a[1]+a[2]*a[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.b = math.sqrt(b[0]*b[0]+b[1]*b[1]+b[2]*b[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.c = math.sqrt(c[0]*c[0]+c[1]*c[1]+c[2]*c[2])<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.alpha = math.acos((b[0]*c[0]+b[1]*c[1]+b[2]*c[2])/(cell.b*cell.c))*180/math.pi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.beta = math.acos((a[0]*c[0]+a[1]*c[1]+a[2]*c[2])/(cell.a*cell.c))*180/math.pi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.gamma = math.acos((b[0]*a[0]+b[1]*a[1]+b[2]*a[2])/(cell.a*cell.b))*180/math.pi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Read positions<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if re_positions.search(line):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; posline = -2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if 0 &lt;= posline &lt; sum(natoms):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = [float(p) for p in line.split()[0:3]]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; c = mvmult3(inverse_lattice_vectors, c)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.sites[posline] = (cell.sites[posline][0],c[0],c[1],c[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if posline == sum(natoms) and introread:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Positions read, now print cell.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cell.label = str(cifblocknr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifstring = ciffilestring(cell)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cif_file.write(cifstring)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if options.verbose:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stdout.write(cifstring)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # increment cif block counter<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cifblocknr += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; posline += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vecline += 1<br />
+&nbsp;&nbsp;&nbsp; else:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.stderr.write(&quot;ERROR: Format of file %i not recognized.\n&quot;%inputfilenr)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sys.exit(1)<br />
+&nbsp;&nbsp;&nbsp; # increment input file counter<br />
+&nbsp;&nbsp;&nbsp; inputfilenr += 1<br />
+<br />
+EOF<br />
+#---------- vasp2cifend<br />
+&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp; chmod +x vasp2cif<br />
+&nbsp;&nbsp;&nbsp; cd ..<br />
+endif<br />
+#<br />
+# Automatically setting<br />
+setenv OMP_NUM_THREADS 1<br />
+set node = `grep &#39;physical id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+set num_core = `grep &#39;core id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+echo &quot;&quot;<br />
+set DATE = `date`<br />
+echo $DATE<br />
+echo &quot;Automatically setting environments&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo &quot;OpenMP threads = 1&quot;<br />
+echo &quot;automatic setting Parallel calculation (MPI) = &quot;$num_core&quot; core&quot;&quot; / &quot;&quot;$node&quot;&quot; node&quot;<br />
+set NPAR = `echo 4-&quot;sqrt($num_core)&quot; | bc`<br />
+echo &quot;automatic setting NPAR = &quot;$NPAR<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_opt_template&quot; &gt; &quot;${standard_input_adress}/INCAR_opt&quot;<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_scf_template&quot; &gt; &quot;${standard_input_adress}/INCAR_scf&quot;<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_dos_template&quot; &gt; &quot;${standard_input_adress}/INCAR_dos&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo $vasp_adress<br />
+echo $pseudo_potential_adress<br />
+echo $standard_input_adress<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+set address = `pwd`<br />
+echo &quot;$address&quot;<br />
+echo &quot;$address&quot; &gt;&gt; &quot;$address/log&quot;<br />
+set DATE = `date`<br />
+echo &quot;start: &quot;$DATE &gt; &quot;$address/log&quot;<br />
+#<br />
+set cif_list=`ls *.cif`<br />
+foreach cif_name ( $cif_list )<br />
+&nbsp; # remove extension<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; mkdir ${cif_folder_name}<br />
+&nbsp; cp &quot;$address/$cif_name&quot; &quot;$address/${cif_folder_name}/$cif_name&quot;<br />
+end<br />
+#<br />
+echo &quot;include&quot;<br />
+set list=`find . -maxdepth 1 -mindepth 1 -type d | awk -F/ &#39;{print $NF}&#39;`<br />
+echo $list<br />
+echo &quot;folder list: &quot;$list &gt;&gt; &quot;$address/log&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+if ( -d graph ) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;graph directory Exists, OK&quot;<br />
+else<br />
+&nbsp;&nbsp;&nbsp; echo &quot;No such file&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;make graph directory&quot;<br />
+&nbsp;&nbsp;&nbsp; mkdir graph<br />
+endif<br />
+#<br />
+if ( -d cif ) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;cif directory Exists, OK&quot;<br />
+else<br />
+&nbsp;&nbsp;&nbsp; echo &quot;No such file&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;make cif directory&quot;<br />
+&nbsp;&nbsp;&nbsp; mkdir cif<br />
+endif<br />
+#<br />
+if ( -d data ) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;data directory Exists, OK&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;extract data from data directory&quot;<br />
+&nbsp;&nbsp;&nbsp; if ( -f &quot;$address/data/compound_total_energy.txt&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp &quot;$address/data/compound_total_energy.txt&quot; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( -f &quot;$address/data/atom_total_energy.txt&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp &quot;$address/data/atom_total_energy.txt&quot; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( -f &quot;$address/data/compound_num.txt&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp &quot;$address/data/compound_num.txt&quot; &quot;$address/compound_num.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; if ( $1 == &quot;-n&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;new formation energy file&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/data/compound_num.txt&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/data/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/data/formation_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/compound_num.txt&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f&nbsp; &quot;$address/formation_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+else<br />
+&nbsp;&nbsp;&nbsp; echo &quot;No such file&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;make data directory&quot;<br />
+&nbsp;&nbsp;&nbsp; mkdir data<br />
+endif<br />
+#<br />
+echo `date` &gt; fermi_energy.txt<br />
+echo `date` &gt; total_energy.txt<br />
+set compound_no = 0<br />
+#<br />
+foreach folder_name_list ( $cif_list )<br />
+&nbsp; set folder_name = `echo $folder_name_list:r`<br />
+&nbsp; echo &quot;--------------------&quot; &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo $DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; #<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; echo &quot;vasp calculation start: &quot;&quot;$folder_name&quot;<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; date<br />
+&nbsp; #<br />
+&nbsp; cd &quot;$address/$folder_name&quot;<br />
+&nbsp; echo &quot;folder name: &quot;$folder_name &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; echo &quot;absolute adress: &quot;`pwd` &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; #<br />
+&nbsp; echo &quot;run cif2cell&quot;<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;${pseudo_potential_adress}&quot; --vasp-cartesian-lattice-vectors -f *.cif<br />
+&nbsp; #<br />
+&nbsp; echo &quot;set standard input files&quot;<br />
+&nbsp; #cp &quot;${standard_input_adress}/KPOINTS&quot; KPOINTS<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_opt&quot; INCAR_opt<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_scf&quot; INCAR_scf<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_dos&quot; INCAR_dos<br />
+&nbsp; #cp &quot;${standard_input_adress}/gplot&quot; &quot;$address/data/gplot&quot;<br />
+&nbsp; #cp &quot;${standard_input_adress}/fenergy&quot; &quot;$address/data/fenergy&quot;<br />
+&nbsp; #chmod +x &quot;$address/data/gplot&quot;<br />
+&nbsp; #chmod +x &quot;$address/data/fenergy&quot;<br />
+&nbsp; # structure optimization<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;optimize structure calculation&quot;<br />
+&nbsp; echo &quot;optimize structure calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; # run opt calculation<br />
+&nbsp; cp INCAR_opt INCAR<br />
+&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp; cp OUTCAR OUTCAR_opt<br />
+&nbsp; cp INCAR INCAR_opt<br />
+&nbsp; rm -f *.cif<br />
+&nbsp; &quot;$standard_input_adress/vasp2cif&quot; CONTCAR<br />
+&nbsp; mv CONTCAR.cif &quot;$folder_name.cif&quot;<br />
+&nbsp; rm -f CONTCAR.cif<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;${pseudo_potential_adress}&quot; --vasp-cartesian-lattice-vectors -f *.cif<br />
+&nbsp; mv INCAR INCAR_cif2cell<br />
+&nbsp; #<br />
+&nbsp; # scf calculation (use optimized structure)<br />
+&nbsp; date<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;scf calculation&quot;<br />
+&nbsp; echo &quot;scf calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; cp &quot;$address/$folder_name/KPOINTS&quot; &quot;$address/$folder_name/KPOINTS_scf&quot; # stalbe setting<br />
+&nbsp; #sed -e &#39;s/Gamma/Monkhorst-pack/g&#39; KPOINTS &gt; KPOINTS_scf<br />
+&nbsp; mv KPOINTS KPOINTS_dos<br />
+&nbsp; # Automatically k-point setting<br />
+&nbsp; # k-space resolution ~0.1/A<br />
+&nbsp; sed -n 4p KPOINTS_dos &gt; KPOINTS_num_02A<br />
+&nbsp; awk &#39;{print $1}&#39; KPOINTS_num_02A &gt; kx_num_temp<br />
+&nbsp; @ kx_num_temp += 0<br />
+&nbsp; if(${kx_num_temp} &gt;= 14)then<br />
+&nbsp;&nbsp;&nbsp; set dos_k_mesh_times = 1<br />
+&nbsp; else<br />
+&nbsp;&nbsp;&nbsp; set dos_k_mesh_times = 2<br />
+&nbsp; endif<br />
+&nbsp; set dos_k_mesh_times = 1 # stable setting<br />
+&nbsp; rm -f kx_num_temp<br />
+&nbsp; echo &quot;n=&quot;${dos_k_mesh_times}<br />
+&nbsp; awk -v n=&quot;${dos_k_mesh_times}&quot; &#39;{print $1*n, $2*n, $3*n}&#39; KPOINTS_num_02A &gt; KPOINTS_num_01A<br />
+&nbsp; #echo &quot;automatic mesh, k-space resolution ~0.1/A&quot; &gt; KPOINTS_dos<br />
+&nbsp; echo &quot;automatic mesh, k-space resolution ~0.2/A&quot; &gt; KPOINTS_dos # stalbe setting<br />
+&nbsp; echo &quot;0&quot; &gt;&gt; KPOINTS_dos<br />
+&nbsp; #echo &quot;Monkhorst-pack&quot; &gt;&gt; KPOINTS_dos<br />
+&nbsp; echo &quot;Gamma&quot; &gt;&gt; KPOINTS_dos&nbsp; # stalbe setting<br />
+&nbsp; cat KPOINTS_num_01A &gt;&gt; KPOINTS_dos<br />
+&nbsp; echo &quot;0 0 0&quot; &gt;&gt; KPOINTS_dos<br />
+&nbsp; rm -f KPOINTS_num_02A<br />
+&nbsp; rm -f KPOINTS_num_01A<br />
+&nbsp; #<br />
+&nbsp; cp INCAR_scf INCAR<br />
+&nbsp; cp KPOINTS_scf KPOINTS<br />
+&nbsp; # clean opt files<br />
+&nbsp; rm -f str<br />
+&nbsp; #rm -f CHG<br />
+&nbsp; #rm -f CHGCAR<br />
+&nbsp; #rm -f IBZKPT<br />
+&nbsp; #rm -f PROCAR<br />
+&nbsp; #rm -f XDATCAR<br />
+&nbsp; #rm -f WAVECAR<br />
+&nbsp; #rm -f vasprun.xml<br />
+&nbsp; #rm -f REPORT<br />
+&nbsp; #rm -f EIGENVAL<br />
+&nbsp; # run scf calculation<br />
+&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp; cp OUTCAR OUTCAR_scf<br />
+&nbsp; mv KPOINTS KPOINTS_scf<br />
+&nbsp; # dos calculation<br />
+&nbsp; date<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;dos calculation&quot;<br />
+&nbsp; echo &quot;dos calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; cp KPOINTS_dos KPOINTS<br />
+&nbsp; # setting automatically dos calculation range<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt; fermi_temp1<br />
+&nbsp; awk &#39;{print $4}&#39; fermi_temp1 &gt; fermi_energy_temp1<br />
+&nbsp; sed -e &#39;s/;.*//g&#39; fermi_energy_temp1 &gt; fermi_energy_temp2<br />
+&nbsp; set fermi_energy = `sed -n 1p fermi_energy_temp2`<br />
+&nbsp; set energy_min = `echo &quot;${fermi_energy} - 13.0&quot; | bc -l`<br />
+&nbsp; set energy_max = `echo &quot;${fermi_energy} + 6.0&quot; | bc -l`<br />
+&nbsp; cp INCAR_dos INCAR_dos_temp<br />
+&nbsp; sed -e &#39;s/#ELOW#/&#39;${energy_min}&#39;/g&#39; -e &#39;s/#EHIGH#/&#39;${energy_max}&#39;/g&#39; INCAR_dos_temp &gt; INCAR_dos<br />
+&nbsp; rm -f fermi_temp1<br />
+&nbsp; rm -f fermi_energy_temp1<br />
+&nbsp; rm -f fermi_energy_temp2<br />
+&nbsp; rm -f fermi_energy<br />
+&nbsp; rm -f INCAR_dos_temp<br />
+&nbsp; #<br />
+&nbsp; grep &quot;#NBANDS&quot; INCAR_cif2cell &gt; nband_temp1<br />
+&nbsp; #set nband_temp2 = `awk &#39;{print int($3*1.2)}&#39; nband_temp1`<br />
+&nbsp; set nband_temp2 = `awk &#39;{print int($3*1)}&#39; nband_temp1` # stable setting<br />
+&nbsp; cp INCAR_dos INCAR_dos_temp<br />
+&nbsp; sed -e &#39;s/#NB#/&#39;${nband_temp2}&#39;/g&#39; INCAR_dos_temp &gt; INCAR_dos<br />
+&nbsp; rm -f nband_temp1<br />
+&nbsp; rm -f nband_temp2<br />
+&nbsp; rm -f INCAR_dos_temp<br />
+&nbsp; #<br />
+&nbsp; cp INCAR_dos INCAR<br />
+&nbsp; # run dos calculation<br />
+&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp; cp OUTCAR OUTCAR_dos<br />
+&nbsp; date<br />
+&nbsp; # data file<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; # new file<br />
+&nbsp; echo &quot;folder name: &quot; &quot;$folder_name&quot; &gt;&gt; &quot;$address/fermi_energy.txt&quot;<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/fermi_energy.txt&quot;<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/total_energy.txt&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/total_energy.txt&quot;<br />
+&nbsp; # formation energy data<br />
+&nbsp; set atom_chara = `awk &#39;NR==6 {print $1}&#39; POSCAR`<br />
+&nbsp; set check_single = `awk &#39;NR==6 {print $2}&#39; POSCAR`<br />
+&nbsp; if(${check_single} == &quot;&quot;)then<br />
+&nbsp;&nbsp;&nbsp; echo $atom_chara &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 7p POSCAR &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp; else<br />
+&nbsp;&nbsp;&nbsp; @ compound_no += 1<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${compound_no}&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${compound_no}&quot; &gt; &quot;$address/compound_num.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; #echo ${compound_no} &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 6p POSCAR &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 7p POSCAR &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp; endif<br />
+&nbsp; # calculating file<br />
+&nbsp; echo &quot;folder name: &quot; &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; # dos plot data<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;dos plot: &quot;$DATE &gt;&gt; $address/log<br />
+&nbsp; sed -n 6p DOSCAR &gt; dos_num_line<br />
+&nbsp; awk &#39;{print $3}&#39; dos_num_line &gt; dos_num<br />
+&nbsp; set end_line = `sed -n 1p dos_num`<br />
+&nbsp; @ end_line += 6<br />
+&nbsp; sed -n 7,${end_line}p DOSCAR &gt; tdos_temp<br />
+&nbsp; awk &#39;{print $4}&#39; dos_num_line &gt; fermi_temp<br />
+&nbsp; set fermi_energy = `sed -n 1p fermi_temp`<br />
+&nbsp; echo &quot;${fermi_energy}&quot;<br />
+&nbsp; awk -v p=&quot;${fermi_energy}&quot; &#39;{print $1-p,$2,$3}&#39; tdos_temp &gt; tdos<br />
+&nbsp; awk -v p=&quot;${fermi_energy}&quot; &#39;{print $1-p,$2,$3}&#39; tdos_temp &gt; &quot;tdos_$folder_name&quot;<br />
+&nbsp; cp &quot;tdos_$folder_name&quot; &quot;$address/graph/tdos_$folder_name&quot;<br />
+&nbsp; rm -f dos_num_line<br />
+&nbsp; rm -f dos_num<br />
+&nbsp; rm -f tdos_temp<br />
+&nbsp; rm -f fermi_temp<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/title&quot;<br />
+&nbsp; # dos plot<br />
+&nbsp; #&quot;$standard_input_adress/gplot&quot;<br />
+&nbsp; #<br />
+&nbsp; #<br />
+&nbsp; #----------gplot start<br />
+set tempfile = `sed -n 1p title`<br />
+set filename&nbsp; = $tempfile<br />
+set psformat&nbsp; = $filename&quot;.ps&quot;<br />
+set epsformat = $filename&quot;.eps&quot;<br />
+<br />
+gnuplot -persist &lt;&lt; EOF<br />
+<br />
+set title &quot;$filename&quot;<br />
+set size 0.7,1.0<br />
+set xr[-12.0:6.0]<br />
+set xl &quot;{/=30 Energy&nbsp; / eV}&quot;<br />
+set yr[0.0:*]<br />
+set yl &quot;{/=30 Density of States / eV}&quot;<br />
+<br />
+set yzeroaxis lt 2 lw 2 lc rgb &quot;black&quot;<br />
+<br />
+# linetype=lt, linecolor=lc, linewidth=lw, pointtype=pt, pointsize=ps<br />
+# with=w, line=l, color setting=lc rgb &quot;&quot;,<br />
+set key box center top<br />
+<br />
+# dos_updn<br />
+#plot &quot;dos_updn&quot; using 1:2 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 up spin}&quot;, &quot;dos_updn&quot; using 1:3 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 down spin}&quot;<br />
+<br />
+# tdos<br />
+plot &quot;tdos&quot; using 1:2 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 total}&quot;<br />
+<br />
+unset key<br />
+#set key left top<br />
+<br />
+set size 1.0,1.0<br />
+set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$psformat&quot;<br />
+replot<br />
+<br />
+#set size 1.5,2.1<br />
+#set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$epsformat&quot;<br />
+#replot<br />
+<br />
+set terminal x11<br />
+<br />
+EOF<br />
+&nbsp; #----------gplot end<br />
+&nbsp; #<br />
+&nbsp; #<br />
+&nbsp; cp *.ps &quot;$address/graph/${folder_name}.ps&quot;<br />
+&nbsp; mv &quot;$address/$folder_name.cif&quot; &quot;$address/cif/$folder_name.cif&quot;<br />
+&nbsp; rm -f title<br />
+&nbsp; #<br />
+#----------boltztrap start<br />
+set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+cp ${boltztrap_adress}/util/vasp2boltz.py vasp2boltz.py<br />
+cat &lt;&lt; EOF &gt; ${file}.py<br />
+from ase import io<br />
+from ase.lattice.spacegroup import Spacegroup<br />
+import vasp2boltz<br />
+<br />
+ao = io.read(&#39;POSCAR&#39;)<br />
+# If you do not have spglib installed, you need to add the spacegroup no.<br />
+# e.g. sg = Spacegroup(216) for the &#39;F -4 3 m&#39; space group<br />
+# If you use the conventional cell rather than the primitive unit cell in your<br />
+# POSCAR file for e.g. I or F spacegroups, you need to add this information.<br />
+<br />
+# Example 1:<br />
+#sg = Spacegroup(1)<br />
+#ao.info = {&#39;spacegroup&#39;: sg}<br />
+<br />
+# Example 2. Here the unit cell in the POSCAR file is cubic (conventional):<br />
+#sg = Spacegroup(225)<br />
+#ao.info = {&#39;spacegroup&#39;: sg, &#39;unit_cell&#39;: &#39;conventional&#39;}<br />
+<br />
+# Read number of electrons from OUTCAR.<br />
+foundnelect = False<br />
+try:<br />
+&nbsp;&nbsp;&nbsp; for line in open(&#39;OUTCAR&#39;, &#39;r&#39;):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if &#39;NELECT&#39; in line:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nelect = float(line.split()[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foundnelect = True<br />
+except:<br />
+&nbsp;&nbsp;&nbsp; pass<br />
+if not foundnelect:<br />
+&nbsp;&nbsp;&nbsp; print &#39;Number of electrons not found. Please set the number manually in hte.intrans.&#39;<br />
+&nbsp;&nbsp;&nbsp; nelect = 1.0<br />
+<br />
+# The remaining part takes care of writing the files required by BoltzTraP.<br />
+bs = vasp2boltz.get_vasp_bandstructure()<br />
+vasp2boltz.write_bandstructure_boltztrap(bs)<br />
+vasp2boltz.write_structure_boltztrap(ao)<br />
+vasp2boltz.write_intrans_boltztrap(n_electrons = nelect)<br />
+EOF<br />
+python ${file}.py<br />
+mv energies.boltztrap ${file}.energy<br />
+mv hte.intrans ${file}.intrans<br />
+mv hte.struct ${file}.struct<br />
+cp ${file}.intrans ${file}_temp.intrans<br />
+sed -e &#39;s/800. 50./800. 10./g&#39; ${file}_temp.intrans &gt; ${file}.intrans<br />
+rm -f -r ${file}_temp.intrans<br />
+endif<br />
+#<br />
+# run boltztrap<br />
+$boltztrap_adress/src/x_trans BoltzTraP<br />
+#<br />
+# boltztrap plot<br />
+# get data for every K<br />
+awk &#39;{if($1==&quot;#&quot;){print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}else{print ($1*13.606),$2,$3,$4,($5*1000*1000),$6,(1.0/$7),$8,$9,$10}}&#39; ${file}.trace &gt; ${file}_eV.trace<br />
+grep &#39; 10.0000&#39;&nbsp; ${file}_eV.trace &gt; output_eV_10K.txt<br />
+grep &#39; 300.0000&#39; ${file}_eV.trace &gt; output_eV_300K.txt<br />
+grep &#39; 600.0000&#39; ${file}_eV.trace &gt; output_eV_600K.txt<br />
+#<br />
+mkdir boltz_data<br />
+cp output_eV_10K.txt&nbsp; ./boltz_data/output_eV_10K.txt<br />
+cp output_eV_300K.txt ./boltz_data/output_eV_300K.txt<br />
+cp output_eV_600K.txt ./boltz_data/output_eV_600K.txt<br />
+cp ${file}.trace&nbsp;&nbsp; ./boltz_data/${file}.trace<br />
+cp ${file}_eV.trace ${file}_eV_temp.trace<br />
+sed -e &#39;s/Ef[Ry]/Ef[eV]/g&#39; ${file}_eV_temp.trace &gt; ${file}_eV.trace<br />
+cp ${file}_eV.trace&nbsp;&nbsp; ./boltz_data/${file}_eV.trace<br />
+rm -f -r ${file}_eV_temp.trace<br />
+# sigxx<br />
+cp ${file}.sigxx ${file}_temp.sigxx<br />
+awk &#39;{print ($1*13.606),$2,$3,$4,$5,$6,$7,$8,$9,$10}&#39; ${file}_temp.sigxx &gt; sigxx_eV.txt<br />
+cp sigxx_eV.txt ./boltz_data/sigxx_eV.txt<br />
+#<br />
+# seebeck coefficient (microV/K vs. eV)<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_seebeck.ps&quot;<br />
+set epsformat = &quot;_seebeck.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Seebeck coefficient, {/Italic S} ({/Symbol m}VK^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:5 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:5 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:5 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# conductivity/lifetime vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_sigma.ps&quot;<br />
+set epsformat = &quot;_sigma.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical conductivity, {/Symbol s} / {/Symbol t} ({/Symbol W}^-^1m^-^1s^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:6 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:6 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:6 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# Electronic thermal conductivity vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_kel.ps&quot;<br />
+set epsformat = &quot;_kel.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical thermal conductivity, {/Symbol k}^0 (Wm^-^1K^-^1s^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:8 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:8 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:8 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# eV vs. inverse Hall coefficient<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_n.ps&quot;<br />
+set epsformat = &quot;_n.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Inverse Hall coefficient, {/Italic R_H}^-^1} (e.unitcell^-^1)&quot;<br />
+#set xlabel &quot;Inverse Hall coefficient and number of carriers n (density of states), {/Italic R_H}^-^1} and {/Italic n} (e.unitcell^-^1)&quot;<br />
+set ylabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 600 K&quot;<br />
+#p &quot;output_eV_10K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 600 K&quot;, &quot;output_eV_10K.txt&quot; u 4:1 w l t &quot;n at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 4:1 w l t &quot;n at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 4:1 w l t &quot;n at 600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# sigxx vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_sigxx.ps&quot;<br />
+set epsformat = &quot;_sigxx.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical conductivity, {/Symbol s} / {/Symbol t} ({/Symbol W}^-^1m^-^1s^-^1)&quot;<br />
+p &quot;sigxx_eV.txt&quot; u 1:2 w l t &quot;xx&quot;, &quot;sigxx_eV.txt&quot; u 1:3 w l t &quot;xy&quot;, &quot;sigxx_eV.txt&quot; u 1:4 w l t &quot;xz&quot;, &quot;sigxx_eV.txt&quot; u 1:5 w l t &quot;yx&quot;, &quot;sigxx_eV.txt&quot; u 1:6 w l t &quot;yy&quot;, &quot;sigxx_eV.txt&quot; u 1:7 w l t &quot;yz&quot;, &quot;sigxx_eV.txt&quot; u 1:8 w l t &quot;zx&quot;, &quot;sigxx_eV.txt&quot; u 1:9 w l t &quot;zy&quot;, &quot;sigxx_eV.txt&quot; u 1:10 w l t &quot;zz&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+#----------boltztrap end<br />
+&nbsp; #<br />
+&nbsp; #<br />
+#----------phonopy start<br />
+#----------phonopy end<br />
+&nbsp; #<br />
+&nbsp; #<br />
+#----------phono3py start<br />
+#----------phono3py end<br />
+&nbsp; #<br />
+end<br />
+cd &quot;$address&quot;<br />
+# formation energy<br />
+#echo &quot;formation energy calculation&quot;<br />
+#&quot;$standard_input_adress/fenergy&quot;<br />
+# back up<br />
+mv &quot;$address/compound_total_energy.txt&quot; &quot;$address/data/compound_total_energy.txt&quot;<br />
+mv &quot;$address/atom_total_energy.txt&quot; &quot;$address/data/atom_total_energy.txt&quot;<br />
+mv &quot;$address/compound_num.txt&quot; &quot;$address/data/compound_num.txt&quot;<br />
+mv &quot;$address/fermi_energy.txt&quot; &quot;$address/data/fermi_energy.txt&quot;<br />
+mv &quot;$address/total_energy.txt&quot; &quot;$address/data/total_energy.txt&quot;<br />
+#cp &quot;$address/formation_energy.txt&quot; &quot;$address/data/formation_energy.txt&quot;<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------

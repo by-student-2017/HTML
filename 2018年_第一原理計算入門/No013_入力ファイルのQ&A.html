@@ -1,0 +1,1098 @@
+<p>　ここでは、バンド計算の入力ファイル作成において、よく疑問となる事項についてまとめていきます。<br />
+------------------------------------------------------------------------------<br />
+■ 一般的な入力ファイルのQ&amp;A<br />
+GAMESS-US, Gaussian -&gt; Gabedit QC-GUI<br />
+<br />
+Q. 周期律表はどこから手に入れればよいですか？<br />
+A. 文部科学省HPから周期律表が見られるようになっています。<br />
+<a href="http://www.mext.go.jp/a_menu/kagaku/week/shuki.htm">http://www.mext.go.jp/a_menu/kagaku/week/shuki.htm</a>　<br />
+<br />
+Q. 波動関数のカットオフ（cut off）の値はいくつに設定すれば良いか？<br />
+A. ウルトラソフト擬ポテンシャルの場合は20～25 Ry 以上に設定して下さい（ノルム保存型擬ポテンシャルの場合はこれより3～4倍にしたりする）。詳細にこの値を決定するには、結晶の計算をして、格子定数や体積弾性率の実験値を再現するようにします[1]。この他、徐々に値を大きくして結果が収束したところで値を決定させることもよく用いられます（Phaseでは擬ポテンシャルファイルに予め値が入力されており、特に設定する必要がありません。一方、VASPでは推奨値が擬ポテンシャルファイル中に記述されています｛詳しくはVASPのマニュアルを参照下さい｝）。WIEN2でのCutoff は 13.6 * (RKmax / Rmt ) ^2 [eV]で得られます（<a href="http://www.jim.or.jp/journal/j/pdf3/73/09/683.pdf">http://www.jim.or.jp/journal/j/pdf3/73/09/683.pdf</a> とも比較してみると良いでしょう。ちなみに、Rmtは最小の値で計算します。計算してみると13.6*(9.0/2.0)^2=275.4 eVとなります）。<br />
+よく用いられる擬ポテンシャルの種類は下記の「 電荷密度分布のカットオフ」に関する記述を参照。<br />
+※ VASPでのPAWに対するカットオフについては下記の報告も参考になる。defaultから600 eVを採用すべきか？<br />
+※ 多くの先生方に伺うと 500 eV ～ 520 eV の方が多い。<br />
+※ WIEN2kとの比較がされていて十分な精度なので、私の場合、最近では推奨値を用いています（左欄の「各第一原理計算コードの特徴」を参照してください）。<br />
+[VPAW0] <a href="http://wolf.ifj.edu.pl/workshop/work2004/files/talks/kresse_vasp_phonon.pdf">http://wolf.ifj.edu.pl/workshop/work2004/files/talks/kresse_vasp_phonon.pdf</a><br />
+[VPAW1] <a href="http://www.nuclear.jp/~kyodo/report/0022/F/18F-13.pdf">http://www.nuclear.jp/~kyodo/report/0022/F/18F-13.pdf</a><br />
+[VPAW2] <a href="https://www.jstage.jst.go.jp/article/msjmag/34/2/34_1003R004/_pdf">https://www.jstage.jst.go.jp/article/msjmag/34/2/34_1003R004/_pdf</a><br />
+[VPAW3] <a href="http://www.toyotariken.jp/activities/65/S09_yuhara.pdf">http://www.toyotariken.jp/activities/65/S09_yuhara.pdf</a><br />
+[VPAW4] <a href="http://books.google.co.jp/books?id=yOznjeSms18C&amp;pg=PA9&amp;lpg=PA9&amp;dq=PAW+%E3%82%AB%E3%83%83%E3%83%88%E3%82%AA%E3%83%95&amp;source=bl&amp;ots=fyrsls8w3s&amp;sig=nWIw9-LW0_8asl0Pj6UlSrSMY98&amp;hl=ja&amp;sa=X&amp;ei=b6CxUcv6H4uElAWmzYGwAw&amp;ved=0CFkQ6AEwCTgK#v=onepage&amp;q=PAW%20%E3%82%AB%E3%83%83%E3%83%88%E3%82%AA%E3%83%95&amp;f=false"><font color="#0000ff">http://books.google.co.jp/books?id=yOznjeSms18C&amp;pg=PA9&amp;lpg=PA9&amp;dq=PAW+%E3%82%AB%E3%83%83%E3%83%88%E3%82%AA%E3%83%95&amp;source=bl&amp;ots=fyrsls8w3s&amp;sig=nWIw9-LW0_8asl0Pj6UlSrSMY98&amp;hl=ja&amp;sa=X&amp;ei=b6CxUcv6H4uElAWmzYGwAw&amp;ved=0CFkQ6AEwCTgK#v=onepage&amp;q=PAW%20%E3%82%AB%E3%83%83%E3%83%88%E3%82%AA%E3%83%95&amp;f=false</font></a><br />
+[VPAW5] <a href="http://nsed.jaea.go.jp/fme/group3/group3_i5.pdf"><font color="#0000ff">http://nsed.jaea.go.jp/fme/group3/group3_i5.pdf</font></a><br />
+[VPAW6] <a href="http://kgur.kwansei.ac.jp/dspace/bitstream/10236/9722/1/M0349.pdf"><font color="#0000ff">http://kgur.kwansei.ac.jp/dspace/bitstream/10236/9722/1/M0349.pdf</font></a><br />
+<br />
+下記のHPの資料（PWscf）にcut offの値を変えた場合の結果が示されています。<br />
+<a href="http://www.fisica.uniud.it/~giannozz/QE-Tutorial/tutorial_pwscf_ex.pdf">http://www.fisica.uniud.it/~giannozz/QE-Tutorial/tutorial_pwscf_ex.pdf</a>　<br />
+2 Ry =&nbsp;1 Hartree = 27.2113845 eV<br />
+1 bohr =&nbsp;1 a.u. = 0.05291772108 nm<br />
+＊カットオフの意味については、下記の中山先生のHPでのstudyを参照するとよい。<br />
+<a href="http://homepage3.nifty.com/mnakayama/index.htm">http://homepage3.nifty.com/mnakayama/index.htm</a><br />
+<br />
+Q. 電荷密度分布のカットオフ（cut off）の値はいくつに設定すれば良いか？<br />
+A. 波動関数のカットオフの4倍以上[1]<br />
+・ノルム保存型擬ポテンシャル：波動関数のカットオフの4倍以上。この種類で用いられる擬ポテンシャルではTroullier-Martin(TM)（トウリエ-マーティン）が有名。<br />
+・ウルトラソフト擬ポテンシャル：波動関数のカットオフの4倍以上、典型的には8倍-12倍の値。この種類で用いられる擬ポテンシャルではVanderbilt（ヴァンデルビート）が有名。<br />
+・PAW：波動関数のカットオフの4倍以上<br />
+※ Phaseでは擬ポテンシャルファイルに予め値が入力されており、特に設定する必要がありません。<br />
+<br />
+Q. qパラメーター（フォノンや吸収の計算で入力することになる）はどの値にすればよいの？<br />
+A. 私も良く分からなかったのですが、qは逆格子空間上でのメッシュの間隔に対応しており、その間隔を実空間に戻したときに（ディスプレイスメントが）計算される範囲（10Å以上あればよい）と考えれば良いようです。格子定数が大きければガンマ点（1点）のみでもよくなります。<br />
+※ フォノンの計算方法は幾つかありますが、基本的なものとしては、スーパーセルを作って、一部の原子を少し動かしたとき（ディスプレイスメント）の力（フォース）を利用したりします。そう考えるとqをどう考えれば良いかが分かりますなりますね！<br />
+<br />
+Q. bandの数はどれくらいに設定すればよいの？<br />
+A. Phaseでは計算する系での価電子帯の全電子数の2割強程度増やした値（ノンスピンの場合はその半分）を入力してください[1]。ABINITでは&quot;nband=占有+非占有のバンドの数&quot;です。（PhaseやABINIT, PWscf, WIEN2kは自動的にデフォルト値が入力される。WIEN2k_11では、デフォルトで、エネルギー範囲内での単位胞あたりの電子数&times;2.0+5に設定されます。ノンスピンの場合はその半分の値）<br />
+<br />
+Q. LDAとGGA、PBEはどんなときに使い分けるのか？<br />
+A. 一般的に PBE（が無ければGGA）を用いて下さい。しかし、希ガス固体とファンデルワールス（vdW）力が関係するグラファイトなどではLDAを採用する方が計算結果が実験に合います。最近の論文（2011年）でもグラフェン（グラファイトが一層になったもの）を扱った系ではLDAで計算されているものがあります。最近では、vdWが可能な第一原理計算コードが普及してきており、PBE（が無ければGGA）を用いてもvdWを入れた計算が可能なものがあります。余談ですが、CASTEPであればSiなどでのギャップの値がLDAよりも改善されるsx-LDAがあります。<br />
+<br />
+Q. LDA+UやGGA+U、PBE+U はどんなときに使うの？<br />
+A. 3d 軌道などの局在する軌道に対して用います。そうすると、ギャップや電子構造が実験値と合う計算結果を得ることができます。SrTiO<sub>3</sub>でのTi 3d 軌道などを例として良く使われています。(effective U for WIEN2k)<br />
+<br />
+Q.&nbsp;3d 軌道などの局在軌道が無い系ではどうすればよいの？<br />
+A. 酸素の2pなどにUを入れている例も見掛けます。この他に、計算に時間が掛かりますが、PBE0, YS-PBE0,&nbsp;mBJ, sx-LDAなどを用いることも考慮してみては良いのではないでしょうか。</p>
+
+<p><br />
+Q. スカラー相対論 (scalar relativestic calculation) とはなんですか？<br />
+A. 非相対論 (non relativestic calculation) に、質量・速度項 と ダーウィン項を加えた計算です。Full relativestic calculation は、スカラー相対論 に スピン・軌道相互作用項を含めたものです（WIEN2kでは Spin Orbit couplingを計算するために入れる項になります）。<br />
+<br />
+Q. XPSなどでよく見る内殻の電子状態を示す2P<sub>1/2</sub>や2P<sub>3/2</sub>などは理論的にどのよう考えれば良いでしょうか？<br />
+A. スピン軌道相互作用の項を理解すると良いでしょう。スピン軌道相互作用の項は次式になります。<br />
+&nbsp; &Delta;Enlj = (1/2) * Anl * (h/2&pi;)^2 * { j * (j+1) - l * (l+1) - 3/4}<br />
+ここでAnlは複雑な式なので詳細を省略します（文献[SOC1-3]を参照して下さい）。j = l + s です。このエネルギー準位は2j+1重に縮退しています。内殻の電子の場合で、l = 1の場合の例を下記で見てみましょう（他のlの値でも同様です）。<br />
+&nbsp; j = 3/2 の場合： P<sub>3/2</sub>、&Delta;Enlj =(1/2) * Anl * (h/2&pi;)^2： 2j+1 = 4 (-3/2, -1/2, 1/2, 3/2 の4つ）<br />
+&nbsp; j = 1/2 の場合： P<sub>1/2</sub>、&Delta;Enlj =-Anl * (h/2&pi;)^2： 2j+1 = 2 (-1/2, 1/2 の2つ）<br />
+j = 1/2 の方が内殻に近いエネルギーになります。スピン軌道相互作用の式から、電子のエネルギーは P<sub>3/2　</sub>&gt;　P<sub>1/2 </sub>であると理解し、また、エネルギー準位が2j+1重に縮退していることからP<sub>3/2　</sub>とP<sub>1/2</sub>の強度比が、2j+1の式から、2*(3/2)+1 : 2*(1/2)+1= 4 : 2 = 2 : 1になることも覚えておくとよいでしょう。重要なこととして、upとdownがそれぞれの軌道に均等に入ります（lとsを負まで考慮に入れて j = l + s の表を作ってみてください｛正確にはj に対するmの表、つまり、mj = ml + ms が正しいでしょう｝）。-3/2, -1/2, -1/2, 1/2, 1/2, 3/2 の6つの値が得られます。これらのどれがP<sub>3/2　</sub>とP<sub>1/2</sub>に属するかは ガシオロウィッツ、「量子力学Ⅱ」、丸善株式会社など、色々な参考書を読んで勉学してみてください）。l=0や1, 2などでも同じ様に考えることができます。また、WIEN2kのcase.instを見ると内殻の電子はupとdownがそれぞれの軌道に均等に配置されていることが分かります。<br />
+[SOC1] 中嶋貞雄、「量子力学Ⅱ」、岩波書店<br />
+[SOC2] <a href="http://202.11.2.126/iwaya/ryoushi/h19/12-2.pdf">http://202.11.2.126/iwaya/ryoushi/h19/12-2.pdf</a><br />
+[SOC3] <a href="http://repository.kulib.kyoto-u.ac.jp/dspace/bitstream/2433/96501/1/KJ00004707301.pdf">http://repository.kulib.kyoto-u.ac.jp/dspace/bitstream/2433/96501/1/KJ00004707301.pdf</a><br />
+<br />
+Q. PWscf での擬ポテンシャルファイルの読み方は？<br />
+A. 下記のHP[1,2]にて解説されています。求める計算の条件に合う擬ポテンシャルを選んで下さい。<br />
+[1] <a href="http://www.quantum-espresso.org/wiki/index.php/Naming_convention_for_the_pseudopotential">http://www.quantum-espresso.org/wiki/index.php/Naming_convention_for_the_pseudopotential</a><br />
+[2] <a href="http://www.quantum-espresso.org/pseudo-notes.php">http://www.quantum-espresso.org/pseudo-notes.php</a><br />
+<br />
+Q. conventional unit cell と primitive unit cell はどう使い分ければいいの？<br />
+A. 下記のHP[1]にて conventional unit cell と primitive unit cell での入力する原子座標の違いが示されています。conventional unit cell は原子座標の入力が直観的に分かりやすいですが、一方、primitive&nbsp;unit cell は入力する原子の座標は少ないものの初学者には難しいと思います。 primitive unit cell では入力する原子座標の数が少ないので、計算時間は短くなると思われます。しかし、primitive unit cell に慣れるまでは、構造を確認し易い conventional unit cell 形式での入力ファイルの作成が良いと思います。ちなみに、cif 形式のデータを読み取って計算するWIEN2k では 私の場合 conventional unit cell での原子座標の入力になり易いです。この他にも、Osaka2k などでは conventional unit cell での原子座標の入力になっています。初めは、分かりやすい conventional unit cell で計算をしてみて、徐々に primitive unit cell に挑戦して、結果に違いが無いかを調べながら様々な計算を行っていくと良いと思います。（xcrysdenでconventional unit cell と primitive unit cell の表示を切り替えられます。そこから自動的に入力ファイルが作成できるかは未調査）<br />
+[1] <a href="http://mpdc.mae.cornell.edu/Courses/MAE715/HwsPDF/HW5/PWSCF-Presentation.pdf">http://mpdc.mae.cornell.edu/Courses/MAE715/HwsPDF/HW5/PWSCF-Presentation.pdf</a>　<br />
+<br />
+Q. k点数の設定はどうすればよいのか？<br />
+A. ユニットセル内の原子数が多くなるほど、k点は少なくて良い。論文の値などを参考にするもの良いでしょう。<br />
+SCF case<br />
+&nbsp; Metal: 0.035 [1/Angstrom]<br />
+&nbsp; Semi-conductor: 0.088 [1/Angstrom]<br />
+&nbsp; Insulator: 0.088 [1/Angstrom]<br />
+DOS case<br />
+&nbsp; Metal: 0.035*2 ~ 0.035*4 [1/Angstrom]<br />
+&nbsp; Semi-conductor: 0.088*2 ~ 0.088*4 [1/Angstrom]<br />
+&nbsp; Insulator: 0.088*2 ~ 0.088*4 [1/Angstrom]<br />
+a) Phaseの場合<br />
+自動的に処理してくれるので、特に気にする必要はない。<br />
+b) ABINITやPWscf の場合<br />
+格子定数が3.91オングストローム程度で4原子程度だと6x6x6の216点程度。<br />
+c) WIEN2kの場合<br />
+格子定数が13オングストローム程度で140原子程度だと、500点で十分なDOSを描くことができる。一般のAl金属などでは1000点。グラフェンなどでは5000点の例がある。8000点を超えたk点数を採用することはほとんどない(SCF計算後に[initialize calc.]のx kgenでk点を増やし、run SCFを実行させ、これらの計算結果が飽和するまで徐々にk点を増やしてみるのがよい。k点の数を多くしていき、3 cycleで収束していくようになれば、それ以上k点を増やさなくてもよい一つの目安になると思います)。<br />
+<br />
+Q. スーパーセルでのk点はどれだけ取ればよいのか？<br />
+A. スーパーセルにする前の単位胞で採用したk点を、スーパーセルにするために拡大した単位胞の倍率分だけ割って下さい。例えば、2&times;2&times;1倍のスーパーセルにしたら、k点は1/4倍とすれば良いです。半導体や絶縁体は金属よりもk点を少なくしてよく、SrTiO3を3x3x3のスーパーセルとした系などではk点が8点でよい（スーパーセルの作り方は参考文献[9]を参照してください）。<br />
+<br />
+Q. 表面の計算をするために真空層はどれだけ必要か？<br />
+A. 10オングストロームほど真空層（何もない空間）を作って下さい。論文でもだいたい10オングストロームが採用されています。<br />
+※ ただし、表面で分極が大きい場合は、20～30オングストロームにすることもあります。<br />
+<br />
+Q. 格子定数の決定はどうすればよいか？<br />
+A. 理論屋さんであれば、第一原理計算の範囲内で最適化により決定します。実験屋さんであれば、実験値を用いることもあるでしょう。実験値を用いて計算した結果が、インパクトファクターの高い論文に記載されていることも多々見かけます。<br />
+<br />
+Q. 各種パラメータはどうやって決定すればよいか？　計算の手順を教えて下さい。<br />
+A.&nbsp;論文があればそれをまず参考にして同じ結果が出力されるか調べる。論文が無ければ、格子定数に実験値を入力して固定し、k点&rarr;カットオフ&rarr;k点と繰り返しながら値を徐々に大きくしていって結果が収束するまで繰り返す。次に、格子定数の最適化を行う。対称性の関係などから（&Gamma;点など）、k点を偶数か奇数で増やしていくかは注意深くみておく必要がある。これは形成エネルギーを検討する場合に条件を揃えるためにも有効である。</p>
+
+<p><br />
+Q. 書籍にあるデータベースの構造を入力したのに計算できません。<br />
+A. NIMS物質・材料データベース(<a href="http://mits.nims.go.jp/">http://mits.nims.go.jp/</a>)を利用してみて下さい。それ以外にも、左欄のデータベースを参照してみて下さい。<br />
+<br />
+Q. WIEN2kでは -c が表示されたり、表示されなかったりします。これは何を意味しているのでしょうか？<br />
+A. 平面波に虚数成分が入って計算されているときに-cが表示されます。<br />
+単純な平面波の式を見てみましょう(結晶での計算では結晶の周期性を反映させるためにさらにブロッホ関数が掛けられる)。<br />
+exp(ikr) = A*cos(kr)+i*B*sin(kr)<br />
+例えば、[r = -r]で同じ原子がある場合、[exp(ikr) = exp(-ikr)]となるような結晶があるとします(これは時間反転対称性と呼ばれる)。<br />
+式をより細かく見てみると、<br />
+A*cos(kr)+i*B*sin(kr) = A*cos(-kr)+i*B*sin(-kr) = A*cos(kr)-i*B*sin(kr)<br />
+2*i*B*sin(kr) = 0 となります。<br />
+実数部分のAは任意の値で上記を満たします。しかし、虚数成分のBは0のときにどのようなkrでも上記を満たすことになります。<br />
+　このように時間反転対称性が成り立つ系の場合には、虚数成分が0になって計算の必要がなくなるために、WIEN2kなどでは実数のみでの計算がなされます。<br />
+　時間反転対称性が無い場合にはWIEN2kで計算中に -c と表示され虚数成分も計算されます。</p>
+
+<p><br />
+Q. MPI では -np と OMP_NUM_THREADS の値をどのように設定すればよいの？<br />
+A. -np の後に入れる数字はCPUの型番を調べてコア数を記入して下さい。そして、OMP_NUM_THREADS では [(OS上で表示されているCPU数) / (-npで入力した数値)]の値を指定して下さい。PWscf では アウトプットファイルにMPIに関する記述が書き込まれますので確認してみて下さい。下記に core-i7 2700K&nbsp; のCPU でPWscf を動作させる場合の例を示します。<br />
+1) export OMP_NUM_THREADS=2 を .bashrc に書き入れる。<br />
+2) /usr/local/openmpi/bin/mpirun -machinefile /home/*/hosts -np 4 /home/*/espresso-4.3.2/bin/pw.x <atom.in> atom.out<br />
+以上で、2 threads * 4 CPU&nbsp;= 8 processor cores の動作となります。<br />
+※ abinit などにおいてもほぼ似たようなコマンド形式になるので同様に設定すればよいです。<br />
+※ OpenMP だけの計算の場合は OMP_NUM_THREADS=OS上で表示されているCPU数 としても良いでしょう。<br />
+※ -machinefile のオプションで、アドレスを指定した hosts ファイルに MPI で計算させる PC の名称を記入します。その優先順位に添って計算がされていきます（同じPCの名称が何行続いてもOK。1台のPCで MPIの並列計算をする場合、筆者は core-i7 2700K が 4 core なので 4行同じ PC の名称を記入したりする）。<br />
+※ OMP_NUM_THREADS=1 とし、 -np 直後に入力する数値を実際のCore数-1とする方が計算が速いこともある。どの指定が計算が速いかは似た系で調査してみるしかない。<br />
+<br />
+Q. SrTiO3 で Ti に対して 約1% だけ遷移金属をドープする場合に、PCのメモリ数はどれだけ準備しておけばよいの？<br />
+A. CASTEP では メモリが24GB実装されていれば、500原子を扱えると言われています。SrTiO3などでTiに対して約1% 置換する系を計算するには、スーパーセルで&nbsp;4x4x4 の構造が必要になります。これは 320 原子の計算になりますから、24 GBのメモリを扱えるPCを準備する必要があります。（ちなみに、Ti に対して約4%置換する系ですと3x3x3&nbsp;で 135 原子なので、8～16 GB 必要になります。core-i7 2700K で メモリ16GBのPCを用いて2 threads * 4 CPU で&nbsp;3x3x3 構造を PWscf で計算したところ、格子定数も含めた構造最適化をすると1日から8日程度掛かります。遷移金属のドープが多いほど収束までの日数は長くなりました。ここで、擬ポテンシャルはPAW以外のもので主にVanderbilt型を、交換相関項はPBEを用い、spinを考慮した計算としている）<br />
+<br />
+Q. ギャップのある系でバンド分散を描くと、本来、直接遷移であるべきなのに、間接遷移の結果が表示されます。どのように対処すれば良いでしょうか？<br />
+A. 格子定数を僅かに変えると、直接遷移や間接遷移に変わると言われています。構造最適化した場合での結果と、XRDなどで得られた実験で計算した場合のどちらかが正しい場合は、その旨を論文に記して、正しい値が得られた方で議論していけば良いでしょう。この他、k点の数を増やしたりしてみます。もし、あなたが擬ポテンシャルを用いて計算している場合は、擬ポテンシャルを他のものに変えてみたりもしてください。また、FLAPW法（WIEN2kやexciting）で計算してみるのも良いでしょう。ちなみに、擬ポテンシャルの作成は理論計算で論文を書いているプロでも難しいので、擬ポテンシャルを作成する場合には、擬ポテンシャル作成のためのプログラムを書いている方やあたなたが計算している第一原理計算コードのプログラムを書いている方に相談してください。<br />
+<br />
+Q. 変分原理から考えるとSCFサイクルの最初から最後へはエネルギーが小さくなるはずですが、そうならない結果もあります。どうしてなのでしょうか？<br />
+A. イフェクティブポテンシャル(Veff)がSCFの初期と最後で異なるためです。Veffが変化するとハミルトニアンも変化します。もし、SCF計算で初期から最後までハミルトニアンが固定されていた場合にはエネルギーが高&rarr;低になります。<br />
+<br />
+Q. WIEN2kなどで計算するとギャップが開いた結果になりますが、実際に試料を作製した結果ではギャップがつぶれています。それは何故でしょうか？<br />
+A. 理想的な完全結晶を実験で作ることは困難です。そのため、欠陥や不純物、または非化学量論組成になることによる準位がフェルミ端近傍に形成されることがあります。KKR-CPAなどで検討してみてください。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ PWscfでの入力ファイルのQ&amp;A<br />
+<br />
+Q. PAWとUSPPの両方を用いているのですが、SCF計算が走りません。<br />
+A. PWscfでのQ&amp;Aでも擬ポテンシャルは混ぜて用いても良いことが書かれていますが、上手く動作しない経験を持った方は多いのではないでしょうか。参考までに筆者が成功した例を下記に示します。<br />
+[System] -&gt; [Optional variables]<br />
+--- Noncolinear calculation ---<br />
+Perform noncolinear calculation (noncolin): Yes<br />
+Allow the use of a pseudopotential with spin-robit (lspinorb): Yes<br />
+上記の条件で計算可能になった擬ポテンシャルの例を下記に示します（注：VはUSPP)。<br />
+Fe.rel-pbe-kjpaw.UPF<br />
+V.pbe-sp-van-UPF<br />
+Al.rel-pbe-n-kjpaw_psl.0.2.2.UPF<br />
+<br />
+Q. 続きから計算するためには？<br />
+A. PWgui &rarr; Control &rarr; Restart mode (restart_mode): from previous interruptied run <restart> を選択後、上の欄にあるRunを押せば続きから計算します。多くの場合、100 cycleで収束しなかったことによる計算の停止が多いと思います。SCFの計算回数の制限を多くするためには、Electrons &rarr; Optional Variables &rarr; Max. # iterations in SCF step (electron_maxstep):&nbsp;に大きな数値を入力しておくことも良いでしょう。&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ ABINITでの入力ファイルのQ&amp;A<br />
+<br />
+Q. ABINITでの入力ファイルのvariablesのどれを選べばよいか分かりません。<br />
+A. 物質・材料研究機構の新井先生が書かれた「ABINITによる第一原理電子構造計算例」<a href="http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example1.pdf">http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example1.pdf</a>及び「ABINITによる第一原理電子構造計算例:ABO<sub>3</sub>」<a href="http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf">http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf</a>を参考にすると、以下のようになります。</restart></atom.in></p>
+
+<p>GWは <a href="http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_flash_ppt_presentation">http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_flash_ppt_presentation</a>&nbsp;を参照<br />
+<br />
+------------------------------------------------------------------------------<br />
+case.out または case.log で、認識された空間群とVariableの設定状況の確認方法<br />
+------------------------------------------------------------------------------<br />
+入力された Variable の確認（下記の2通りの方法がある）<br />
+A) case. out で下記を確認<br />
+&nbsp;&nbsp;1) Symmetries : space group 空間群 （# 空間群の番号）を調べる。<br />
+&nbsp;&nbsp;2) Values of the parameters that define the memory need of the present rum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;直ぐ下にある This job should need less than の後の使用メモリも見ておくと良いだろう。<br />
+&nbsp;&nbsp;3) -outvars: echo values of preprocessed input variables ------&nbsp;<br />
+&nbsp;&nbsp;4) 以上で自動で設定された値も含めて、入力された variable の値が分かる。<br />
+&nbsp;&nbsp;&nbsp;目的のものと違っていた場合は、case.in に書き入れる。<br />
+&nbsp;&nbsp;5) 上記になかった variable は ctrl + F で検索して、どのように使われているか調べる。<br />
+B ) case.log で下記を確認<br />
+&nbsp;&nbsp;1) symspgr : spgroup= で空間群の番号を調べる。<br />
+&nbsp;&nbsp;2) Values of the parameters that define the memory need of the present rum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;直ぐ下にある This job should need less than の後の使用メモリも見ておくと良いだろう。<br />
+&nbsp;&nbsp;3) -outvars: echo values of preprocessed input variables ------&nbsp;<br />
+&nbsp;&nbsp;4) 以上で自動で設定された値も含めて、入力された variable の値が分かる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;目的のものと違っていた場合は、case.in に書き入れる。<br />
+&nbsp;&nbsp;5) 上記になかった variable は ctrl + F で検索して、どのように使われているか調べる。<br />
+&nbsp;&nbsp;※ mband = nband * nsppol<br />
+※ Fermi energy は case.out に記載されている。<br />
+<br />
+case.filesには、以下を記述する。（）内は記述しない。<br />
+./A/case.in　とファイルAの中にある指定も可能。<br />
+--------------------------------------------------<br />
+case.in　（パラメーターの入力ファイル名）<br />
+case.out　（出力ファイル名）<br />
+casexi　（その他の入力ファイルのヘッダー）<br />
+casexo　（その他の出力ファイルのヘッダー）<br />
+temp　（一時ファイル用）<br />
+06-C.LDA.fhi　（擬ポテンシャルファイル名）<br />
+--------------------------------------------------<br />
+<br />
+case.in<br />
+--------------------------------------------------<br />
+acell&nbsp;7.38&nbsp;7.38&nbsp;7.38 #セルの長さの設定。 3*7.38 でもよい。（a.u.単位）<br />
+angdeg　90&nbsp;90 90 #基本ベクトル間の角度(a2とa3の間の角) (a1とa3の間の角) (a1とa2の間の角)<br />
+ntypat 3 #原子種の数<br />
+znucl 38 22 8 #各原子種の原子番号<br />
+natom 5 #原子数<br />
+typat 1 2 3 3 3 #各原子の種類を指定　（例だと、Sr Ti O O O となる）<br />
+xred #各原子の相対座標　または　xcart #各原子の座標<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+0.5 0.5 0.0<br />
+0.5 0.0 0.5<br />
+0.0 0.5 0.5　<br />
+ixc 11 #交換相関項の設定。GGAは11。擬ポテンシャルもGGA用が必要<br />
+nsppol 2 #スピン分極を考慮する場合は2<br />
+spinat #各原子の初期のスピン（ディフォルト値は0.0d0、h-bar/2単位）<br />
+0.0 0.0 0.0&nbsp;#typat で指定した順なので原子番号38。x, y, z のスピンは全て0<br />
+0.0 0.0 0.0 #原子番号22で、x, y, z の各軸の方向で &quot;upの数 - down の数&quot; の値を入力。<br />
+0.0 0.0 0.0 #原子番号8で、x, y, z のスピンは全て0<br />
+0.0 0.0 0.0&nbsp;#原子番号8で、x, y, z のスピンは全て0<br />
+0.0 0.0 0.0 #原子番号8で、x, y, z のスピンは全て0<br />
+nband #考慮する状態（バンド）数<br />
+68&nbsp;68<br />
+ecut 30.0 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+occopt 7 # 7はGaussian smearing<br />
+tsmear 0.01 #フェルミ端のブロードニング（Hartree単位）<br />
+kptopt 1 # 対称性を考慮してirreducible Bz内でのk点を作成<br />
+ngkpt 6 6 6 #Monkhorst-Pack法によるk点（x, y, z方向のk点数）<br />
+nstep 40 # 最大イタレーション<br />
+toldfe 1.0d-6 # 収束判定条件（total energy) または toldff #収束判定条件（atomic forces)<br />
+--------------------------------------------------<br />
+<br />
+case.in (複数の計算を行う場合 : multi dataset mode）<br />
+この方法は、原子位置を徐々に変えて計算したり、SCF計算の後にDOSやバンド図を計算させたりすることを設定することとができる。下記はカットオフを徐々に変えた例。<br />
+--------------------------------------------------<br />
+ndtset 3 # データセットの数<br />
+ecut1 30.0<br />
+ecut2 35.0<br />
+ecut3 40.0<br />
+または下記のようにする<br />
+ndtset 3&nbsp;<br />
+ecut : 30.0<br />
+ecut+ 5.0<br />
+--------------------------------------------------<br />
+<br />
+計算の実行は、abiniｔ &lt; case.files &gt; case.log<br />
+<br />
+Q. ABINITでDOSやband図、Gamma点のフォノン、M点での不安定モードに対応する原子変位を計算をする方法を教えて下さい。<br />
+A. SCF計算で出力されたcase0_DENファイルを複製して、casei_DENという名前に変えて下さい。<br />
+<br />
+case.in（DOSを得るための計算）<br />
+--------------------------------------------------<br />
+iscf -2 # SCF計算をしない<br />
+prtdos&nbsp;3 # Local Density of States inside a sphere centered on an atomを出力<br />
+nband 28 # 考慮する状態（バンド）数<br />
+tolwfr 1.0e-10 # wf許容誤差<br />
+--------------------------------------------------<br />
+<br />
+case.in　（バンド図のための計算）<br />
+--------------------------------------------------<br />
+iscf -2 # SCF計算をしない<br />
+nband 28 # 計算するバンドの数<br />
+enunit 1 # eV単位の固有エネルギーとなるように設定<br />
+tolwfr 1.0e-10 # <nk|(h-e)<sup>2|nk&gt;&nbsp; &lt;= 1.0e-10<br />
+kptopt -5&nbsp;# 負の場合はkptboundsとndivkが対応する<br />
+kptbounds #<br />
+0.0 0.0 0.0 # Gamma点<br />
+0.5 0.0 0.0 # X点<br />
+0.5 0.5 0.0 # M点<br />
+0.0 0.0 0.0 # Gamma点<br />
+0.5 0.5 0.5 # R点<br />
+0.5 0.5 0.0 # M点<br />
+ndivk 15 15 20 25 15 # k点の分割<br />
+--------------------------------------------------　<br />
+<br />
+case.in　（Gamma点に対するフォノンの計算）<br />
+--------------------------------------------------<br />
+ndtset 2 # データセットの数<br />
+# キーワードの直後に1が書かれていると最初に計算される。<br />
+kptopt1 1 # 対称性を考慮してirreducible Bz内でのk点を作成<br />
+tolvrs1 1.0d-10 # SCF停止の基準<br />
+# キーワードの直後に2が書かれていると二番目に計算される。<br />
+rfphon2 1 # フォノンに関する応答関数<br />
+rfatpol2 1 5 # 1から5の原子が移動する<br />
+rfdir2 1 0 0 # x軸方向<br />
+nqpt2&nbsp;1 # Q点の数<br />
+qpt2　0 0 0 # Gamma点<br />
+getwfk2 -1 # GET the wavefunctions from _WFK file<br />
+kptopt2 2# 時間反転対称<br />
+tolvrs2 1.0d-8 # SCF停止の基準<br />
+#以下は共通。キーワードの直後に数字が書かれない。<br />
+acell 7.267 7.267 7.267 # セルの長さの設定<br />
+ntypat 3 # 原子の種類<br />
+znucl 38 22 8　# 各原子種の原子番号<br />
+natom 5 # 原子数<br />
+typat 1 2 3 3 3 # Sr Ti O O O<br />
+xred # 各原子の相対座標<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+0.5 0.5 0.0<br />
+0.5 0.0 0.5<br />
+0.0 0.5 0.5　<br />
+ecut 40.0 # 平面波展開のカットオフエネルギー<br />
+ngkpt 6 6 6 # Monkhorst-Pack法によるk点（x, y, z方向のk点数）<br />
+--------------------------------------------------<br />
+<br />
+case.files (M点での不安定モードに対応する原子位置変位の計算）<br />
+--------------------------------------------------<br />
+case.in<br />
+case.out<br />
+casexo_DS3_DDB<br />
+foo<br />
+--------------------------------------------------<br />
+case.in (M点での不安定モードに対応する原子位置変位の計算）<br />
+--------------------------------------------------<br />
+eivec 1 # flag to turn on the analysis of phonon eigenvectors<br />
+nph1l 1 # number of q-points for phonon interpolation<br />
+qph1l 1 1 0 2 # list of q-points for phonon interpolation<br />
+--------------------------------------------------<br />
+<br />
+計算の実行は、anaddb &lt; case.files &gt; case.log<br />
+<br />
+Q. ABINITで特定の原子を固定した場合の構造最適化の方法を教えて下さい。<br />
+A. 下記のようにnatfixとiatfixを用いて下さい。<br />
+<br />
+case.in　（特定原子を固定した構造最適化）<br />
+--------------------------------------------------<br />
+ionmov 3 # 修正Broydenアルゴリズムを使用（全エネルギー考慮）<br />
+ntime 10 # Broydenタイムステップの最大値<br />
+tolmxf 5.0d-4 # 構造最適化での収束判定条件（Hartree / Bohr）<br />
+nsym 1 # 空間群 No.1<br />
+acell 4.73565 4.73565 47.25<br />
+angdeg 90 90 120<br />
+natfix 2 # 固定する原子種の数<br />
+iatfix 6 7 # 固定する原子の番号<br />
+ntypat 2 # 原子種の数<br />
+znucl 6 27 # 各原子種の種類を指定<br />
+natom&nbsp;7 # 原子数<br />
+typat 1 1 2 2 2 2 2 # C C Co Co Co Co Co<br />
+xred # 各原子の相対座標　または　xcart # 各原子の座標<br />
+0.0 0.0 0.4<br />
+0.3333 0.6666 0.4<br />
+0.3333 0.6666 0.488<br />
+0.0 0.0 0.56938<br />
+0.3333 0.6666 0.65076<br />
+0.0 0.0 0.73214<br />
+0.3333 0.6666 0.81352<br />
+nband&nbsp;36 # 考慮する状態（バンド）数<br />
+ixc 7 # 交換相関項の設定。Perdew-Wang 92 function<br />
+ecut 30.0 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+kptopt 1 # 1にすると手動でk点を設定することになる<br />
+ngkpt 6 6&nbsp;2 # セル内を6 x 6 x 2で分割する<br />
+nstep 40 # 最大イタレーション<br />
+toldfe 1.0d-6 # 収束判定条件（total energy) または toldff # 収束判定条件（atomic forces)<br />
+--------------------------------------------------<br />
+<br />
+Q. ABINITでチュートリアルの入力ファイルを書き直して実際の計算をする場合、どのくらいの精度に設定し直せばよいですか？<br />
+A. XtalEditのsample/ABINITの中には、入力ファイルの例が書かれています。この程度の精度になるように、チュートリアルの値を書き換えると良いと思います。（原子種や原子座標の設定は除く）<br />
+Ga2O3 : ionmov 2, ntime 200, acell 10.0531007914 10.0531007914 10.0531007914, tsmear 0.04, ixc 7, kptop 1, ngkpt 4 4 4, ecut 40.0, nstep 100, toldff 5.0d-5, tolmxf 5.0d-4, diemac 12.0<br />
+La2O3 : ionmov 2, ntime 200, optcel 0, tsmear 0.04, ixc 7, kptopt 1, ngkpt 4 4 2, ecut 40.0, nstep 100, toldff 5.0d-5, tolmx 5.0d-4, diemac 12.0<br />
+LaAlO3(Lattice optimize) : ionmov 1, dtion 100.0, vis 50.0, acell 11.322570056 16.039447611 11.401013107, ecut 50.0, kptopt 0 #(use nkpt.), nkpt 1, nstep 100, toldfe 1.0d-6, diemac 12.0<br />
+LaGaO3 (1000 k)&nbsp;: ionmov 2, ntime 200, acell 10.3651470474 14.6831709313 10.4369566349, tsmear 0.04, ixc 7, kptopt 1, ngkpt&nbsp;3 3 3, ecut 45.0, nstep 100, toldff 5.0d-5, tomlxf 5.0d-4, diemac 12.0<br />
+LaGaO3(super cell) : ionmov 2, ntime 200, optcel 0, acell 14.7093964442 14.6831710000, 14.7093964442, tsmear 0.04, ixc 7, kptopt 1, ngkpt 2 2 2, ecut 45.0, nstep 100, toldff 5.0d-5, tolmx 5.0d-4<br />
+SrO : ionmov 2, ntime 200, optcel 2, acell 6.8949883953 6.8949883953 6.8949883953, ixc 7, tsmear 0.04, kptopt 1, ngkpt 4 4 4, ecut 40, nstep 100, toldff 5.0d-5, tolmx 5.0d-4, diemac 12.0</nk|(h-e)<sup></p>
+
+<p>&nbsp;</p>
+
+<p>Q. TDDFTの入力ファイルを教えてください。</p>
+
+<p>A. チュートリアルには下記のようにあります。（見たところ、全てのnbandとboxcenter, nbdbufを消して、diemacとcommon dataの部分を計算したい系の情報に書き換えればよいようだ｛調査中｝）</p>
+
+<p>　case.in<br />
+&nbsp; --------------------------------------------------<br />
+&nbsp; ndtset 2 (SCFとTDDFTの二つのプロセスがあるという意味）<br />
+&nbsp; # data set 1 SCF<br />
+&nbsp; iscf1 5 # SCFの計算の設定<br />
+&nbsp; tolwfr1 1.0d-15 #<nk|(h-e)<sup>2|nk&gt;&nbsp; &lt;= 1.0e-15<br />
+&nbsp; nband1 5 # 考慮する状態（バンド）数<br />
+&nbsp; prtden1&nbsp;1&nbsp;# TDDFTの計算で用いるための電荷密度分布のデータを出力する<br />
+&nbsp; getwfk1&nbsp;0&nbsp;# no use of previously computed output wavefunction file appended with _DSx_WFK is done.<br />
+&nbsp; #data&nbsp;set&nbsp;2&nbsp;TDDFT<br />
+&nbsp; iscf1 -1&nbsp;# TDDFTの計算の設定<br />
+&nbsp; tolwfr2&nbsp;1.0d-9 #<nk|(h-e)<sup>2|nk&gt;&nbsp; &lt;= 1.0e-9<br />
+&nbsp; nband2 12 # 考慮する状態（バンド）数、非占有準位の数も入れる<br />
+&nbsp; getden2 1 # data set &quot;1&quot; からの電荷密度分布のデータを取得する<br />
+&nbsp; getwfk2 1 #&nbsp; data set &quot;1&quot; からの output wavefunction file を得る<br />
+&nbsp; #common data<br />
+&nbsp; acell 6 2*5 Angstrom # 6 x 5 x 5 の大きさの単位胞を設定<br />
+&nbsp; boxcenter 3*0.0d0 # 中心位置を設定（TDDFTでの計算のみに用いられる）。ディフォルトは 0.5 0.5 0.5<br />
+&nbsp; diemac 1.0d0 # For silicon, use 12.0 . A similar value is likely to work well for other semiconductors.&nbsp; For wider gap insulators, use 2.0 ... 4.0.&nbsp;ディフォルトは 10<sup sizcache="7" sizset="0"><span style="font-size: small;">6</span></sup> (metallic damping).<br />
+&nbsp; diemix 0.5d0 # model dielectric mixing factor.&nbsp; 0.0 から1.0の間の値。ディフォルトは 1.0<br />
+&nbsp; ecut 25 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+&nbsp; ixc 7 # 交換相関項の設定。Perdew-Wang 92 function<br />
+&nbsp; kptopt 0 # k点設定のオプション(この場合、1点計算になる）<br />
+&nbsp; natom 2 # 単位胞内に2つの原子を用いる<br />
+&nbsp; nbdbuf 0 # bufferとしてのバンドの数<br />
+&nbsp; nstep 25 # 最大イタレーション<br />
+&nbsp; ntypat 1 # 1つの原子種のみ用いる<br />
+&nbsp; znucl 7 # 窒素原子Nを1番に設定<br />
+&nbsp; typat 1 1 # N と N の座標を単位胞内で設定する<br />
+&nbsp; xcart -0.54885 0 0 0.54885 0 0 Angstrom # 座標の設定<br />
+&nbsp; --------------------------------------------------</nk|(h-e)<sup></nk|(h-e)<sup></p>
+
+<p>&nbsp;</p>
+
+<p>Q. GW近似での入力ファイルを教えてください。</p>
+
+<p>A. チュートリアルには下記のようにあります。擬ポテンシャルはLDA用のものが必要です。最後にpspncやfhiと付いたファイルや、Troullier-Martines pspやHamann-type, LDA CA Perdewangとファイルに書き込まれたものを用いて下さい。</p>
+
+<p>　case.files　<br />
+&nbsp; --------------------------------------------------<br />
+&nbsp; case.in<br />
+&nbsp; case.out<br />
+&nbsp; casei<br />
+&nbsp; caseo<br />
+&nbsp; caset../../Psps_for_tests/14si.pspnc<br />
+--------------------------------------------------　</p>
+
+<p>&nbsp;</p>
+
+<p>　case.in<br />
+--------------------------------------------------<br />
+nstset 3 #<br />
+# Definition of parameters for the calculation of the KSS file<br />
+nbandkss1 -1 # KSS fileにおけるバンド数に関する設定<br />
+nband1 9 # 占有と非占有のバンド数<br />
+# Calculation of the screening<br />
+optdriver2 3 # Screening calculation<br />
+getkss2 -1 # 前のデータセットからのKSS fileを取得<br />
+nband2 17 # screening 計算で用いるバンド数<br />
+ecutwfn2 2.1 # 波動関数のためのカットオフエネルギーを設定, <b>ecutwfn</b> is smaller than ecut, It would be more convenient to keep the default ecut value.<br />
+ecuteps2 3.6 # 誘電関数のためのカットオフエネルギーを設定, A value of <b>ecuteps</b> between 5 and 10 Hartree often leads to converged results<br />
+ppmfrq2 16.7 eV # Note that, if the plasmon-pole approximation is good, then, the choice of ppmfrq should have no influence on the final result.&nbsp; One should check whether this is the case.&nbsp; In general, the plasmon frequencies of bulk solids are of the order of 0.5 Hartree.<br />
+awtr2 0 # 時間反転対称性無しにAdler-Wiser expressionを用いる<br />
+#Calculation of the Self-Energy matrix elements<br />
+optdriver3 4 # Self-Energy calculation<br />
+getkss3 -2 # KSS file をデータセット1から得る<br />
+getscr3 -1 # SCR fileを前のデータセットから得る<br />
+nband3 30 # Self-Energy 計算で用いるバンド数<br />
+ecutwfn3 5.0 # It would be more convenient to keep the default ecut value.<br />
+ecutsigx3 6.0 # It would be more convenient to keep the default ecut value.<br />
+nkptgw3 1 # GW補正のためのk点の数<br />
+kptgw3 # k点の指定<br />
+-0.125 0.0 0.0<br />
+bdgw3 4 5 # 4から5のバンドに対してGW補正を計算<br />
+#Data common to the three different datasets<br />
+acell 3*10.217 # 10.217 x 10.217 x 10.217のユニットセル<br />
+rprim # primitive vectors<br />
+0.0 0.5 0.05<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+ntypat 1 #<br />
+znucl 14 #<br />
+#Definition of the atoms<br />
+natom 2 #<br />
+typat 1 1<br />
+xred 0.0 0.0 0.0 #<br />
+0.25 0.25 0.25<br />
+#Definition of the k-point grid<br />
+ngkpt 4 4 4 #<br />
+nshiftk 4 #<br />
+shiftk 0.5 0.5 0.5 #<br />
+0.5 0.0 0.0<br />
+0.0 0.5 0.0<br />
+0.0 0.0 0.5<br />
+istwfk *1 # This is mandatory in all the GW steps.<br />
+#Use only symmorphic operations<br />
+symmorphi 0 #<br />
+# Definition of the planewave basis set<br />
+ecut 8.0<br />
+# Definition of the SCF procedure<br />
+nstep 10 #<br />
+toldfe 1.0d-6<br />
+diemac 12.0 #<br />
+iscf 5<br />
+--------------------------------------------------</p>
+
+<p>上記は下記のようにして、ディフォルトの値を用いるようにしても、0.001 eVでGapの値が求められる。</p>
+
+<p># ppmfrq2 16.7 eV # Note that, if the plasmon-pole approximation is good, then, the choice of ppmfrq should have no influence on the final result.&nbsp; One should check whether this is the case.&nbsp; In general, the plasmon frequencies of bulk solids are of the order of 0.5 Hartree.</p>
+
+<p>#wtr2 0 # 時間反転対称性無しにAdler-Wiser expressionを用いる</p>
+
+<p>　</p>
+
+<p>case.files　<br />
+--------------------------------------------------<br />
+&nbsp; case.in<br />
+&nbsp;&nbsp;case.out<br />
+&nbsp; casei<br />
+&nbsp; caseo<br />
+&nbsp;&nbsp;caset<br />
+&nbsp; ../../Psps_for_tests/13al.981214.fhi<br />
+--------------------------------------------------　</p>
+
+<p>&nbsp;</p>
+
+<p>case.in<br />
+--------------------------------------------------<br />
+# Create the KSS file<br />
+kssform 1 # ディフォルトは1<br />
+nbandkss 30 # the KSS file でのバンドの数。GW計算で用いられる。<br />
+nband 6 # バンド数の設定<br />
+prtwf 0 # 波動関数のアウトプットは無し<br />
+# definition of occupation numbers<br />
+occopt 3 # フェルミディラック関数を用いる<br />
+tsmear 0.05 # フェルミ端のブロードニング（Hartree単位）<br />
+&nbsp;&nbsp; # Definition of the unit cell<br />
+acell 3*7.652 # 7.652 x 7.652 x 7.652のユニットセル<br />
+rprim # FCC primitive vectors<br />
+0.0 0.5 0.5<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+# Definition of the atom types<br />
+ntypat 1 # 1つの原子種のみ用いる<br />
+znucl 13 # 原子番号13、つまりAlを&quot;1&quot;に設定<br />
+# Definition of the atoms<br />
+natom 1 # 単位胞内で設定する原子の数<br />
+typat 1 # &quot;1&quot;（ つまりAl ）を単位胞内で用いる<br />
+xred 0.0 0.0 0.0 # &quot;1&quot;（ つまりAl ）の座標を設定<br />
+# Definition of the planewave basis set<br />
+ecut 8 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+# Definition of the k-point grid<br />
+ngkpt 4 4 4 # セル内を4 x 4 x 4で分割する<br />
+#64 k point<br />
+nshiftk 1 # k点のグリッドをシフトさせる数<br />
+shiftk 0.0 0.0 0.0 # k点のシフト。<br />
+istwfk 8*1 #<br />
+#Definition of the SCF procedure<br />
+nstep 50 # 最大イタレーション<br />
+toldfe 1.0d-8 # 収束判定条件（total energy)<br />
+prtvol 5 # 結果を出力するボリュームを制御する<br />
+enunit 1 # eV単位の固有エネルギーとなるように設定<br />
+--------------------------------------------------</p>
+
+<p>&nbsp;</p>
+
+<p>Q. DFT+Uでの入力ファイルを教えてください。</p>
+
+<p>A. チュートリアルには下記のようにあります。<br />
+擬ポテンシャルは paw が必要です。(ldaの記述があるものも必要か調査中）<br />
+<br />
+case.files<br />
+--------------------------------------------------<br />
+case.in<br />
+case.out<br />
+casei<br />
+caseo<br />
+casex<br />
+../../Psps_for_tests/Ni.atompaw.lda.paw<br />
+../../Psps_for_tests/08o-lda.atompaw　<br />
+--------------------------------------------------<br />
+<br />
+case.in<br />
+--------------------------------------------------<br />
+#Spin<br />
+nsppol 1<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 1 # 各原子の初期のスピン<br />
+0 0 -1<br />
+0 0 0<br />
+0 0 0<br />
+#Parameters<br />
+nstep 50 # 最大イタレーション<br />
+ecut 15 # 平面波展開のカットオフエネルギー<br />
+pawecutdg 30<br />
+iscf 17<br />
+toldfe 1.0d-5 # 収束判定条件（total energy)<br />
+nband 40 #考慮する状態（バンド）数<br />
+occopt 1<br />
+#Structural parameters<br />
+natom 4 # 原子数<br />
+ntypat 2 # 原子種の数<br />
+typat 1 1 2 2 # Ni Ni O O<br />
+znucl 28 8 # 各原子種の原子番号<br />
+xred 0 0 0 # 各原子の相対座標<br />
+0.0 0.0 0.5<br />
+0.5 0.5 0.25<br />
+0.5 0.5 0.75<br />
+acell 3*7.92 # セルの長さの設定<br />
+rprim 0.0 1/2 1/2<br />
+1/2 0.0 1/2<br />
+1.0 1.0 0.0<br />
+# Kpoint Grid<br />
+ngkpt 2 2 2 # セル内を2 x 2 x 2で分割する<br />
+chksymbreak 0 # The k point grid is not symmetric, but the calculations being for the ground-state, this is not a problem.<br />
+# LDA+U<br />
+usepawu 1 # FLL法だと1, AMF法だと2<br />
+lpawu 2 -1 # znucl での原子の順で入力。-1: U無し、2:d軌道にU, 3: f軌道にUを考慮<br />
+upawu 8.0 0.0 eV<br />
+jpawu 0.8 0.0 eV # upawu の10%の値を入力<br />
+--------------------------------------------------<br />
+<br />
+Q. 単位胞内の電子数を変えるには？<br />
+A. chagreを持ちいて下さい。<br />
+nelect = zion - charge になります。</p>
+
+<div>下記も参照してださい。</div>
+
+<div>http://www.abinit.org/doc/helpfiles/for-v7.10/input_variables/vargs.html#charge</div>
+
+<div><font id="yiv1166842798text">「To treat a system missing one electron per unit cell, set <b>charge</b>=+1.」</font></div>
+
+<div><font id="yiv1166842798text">＝「単位胞あたりで1電子欠けた系を取り扱うため、charge=+1を設定する」</font></div>
+
+<div>------------------------------------------------------------------------------</div>
+
+<p><br />
+------------------------------------------------------------------------------<br />
+■ WIEN2kでの入力ファイルのQ&amp;A<br />
+※ <a href="http://www.wien2k.at/reg_user/faq/">http://www.wien2k.at/reg_user/faq/</a> も見てみると良い。<br />
+<br />
+Q. 遠隔操作をする方法を教えて下さい。<br />
+A. Google Chron や Firefox、sufari の URLに WIEN2kがインストールされている計算機のIPアドレス:7890 と入力して下さい。例えば、XXX.Y.ZZ.AAA:7890 などです。これで上手く動作しない場合は WIEN2kがインストールされている計算機のTerminal でw2web を入力して得られる最後の4つの数字を 7890と取り替えて下さい。各種のデータの取得は、[Files&gt;&gt;]を開き、[show all files]で、得たいファイルの左側にあるフロッピーディスクのアイコンをクリックすると可能になります。余談ですが、RunSCFのところで、e-mailの行にチェックを入れて、e-mailアドレスを書き込むと計算が終了した時に連絡してくれるようになります。（どうしても動作しない場合は、WIEN2kがインストールされている計算機側からgoogleの検索画面などが見れるか調べて下さい）<br />
+<br />
+Q. WIEN2kでcore electrons leakと出力されます。どうすれば良いでしょうか？<br />
+A. Separation energyの値を変更します。ここでは価電子帯（Valence）と準内殻(semi-core)を分けるエネルギー位置を入力することになります。余談ですが、準内殻(semi-core)と内殻(core)を分けるのは、先に設定した値から- 3Ryした値になります。<br />
+<br />
+Q. WIEN2kでのRmtはどのように設定すれば良いでしょうか？<br />
+A. 隣接原子と重ならない限り、出来るだけ大きくとる。しかし、小さな値にしても精度的に論文で非難されるようなことはありませんが、計算時間が増大します。WIEN2k　HPのPAPERSから値を参考にするのも手でしょう。ちなみに、Rmtの単位はa.u.です。（Ca : 2.0, Cu : 1.9, Ti : 1.9, Ge : 1.9, Sn : 2.2, V : 1.9, O : 1.6程度の値だったりします）&nbsp;<br />
+&nbsp; 上記までで問題がある場合は、入力ファイルにおいて、結晶群、格子定数と角度、原子種、座標のみ入力し、あとはWIEN2k側で入力させるようにすると解決する場合があります。cifファイルを使って入力ファイルを作るのも手です。<br />
+※ Total DOSは変わりませんが、Partial DOSの大きさは、RMTで変わります。RMTを大きくすると、大きくした原子に対するPartial DOSが大きくなります。また、積算した電子数も大きくなります。<br />
+<br />
+Q. WIEN2kでクーロンや交換相関エネルギーを得るにはどうすればよいの？<br />
+A. WIEN2k GUI (web画面）で左側にある[Files&gt;&gt;]で[SCF files]を選択します。case.scfのファイルを見ると、下記のデータが書かれています。(case=ファイル名）<br />
+&nbsp;ENE :&nbsp;The total Energy.<br />
+&nbsp;SUM : The band-structure energy including the lowlying semicore state.<br />
+&nbsp;DEN :&nbsp;The potential density integrals are contains E-coul, Exc and kinetic E-correction.<br />
+となり、内殻のエネルギー&nbsp;core energy = ENE - SUM - DEN　となります。<br />
+WIEN2k_10では、case.in0でKXCを用いると、<br />
+&nbsp;DEN : coulomb, kinetic and exchange-correlation energy<br />
+を分離して得ることができます。<br />
+<br />
+Q. バンド分散用のk点やCIFファイルの利用、InterstitialのDOS表示、フェルミ面の可視化はどうすればいいの？<br />
+A. 下記のアフィニティサイエンス WIEN2k FAQをご参照ください。<br />
+<a href="http://www.affinity-science.com/wien2k/faq.html">http://www.affinity-science.com/wien2k/faq.html</a>　<br />
+<br />
+Q. バンド分散を描くときに任意のk点でプロットする方法を教えて下さい。<br />
+A. [Tasks &gt;&gt;] &rarr; [Bandstructure] &rarr; Generate k-mesh using Xcrysden を押して、得たいk点を次々と押していきます。Total number of k-points along the path: の右の空欄に選択したk点の初めから終わりまでを分割する数（全体のk点数）を入力して(k点数は入力した値に近い点数で最適なものに自動で書き換えられます)、ファイル名をxcrysden.klistとしてください（Generate k-mesh using Xcrysden の右に書かれているものをコピー&amp;ペーストするのが便利です）。create wien.klist_band の左を from xcrysden にして、create wien.klist_band を押します。再度&nbsp;Bandstructureの画面に入り、create wien.klist_band の左を from xcrysden にしてからは、いつも通りにcreate wien.klist_band のある行の次から、上から順にボタンを（濃い灰色の部分は除いて）押していきます。（つまり、[Tasks &gt;&gt;] &rarr; [Bandstructure] &rarr; Generate k-mesh using Xcrysdenを押したあとは、http://www.affinity-science.com/wien2k/faq.html の3.から始めればよい）<br />
+<br />
+Q. LDA+U またはGGA+Uの計算をしたいのですが、どのようにすればよいか教えてください。<br />
+A. 下記の文献[L1-L3]を見て下さい。3dを含んだ化合物に対して、3dに対してUを含んだ計算してみると良いでしょう。例えば文献[L4-L7]にあるような系で計算してみて、Uを導入することでギャップが大きくなるかを調べて、LDA+Uの計算に慣れてみるのも良いでしょう。<br />
+spを入れて非磁性の計算にし、SOとLDA+Uの計算をする場合のコマンド： runsp_c_lapw -so -orb<br />
+&nbsp; runsp_c calculates only spin-up vectors and copies them to spin-dn. Thus spin up and dn are exactly the same and any spin-moment is gone. (P.Blaha)<br />
+&nbsp; run_lapw -orb was NEVER possible (as far as I remember). You must use a spin-polarized setup and use runsp_c_lapw -orb (P.Blaha)<br />
+&nbsp; In order to speed up the runsp_c calculations, in the new version lapw2 -dn is not executed, but the necessary files are copied from the corresponding &quot;up&quot; files.<span style="font-family: monospace;">&nbsp; </span>Since lapwdm is usually so fast, this was not done for this step. However, in parallel mode it would not work this way.&nbsp; Therefore one has to make the same &quot;trick&quot; as with lapw2: comment the spin-dn execution and add two &quot;cp&quot; lines:<br />
+total_exec lapwdm -up $para<br />
+# total_exec lapwdm -dn $para<br />
+cp $file.scfdmup $file.scfdmdn<br />
+cp $file.dmatup $file.dmatdn<br />
+(P.Blaha)<br />
+&nbsp; Please note, we do not recommend to use -orbdu .&nbsp; Did you run initso_lapw (with spin-polarization !!) and accepted eventually the newly generated struct file ???&nbsp; SO + spin-plo. may lower symmetry. (The &quot;ipass&quot; message indicates to me that you still have very high symmetry) (P. Blaha)<br />
+[L1] <a href="http://www.apph.tohoku.ac.jp/kiso/files/0803_magne.pdf">http://www.apph.tohoku.ac.jp/kiso/files/0803_magne.pdf</a>&nbsp;<br />
+[L2] <a href="http://aperonya.blog115.fc2.com/blog-category-3.html">http://aperonya.blog115.fc2.com/blog-category-3.html</a><br />
+[L3] <a href="http://www.nims.go.jp/cmsc/staff/arai/wien/ldau.html">http://www.nims.go.jp/cmsc/staff/arai/wien/ldau.html</a><br />
+[L4] <a href="http://www.mizuho-ir.co.jp/solution/research/semiconductor/nano/titania2/index.html">http://www.mizuho-ir.co.jp/solution/research/semiconductor/nano/titania2/index.html</a><br />
+[L5] <a href="http://www.fplo.de/workshop/ws2008/koepernik2_fplo2008.pdf">http://www.fplo.de/workshop/ws2008/koepernik2_fplo2008.pdf</a><br />
+[L6] <a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf</a> での Exercise 6: を試してみる。<br />
+[L7] <a href="http://www.wien2k.at/reg_user/textbooks/Constraint_U.pdf">http://www.wien2k.at/reg_user/textbooks/Constraint_U.pdf</a><br />
+[L8] <a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/ldau.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/ldau.pdf</a>　<br />
+[L9] <a href="http://cometscome.blog76.fc2.com/blog-entry-1009.html">http://cometscome.blog76.fc2.com/blog-entry-1009.html</a><br />
+※ Memo（他者から収束したファイルを貰った場合）<br />
+1. Expert のモードで select spin-polarizedにチェックを入れて、下にある「CHECK BATCH VALUES」を押す<br />
+2. initso_lapw で x symmetso -c から始める<br />
+<br />
+Q. LDA+U での計算が上手く収束しません。どうすればよいでしょうか？<br />
+A. LDA+Uは計算が不安定になりやすくなります。LDAでSCF計算を行った後に、Uを導入した計算をすると良いでしょう。それでも駄目なときは case.in1のLAPWのエネルギー値を変えます。<br />
+※ 幾つか計算した後に、k点数を変えたい場合は、[Utiles] -&gt; [initso_lapw]を押して、[kgen] や [kgen -so]でk点数を変えて下さい。<br />
+※ Uを入れた計算はHF近似の計算も入ることになりますから、複数の解が得られることもあります。経験的計算にもなりますので、物理的な考察も大切になります。浜田典昭「固体物理 39」(2004) 743. は読んでおくと良いでしょう。<br />
+1. SCF calculation.<br />
+2. Copy from case.inorb and case.indm or case.indmc in SRC_templates to them in calculation directory.<br />
+3. change from case to calculation directory name.<br />
+4. rewrite them.<br />
+5. check a box for orbital pot(LDA+U), It-number 1 (1 shot calculation case) and&nbsp; spinorbit (+SO case), then start SCF cycle.</p>
+
+<p><br />
+Q. WIEN2kで電場や磁場を掛けた計算方法を教えて下さい。<br />
+A. zig-zag potentialの概念図は[10]を参考にするとよいでしょう。電場の場合は、case.in0の4行目を書き換えます。磁場の場合はcase.inorbを書き換えます。（編集中）<br />
+J. Stahn&nbsp;et al., Phys. Rev. B 63 (2001) 165205.<br />
+&nbsp;: <a href="http://prb.aps.org/abstract/PRB/v63/i16/e165205">http://prb.aps.org/abstract/PRB/v63/i16/e165205</a> （電場）<br />
+<br />
+Q. Spin orbital coupling での計算をしたいのですが、case.inso での NX のある行はどのようにすればよいのですか？<br />
+A. 通常はNX がある最初の行のNX を 0 にて、次の行を消してください。もし、semi-core の範囲（ディフォルトでは-6 Ry から -3 Ry）に p1/2の軌道がある場合は、最初の行のNXへそれに対応する原子の番号（StructGen や DOSと同じ）の数を入力して、NXの数だけ NX1の行をコピー&amp;ペーストして、NX1に原子の番号（StructGen やDOS）を入力します。<br />
+<br />
+Q. WIEN2kを用いてラシュバ効果の計算をしたいのですが、どのように設定すればよいでしょうか？<br />
+A. spinを入れた計算でもvalence bandではscalar relativesticの計算となるので、スラブモデル（真空層を入れたモデル）で計算し、upとdown spinでバンド構造が異なるかを調べてみてください。spin orbit couplingを入れて計算をしたい場合は、[run SCF]&rarr;Optionsでのspinorbitにチェックを入れます。（semi-core｛ディフォルトでは-6 Ry から -3Ry｝の範囲にp1/2があり、相対論用にp1/2を入れた結果を議論したい場合{結果がより実験値に近づく場合もあるかもしれない}は、case.insoでNXのところに計算に入れる数を入力します。次に、NX1に原子に付けられた番号を入れます（この行の部分を、NXで指定した数だけ増やします）[11-13]）<br />
+<br />
+Q. WIEN2kを用いてEELSの計算をしたいのですが、特定の方位での遷移確率を調べるにはどうすればよいでしょうか？<br />
+A. TELNESをExpert modeにします。InnesGenTM for TLNESがでますので、Orientation sensitive : のところにチェックを入れて、計算させたい方位を指定すればよいです。case.incで計算させたい原子の内殻をOCCUPを2から1にして内殻空孔を導入します。そして、case.in2のNEの値を一つ増やします。case.in1で1.5を2.5や3にします（非占有準位の計算範囲を増やす）。上記は[Remove 1 core electron, add 1 electron to conduction band]での計算となる。さらに、TELNESで x lapw1 -c の計算の後に、case.in2のNEの値を元に戻して、続けて計算する方法もある[14]。この他に、内殻空孔を入れない方法（sudden approximaiton）や、原子番号がZ+1である原子に入れ替えて計算する方法（Z+1 approximation)などもあります[15]。<br />
+Expert modeのさせ方：WIEN2kのGUIで左の欄にある[Configuration]を押してELNES expert mode にチェックを入れ、Save these values を押します。WIEN2kのソースファイルを解凍したフォルダで、SRC_lapw2のフォルダにあるmodules.F をkwriteやemacs、vi などで開いて LXDOS = 1 を LXDOS = 3 にして save します。./siteconfig_lapw で r を押して、s を選択し、lapw2 と入力します。<br />
+<br />
+Q. スーパーセルで元素置換を行った系の計算をしたいのですが上手くいきません。<br />
+A.1. &nbsp;文献[9]を参考にスーパーセルを作成して下さい。その後、置換する元素が、置換する前の元素よりも大きなZ番号を持つ場合は、格子定数を大きめに設定して計算して下さい（例えば、5%程度）。計算が収束したら、構造最適化を行って、最適な格子定数を決定します。</p>
+
+<p>A.2. &nbsp;下記に手順を示します。<br />
+&nbsp; 1)&nbsp;[ single&nbsp;prog. ] &rarr; [ Other&nbsp;programs ] &rarr;&nbsp;[ supercell ]&nbsp;にチェックを入れ[ Ececute !]を押す。<br />
+&nbsp;&nbsp;2)&nbsp;Number&nbsp;of&nbsp;cells&nbsp;in&nbsp;x&nbsp;direction : に x 方向に拡張したい数を入力<br />
+&nbsp;&nbsp;&nbsp; y, z も同様に行い、 一番下にある [Ececute !] を押す。<br />
+&nbsp;&nbsp;&nbsp; ( [ Enter your target lattice type: ] も選択した方が良いかもしれない）<br />
+&nbsp;&nbsp;3) case_super.strcut という名称のファイルができる。このファイル以外を削除し、case_super.strcut を case.struct という名称に変える。<br />
+&nbsp; 4) [StructGen<sup>TM</sup>]にて、置換したい部分の原子名とZを変える。<br />
+&nbsp; 5) [StructGen<sup>TM</sup>] &rarr; [set automatically RMT and continue editing] &rarr; [Resude RMTs by %]&nbsp;&rarr; [ do it ]<br />
+&nbsp;&nbsp;6)&nbsp;&nbsp;[ Save&nbsp;structure&nbsp;] &rarr;&nbsp;[ save file and clean up ]<br />
+&nbsp; 7) 通常と同じように進めていき（[ initialize calc. ]にて上から順にボタンを押していく）、[ Use new struct-file ? ] では No, [ Use strcut-file generated by sgroup ? ] で Yes を選択し、x symmetry に進む。<br />
+&nbsp; 8) 後は通常通り進めて行けばよい。<br />
+A.3. スーパーセルの構造を計算して、VESTAでP1にて構造を入力して、確認し、cif データとして書き出して、WIEN2kに読み取らせることもできる。この場合、3)　の手順から進めればよい。</p>
+
+<p><br />
+Q. Use struct-file generated by sgroup? (Usually No, unless WARNING appeared above)ではどのようにすればよいでしょうか？<br />
+A. ここでYesを選択すると、WIEN2k側でより対称性を良くした構造の入力ファイルを作成してくれます。しかし、適切な構造の入力ファイルとならないこともあるので、通常はNoを選択して下さい。（スーパーセルを用いる場合などでは、Yesを選択して、XCrySDenなどで構造を確認して問題が無ければ、計算を走らせてみることもお勧めします。上手く入力ファイルが作成されれば、計算に掛かる時間をかなり短くできます。この場合、スーパーセルで置換した系を計算するのに格子定数を実験値をより大きめに設定しなくてもエラー無く収束した例が報告されています）<br />
+<br />
+Q. 構造最適化が上手く動きません。<br />
+A. [StructGen<sup>TM</sup>] &rarr; [set automatically RMT and continue editing] &rarr; [Resude RMTs by %]の部分を1から5程度の値を入れて計算させて下さい。optimizeで For option 1-4 の下の欄に体積変化率を入力します。edit optimize.job で必要とするコマンドの#を消します。磁性の有無や反転対称性の有無などです。最適化が終われば、E vs. volume から、lattice parameter がbohrとAng(オングストローム)で表示されます。<br />
+<br />
+Q. 原子位置の最適化を行いたいのですがどうすればよいですか？<br />
+A. RMTを小さくし、k点を1にして、[mini.positions] を押して下さい。[Prepare commandline] のボタンを押します。[start it ...]のボタンを押します。<br />
+&nbsp; 「これでも時間が掛かりそうなときは、実験などから真の値に出来るだけ近い構造を初期値として入力し、SCF計算します。DOSとバンド図などを得ておきます。そして、新しくディレクトリを作り直し、RmtKmaxを5～6の値にしたり（Cutoff =13.6 * (RmtKmax / Rmt ) ^2 [eV]となるので必要なカットオフのRmtKmaxにする ）、x lstart での core と valence band の区切りを -6.0 Ry から -3.0 などにします。このとき x lstart に戻されますが、無理やり次のボタンに移ってください。前に得られた結果を吟味しながら、case.in1 での El やエネルギー刻みを設定します。case.in2 の最後にあるGmaxも変えます（GMAXは電荷&rho;とポテンシャルvを表現するのにどの程度まで精度が欲しいかに関連する。<a href="http://arxiv.org/pdf/1103.4466.pdf">http://arxiv.org/pdf/1103.4466.pdf</a>に詳細な式がある）。そして、k点を1にして、[mini.positions]で計算していきます。構造最適化の後にk点を大きくして、構造最適化前と後を比べます。物理的に意味のある結果になっているかしっかりと他の実験結果と吟味します」（&larr;この記述は確認中）<br />
+<br />
+Q. SCF計算を途中で止めるにはどうすればよいですか？<br />
+A. [Utils.&gt;&gt;]&rarr;[stop SCF]か[stop mini]で止めることが可能です。再度計算させるには、[Execution &gt;&gt;]&rarr;[run SCF]&rarr;[Remove the files case.broyd[1][2]]に対応する部分を選択して、再度[run SCF]を押して再び計算を始めることができます。計算の経過は[Utils.&gt;&gt;]&rarr;[show dayfile]で知ることができます。<br />
+<br />
+Q. DOSやバンド図を描けないのですが、どこか間違っているのでしょうか？<br />
+A. 濃い灰色の部分にあるボタンを押さずにDOSやbandstructureなどの計算をしてみて下さい。ただし、bandstructure で各原子の軌道を計算したい場合は濃い灰色の部分の上から二番目のボタン[x lapw2 -band -qtl -p]を押して下さい。そして、edit case.insp でjatomとjtypeのある行の左から一番目と二番目をDOSのときと同じように表示させたい原子と軌道の番号を書き入れます。<br />
+<br />
+Q. DOS を計算したときに&#39;NaN&#39;と表示されます。どうすればよいでしょうか？<br />
+A. 下記のHPに解決方法が記載されています。<br />
+<a href="http://zeus.theochem.tuwien.ac.at/pipermail/wien/2011-September/015419.html">http://zeus.theochem.tuwien.ac.at/pipermail/wien/2011-September/015419.html</a><br />
+<br />
+Q. DOSの表示範囲を変えたいのですが、どのようにすればよいでしょうか？<br />
+A. case.in1_st または case.in1 でのEMAXの部分を大きくして run_SCF をして下さい。続いて、DOSの edit.int でもEMAXの部分があります。<br />
+<br />
+Q. DOSの単位は何ですか？<br />
+A. case.structに記載されている原子の数だけ計算されます。代表的な原子座標を記述すると等価な原子が自動的に記載されていることが分かります。その数の合計と各原子でのDOSが一致します。そのため、case.strcutに記載されている等価な原子の数でDOSを割ることで、単位は[Density of states / eV. atom] になります。同様に、Total DOS でもcase.structに記載されている原子数で割り[Density of states / eV. atom]にします。[Density of states / eV. unitcell]ではないので注意してください。<br />
+　Total DOS = &Sigma; Partial DOS + interstitial DOS （case.struct の Inewuivalent Atoms と edit case.int のAtomが対応）<br />
+　Total DOS = Total DOS (up) + Total DOS (down)<br />
+※ 単位胞内での原子数が分かっている場合は、Total DOSが下記のようにして出力されます。<br />
+1) BCC： 全原子＊1/2個 （case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を 2 倍すると [Density of states / eV. unitcell] になる。<br />
+2) FCC： 全原子＊1/4個 （case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;4 倍すると [Density of states / eV. unitcell] になる。<br />
+3) HCP： 全原子（case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;1 倍すると [Density of states / eV. unitcell] になる。<br />
+4) SC： 全原子（case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;1 倍すると [Density of states / eV. unitcell] になる。<br />
+※ case.dos1(Ryでの出力。integrated DOSも出力される)<br />
+　Ry &rarr; eVへの変換：&nbsp;(Energy - EF)*13.6058, DOS / 13.6058 とする。<br />
+　EF値は、case.dos1の二行目の一番最初に記載されている。<br />
+※ case.dos1eV（eVでの出力。EFが0の位置に自動的に調整されている）<br />
+<br />
+Q. バンド図を描く場合にエラーがでます。<br />
+A. Insert correct EFのところに、xxxxとある部分があります。そこに、右上に書かれている数値を入力してください。データはspaghetti_eneとして出力されます。OpenOfficeなどのspreadsheetでスペースなどで区切って、最後の2列（最初の行が空白の場合はそれを削除する）をigorなどのプロットソフトにコピー&amp;ペーストして下さい。全く別の話ですが、DOSを計算した場合の結果はdos1eVとして出力されます（dos2eVやdos3eVが存在する場合はそこにもデータが存在しています）。ちなみに、PDOSの単位はDOS / eV.atomです。<br />
+<br />
+Q. バンド図を描いた後に、DOSやSCF計算をするにはどうすればよいですか？<br />
+A. [Files &gt;&gt;]&rarr;[def files]&rarr;[lapw1.def]で、case.klist_band の部分を case.klist に書き換えます。<br />
+<br />
+Q. 不要になったセッションを削除したいのですが。<br />
+A. [Session Mgmt. &gt;&gt;]&rarr;[delete session]で削除してください。また、データが格納されているファイルも残っているので、それも削除してください。余談ですが、[change session]で他のセッションに移動できます。<br />
+<br />
+Q. 単位胞内の原子数を知りたいのですが。<br />
+A. case.struct の MULTI の総和を求めてください。その総和に係数を掛けます。case.structの二行目の最初に PやF, B, CXY, CYZ, CXZ, R,&nbsp;H&nbsp;などの記述があると思います。係数はP=1, F=4, B=2, CXY=1（調査中）, CYZ=1（調査中）, CXZ=1（調査中）, R=3（調査中）, H=1（調査中）となります。文献[17]に他のコードでの記載があります。<br />
+<br />
+Q. OpenMP での並列計算ができないのですが&hellip;&hellip;。<br />
+A. Linux 上でcd $HOME と入力して、&nbsp;[view] &rarr; [Show Hidden Files]&nbsp;を選択すると .bashrc というファイルが見つかります。export OMP_NUM_THREADS=1 で数値を並列計算させたいスレッド数に変えてください。下記のk点並列やMPI並列の設定を各ディレクトリで設定するのが面倒な場合はOSが認識している最大のCPU数を設定しておけば良いでしょう。（慣れてきたらk点並列などを試してみましょう）<br />
+<br />
+Q. 並列計算ができないのですが&hellip;&hellip;。<br />
+A. 並列計算には、k点並列とMPI並列の二つがあります。k点並列の方が計算が早く済むことが多いですから、k点並列を用いることをお勧めします。<br />
+[Utiles&gt;&gt;] &rarr; [ edit .machines ] の最後を書き換えます。自動的にWIEN2k側である程度入力ファイルが作られます。それを参考に、k点並列とMPI並列で、下記のように書き換えます（k点並列の場合は特に大幅な変更はないでしょう）。<br />
+※ 簡単な系で、下記にあるk点並列の方法で、どれが計算速度が速いかを調べてみてください。<br />
+◇ OpenMP並列（4 core の場合）<br />
+.bashrc&nbsp;で&nbsp;&nbsp;export OMP_NUM_THREADS=4 にする。<br />
+以上の設定をして、run SCF で計算します。<br />
+◇ k点並列計算の場合（4 core の場合）（最初の数値がk点を割り振る比率）<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; granularity:1<br />
+&nbsp; extrafine:1<br />
+※ .bashrc　で&nbsp;&nbsp;export OMP_NUM_THREADS=1 か &nbsp;export OMP_NUM_THREADS=2 にする。（未確認）<br />
+以上の設定をして、run SCF でのOptions でparallel1にチェックを入れます。<br />
+◇ k点並列計算の場合（4 core の場合）（最初の数値がk点を割り振る比率）（未確認）<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; granularity:1<br />
+&nbsp; extrafine:1<br />
+※ .bashrc&nbsp;で&nbsp;&nbsp;export OMP_NUM_THREADS=1 か &nbsp;export OMP_NUM_THREADS=2 にする。<br />
+以上の設定をして、run SCF でのOptions でparallel1にチェックを入れます。<br />
+◇ k点並列計算の場合（4 core 8 スレッド の場合）（最初の数値がk点を割り振る比率）（未確認）<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; granularity:1<br />
+&nbsp; extrafine:1<br />
+※ .bashrc&nbsp;で&nbsp;&nbsp;export OMP_NUM_THREADS=1 とする。<br />
+以上の設定をして、run SCF でのOptions でparallel1にチェックを入れます。<br />
+◇ k点並列計算の場合（6 core&nbsp;12 スレッド の場合）（最初の数値がk点を割り振る比率）（未確認）<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp;&nbsp;1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; 1:localhost<br />
+&nbsp; granularity:1<br />
+&nbsp; extrafine:1<br />
+※ .bashrc&nbsp;で&nbsp;&nbsp;export OMP_NUM_THREADS=1 とする。<br />
+以上の設定をして、run SCF でのOptions でparallel1にチェックを入れます。<br />
+◇ MPI並列計算の場合（4 core の場合）<br />
+&nbsp; 1: localhost:4<br />
+&nbsp; lapw0: localhost:4<br />
+&nbsp; granularity:1<br />
+&nbsp; extrafine:1<br />
+以上の設定をして、run SCF でのOptions でparallel1にチェックを入れます。<br />
+文献：&nbsp;&nbsp;<a href="http://www.hpc.co.jp/assets/files/Wien2kManual.pdf">http://www.hpc.co.jp/assets/files/Wien2kManual.pdf</a><br />
+※ BTOなどで購入したPCを複数用いて並列化させる場合は、NFSの設定が必要になります。<br />
+※ スレッド：参考文献：日本分光会、『分光測定入門シリーズ3 分光装置Q&amp;A』、講談社サイエンティフィック<br />
+<br />
+Q. 他のPCとでの並列計算ができないのですが&hellip;&hellip;。<br />
+A. NFSの設定が必要です。そして、intel fortran でのコンパイルオプションで -i-static を忘れないように入れておいて下さい。<br />
+<br />
+Q. XMCDの入力ファイルにおいて、WIEN2kのマニュアルと論文[16]での記述が異なっているのですが、どちらが正しいのですか？<br />
+A. Blaha教授に聞いたところ、論文に書かれている入力ファイルの方が正しいとのことです。コンパイルに不安がある場合は、論文と同じ結果が得られるかどうか試してみるとよいでしょう。<br />
+<br />
+Q. WIEN2kのワークショップに参加できなかったのですが、独学する方法はありますか？<br />
+A.&nbsp;下記のHPにおけるExercises_11.pdfを参照してみて下さい。<br />
+WIEN2k lecture note:&nbsp;<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/</a><br />
+また、左欄にあるWIEN2kの中頃から後半を参照してみてください。<br />
+<br />
+Q. 初期構造をLow spin配置にして計算する方法を教えてください。<br />
+A. Initial calc. での instgen_lapw にて、selected blowの欄にチェックを入れます。各原子に記入されているuをnに変えます。こうすると、case.inst にて、up と downが同じ数だけ配置されるようになります。もし、これで計算してもLow spinの状態にならないときには、その物質がhigh spin で安定であると考えられます。<br />
+<br />
+Q. case.in1にあるEl や de の入力について説明してある Userguide にある Fig.7.1 はどのように解釈すれば良いのでしょうか？<br />
+A. 図中のul(r,El)はradial function（動径分布関数）です。例として、各軌道が混成し、軌道混成を形成すると、図7の右のDOSのような結果が得られます。エネルギーの高い反結合軌道エネルギー（Etop）をはじめに探して、少しずつ下に向かい、結合軌道のエネルギー(Ebottom)を見つけます。EtopとEbottomが見つかれば、その平均をとって、その混成軌道に前よりもより適した動径分布関数のエネルギー El を見つけます。<br />
+&nbsp; WIEN2kではRmt を使いましたね。平面波だけで計算すると多くの平面波が必要になり、さらに時間も掛かるので、Rmt の距離よりも内側では内殻用の軌道（例えば、sやp軌道などの動径関数を用います）を用いることで（Rmtの外側で使われる）平面波を減らして計算時間を短縮します。Fig. 7の左でRmtまでが記述されているのは、動径分布関数がそこで終わるからです。その先は平面波で滑らかに繋がるようにしています。<br />
+　EtopとEbottomを探すエネルギー刻みが 0.000 の場合には、ElがEF-0.2 または EF+0.2 した値に設定されます。<br />
+　ゴーストバンドを避けたい場合には、LAPWではなくAPW(局在化している3dや4f電子だけをAPW)にしたりすることも考慮してみてください（ただし、時間が掛かるようになります）。<br />
+※ LAWPを使うときは RKmax=6～10, APWを使うときはRKmax=5～9でよい。[x1]<br />
+※ loとLOともにローカルオービタル。<br />
+※ APW+loでは interstital region で APW -&gt; PW に、LAPW+LOでは interstital region でLOが消える。APW+loはLAPW+loと併用して使われたりする。<br />
+※ APW+lo: ゴーストバンド出ない（と言われる）。エネルギー的に非線形の基底関数になるので永年方程式を解くのが大変。<br />
+※ エネルギー的に線形化するようにしたのがLAPW+LO（よく使われる）。もし、ゴーストバンドが出現していたら、バンド分散を描くと直線になっており、さらに、ゴーストバンドに電子が詰められるので、本来よりもEFの位置が下がる。それでゴーストバンドが発生しているかを判断してみるとよい。正しいエネルギー位置を設定すると問題が解消される。<br />
+※
+<style type="text/css">P { margin-bottom: 0.21cm; }
+</style>
+マフィンティンの内側では、これら双方とも局所的な球面関数で基本的には同じ手法で展開される。各原子での角運動量においては、動径部分が一つかいくつかの動径部分で展開される。<br />
+<br />
+Q. case.inc とcase.in1 の違いや詳細を教えて下さい。<br />
+A. case.inc は 内殻の軌道に関する情報を記述します。case.in1 はRmt内でcoreよりも上のエネルギー、つまり、semi-core や valenceに関係する軌道を記述します。case.in1の最初の行ではEFの値がRy単位で記述されています。例えば、Tiの3sが-3.00と記述されていたら、-3.0&nbsp;- EF = -3.0&nbsp;- 0.5 = -3.5 Ry = -3.5*13.6 eV = -47.6 eV に Ti 3s の状態がDOSとして現われると初期では考えることになります。SCF計算のサイクル中に、上の質問に書いてある通り、EtopとEbottomを探して、その平均を Elにします。case.in1のEFは各サイクルで得られたEFの値が入れられます。計算値や実験値を参考にしてEFとElを近い値にしておくと収束が速くなる場合もあります。<br />
+<br />
+Q. APW+lo の設定方法を教えてください。<br />
+A. case.in1 にあるCONTの右側の数値が1であればAPW（0だとLAPW）です。(L)APWでのloは第2項の値が負になっていることが多いです。ディフォルトの場合、APW+loになっていると思います。case.in1を確認してみて下さい。<br />
+<br />
+Q. LOPW(&#39;LOPW&#39; - Plane waves exhausted)のエラーの対処方法を教えて下さい<br />
+A. RKmaxを増やしてください。それでもだめな場合は、下記のように.in1でdバンドを除いてみます。</p>
+
+<div>----------------------------------<br />
+WFFIL&nbsp; EF= 0.50000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (WFFIL, WFPRI, ENFIL, SUPWF)<br />
+&nbsp; 7.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 4 (R-MT*K-MAX; MAX L IN WF, V-NMT<br />
+&nbsp; 0.30&nbsp;&nbsp;&nbsp; 4&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GLOBAL E-PARAMETER WITH n OTHER CHOICES, global APW/LAPW)<br />
+2&nbsp;&nbsp; -1.83&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.002 CONT 0<br />
+2&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 0<br />
+0&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+1&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1</div>
+
+<div>----------------------------------</div>
+
+<div>を下記のようにする。</div>
+
+<div>----------------------------------<br />
+WFFIL&nbsp; EF= 0.50000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (WFFIL, WFPRI, ENFIL, SUPWF)<br />
+7.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 4 (R-MT*K-MAX; MAX L IN WF, V-NMT<br />
+0.30&nbsp;&nbsp;&nbsp; 3&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GLOBAL E-PARAMETER WITH n OTHER CHOICES, global APW/LAPW)<br />
+2&nbsp;&nbsp; -1.83&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.002 CONT 0<br />
+0&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+1&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+----------------------------------
+<div><a href="https://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg08438.html" rel="nofollow" target="_blank">https://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg08438.html</a></div>
+
+<div><a href="http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg05748.html" rel="nofollow" target="_blank">http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg05748.html</a></div>
+
+<div><a href="http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg03910.html" rel="nofollow" target="_blank">http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg03910.html</a><br />
+<br />
+Q. ゴーストバンド（ &#39;l2main&#39; - QTL-B.GT.15., Ghostbands, check scf files ）のエラーの対処方法を教えてください.<br />
+A.&nbsp;<a href="http://www.wien2k.at/reg_user/faq/qtlb.html"><font color="#0000ff">http://www.wien2k.at/reg_user/faq/qtlb.html</font></a>&nbsp;に対処方法が記載されています。<br />
+※ 要点としては、case.in1 または case.in1c で Eパラメーターの値(ディフォルト 0.30 [Ry])をEFの値から0.2ほど小さい値に変えて再度計算させます。それでも駄目であれば、Eパラメーターを手作業で少しずつ変えていきます（それはエラーの生じたところから行っていけばよいと思います｛私の経験｝）。LOを入れた部分でエラーが出ている場合は、どちらかの軌道の EパラメーターをEFに近づけるか、LOを消去してしまいます。<br />
+1. case.scf2 ファイルを見る。<br />
+&nbsp; 下記に似た表示があることが分かる。<br />
+:FER&nbsp; : F E R M I - ENERGY(TETRAH.M.)=&nbsp;&nbsp; 1.01765<br />
+EFは 1.01765 Ry となったことが分かる。そして、<br />
+&nbsp;&nbsp;&nbsp;&nbsp; QTL-B VALUE .EQ.&nbsp; 120.91788&nbsp;&nbsp; in Band of energy&nbsp;&nbsp;&nbsp; 1.12346&nbsp;&nbsp; ATOM=&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; L=&nbsp; 2<br />
+ここで、energy 1.12345 Ryで、ATOMが1番、軌道l=2で問題が生じていることを示している。<br />
+2. case.scf1 ファイルを見る。<br />
+&nbsp; :E2_0001: E( 2)=&nbsp;&nbsp;&nbsp; 0.3000&nbsp;&nbsp; E(BOTTOM)=&nbsp;&nbsp; -0.066&nbsp;&nbsp; E(TOP)= -200.000<br />
+などの記述がある部分ところを見る。これは、この軌道のE(BOTTOM)の軌道は見つかっているが、E(TOP)が見つかっていないことを示している（-200.000で計算をストップした）。<br />
+3.&nbsp; case.in1 を修正する。<br />
+&nbsp; case.scf2 で記述されいたATOMの設定を見ると下記に似た形になっている。1<br />
+0.30&nbsp;&nbsp;&nbsp; 6&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (GLOBAL E-PARAMETER WITH n OTHER CHOICES, global APW/LAPW)<br />
+0&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+（省略）<br />
+2&nbsp;&nbsp;&nbsp; 0.80&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1<br />
+&nbsp;&nbsp;GLOBAL E-PARAMETER&nbsp;の行以降は次の順番で記述されている。<br />
+軌道ｌ、RmtでのAPW/LAPWの軌道lのエネルギー（=El）、Rmtでの最適なエネルギーを探すためのエネルギー刻み&nbsp;（=de）、Rmtでの最適なエネルギーを探すのに必要なEtop（軌道lが関連するバンドの上端）かEbottom（バンドの下端）が見つからなくても続けるか？、1=APW か 0=LAPWか？<br />
+&nbsp; 対応するATOMと軌道lに対する Rmtでのエネルギーを EF に近い値にする。つまり、下記のようにする。<br />
+　E( 2) を正確な値に設定する（FEから0.2を引いた値にするか、試行錯誤する）。<br />
+　他の全ての軌道をディフォルトの 0.30 から、FEの値 から0.2 を引いた値の0.8などにしてEFの値に近づける。（※ 問題が生じた軌道の行は、QTL-Bの行で記述されている値 に近い値にする）<br />
+・筆者の経験<br />
+&nbsp; ATOM=4 L=1 でエラーが出ており、case.in1 では下記のように書き換えた。<br />
+1&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000 CONT 1　&rarr;&nbsp;1&nbsp;&nbsp;&nbsp; 0.50&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.001 CONT 1<br />
+&nbsp; 最初のcycleで発生し、初期値が EF=0.5 なので、ATOM 4 の l=1軌道のエネルギーをEF近傍の値となる（というよりもほぼEFと同じ値） 0.5 に設定した。最適なAPW/LAPWのRMTでのエネルギー(El)を探すためエネルギーステップを 0.001 と小さい値にした。これらのパラメーターを書き換えた後は、RKmax 5.0から7.0までの小さい値にし、k点を1や8にして、cycleが走るかを調べ、上手く動作したら本格的にRKmaxやk点を大きくしていけば良い。上手くいかなければ、 El と de を少しずつ変えて試行錯誤する。<br />
+※ 上記の他、私の経験では、ゴーストバンドが表示された場合、&nbsp;例えば、&rdquo;QTL-B VALUE .EQ.&nbsp; 120.91788&nbsp;&nbsp; in Band of energy&nbsp;&nbsp;&nbsp; -2.12346&nbsp;&nbsp; ATOM=&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp; L=&nbsp; 2&rdquo;（上記のゴーストバンドのエラーの対処方法を参照）と表示された場合に、case.in1または case.in1c でそれに対応する原子の軌道のEパラメーターに Band of energy に近い値を指定すると上手く計算が収束してくれたことがある。例えば、case.in1c で &quot;2&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot;&nbsp;-&gt;&nbsp; &quot;2&nbsp;&nbsp;&nbsp; -2.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot; と変更したりする。それに加えて、単位胞の中で原子番号が似たものは全て同じ様に値を変更してみるとよい。<br />
+※ WIEN2k_13, ZrCoBiではCo l=0, 1でゴーストバンドのエラーが出た。対処方法は、case.in1cでEF=0.6にしてゴーストバンドに対処し、全エネルギーの収束が良くなってから発散している様子が見えていたのでmixingを0.05にしてcycle毎の変化を小さくした。case.in1cでCo l=0, 1のエネルギーを0.3から変えてもいた。しかし、どのような条件で上手くいったかは忘れてしまった。mixingとcase.in1cのパラメーターを変えた直後はinitialize calc.は２回以上行っている。<br />
+<br />
+Q. lapw.error Cholesky INFO が生じるときとは？<br />
+A. case.struct（二つの原子が同じ位置を指定している）、case.in1（energy parameter の設定）が間違っているか、EKMAXが合理的ではないほどに大きい、などの理由が考えられます。<br />
+<br />
+Q. 計算負荷を小さくしたい場合にはどこを変えればよいでしょうか？<br />
+A. 下記の点を考察してみて下さい。non-spinで計算して良い場合にはspin polarization を指定しない。プロだとここまで変えても正しい値が得られる。ただし、初心者が行うと収束が上手くいかず、計算時間が長くなるだけでなく、正しい結果が得られない。プロは十分に理解して書き換え、計算負荷を小さくして正しい値を得ることが出来ていると理解しておけば良いだろう。<br />
+※ 虚数を平面波展開での係数に含む場合には、入力ファイルの最後に c が付く。<br />
+※ 経験では RKmaxが小さいと、バンドが広がって見える。<br />
+※ 下記の条件で計算を行って、RKmaxを増加させたり、k点数を多くしたりしていくと良い。<br />
+■&nbsp;初心者<br />
+a)&nbsp;x lstart (case.in0)<br />
+&nbsp; x lstart で LSDA&nbsp;を選択。GGA-PBEでも良い。<br />
+b) case.in1<br />
+&nbsp; RKmax を 6.5 や 6.0 にする。どうしてもメモリが足りないなどの場合は、5.00&plusmn;0.04に近い値にする。<br />
+　価電子帯（-15 eV 程度か？）局在した軌道があるかや Rmt の大きさにもよるので一概には言えないが、<br />
+　第四周期元素ならば経験上 5.0 くらいが良いか？<br />
+　重元素（原子番号50を超える）ならば経験上 6.0 くらいが良いか？<br />
+c) case.in2<br />
+&nbsp; 計算する系が金属の場合（フェルミ端の直ぐ上に状態がある場合）は、TETRAを TEMPS または TEMP にして、 その右の数値を&nbsp; 0.002 にする。&nbsp;TEMPSやTEMPは計算する系が金属の場合、一般的に収束が速くなり易い。0.002 はディフォルト値。<br />
+d)&nbsp;case.klist<br />
+&nbsp; x kgen で1桁か2桁の数字（例えば、8 など）を入れて、view klist で見たときにENDも含めて数行だけ書き込まれているよう x kgen での値を調整する。SCF収束後にDOSを見て、満足いかなければ x kgenで値を増やして再びrun SCF を行う。<br />
+※ 原子での電子密度分布を初期に用いるので、少ないk点数で結晶中での電子密度分布に近づけてから、k点を多くする方が結果的には速く収束する。私の周りの人だと、8 kや32 k, 64 kなどの小さいk点での計算の後に、256 k, 512 k, 1000 kにするなどしている。<br />
+※ 下記の中級者と上級者向けの変更は、通常のSCFで RKmax 5、1 k-point（または数点）&nbsp;として計算を行った後に行う。&nbsp;<br />
+■ 中級者 (semi-core と valenceの範囲を変更)<br />
+a)&nbsp;x lstart (case.in0)<br />
+&nbsp; x lstart で LSDA&nbsp;を選択。GGA-PBEでも良い。<br />
+b) x lstart<br />
+　-6.0 Ry から -3.0 Ry や -2.0 Ry（case.in1で 0のAPW+loを指定時） にする。<br />
+　※ x lstart で入力した Ry に -3.0 Ry した値が case.in1 での emin に対応する。x lstart で -3.0 Ry&nbsp;などと入力して、 x lstart に 戻されても 0.97&nbsp;から 0.9999 内に収まっていれば無視して次に進む（これで精度が良いのは、4fや5dがcoreに、5pや5dがsemi-coreにあると考えられる場合）。<br />
+c) case.in1（ semi-core と valence での local orbital と LAPW, APW の指定など）<br />
+&nbsp; RKmax を 6.0 や 5.0 にする。どうしてもメモリが足りないなどの場合は、5.00&plusmn;0.04に近い値にする。<br />
+　価電子帯（-15 eV 程度か？）局在した軌道があるかや Rmt の大きさにもよるので一概には言えないが、<br />
+　第四周期元素ならば経験上 5.0 くらいが良いか？<br />
+　重元素（原子番号50を超える）ならば経験上 6.0 くらいが良いか？<br />
+　※ semi-core と valence での local orbital と LAPW, APW の指定は x lstart で自動的に書き換えてくれる(ver. 12 で確認)。<br />
+　※ 私の経験では、ゴーストバンドが表示された場合、&nbsp;例えば、&rdquo;QTL-B VALUE .EQ.&nbsp; 120.91788&nbsp;&nbsp; in Band of energy&nbsp;&nbsp;&nbsp; -2.12346&nbsp;&nbsp; ATOM=&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp; L=&nbsp; 2&rdquo;（上記のゴーストバンドのエラーの対処方法を参照）と表示された場合に、case.in1または case.in1c でそれに対応する原子の軌道のEパラメーターに Band of energy に近い値を指定すると上手く計算が収束してくれたことがある。例えば、case.in1c で &quot;2&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot;&nbsp;-&gt;&nbsp; &quot;2&nbsp;&nbsp;&nbsp; -2.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot; と変更したりする。それに加えて、単位胞の中で原子番号が似たものは全て同じ様に値を変更してみるとよい。<br />
+　※ 一番右の 0はLAPWを使うことを指定している。APWでは1を記入。LAPWは、APWの計算式においてエネルギーの関数で対数微分する部分を線形に近似した方法のこと。APWの方が精度がよい。<span ar-sa="" style="font-family:;">局在化している</span><span ja="" lang="EN-US" style="font-family:;">3d</span><span ar-sa="" style="font-family:;">電子と</span><span ja="" lang="EN-US" style="font-family:;">4f</span><span ar-sa="" style="font-family:;">電子だけを</span><span ja="" lang="EN-US" style="font-family:;">APW</span><span ar-sa="" style="font-family:;">に指定すれば良いことが多い。例えば、</span><span ja="" lang="EN-US" style="font-family:;">Zn</span><span ar-sa="" style="font-family:;">では</span><span ja="" lang="EN-US" style="font-family:;">d</span><span ar-sa="" style="font-family:;">軌道まで、</span><span ja="" lang="EN-US" style="font-family:;">Mn, Al</span><span ar-sa="" style="font-family:;">は</span><span ja="" lang="EN-US" style="font-family:;">p</span><span ar-sa="" style="font-family:;">軌道まで</span><span ja="" lang="EN-US" style="font-family:;">lo</span><span ar-sa="" style="font-family:;">を入れて計算し、</span><span ja="" lang="EN-US" style="font-family:;">APW+lo</span><span ar-sa="" style="font-family:;">としてみる。</span><span ja="" lang="EN-US" style="font-family:;">APW+lo</span><span ar-sa="" style="font-family:;">法は、</span><span ja="" lang="EN-US" style="font-family:;">LAPW</span><span ar-sa="" style="font-family:;">法と同じ結果に収束し、尚且つ</span><span ja="" lang="EN-US" style="font-family:;">Rkmak</span><span ar-sa="" style="font-family:;">（平面波の最大波数の目安）の値が</span><span ja="" lang="EN-US" style="font-family:;">1</span><span ar-sa="" style="font-family:;">小さくて済み、基底関数の数が最大</span><span ja="" lang="EN-US" style="font-family:;">50%</span><span ar-sa="" style="font-family:;">少なくなり、計算時間は</span><span ja="" lang="EN-US" style="font-family:;">1</span><span ar-sa="" style="font-family:;">桁短くなる可能性がある。</span><br />
+d) case.in2<br />
+&nbsp; 計算する系が金属の場合（フェルミ端の直ぐ上に状態がある場合）は、TETRAを TEMPS または TEMP にして、 その右の数値を&nbsp; 0.002 にする。&nbsp;TEMPSやTEMPは計算する系が金属の場合、一般的に収束が速くなり易い。0.002 はディフォルト値。<br />
+e)&nbsp;case.klist<br />
+&nbsp; x kgen で1桁か2桁の数字（例えば、8 など）を入れて、view klist で見たときにENDも含めて数行だけ書き込まれているよう x kgen での値を調整する。SCF収束後にDOSを見て、満足いかなければ x kgenで値を増やして再びrun SCF を行う。<br />
+f) case.inst（恐らく編集は必要ない）<br />
+　周期律表に記載されている[希ガスの原子]と他の軌道の記述を真似ればよい。<br />
+g) [ruｎ_SCF]にて、エネルギーの収束判定値を「0.0001 (Ry) * case.struct に記載されている原子の数(Posと書かれている行の数)」にする。1 meV / atom であれば十分である。※ 0.0001 Ry * 13.6058 = 0.0013 eV = 1.3 meVである。<br />
+■ 上級者 (semi-core にある軌道｛ s や pなど｝を core｛case.inc｝ に指定する）(中級者のレベルでこれを行うと 1 cycle の時間は短いが、収束までの時間はあまり短くならない。私としては上記の中級者レベルまでの計算をオススメしたい)<br />
+下記は一例である。 (.lcore という名称の空のファイルを作成しておくと良いだろう)<br />
+a)&nbsp;x lstart (case.in0)<br />
+&nbsp; x lstart で LSDA&nbsp;を選択。GGA-PBEでも良い。<br />
+b) x lstart<br />
+　-6.0 Ry から -3.0 Ry や -2.0 Ry（case.in1で 0のAPW+loを指定時） にする。<br />
+　※ x lstart で入力した Ry に -3.0 Ry した値が emin に対応する。x lstart で -3.0 Ry&nbsp;などと入力して、 x lstart に 戻されても 0.97&nbsp;から 0.9999 内に収まっていれば無視して次に進む（これで精度が良いのは、4fや5dがcoreに、5pや5dがsemi-coreにある考えられる場合）。<br />
+c) case.in0<br />
+&nbsp; LSDA となるように TOT の次の数字を 5 にする。<br />
+&nbsp;&nbsp;min IFFT-parameters: LSDA なので 0 0 0 とする。<br />
+&nbsp;&nbsp;enhancement factor: 1.00 とする。<br />
+&nbsp; ※ x lstart で LSDA を選べば同然ながら、TOT の次の数字は 5 になっている。<br />
+d) case.in1&nbsp;(恐らく、x lstart でのsemi-coreとvalenceの範囲の変更には自動的に対応して書き換えてくれるだろう)<br />
+　case.in1から軌道を除いた場合は、case.inc に軌道を記述する。多くの場合、価電子帯にあるs軌道をcase.in1から除いた場合には、特にcase.incに記述する必要は無い（計算する平面波で十分な精度が得られることがある。ただし、その場合、RKmaxは6.0以上にしておくのが良いだろう）。-1.0 Ry 近傍にあるような軌道をcase.in1から除いた場合には、case.incに軌道を記述する。<br />
+&nbsp; RKmax: 5.0 から 6.0 の値&nbsp;&larr; ケースにより様々なので 中級者から上級者へとなってきた方は 6.0 以上としておくのが無難。<br />
+&nbsp; emin: -6.0&nbsp;<br />
+&nbsp; emax: 2.0&nbsp;<br />
+&nbsp; ※ この他に、&nbsp;coreに属するものは除いて、上記のcase.in1のQ&amp;Aを参考に記述する。<br />
+&nbsp; ※ x lstart で入力した Ry に -3.0 Ry した値が emin に対応する。x lstart で -3.0 Ry&nbsp;などと入力して、 x lstart に 戻されても 0.97&nbsp;から 0.9999内に収まっていれば無視して次に進む（これで精度が良いのは、4fや5dがcoreに、5pや5dがsemi-coreと考えられる場合である。経験上は semi-core(x lstart で{入力したRy} から {入力した Ry -3.0 Ry})の範囲にdがある場合などでも精度よく計算可能である）。case.in1とcase.inc が連動して最適な値に変わっているかは確認が必要。<br />
+&nbsp;&nbsp;※ これまでの経験などで EF が分かる場合は、それに近い値を入力する。そして、Elの値も入力したEFを基準に、(XPSなどのデータブックを見るなどして）存在しそうなエネルギー（Ry)の値を書き込む。<br />
+　※ SOを入れた計算をする場合には、EFから遠い方のDOSの中心部分を El とする（調査中）。理由：SOを入れてSCF計算した後、SO無しでDOSを描くと高束縛エネルギー側のDOSだけが主に描かれていたため。恐らく、4f などでは、SOを入れると低束縛エネルギー側にスプリットした準位が生じるためであると考えている。<br />
+　※ 局在していないs 軌道(l=0で、EF近傍にあるようなもの)がLAPWやAPWとしてcase.in1に記述してある場合、それを除いたときは、RKmax を 6.0 以上にする（調査中）。<br />
+　※ 私の経験では、ゴーストバンドが表示された場合、&nbsp;例えば、&rdquo;QTL-B VALUE .EQ.&nbsp; 120.91788&nbsp;&nbsp; in Band of energy&nbsp;&nbsp;&nbsp; -2.12346&nbsp;&nbsp; ATOM=&nbsp;&nbsp;&nbsp;&nbsp;9&nbsp;&nbsp; L=&nbsp; 2&rdquo;（上記のゴーストバンドのエラーの対処方法を参照）と表示された場合に、case.in1または case.in1c でそれに対応する原子の軌道のEパラメーターに Band of energy に近い値を指定すると上手く計算が収束してくれたことがある。例えば、case.in1c で &quot;2&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot;&nbsp;-&gt;&nbsp; &quot;2&nbsp;&nbsp;&nbsp; -2.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.005 CONT 1&quot; と変更したりする。それに加えて、単位胞の中で原子番号が似たものは全て同じ様に値を変更してみるとよい。<br />
+　※ 一番右の 0はLAPWを使うことを指定している。APWでは1を記入。LAPWは、APWの計算式においてエネルギーの関数で対数微分する部分を線形に近似した方法のこと。APWの方が精度がよい。<span ar-sa="" style="font-family:;">局在化している</span><span ja="" lang="EN-US" style="font-family:;">3d</span><span ar-sa="" style="font-family:;">電子と</span><span ja="" lang="EN-US" style="font-family:;">4f</span><span ar-sa="" style="font-family:;">電子だけを</span><span ja="" lang="EN-US" style="font-family:;">APW</span><span ar-sa="" style="font-family:;">に指定すれば良いことが多い。例えば、</span><span ja="" lang="EN-US" style="font-family:;">Zn</span><span ar-sa="" style="font-family:;">では</span><span ja="" lang="EN-US" style="font-family:;">d</span><span ar-sa="" style="font-family:;">軌道まで、</span><span ja="" lang="EN-US" style="font-family:;">Mn, Al</span><span ar-sa="" style="font-family:;">は</span><span ja="" lang="EN-US" style="font-family:;">p</span><span ar-sa="" style="font-family:;">軌道まで</span><span ja="" lang="EN-US" style="font-family:;">lo</span><span ar-sa="" style="font-family:;">を入れて計算し、</span><span ja="" lang="EN-US" style="font-family:;">APW+lo</span><span ar-sa="" style="font-family:;">としている模様。</span><span ja="" lang="EN-US" style="font-family:;">APW+lo</span><span ar-sa="" style="font-family:;">法は、</span><span ja="" lang="EN-US" style="font-family:;">LAPW</span><span ar-sa="" style="font-family:;">法と同じ結果に収束し、尚且つ</span><span ja="" lang="EN-US" style="font-family:;">Rkmak</span><span ar-sa="" style="font-family:;">（平面波の最大波数の目安）の値が</span><span ja="" lang="EN-US" style="font-family:;">1</span><span ar-sa="" style="font-family:;">小さくて済み、基底関数の数が最大</span><span ja="" lang="EN-US" style="font-family:;">50%</span><span ar-sa="" style="font-family:;">少なくなり、計算時間は</span><span ja="" lang="EN-US" style="font-family:;">1</span><span ar-sa="" style="font-family:;">桁短くなる可能性がある。</span><br />
+e) case.inc (x lstart でsemi-coreとvalenceをシフトさせた分、coreに追記する軌道が増える。計算していてゴーストバンドのエラーが出ている場合、ここでの記述を忘れていないか確認するようにしておくとよい。加えて、case.in1で軌道をディフォルトから省いた場合も記述が必要になる)<br />
+&nbsp;&nbsp;一般的な周期律表に、計算で扱う原子の[希ガスの原子]と他の軌道が書かれていると思うが、[希ガスの原子]のところまで記述を書き込む（追加する）。<br />
+&nbsp; NUMBER OF&nbsp;ORBITALS: 追加する内殻の軌道の数を入力<br />
+&nbsp; SHIFT: 0.00<br />
+&nbsp; N, KAPPA, OCCUP を入力する。<br />
+&nbsp; OCCUP は KAPPAの絶対値の2倍<br />
+&nbsp; ※ case.inst は UPとDNを分けているので、KAPPAの絶対値<br />
+　※ error case following,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&#39;CORE&#39; - NSTOP= 362 positive eigenvalue for&nbsp; 5P&nbsp; Atom:&nbsp; 20 Yb&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; &nbsp; &nbsp; &#39;CORE&#39; - Try to apply a potential shift in case.inc&nbsp;&nbsp;&nbsp;<br />
+&nbsp; change: [17 0.00&nbsp; 0&nbsp; NUMBER OF ORBITALS (EXCLUDING SPIN), SHIFT, IPRINT] -&gt; [17 1.00&nbsp; 0&nbsp; NUMBER OF ORBITALS (EXCLUDING SPIN), SHIFT, IPRINT]<br />
+　※ shift: shift of potential for &ldquo;positive&rdquo; eigenvalues (e.g. for 4f states as core states in lanthanides)<br />
+f) case.in2<br />
+　Emin: x lstart で入力したい値を記述する。中級者から上級者に移ってきたばかりの人はディフォルトのままでよい。<br />
+　ne: x lstart で入力した値よりも低束縛エネルギー側（＝valence）の電子数（＝「case.structまたは StrcutGenTMに記載されている原子の数」 * 「x lstartで入力した値よりも低束縛エネルギー」）となっている。<br />
+&nbsp; 計算する系が金属の場合（フェルミ端の直ぐ上に状態がある場合）は、TETRAを TEMPS または TEMP にして、 その右の数値を&nbsp; 0.002 にする。&nbsp;TEMPSやTEMPは計算する系が金属の場合、一般的に収束が速くなり易い。0.002 はディフォルト値。<br />
+&nbsp; Gmax: 12.00 &larr;12.00近辺を入力して Gmax &gt; Gminとなるようにする。Userguideに推奨されている最小値は14.00。<br />
+　Gmaxが12.00 よりも小さな値でも大丈夫か調査中。<br />
+g) case.inm<br />
+&nbsp; mixing FACTOR for BROYD/PRATT scheme: 0.10　&larr;ミキシングファクター（Userguide 7.10 MIXERに記載がある。新しく計算された電荷密度分布の割合を記述している。ディフォルトは0.2。ちなみにDVXa法SCATであれば0.3である。最初は大きな値にして数サイクル計算後に小さい値にしたり、初期値の電子密度分布を適切な値に設定していれば小さい値で始めたりする）<br />
+&nbsp; PW and CLM-scaling factor: 0.40 1.00 &larr;電荷が振動する場合は1.0より小さくする(0.4とか0.5とか)。CLM-scaling factor はUserguideに1.00とするとある。<br />
+h) k点は行数が、並列化で用いるcore数-1 （spin有りの場合は、（並列core数-1)/2とするとよい？）&nbsp;になるようにする。<br />
+　（「並列計算するcoreの中で、1つだけは統括のような役目をして、計算にはあまり寄与されない？」だったかな？）<br />
+i) case.inst （恐らく、編集の必要は無い）<br />
+　周期律表に記載されている[希ガスの原子]と他の軌道の記述を真似ればよい。<br />
+※ 入力ファイルは、まず _st と付いたものが作られ、Prepare input file で _st の無いファイルにコピーされる。実際に計算に使われるのは _st の無いものである。虚数を平面波展開での係数に含む場合には、入力ファイルの最後に _st を取り去った後に、c が付く。<br />
+ｊ) [ruｎ_SCF]にて、エネルギーの収束判定値を「0.0001 (Ry) * case.struct に記載されている原子の数(Posと書かれている行の数)」にする。1 meV / atom であれば十分である。※ 0.0001 Ry * 13.6058 = 0.0013 eV = 1.3 meV である。<br />
+<br />
+Q. k点数はどうやって大きくすれば良いでしょうか？<br />
+A. SCF や DOS 計算の後に、k点を大きくしたい場合は下記のようにします。<br />
+通常：　[initialize calc.] -&gt; [x kgen] -&gt; k点を入力 して、Execute&nbsp;! を押す&nbsp;-&gt; [run SCF]<br />
+SOの場合： [initso_lapw] -&gt; [x kgen -so] -&gt; k点を入力、Execute&nbsp;! を押す -&gt; [run SCF]&nbsp;<br />
+<br />
+Q. 本来、あり得ないと思われるところに非常にシャープなスパイク構造が見えるのですが・・・・・・。<br />
+A. k点数を多くしてみてください。k点数が少ないと、スパイク的な構造が見える場合があります。上記の[k点数はどうやって大きくすれば良いのでしょうか？] を参照してk点数を大きくしてみてください。<br />
+<br />
+Q. &quot;.lcore&quot;という名称の空（0MB）のファイルはどういう意味があるのですか？<br />
+A. &nbsp;&quot;.lcore&quot;はマフィンティン球（muffin-tin spheres）からリークした（染み出た）内殻電子の電荷密度に対するテール（裾）の補正を組み込ませます。例えば、彼方が、準内殻ではなく、内殻の状態としてGa-3d 電子を選択すれば、このオプションは必須になります。<br />
+英文：&quot;.lcore&quot; includes the tail correction for the charge density of core electrons leaking out of the muffin-tin spheres. For example,&nbsp;&nbsp;you select the Ga-3d electrons as core states (not semicore), so this option is essential. (Dr. Eeuwe S. Zijlstra)<br />
+&quot;touch .lcore&quot;コマンド（Linuxでのターミナル上で touch .lcore と入力すると .lcore という名称の空のファイルが作られる）は内殻の状態とした電子に対するテール（裾）の補正するプログラムを起動させます。これを用いないと、多くても 0.01の電子がディフォルトとしてマフィンティン球（muffin-tin spheres）からリークするでしょう。この補正を用いると、0.1よりも多くの電子が結果に影響することなしにリークできます。それ故、&quot;touch .lcore&quot;オプションを用いると、内殻に多くの電子準位を含ませることができ、大規模計算を若干経済的（計算コストの少ない割安）な実行形式にさせることができます。<br />
+英文：The &quot;touch .lcore&quot; command invokes tail corrections for the core states. Without it, at most 0.01 electrons may by default leak out of the muffin-tin spheres. With the corrections, as much as 0.1 electrons may leak out without impacting the results. Therefore, with the &quot;touch .lcore&quot; option, we can include more electronic levels in the core and make a big calculation a little bit cheaper to perform. (Dr. Eeuwe S. Zijlstra)<br />
+（書き換える部分は、case.inc に内殻とする電子を書き入れ、case.in1から内殻とした電子のlの記述を省きます）<br />
+<br />
+Q. どのプログラムでどのファイルが出力されるか分かりますか？<br />
+A. Userguide に記載されています。<br />
+　program needs generates という欄があるテーブルがUserguide にあります。<br />
+　例えば、KGEN ( x kgen )を実行すると case.outputkgen（IBZ内で全てのk点に対する情報）や case.klist, case.kgenが出力されることが分かります。necessaryで分かるように、_stが付いたファイルを入力としているプログラムはSYMMETRYを除いてありません。直接ディレクトリにあるファイルを編集する場合には_stの付いていないものにすることが必要であることも理解しておくと良いでしょう。<br />
+<br />
+Q. Spin orbit couplid の入力ファイルを initso_lapw で作成すると対称性が低下します。<br />
+A. case.structの一番下に対称操作の行列が記載されています。このデータは、SRC_symmetso/symho.f では transに格納されます。例えば、磁化の方向をz軸にした場合には、trans(1,1)*trans(2,2) - trans(1,2)*trans(2,1) を計算して、それが0.01の範囲で0に近ければ、対称操作から除き、1であればAと分類してその対称操作を残し、-1であればBと分類して対称操作（z軸に時間反転のものとなる）を残します。残された対称操作から空間群を探し出します。&nbsp;<br />
+　SOの場合は、case.struct での空間群の記載があてになりません（ver.12）。case.struct の最下部に書かれている対称操作を見て、International tables A から対応する空間群を探すべきです。例えば、I23 (No.197)の場合には、International tables Aで [ 197 (I23)&nbsp;] を押して、Maximal non-isomorphic subgroup にある空間群を調べます。Positions の x, y, z などと書かれているところと、case.structの最下部が対応しているかを調べます。そうすると、23 (I222) が対応していることが分かります。つまり、SOの計算のために対称性を低下させて、197 (I23) -&gt; 23 (I222) になっていることが分かります。<br />
+<br />
+Q. RKmaxを大きくしすぎると結果が正しくないような気がするのです。<br />
+A. ブラハ教授に聞きましたが「線形性が壊れる」からだそうです。&nbsp;<br />
+他のコードで似たような事例としては下記があります。<br />
+「fcc, hcp, bccなどの結晶構造をもつ高密度のバルク系において、多くの基底関数を割り当てた場合には、基底関数が過完備になる可能性があります。そのような場合には、数値不安定性のために誤った固有値が生じる可能性があります。この過完備性を避けるために、最適化された基底関数を使用することが推奨されます」(OpenMX HP)<br />
+<br />
+その他のQ&amp;Aなどについては下記を参照してみてください。
+<div>WIEN2k-FAQ: How to set a good RKmax value?</div>
+
+<div><a href="http://www.wien2k.at/reg_user/faq/rkmax.html" rel="nofollow" target="_blank">http://www.wien2k.at/reg_user/faq/rkmax.html</a></div>
+
+<div>&nbsp;</div>
+
+<div>Frequently asked Questions</div>
+
+<div><a href="http://www.wien2k.at/reg_user/faq/" rel="nofollow" target="_blank">http://www.wien2k.at/reg_user/faq/</a></div>
+
+<div>&nbsp;</div>
+
+<div>WIEN2k software package</div>
+
+<div><span id="yui_3_2_0_1_14344999434653697"><a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/WIEN2k-getting_started.pdf" rel="nofollow" target="_blank">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/WIEN2k-getting_started.pdf</a></span></div>
+<br />
+------------------------------------------------------------------------------<br />
+<br />
+参考文献<br />
+[1] ナノ・物質・材料・マルチスケール機能シミュレーション PHASE ver.9.00 ユーザーマニュアル<br />
+[2] 山内淳 著、第一原理計算を理解するために : <a href="http://ci.nii.ac.jp/els/110004800210.pdf?id=ART0007532250&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1302015226&amp;cp">http://ci.nii.ac.jp/els/110004800210.pdf?id=ART0007532250&amp;type=pdf&amp;lang=jp&amp;host=cinii&amp;order_no=&amp;ppv_type=0&amp;lang_sw=&amp;no=1302015226&amp;cp</a>=<br />
+[3] 赤木和人 著、企画の趣旨 : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/128/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/128/_pdf/-char/ja/</a> （以下は表面科学での特集としてシリーズとなっている)<a href="http://www.jstage.jst.go.jp/browse/jsssj/28/3/_contents/-char/ja/">http://www.jstage.jst.go.jp/browse/jsssj/28/3/_contents/-char/ja/</a>　<br />
+[4] 小林一昭 著、 バンド計算と実験との距離 : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/129/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/129/_pdf/-char/ja/</a><br />
+[5] 山内淳 著、第一原理計算の諸条件 : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/135/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/135/_pdf/-char/ja/</a><br />
+[6] 吉本芳英 著、第一原理計算による構造最適化とその周辺 : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/144/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/144/_pdf/-char/ja/</a><br />
+[7] 中井浩巳 著、表面-分子相互作用系の量子化学計算に関する最近の動向 : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/150/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/150/_pdf/-char/ja/</a><br />
+[8] 赤木和人 著、第一原理計算パッケージを使ってみる : <a href="http://www.jstage.jst.go.jp/article/jsssj/28/3/160/_pdf/-char/ja/">http://www.jstage.jst.go.jp/article/jsssj/28/3/160/_pdf/-char/ja/</a><br />
+[9] Tsuchiura et al., A &quot;Beginners guide&quot; to WIEN2k :<br />
+<a href="http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf">http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf</a><br />
+[10]&nbsp;M. Gmitra et al., Phys. Rev.&nbsp;B 80 (2009) 235431.<br />
+&nbsp; <a href="http://prb.aps.org/pdf/PRB/v80/i23/e235431">http://prb.aps.org/pdf/PRB/v80/i23/e235431</a><br />
+[11] <a href="http://www.wien2k.at/events/ws2008/talks/Laskowski-SO-NCM.pdf">http://www.wien2k.at/events/ws2008/talks/Laskowski-SO-NCM.pdf</a><br />
+[12] <a href="http://www.mri.psu.edu/conferences/WIEN/ProgramFiles/printversie_relativity.pdf">http://www.mri.psu.edu/conferences/WIEN/ProgramFiles/printversie_relativity.pdf</a><br />
+[13] <a href="http://www.wien2k.at/events/ws2006/magnetism-so.pdf">http://www.wien2k.at/events/ws2006/magnetism-so.pdf</a><br />
+[14] <a href="http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html">http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html</a><br />
+[15] G. Bertoni et al., Micron 37 (2006) 486.<br />
+&nbsp; <a href="http://www.emat.ua.ac.be/pdf/1387.pdf">http://www.emat.ua.ac.be/pdf/1387.pdf</a><br />
+[16] L. Pardini et al., arXiv:1104.1558v1, (2011).<br />
+&nbsp; <a href="http://arxiv.org/PS_cache/arxiv/pdf/1104/1104.1558v1.pdf">http://arxiv.org/PS_cache/arxiv/pdf/1104/1104.1558v1.pdf</a>&nbsp;<br />
+[17] 笠井秀明ら著、計算機マテリアルデザイン入門、大阪大学出版会<br />
+[xx] <a href="http://www.mri.psu.edu/conferences/WIEN/ProgramFiles/WIEN2k-getting_started-07.pdf">http://www.mri.psu.edu/conferences/WIEN/ProgramFiles/WIEN2k-getting_started-07.pdf</a><br />
+[X1] 和光システム研究所、固体の中の電子、WSL<br />
+------------------------------------------------------------------------------</div>
+</div>

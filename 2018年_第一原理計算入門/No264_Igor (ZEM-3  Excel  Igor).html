@@ -1,0 +1,2071 @@
+<p>------------------------------------------<br />
+ZEM-3からのデータをコピー&amp;ペーストでExcelに貼り付け、下記の順番で横にデータを並べる。<br />
+（例、Temp [℃]、Temp [K]、電気抵抗率 [&mu;&Omega;㎝]となるように並べる）<br />
+1. Temp [℃]<br />
+2. Temp [K]<br />
+3.&nbsp;電気抵抗率 [&mu;&Omega;㎝]<br />
+4. ゼーベック係数[&mu;V/K]<br />
+5. 熱伝導率 [W/mK]<br />
+6. ZT<br />
+7. Z<br />
+8. 出力因子 [W/mK2]<br />
+9. キャリアの熱伝導率&nbsp;[W/mK] (ヴィーデマンフランツ則より求める)<br />
+10. フォノンの熱伝導率&nbsp;[W/mK]<br />
+------------------------------------------<br />
+1. Igor &gt; ウィンドウ &gt; プロシージャーウインドウ で下記のIgorマクロをコピー&amp;ペーストする。<br />
+2. マクロ &gt; コンパイル<br />
+3. マクロ &gt; Plot_Ass_panel<br />
+4. データ &gt; Data Browser &gt; New Folder &gt; サンプル番号や名前&nbsp;&gt; 矢印を新しいフォルダに移動<br />
+5. Tableのボタンを押す &gt; Excelのデータを貼り付け<br />
+6. Renameのボタンを押すと名称が現在のフォルダと対応するようになる<br />
+7. S vs T などのボタンを押す（+はデータを追加）<br />
+　Graph Arial は学会やコロキウムなど、プレゼンテーション用<br />
+　Times New Roman は日本金属学会などの論文用<br />
+8. Optionは主に縦軸と横軸の表示が変わるだけになっている<br />
+※ Offset のところに値を入れれば、最後にクリックしたグラフでオフセットが掛かるようにしました。<br />
+※ //はコメントです。無視してくださってかまいません。別の手法を模索した結果になっています。<br />
+※ SetAxis の部分で縦軸と横軸を設定しています。よく使う値にしてください。<br />
+※ optionの部分は上記のZEM-3用のExcelデータでなくても使えます。optionより上は無視してよいです。<br />
+※ 「ユーザ関数 エラー: NULL文字列変数を使おうとしました」に類似する表示はでますが、問題ないんで気にしないでください（この表示がなくなるようにする方法が分からない）。うまくいかなければ、パネルを消して、もう一度パネルを開いてみてください。<br />
+------------------------------------------</p>
+
+<p>#pragma rtGlobals=1&nbsp; // Use modern global access method.<br />
+&nbsp; silent 0</p>
+
+<p>String/G K0</p>
+
+<p>Macro plot_Ass_panel()</p>
+
+<p>NewPanel/W=(0, 0, 240, 406)</p>
+
+<p>SetDrawEnv fillfgc= (48896,65280,48896)<br />
+&nbsp;&nbsp;&nbsp; DrawRect 5,2,236,60</p>
+
+<p>DrawText 16,17,&quot;Plot Ass. Panel (ZEM-3, LF, Excel)&quot;<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14</p>
+
+<p>//Table<br />
+&nbsp;&nbsp;&nbsp; Button button0 title=&quot;Table&quot;,proc=ButtonProc<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button0 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button0 pos={16,20}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //Rename<br />
+&nbsp;&nbsp;&nbsp; Button button90 title=&quot;Rename&quot;,proc=ButtonProc_90<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button90 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button90 pos={16,40}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; //All Graph<br />
+&nbsp;&nbsp;&nbsp; Button button91 title=&quot;All Graph&quot;,proc=ButtonProc_91<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button91 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button91 pos={126,20}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //All +<br />
+&nbsp;&nbsp;&nbsp; Button button92 title=&quot;All +&quot;,proc=ButtonProc_92<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button92 size={40,20}<br />
+&nbsp;&nbsp;&nbsp; Button button92 pos={126,40}</p>
+
+<p>&nbsp;&nbsp; //Del<br />
+&nbsp;&nbsp;&nbsp; Button button93 title=&quot;All -&quot;,proc=ButtonProc_93<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button93 size={40,20}<br />
+&nbsp;&nbsp;&nbsp; Button button93 pos={166,40}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //All Del<br />
+&nbsp;&nbsp;&nbsp; Button button94 title=&quot;Del&quot;,proc=ButtonProc_94<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button94 size={30,20}<br />
+&nbsp;&nbsp;&nbsp; Button button94 pos={206,20}</p>
+
+<p>//<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fillfgc= (48896,65280,48896)<br />
+&nbsp;&nbsp;&nbsp; DrawRect 5,63,236,185</p>
+
+<p>DrawText 24,79,&quot;Graph Arial&quot;</p>
+
+<p>//Graph S vs T<br />
+&nbsp;&nbsp;&nbsp; Button button1 title=&quot;S vs T&quot;,proc=ButtonProc_1<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button1 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button1 pos={16,80}</p>
+
+<p>//Graph R vs T<br />
+&nbsp;&nbsp;&nbsp; Button button2 title=&quot;R vs T&quot;,proc=ButtonProc_2<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button2 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button2 pos={16,100}</p>
+
+<p>//Graph P vs T<br />
+&nbsp;&nbsp;&nbsp; Button button3 title=&quot;P vs T&quot;,proc=ButtonProc_3<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button3 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button3 pos={16,120}</p>
+
+<p>//Graph k vs T<br />
+&nbsp;&nbsp;&nbsp; Button button4 title=&quot;k vs T&quot;,proc=ButtonProc_4<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button4 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button4 pos={16,140}</p>
+
+<p>//Graph ZT vs T<br />
+&nbsp;&nbsp;&nbsp; Button button5 title=&quot;ZT vs T&quot;,proc=ButtonProc_5<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button5 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button5 pos={16,160}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp; //Graph S +<br />
+&nbsp;&nbsp;&nbsp; Button button51 title=&quot;+&quot;,proc=ButtonProc_51<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button51 size={20,20}<br />
+&nbsp;&nbsp;&nbsp; Button button51 pos={101,80}</p>
+
+<p>//Graph R +<br />
+&nbsp;&nbsp;&nbsp; Button button52 title=&quot;+&quot;,proc=ButtonProc_52<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button52 size={20,20}<br />
+&nbsp;&nbsp;&nbsp; Button button52 pos={101,100}</p>
+
+<p>//Graph P +<br />
+&nbsp;&nbsp;&nbsp; Button button53 title=&quot;+&quot;,proc=ButtonProc_53<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button53 size={20,20}<br />
+&nbsp;&nbsp;&nbsp; Button button53 pos={101,120}</p>
+
+<p>//Graph k +<br />
+&nbsp;&nbsp;&nbsp; Button button54 title=&quot;+&quot;,proc=ButtonProc_54<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button54 size={20,20}<br />
+&nbsp;&nbsp;&nbsp; Button button54 pos={101,140}</p>
+
+<p>//Graph ZT +<br />
+&nbsp;&nbsp;&nbsp; Button button55 title=&quot;+&quot;,proc=ButtonProc_55<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button55 size={20,20}<br />
+&nbsp;&nbsp;&nbsp; Button button55 pos={101,160}</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; // title<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 12<br />
+&nbsp;&nbsp;&nbsp; DrawText 114,79,&quot;Times New Roman&quot;</p>
+
+<p>//Graph S vs T<br />
+&nbsp;&nbsp;&nbsp; Button button11 title=&quot;S vs T&quot;,proc=ButtonProc_11<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button11 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button11 pos={126,80}</p>
+
+<p>//Graph R vs T<br />
+&nbsp;&nbsp;&nbsp; Button button12 title=&quot;R vs T&quot;,proc=ButtonProc_12<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button12 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button12 pos={126,100}</p>
+
+<p>//Graph P vs T<br />
+&nbsp;&nbsp;&nbsp; Button button13 title=&quot;P vs T&quot;,proc=ButtonProc_13<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button13 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button13 pos={126,120}</p>
+
+<p>//Graph k vs T<br />
+&nbsp;&nbsp;&nbsp; Button button14 title=&quot;k vs T&quot;,proc=ButtonProc_14<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button14 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button14 pos={126,140}</p>
+
+<p>//Graph ZT vs T<br />
+&nbsp;&nbsp;&nbsp; Button button15 title=&quot;ZT vs T&quot;,proc=ButtonProc_15<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button15 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button15 pos={126,160}</p>
+
+<p>//<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fillfgc= (48896,65280,48896)<br />
+&nbsp;&nbsp;&nbsp; DrawRect 5,187,236,400</p>
+
+<p>DrawText 40,200,&quot;Option&quot;</p>
+
+<p>//Graph XRD vs T<br />
+&nbsp;&nbsp;&nbsp; Button button21 title=&quot;XRD&quot;,proc=ButtonProc_21<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button21 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button21 pos={16,200}</p>
+
+<p>//Graph DOS vs T<br />
+&nbsp;&nbsp;&nbsp; Button button22 title=&quot;DOS&quot;,proc=ButtonProc_22<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button22 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button22 pos={16,220}</p>
+
+<p>//Graph Arial<br />
+&nbsp;&nbsp;&nbsp; Button button25 title=&quot;Arial&quot;,proc=ButtonProc_25<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button25 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button25 pos={126,200}</p>
+
+<p>//Graph Times New Roman<br />
+&nbsp;&nbsp;&nbsp; Button button26 title=&quot;Times New Roman&quot;,proc=ButtonProc_26<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button26 size={120,20}<br />
+&nbsp;&nbsp;&nbsp; Button button26 pos={106,220}</p>
+
+<p>//Graph Latt. const. vs comp<br />
+&nbsp;&nbsp;&nbsp; Button button31 title=&quot;Latt. const. vs comp.&quot;,proc=ButtonProc_31<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button31 size={120,20}<br />
+&nbsp;&nbsp;&nbsp; Button button31 pos={16,240}</p>
+
+<p>//Graph S<br />
+&nbsp;&nbsp;&nbsp; Button button32 title=&quot;S&quot;,proc=ButtonProc_32<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button32 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button32 pos={16,260}</p>
+
+<p>//Graph R<br />
+&nbsp;&nbsp;&nbsp; Button button33 title=&quot;R&quot;,proc=ButtonProc_33<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button33 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button33 pos={16,280}</p>
+
+<p>//Graph P<br />
+&nbsp;&nbsp;&nbsp; Button button34 title=&quot;P&quot;,proc=ButtonProc_34<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button34 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button34 pos={16,300}</p>
+
+<p>//Graph k<br />
+&nbsp;&nbsp;&nbsp; Button button35 title=&quot;k&quot;,proc=ButtonProc_35<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button35 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button35 pos={16,320}</p>
+
+<p>//Graph ZT<br />
+&nbsp;&nbsp;&nbsp; Button button36 title=&quot;ZT&quot;,proc=ButtonProc_36<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button36 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button36 pos={16,340}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //Graph intensity<br />
+&nbsp;&nbsp;&nbsp; Button button37 title=&quot;Intensity&quot;,proc=ButtonProc_37<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button37 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button37 pos={16,360}</p>
+
+<p>//Graph certain vs comp<br />
+&nbsp;&nbsp;&nbsp; Button button41 title=&quot;comp.&quot;,proc=ButtonProc_41<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button41 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button41 pos={126,260}</p>
+
+<p>//Graph certain vs K<br />
+&nbsp;&nbsp;&nbsp; Button button42 title=&quot;Temp. K&quot;,proc=ButtonProc_42<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button42 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button42 pos={126,280}</p>
+
+<p>//Graph certain vs C<br />
+&nbsp;&nbsp;&nbsp; Button button43 title=&quot;Temp. C&quot;,proc=ButtonProc_43<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button43 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button43 pos={126,300}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //Graph eV<br />
+&nbsp;&nbsp;&nbsp; Button button44 title=&quot;eV&quot;,proc=ButtonProc_44<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button44 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button44 pos={126,320}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //Graph Binding Energy<br />
+&nbsp;&nbsp;&nbsp; Button button45 title=&quot;B. E&quot;,proc=ButtonProc_45<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button45 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button45 pos={126,340}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; //Graph Kinetic Energy<br />
+&nbsp;&nbsp;&nbsp; Button button46 title=&quot;K. E&quot;,proc=ButtonProc_46<br />
+&nbsp;&nbsp;&nbsp; SetDrawEnv fsize= 14<br />
+&nbsp;&nbsp;&nbsp; Button button46 size={80,20}<br />
+&nbsp;&nbsp;&nbsp; Button button46 pos={126,360}<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; // Composition<br />
+&nbsp;&nbsp; String/G sample_name<br />
+&nbsp;&nbsp; sample_name = &quot;0&quot;<br />
+&nbsp;&nbsp; SetVariable setvar0 proc=SetVarProc<br />
+&nbsp;&nbsp; SetVariable setvar0 pos={18,380},limits={0,1000,0},live=1<br />
+&nbsp;&nbsp; SetVariable setvar0 value=sample_name<br />
+&nbsp;&nbsp; SetVariable setvar0 title=&quot;Offset&quot;<br />
+&nbsp;&nbsp; SetVariable setvar0 size={100,20}</p>
+
+<p>End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Table<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Edit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; //Table<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_90(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; degC_name = sample_name + &quot;_DegC&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave0, $degC_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave1, $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave2, $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave3, $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave4, $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name = sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave5, $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name = sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave6, $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name = sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave7, $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name + &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave8, $kel_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Rename wave9, $kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Seebeck vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_1(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Seebeck Coefficient, <a href="file://\\f02S\\f00">\\f02S\\f00</a> (<a href="file://\\F'Symbol'm\\M\\F'Arial'V/K\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\M\\F&#39;Arial&#39;V/K\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Resistivity vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_2(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Electrical Resistivity, <a href="file://\\F'Symbol'\\f02r\\f00\\M\\F'Arial'">\\F&#39;Symbol&#39;\\f02r\\f00\\M\\F&#39;Arial&#39;</a> (<a href="file://\\F'Symbol'm\\MW\\F'Arial'cm\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\MW\\F&#39;Arial&#39;cm\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,600<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Power factor vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_3(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P = See * See / Res / 10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display P vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Power factor, <a href="file://\\f02P\\f00">\\f02P\\f00</a> ( 10\\S-3\\M\\F&#39;Arial&#39; W / m\\M\\F&#39;Arial&#39; K\\S2\\M\\F&#39;Arial&#39;)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph kappa vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_4(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp; = sample_name +&nbsp; &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name + &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name +&nbsp; &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $k_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $kel_name, $kph_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Thermal Conductivity, <a href="file://\\f02\\F'Symbol'k\\F'Arial'\\f00">\\f02\\F&#39;Symbol&#39;k\\F&#39;Arial&#39;\\f00</a> (W/mK)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=55<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Legend/C/N=text0/F=0/M/H=18/A=MC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text3/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text2/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'el\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;el\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text1/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'ph\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;ph\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kel_name)=18, msize($kel_name)=6.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kph_name)=16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph ZT vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_5(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z&nbsp;&nbsp;&nbsp; = See * See / Res / 10 / 1000 / k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT = See * See / Res / 10 / 1000 / k * T<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display ZT vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Dimensionless Figure of Merit, <a href="file://\\f02ZT\\f00">\\f02ZT\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,0.3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p>//<br />
+&nbsp;&nbsp;&nbsp; //Graph Seebeck vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_11(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Seebeck Coefficient, <a href="file://\\f02S">\\f02S</a> /\\f00 <a href="file://\\F'Symbol'm\\M\\F'Times">\\F&#39;Symbol&#39;m\\M\\F&#39;Times</a> New Roman&#39;VK\\S-1\\M\\F&#39;Times New Roman&#39;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> / K&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Resistivity vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_12(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label left &quot;Electrical Resistivity, <a href="file://\\F'Symbol'\\f02r\\f00\\M\\F'Times">\\F&#39;Symbol&#39;\\f02r\\f00\\M\\F&#39;Times</a> New Roman&#39; (<a href="file://\\F'Symbol'm\\MW\\F'Times">\\F&#39;Symbol&#39;m\\MW\\F&#39;Times</a> New Roman&#39;cm\\M\\F&#39;Times New Roman&#39;)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Electrical Resistivity, <a href="file://\\F'Symbol'\\f02r\\f00\\M\\F'Times">\\F&#39;Symbol&#39;\\f02r\\f00\\M\\F&#39;Times</a> New Roman&#39; / <a href="file://\\F'Symbol'm\\MW\\F'Times">\\F&#39;Symbol&#39;m\\MW\\F&#39;Times</a> New Roman&#39;cm\\M\\F&#39;Times New Roman&#39;&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,600<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> / K&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Power factor vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_13(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P = See * See / Res / 10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display P vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label left &quot;Power factor, <a href="file://\\f02P\\f00">\\f02P\\f00</a> ( 10\\S-3\\M\\F&#39;Times New Roman&#39; W / m\\M\\F&#39;Times New Roman&#39; K\\S2\\M\\F&#39;Times New Roman&#39;)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Power factor, <a href="file://\\f02P\\f00">\\f02P\\f00</a> / 10\\S-3\\M\\F&#39;Times New Roman&#39; Wm\\S-1\\M\\MK\\S-2\\M&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> / K&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph kappa vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_14(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display $k_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $kel_name, $kph_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label left &quot;Thermal Conductivity, <a href="file://\\f02\\F'Symbol'k\\F'Times">\\f02\\F&#39;Symbol&#39;k\\F&#39;Times</a> New Roman&#39;\\f00 (W/mK)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Thermal Conductivity, <a href="file://\\f02\\F'Symbol'k\\F'Times">\\f02\\F&#39;Symbol&#39;k\\F&#39;Times</a> New Roman&#39;\\f00 / Wm\\S-1\\MK\\S-1\\M&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=55<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> / K&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Legend/C/N=text0/F=0/M/H=18/A=MC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text3/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Times">\\M\\F&#39;Times</a> New Roman&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Times New Roman&#39;\\M\\F&#39;Times New Roman&#39;\\Z18&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text2/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Times">\\M\\F&#39;Times</a> New Roman&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Times New Roman&#39;el\\M\\F&#39;Times New Roman&#39;\\Z18&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text1/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Times">\\M\\F&#39;Times</a> New Roman&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Times New Roman&#39;ph\\M\\F&#39;Times New Roman&#39;\\Z18&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb($k_name)=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kel_name)=18, msize($kel_name)=6.5, rgb($kel_name)=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kph_name)=16, rgb($kph_name)=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph ZT vs T<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_15(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z&nbsp;&nbsp;&nbsp; = See * See / Res / 10 / 1000 / k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT = See * See / Res / 10 / 1000 / k * T<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display ZT vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Dimensionless Figure of Merit, <a href="file://\\f02ZT\\f00">\\f02ZT\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,0.3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> / K&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph XRD<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_21(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Intensity, <a href="file://\\f02I\\f00">\\f02I\\f00</a> (arb. units)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;2\\F&#39;Symbol&#39;\\f02q\\f00\\F&#39;Arial&#39; (degree)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph DOS<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_22(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Density of States / eV&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Energy / eV&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph XRD<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_25(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph XRD<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_26(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Lattice constnt vs comp.<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_31(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Times New Roman&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb=(0,0,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Lattice Constant, <a href="file://\\f02a\\f00">\\f02a\\f00</a> (nm)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Composition, <a href="file://\\f02x\\f00">\\f02x\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph S<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_32(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Seebeck Coefficient, <a href="file://\\f02S\\f00">\\f02S\\f00</a> (<a href="file://\\F'Symbol'm\\M\\F'Arial'V/K\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\M\\F&#39;Arial&#39;V/K\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph R<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_33(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Electrical Resistivity, <a href="file://\\F'Symbol'\\f02r\\f00\\M\\F'Arial'">\\F&#39;Symbol&#39;\\f02r\\f00\\M\\F&#39;Arial&#39;</a> (<a href="file://\\F'Symbol'm\\MW\\F'Arial'cm\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\MW\\F&#39;Arial&#39;cm\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph P<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_34(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Power factor, <a href="file://\\f02P\\f00">\\f02P\\f00</a> ( 10\\S-3\\M\\F&#39;Arial&#39; W / m\\M\\F&#39;Arial&#39; K\\S2\\M\\F&#39;Arial&#39;)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph k<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_35(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Thermal Conductivity, <a href="file://\\f02\\F'Symbol'k\\F'Arial'\\f00">\\f02\\F&#39;Symbol&#39;k\\F&#39;Arial&#39;\\f00</a> (W/mK)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph ZT<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_36(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Dimensionless Figure of Merit, <a href="file://\\f02ZT\\f00">\\f02ZT\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Intensity<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_37(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Intensity / arb. units&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;</p>
+
+<p>&nbsp;//Graph Comp.<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_41(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Composition, <a href="file://\\f02x\\f00">\\f02x\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Temperature K<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_42(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp; //Graph Temperature C<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_43(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature (ｰC)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; //Graph eV<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_44(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Energy / eV&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; //Graph binding energy<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_45(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Binding Energy / eV&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp;&nbsp; //Graph Kinetic energy<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_46(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Kinetic Energy / eV&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph S +<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_51(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph R+<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_52(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $Res_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph P+<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_53(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $P_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph k+<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_54(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $k_name, $kel_name, $kph_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph ZT+<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_55(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String/G ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $ZT_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp; //All Gaphe<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_91(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SVAR K0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; K0 = GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display/N=$(See_name) $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Seebeck Coefficient, <a href="file://\\f02S\\f00">\\f02S\\f00</a> (<a href="file://\\F'Symbol'm\\M\\F'Arial'V/K\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\M\\F&#39;Arial&#39;V/K\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display/N=$(Res_name)&nbsp; $Res_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Electrical Resistivity, <a href="file://\\F'Symbol'\\f02r\\f00\\M\\F'Arial'">\\F&#39;Symbol&#39;\\f02r\\f00\\M\\F&#39;Arial&#39;</a> (<a href="file://\\F'Symbol'm\\MW\\F'Arial'cm\\M\\F'Arial'">\\F&#39;Symbol&#39;m\\MW\\F&#39;Arial&#39;cm\\M\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,600<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P = See * See / Res / 10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display/N=$(P_name)&nbsp; P vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Power factor, <a href="file://\\f02P\\f00">\\f02P\\f00</a> ( 10\\S-3\\M\\F&#39;Arial&#39; W / m\\M\\F&#39;Arial&#39; K\\S2\\M\\F&#39;Arial&#39;)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display/N=$(k_name)&nbsp; $k_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph $kel_name, $kph_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Thermal Conductivity, <a href="file://\\f02\\F'Symbol'k\\F'Arial'\\f00">\\f02\\F&#39;Symbol&#39;k\\F&#39;Arial&#39;\\f00</a> (W/mK)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=55<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Legend/C/N=text0/F=0/M/H=18/A=MC<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text3/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text2/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'el\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;el\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TextBox/C/N=text1/F=0/M/H=18/A=MC &quot;<a href="file://\\M\\F'Arial'\\Z18\\F'Symbol'\\f02k\\B\\F'Arial'ph\\M\\F'Arial'\\Z18">\\M\\F&#39;Arial&#39;\\Z18\\F&#39;Symbol&#39;\\f02k\\B\\F&#39;Arial&#39;ph\\M\\F&#39;Arial&#39;\\Z18</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kel_name)=18, msize($kel_name)=6.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph marker($kph_name)=16<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z&nbsp;&nbsp;&nbsp; = See * See / Res / 10 / 1000 / k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT = See * See / Res / 10 / 1000 / k * T<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Display/N=$(ZT_name)&nbsp; ZT vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff(left)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(left)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(left)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(left)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(left)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label left &quot;Dimensionless Figure of Merit, <a href="file://\\f02ZT\\f00">\\f02ZT\\f00</a>&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(left)=3,lblPos(left)=65<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(left)=71<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(right)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis left 0,0.3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph standoff=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mirror(bottom)=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph tick(bottom)=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph fSize(bottom)=20<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph height=283.465<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Label bottom &quot;Temperature, <a href="file://\\f02T\\f00">\\f02T\\f00</a> (K)&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lblPosMode(bottom)=3,lblPos(bottom)=50<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(bottom)=57<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph margin(top)=21<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SetAxis bottom 300,750<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph mode=4,marker=19,msize=7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph lsize=2<br />
+&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End</p>
+
+<p><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph All+<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_92(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SVAR K0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph/W=$(K0)+&quot;_See0&quot; $See_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph/W=$(K0)+&quot;_Res0&quot; $Res_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph/W=$(K0)+&quot;_P0&quot; $P_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph/W=$(K0)+&quot;_k0&quot; $k_name, $kel_name, $kph_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; AppendToGraph/W=$(K0)+&quot;_ZT0&quot; $ZT_name vs $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Graph All-<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_93(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SVAR K0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RemoveFromGraph/W=$(K0)+&quot;_See0&quot;&nbsp; $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RemoveFromGraph/W=$(K0)+&quot;_Res0&quot; $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RemoveFromGraph/W=$(K0)+&quot;_P0&quot; $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RemoveFromGraph/W=$(K0)+&quot;_k0&quot; $k_name, $kel_name, $kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RemoveFromGraph/W=$(K0)+&quot;_ZT0&quot; $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Del<br />
+&nbsp;&nbsp;&nbsp; Function ButtonProc_94(ba) : ButtonControl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String sample_name= GetDataFolder(0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String degC_name, TempK_name, Res_name, See_name, k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String ZT_name, Z_name, P_name, kel_name, kph_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; See_name = sample_name + &quot;_See&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Res_name = sample_name + &quot;_Res&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; P_name&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_P&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k_name&nbsp;&nbsp;&nbsp;&nbsp; = sample_name + &quot;_k&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kel_name = sample_name +&nbsp; &quot;_kel&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; kph_name = sample_name + &quot;_kph&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z_name&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; sample_name + &quot;_Z&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZT_name&nbsp;&nbsp; =&nbsp; sample_name + &quot;_ZT&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TempK_name = sample_name + &quot;_TempK&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave See = $See_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Res = $Res_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave P = $P_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave k = $k_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave T = $TempK_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave Z = $Z_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Wave ZT = $ZT_name<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Killwindow $(See_name)+&quot;0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Killwindow $(Res_name)+&quot;0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Killwindow $(P_name)+&quot;0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Killwindow $(k_name)+&quot;0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Killwindow $(ZT_name)+&quot;0&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp;&nbsp; End<br />
+&nbsp;<br />
+&nbsp;&nbsp;&nbsp; //offset<br />
+&nbsp;&nbsp; Function SetVarProc(sva) : SetVariableControl<br />
+&nbsp;&nbsp;&nbsp; STRUCT WMSetVariableAction &amp;sva</p>
+
+<p>&nbsp;switch( sva.eventCode )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; case 1: // mouse up<br />
+&nbsp;&nbsp;&nbsp;&nbsp; case 2: // Enter key<br />
+&nbsp;&nbsp;&nbsp;&nbsp; case 3: // Live update<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable dval = sva.dval<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //String sval = sva.sval<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String Top_Graph = WinName(0,1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //GetWindow $(Top_Graph), wavelist<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //Edit W_WaveList<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String traces= TraceNameList(&quot;&quot;,&quot;;&quot;,1)&nbsp;&nbsp; // Traces in top graph<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; String traceName<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Variable i=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //for(i=0; i&lt;=DimSize(W_WaveList,0)-1; i+=1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; traceName= StringFromList(i,traces)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( strlen(traceName) == 0 )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph/W=$(Top_Graph) offset($traceName)={0, dval * i}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i += 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while (1) // exit is via break statement<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //endfor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp;&nbsp; case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp; endswitch</p>
+
+<p>&nbsp;return 0<br />
+&nbsp;&nbsp; End</p>

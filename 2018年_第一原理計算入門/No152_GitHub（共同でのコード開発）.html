@@ -1,0 +1,260 @@
+&nbsp; ここでは共同でのコード開発で利用されるバージョン管理システム「GitHub」についての情報をまとめていく。<br />
+------------------------------------------------------------------------------<br />
+■ Windowsの場合<br />
+□ インストール<br />
+1. msysGitをダウンロード<br />
+2. Nextを押していくだけだが、「Use Git Bash only」がLinuxのBashと対応するので便利<br />
+3. 「Checkout Windows-style, commit Unix-style line endings」を選択<br />
+　改行コードを自動変換してくれる。check out時はCRLF、commit時はLFに変換される<br />
+　改行コード：MacやLinuxはLF(Line Feed)、CRLF(Carriage Return + Line Feed)<br />
+4. スタート &gt; Git &gt; Git Bashを用いればよい<br />
+<br />
+□ 初期設定<br />
+1. スタート &gt; Git &gt; Git Bash<br />
+2. git config --global user.name &quot;Firestname Lastname&quot;<br />
+&nbsp;&nbsp;&nbsp; git config --global user.email &quot;<a href="mailto:your_email@example.com">your_email@example.com</a>&quot;<br />
+　 ~/.gitconfig に上記の情報が記述される。GitHubでの公開でも使われる。英字が良い。<br />
+3.&nbsp;git config --global color.ui auto<br />
+　コマンドからの出力を読みやすくする設定<br />
+------------------------------------------------------------------------------<br />
+■ GitHubの設定 (<a href="https://github.com/join">https://github.com/join</a>)<br />
+□ アカウントの作成<br />
+1. Usernameに希望するIDを英数字で入力する<br />
+　これは、公開ページのURLで<a href="https://github.com/">https://github.com/</a>○○の部分の○○が対応する<br />
+2. 全ての項目を入力後、「Create an account」をクリックでアカウント作成は終了<br />
+※ アイコンはGravatarというサービスを利用して表示されているらしい<br />
+※ アカウントを削除したい場合： Settings &gt; Account &gt; 下の方に Delete accountがある<br />
+<br />
+□ SSH kyeの設定（GitHubへのアクセス認証に用いる秘密鍵と公開鍵の設定）<br />
+0. スタート &gt; Git &gt; Git Bash<br />
+1. ssh-keygen -t rsa -C &quot;your_email@example.com&quot;<br />
+&nbsp;&nbsp;&nbsp; (Users/your_user_directroy/.ssh/id_rsa): Enterを押す<br />
+&nbsp;&nbsp;&nbsp; Enter passphrase (empyt for no passphrase): パスワードを入力<br />
+&nbsp;&nbsp;&nbsp; Enter same passphrase again: 再度パスワードを入力<br />
+2. 秘密鍵（id_rsa）と公開鍵（id_rsa.pub）が生成される<br />
+&nbsp;&nbsp;&nbsp; The kye fingerpirnt is:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;フィンガープリント your_email@example.com<br />
+&nbsp;&nbsp;&nbsp;&nbsp;（このフィンガープリントは後でGitHubに入るための設定に用いる）<br />
+3. GitHub&nbsp;(<a href="https://github.com/join">https://github.com/join</a>)で右上の顔を掲載する部分をクリック<br />
+&nbsp;&nbsp; &gt; Settings&nbsp;&gt; SSH and GPG keys<br />
+&nbsp;&nbsp; Titleには適当な名前、Keyにはid_rsa.pubの内容をそのままコピー&amp;ペーストする<br />
+&nbsp;&nbsp; C:\Users\Owner\.ssh\id_rsa.pubをサクラダエディターなどで開けばよい<br />
+　（その他の方法として、Git Bashでcat ~/.ssh/id_rsa.pubとしても得られる）<br />
+※ 以下は設定のチェック方法<br />
+4. スタート &gt; Git &gt; Git Bash<br />
+5. ssh -T git@github.com<br />
+&nbsp;&nbsp;&nbsp; RSA key fingerprint is フィンガープリント<br />
+&nbsp;&nbsp;&nbsp; Are you sure you want to continue connecting (yes/no)?: yes<br />
+6. 下記のように表示されれば成功<br />
+　Hi アカウント名! You&#39;ve successfully authenticated, but GitHub dose not proviede shell access.<br />
+※ 二回目以降<br />
+7. ssh -T <a href="mailto:git@github.com">git@github.com</a><br />
+&nbsp;&nbsp;&nbsp; Enter passphrase for key &#39;/c/Users/Owner/.ssh/id_rsa&#39;: パスワード<br />
+<br />
+□ GPG keyの設定（GitHubへのアクセス認証に用いる秘密鍵と公開鍵の設定）<br />
+0. スタート &gt; Git &gt; Git Bash<br />
+1. gpg&nbsp;--version<br />
+&nbsp;&nbsp;&nbsp; gpg (GnuPG) X.X.XX などと表示されればOK<br />
+2. gpg --gen-key<br />
+&nbsp;&nbsp;&nbsp; gpg: directory `/c/Users/Owner/.gnupg&#39; created<br />
+&nbsp;&nbsp;&nbsp; Please select what kind of key you want:<br />
+&nbsp;&nbsp; (1) RSA and RSA (default)<br />
+&nbsp;&nbsp; (2) DSA and Elgamal<br />
+&nbsp;&nbsp; (3) DSA (sign only)<br />
+&nbsp;&nbsp; (4) RSA (sign only)<br />
+Your selection? 1<br />
+3. What keysize do you want? (2048) Enterを押す<br />
+4. Key is valid for? (0) Enterを押す<br />
+5. Is this correct? (y/N) y<br />
+6. Real name:, Email address:, Comment: などを入力していく<br />
+7. Change (N)ame, (C)omment, (E)mail or (O)kay/(Q)uit? Oを押す<br />
+8. Enter passphrase: 好きなパスワードを入力<br />
+　もう一度入力する。<br />
+9. <span class="command">gpg --list-secret-keys --keyid-format LONG</span><br />
+&nbsp;&nbsp; sec 2048R/秘密鍵<br />
+10. <span class="command">gpg --armor --export </span>秘密鍵<br />
+　下記のように表示される<br />
+-----BEGIN PGP PUBLIC KEY BLOCK-----<br />
+（省略）<br />
+-----END PGP PUBLIC KEY BLOCK-----<br />
+11. GitHub&nbsp;(<a href="https://github.com/join">https://github.com/join</a>)で右上の顔を掲載する部分をクリック<br />
+&nbsp;&nbsp; &gt; Settings&nbsp;&gt; SSH and GPG keys<br />
+&nbsp;&nbsp; GPG Keyには「-----BEGIN PGP PUBLIC KEY BLOCK-----（省略）-----END PGP PUBLIC KEY BLOCK-----」までの内容をそのままコピー&amp;ペーストする<br />
+12. gpg --list-keys<br />
+&nbsp;&nbsp; pub 2048R/公開鍵のID<br />
+13. git config --global gpg.program <span class="k">$(</span>which gpg<span class="k">)</span><br />
+14. git config --global user.signingkey 公開鍵のID<br />
+15. git config --global commit.gpgsign true<br />
+Refeneces:<br />
+[1] <a href="https://qiita.com/prince_0203/items/ef0e12f2f6d150ff0485">https://qiita.com/prince_0203/items/ef0e12f2f6d150ff0485</a><br />
+[2] <a href="https://help.github.com/articles/generating-a-new-gpg-key/">https://help.github.com/articles/generating-a-new-gpg-key/</a><br />
+[3] <a href="https://oku.edu.mie-u.ac.jp/~okumura/linux/?GnuPG">https://oku.edu.mie-u.ac.jp/~okumura/linux/?GnuPG</a><br />
+[4] <a href="https://qiita.com/Ress/items/caf53a82b91103552c0e">https://qiita.com/Ress/items/caf53a82b91103552c0e</a><br />
+------------------------------------------------------------------------------<br />
+■ GitHubの利用方法<br />
+□ データベース用のフォルダ（リポジトリ）の作成<br />
+1. GitHub（<a href="https://github.com/join">https://github.com/join</a>）のページを開いてログイン<br />
+2. Start a project &gt; Repository name を入力<br />
+　 Add.gitgngore: 使用する言語やフレームワークを選択（たとえば、python, C, Fortran, TeXなど）<br />
+&nbsp;&nbsp;&nbsp; Add a license: MIT License が良く選択される<br />
+　 ※ リポジトリの初期化とREADMEファイルを自動的に作って欲しい場合は[Initialize this repository with a README]にチェックを入れる<br />
+&nbsp;&nbsp;&nbsp;※ 手元にあるGitリポジトリをGitHubに登録した場合はチェックを入れないでよい<br />
+3. Create repository<br />
+※ リポジトリの削除：作成したリポジトリに入る &gt; 歯車の記号 Settings（&lt;&gt;Codeと同じ行｛横｝か列｛縦｝にある） &gt; Danger Zone &gt; Delete this repository<br />
+※ Privateは非公開になるが有料<br />
+<br />
+□ 新しいリポジトリの作成とデータの公開<br />
+0. スタート &gt; Git &gt; Git Bash<br />
+1. git clone <a href="mailto:git@github.com">git@github.com</a>:アカウント名/XXXX.git<br />
+&nbsp;&nbsp; アカウント名/XXXX.git の部分はGitHub（<a href="https://github.com/join">https://github.com/join</a>）で作成したリポジトリの Clone or downloadに記載されている<br />
+2.&nbsp;git status<br />
+&nbsp;&nbsp;&nbsp; リポジトリの状態を確認<br />
+3. git add&nbsp;ファイル名<br />
+&nbsp;&nbsp;&nbsp; ステージ領域（コミット前の一時領域）へファイルを追加<br />
+4. git commit -m&nbsp;&quot;Add&nbsp;ファイル名 by 言語名&quot;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp; リポジトリの履歴を記録<br />
+5. git log<br />
+&nbsp;&nbsp;&nbsp; コミットログを確認<br />
+&nbsp;&nbsp;&nbsp; ※ 1行目のみを表示： git log --pretty=short<br />
+&nbsp;&nbsp;&nbsp; ※ ファイルの差分を表示: git log -p<br />
+6. git push<br />
+&nbsp;&nbsp;&nbsp; GitHub側のリポジトリが更新される<br />
+※ git commit&nbsp;と git add は git commit -am &quot;Add&nbsp;ファイル名 by 言語名&quot;&nbsp;とすることもできる。<br />
+<br />
+□ 良く使用する２回目以降の方法-簡易版-<br />
+（ほとんど変更なしで前回の続きからのとき。PCの電源をOFFして再起動した後でもOKだった）<br />
+1. git pull<br />
+2. cd 作成されたファイル名<br />
+3. 作成されたファイル名にデータを入れる<br />
+4. git add データ名<br />
+5. git commit -m &quot;コメント&quot;<br />
+6. git push<br />
+※ 上手くいかないときは、git pull する前に cd で目的のフォルダに入っておくと動作するときがある。<br />
+※ 1. git pull は必要ないかもしれない。<br />
+<br />
+□ 良く使用する２回目以降の方法（前回のフォルダを利用する場合）<br />
+0. git remote add origin&nbsp;リポジトリのURL<br />
+&nbsp;&nbsp;&nbsp; origin という名称が リポジトリのURL に対応するようになる<br />
+&nbsp;&nbsp;&nbsp;（fatal: remote origin already exists.の場合は既にoriginという名称が対応付けられている）<br />
+1. Git Bash &gt; pwd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;表示されたアドレスに取得するリポジトリと同名のファイルがあるかをチェック<br />
+2. git clone リポジトリのURL<br />
+&nbsp;&nbsp;&nbsp; [fatal: destination path リポジトリ名 &nbsp;already exists and is not an empty directory.]と、pwdで示されたアドレスにリポジトリ名のファイルがあると表示される。そういう場合は名称を少し変更して対処できる。<br />
+3. cd リポジトリ名<br />
+&nbsp;&nbsp;&nbsp; リポジトリ名の入力の途中でTabを押すと自動で見つけてけることがある<br />
+4. git pull origin master<br />
+5. 作成されたファイルの中を編集したりファイルを追加<br />
+6. git branch -a<br />
+7. git&nbsp;checkout -b ブランチ名<br />
+&nbsp;&nbsp;&nbsp; 新しいブランチを作ってそこに移動<br />
+8. ファイルを編集<br />
+9. git diff<br />
+&nbsp;&nbsp;&nbsp; 編集前後の差分を確認<br />
+10. git add 編集したり追加したファイルの名前<br />
+11. git&nbsp;commit -m &quot;行ったことを記述&quot;<br />
+12. git checkout master<br />
+&nbsp;&nbsp;&nbsp; masterに戻る<br />
+13. git log --graph<br />
+&nbsp;&nbsp;&nbsp; q + Enterで元の画面に戻る<br />
+14. git merge ブランチ名<br />
+&nbsp;&nbsp;&nbsp; 入力したブランチ名での作業をmasterに統合する<br />
+15. git push<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push = git push origin masterと同じ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push origin master:masterも同じ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push -u origin masterも同じ<br />
+※ 上手くいかないときは、git pull する前に cd で目的のフォルダに入っておくと動作するときがある。<br />
+<br />
+□ 良く使用する２回目以降の方法（新しくフォルダを作る場合）<br />
+0. git remote add origin&nbsp;リポジトリのURL<br />
+&nbsp;&nbsp;&nbsp; origin という名称が リポジトリのURL に対応するようになる<br />
+&nbsp;&nbsp;&nbsp;（fatal: remote origin already exists.の場合は既にoriginという名称が対応付けられている）<br />
+1. Git Bash &gt; pwd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;表示されたアドレスに取得するリポジトリと同名のファイルが無いか確認<br />
+&nbsp;&nbsp;&nbsp;&nbsp;同名のファイルがあれば名称を変更<br />
+2. git clone リポジトリのURL<br />
+　 pwdで示されたアドレスにリポジトリ名のファイルができる<br />
+3. cd リポジトリ名<br />
+　 リポジトリ名の入力の途中でTabを押すと自動で見つけてけることがある<br />
+4. git pull origin master<br />
+5. 作成されたファイルの中を編集したりファイルを追加<br />
+6. git branch -a<br />
+7. git&nbsp;checkout -b ブランチ名<br />
+&nbsp;&nbsp;&nbsp; 新しいブランチを作ってそこに移動<br />
+8. ファイルを編集<br />
+9. git diff<br />
+&nbsp;&nbsp;&nbsp; 編集前後の差分を確認<br />
+10. git add 編集したり追加したファイルの名前<br />
+11. git&nbsp;commit -m &quot;行ったことを記述&quot;<br />
+12. git checkout master<br />
+&nbsp;&nbsp;&nbsp; masterに戻る<br />
+13. git log --graph<br />
+&nbsp;&nbsp;&nbsp;&nbsp;q + Enterで元の画面に戻る<br />
+14. git merge ブランチ名<br />
+&nbsp;&nbsp;&nbsp; 入力したブランチ名での作業をmasterに統合する<br />
+15. git push<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push = git push origin masterと同じ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push origin master:masterも同じ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; git push -u origin masterも同じ<br />
+<br />
+□ LFからCRLFに自動で切り替わって困ったときは下記を予め入力する<br />
+git config --global core.autocrlf false<br />
+------------------------------------------------------------------------------<br />
+■ その他のコマンド<br />
+・pwd<br />
+&nbsp;&nbsp; 現在のアドレスを示す<br />
+（git cloneでfatalのエラーが表示される場合は、pwdコマンドで表示されるアドレスからリポジトリと同名のファイルを削除すると解決する。削除して困らないように、削除前に異なった名称でコピー&amp;ペーストしておくとよい）<br />
+・git diff<br />
+&nbsp;&nbsp; 変更差分を確認（+が追加、-が削除された行）<br />
+・git branch<br />
+&nbsp;&nbsp;&nbsp;ブランチの一覧表示（*は現在いるブランチ）<br />
+・git checkout -b 作成するブランチ名<br />
+&nbsp;&nbsp; ブランチを作成+切り替え<br />
+・git checkout -<br />
+&nbsp;&nbsp; 一つ前のブランチに切り替え<br />
+・git merge --no-ff 統合されるブランチ名<br />
+&nbsp;&nbsp; ブランチの統合<br />
+・git log --graph<br />
+&nbsp;&nbsp; ブランチを視覚的に確認<br />
+・git reflog<br />
+&nbsp;&nbsp; 現在のリポジトリで行われた作業のログを確認<br />
+・git reset --herd [git log --graphでのcommitの後に表示される英数字（ハッシュと呼ばれる）、またはgit reflogでのHEADの前の英数字]<br />
+&nbsp;&nbsp; 過去の履歴の場所に戻る<br />
+・git commit --amend<br />
+&nbsp;&nbsp; 直前のコミットメッセージを修正<br />
+・git rebase -i HEAD~2<br />
+&nbsp;&nbsp; 現在のブランチのHEAD（最新のコミット）を含めた2つまでの履歴を表示<br />
+&nbsp;&nbsp; viなどのエディタで、削除したい履歴のpickをfixupと書き換えて、保存<br />
+・git remote -v<br />
+&nbsp;&nbsp; 現在設定しているoriginが何かが分かる<br />
+<br />
+※ README.mdではhtmlよりも記述方法を直感的で簡単にした Markdown記法で記述できる。<br />
+----------------------------------------------------------------------<br />
+■ create a new repository<br />
+<span class="user-select-contain">echo &quot;# php&quot; &gt;&gt; README.md</span><br />
+<span class="user-select-contain">git init</span><br />
+<span class="user-select-contain">git add README.md</span><br />
+<span class="user-select-contain">git commit -m &quot;first commit&quot;</span><br />
+<span class="user-select-contain">git remote add origin </span><span class="js-git-clone-help-text"><a href="https://github.com/XXXXXXX/XXX.git">https://github.com/XXXXXXX/XXX.git</a></span><br />
+<span class="user-select-contain mb-0">git push -u origin master</span><br />
+<br />
+■ push an existing repository<br />
+<span class="user-select-contain">git remote add origin <span class="js-git-clone-help-text"><a href="https://github.com/XXXXXXX/XXX.git">https://github.com/XXXXXXX/XXX.git</a></span><br />
+git push -u origin master</span><br />
+<br />
+References: GitHub<br />
+----------------------------------------------------------------------<br />
+■ 参考文献<br />
+[S1] <a class="entry-title-link bookmark" href="http://nigohiroki.hatenablog.com/entry/2012/09/12/000003">GitとGithubの使い方~超初級編~</a>; <a href="http://nigohiroki.hatenablog.com/entry/2012/09/12/000003">http://nigohiroki.hatenablog.com/entry/2012/09/12/000003</a><br />
+[S2] 【初心者でもわかる】GitHubとは？とざっくりな使い方; <a href="https://eng-entrance.com/github-is">https://eng-entrance.com/github-is</a><br />
+[1] 大塚弘記「GitHub実践入門」技術評論社<br />
+[2] 池田尚史ら「チーム開発実践入門」技術評論社<br />
+[3] Markdown（マークダウン）記法でブログ執筆を高速化せよ！；<a href="http://livelognet.com/markdown/">http://livelognet.com/markdown/</a><br />
+[E1] <a href="http://neos21.hatenablog.com/entry/2016/02/07/000000">http://neos21.hatenablog.com/entry/2016/02/07/000000</a><br />
+[E2] (For ssh, remote: Permission to) <a href="http://phprefa.seesaa.net/article/363984816.html">http://phprefa.seesaa.net/article/363984816.html</a><br />
+[E3] (For gpg, remote: Permission to) <a href="https://qiita.com/comefigo/items/8acfc82b1dbbc314d90d">https://qiita.com/comefigo/items/8acfc82b1dbbc314d90d</a><br />
+&nbsp;&nbsp; .gitconfigに下記を加える。パスワードに@を入れてた場合はそこを%40に置き換えて入力。<br />
+&nbsp;&nbsp; [remote &quot;origin&quot;]<br />
+&nbsp;&nbsp;&nbsp;url = https://ユーザー名:パスワード@github.com/xxxxxx/xxxxx.git<br />
+&nbsp;&nbsp;&nbsp;上手くいったら削除すればよい（調査回数が足りないが、直前のものが保持されている感じ）。<br />
+[E4] (remote: Permission to) <a href="https://qiita.com/ritukiii/items/0d14df8f0253ca223373">https://qiita.com/ritukiii/items/0d14df8f0253ca223373</a><br />
+------------------------------------------------------------------------------

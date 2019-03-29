@@ -1,0 +1,652 @@
+<p>------------------------------------------------------------------------------<br />
+■ andLinux :&nbsp;<a href="http://www.andlinux.org/">http://www.andlinux.org/</a>&nbsp;<br />
+1) andLinus Beta 2 (final) KDE version をダウンロードしデフォルトの設定をしていく<br />
+&nbsp; How do you want to access your&nbsp;Windows file system from andLinux?&nbsp;<br />
+&nbsp; において、CoFSにするかデフォルトの設定にするかを選択する<br />
+2) CoFSを選択した場合 （筆者としてはオススメ）<br />
+&nbsp; 分り易い名称のフォルダを作成して選択する<br />
+3)&nbsp;デフォルトの設定を選択した場合<br />
+&nbsp; a) Program Files &rarr; andLinux &rarr; setting.txt で下記を加える（\は円マーク）<br />
+&nbsp;&nbsp;&nbsp; cofs0=c:\<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cofs1=d:\<br />
+&nbsp;&nbsp;b) /etc/fstab で下記を加える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cofs0 /mnt/c cofs defaults 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;cofs1 /mnt/d cofs defaults 0 0<br />
+&nbsp;&nbsp;c) cd .. で上のフォルダに移動しlsでファイルを見る（ls -aで隠しファイル表示）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;その中で、mnt があり、そこでmkdir cとmkdir dを入力する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;（cとdのフォルダが作られる）<br />
+&nbsp;&nbsp;&nbsp;d) 再起動をすると、Cドライブ及びDドライブのデータを得ることができる<br />
+4) sudo poweroff でシャットダウン、sudo rebootで再起動、ls -l | more でファイルの中身を調べることができる<br />
+------------------------------------------------------------------------------<br />
+■ 日本語キーボード有効化<br />
+&nbsp; 1) sudo&nbsp;dpkg-reconfigure console-data<br />
+&nbsp; 2) configuring console-data &lt;ok&gt;で次に<br />
+&nbsp; 3) Select keymap from arch list&nbsp;を選択<br />
+&nbsp;&nbsp;4)&nbsp;qwerty を選択<br />
+&nbsp;&nbsp;5) Japanese を選択<br />
+&nbsp; 6) Standard を選択<br />
+&nbsp; 後藤先生のHP : <a href="http://www.aise.ics.saitama-u.ac.jp/~gotoh/FrontPage.html">http://www.aise.ics.saitama-u.ac.jp/~gotoh/FrontPage.html</a><br />
+□ 日本語キーボード有効化 （他の方法）<br />
+1) cd /etc<br />
+2) sudo&nbsp;emacs profile または sudo vi profile でprofileの最後に下記を加える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ----------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Japanese Key Settings (変更が分りやすくなるで入れるとよい）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; loadkeys jp106<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ----------------------------<br />
+3) 筆者が試したところ、確かに日本語キーボードになったが、loadkeys: could not deallocate keymap 2 などが表示されるようになった。<br />
+参考HP&nbsp;: <a href="http://blog.mmq.at/sb.cgi?eid=146">http://blog.mmq.at/sb.cgi?eid=146</a><br />
+vi : o で書き込み、ESCでコマンドに戻る、:qで保存せず終了、:wqで保存して終了<br />
+------------------------------------------------------------------------------<br />
+■ ファイルのサイズ変更<br />
+（andLinuxをC:ドライブにデフォルトでインストールした場合。\は円マーク）<br />
+C:\Program Files\andLinux\Drives にあるbase.vdiの容量を大きくします<br />
+1) アクセサリ &rarr; コマンドプロンプト &rarr; 右クリック &rarr; 管理者として実行<br />
+2)&nbsp;cd C:\Program Files\andLinux\にあるImageResizeTool.zipを解凍<br />
+3) 解凍して開いたファイルのフォルダ上の部分を右クリックしてアドレスをコピー<br />
+4) cd スペースの後に、コマンドプロンプトに貼り付けて、Enterを押す<br />
+5) その後に、下記のように入力&nbsp;<br />
+&nbsp; resize2fs.exe&nbsp;-f -p &quot;C:\Program&nbsp;Files\andLinux\Drives\base.vdi 20G<br />
+6) 他の大きさの容量にしたい場合は上記の20Gを他の値に変えればよい<br />
+------------------------------------------------------------------------------<br />
+■ Xmingを起動させると、Konquerorなどが利用可能となる。<br />
+&nbsp; （Linux OS : ubuntu でも利用可能）<br />
+&nbsp; sudo apt-get install grace (結果確認用のグラフを描くのに便利）<br />
+&nbsp; sudo apt-get install rasmol&nbsp;(xbandの利用に便利）<br />
+&nbsp; sudo apt-get install gnuplot (結果確認用のグラフを描くのに便利）<br />
+&nbsp; sudo apt-get install&nbsp;gausssum (結果確認用のグラフを描くのに便利）<br />
+&nbsp; sudo apt-get install emacs (テキストエディタ）<br />
+&nbsp; sudo apt-get install&nbsp;openBABEL<br />
+&nbsp;&nbsp;sudo apt-get abinit (ABINITを簡単にインストールする場合）<br />
+&nbsp; sudo apt-get install libstdc++5 (Intel Compilerのインストールに必要）<br />
+&nbsp; sudo apt-get install&nbsp;csh&nbsp;(WIEN2kのインストールに必要）<br />
+&nbsp;&nbsp;sudo apt-get install tcsh<br />
+&nbsp; sudo apt-get install tk<br />
+&nbsp; sudo apt-get install python-numpy (GPAW, Phonopyに必要）<br />
+&nbsp;&nbsp;sudo apt-get install python-dev (GPAW, Phonopyに必要）<br />
+&nbsp; sudo apt-get install python-matplotlib (Phonopyに必要）<br />
+&nbsp; sudo apt-get install&nbsp;python-tk&nbsp;(Phonopyに必要）<br />
+&nbsp; sudo apt-get install python-lxml&nbsp;(Phonopyに必要）<br />
+&nbsp; sudo&nbsp;apt-get install python-yaml&nbsp;(Phonopyに必要）<br />
+&nbsp; sudo apt-get install python-scipy (Phonopyで用いる）<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;mpichpython<br />
+&nbsp; sudo apt-get install gfortran<br />
+&nbsp; sudo apt-get install build-essential&nbsp;<br />
+&nbsp; sudo apt-get install libblas-dev<br />
+&nbsp; sudo apt-get install liblapack-dev<br />
+&nbsp;&nbsp;sudo apt-get install sfftw2<br />
+&nbsp; sudo apt-get install fftw2<br />
+&nbsp;&nbsp;sudo apt-get install fftw-dev<br />
+&nbsp; sudo apt-get install libfftw3-3<br />
+&nbsp;&nbsp;sudo apt-get install libfftw3-dev<br />
+&nbsp;&nbsp;sudo apt-get install cl-fftw3<br />
+&nbsp; sudo apt-get install mffm-fftw1<br />
+&nbsp;&nbsp;sudo apt-get install mffm-fftw-dev<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;netpipe-mpich<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;rsh-client<br />
+&nbsp; sudo apt-get install&nbsp;rsh-server<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;blacs1-mpich (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs1gf-mpich (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs-mpich-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install scalapack-mpich-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install libblacs-mpi1 (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install libblacs-mpi-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install libscalapack-mpi1 (並列化に必要)<br />
+&nbsp; sudo apt-get install libscalapack-mpi-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs1-lam (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs1gf-lam (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs-lam-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacsgf-lam-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install libclam-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install scalapack1-lam (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install scalapack-lam-dev (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install blacs-pvm (並列化に必要)<br />
+&nbsp; sudo apt-get install blacs1-pvm (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;blacs-pvm-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install libscalapack-pvm1 (並列化に必要)<br />
+&nbsp; sudo apt-get install libscalapack-pvm-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install mpich-bin (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;libmpich1.0-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install libmpich-mpd1.0-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install libmpich-shmem1.0-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install openmpi-bin (並列化に必要)<br />
+&nbsp; sudo apt-get install libopenmpi-dev&nbsp; (並列化に必要)<br />
+&nbsp; sudo apt-get install mpichpython (並列化に必要)<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;liblam4 (並列化に必要)<br />
+&nbsp; sudo apt-get install lam4-dev (並列化に必要)<br />
+&nbsp; sudo apt-get install lam-runtime (並列化に必要)<br />
+&nbsp; sudo apt-get install lame (並列化)<br />
+&nbsp; sudo apt-get install lampython (並列化に必要)<br />
+&nbsp; sudo apt-get install wine （windowsのアプリケーション利用）<br />
+&nbsp; sudo apt-get install root-system （解析ソフト）<br />
+&nbsp; sudo apt-get install netCDF-bin<br />
+&nbsp; sudo apt-get install libgsl0-dev (APEのインストールに必要)<br />
+&nbsp; sudo apt-get install xutils-dev (FLEURのインストールに必要)<br />
+&nbsp; sudo apt-get install subversion (acpypiのインストールに必要）<br />
+&nbsp; sudo apt-get install flex (AmberToolsのインストールに必要）<br />
+&nbsp; sudo apt-get install libqt4-gui libqt4-dev libqwt5-qt4 libqwt5-qt4-dev<br />
+&nbsp; sudo apt-get install g++ make (gromacs gui)<br />
+&nbsp; sudo apt-get install qt4-qmake (gromacs gui 必要か調査中)<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;gromacs-lam<br />
+&nbsp;&nbsp;sudo apt-get install&nbsp;gromacs-openmpi<br />
+&nbsp; sudo apt-get install&nbsp;libatlas-base-dev (必要か調査中)<br />
+&nbsp; sudo apt-get install libatlas-dev (必要か調査中)<br />
+&nbsp; sudo apt-get install libatlas3gf-base (必要か調査中)<br />
+&nbsp; sudo apt-get install libatlas-cpp-0.6-1 (必要か調査中)<br />
+&nbsp; sudo apt-get install libatlas-cpp-0.6-dev (必要か調査中)<br />
+&nbsp; sudo apt-get install mpqc-openmpi<br />
+andLinux以外でもubuntuを用いて必要なプログラムを入手する場合は、<br />
+<a href="http://packages.ubuntu.com/">http://packages.ubuntu.com/</a>&nbsp;のHPからkeywordで検索か apt-cache search 探したいファイル名 としてみるとよい。<br />
+Ubuntu11.04以後の場合は、左欄の WIEN2k または コンパイラの設定 を参照<br />
+------------------------------------------------------------------------------<br />
+■ Konquerorで以下をダウンロード<br />
+&nbsp; （＊CoFSで共有しているファイル内で解凍したり、コンパイルするとエラーが発生する）<br />
+&nbsp; Intel Fortran Compiler 11.1.064<br />
+&nbsp; Intel C Compiler 11.1.075<br />
+&nbsp;&nbsp;XCrySDen-1.4.1bin<br />
+&nbsp; PWgui-4.2<br />
+&nbsp; FFTW2<br />
+&nbsp; FFTW3<br />
+&nbsp; NetCDF-4.1.1<br />
+&nbsp; CPMD-v3.15.1<br />
+&nbsp; ABINIT-6.6.2<br />
+&nbsp; PWscf-4.2.1<br />
+&nbsp;&nbsp;Yambo-3.2.1-r.448<br />
+&nbsp;&nbsp;GPAW-0.8.07895<br />
+&nbsp; OpenMX 3.5<br />
+&nbsp; Phase v900<br />
+&nbsp; ABCAP<br />
+&nbsp; exciting (Intel Fortran 11.1はお勧めしない。Intel Fortran 11.0 がよい)<br />
+&nbsp; ELK-1.2.20<br />
+&nbsp; FLEUR （v26bは成功, v26はコンパイルに失敗）<br />
+&nbsp; WIEN2k 9&nbsp;(version 10はubuntuで複雑な系の計算が無理か？)<br />
+&nbsp;&nbsp;Phonopy<br />
+&nbsp;&nbsp;WIEN2PHON<br />
+&nbsp; APE<br />
+&nbsp; CASINO_v2.6<br />
+&nbsp; Gromacs (調査中)<br />
+&nbsp; EDM (調査中)<br />
+&nbsp; vine toolkit (調査中)<br />
+------------------------------------------------------------------------------<br />
+■ コンソール（またはターミナル）での便利な方法<br />
+a) ファイル管理の方法は幾つかあるが、例えばC:\andLinuxとCoFSでファイルを指定したら、色々なファイルをフォルダーに纏めて、下記のようにして移動させることもできる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;mv /mnt/win/フォルダ名 /home/フォルダ名<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 消去したい場合は、　rm -f -r フォルダ名<br />
+&nbsp;b) また、ワイルドカード(*)を用いればファイル名を全て入力しなくてもよいので便利<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tar zxvf exc*<br />
+&nbsp;&nbsp; cd exc*<br />
+&nbsp;c)&nbsp;入力途中にTabを押せば、補われる<br />
+&nbsp;d) 過去に入力が成功したコマンドは十字キーの&uarr;&darr;で探すことができる<br />
+＊コンソール（ターミナル）でのファイル処理が煩雑な場合はandLinux Menu &rarr; Dolphinを用いればよい<br />
+------------------------------------------------------------------------------<br />
+■ Intel Fortran Compiler setup<br />
+&nbsp;&nbsp;ソフトダウンロードの為の登録の後に、ライセンスファイルが添付されたメールが届く<br />
+&nbsp;&nbsp;1) tar zxvf&nbsp;l_cprof_p_11.1.064.tar.gz<br />
+&nbsp;&nbsp;2) cd l_cprof_p_11.1.064<br />
+&nbsp;&nbsp;3) ./install.sh<br />
+&nbsp; 4) accept と入力する場面があり、後はEnterを押していく。<br />
+&nbsp; 5) ライセンスファイルへのアドレスを入力する場面があり、アドレスを入力する。<br />
+&nbsp; 6) Enter を押していき、インストールが終了したら、kwriteやvi、emacsなどで.bashrcの一番下に下記を書き加える。<br />
+source&nbsp;/opt/intel/Compiler/11.1/064/bin/ifortvars.sh ia32<br />
+&nbsp; source /opt/intel/Compiler/11.1/064/mkl/tools/environment/mklvars32.sh<br />
+------------------------------------------------------------------------------<br />
+■ Intel&nbsp;C Compiler setup<br />
+&nbsp; 1) tar l_cproc_p_11.1.075.tar.gz<br />
+&nbsp; 2) cd l_cproc_p_11.1.075<br />
+&nbsp; 3) ./install.sh<br />
+&nbsp; 4) 後はIntel Fortran Compilerでのインストールを参考にすればよい。<br />
+------------------------------------------------------------------------------<br />
+■ XCrySDen setup<br />
+&nbsp;&nbsp;1) tar zxvf xc-1.4.1bin-linuxPC-static.tar.gz<br />
+&nbsp;&nbsp;2) cd XCrySDen-1.4.lbin-static<br />
+&nbsp;&nbsp;3) ./xcConfigure<br />
+&nbsp; 4) Please specify XCRYSDEN_SCRATCH directory<br />
+&nbsp;&nbsp;&nbsp;&nbsp; (default: /home/lecture/cp120/xcrys_tmp): (enter)<br />
+&nbsp;&nbsp;5) Do you have a CRYSTAL package ([y]es/[n]o): n<br />
+&nbsp;&nbsp;6) Specify print command (default: lpr -h): (enter)<br />
+&nbsp; 7) Do you want to enable the BABEL program ([y]es/[n]o):&nbsp;y<br />
+&nbsp;&nbsp;8) Do you want to enable image conversion program ([y]es/[n]o): y<br />
+&nbsp;&nbsp;9) Which image conversion program&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (default: //bin/X11/convert): (enter)<br />
+&nbsp;&nbsp;10) Do you want to enable whirlgif program ([y]es/[n]o): n<br />
+&nbsp;&nbsp;11) Do you want to enable mpeg_encode program ([y]es/[n]o): y<br />
+&nbsp; 12) Which mpeg_encode program&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(default: //bin/mpeg_encode): (enter)<br />
+&nbsp; 13) Is this correct ([y]es/[n]o): y<br />
+&nbsp; 14) Would you like to edit ~/.xcrysden/custom-definitions&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; file now ([y]es/[n]o): n<br />
+以上で終了。最新版の1.5でなくても十分に他のプログラムが使える。大変良い意味で枯れたプログラムである。これまでのところ、ユーザー側で明示的にパスを通さなくても、WIEN2kやPWguiは動作してくれる。<br />
+参考HP : <a href="http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html">http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html</a><br />
+------------------------------------------------------------------------------<br />
+■ PWgui setup<br />
+&nbsp; 1) tar zxvf pwgui-4.2-linux-x86.tgz<br />
+------------------------------------------------------------------------------<br />
+■ FFTW setup&nbsp;<br />
+&nbsp;&nbsp; (/uer/local/lib にライブラリが入る）<br />
+1) tar zxvf fftw-2.1.5.tar.gz<br />
+2) cd fftw-2.1.5<br />
+3) ./configure F77=ifort FC=ifort F90=ifort CC=icc CXX=icpc<br />
+4) sudo make<br />
+5) sudo make install<br />
+<br />
+&nbsp; (icc, icpcでの方法は調査中）<br />
+1) tar zxvf fftw-3.3.2.tar.gz<br />
+2) cd fftw-3.3.2<br />
+3) ./configure F77=ifort FC=ifort F90=ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;gromacs&nbsp;のインストールなどでCan&#39;t&nbsp;find fftw3f などと出る場合は<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;./configure F77=ifort FC=ifort F90=ifort --enable-threads --enable-float&nbsp;　<br />
+&nbsp;&nbsp;4) sudo make<br />
+5) sudo make install<br />
+------------------------------------------------------------------------------<br />
+■ NetCDF setup<br />
+&nbsp; 1) tar zxvf netcdf-4.1.1.tar.gz<br />
+&nbsp; 2) cd netcdf-4.1.1<br />
+&nbsp; 3) ./configure --prefix=/usr/local/netcdf F77=ifort FC=ifort F90=ifort CC=icc CXX=icpc<br />
+&nbsp; 4) sudo make check install<br />
+------------------------------------------------------------------------------<br />
+■ CPMD setup<br />
+&nbsp; 1) download CPMD :&nbsp;<a href="http://cpmd.org/">http://cpmd.org/</a><br />
+&nbsp; 2) tar zxvf cpmd-v3_15_1.tgz<br />
+&nbsp; 3) cd CPMD<br />
+&nbsp; 4) CONFIGUREの中から適した環境のファイル名を探す<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a) gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./mkconfig.sh PC-GFORTRAN &gt; Makefile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Makefile&nbsp;において<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;LFLAGS で　-static&nbsp;を削除<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b) intel fortran compiler<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;./mkconfig.sh PC-IFC &gt;&nbsp;Makefile<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Makefile において<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS&nbsp;で&nbsp;-axM -tpp6&nbsp;を削除<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LFLAGS&nbsp;=&nbsp;-L/opt/intel/Compiler/11.1/064/mkl/lib/32 -i-static&nbsp;-lmkl_intel -lmkl_sequential -lmkl_core -lpthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC = ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LD =&nbsp;ifort<br />
+&nbsp; 5) make<br />
+References<br />
+<a href="https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf">https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf</a><br />
+<a href="http://156.17.103.207/kwanty-nowa/sites/default/files/cpmd-tutor.pdf">http://156.17.103.207/kwanty-nowa/sites/default/files/cpmd-tutor.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ ABINIT setup<br />
+&nbsp; 1)&nbsp;tar zxvf abinit-6.6.2.tar.gz<br />
+&nbsp; 2)&nbsp;cd abinit-6.6.2<br />
+&nbsp; 3)&nbsp;./configure F77=ifort FC=ifort F90=ifort CC=icc CXX=icpc --with-linalg-libs=&quot;-lmkl_blas95 -lmkl_lapack95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&quot;<br />
+&nbsp; 4) make<br />
+&nbsp; 5) cd tests<br />
+&nbsp; 6) make help<br />
+&nbsp; 7) make tests_min<br />
+&nbsp; 8) cd ..<br />
+&nbsp; 9) sudo make install<br />
+------------------------------------------------------------------------------<br />
+■ PWscf setup<br />
+&nbsp; 1) tar zxvf espresso-4.2.1.tar.gz<br />
+&nbsp; 2)&nbsp;cd espresso-4.2.1<br />
+&nbsp; 3) ./configure BLAS_LIBS=&#39;-lmkl_blas95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&#39; LAPACK_LIBS=&#39;-lmkl_lapack95&#39;<br />
+4) make all xspectra<br />
+業者様の場合は <a href="http://xinhuolin.web.officelive.com/QuantumEspressoinUbuntu.aspx">http://xinhuolin.web.officelive.com/QuantumEspressoinUbuntu.aspx</a>　を参照<br />
+------------------------------------------------------------------------------<br />
+■ Yambo setup (ifort及びiccでerrorが出るのでblas,lapackの指定無しにした）<br />
+&nbsp; ($HOME = /home/ログイン名/PWscf）(NetCDF 無し）&larr;&uarr;（原因調査中）<br />
+1) tar zxvf yambo-3.2.1-r.448.tar.gz<br />
+2) cd yambo-3.2.1-r.448<br />
+&nbsp; 3)&nbsp;./configure F77=ifort FC=ifort F90=ifort CC=icc&nbsp;CXX=icpc&nbsp;--with-iotk=&#39;$HOME/PWscf/espresso-4.2.1/iotk&#39; --with-p2y=4.0 LOCAL_LIBS=&quot;-lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&quot; &gt;&amp; configure.log<br />
+&nbsp; 4) sudo | make yambo interfaces ypp &gt;&amp; make.log<br />
+------------------------------------------------------------------------------<br />
+■ GPAW setup<br />
+&nbsp; （$HOME/ログイン名/GPAW/ 内にtar.gzファイルをおいた場合）<br />
+&nbsp; 1) tar zxvf gpaw-setups-0.8.929.tar.gz<br />
+&nbsp; 2) cd gpaw-setups-0.8.929<br />
+&nbsp; 3) gunzip *.gz<br />
+&nbsp; 4) cd ..<br />
+&nbsp; 5) tar zxvf python-ase.3.5.0.2101.tar.gz<br />
+&nbsp; 6) cd python-ase.3.5.0.2101<br />
+&nbsp; 7) sudo python setup.py install<br />
+&nbsp; 8) cd ..<br />
+&nbsp; 9) vi .bahsrc or emacs .bashrc として最後の行に下記を書き込む。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export GPAW_SETUP_PATH=$HOME/GPAW/gpaw-setups-0.8.7929<br />
+&nbsp; 10) tar zxvf gpaw-0.8.07895.tar.gz<br />
+&nbsp; 11) cd gpaw-0.8.07895<br />
+&nbsp; 12) sudo python setup.py install<br />
+&nbsp; 13) gpaw-test -j 1<br />
+&nbsp; 計算の実行は、計算用のスクリプト case.py を作成し、python case.py となる。<br />
+------------------------------------------------------------------------------<br />
+■ OpenMX setup<br />
+&nbsp; ($HOME = /home/ログイン名）<br />
+1) tar zxvf openmx3.5.tar.gz<br />
+2) cd openmx3.5<br />
+3) cd source<br />
+4) source の makefile を下記の例のように書き換える。<br />
+5)&nbsp;vi makefile&nbsp;又は emacs makefile&nbsp;又は kwrite makefile&nbsp;で下のように書き換える&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; CC = icc -O3 -Dnompi -Dnoomp -I/usr/local/include -I/$HOME/intel/Compiler/11.1/075/mkl/include<br />
+LIB = -L/usr/local/lib -lfftw3 -L/opt/intel/Compiler/11.1/075/mkl/lib/32 -lmkl_intel -lmkl_sequential -lmkl_core -lpthread -L/usr/lib -lpthread -i-static<br />
+6) make install<br />
+------------------------------------------------------------------------------<br />
+■ exciting setup (Intel Fortran 11.1 ではエラーが出る。11.0.084では成功)<br />
+&nbsp; 1) tar xvf exciting.helium.2010.12.17.gz<br />
+2)&nbsp;cd exciting<br />
+3) make<br />
+--------------------------------------------------------<br />
+■ ELK setup<br />
+&nbsp; 1) download ELK : <a href="http://elk.sourceforge.net/">http://elk.sourceforge.net/</a>&nbsp;<br />
+&nbsp; 2) tar zxvf elk-1.2.20.tgz<br />
+&nbsp; 3) cd elk*<br />
+&nbsp; 4) ./setup<br />
+&nbsp;&nbsp;&nbsp;&nbsp; a) Intel Fortran 10 のヴァージョンをインストールしていた場合: 3 を選択<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; （11.1 でも test ではPassed となった）<br />
+&nbsp;&nbsp;&nbsp;&nbsp; b) gfortran の場合: 18 を選択<br />
+&nbsp; 5) make all<br />
+&nbsp; 6) make test でコンパイルしたプログラムのテストができる<br />
+References<br />
+<a href="http://elk.sourceforge.net/elk.pdf">http://elk.sourceforge.net/elk.pdf</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ FLEUR : <a href="http://www.flapw.de/fleur_features.shtml">http://www.flapw.de/fleur_features.shtml</a><br />
+&nbsp; 1) wannier90 : http://wannier.org/index.html<br />
+&nbsp; 2) tar zxvf wannier<br />
+&nbsp; 3) cd wannier*&nbsp;<br />
+&nbsp; 4) Compiler によって下記のように入力が変わる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; a) Intel fotrtran の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp ./config/make.sys.ifort ./make.sys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make.sys を開き、対応するパスを記入する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIBDIR = /opt/intel/Compiler/11.1/069/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIBS = -L$(LIBDIR) -lmkl_intel -lmkl_sequential -lmkl_core -lpthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; b) gfortran の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp ./confi/make.sys.gfort ./make.sys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make.sys を開き、使いたいライブラリの#を除く。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; よく分からない場合は、NETLIB LAPACK and BLAS で<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #LIBDIRと#LIBSの#を削除してSAVE<br />
+&nbsp; 5) make<br />
+&nbsp; 6) make lib<br />
+&nbsp; 7) make doc<br />
+&nbsp; 8) make test<br />
+<br />
+■ FLEUR : <a href="http://www.flapw.de/pm/index.php?n=Main.HomePage">http://www.flapw.de/pm/index.php?n=Main.HomePage</a>　<br />
+&nbsp; 1) tar zxvf v26b.tgz<br />
+&nbsp; 2) cd v26b<br />
+&nbsp; 3) Imakefile で、#define の後の部分を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/intel/mkl/current/lib/32 を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /opt/intel/Compiler/11.1/064/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/intel/fc/current/lib を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /opt/intel/Compiler/11.1/064/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 最初のFFLAGS を #FFLAGS にする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LD_LIBRARY_PATH にある -lmkl を下記に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;-lmkl_intel -lmkl_sequential -lmkl_core<br />
+&nbsp; 4)&nbsp;Imakefile で、欲しい計算方法を#define の後の部分で書き加える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #define apw (APW+lo法、場合によってはLAPWよりも50%速くなる)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #define soc (spin-orbit coupling 計算を可能にする)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; などなど<br />
+&nbsp; 5) imake<br />
+&nbsp; 6)&nbsp;make fleur.x inpgen.x<br />
+&nbsp; 7) 再度コンパイルする場合は、make rmall の後に imake<br />
+&nbsp;&nbsp;＊ Imakefile でのまとめ（書き換えは下記の通り）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #FFLAGS= -cm -W0 -g -r8 -assume byterecl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/Compiler/11.1/064/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDFLAGS= -L/opt/intel/Compiler/11.1/064/mkl/lib/32 -lmkl_intel -lmkl_sequential -lmkl_core -lguide -lpthread -i_dynamic \<br />
+-Wl,-rpath=/opt/intel/Compiler/11.1/064/mkl/lib/32 -Wl,-rpath=/opt/intel/Compiler/11.1/064/lib<br />
+<br />
+References : <a href="http://nitrogen14.blog51.fc2.com/blog-entry-66.html">http://nitrogen14.blog51.fc2.com/blog-entry-66.html</a><br />
+------------------------------------------------------------------------------<br />
+■ WIEN2k　 version 9　<br />
+&nbsp; (最新版の11がweb上からダウンロードできなかったので9を入れる)<br />
+&nbsp; 1) tar -xvf WIEN2k_09.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) ./userconfig_lapw<br />
+7) w2web<br />
+業者様の場合は <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a>&nbsp;を参照<br />
+&nbsp;&nbsp;1) tar -xvf WIEN2k_9.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) V gfortran + gotolib を選択<br />
+&nbsp; 7) gfortran, gcc を入力<br />
+&nbsp; 8) r を押して、-llapack_lapw -lblas_lapw -lblas -llapack<br />
+&nbsp; 9) ./userconfig_lapw<br />
+------------------------------------------------------------------------------<br />
+■ Phonopy (調査中)<br />
+&nbsp; 1)&nbsp;download phonopy :&nbsp;<a href="http://sourceforge.jp/projects/sfnet_phonopy/releases/">http://sourceforge.jp/projects/sfnet_phonopy/releases/</a><br />
+&nbsp; 2) tar zxvf ponopy-0.9.4.3-pre6.tar.gz<br />
+&nbsp; 3)&nbsp;cd phonopy*<br />
+&nbsp; 4)&nbsp;python setup.py install<br />
+Reference : <a href="http://phonopy.sourceforge.net/index.html">http://phonopy.sourceforge.net/index.html</a><br />
+<a href="http://atztogo.users.sourceforge.net/">http://atztogo.users.sourceforge.net/</a><br />
+------------------------------------------------------------------------------<br />
+■ WIEN2PHON（調査中）<br />
+&nbsp; 1) download WIEN2kPHON :&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.wien2k.at/reg_user/unsupported/WIEN2PHON.tgz">http://www.wien2k.at/reg_user/unsupported/WIEN2PHON.tgz</a><br />
+&nbsp; 2) フォルダを作成してWIEN2PHON.tgzを入れる<br />
+&nbsp; 3)&nbsp;tar zxvf WIEN2PHON.tgz<br />
+&nbsp; 4) cd WIEN2PHON<br />
+&nbsp; 5) cd WIEN2POSCAR<br />
+&nbsp; 6) WIEN2POSCAR にあるMakefileでFC = ifc をFC = ifort に書き換える<br />
+&nbsp; 7) make<br />
+&nbsp; 8) cd ..<br />
+&nbsp; 9) cd cellconv<br />
+&nbsp; 10) cellconvにあるMakefileでFC = ifc をFC = ifort に書き換える<br />
+&nbsp; 11) make<br />
+&nbsp; 12) cd ..<br />
+&nbsp; 13)&nbsp;文献[1]を参考にperl-math-MatrixReal.pm&nbsp;を<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/lib/perl5/math/へダウンロードする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://search.cpan.org/dist/Math-MatrixReal/">http://search.cpan.org/dist/Math-MatrixReal/</a><br />
+&nbsp; PHON : <a href="http://www.homepages.ucl.ac.uk/~ucfbdxa/">http://www.homepages.ucl.ac.uk/~ucfbdxa/</a><br />
+&nbsp; 1) mkdir PHON<br />
+&nbsp; 2) phon.1.30.tar.Z をPHONに入れる<br />
+&nbsp; 3) cd PHON<br />
+&nbsp; 4) tar zxvf phon.1.30.tar.Z<br />
+&nbsp; 5) cd blas<br />
+&nbsp; 6) make<br />
+&nbsp; 7) cd ../lapack<br />
+&nbsp; 8) make<br />
+&nbsp; 9) cd ../src<br />
+&nbsp; 10)&nbsp;cp makefile.linux_ifort makefile<br />
+&nbsp; 11) make<br />
+References :<br />
+[1] <a href="http://www001.upp.so-net.ne.jp/hata/dowasure_perl.html#matrix01">http://www001.upp.so-net.ne.jp/hata/dowasure_perl.html#matrix01</a><br />
+[2] D. Alfe, Computer Physics Communications 180 (2009) 2622.<br />
+その他、google Scholar でPHON、WIEN2PHON, D. Alfeなどで検索してみるとよい<br />
+-----------------------------------------------------------------------------<br />
+■ APE setup<br />
+(gfortran, cc でのコンパイル）<br />
+libxcが要求される。下記HPを参照してインストールする。<br />
+<a href="http://www.tddft.org/programs/octopus/wiki/index.php/Libxc:download">http://www.tddft.org/programs/octopus/wiki/index.php/Libxc:download</a><br />
+&nbsp; 1) tar zxvf libxc-1.0.tar.gz<br />
+&nbsp; 2) cd libxc<br />
+&nbsp; 3) ./configure<br />
+&nbsp; 4) make<br />
+&nbsp; 5) sudo make install<br />
+&nbsp; ape setup<br />
+&nbsp; 1) tar zxvf ape-1.1.0.tar.gz<br />
+&nbsp; 2) cd ape-1.1.0<br />
+&nbsp; 3) ./configure --with-libxc-prefix=/opt/etsf/<br />
+&nbsp; 4) make<br />
+&nbsp; 5) make install<br />
+&nbsp; 6) cd src<br />
+&nbsp; 7) sudo cp ape /usr/local/bin<br />
+Reference : <a href="http://xinhuolin.web.officelive.com/APEinUbuntu.aspx">http://xinhuolin.web.officelive.com/APEinUbuntu.aspx</a><br />
+------------------------------------------------------------------------------<br />
+■ CASINO（CASINO_v2.6_standard.tar.tar）<br />
+&nbsp; 1) tar xvf CASINO*<br />
+&nbsp; 2) cd CASINO<br />
+&nbsp; 3) .bashrc にて下記を加える。QMC_ARCH ではREADME_ARCHから選択する。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export QMC_ARCH=&quot;linuxpc-ifort&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:$HOME/CASINO/bin_qmc<br />
+&nbsp; 4) make<br />
+------------------------------------------------------------------------------<br />
+■ Gromacs set up （並列は調査中）<br />
+<br />
+&nbsp; acpypi<br />
+&nbsp; 1) svn checkout <a href="http://acpypi.googlecode.com/svn/trunk">http://acpypi.googlecode.com/svn/trunk</a> acpypi<br />
+<br />
+&nbsp; AmberTools (AmberTools.pdf に分かりやすく書かれている）<br />
+&nbsp; 1) download AmberTools :&nbsp;<a href="http://ambermd.org/">http://ambermd.org/</a>&nbsp;<br />
+&nbsp; 2)&nbsp;tar xvfj AmberTools-1.5.tar.gz<br />
+&nbsp; 3) .bashrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export AMBERHOME=$HOME/amber11<br />
+&nbsp;&nbsp;4) cd&nbsp;amber11/AmberTools/src<br />
+&nbsp; 5) ./configure --help | more<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;使用したい機能に対する追加するオプションを調べる&nbsp;<br />
+&nbsp; 6) ./configure intel<br />
+&nbsp; 7)&nbsp;make&nbsp;install<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Error がかなり表示される<br />
+&nbsp; 8) cd ../test<br />
+&nbsp; 9) make test<br />
+MPI並列<br />
+&nbsp;&nbsp;10) cd $AMBERHOME/AmberTools/src<br />
+&nbsp; 11) make&nbsp;clean<br />
+&nbsp;&nbsp;12)&nbsp;./configure -mpi&nbsp;他のオプション コンパイラの選択<br />
+&nbsp; 13) make install<br />
+&nbsp;&nbsp;OpenMP並列<br />
+&nbsp;&nbsp;12) ./configure -openmp 他のオプション　コンパイラの選択<br />
+&nbsp; 13)&nbsp;make nabonly<br />
+&nbsp; 14) cd ../test<br />
+&nbsp; 15 make test.parallel<br />
+<br />
+&nbsp; Gromacs<br />
+&nbsp; 1)&nbsp;tar zxvf&nbsp;gromacs-4.5.4.tar.gz<br />
+&nbsp; 2) cd&nbsp;gromacs-4.5.4<br />
+&nbsp; 3) ./configure<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 並列 : ./configure MPICC=mpicc --enable-mpi --program-suffix=_mpi<br />
+&nbsp; 4) make<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 並列 : make mdrun<br />
+&nbsp;&nbsp;5) sudo make install<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 並列 : sudo make install -mdrun<br />
+&nbsp; 6)&nbsp;/usr/local/gromacs&nbsp;インストールでのデータが格納される<br />
+<br />
+&nbsp; Gromacs GUI<br />
+&nbsp; 1) tar zxvf&nbsp;47665-grogui052.tar.gz<br />
+&nbsp; 2) cd grogui*<br />
+&nbsp; 3) cd gui_withplotting<br />
+&nbsp; 4) grogui.pro で下記を確認<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Line 10, 15&nbsp;: /usr/include/qwt-qt4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Line 20 : LIBS += -lqwt-qt4<br />
+&nbsp; 5) qmake<br />
+&nbsp; 6) make<br />
+&nbsp; 7) ./grogui<br />
+References :<br />
+[1] <a href="http://nitrogen14.blog51.fc2.com/?q=gromacs#entry57">http://nitrogen14.blog51.fc2.com/?q=gromacs#entry57</a><br />
+[2] <a href="http://ibio.jp/index.php?Gromacs%A5%C1%A5%E5%A1%BC%A5%C8%A5%EA%A5%A2%A5%EB">http://ibio.jp/index.php?Gromacs%A5%C1%A5%E5%A1%BC%A5%C8%A5%EA%A5%A2%A5%EB</a><br />
+[3] <a href="http://ibio.jp/index.php?%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB%CE%E0%2FGromacs%CF%C2%CC%F5">http://ibio.jp/index.php?%A5%DE%A5%CB%A5%E5%A5%A2%A5%EB%CE%E0%2FGromacs%CF%C2%CC%F5</a><br />
+[4] <a href="http://masa.o.oo7.jp/howtogromacs.txt">http://masa.o.oo7.jp/howtogromacs.txt</a><br />
+[5] <a href="http://nano.cc.toin.ac.jp/~ysd/semi/gromacs.txt">http://nano.cc.toin.ac.jp/~ysd/semi/gromacs.txt</a><br />
+[6] <a href="http://toranekosan.blogspot.com/2007/07/gromacs.html">http://toranekosan.blogspot.com/2007/07/gromacs.html</a><br />
+[7] <a href="http://08thse.dip.jp/lab/gromacs_install_3.3.html">http://08thse.dip.jp/lab/gromacs_install_3.3.html</a><br />
+[8] <a href="http://extstrg.asabiya.net/pukiwiki/index.php?tar%A4%CE%BB%C8%A4%A4%CA%FD">http://extstrg.asabiya.net/pukiwiki/index.php?tar%A4%CE%BB%C8%A4%A4%CA%FD</a><br />
+[9] <a href="http://kde-apps.org/content/show.php?content=47665">http://kde-apps.org/content/show.php?content=47665</a><br />
+------------------------------------------------------------------------------<br />
+■ EDM setup (調査中。--x-includesや--x-libraries が不明。make時にエラーが出る）<br />
+&nbsp; (windows用にedm-2.0.1.exeなどがある)<br />
+&nbsp;&nbsp;edm-2.0.1.tar.tar<br />
+&nbsp; 1) tar zxvf edm-2.0.1.tar.tar<br />
+&nbsp; 2) cd edm-2.0.1<br />
+&nbsp; 3) ./configure --enable-both --x-includes=/usr/include/ --x-libraries=/usr/X11R6/<br />
+&nbsp; 4) make<br />
+&nbsp; edm-3.0.tar.tar<br />
+&nbsp; 1) tar zxvf edm-3.0.tar.tar<br />
+&nbsp; 2) cd edm-3.0<br />
+&nbsp; 3) ./configure --enable-both --x-includes=/usr/include/ --x-libraries=/usr/X11R6/<br />
+&nbsp; 4) make<br />
+&nbsp;&nbsp;2.0.1にあるfftwとformsを3.0にコピーする。<br />
+&nbsp; 1) cd edm-3.0<br />
+&nbsp; 2) make<br />
+&nbsp; 3) make install<br />
+&nbsp; 4) .bashrc にて、export PATH=&quot;/usr/local/edm/bin:$PATH&quot;<br />
+この後に、sudo reboot&nbsp;でリブートする。<br />
+&nbsp; 1) edn と入力して起動<br />
+Reference : <a href="http://xinhuolin.web.officelive.com/CompileEDMinCygwin.aspx">http://xinhuolin.web.officelive.com/CompileEDMinCygwin.aspx</a><br />
+------------------------------------------------------------------------------<br />
+■ ABCAP&amp;Phase<br />
+&nbsp;&nbsp;十分な日本語のマニュアルがあるのでsetupについては省略する。<br />
+&nbsp; PhaseでTDDFTが実装されたら、海外の人にも使って頂けるようにインストール手順と使用方法を解説したいと考えております。<br />
+------------------------------------------------------------------------------<br />
+■ vine toolkit setup (以下はvine toolkit のセットアップ：調査中)<br />
+------------------------------------------------------------------------------<br />
+■ JDK6 setup<br />
+&nbsp; 1)&nbsp;download JDK6 : <a href="http://java.sun.com/javase/ja/6/download.html">http://java.sun.com/javase/ja/6/download.html</a>&nbsp;<br />
+&nbsp; 2)&nbsp;chmod +x jdk-*<br />
+&nbsp; 3) ./jdk*<br />
+&nbsp; 4)&nbsp;kwrite などを用いて.bashrcにPATHを書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export JAVA_HOME=作成されたファイルのディレクトリ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${JAVA_HOME}/bin:<br />
+&nbsp; 5) java -version<br />
+&nbsp;&nbsp;&nbsp;&nbsp;　Java(TM) SE Rutine Environment と表示されれば成功<br />
+References :<br />
+<a href="http://java.sun.com/javase/ja/6/webnotes/install/jdk/install-linux.html">http://java.sun.com/javase/ja/6/webnotes/install/jdk/install-linux.html</a><br />
+<a href="http://www.whitemark.co.jp/tec/java/jdkInstallLin.html">http://www.whitemark.co.jp/tec/java/jdkInstallLin.html</a><br />
+------------------------------------------------------------------------------<br />
+■ Apache-ant setup<br />
+&nbsp; 1)&nbsp;download&nbsp;Apache-ant-1.8.2 :&nbsp;<a href="http://ant.apache.org/bindownload.cgi">http://ant.apache.org/bindownload.cgi</a><br />
+&nbsp; 2) tar zxvf apache-ant-1.8.2-bin.tar.gz<br />
+&nbsp; 3)&nbsp;kwrite などを用いて.bashrcにPATHを書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export JAVA_HOME=作成されたファイルのディレクトリ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${ANT_HOME}/bin:<br />
+&nbsp;&nbsp;4) bash<br />
+&nbsp; 5) ant -v<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Apache Ant(TM) version 1.8.2 と表示されれば成功<br />
+Reference : <a href="http://ant.apache.org/manual/install.html">http://ant.apache.org/manual/install.html</a><br />
+------------------------------------------------------------------------------<br />
+■ Apache-tomcat setup<br />
+&nbsp; 1) download Apache-tomcat :&nbsp;<a href="http://vinetoolkit.org/software_releases">http://vinetoolkit.org/software_releases</a><br />
+&nbsp; 2)&nbsp;tar zxvf apache-tomcat-5.5.26.tar.gz<br />
+&nbsp; 3) kwrite などを用いて.bashrcにPATHを書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export TOMCAT_HOME=作成されたファイルのディレクトリ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${TOMCAT_HOME}/bin:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;export CATALINA_HOME=作成されたファイルのディレクトリ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${CATALINA_HOME}/bin:<br />
+&nbsp; 4)&nbsp;bash<br />
+&nbsp; 5) ./catalina.sh start<br />
+&nbsp; 6) sudo ifconfig<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lo での inet addr をメモしておく<br />
+&nbsp; 7)&nbsp;以下の好きな方法で起動できる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://IPアドレス:8080/">http://loでメモした値:8080/</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://andLinux:8080/">http://andLinux:8080/</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://localhost:8080/">http://localhost:8080/</a><br />
+Reference : <a href="http://www.profaim.jp/tools/soft/tomcat/setup5-linux/install.php">http://www.profaim.jp/tools/soft/tomcat/setup5-linux/install.php</a><br />
+------------------------------------------------------------------------------<br />
+■ Flex SDK setup<br />
+&nbsp; 1)&nbsp;download flex sdk : <a href="http://vinetoolkit.org/software_releases">http://vinetoolkit.org/software_releases</a><br />
+&nbsp; 2)&nbsp;mkdir&nbsp;コマンドで新しいフォルダを作成する<br />
+&nbsp;&nbsp;3)&nbsp;作成したフォルダの中に ダウンロードしたflex_sdk.....を入れる<br />
+&nbsp; 4)&nbsp;unzip flex*<br />
+&nbsp; 5) cd bin<br />
+&nbsp; 6) chmod +x *&nbsp;<br />
+&nbsp; 7)&nbsp;改行コードがCR+LFのため ^M bad interpreterとエラーが出るので対策を行う<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; これはWindowsからLinuxへデータを転送したために起こっている<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp -p&nbsp;mxmlc mxmlc.orig<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tr -d &#39;\r&#39; &lt; mxmlc.orig &gt; mxmlc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 他のスクリプトについても行うとよい<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (aasdoc, acompc, amxmlc, asdoc, compc, copylocale,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; digest,&nbsp;fcsh,&nbsp;fdb, optimizer)<br />
+&nbsp; 8)&nbsp;kwrite などを用いて.bashrcにPATHを書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export FLEX_HOME=作成したファイルのディレクトリ<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${FLEX_HOME}/bin:<br />
+&nbsp; 9) mxmlc -help<br />
+Reference : <a href="http://www.revulo.com/blog/20090924.html">http://www.revulo.com/blog/20090924.html</a><br />
+------------------------------------------------------------------------------<br />
+GridSphere setup<br />
+&nbsp; 1) download GridSphere :<br />
+&nbsp; 2) tar zxvf Grid*<br />
+&nbsp; 3) cd Grid*<br />
+&nbsp; 4) ant install<br />
+&nbsp; 5) kwrite などを用いて.bashrcにPATHを書き入れる(GridSphereを使う場合)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export CATALINA_HOME=$CATALINA_HOME:解凍されたファイルのディレクトリ/webapps<br />
+Reference : <a href="http://vinetoolkit.org/content/vine-and-gridsphere">http://vinetoolkit.org/content/vine-and-gridsphere</a><br />
+------------------------------------------------------------------------------<br />
+■ Liferay setup<br />
+&nbsp; 1) download Liferay :&nbsp;<br />
+&nbsp; 2) unzip&nbsp;liferay-portral-5.2.3<br />
+&nbsp; 3) kwrite などを用いて.bashrcにPATHを書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export CATALINA_HOME=作成したファイルのディレクトリ/tomcat-5.5.27<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$PATH:${CATALINA_HOME}/bin:<br />
+&nbsp;&nbsp;4)&nbsp;login ID : test@liferay.com&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; password : test<br />
+Reference : <a href="http://vinetoolkit.org/content/vine-and-liferay">http://vinetoolkit.org/content/vine-and-liferay</a>&nbsp;&nbsp;<br />
+<a href="http://www.liferay.com/ja/community/wiki/-/wiki/Main/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB;jsessionid=B336C3B7AA1DE14FDBC0DE7857F009BA.node-1#section-_E3_82_A4_E3_83_B3_E3_82_B9_E3_83_88_E3_83_BC_E3_83_AB-_E7_B0_A1_E5_8D_98_E3_81_AALiferay_E3_82_A4_E3_83_B3_E3_82_B9_E3_83_88_E3_83_BC_E3_83_AB_E6_89_8B_E9_A0_86">http://www.liferay.com/ja/community/wiki/-/wiki/Main/%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB;jsessionid=B336C3B7AA1DE14FDBC0DE7857F009BA.node-1#section-_E3_82_A4_E3_83_B3_E3_82_B9_E3_83_88_E3_83_BC_E3_83_AB-_E7_B0_A1_E5_8D_98_E3_81_AALiferay_E3_82_A4_E3_83_B3_E3_82_B9_E3_83_88_E3_83_BC_E3_83_AB_E6_89_8B_E9_A0_86</a><br />
+------------------------------------------------------------------------------<br />
+■ vine toolkit setup<br />
+&nbsp; 1) download vine-1.3.1.tar.gz<br />
+&nbsp; 2) tar zxvf vine-1.3.1.tar.gz<br />
+&nbsp; 3) cd vine-1.3.1<br />
+&nbsp; 4) ant install<br />
+&nbsp; 5) [19] nano abinit project deployed to Liferay を選択<br />
+Reference : <a href="http://vinetoolkit.org/content/vine-toolkit-standalone-mode">http://vinetoolkit.org/content/vine-toolkit-standalone-mode</a><br />
+<a href="http://gforge.man.poznan.pl/files/vine_docs/VineTutorials.pdf">http://gforge.man.poznan.pl/files/vine_docs/VineTutorials.pdf</a><br />
+------------------------------------------------------------------------------</p>

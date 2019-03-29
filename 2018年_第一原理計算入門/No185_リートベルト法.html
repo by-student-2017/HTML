@@ -1,0 +1,792 @@
+　ここではリートベルト法の関連情報について記述する<br />
+------------------------------------------------------------------------------<br />
+■ 特に重要<br />
+・2018年5月7-8日に名古屋のJFCCで泉富士夫先生にお会いしたときに、講演に呼ばれるのが旧帝が多くて寂しがっていました。加えて、「研究室程度の小規模でもどこでも行って&quot;無償で&quot;講演するよ」って言っていました（twitterにもそう書いている）。<br />
+　名古屋のJFCCのセミナーでは非常に分かり易くてよく出来たマニュアルが配布されていて驚きました。twitterやHPからは想像できない物腰の柔らかい老紳士の方なので、多くの大学や企業、各研究室で講演がなされればと私は思っております。<br />
+　Youtube動画の配信や最新版の配布を行わない理由は、多くのフリーソフトやシェアウェア（秀丸など）と連携しているため、権利の問題が起こらないように細心の注意を払いたいためだそうです。<br />
+<br />
+※ 私個人の意見としては、この講習に前後して、『坪田 雅己、伊藤 孝憲&nbsp; 著、「RIETAN‐FPで学ぶリートベルト解析」、情報機構』や同じ著書の書籍に目を通しておくとよい。実際の解析で迷ったとき（入力ファイルでの変更箇所とその考え方）やエラーでの対処方法が記載されており非常に役立つ。大学の図書館になければ購入を頼んでみればよい。それだけの価値がある書籍である。著書の坪田さんは情報機構でセミナーの講師をしていたりするので、その機会を利用して、不明な点を相談してみるのもよい。<br />
+------------------------------------------------------------------------------<br />
+■ 動画（全てクリエイティブコモンにしています）<br />
+・Youtube動画： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mEjtFPpzJY24kgu5KCt_2jU">https://www.youtube.com/playlist?list=PL9r3BfacS1mEjtFPpzJY24kgu5KCt_2jU</a>&nbsp;<br />
+&nbsp;（古いヴァージョンでの操作方法になりますが、新しいヴァージョンでも基本的な操作方法は同じです）
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mEjtFPpzJY24kgu5KCt_2jU " width="560"></iframe></div>
+・動画リスト： <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a>&nbsp;<br />
+・関連動画： <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+------------------------------------------------------------------------------<br />
+■ Rietveld解析ができないデータ<br />
+・選択配向の影響が強く出ているデータ<br />
+・粗大粒子の影響が強く出ているデータ<br />
+・反射法測定（通常のXRD装置）で入射X線が試料からはみ出しているデータ<br />
+（低角では照射面積が広がる。通常の試料ホルダーに充填しているなら大丈夫でしょう）<br />
+・反射法測定で試料が薄いため、入射X線が試料ホルダーや基板まで突き抜けている場合<br />
+------------------------------------------------------------------------------<br />
+□ 技能の取得方法<br />
+　名古屋大学シンクロトロン光研究センターでのシンクロトロン光利用者研究会で講習会が開催されている（XRDは夏ごろ開催なので6月近辺でHPをチェックしておくと良い)。もし定員が埋ってしまった場合は、下記を参考にして自習しておくとよい。<br />
+課題1： <a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd1.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd1.pdf</font></a><br />
+課題2： <a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf</font></a><br />
+理論： <a href="http://www.crl.nitech.ac.jp/~ida/"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/</font></a> &lt;- 英文であるが、読みこなして欲しい。<br />
+Rietveld解析：<a href="http://chem.tf.chiba-u.jp/gacb10/memo.files/Rietveld/Rietveld.html">http://chem.tf.chiba-u.jp/gacb10/memo.files/Rietveld/Rietveld.html</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+□ emacs+pythonでRIETAN-FPを実行し、解析結果をグラフ化する<br />
+・Rietveld解析 <a href="http://chem.tf.chiba-u.jp/gacb10/memo.files/Rietveld/Rietveld.html">http://chem.tf.chiba-u.jp/gacb10/memo.files/Rietveld/Rietveld.html</a>　<br />
+------------------------------------------------------------------------------<br />
+■ Z-matrix: <a href="http://www.crl.nitech.ac.jp/~ida/research/memo/Zmatrix/20140829z_matrix.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/research/memo/Zmatrix/20140829z_matrix.pdf</font></a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;International Tables Vol. A の読み方は、今野豊彦、『物質の対称性と群論』、共立出版、を読むと良い。<br />
+------------------------------------------------------------------------------<br />
+■ Available Rietveld Software： <a href="http://programming.ccp14.ac.uk/solution/rietveld_software/index.html"><font color="#0000ff">http://programming.ccp14.ac.uk/solution/rietveld_software/index.html</font></a><br />
+------------------------------------------------------------------------------<br />
+■ GSAS (米国)<br />
+□ GUI: EXPGUI<br />
+・ TOFでの粉末構造解析をするなら安定していて使いやすい<br />
+・ 磁気構造解析が可能<br />
+・ Stephon&#39;s関数も使用可能（結晶構造に依存した歪方向を考慮する。計算が高速になる）<br />
+※ GSASはステップ間隔が一定（等間隔のデータで）ないと処理できない。<br />
+※&nbsp;MEMの手順： GSAS -&gt; Alchemy -&gt; Dysnomia<br />
+Alchemy: <a href="http://tof-alchemy.secret.jp/">http://tof-alchemy.secret.jp/</a>, <a href="http://science.shinshu-u.ac.jp/~muki/VENUS.html">http://science.shinshu-u.ac.jp/~muki/VENUS.html</a><br />
+□ GSAS&nbsp;&gt; REFLIST &gt; *.lst &gt; Alchemy (*.inp) &gt; *.fos or *.mem &gt; Dysnomia&nbsp;(*.prf)<br />
+・ <a href="https://www.jstage.jst.go.jp/article/bunsekikagaku/55/6/55_6_391/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/bunsekikagaku/55/6/55_6_391/_pdf/-char/ja</a>&nbsp;に下記のように記載されている<br />
+----------<br />
+　複数のヒストグラムを組み合わせて解析した場合は、ヒストグラムの数だけAlchemyによるファイル変換を繰り返さなければならない。基本的には、2&theta;が最大の高角バンクで測定した、分解能の高い粉末中性子回折データから得た*.memおｗMEM解析するのが望ましいが、単位胞がよほど小さい物質でない限り、それだけでは済まなくなる。<br />
+　MEM解析において本質的に重要なのは、十分広いd領域の反射の回折強度を高確度・精度で測定することできる。しかし、TOF中性子回折では、長波長の中性子の回折により観測された、|Fo(F)|の大きい低指数反射の回折強度は消衰効果の影響を受けやすい。消衰効果を厳密に補正するのは事実上不可能といって過言ではない。したがって、それらの反射は低角バンクで、短波長の中性子の回折を通じて観測する必要がある。<br />
+　複数のヒストグラムに対応した*.memを作成した後、低角バンクで測定したヒストグラムから得られた*.memから何本かの低指数反射のデータを抜き出し、高角バンクに対するヒストグラムから作成した*.mem中に挿入する。どのヒストグラムからどの反射を取り出すかは、*.memに出力された|Fo(h)|や&lambda;を考慮した上でユーザーが適切に判断する。<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ JANA<br />
+・ 安定性が高い。<br />
+・ アルゴリズムがFullprofに似ているため、Fullprofの初期値として使用できる。<br />
+JANA: <a href="http://jana.fzu.cz/">http://jana.fzu.cz/</a><br />
+JANA:&nbsp;<a href="http://www.crystallography.fr/mathcryst/pdf/uberlandia/Dusek_Powder_examples.pdf">http://www.crystallography.fr/mathcryst/pdf/uberlandia/Dusek_Powder_examples.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ Fullprof （フランス語圏｛ベルギー｝の方に聞いたらこちらを使われていた）<br />
+□ GUI: WinPLOTR<br />
+・ パラメータが発散しやすい。発散すると解析を最初からやり直すことになることが多い<br />
+・ Dicvol用のファイルが作製可能<br />
+・ 未知構造解析が可能<br />
+・ Superflipも可能<br />
+・ 磁気構造解析が可能<br />
+※ <a href="http://nc-imr.imr.tohoku.ac.jp/HERMES/index.html">http://nc-imr.imr.tohoku.ac.jp/HERMES/index.html</a> から <a href="http://nc-imr.imr.tohoku.ac.jp/HERMES/Analysis/FullProf.html">http://nc-imr.imr.tohoku.ac.jp/HERMES/Analysis/FullProf.html</a> の記事を参照すると良い<br />
+※ ランデのg因子はフィッティングで求めている<br />
+※ JANAのパラメーターをFullprofに入れると安定して動作させやすい<br />
+※ 磁気構造モデルを探査するときには SARAhを用いると便利であったりする<br />
+※ MEMの手順：&nbsp;fullprof &gt; *.out &gt;&nbsp;Alchemy (*.inp) &gt; *.fos or *.mem &gt; Dysnomia (*.prf)<br />
+------------------------------------------------------------------------------<br />
+■ EXPO2013 ( Academic free: アカデミックでは登録すれば無料）<br />
+・ 登録とダウンロード<br />
+1. <a href="http://www.ba.ic.cnr.it/user/register"><font color="#0000ff">http://www.ba.ic.cnr.it/user/register</font></a> にて登録<br />
+2. メールが送られてくるので、指定されたHPへ入って、さらに情報を入力する（所属が大学ならフリーメールでもOKだった）。<br />
+3. <a href="http://www.ba.ic.cnr.it/content/expo2013"><font color="#0000ff">http://www.ba.ic.cnr.it/content/expo2013</font></a> から&nbsp;<a href="http://www.ba.ic.cnr.it/content/expo-downloads" title="EXPO2013 downloads"><font color="#0000ff">latest version of EXPO2013</font></a> へ入ってソフトをダウンロードする。<br />
+4. expo-027073x64_install.exe を downloadして、実行し、Next を続ければよい。<br />
+・ 利用方法<br />
+1. EXPO2013 &gt; File &gt; New<br />
+2. Profile counts filename: &gt; Click to browse &gt; case.xy &gt; OK<br />
+&nbsp; case.xy は XRDのデータ。RIETAN-PF の case.int の最初の二行を削って、case.xy の名称に変えればよい。<br />
+3. Source &gt;<br />
+&nbsp; X rays : K&alpha;2のピークがある場合は、K Alpha2 Correction にチェックを入れる。<br />
+&nbsp; 放射光:&nbsp;Synchrotron にチェックを入れて、波長を入力&nbsp;(単位はÅ？）<br />
+4. Save &gt; Go<br />
+　（Edit expoはFileの下のアイコン）<br />
+5. Next （右上にある）を押していく。<br />
+※ 私の用いる無機材料では上手く解析できなかった。<br />
+[1] EXPO： <a href="http://www.ba.ic.cnr.it/content/software"><font color="#0000ff">http://www.ba.ic.cnr.it/content/software</font></a><br />
+[2] EXPO2013使用方法： <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?EXPO2013%BB%C8%CD%D1%CA%FD%CB%A1"><font color="#0000ff">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?EXPO2013%BB%C8%CD%D1%CA%FD%CB%A1</font></a><br />
+[3] 直接法及び関連論文： J-STAGE( <a href="https://www.jstage.jst.go.jp/browse/-char/ja"><font color="#0000ff">https://www.jstage.jst.go.jp/browse/-char/ja</font></a> ) にて記事の下の空欄に「日本結晶学会誌 桜井 敏雄」として検索する。<br />
+------------------------------------------------------------------------------<br />
+■ RIETAN-FP ( MEMへの対応があるという他のソフトには無い利点がある。しかし、Linux版は無い{ Linuxでの利用者が5人以上いたら作ってもよいとのこと})<br />
+※ JRR の HERMES などの角度分散型中性子回折のデータをリートベルト解析するのに用いる。<br />
+※ J-PARC のBL20 &nbsp;iMteria のような 飛行時間法(TOF: Time of Flight法)のデータには直接対応していない。<br />
+※ TOF法で磁気構造解析が可能な Fullprofの使い方は <a href="http://nc-imr.imr.tohoku.ac.jp/HERMES/index.html">http://nc-imr.imr.tohoku.ac.jp/HERMES/index.html</a> を参照すると良い。<br />
+・ 利用方法は下記のPDFが詳しい（選択配向や結合長、結合角、結合価数和を取り扱う方法などが記載されている）。<br />
+　<a href="http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf</font></a>　<br />
+　<a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf</font></a>　<br />
+・ 解析したら <a href="http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/rietan/know-how/know-how.html"><font color="#0000ff">http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/rietan/know-how/know-how.html</font></a>&nbsp;で結果をチェックする。<br />
+・ 泉先生方に質問する前に Q&amp;A（ <a href="http://www16.ocn.ne.jp/~structur/qa/qa.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/qa/qa.html</font></a> ）を読んでおくと良い。<br />
+・ コロキウムや定期的な報告の前に佐藤・戸田研にある「粉末X線回折と構造解析」（<a href="http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/powderX-ray.pdf"><font color="#0000ff">http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/powderX-ray.pdf</font></a>）を読んでおくと良い。<br />
+・ この他に重要な情報としては下記がある。<br />
+　複数サイトへの元素の分配： <a href="http://fujioizumi.verse.jp/board/board_2004.html"><font color="#0000ff">http://fujioizumi.verse.jp/board/board_2004.html</font></a><br />
+　学会日記： <a href="http://www16.ocn.ne.jp/~structur/analysis/omake.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/analysis/omake.html</font></a><br />
+※ 使用されている数式などの詳細が知りたい場合は、RIETAN-FPのマニュアルや「粉末X線解析の実際」を合わせて読むと良い（英語が苦手な場合には日本語の参考書は英文のマニュアルを読む助けになる。日本語と英語を交互に読み込む場合には、専門用語に注意が必要。例えば、「粉末X線解析の実際」の索引にある標準偏差は、英語では通常&quot;Standard diviation&quot;であるが、RIETAN-FPのマニュアルでは&quot;Standard Uncertainties&quot;｛この方法は単結晶での計算方法と同じ｝となる）。「Standard diviation&nbsp;≒ 2～3 * Standard Uncertainties」と聞く。<br />
+※ 現在のところ、非対称補正は実装されていない。<br />
+※ 結合角・原子間距離にはVESTAだけでなく、ORFFE を用いる方法もある。<br />
+※ FapatiteJのフォルダに日本語の解説がある。文字化けしている場合は「日本語コードについて.txt」を参照する。それでも上手くいかない場合は、秀丸エディタで開くと文字化けしていないことがある。<br />
+※ tab は駄目なので注意。<br />
+※ 高角度側を計算に入れたくなければ、case.int の二行目を書き換えて読み取り範囲を変えれば便利である。<br />
+□&nbsp;study （学習方法） J-Stage (解析に慣れてきたら結果のチェックのためにも下記を読んでおくとよい)<br />
+[1] RIETAN徹底活用ガイド(1) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf</font></a><br />
+[2] RIETAN徹底活用ガイド(2) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf</font></a><br />
+[3] RIETAN徹底活用ガイド(3) : <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf</font></a><br />
+[4] Q&amp;A: <a href="http://www16.ocn.ne.jp/~structur/qa/qa.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/qa/qa.html</font></a>&nbsp;( <a href="http://www16.ocn.ne.jp/~structur/index.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/index.html</font></a> に多くの情報がある)<br />
+[5] 参考文献： <a href="http://fujioizumi.verse.jp/download/download.html"><font color="#0000ff">http://fujioizumi.verse.jp/download/download.html</font></a><br />
+[6] 泉富士夫 (twitter) : <a href="http://fujioizumi.verse.jp/blog/blog.html"><font color="#0000ff">http://fujioizumi.verse.jp/blog/blog.html</font></a> ； 『お勧めは「VICS・VEND 秘話 &mdash; 道楽の果て」「RIETAN-2000と RIETAN-FP」、「ムラ社会の掟」、「粉末Ｘ線回折講習会の歴史」、「RIETAN vs. Z-Rietveld」』とのこと。<br />
+[7] 井田先生のHP: <a href="http://www.crl.nitech.ac.jp/~ida/">http://www.crl.nitech.ac.jp/~ida/</a>; こちらも重要なので読んでおくと良い。<br />
+※RIETAN-FPのversionが変わって、 入力ファイルがどのように違うようになったかを知りたければweb上で見つけられる（google 検索で簡単に見つかる） difff を用いて比較してみると良い。<br />
+AichiSR BL5S2でのcase.insファイルの例： <a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/0207Quartz_KCl/quartz_KCl.ins.bak"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/0207Quartz_KCl/quartz_KCl.ins.bak</font></a>, <a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd2.pdf</font></a><br />
+※ 単斜晶系はb軸, c軸を主軸とすることが多いが、RIETAN-FPではSTRUCTRE YIDYに則ってb軸を主軸とするように設計されている。RIETAN-FPとVESTAの両方にSTRUCTURE TIDYが組み込まれていて、標準軸設定に変換できるようにしてあります。documentsフォルダ中のSpace_groups.xlsに変換可能な空間群が記録されています。(2014/07/19 Twitterより)<br />
+※ 表面粗さによる自己吸収を補正すればB&gt;0となるのは当然(2014/07/19 Twitterより)。<br />
+※&nbsp;　対称中心のない空間群では、原点の選び方に任意性があるものが存在する。任意性の有無は空間群の一般同価位置において正負の符号があるか否かで判定できる。任意性がある場合は、特定の原子の座標(の一部)を固定しなければならない。(2016/01/06 Twitterより)。<br />
+※ v.2.6以降（Williamson&ndash;Hall と Halder&ndash;Wagner プロットを好みに応じて変更する方法：<a href="http://blog.fujioizumi.verse.jp/?eid=299">http://blog.fujioizumi.verse.jp/?eid=299</a>）もとても重要。<br />
+<br />
+■ v.2.64 からは格子定数を得られるWinPLOTRとの連携がなされました。<br />
+使い方は泉先生のHPのRIETAN-FPとWinPLOTRとの連携を見てください。<br />
+<br />
+□ 基本的な使い方<br />
+A. *.ins と *. int （つまり、拡張子が .ins と .int のもの）を同じファイルに入れて、*.bat をダブルクリックすれば計算される。<br />
+B. 入力ファイル *.ins を手軽に作る方法として、下記のHPを参考にしてみるのも良い。<br />
+VESTA利用：<a href="http://crystruct.info/Rietveld/RIETAN_Ana_FapFP1.html"><font color="#0000ff">http://crystruct.info/Rietveld/RIETAN_Ana_FapFP1.html</font></a><br />
+GUI環境：<a href="http://mukiken.eng.niigata-u.ac.jp/chemsoft.html"><font color="#0000ff">http://mukiken.eng.niigata-u.ac.jp/chemsoft.html</font></a>　<br />
+C. *.insでの各種のパラメーターファイルを書き換える。<br />
+というのが大筋の流れになるが、学生さんにはこれだけだとかなり難しい。<br />
+<br />
+□ RIETAN-FPのインストール<br />
+1. 泉先生のHPから Windows_versions.zip をダウンロード<br />
+2. Install_RIETAN_VENUS.bat を管理者権限でクリック<br />
+<br />
+□ *.bat ファイルの編集　（編集で開く）<br />
+1. SET SAMPLE= ins ファイルに付けたファイルの名称（%などは使わないこと）<br />
+2. 毎回 グラフが表示されるのが面倒な場合は下記の4行の前に REM + スペースを入れると良い。<br />
+IF EXIST &quot;%SAMPLE%.plt&quot; &quot;%RIETAN%\gnuplot\bin\wgnuplot.exe&quot; /noend %SAMPLE%.plt<br />
+IF NOT EXIST &quot;%SAMPLE%.plt&quot; &quot;%PATVIEWER%&quot; &quot;%SAMPLE%.itx&quot;<br />
+IF &quot;%OS%&quot; == &quot;Windows_NT&quot; Wscript &quot;%RIETAN%\message2.vbs&quot;<br />
+IF NOT &quot;%OS%&quot; == &quot;Windows_NT&quot; Wscript &quot;%RIETAN%\message1.vbs&quot;<br />
+<br />
+□ 秀丸エディタでのマクロの設定&nbsp;<br />
+1. Windows_versions にある DengakuDLL.dll を C:\Program Files\Hidemaru にコピー&amp;ペースト<br />
+2. 泉先生のHPで配布されているdocuments.zip にある Readme_macros.pdf を開く。<br />
+3. 「3.2 本支援環境用の設定」の通りに行う。<br />
+※ PCの環境によっては上手くいかないことも多いので、その場合は諦めて、*.bat をクリックして毎回計算を走らせることが必要となる。<br />
+<br />
+□ *.insでのパラメーターの設定<br />
+※ Windows_versions\RIETAN_VENUS_examples にある FapatiteJ を元に *.ins ファイル（入力ファイル）を作成するのも良いだろう。<br />
+A. 注意点<br />
+1. ! のある行は読み取られない。<br />
+2. VNS1 と HKLM1などが分からない場合はVESTAで得られる値を参考にする。<br />
+3. NUPDT =1 にしないとinsへパラメーターの更新がされない。<br />
+4. プロファイル関数の選択では、拡張分割pseudo-Voigt関数である NPRFN = 2 がフィッティングが良い傾向にある。<br />
+5.&nbsp;R12 = 0.5 (K&alpha;2が無い場合は 0.0 にする)<br />
+6. XMUR2 = 0.0 ( 計算して 0.1 未満の場合は0.0でよい。0.1以上の場合は値を記入する。これは占有率に大きく影響する）<br />
+　Q&amp;A: <a href="http://www16.ocn.ne.jp/~structur/qa/qa.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/qa/qa.html</font></a> を見ると良い。<br />
+7. NPRINT = 1<br />
+<br />
+B. VESTAを用いた *.ins ファイルの作成<br />
+1. 直接手で座標を入力するか、cif ファイルなどから結晶のデータを読み込む。<br />
+2. Utilities &rarr; Powder Diffraction Pattern ......&nbsp;<br />
+3.&nbsp;VESTA\temp の中に .ins ファイルがある。<br />
+4. 下記の部分をリートベルト解析になるように書き換える。<br />
+NMODE = 0! Rietveld analysis of powder diffraction data.<br />
+NMODE = 1: Calculation of powder diffraction intensities (plus simulation).<br />
+上記を下記にする。<br />
+NMODE = 0: Rietveld analysis of powder diffraction data.<br />
+NMODE = 1! Calculation of powder diffraction intensities (plus simulation).<br />
+5. NUPDT = 0 を NUPDT = 1 にする。<br />
+6. R12 = 0.5 (K&alpha;2が無い場合は 0.0 にする)<br />
+7. XMUR2 = 0.0 ( 計算して 0.1 未満の場合は0.0でよい。0.1以上の場合は値を記入する。これは占有率に大きく影響する）<br />
+　　Q&amp;A: <a href="http://www16.ocn.ne.jp/~structur/qa/qa.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/qa/qa.html</font></a> を見ると良い。<br />
+8. NPRINT = 1<br />
+<br />
+C. IDの初期値の設定　（一番右側の 00などと0が並んでいるのがID）<br />
+1. SHIFTN 0.0 0.0 0.0 0.0 0000<br />
+&nbsp; シフト因子。最初は0にする。<br />
+2. SCALE 0.0001 1<br />
+&nbsp; スケール因子または尺度因子と呼ばれる。理論値を実験値に合わせるための比率。<br />
+3. BKGD 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 000000000000<br />
+&nbsp; バックグラウンドパラメーター。第一項に低角側でのバックグラウンドの値を記入すればよい。<br />
+4. FWHM12 0.005 -0.001 0.005 0.0 0000<br />
+&nbsp; 角度によって半値全幅を変えるパラメーター。左から順にU, V, W と呼ばれる。Wは角度に依存しない。第三項のWには粉末X線回折から粗くてもよいので、読み取った半値全幅を入力する（とりあえず最強回折線のもので良い）。U&gt;0, V&lt;0, W&gt;0 と言われているがこだわる必要は無い。<br />
+5. ASYM12 1.0 0.0 0.0 0.0 0000<br />
+&nbsp; 非対称パラメーター。ピーク幅の広がりに関係する。<br />
+6. ETA12 0.6 0.2 0.6 0.2 0000<br />
+&nbsp; 減衰パラメーター。ガウス関数とローレンツ関数の割合となる。ガウス関数はローレンツ関数よりも裾を引かない。 初期値は、第1項=第3項、第2項=第4項とする。フィッティング中に発散した場合は、初期値を第1項=第3項、第2項=第4項に戻すと収束しやすくなる。<br />
+7. ANISOBR12 0.0 0.0 00<br />
+&nbsp; 異方性広がりパラメーター。異方的なプロファイルの広がりを表現するパラメーターとなる。半値全幅を表現するパラメーターU, V, Wに、さらにUeとPeというパラメーターを加えることに相当する。 初期には第1項と第2項を同時に精密化することを避ける。<br />
+8. CELLQ 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0000000<br />
+&nbsp; a軸、b軸、c軸、&alpha;、&beta;、&gamma; の順に並んでいる。a軸、b軸、c軸は、粉末X線回折から粗くてもよいので、読み取った半値全幅を入力する（とりあえず最強回折線のもので良い）。&alpha;、&beta;、&gamma; は想定される値を入力。（a,b,c軸の単位はÅなので注意。出力される値もÅである）<br />
+9. g<br />
+&nbsp; 占有率は仕込組成やEDXなどから推定される正しい値を入力する。<br />
+10. x, y, z<br />
+&nbsp; 分極座標は最初に理想的な構造か類似の試料の構造を入力。<br />
+&nbsp; 動かす場合は、International Tables for Crystallography （<a href="http://it.iucr.org/"><font color="#0000ff">http://it.iucr.org/</font></a>）を参照する。x,y,zを最適化するようになったら、International Tables for Crystallography を参考にして、例えば x, x, z とあれば、ID を120としたりする。<br />
+11.&nbsp;B<br />
+&nbsp; 温度因子や原子変位パラメーターと呼ばれる。軽い元素は大きく、重い元素は小さくする。0.1～2.0の値を設定。報告されている値やこれまでフィットされている値を用いる。これは原子の熱振動や位置の無秩序さを反映する。初期値としては、軽元素 1.0、重元素を 0.5 とする。同じ原子や同じ環境のものは計算負荷を軽くするために同じBにしたりする。室温でのデータであれば、重元素（金属など）は0.2から0.6程度、軽元素（酸素など）は0.6から1.2程度といわれることもある。<br />
+12. 線形制約条件式は 左辺にはIDが2のパラメーター、右辺にはIDが1を含む形で記述する。<br />
+13. PREF 1.0 1.0 0.0 0.0 0.0 0.0 000000<br />
+&nbsp; 無配向の設定にしておく。<br />
+<br />
+□ 最適化<br />
+1 . 尺度因子(SCALE)とバックグラウンドパラメーター(BKGD)のIDを1にしてフィットさせる。<br />
+2 . 結晶構造が明らかである場合には、構造パラメーター（CELLQ）を固定してバックグラウンドパラメーターを決定し、次にバックグランドパラメーターを固定して構造パラメーターを決定（IDを1に）する。<br />
+3 . 基本的には、SHIFTNとCELLQ、g、x, y,z、B を除いて、上記の初期値の設定で上から記した順で、そして、左のIDから一つずつフィットしていく。FWHM12ではWから最初にフィットする。ANISOBRまで終わったら、CELLQのIDを全て0にして、SHIFTNを動かす。Bをフィットさせ、再度FWHM12からフィットしていく。いくつか収束してきたら前のIDの1は残して次のIDを1に変えていく。サイクル数の増加と共に残差二乗和とR因子が減少しない場合、格子定数の初期値が真値に近いかをチェックする。<br />
+4 . *.lst ファイル中のエラーメッセージでプロファイルパラメーターが不適切と表示されたパラメーターの初期値を適切なものにする。ひな形ファイルや過去に成功した例をコピー&amp;ペーストしてみたりする。FWHM12やASYM12, ETA12, ANISOBR12 は装置や試料によって変わる。似た試料のデータを用いると解析が上手くいくことがある。結果が発散したら、少し前かそれよりもかなり古いパラメータを使う。<br />
+5 . 説明できない反射があれば考慮していない不純物が存在するか、仮定した構造モデル（空間群、原子位置）が間違っている可能性が高い。<br />
+6. 原子変位パラメーターと占有率を固定し、無配向を仮定して、分率座標を精密化する。分極座標は、非対称単位内のサイトのみIDを入力すればよい。動かすか否かはInt. Table（International Tables {<a href="http://it.iucr.org/"><font color="#0000ff">http://it.iucr.org/</font></a>}）で確認する。収束を確認するには、共役方向法（NAUTO=3）を使う。分極座標は重原子を動かし、次いで軽原子を動かす。フィットが悪い反射が系統的に出現する場合、選択配向パラメーターを動かす。<br />
+7. 結晶構造（原子間距離、結合角、bond valence sumで推定した酸化状態、電荷分布）が妥当であり、文献の構造データと矛盾がなくなったら、等方性原子変位パラメーターを精密化する。最初は元素ごとに共通の値を用いる方がよい。その後、各サイトの値を変える。必要に応じて占有率も変えるが、等方性原子変位パラメーターと占有率は相関が強く同時に精密化するのは難しい。初期値を変えても同じ値に収束するかどうかや同じ元素の等方性原子変位パラメーター間で大きく変わらないかを確認する。（同じ構造でフレームワーク上の異なるサイトに存在する同じ原子の等方性原子変位パラメーターが10倍も違っている結果や負の等方性原子変位パラメーターを学会で発表してはいけない）。中性子回折の場合は異方性原子変位パラメーターも精密化できるかどうか試す価値がある。 ※占有率はBGや熱振動と相関が強い。熱振動は&mu;rと相関が強いことも覚えておきたい。<br />
+8. 信頼度因子を評価する。RwpとSが低くなるほど良い。（回折ピークの強度が低く、バックグラウンドが高い場合はRwpが低くなるので注意。糠喜び(ぬかよろこび)が多発。『RwまたはRwpは、バックグラウンドが高いデータや、カウント数が大きいデータ、反射数が少ないデータでは、小さくなりやすい。S=Rwp/Reであるが、Reは観測データの数Nによって値が決まる。そのため、観測強度が小さい場合はReが大きくなり、Sは小さくなる。大型放射光施設では観測強度が1万カウントを超えることがいくらでもあり、Reは極めて小さく、Sは大きく算出される。[4]』）<br />
+9. R因子を評価する。無機結晶の場合、RFやRBが10%を超えるような解析はさらに改善が必要となる。RFやRBは結晶構造モデルの妥当性を評価する指標として役立つ。RFやRBは結晶構造や測定した2&theta;の範囲、角度分解能、反射の重なり具合によって変わるので絶対的な指標にならないことは覚えておきたい。<br />
+10. 物理的・化学的に意味のある解析結果が得られているか、過去に報告されている類縁化合物の結晶データと矛盾が無いかどうかを綿密にチェックする。結晶構造の温度・化学組成依存性を調べた場合は、格子定数、結晶構造パラメーター、結合距離などを温度、組成の関数として誤差棒つきのグラフにプロットして吟味する。必要なら、文献値もプロットして比較する（最終的に報告する時には、座標と温度因子を同時に変えて精密化した結果を用いる）。<br />
+11. 他の実験で得られたデータとも比較することが重要である。特に占有率は自動でフィットさせることが難しい場合も多い。手作業で最小のRwpを探すにしても、何かの指標は必要である。その助けになるものとして、アルキメデス法によって得られる密度と比較することが挙げられる。これは、SEMやTEMで隙間が無いか十分に注意すれば、占有率が正しいかを比較する指標になる。密度での実測値との誤差は 0.08 g/cm^3 程度に収まる例もある。この他、蛍光X線分析などによる組成分析の結果とも比較すると良い。理論計算の結果と比較できればリートベルト解析での結果の信頼性はより高くなるだろう。Akai-KKRを用いて全エネルギーが安定な占有率を調べたり、VASPなどで構造緩和させた構造と比較するのも良いだろう。上記に記した「外挿法による格子定数の計算」結果とも比較することが大事である。生スペクトルを並べて再確認し、傾向や値が明らかに変ではないかいを確認する。MEM解析（Dysnomia）での結果を系統的に比較をしてみたり、WIEN2kやVASPとで電荷密度分布の変化を比較することも行ってみると良い。それぞれの結果が上手く説明できなければ、そのようになった理由をよく考える必要がある。試料作製時での誤りや試料につけるラベルなどに誤りがないかもチェックし、XRD測定時に試料を誤っていないかをチェックする。系統的に試料を作製して、値やスペクトルが系統的（順々に流れるように変化）に結果が出ない場合は、即座にノートをチェックする習慣をつけておくとよいだろう。<br />
+※ 似た.insファイルを使うのは良いが、元素をドープした量が変われば、SHIFTNは全て0.0 0.0 0.0 0.0 0000 にしてからフィットを開始させることが重要である。何事も急がば回れである。SHIFTNの第一項が2x10^-2よりも絶対値が大きな値になっている結果を見る。注意して欲しい。<br />
+<br />
+□ 結果のチェック<br />
+1. SHIFTN<br />
+&nbsp;&nbsp; 最適化したときに第一項が2x10^-2より小さくなることが必要。これが大きいと格子定数が誤った結果で出力される。NSHIFT = 1の場合、第1項が適切な場合、温度上昇とともに不自然な折れ曲がりが無く直線的に増加する。第2項は試料表面レベルのズレが影響している。第3項は試料内部への浸透が原因となる。<br />
+2. FWHM12<br />
+&nbsp; U, V, W から算出される半値全幅 が0以上であることを確認する。<br />
+3. 虎谷先生の分割pseudo-Voigt関数や分割Pearson VII関数に物理的意味は無い。ASYM12とETA12がこの式に関係する。<br />
+4. ASYM12<br />
+&nbsp; 非対称パラメーターを用いて A = 第1項 + 第2項（&radic;2-cosec&theta;） + 第3項(2-cosec&theta; * cosec&theta;) とすると、高角側になるにつれてAは1に近づく。ピークよりも低角側の面積をAとすると高角側のピーク面積は1となる。<br />
+5. ETA12<br />
+&nbsp; 減衰パラメータの第1と2項はピークよりも低角側、第3と4項はピークよりも高角側でのガウス関数の割合を示す。第2項と第4項は角度によるガウス成分の増加量となる。2&theta;が小さいときには、ピークよりも低角側のガウス成分が多い傾向にある。計算の範囲内で 0 &lt;&nbsp;&nbsp;減衰パラメータの第1 + 2項*2&theta;(radian単位) &lt; 1, 0 &lt; 減衰パラメータの第3 + 4項*2&theta;(radian単位) &lt; 1 となることが物理的に正しい。<br />
+6. 非対称パラメーターや減衰パラメーターは、スケール因子、温度因子などに相関がある。<br />
+7. 占有率 gや温度因子（デバイ・ワーラー因子）Bは誤差の範囲内で負になっている場合を除いて、負の値になってはいけない。どんなにフィッティングが良くても、他のパラメーターが真の値から異なっていると考えるべき。<br />
+8. 温度因子Bは室温において金属原子の標準的な値は0.4～0.7Å^2である。同じサイトに複数の化学種が存在すると静的な不規則性のためにBが1Å^2より大きくなることもある。イオン伝導体における可動イオンのBは1Å^2よりはるかに大きいことが多い。<br />
+9. 分極座標では、原子が別のサイトに動いて多重度が変わっていないかをチェックする。動かして良かったかはInt. Tableで再度確認する。<br />
+10. case.itx や case.pdf などでのフィッティング結果を見て、ピークの裾に段差ができていれば、プロファイル計算の範囲を拡大しなければならない。これは特に分解能の低い状態で測定を行った場合にチェックが必要となる。段差がある場合は、Select case NPRFN を探し、それよりも上記に記述されている NPRFN = 数値　の数値にあわせて case 数値の部分での PC =　7.00 の値を変える。徐々に値を大きくしていき、段差が目立たなくなるところで終了させる。放射光では分解能が高いために気にならないが、室内光源で強度を得るために分解能を犠牲にした場合にはPCの値を大きくする必要がある。<br />
+11. 再度になるが、とても重要な事：研究目的が達成されているかどうか、&nbsp;物理的・化学的に意味のある解析結果が得られたか否か、過去に報告されている類縁化合物の結晶データと矛盾がないかどうかを綿密にチェックする。結晶構造の温度・化学組成依存性を調べた場合は、格子定数、結晶構造パラメーター、結合距離などを温度、組成の関数として誤差棒つきのグラフにプロットして吟味する。必要ならば、文献値もプロットして比較する。何か問題が見つかったならば、その原因について熟考した上で、解析をやり直す。<br />
+11. NLESQ=2で共役方向法を使ってチェックしてみるのもよい。共役方向法は時間がかかるが、得られた解が偽の極値に落ち込んでいないかをチェックしたり、互いに相関の強いパラメーターを精密化するのに有効である。<br />
+<br />
+□ 誤差の読み取り方<br />
+占有率であるgが1.0012(4) とある場合、()内が標準偏差を意味する。この標準偏差は最後の桁に数値を入れる。この場合、標準偏差は0.0004となる。加えて、&plusmn; 3*標準偏差内であれば、占有率を精密化する場合、1.0 に固定してよい。「外部に発表するときには()をつけて標準偏差を示すこと！」<br />
+※ 占有率gを精密化したときには、g &gt;1 や g &lt; 0 となった場合、 0 =&lt; g =&lt; 1 となるように構造モデルなどを再構築したほうが良い。<br />
+※ 占有率gを精密化する際には、化学組成と一致するような線形制約条件式を与えると合理的な結果が得られやすくなる。例えば、A(Al1, g) = 1.00 - A(Fe1,g) など。<br />
+<br />
+□ 各ファイルの説明<br />
+A. *.ins： 空間群、結晶学、プロファイル、バックグラウンドパラメーターの初期値 (入力ファイル)<br />
+B. *.int： 回折強度データ（実験値）(入力ファイル)(EXPOの計算ではGENERAL$を消す)<br />
+C.&nbsp;*.bat： RIETANの場所、ファイル名&nbsp;* などを指定 (プログラム実行のためのファイル)<br />
+D. *.lst： 解析結果の出力ファイル<br />
+E. *.itx, *.pat ： リートベルト解析図形 (出力ファイル)<br />
+F. *.fos： MEM 計算用の出力　(出力ファイル)<br />
+G. *.xyz： 原子間距離・結合各の計算用出力など&nbsp;(出力ファイル)<br />
+H. *.cif：結晶構造データファイル<br />
+I. *.prf: Dysnomia(MEM)（入力ファイル）<br />
+J. *.pgrid：Dysnomia(MEM)の電子密度分布（出力ファイル）<br />
+K. *.inflip：Superflip（入力ファイル）<br />
+L. *.xplor：Superflipの電子密度分布（出力ファイル）、EDMAの入力ファイル<br />
+M. *.cif：結晶構造データファイル<br />
+N. *.exp：EXPOの入力ファイル（*.ins にて NMODE=4または5 にする必要がある）<br />
+O*.plt：gnuplot(pdf)での出力形式を指定する（入力ファイル）<br />
+※ 秀丸エディタにてF1 でEDMAが動作する。MSCSの方式を選択するのは*.ins にてMSCSの選択オプションを見て書き換える。<br />
+<br />
+□ 入力ファイルでの各パラメーターの要点<br />
+A.&nbsp;バックグラウンド関数<br />
+&nbsp; Mは5～7程度で十分。 重み wi = 1/ yi は、経験パラメーターであり、初・中級者はデフォルトをそのまま用いたほうが良い。<br />
+B . 表面粗さ補正因子 SR(&theta;i)<br />
+&nbsp; デフォルトの値でよい。<br />
+C. 異常散乱因子<br />
+&nbsp; 放射光で主に用いる異常散乱因子は、東工大の佐々木研究室のHPにある。<br />
+&nbsp; <a href="http://lipro.msl.titech.ac.jp/logo.html"><font color="#0000ff">http://lipro.msl.titech.ac.jp/logo.html</font></a>　<br />
+D. デバイワーラー因子（熱振動）<br />
+&nbsp; 温度が高いと、高角で強度が減少する。 XRDでは等方性原子変位パラメーターを、中性子回折では非等方性原子変位パラメーターを用いる。<br />
+E . 選択配向関数 PK<br />
+&nbsp; 初・中級者は粒径10 &mu;m程度の均一の試料にし、PK=1（無配向） とする方がよい。 PKを適切な値に設定するのは大変困難。<br />
+F . ローレンツ偏光因子<br />
+&nbsp; 特性X線（u=1/2）、放射光（u=約0.1）、中性子（u=0）の違いを考慮するための因子。 経験式である擬フォークト関数が最も良く使われる。<br />
+G . ピーク位置の移動 &Delta;2&theta;K<br />
+&nbsp; 初・中級者はデフォルトをそのまま用いたほうが良い。<br />
+<br />
+□ リートベルト解析でのポイント<br />
+1. O2-を使うのではなく、O-を使う。O2-でもO-でも結果はほとんど変わらない。<br />
+　一説には、O2-の原子散乱因子の計算は難しいとのこと。低角側以外は一致するのでO-でもよいと考えられる。<br />
+2. 上手く動かない場合は、エラー表示をよく読む。また、入力ファイル作成で全角スペースに注意。&nbsp;&nbsp;&nbsp;<br />
+3. SPring-8などの学外実験のデータで、低角側（数度）のところと最後の高角側で、バックグラウンドが滑らかに続かず、明らかにおかしなデータの部分はintに記さないこと。エラーが表示されて計算が進まないことがあるためである。<br />
+<br />
+□ チェック方法<br />
+1. 積分強度に関する信頼度因子 R<sub>B</sub>、 構造因子に関する信頼度因子 R<sub>F</sub> が 5% を切るようにパラメーターを決定する（あくまでも目安）。<br />
+2. フィットの良さ S は、最高強度が1万カウントの場合、 S&lt;1.3 であると良い（最高強度が1万カウントでない場合は、S&lt;1.3はあてにならない）。<br />
+3. 結合価数和（Bond Valence Sum： BVS)が計算できる場合は、BVSが形式電荷から 0.2 程度の値のズレに収まっているかどうかを調べる。収まっていない場合は、もう一度、構造モデルや解析方法、実験条件などを調べなおしてみる。<br />
+4. VESTAまたはORFFEを用いて結合距離や結合角を調べてみる。変化は系統的か？<br />
+5. リートベルト解析とMEMの結果が異なる場合は、想定した構造が間違っている。<br />
+6. 理論計算（全ての想定される構造を計算）して、MEMの結果と比較する。<br />
+※ 理論計算で用いるコードは、予算のある研究室（VASP, CASTEP）、予算の無い研究室（Abinit, PWscf,&nbsp; exciting, WIEN2k, DV-X&alpha;など）を用いることで電子密度分布を比較できる。<br />
+<br />
+□ 信頼度因子<br />
+1. Re = R expected ：統計的に予測される期待値<br />
+　　Re = [（全データ点数 - 精密化するパラメータの数）/ &Sigma; (統計的重み*y^2)]^(1/2)<br />
+2. Rp = R プロファイル：観測強度(y)と計算強度(ycal)の一致度を示す。<br />
+　　Rp=&Sigma;|y - ycal] / &Sigma;y<br />
+3. Rwp = R weighted: Rプロファイルに重み付けを行った信頼度因子<br />
+4. R<sub>B</sub>：積分強度に関する信頼度因子<br />
+5. R<sub>F</sub>：構造因子に関する信頼度因子<br />
+6. S = GOF： Goodness of Fit： Rwp / Re で1に近づくほどよい一致を示す。<br />
+<br />
+□ 信頼度因子の目安<br />
+1. S=Rwp/Reである。そのため、実験室などにあるXRDで計測時間を長くしたり、短時間で大きなカウント数が得られる放射光を用いた測定結果であれば、統計誤差が小さくなり、Reも小さくなるので、S&lt;1.3にするのは困難になる。<br />
+2. 森澤らの報告(参考文献[2])では最大強度に対してRwpがどのように変化するかを図で示している。<br />
+3. 最小になるRwpは物質によって異なる。フルホイスラーのFe2VAlであればRwpは7-8程度（時に12-13程度）の値になるが、ハーフホイスラーであるZrNiSnであればRwpは2-8程度の値になる。文献[1]では「一般的には 20%程度以下であれば概ね正しい構造が求められていると判断できる」と記されており、文献[2]では「Rwpは期待値からの誤差であり、低い方がよりよく精密化されていることを示す。今回の解析では、一般的に目安とされている15%以下を目標にフィッティングを行った」とある。<br />
+4. Rwpはバックグラウンドが高いデータやカウント数が大きいデータ、反射数が少ないデータでは小さくなりやすい。<br />
+&nbsp; 時期や測定条件が異なる場合は、これを考慮に入れてこれまでの結果と比較することが必要である。観測データの数N(計算範囲を制限しない場合はcase.intのデータ数)が同一で精密化するパラメーターの数Pが同じ場合はReの大きさに注目する。<br />
+&nbsp; ドーピングした系などで起こると想定されるが、最強回折線での[本来の物質の回折ピーク+ノイズ]を同じ強度まで溜めた場合、ノイズが大きいと、本来の物質の回折ピークは小さくなる。そうすると、Reは小さく、本来の回折ピークの部分の統計誤差は大きくなり、Rwpはこのどちらが強く影響するかによって値が異なる。計測時間が同じである場合、系の電子数が少ないと全体でのカウント数が少なくなり、統計誤差が大きくなり、Rwpは大きい値を示すかもしれない。<br />
+5. R<sub>B</sub>, R<sub>F</sub>は10%以下（学会）、5%以下（論文）、3%以下（結晶を専門にする論文）を目安にしてみるのも良いだろう。（第三光源の放射光によるXRDのデータを用いると、系にもよるが、R<sub>B</sub>は5%程度、R<sub>F</sub>は2%程度まで容易に下がる。実験室系で数時間～数日動かすよりも放射光の十数分にしたい気持ちも分かる） ※ 「R<sub>B</sub>が4.29%であるのは十分低い訳でない。R<sub>B</sub>は積分強度から計算するため、それぞれの反射で残差が＋と&ndash;の部分が釣り合っていると一見低くなる」（参考：泉先生のtwitterより）<br />
+6. これまでと違って、あるときRwpが悪くなっている場合<br />
+　a. BGが低いとRwp が悪くなる。Sも見てみる。<br />
+　b. 計算範囲が裾の途中で切れたところになっていないかを確認する<br />
+　c. 横軸をこれまでのものと比較してみる（粟屋の方法で対処か？）<br />
+　d. yi / &sigma; をプロットしてみる<br />
+　e. 低角側を除いてみたりする（入射している光の波長を短くしたときに低角側で新たな別の構造やピークが表れている場合｛短距離秩序の影響が見えているかもしれない｝は、その角度よりも大きな角度からフィッティングするようにしてみる）<br />
+[1] <a href="http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf</font></a><br />
+[2] <a href="http://www.mpstpc.pref.mie.lg.jp/KOU/kenhou/h21/21b09.pdf"><font color="#0000ff">http://www.mpstpc.pref.mie.lg.jp/KOU/kenhou/h21/21b09.pdf</font></a><br />
+[3] 粟屋の方法： <a href="http://www.geocities.jp/ikuro_kotaro/koramu/285_awaya.htm"><font color="#0000ff">http://www.geocities.jp/ikuro_kotaro/koramu/285_awaya.htm</font></a><br />
+<br />
+□ 結合価数和(Bond Valence Sum)の計算 [BVS1]（2つの原子の組み合わせが無かったので未確認）<br />
+1. VESTA-win64 を開いて、bvparm2013.cif を見る。<br />
+　2つの原子（価数）の組で、BVSの計算に必要な距離が6列目に記載されている。<br />
+2. case.lst を VESTA で開く<br />
+3. VESTA &gt; Eidt &gt; Bond... &gt; New<br />
+4. VESTAの画面の左側にある ○&hArr;○を押して、BVSを計算したい原子（2つ）を押す<br />
+5. 距離を入力<br />
+6. VESTAの下部テキストに結果が表示される。<br />
+[BVS1] <a href="http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/education/CeramicPractice/xrd.pdf</font></a><br />
+<br />
+□ マーデルングエネルギー<br />
+・価数がほぼ明確に分かるような酸化物などにおいて、マーデルングエネルギーを計算し、安定性を議論する。ある位置に軽原子がいるかの情報に役立つときもある。<br />
+・VESTAでマーデルングポテンシャルを計算するとき、Charge (ideal oxidation number)が不適切だと、類似の原子でsite potential(phi)がバラついた値になる。類似の原子でsite potential(phi)の値がバラつかないようなCharge&nbsp;(ideal oxidation number)を探す。<br />
+<br />
+□ 発表時での大事なこと [P1]<br />
+・ hkl は括弧をつけた(hkl)を用いてはいけない。<br />
+[P1]&nbsp;&nbsp;<a href="http://blog.fujioizumi.verse.jp/?eid=188"><font color="#0000ff">http://blog.fujioizumi.verse.jp/?eid=188</font></a><br />
+SI単位での記述法： <a href="http://physics.nist.gov/cuu/Units/bibliography.html"><font color="#0000ff">http://physics.nist.gov/cuu/Units/bibliography.html</font></a><br />
+<br />
+□ 多相試料の解析<br />
+※ 参考とする入力ファイルとしては、3相が共存する Cu3Fe4P6E または [1] を見てみると良い。<br />
+1. メインとなる相でリートベルト解析をして、プロファイルパラメーターを上手くいくところまでフィットさせる。<br />
+&nbsp; 系によるが、格子定数が発散しやすい場合は、# で上手くいった値のものをコピー&amp;ペーストしておくと良いだろう<br />
+2. NIMSの2元合金データなどから考えられる他の相のXRDを調べる。<br />
+・ 図書館にPDFが供えてある場合はそれを用いる。不明なピークのdの値を計算し、その強度とともにメモしておく。XSearchがあればそれを用いて探す。<br />
+・ 私が探すときの優先順位は、構成元素 &gt; 構成元素の酸化物 &gt; 炭酸化したもの（例： CaCO<sub>3や</sub>MgCO<sub>3</sub>など）&nbsp;&gt; 試料作製時に混入するもの（SやPなど） &gt; 有機物（500℃を超える場合は炭素系の物質が酸化して二酸化炭素となって無くなっていくことが多いことは理解しておきたい。ただし、少数の例外としてCaCO<sub>3</sub>などは800℃まで存在したりするので注意。また、Feなどではわずかに炭素が溶け込んでいることもある）<br />
+・ 放射光では透過法を用いることが多いのでバルク敏感（結晶内部が敏感）、実験室光源では反射法が多いので表面敏感となりやすい。バルク敏感の場合はバルクにあると考えられるものを優先的にまず探す。表面敏感であれば、アルミナ乳鉢で砕いたときにはAl<sub>2</sub>O<sub>3</sub>がピークとして見えたり、表面の酸化などによるピークが見られたりする。<br />
+・ハナワルト法（強度の強いピーク3つ{3強線}から相を同定する）を使えればよいがそれが難しいことも多い。リートベルトした差分（青線）のピーク位置と強度をメモっておいて、それを手がかりに探してみるのも一つの方法である。d値で見切りをつけて、ハナワルト法も併用しながら、何度も国公立などの大学図書館に足を運ぶ｛会社にPDFがなければ、税金払っているのだから社会人も使いに来ると良い｝。相の同定で私は、図書館に1回訪れる毎に、数個のd個に対して、一つのd値で十数の候補のデータを取得する。候補の構造をNIMSやCOD, AMCSDから取得し、それでも見つからない場合は、Pearson&#39;s Handbookから探す（この場合にはもう一度、図書館に行かなければならない）。リートベルト解析して必要ないところにピークがあるものや物理的におかしな値に収束している物質は除いていく。解析が終わるまでに6-7回ほど図書館に足を運ぶことになる。多相の解析は単純なものを除いてかなりの苦労を強いる。費用対効果に見合ったものになるかを慎重に判断して欲しい（多相の解析は、指導教官の顔色を伺いながら、それに意味があるかを見極めることも必要になる）。<br />
+3. 相の数だけ入力を繰り返す場所は下記の2箇所を書き換える。<br />
+　a) 相の名称から選択配向ベクトルの方向までを入力する部分<br />
+　　PHNAME1 から ILP3 = 0: / までをコピーして（結晶相に関するデータの入力の {}内に）追加する。そして最後の数値を変える（PHNAME1 &rarr; PHNAME2 等々）。<br />
+　　IHP 以降の選択配向ベクトルを IHP1 &rarr; IHP11, IHP2 &rarr; IHP12&nbsp;などとする。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;下記の部分（VNS2とHKLM2）は、VESTAに該当する構造（またはcifなど）を入れて、Utilities -&gt; Powder&nbsp;Diffraction Pattern... を押して、VESTAを解凍して得られたファイルのtmpにある.ins ファイルをコピー&amp;ペーストする。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;VNS2 = &#39;A-2&#39;: (Vol.No. of Int.Tables: A or I)-(Space group No)-(Setting No).<br />
+&nbsp;&nbsp;&nbsp; # A Hermann-Mauguin symbol included in Spgr.daf under folder RIETAN_VENUS.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;HKLM2 = &#39;P -1 &#39;: hkl and m are generated from the Hermann-Mauguin symbol.#1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;HKLM2 = &#39;P -1*&#39;! Crystal-structure data based on the Hermann-Mauguin symbol are standardized.#2<br />
+　b) 尺度因子から最後の構造パラメーター(原子の占有率などを記述する行)までを入力する部分<br />
+　　SCALE &rarr; SCALE1<br />
+　　FWHM12　&rarr; FWHM121<br />
+　　PREF &rarr; PREF1<br />
+　　CELLQ &rarr; CELLQ1<br />
+　　などのような感じでプロファイルパラメーターの最後に数値を付けていく。<br />
+4. NPRFN = 2<br />
+5. NINT = 1<br />
+6. NUPDT = 1<br />
+7. NPHASE@ = 相の数を記入する。<br />
+8. 放射光を用いている場合は、質量減衰係数(Mass attenuation coefficients...)は[2,3]を参照して記入する。<br />
+　[3]のサイトで、 Type of Data: で Mass attenuation coefficients (cm**2/g) vs E (keV)&nbsp;Graph を選択する。&nbsp;Element:* または (こちらのが優先&rarr;Compound* formula or element symbol: に元素名を入力する。Get Data を押す。用いている波長Åを用いて&nbsp;E [keV] = 12.40 / 波長[Å]を計算し、右下にある E の値対応する [&mu;/&rho;] Total cm<sup>2</sup>g<sup>-1</sup> を探す。原子の記述の順番は通常のリートベルト解析で記入している [ &#39;O-&#39;&nbsp; &#39;P&#39;&nbsp; &#39;Fe3+&#39;&nbsp; &#39;Cu2+&#39; / ] に該当する部分と対応する。上記の説明でよく分からなかった場合は、Cu3Fe4P6Eと[3]を対応付けて見れば分かる。<br />
+9. Effective radii はSEMなどを用いて粒径が分からなければ、 / を入力する。<br />
+※ 2～3&mu;m程度と小さいならMicroabsorption&nbsp;の効果は激減する。 母相以外の相の大きさが200 nmよりも小さいなら、シェラーの式で得られた大きさを入力してみるのも意味があるかもしれない。<br />
+※ 1種類のプロファイル関数ですべての相を表現しなければならない（しかし、プロファイルパラメーターは各相ごとに精密化はできる）。少量しか含まれていない場合は、メインとなる相のプロファイルパラメーターと同じ値にするかすべて固定にする。理由が付けられれば全てのプロファイルパラメーターを変える。例えば、各相での粒径が異なり半値幅が広がることや歪による分布の形状の変化などが異なる場合は各プロファイルパラメーターを変える理由になると思う。<br />
+※ 粒径を入力しない場合は、質量分率が出力される。<br />
+※ フィットした後に同定できていないピークがないかどうかをチェックするのは大切なことであるが、フィッティング中でもRFが小さくならない（放射光では3～5程度まで下がらない）場合に多相ではないかと疑ってみたりすることも大切。放射光ではフィッティングできてないピークを多相解析することでRFが0.数%まで下がったりする。実験室光源では最強回折ピークの強度が10000 count 程度で、RFが数～13程度、Rwpが20程度まで下がったりする（時にはRwpが17程度まで下がったりする）。<br />
+※ 窒化物は窒素雰囲気中で無いと作製するのは難しいので優先順位を低くしている。<br />
+□ 多相試料の解析での相の定量の評価<br />
+解析の目的が相の定量を明らかにするための場合、初期構造が大きくずれていなければ、<br />
+原子座標や温度因子などの結晶構造の詳細を精密化してもそれほど大きな効果はありません。<br />
+解析の目的をよく考えて、やみくもにパラメーターを精密化しないように注意することが必要です。<br />
+パラメーターを精密化して、定量が0.02 wt%程度の違いはあまり気にしないこと。<br />
+[1] <a href="http://www16.ocn.ne.jp/~structur/utilities/japanene-ins.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/utilities/japanene-ins.html</font></a><br />
+[2] <a href="http://crytal.michikusa.jp/memo2.html"><font color="#0000ff">http://crytal.michikusa.jp/memo2.html</font></a><br />
+[3] <a href="http://physics.nist.gov/PhysRefData/FFast/html/form.html"><font color="#0000ff">http://physics.nist.gov/PhysRefData/FFast/html/form.html</font></a><br />
+[4] <a href="http://www.yamada-lab.imr.tohoku.ac.jp/HERMES/Analysis/RIETAN/RIETAN_insRev18.html"><font color="#0000ff">http://www.yamada-lab.imr.tohoku.ac.jp/HERMES/Analysis/RIETAN/RIETAN_insRev18.html</font></a><br />
+[5] M. Yashima, Tokyo Inst. Tech.<br />
+[6] <a href="http://blog.fujioizumi.verse.jp/?eid=35"><font color="#0000ff">http://blog.fujioizumi.verse.jp/?eid=35</font></a><br />
+[7] <a href="http://www.panalytical.jp/Home.htm"><font color="#0000ff">http://www.panalytical.jp/Home.htm</font></a><br />
+<br />
+□ MPF解析<br />
+<a href="http://fujioizumi.verse.jp/board/board_2010.html">http://fujioizumi.verse.jp/board/board_2010.html</a>&nbsp;にMPF解析での留意点が記述されている。<br />
+<br />
+□ 部分プロファイル緩和（異方的なブロードニングに対応するために行われる）<br />
+1. 通常の解析を行う<br />
+2. NPRINT = 1<br />
+3. lst のファイルに h k l と 2-theta が表示される<br />
+4. #PPP1_1.0.0&nbsp;&nbsp; 0.123836&nbsp; 6.79726E-2&nbsp; 0.936762&nbsp; 0.228537&nbsp; 0.186868&nbsp; 11111<br />
+&nbsp; #を取り、PPPの直ぐ後はPhaseの番号、_の後は h.k.l で、lstで確認する。<br />
+5. 部分プロファイル緩和を適用する反射の2&theta;範囲を書き換える。<br />
+If NCUT = 1 then<br />
+&nbsp;&nbsp; # 部分プロファイル緩和を適用する反射の2&theta;範囲. PPn_h.k.l+PPP+IDの行と同じ順番で,<br />
+&nbsp;&nbsp; # 同じ数だけ入力すること. 緩和した反射の数はわかっているので, &#39;}&#39;は不要.<br />
+&nbsp;&nbsp;&nbsp; 29.4&nbsp;&nbsp;&nbsp; 30.8<br />
+end if<br />
+6. 後は通常の解析と同じ。<br />
+[1] <s><a href="http://www16.ocn.ne.jp/~structur/rietveldwin/chapter12.html">http://www16.ocn.ne.jp/~structur/rietveldwin/chapter12.html</a></s>&nbsp;（リンク先消失）<br />
+異方的なブロードニング：装置やStephensひずみ &lt;- 低角では重なりに注意！<br />
+<br />
+□ 個別プロファイルフィッティング<br />
+　Le Bail -&gt; 準安定 -&gt; 個別プロファイルフィッティング<br />
+<br />
+□ 参考文献<br />
+[1] 中井泉、泉富士夫、「粉末X線解析の実際（第2版）」、朝倉新書<br />
+[2] <a href="http://www.mpstpc.pref.mie.lg.jp/KOU/kenhou/h21/21b09.pdf"><font color="#0000ff">http://www.mpstpc.pref.mie.lg.jp/KOU/kenhou/h21/21b09.pdf</font></a><br />
+[3] 加藤誠軌、「X線回折分析」、内田老鶴圃<br />
+[4] 大橋祐二、「X線結晶構造解析」、裳華房<br />
+[5] M. Yashima, Tokyo Inst. Tech.<br />
+[6] <a href="http://www.geocities.jp/kmo_mma/link/"><font color="#0000ff">http://www.geocities.jp/kmo_mma/link/</font></a><br />
+[7] I. Yamaji, Johokiko<br />
+[8] Burker AXS マニュアル<br />
+<br />
+□ 半自動化（現状 Win版のみ）<br />
+SeqRunProがリリースされました： <a href="http://physonit.jp/seqrunpro/"><font color="#0000ff">http://physonit.jp/seqrunpro/</font></a>&nbsp;から試用版と製品版がダウンロードできます。中間管理職で忙しい方やプロジェクトで人手が足りないという場合、非常に重宝するでしょう。<br />
+<a href="http://www16.ocn.ne.jp/~structur/utilities/seqrun-for-rietan.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/utilities/seqrun-for-rietan.html</font></a>　<br />
+<a href="http://physonit.jp/archives/146/"><font color="#0000ff">http://physonit.jp/archives/146/</font></a><br />
+<br />
+日本結晶学会誌(J-Stage)<br />
+[1] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/4/44_4_246/_pdf</font></a>&nbsp;<br />
+[2] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/5/44_5_311/_pdf</font></a>&nbsp;<br />
+[3] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/6/44_6_380/_pdf</font></a><br />
+[4] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_3/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_3/_pdf</font></a><br />
+[5] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_25/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_25/_pdf</font></a><br />
+[6] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/46/3/46_3_232/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/46/3/46_3_232/_pdf</font></a><br />
+[7] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/48/1/48_1_25/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/48/1/48_1_25/_pdf</font></a><br />
+[8] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/49/6/49_6_354/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/49/6/49_6_354/_pdf</font></a><br />
+<br />
+ICDD PDF-4+ の使い方(下記のHPを参考にすると良い)<br />
+<a href="http://www.crl.nitech.ac.jp/~ida/index-j.html"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/index-j.html</font></a><br />
+<a href="http://www.crl.nitech.ac.jp/~ida/research/memo/PDF2VESTA.pdf"><font color="#0000ff">http://www.crl.nitech.ac.jp/~ida/research/memo/PDF2VESTA.pdf</font></a><br />
+※ PDF-2+ に XSearch が附属している場合は、それを用いた方が早いかもしれない。<br />
+------------------------------------------------------------------------------<br />
+■ 部分プロファイル緩和<br />
+1. Rwp が大きく下がる<br />
+2. シリアルコリレーションの部分に用いる。case.lst のR因子の後にその情報が記述されている<br />
+3. 部分プロファイル緩和を適用するのは（半）孤立反射で3つまで<br />
+4. 占有率など他のパラメータに影響は無い<br />
+5. アンブレラ効果などで非対称になった低角領域の反射、ドメインや積層欠陥などのため、他の反射とプロファイル形状が大きく異なる反射に対して威力を発揮する。特に高角度分解能が高い回折データの解析で有効な技法である。 [P1]<br />
+6. 部分プロファイル緩和はリートベルト解析の初期段階では使わずに、十分解析が進んでフィットがよくなってきたとき、明らかにプロファイルが合わない（半）孤立反射に対してのみ用いる。やたらに濫用すべきではない。[P1]<br />
+7. 部分プロファイル緩和は緩和反射においてPPPの&theta;k依存性を全く近似・仮定せずにすむという点で健全である。残差の大きさの目立つ反射を&rdquo;ねらい撃ち&rdquo;してリートベルト解析結果をブラッシュアップできる。RIETAN-FPでは、リートベルト解析ばかりでなく、Le Bail解析と最大エントロピー法（MEM）に基づく全回折パターンフィッティングでも部分プロファイル緩和を適用可能である。[P1]<br />
+[P1] 中井泉ら著、粉末X線解析の実際 第二版、朝倉書店<br />
+8. （泉先生と議論したときの話）「プロファイル関数が完璧ではないから、低角度側の指定したh k lに対してプロファイル関数を補正する（プロファイル関数での値を指定したh k l のところだけ再度フィットしなおす）」ということだそうです<br />
+-----------------------------------------------------------------------<br />
+■ デバイワーラー因子 T<br />
+B: 等方性原子変位パラメーター<br />
+&beta;: 異方性原子変位パラメーター<br />
+-----------------------------------------------------------------------<br />
+■ MPF解析<br />
+1. MPF解析ではIDを無視するようになっている。<br />
+2. w.p.f の Rwp が下がりきったところでやめるのが理想<br />
+-----------------------------------------------------------------------<br />
+■ 選択配向関数<br />
+□ March-Dollase<br />
+選択配向の方位をhklで指定し、配向の重み付けを行う方法（通常、選択配向の方位は複数指定できる）。<br />
+Valueが1の時は選択配向無しとなる。<br />
+Valueが0.9から1.1の範囲外であった場合、選択配向の影響を強く受けており、正しい結晶構造を算出できないと言われている。<br />
+選択配向の影響を回避するため、透過法での測定、試料の粉砕や充填方法を探る。<br />
+□ Spherical Harmonics<br />
+&nbsp;配向を緩和させる効果が高いが、ある方位に負の強度を計算する可能性がある。<br />
+負の強度が計算された場合、原子座標、占有率、温度因子、定量分析の結果の信頼性は低くなる。<br />
+係数の数は通常４が推奨される。<br />
+□ March-Dollaseが有利<br />
+複数の結晶相が存在し、数wt%の微量相がある場合<br />
+複数の結晶相が存在し、それぞれの反射のの重なりが多い場合<br />
+クリンカー・セメント試料のように５相以上の結晶相が含まれる場合<br />
+-----------------------------------------------------------------------<br />
+■ 非常に分かりやすいテキストとして下記の文献がある。<br />
+坪田 雅己、伊藤 孝憲&nbsp; 著、「RIETAN‐FPで学ぶリートベルト解析」、情報機構<br />
+※ 初めてリートベルト解析する方でも「RIETAN‐FPで学ぶリートベルト解析」の図解にあるように、順を追っていけばリートベルト解析が出来る。また、パラメーターの値をどのように設定すればよいのかも、その理由が良く分かるようになっている。値段は高いがそれに見合う良書。これほど丁寧に書かれた書籍はほとんど見られない。リートベルト解析を行いたい方は購入してみると良いだろう。Macでも手順どおり行えばセットアップから解析までが出来るようになっているのも大変助かる。<br />
+※ この書籍の著者である坪田氏は技術指導や自動化のためのソフトを開発し販売している。高い精度で効率よく様々な情報をリートベルト解析から得たい場合には、<a href="http://physonit.jp/"><font color="#0000ff">http://physonit.jp/</font></a> にアクセスしてみるのも良いだろう。<br />
+------------------------------------------------------------------------------<br />
+下記参考文献が役に立つ。完成版が楽しみ。<br />
+参考文献<br />
+[1] <a href="http://crystruct.info/Rietveld/RIETAN_Ana_FapFP1.html"><font color="#0000ff">http://crystruct.info/Rietveld/RIETAN_Ana_FapFP1.html</font></a><br />
+[2] <a href="http://www.yamada-lab.imr.tohoku.ac.jp/HERMES/Analysis/RIETAN/Howto.html"><font color="#0000ff">http://www.yamada-lab.imr.tohoku.ac.jp/HERMES/Analysis/RIETAN/Howto.html</font></a><br />
+[3] <a href="http://www16.ocn.ne.jp/~structur/index.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/index.html</font></a><br />
+------------------------------------------------------------------------------<br />
+■ 準結晶<br />
+[1] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/49/1/49_1_6/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/49/1/49_1_6/_pdf</font></a><br />
+------------------------------------------------------------------------------<br />
+■ サイト・ポテンシャル &amp; マーデルング・エネルギー<br />
+[1] <a href="http://fujioizumi.verse.jp/board/board_2008.html"><font color="#0000ff">http://fujioizumi.verse.jp/board/board_2008.html</font></a><br />
+------------------------------------------------------------------------------<br />
+■ 静電ポテンシャル<br />
+　XD2006でのXDGRAPHを利用するらしいが、有料なのでここでは扱わない<br />
+[1] <a href="http://fujioizumi.verse.jp/board/board_2008.html"><font color="#0000ff">http://fujioizumi.verse.jp/board/board_2008.html</font></a><br />
+[2] <a href="http://xd.chem.buffalo.edu/instal.html"><font color="#0000ff">http://xd.chem.buffalo.edu/instal.html</font></a><br />
+------------------------------------------------------------------------------<br />
+■ ICDDの推奨値<br />
+　最強強度の50%域あるいはそれ以上のピークの全計数値は少なくとも50,000 cps<br />
+　最強強度の5%域あるいはそれ以上のピークの全計数値は少なくとも5,000 cps<br />
+・ 一般的な測定（例えば、データ点が4000の場合）<br />
+　計数時間<br />
+　0.5-2 s： 大雑把な測定<br />
+　6-10 s： 徹夜測定<br />
+　20 s以上： 週末測定<br />
+・ カウント数を上げるには？<br />
+　計数時間の増大 -&gt; 実験時間の増大<br />
+　DSスリット（発散スリット）の拡大 -&gt; 試料面の増大<br />
+　RSスリット（散乱｛防止｝スリット）の拡大 -&gt; 分解能の低下<br />
+References: <a href="http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/powderX-ray.pdf"><font color="#0000ff">http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/powderX-ray.pdf</font></a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;板状の試料（板の上に蒸着やスパッタリングによって作製した試料）：メモ<br />
+マニュアルの「March-Dollase function」と「Modified March-Dollase function」に詳細が書かれている。<br />
+RIETAN-PFでは「March-Dollase function」に対して、それを線形結合の形にして修正した「Modified March-Dollase function」を用いている。<br />
+<br />
+□ March-Dollase function<br />
+実験室系のXRD(Bragg-Brentano geometry)では、平面な試料だと r &lt; 1 となる。針状試料だと r &gt; 1となる。<br />
+rは試料の圧縮または伸長を示す(無配向の場合はr=1である)。<br />
+&alpha;は選択配向ベクトルと逆格子ベクトルの間の角度<br />
+<br />
+□ Modified March-Dollase function<br />
+= f<sub>1</sub> * P<sub>K</sub>(r<sub>1</sub>) + f<sub>2</sub> * P<sub>K</sub>(r<sub>2</sub>) + f<sub>3</sub>&nbsp;* P<sub>K</sub>(r<sub>3</sub>)<br />
+f<sub>1</sub> + f<sub>2</sub> + f<sub>3</sub> = 1 という関係になる。<br />
+<br />
+□ f<sub>1</sub> * P<sub>K</sub>(r<sub>1</sub>) だけ動かす場合<br />
+f<sub>2</sub> * P<sub>k</sub>(r<sub>2</sub>) と f<sub>3</sub>&nbsp;* P<sub>K</sub>(r<sub>3</sub>) で hp = kp = lp = 0<br />
+f<sub>1</sub> = 1<br />
+<br />
+□ f<sub>1</sub> * P<sub>K</sub>(r<sub>1</sub>) と f<sub>2</sub> * P<sub>K</sub>(r<sub>2</sub>) だけ動かす場合<br />
+f<sub>3</sub>&nbsp;* P<sub>K</sub>(r<sub>3</sub>) で hp = kp = lp = 0<br />
+f<sub>2</sub> = 1 - f<sub>1</sub><br />
+<br />
+□ 全て動かす場合<br />
+f<sub>3</sub> = 1 - f<sub>1</sub> - f<sub>2</sub><br />
+<br />
+□ パラメータの指定<br />
+　出力ファイルである*.lstを見て、測定値 Iobs &lt; 計算値 Ical となっている特定の方向 (hkl)に対してIHP1, IKP1, ILP1を指定する。<br />
+　例えば、hやlで0で、kで数値がある場合に測定値 Iobs &lt; 計算値 Ical という傾向になっているとき（試料面内方向にb軸が並びやすい状態になっている）にはIHP1=0, IKP1=1, ILP1=0 としたりする。<br />
+　よく実験で使うガラスの平板状の試料ホルダに充填したとときに、試料の軸(この例ではkつまりb軸)が試料面内方向（平板状の試料ホルダに平行な方向。または、試料法線｛平板状の試料ホルダに垂直｝でない方向）に向きやすくなっていることを意味する。<br />
+※ もし、想定と別のhklの強度が下がったら、IHP1などにそのhklを指定したりもしてみる。<br />
+<br />
+実際の解析では「<a href="http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd1.pdf">http://www.crl.nitech.ac.jp/~ida/topics/2013/0806AichiSR/xrd1.pdf</a>」を参考にするとよい。<br />
+試料法線：<a href="http://www.jsac.or.jp/bunseki/pdf/bunseki2006/200601nyumon.PDF">http://www.jsac.or.jp/bunseki/pdf/bunseki2006/200601nyumon.PDF</a><br />
+<br />
+V. K. Pecharsky and P. Y. Zavalij, Fundamentals of Powder Diffraction and Structural Characterization of Materials: <a href="https://drxaplicacionesmx.files.wordpress.com/2009/10/pecharsky_fundamentals-of-powder-diffraction-and-structural-characterization-of-materials.pdf">https://drxaplicacionesmx.files.wordpress.com/2009/10/pecharsky_fundamentals-of-powder-diffraction-and-structural-characterization-of-materials.pdf</a><br />
+<a href="http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/recent_research/rdj2000/rdj2000.pdf">http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/recent_research/rdj2000/rdj2000.pdf</a><br />
+<br />
+□ バックグラウンド(BG)を除く（基板のXRDのデータがある場合）<br />
+リートベルト解析用のXRDデータ = 基板に蒸着した試料のXRDデータ - 基板のXRDデータ * x + a<br />
+例えば、基板がガラス基板であれば、25&deg;近傍にブロードなピーク（ハローピーク）が見える。xを調整して、25&deg;近辺を綺麗に差し引く。その後、差し引いたデータで負の値がなるなるようにaをプラスする。<br />
+※ 私の場合、高角度側はBGが高くなるが、かなり綺麗に引けた。<br />
+<br />
+□ バックグラウンド(BG)を除く<br />
+※ 基板のXRDデータがある場合は、それを引くようにしてください。下記はそのようなことが出来なかった場合です。<br />
+※ ガラス基板上に蒸着したので、最初に下記の方法で分析したら、ガラス基板のデータだけが残りました。最初から除いておけば、いらぬ作業をしなくて済んだのにと思うと悲しいです（数日費やしました）。<br />
+1. 秀丸エディタで*.insを開く<br />
+2. WinPLO...を押す<br />
+3. Points Selection &gt; automatic background &gt; OK<br />
+4. Points Selection &gt; Remove points/back... &gt; 配置していく &gt; 終了後右クリック<br />
+5. Points Selection &gt; Add points/back... &gt; 取り除いていく &gt; 終了後右クリック<br />
+6. Points Selection &gt; SaVe Background points<br />
+7. Excelでセーブしたファイルを開く<br />
+8. Igorにデータをコピー&amp;ペーストする<br />
+9. 回帰分析でpolyを選ぶ（多項式の数 8-9程度）<br />
+10. Data Browserで fit_... とあるファイルを選択するとデータ間隔が表示される<br />
+11. 解析 &gt; Interpolate... でデータの間隔が同じになるようにデータの点数を変える<br />
+12. 最初と最後のデータを揃える（最初と最後近辺のデータを捨てる）<br />
+13. *.intのデータから先ほど作ったバックグラウンドのデータを除く<br />
+------------------------------------------------------------------------------<br />
+■ RINT 2000シリーズ (恐らく RINT2100)<br />
+・装置に附属しているモノクロメーター<br />
+　Cu K&alpha;: Graphite 曲率半径 225 (=2r)：RS-C(mm) 51.5：&theta;=13.27：2&theta;＝26.57：C-RSm(mm)=51.5<br />
+　モザイク結晶 Graphite[0002]: 3d = 6.708 Å<br />
+・ゴニオメーター半径 185 mm, シンチレーションカウンター<br />
+　ガラス試料板（試料が実際に入る横幅20 mm）：発散スリット1&deg;の時、 2&theta;が約19&deg;で試料の全面がXで照射される。そのため、2&theta;が19&deg;より大きな範囲ではX線が試料部分のみを照射するため、照射面積は変化しても試料が受けるX線の全強度は変わらない。試料面が均一であれば回折線の強度は2&theta;に影響を受けない。<br />
+<br />
+・測定条件（無機物）<br />
+　測定範囲：20～120&deg;、ステップ：0.020、発散スリット 1&deg;、発散縦10 mm、散乱（防止）スリット1&deg;、受光スリット0.3 mm<br />
+　（上記の条件だと、高角度側で強度が理論値と合わない。当初はS/N比や選択配向の問題か発散スリットによる試料への光の照射幅による可能性が考えられる？）<br />
+　発散スリットを1/2&deg;にすると強度の減少は1割程度。散乱スリットを1/2&deg;にすると強度が極端に減少する（1/10になった感じ）。<br />
+　<br />
+・Rietan&nbsp;の入力ファイル (case.ins)<br />
+&nbsp;&nbsp; R12 = 0.5: R12 = Intensity(K_alpha2)/Intensity(K_alpha1) for K_alpha radiation, and R12 = 0.0 for Cu K_beta radiation.<br />
+&nbsp;&nbsp; CTHM1 = 0.80035: (cos(2*alpha))**2 for the monochromator.*<br />
+&nbsp;&nbsp; # alpha=13.27<br />
+&nbsp;&nbsp; NTRAN = 0: Bragg-Brentano geometry (conventional divergence slit).<br />
+&nbsp;&nbsp; NPRFN = 2<br />
+　 PC = 70.00<br />
+<br />
+・各種条件での測定結果（対称試料：無機物 Fm-3m系）<br />
+下記は一度試料をセットしたら動かさず、測定条件を変えてリートベルト解析したもの。部分プロファイル緩和は行っていない。<br />
+20～70&deg;での測定結果で解析する方が色々と便利かもしれない。今回は20～120&deg;の範囲で調査してみた。<br />
+（MPF及びDysnomiaではE以外はディフォルトの値を使用）<br />
+・測定条件1（無機物：最強回折線強度 9,805 count, 測定時間 約&nbsp;4 h ）&amp;結果1<br />
+測定範囲：20～120&deg;、ステップ：0.020、発散スリット 1&deg;、発散縦10 mm、散乱（防止）スリット1&deg;、受光スリット0.3 mm、計数時間2.0<br />
+　SHIFTN&nbsp; -2.86231E-3&nbsp; -1.48651E-2&nbsp; -2.90861E-3&nbsp; 0.0&nbsp; 0000<br />
+　FWHM12&nbsp; 8.9145E-3&nbsp; -8.64145E-3&nbsp; 1.18017E-2&nbsp; 0.0&nbsp; 1110<br />
+　ASYM12&nbsp; 0.757718&nbsp; -1.02589&nbsp; 1.3648E-2&nbsp; 0.0&nbsp; 1110<br />
+　ETA12&nbsp; -3.38864E-3&nbsp; 0.592953&nbsp; 0.773354&nbsp; -1.99182E-1&nbsp; 1111<br />
+　ANISOBR12&nbsp; -3.25613E-6&nbsp; 1.56224E-6&nbsp; 11<br />
+　CELLQ&nbsp; 5.76252&nbsp; 5.76252&nbsp; 5.76252&nbsp; 90.0&nbsp; 90.0&nbsp; 90.0&nbsp; 0.0&nbsp; 1000000<br />
+　Rwp = 20.430&nbsp;&nbsp;&nbsp; Rp = 14.266&nbsp;&nbsp;&nbsp; RR = 17.125&nbsp;&nbsp;&nbsp; Re = 14.813&nbsp;&nbsp;&nbsp; S = 1.3792&nbsp;&nbsp;&nbsp;&nbsp; d1 = 1.2178&nbsp;&nbsp;&nbsp;&nbsp; d2 = 0.5474<br />
+　RB =&nbsp; 9.399&nbsp;&nbsp;&nbsp; RF =&nbsp; 7.139&nbsp;&nbsp;&nbsp; RF^2 = 14.645&nbsp;&nbsp;&nbsp; E(SCIO) =&nbsp;&nbsp; 2441.49<br />
+　20～70&deg;の範囲に限定にするとフィッティングは当然良くなる。原子変位パラメーターも正の値が出力される。しかし、依然として、仕込み組成と異なり、占有率は数%異なる。恐らく選択配向が出ている。酸化と思われるピークも見えている。<br />
+MPF解析（ピクセル分割数は56x56x56）<br />
+　E=0.2での&nbsp;1.01 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置に電子密度無し。<br />
+　E=0.3での&nbsp;0.79 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置に電子密度無し。<br />
+　E=0.4での&nbsp;0.68 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置に僅かにある。<br />
+　E=0.5での&nbsp;0.62 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置の電子密度が増大。<br />
+　E=0.6での&nbsp;0.58 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置の電子密度が増大。この辺りから e/Å^3を小さくするとWIEN2kの値と一致しなくなってくる。<br />
+　E=0.7以降ではWIEN2kでの結果と変化の傾向が一致せず。ディフォルトの場合にあるべき位置の電子密度が増大。<br />
+　（後から気付いたこと：PC=7.00 -&gt; PC=70.00 にして裾をあわせるとR因子は良くなる。加えて、e/Å^3の下2桁目がより小さい値でWIEN2kと一致するようになる）<br />
+　20～70&deg;の範囲に限定にするとWIEN2kの結果と合わない。<br />
+<br />
+・測定条件2（無機物：最強回折線強度 24,667 count, 測定時間 約 7 h ）&amp;結果2<br />
+測定範囲：20～120&deg;、ステップ：0.020、発散スリット 1&deg;、発散縦10 mm、散乱（防止）スリット1&deg;、受光スリット0.3 mm、計数時間5.0<br />
+　SHIFTN&nbsp; -9.2179E-4&nbsp; -1.21879E-2&nbsp; -2.78436E-3&nbsp; 0.0&nbsp; 0000<br />
+　FWHM12&nbsp; 5.39583E-3&nbsp; -2.66937E-3&nbsp; 9.99045E-3&nbsp; 0.0&nbsp; 1110<br />
+　ASYM12&nbsp; 0.960729&nbsp; -6.13665E-1&nbsp; 3.76877E-2&nbsp; 0.0&nbsp; 1110<br />
+　ETA12&nbsp; 0.247004&nbsp; 0.344673&nbsp; 0.428879&nbsp; 6.90969E-2&nbsp; 1111<br />
+　ANISOBR12&nbsp; -4.0189E-6&nbsp; 1.28786E-6&nbsp; 11<br />
+　CELLQ&nbsp; 5.76241&nbsp; 5.76241&nbsp; 5.76241&nbsp; 90.0&nbsp; 90.0&nbsp; 90.0&nbsp; 0.0&nbsp; 1000000<br />
+　Rwp = 16.109&nbsp;&nbsp;&nbsp; Rp = 12.006&nbsp;&nbsp;&nbsp; RR = 14.752&nbsp;&nbsp;&nbsp; Re =&nbsp; 9.379&nbsp;&nbsp;&nbsp; S = 1.7176&nbsp;&nbsp;&nbsp;&nbsp; d1 = 0.7836&nbsp;&nbsp;&nbsp;&nbsp; d2 = 0.2286<br />
+　RB =&nbsp; 9.393&nbsp;&nbsp;&nbsp; RF =&nbsp; 6.435&nbsp;&nbsp;&nbsp; RF^2 = 15.501&nbsp;&nbsp;&nbsp; E(SCIO) =&nbsp;&nbsp; 2480.28 &nbsp;&nbsp;<br />
+MPF解析（ピクセル分割数は56x56x56）<br />
+　E=0.1 での0.78 e/Å^3が WIEN2k: 0.2625 e/Å^3値と比較的良い一致。<br />
+　E=0.15での0.61 e/Å^3が WIEN2k: 0.2625 e/Å^3値と比較的良い一致。<br />
+　E=0.2　での0.53 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。しかし、e/Å^3を小さくするとWIEN2kの値と一致しなくなってくる。<br />
+　E=0.5から球からの形の歪みを大きく認識できるようになり、E=0.6からゴーストのようなものが見えるようになる。<br />
+　20～70&deg;の範囲に限定にするとWIEN2kの結果と合わない。<br />
+<br />
+・測定条件3（無機物：最強回折線強度 9,805 count, 測定時間 約&nbsp;4 h ）&amp;結果3<br />
+測定範囲：20～120&deg;、ステップ：0.020、発散スリット 1/2&deg;、発散縦10 mm、散乱（防止）スリット1&deg;、受光スリット0.3 mm、計数時間2.0<br />
+　SHIFTN&nbsp; -8.85766E-4&nbsp; -1.15115E-2&nbsp; -3.09238E-3&nbsp; 0.0&nbsp; 0000<br />
+　FWHM12&nbsp; 6.32361E-3&nbsp; -4.38763E-3&nbsp; 1.03038E-2&nbsp; 0.0&nbsp; 1110<br />
+　ASYM12&nbsp; 0.947099&nbsp; -6.59636E-1&nbsp; 3.43325E-2&nbsp; 0.0&nbsp; 1110<br />
+　ETA12&nbsp; 0.135966&nbsp; 0.39767&nbsp; 0.420758&nbsp; 6.08497E-2&nbsp; 1111<br />
+　ANISOBR12&nbsp; -2.60294E-6&nbsp; 1.03226E-6&nbsp; 11<br />
+　CELLQ&nbsp; 5.76241&nbsp; 5.76241&nbsp; 5.76241&nbsp; 90.0&nbsp; 90.0&nbsp; 90.0&nbsp; 0.0&nbsp; 1000000<br />
+　Rwp = 22.181&nbsp;&nbsp;&nbsp; Rp = 15.139&nbsp;&nbsp;&nbsp; RR = 17.435&nbsp;&nbsp;&nbsp; Re = 16.121&nbsp;&nbsp;&nbsp; S = 1.3759&nbsp;&nbsp;&nbsp;&nbsp; d1 = 1.2047&nbsp;&nbsp;&nbsp;&nbsp; d2 = 0.3114<br />
+　RB = 10.755&nbsp;&nbsp;&nbsp; RF =&nbsp; 8.271&nbsp;&nbsp;&nbsp; RF^2 = 19.394&nbsp;&nbsp;&nbsp; E(SCIO) =&nbsp;&nbsp; 2354.46<br />
+　予想通り、発散スリット1&deg;でも1/2&deg;でも結果はほとんど変わらない。強度が1割増加し、試料への照射面積も増えることから、発散スリット1&deg;の方が良いと思う。<br />
+&nbsp;　20～70&deg;の範囲に限定にするとフィッティングは当然良くなる。原子変位パラメーターも正の値が出力される。しかし、依然として、仕込み組成と異なり、占有率は数%異なる。恐らく選択配向が出ている。酸化と思われるピークも見えている。測定条件1と測定条件3の占有率は下3程度までほぼ一致（下2桁までは一致）。<br />
+MPF解析にてピクセル分割数 56x56x56<br />
+　E=0.2での0.98 e/Å^3にて、WIEN2kでの値 0.2625 e/Å^3と良い一致。ディフォルトの場合にあるべき位置に電子密度無し。<br />
+　E=0.3での0.73 e/Å^3にて、WIEN2kでの値 0.2625 e/Å^3と良い一致。ディフォルトの場合にあるべき位置に電子密度無し。<br />
+　E=0.4での0.61 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置に僅かにある。<br />
+　E=0.5での0.54 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置の電子密度が増大。<br />
+　E=0.6での0.50 e/Å^3がWIEN2k: 0.2625 e/Å^3値と比較的良い一致。ディフォルトの場合にあるべき位置の電子密度が増大。この辺りから e/Å^3を小さくするとWIEN2kの値と一致しなくなってくる。<br />
+　E=0.7以降ではWIEN2kでの結果と変化の傾向が一致せず。ディフォルトの場合にあるべき位置の電子密度が増大。<br />
+<br />
+・測定条件4（無機物：最強回折線強度&nbsp; 45,000 count, 測定時間 約&nbsp; 18 h ）&amp;結果4&nbsp;<br />
+　測定条件1-3と異なり、ここでは、同じ試料のロットであるが、ガラス試料板に試料を入れ替えた。<br />
+測定範囲：20～150&deg;、ステップ：0.020、発散スリット 1&deg;、発散縦10 mm、散乱（防止）スリット1&deg;、受光スリット0.3 mm、計数時間10.0<br />
+　SHIFTN&nbsp; -2.96743E-2&nbsp; -1.10836E-1&nbsp; -3.64406E-2&nbsp; 0.0&nbsp; 0000<br />
+　FWHM12&nbsp; 5.95999E-3&nbsp; -4.13511E-3&nbsp; 1.10747E-2&nbsp; 0.0&nbsp; 1110<br />
+　ASYM12&nbsp; 0.997675&nbsp; -2.26121E-1&nbsp; -4.84967E-2&nbsp; 0.0&nbsp; 1110<br />
+　ETA12&nbsp; 0.272265&nbsp; 0.303543&nbsp; 0.340187&nbsp; 0.129073&nbsp; 1111<br />
+　ANISOBR12&nbsp; -1.46044E-6&nbsp; 9.7873E-7&nbsp; 11<br />
+　CELLQ&nbsp; 5.76491&nbsp; 5.76491&nbsp; 5.76491&nbsp; 90.0&nbsp; 90.0&nbsp; 90.0&nbsp; 0.0&nbsp; 1000000<br />
+　Rwp = 15.435&nbsp;&nbsp;&nbsp; Rp = 12.319&nbsp;&nbsp;&nbsp; RR = 16.079&nbsp;&nbsp;&nbsp; Re =&nbsp; 7.382&nbsp;&nbsp;&nbsp; S = 2.0908&nbsp;&nbsp;&nbsp;&nbsp; d1 = 0.5326&nbsp;&nbsp;&nbsp;&nbsp; d2 = 0.2033<br />
+　RB = 10.975&nbsp;&nbsp;&nbsp; RF =&nbsp; 6.050&nbsp;&nbsp;&nbsp; RF^2 =&nbsp; 6.978&nbsp;&nbsp;&nbsp; E(SCIO) =&nbsp;&nbsp; 2498.97&nbsp;<br />
+　今回の検証では、占有率が上手くフィットできないと、原子変位パラメーターは負の値になりやすい傾向となった。　NSHIFTの第一項が僅かに悪い。<br />
+MPF解析（ピクセル分割数は56x56x56）<br />
+　20～150&deg;の範囲ではいずれのEにおいてもWIEN2kの結果と合わない。（選択配向と酸化のためか？）<br />
+　下記のように、20～120&deg;の範囲にするとWIEN2kと同様の結果が得られる。<br />
+　　E=0.1での0.550 e/Å^3が、WIEN2kでの値 0.2625 e/Å^3と良い一致。<br />
+　　E=0.2での0.430 e/Å^3が、WIEN2kでの値 0.2625 e/Å^3と良い一致。<br />
+　　E=0.3での0.395 e/Å^3が、WIEN2kでの値 0.2625 e/Å^3と良い一致。<br />
+　　E=0.4での0.375 e/Å^3が、WIEN2kでの値 0.2625 e/Å^3と良い一致。<br />
+　　E=0.5では変化の傾向がWIEN2kの結果と一致せず。<br />
+<br />
+考察<br />
+　測定条件1と測定条件3は発散スリット角が異なるだけである。ピーク高さを規格化して同じにした場合、両者を比べて見るとノイズ幅の範囲内でスペクトルが綺麗に一致している。MEMの値も下3桁目が僅かに異なるだけである。<br />
+　ReとE=2で [e/Å^3] を描くと良い相関関係が得られる（測定条件1を除けば綺麗な直線や曲線になる）。もしかしたら、Reを更に下げるとサチレーションして[e/Å^3] は一定値に近づくかもしれない。放射光や半導体検出器であれば、小さなReを得られるので、Eと[e/Å^3]を同じにして、系統的な電子構造の変化を比較できるかもしれない。<br />
+　適切なEを設定すれば、変化の傾向はWIEN2kと一致するので、測定条件を同じにして、ある位置での電子密度分布を同じにして比較することはできると思われる。E値によって[e/Å^3]が異なるのは、原子核付近の電子の配分が異なるためだからであろう（Eが小さいと、核に電子が少なくなる分、核の外側に電子が多く配置されるためであると考えられる）。<br />
+　MPF解析での注意点としては、E値の候補を入れるが、極端に外れた値を入れると、フィッティングの値がおかしくなる。case.itxやcase.pdfなどでフィッティングの結果をよく見ておくことが必要。大きく外れたフィッティングになっている場合には、リートベルト解析からやり直すことが必要である。<br />
+　MEM及びMPF解析で重要なこととして、フィッティング範囲を狭めると正しい値が出力されないことである。特に、高角側はMEMで予測されると思われたが、これまで言われていた経験や指摘どおり、低角側だけでなく、高角側のデータも必要であることが明らかとなった。ただし、余りにも高角側のデータが存在するとWIEN2kの結果と一致せず、結果がフーリエ合成した感じになる。&nbsp;これはCount数が足りないために、高角側ではノイズの影響が無視できなくなるためであると考えられる（熱散漫散乱の影響も考えるこことが必要）。<br />
+<br />
+今後の課題<br />
+　同じ試料を用いて実験室光源で再現性が得られる条件を探す。<br />
+　回転試料台と半導体検出器が利用できる大型基盤センターなどの装置で比較検討を行う。<br />
+<br />
+Reference: <a href="http://www16.ocn.ne.jp/~structur/rietveldwin/chapter1.html"><font color="#0000ff">http://www16.ocn.ne.jp/~structur/rietveldwin/chapter1.html</font></a><br />
+<a href="http://tsuyu.cocolog-nifty.com/blog/2007/05/miniflexrietvel_6f5d.html"><font color="#0000ff">http://tsuyu.cocolog-nifty.com/blog/2007/05/miniflexrietvel_6f5d.html</font></a><br />
+<a href="http://crystruct.info/patio/read.cgi?no=3&amp;l=1"><font color="#0000ff">http://crystruct.info/patio/read.cgi?no=3&amp;l=1</font></a>-<br />
+------------------------------------------------------------------------------<br />
+■ X線結晶構造解析 関連ソフトウェア<br />
+A. Yadokari-XG 2009 ： X線結晶構造解析ソフト<br />
+B. SHELXL ： ドイツのSheldrick 博士が開発した信頼できるX線結晶解析精密化ソフト。特にディスオーダー解析に優れている。<br />
+C. SIR ： 回折斑点データの関係式から直接に初期構造を見つけるソフト<br />
+D. DIRDIF ： 重原子（金属原子など）を含んだ構造の初期構造を見つけるソフト<br />
+E. ORTEP ： 結晶中での原子の動き（熱振動）を楕円体で描くソフト。論文提出用作図に使用される。<br />
+F. PovRay ： コンピュータグラフィックアーティストが使用するお絵描きソフト。下に影絵などの表示も可能で三次元構造の遠近感を見事に再現できる。<br />
+G. Winmostar ： MOPAC, GAMESS, Gaussian 用のGUI<br />
+H. BKChem ： 有機化学構造式描画ソフト<br />
+I. Chemtool ： 有機化学構造式描画ソフト<br />
+J. ChemBuddy ： 分析値換算ソフト<br />
+K. Gnuplot ： グラフ作製ソフト<br />
+L. Ngraph： グラフ作製ソフト<br />
+M. Digital Curve Tracer： グラフ読み取りソフト<br />
+N. Flask Paint ： 実験器具描画ソフト<br />
+O. ライフサイエンス辞書 ：生命科学系専門用語のかな漢字変換辞書<br />
+------------------------------------------------------------------------------<br />
+■ X線結晶構造解析 関連ソフトウェア<br />
+A. GSASⅡ： GUI有り<br />
+B. Fullprof2000： 磁気構造解析が可能<br />
+C. RIETAN-FP： MPF解析が可能<br />
+D. EXPO2013：<br />
+E. QUANTO：<br />
+F. MAUD：<br />
+G. JANA2006： 変調構造で有利。<br />
+H. BRASS： GUI有り<br />
+I. DDM： GUI有り<br />
+J. BGMN：<br />
+K. TOPAS4.0： GUI有り<br />
+------------------------------------------------------------------------------<br />
+■ 未知構造解析<br />
+1. h k l の指数付け +&nbsp;格子定数<br />
+&nbsp; 有名なソフト： Conograph, DICVOL, McMaille, ITO, TREOR<br />
+2. 消滅則から空間群を推定<br />
+3. LeBail法を用いて反射強度を求める。<br />
+&nbsp; Pawley法もあるが実装のし辛いのと積分強度で負の値が出ることがある。<br />
+4.&nbsp;初期構造モデルの決定<br />
+&nbsp;&nbsp;A. 逆空間法： EXPO が無料のコードとして有名。<br />
+&nbsp; B. 実空間法：&nbsp;PSSP, FOX が無料のコードとして有名。<br />
+5. 精密化（RIETAN-FPなどによるリートベルト解析）<br />
+[1] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/3/53_3_163/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/3/53_3_163/_pdf</font></a><br />
+[2] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/3/53_3_170/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/3/53_3_170/_pdf</font></a><br />
+[3] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/4/53_4_231/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/4/53_4_231/_pdf</font></a><br />
+[4] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/4/53_4_240/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/4/53_4_240/_pdf</font></a><br />
+[5] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_299/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_299/_pdf</font></a><br />
+[6] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_307/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_307/_pdf</font></a><br />
+[7] <a href="https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_312/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj/53/5/53_5_312/_pdf</font></a>&nbsp;<br />
+[8] <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_30/_pdf"><font color="#0000ff">https://www.jstage.jst.go.jp/article/jcrsj1959/44/1/44_1_30/_pdf</font></a><br />
+------------------------------------------------------------------------------<br />
+------------------------------------------------------------------------------<br />
+付録：化学者用フリーソフト<br />
+A. 化学Word用ユーザー辞書<br />
+B. google 日本語入力<br />
+C. Thesaurus （類義語辞典）<br />
+D. Exemplar (論文用の用例検索、使用する前置詞の検索などに便利）<br />
+------------------------------------------------------------------------------<br />
+付録：データベース<br />
+A. OCRR ; <a href="http://chmsearch.kovsky.net/"><font color="#0000ff">http://chemsearch.kovsky.net/</font></a><br />
+B. AL ; <a href="http://locator.web.fc2.com/"><font color="#0000ff">http://locator.web.fc2.com/</font></a><br />
+C. Chem Ref<br />
+D. Right-click for Chemistry<br />
+E. Add to Search Bar<br />
+F. Serach Center<br />
+G. OCRR for iGoogle widget<br />
+H. ChemTools<br />
+I. 文献一括検索<br />
+J. クイックサーチ<br />
+K. Drag&amp;DropZones<br />
+L. Google リーダー<br />
+M. ChemFeeds ; <a href="http://www.chemfeeds.com/"><font color="#0000ff">http://www.chemfeeds.com/</font></a><br />
+N. Sulflower ; <a href="http://sulflower.com/"><font color="#0000ff">http://sulflower.com/</font></a><br />
+O. ScienceJournalFeeds ; <a href="http://science.journalfeeds.com/"><font color="#0000ff">http://science.journalfeeds.com/</font></a><br />
+P. ORGANIC-REACTION ; <a href="http://www.organic-reaction.com/"><font color="#0000ff">http://www.organic-reaction.com/</font></a><br />
+------------------------------------------------------------------------------<br />
+付録：化学者用データベース<br />
+A. NIMS Thermodynamic Database<br />
+B. NIST Chemistry WebBook<br />
+C. 国際化学物質安全性カード（ICSC&nbsp;CARD)<br />
+D. MatNavi NIMS 物質・材料データベース<br />
+E. 日化辞 Web<br />
+F. 研究情報公開データベース（RIO-DB)<br />
+G. ODOOS 合成反応データベース<br />
+H. POBj （日本蛋白質構造データバンク）<br />
+I. DDBJ (日本DNAデータバンク）<br />
+J. NCBI (National Center for Biotechnology Information)<br />
+K. 失敗知識データベース<br />
+------------------------------------------------------------------------------<br />
+C. 国際化学物質安全性カード（ICSC&nbsp;CARD)<br />
+D. MatNavi NIMS 物質・材料データベース<br />
+E. 日化辞 Web<br />
+F. 研究情報公開データベース（RIO-DB)<br />
+G. ODOOS 合成反応データベース<br />
+H. POBj （日本蛋白質構造データバンク）<br />
+I. DDBJ (日本DNAデータバンク）<br />
+J. NCBI (National Center for Biotechnology Information)<br />
+K. 失敗知識データベース<br />
+------------------------------------------------------------------------------

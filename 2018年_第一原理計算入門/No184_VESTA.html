@@ -1,0 +1,335 @@
+　ここではVESTAの関連情報について記述する<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mGMAE6UMmAQ3gFsIyTI9JCw" width="560"></iframe></div>
+------------------------------------------------------------------------------<br />
+■ Lattice planes<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/Ev0Wrpour84" width="560"></iframe></div>
+<br />
+Lattice planes<br />
+1. Drag &amp; Drop *.cif<br />
+2. Edit &gt; Lattice Planes ...<br />
+3. New<br />
+4. select atoms (&gt;= 3)<br />
+&nbsp;&nbsp; Shift + left click<br />
+5. Calculate the best plane ...<br />
+6. OK<br />
+<br />
+※ リートベルト解析をしても低角側のピークが理論では表示されてもXRDでは現われていない場合、*.lstを見てそのピークの2&theta;に該当する h k l を調べてVESTAでこの h k l 面を描いてみるとよい。そのh k lで作られる面に対して原点からの距離を変えて、原子の並びと対応するh k lを探す。その原子の秩序性が低くなっている（該当する元素の占有率が100%になっていない）と、ピーク構造が現われないことがある（例えば、L2<sub>1</sub>構造などが該当する）。<br />
+------------------------------------------------------------------------------<br />
+■ Interface structure<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/jXhEY_QsDp0" width="560"></iframe></div>
+<br />
+Interface<br />
+1. Drag &amp; Drop *.cif<br />
+2. Edit &gt; Edit Data &gt; Unit Cell...<br />
+3. Remove symmetry<br />
+4. Transform...<br />
+&nbsp; 1&nbsp; 0&nbsp; 0<br />
+&nbsp; 0&nbsp; 1&nbsp; 2<br />
+&nbsp; 0&nbsp; 2 -1<br />
+5. OK &gt; Yes &gt; Yes &gt; Search... &gt; OK<br />
+6. Apply<br />
+7. Remove symmetry<br />
+8. Transform...<br />
+&nbsp; 1&nbsp; 0&nbsp; 0<br />
+&nbsp; 0&nbsp; 1&nbsp; 0<br />
+&nbsp; 0&nbsp; 0&nbsp; 6<br />
+9. OK &gt; Yes &gt; Search... &gt; OK<br />
+10. Apply<br />
+11. Remove symmetry<br />
+12. Transform...<br />
+&nbsp; 1&nbsp; 0&nbsp; 0<br />
+&nbsp; 0&nbsp; 1&nbsp; 0<br />
+&nbsp; 0&nbsp; 0&nbsp; 2<br />
+13. OK &gt; Yes &gt; Do nothing &gt; OK<br />
+14. Apply<br />
+15. File &gt; Export Data...<br />
+16. Remove symmetry<br />
+17. Transform...<br />
+&nbsp; 1&nbsp; 0&nbsp; 0&nbsp; 0.0<br />
+&nbsp; 0 -1&nbsp; 0&nbsp; 0.0<br />
+&nbsp; 0&nbsp; 0&nbsp; 1&nbsp; 0.5<br />
+18. OK &gt; Yes<br />
+19. Phase &gt; Import...<br />
+20. Apply<br />
+21. OK<br />
+22. Edit &gt; Export Data... &gt; *.vasp &gt; OK<br />
+------------------------------------------------------------------------------<br />
+■ 差フーリエ<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/aABNgb65uHw" width="560"></iframe></div>
+<br />
+Difference Fourier<br />
+1. Drag &amp; Drop *.cif<br />
+2. Utilities &gt; Fourier Synthesis...<br />
+3. Import... &gt; *.fcf (from SHELX)<br />
+4. Fo-Fc &gt; OK<br />
+5. Calculate<br />
+6. Close<br />
+<br />
+7. Objects &gt; Properties &gt; Isosurfaces...<br />
+8. click row<br />
+9. change Isosurface level:<br />
+10. OK<br />
+<br />
+11. click a, b, c, etc.<br />
+12. Utilities &gt; 2D Data Display...<br />
+13. Slice... &gt; [set current orientation ...]<br />
+14. OK<br />
+15. Contours<br />
+16. check [Draw contour lines]<br />
+<br />
+11. shift + click atom (for a long time)<br />
+12. Utilities &gt; 2D Data Display...<br />
+13. Slice... &gt; [Caclulate the best plane ...]<br />
+14. OK<br />
+15. Contours<br />
+16. check [Draw contour lines]<br />
+<br />
+17. Edit &gt; Lattice planes...<br />
+18. New &gt; Calculate the best plane for ...<br />
+19. OK<br />
+20. Objects &gt; Properties &gt; Sections...<br />
+<br />
+20. Utilities &gt; 2D Data Display...<br />
+21. General<br />
+22. check [Brid&#39;s-eye view]<br type="_moz" />
+<br />
+Fo: 実験値でのF。*.fcf はSHELX（シェリックス）を用いて得られる。HKLは将来対応予定とのこと。<br />
+Fc: VESTAが計算するF。<br />
+※ この手法に対しては単結晶が良い。粉末や多結晶は悪いときもある<br />
+------------------------------------------------------------------------------<br />
+■ モデル電子密度・核密度の計算<br />
+<br />
+　モデル電子密度： Utilities &gt; Model Electron Densities<br />
+　モデル核密度： Utilities &gt; Model Nuclear Densities<br />
+<br />
+※ 電子密度の場合、原子散乱因子パラメーターの信頼領域は6 Å<sup>-1</sup>（実空間のグリッド分解能で約 0.042 Å)。電子密度の場合には、Resolution (Å)は 0.042 から 0.1 程度でよい<br />
+※ 例えば、MEM解析の結果と水素をあえて除いた（無視した）モデルで電子密度を計算（モデル電荷密度を計算）して、それらの差分をとることで、水素の電子密度分布を見つける手掛かりを得ることができる。この結果と差フーリエ合成の結果を比較してみるのもよい。<br />
+------------------------------------------------------------------------------<br />
+■ 有効配位数（ECoN）と電荷分布の計算<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/xn7UCHiWFlM" width="560"></iframe></div>
+<br />
+Effective coordination number (ECoN) and charge distribution<br />
+1. Drag &amp; Drop *.cif<br />
+2. Edit &gt; Edit Data &gt; Structure Parameters...<br />
+3. input [Charge:] Formal charge<br />
+&nbsp; e.g. Yb 3, M 2.5, O -2<br />
+4. OK<br />
+5. Edit &gt; Bonds...<br />
+6. New<br />
+&nbsp; e.g. M O Max.3, Yb O Max.3<br />
+7. OK<br />
+8. Style &gt; Style &gt; Polyhedral<br />
+9. click polyhedral<br />
+<br />
+※ 入力に必要な情報は、原子座標と形式電荷だけでよい<br />
+※ 結合の表示されているところまで計算される<br />
+------------------------------------------------------------------------------<br />
+■ Bond Valence Sum (BVS)<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/v-zUpA1xcYM" width="560"></iframe></div>
+<br />
+Bond Valence Sum (BVS)<br />
+1. Drag &amp; Drop *.cif<br />
+2. open bvparm2013.cif<br />
+3. get oxidation number, Ro and B<br />
+&nbsp; VESTA: B = 0.37 (fix)<br />
+&nbsp; e.g.<br />
+&nbsp;&nbsp; Si: 4, Mg: 2, O: -2<br />
+&nbsp;&nbsp; Mg-O: R0=1.693<br />
+&nbsp;&nbsp; Si-O: R0=1.624<br />
+4. Edit &gt; Edit Data &gt; Structure Parameters...<br />
+5. input [Charge:] Formal charge<br />
+&nbsp; e.g. Si: 4, Mg: 2, O: -2<br />
+6. OK<br />
+7. Style &gt; Style &gt; Polyhedral<br />
+8. Ctrl + click polyhedra<br />
+9. Input a bond valence parameter: R0<br />
+&nbsp; (calculate Bond valence sum)<br />
+10. OK<br />
+<br />
+If you do not input Formal charge,<br />
+10. Input an oxidation number<br />
+&nbsp; (calculate bond length)<br />
+11. OK<br type="_moz" />
+<br />
+※ 2種以上の原子が1つの原子に結合した配位多面体はだめ<br />
+※ 配位多面体が極端に歪んでいる場合は良い値にならない<br />
+------------------------------------------------------------------------------<br />
+■ サイトポテンシャルとマーデルングエネルギーの計算<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/BFLMjQqDFx8" width="560"></iframe></div>
+<br />
+Site potential and Madelung energy<br />
+1. Drag &amp; Drop *.cif<br />
+2. Edit &gt; Edit Data &gt; Structure Parameters...<br />
+3. input [Charge:] Formal charge<br />
+&nbsp; e.g. Si: 4, Mg: 2, O: -2, mix F and O: -1, H: 0<br />
+4. OK<br />
+5. Utilities &gt; Site Potentials and<br />
+Madelung Energy...<br />
+6. Radius of ionic sphere (in A):<br />
+&nbsp; Should be large enough but less than the smallest interatomic distance.<br />
+&nbsp;e.g. 1.6<br />
+7. OK<br />
+8. Reciprocal-space range (in A^-1): 2 - 4<br />
+&nbsp;e.g. 4<br />
+9. OK<br />
+10. check phi<br />
+&nbsp;Almost same phi for same atom is OK<br />
+<br />
+phi: Site Potential (calculated)<br />
+charge: Ideal oxidation number<br type="_moz" />
+<br />
+※ MADELを用いて計算している<br />
+※ 各サイトに形式電荷を割り当てて計算<br />
+※ 各サイトの phi が近い値になるように形式電荷を変更する<br />
+※ [Radius of ionic sphere]では最小の結合距離よりちょっとだけ短い値を入力する（ORFFEの値を見ればよい）<br />
+------------------------------------------------------------------------------<br />
+■ Volumetric data のピークサーチと積分<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/suhvpbbFQTs" width="560"></iframe></div>
+<br />
+Peak Search and Integration<br />
+1. Drag &amp; Drop *.pgrid (by MEM method on Dysnomia, etc)<br />
+2. Edit &gt; Edit Data &gt; Structure Parameters...<br />
+3. Import &gt; *.cif<br />
+4. OK<br />
+5. Objects &gt; Properties &gt; atoms...<br />
+6. Radius and color<br />
+7. OK<br />
+8. Objects &gt; Properties &gt; Isosurfaces...<br />
+9. click row<br />
+10. change [Isosurface level:]<br />
+11. OK<br />
+12. Utilities &gt; Peak Search...<br />
+13. Max. number of peaks (0 for all):<br />
+&nbsp;e.g. 100<br />
+14. OK<br />
+<br />
+Peak value = Peak density (e/A<sup>3</sup> or fmA<sup>-3</sup>)<br />
+Integrated = Number of electrons<br />
+Volume = Voronoi volume (A<sup>3</sup>)<br />
+<br />
+※ ボロノイ多面体で空間を区切って電子数を計算している。ボロノイ多面体は、二原子間の垂直二等分面で空間を区切っていったものと考えればよい<br />
+※ 表示されているピーク位置に対応する原子の電子数とだいたい近い値になる。元素置換している場合は、置換する元素の方が原子番号が大きい場合は電子数が増えている。逆に、置換する元素の方が原子番号が小さければ電子数が減っている。空孔ができて占有率が下がっているサイトでは電子数が減少する。このような情報を利用して、置換されるサイトが複数予測される場合に置換されるサイトと置換元素を明らかにすることができる。この手法とリートベルト解析、MEMを繰り返して矛盾の無い結果を得ればよい。<br />
+※ 第一原理計算の結果に対してこの手法を用いてもよい。ただし、WIEN2kはフルポテンシャルで内殻まで表示されるのでいよいが、VASPでは内殻まで再現されているかはチェックする必要がある。WIEN2kはArai先生が「wien2venus.py」を作ってくださっているのでそれを利用してください。理論計算との比較も行うと、数値の信頼性の範囲やその数値の考え方の情報が得られるでしょう。<br />
+※ Max. number of peaks (0 for all): お使いのPCによりますが、数百程度までは入力しても大丈夫です。<br />
+　例えば、100を入力して、出力されたリストの結果を見て、構成元素の電子数よりも極端に小さい値が示されている座標を除いたサイトの数を再度入力して計算してください。そうすることで、原子位置とは関係ないピークが除かれて、より正確なボロノイ多面体を計算できるはずです。<br />
+------------------------------------------------------------------------------<br />
+■ ORFEEによる結合距離・結合角の計算結果の可視化<br />
+1. Utilities &gt; Ceometrical Parameters...<br />
+2. click row<br />
+------------------------------------------------------------------------------<br />
+■ 空間群の探し方<br />
+&nbsp;
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/dj-vnZtJFCE" width="560"></iframe><br />
+<br />
+Find space group<br />
+A1. click center atom<br />
+&nbsp; get position<br />
+&nbsp; e.g. 0.30618<br />
+A2. Edit<br />
+A3. Edit Data<br />
+A4. Unit Cell...<br />
+A5. Transform...<br />
+&nbsp; Origin shift p<br />
+&nbsp; e.g 0.30618+0.5<br />
+A6. OK<br />
+A7. Apply<br />
+A8. OK<br />
+A9. File<br />
+A10. Export Data...<br />
+A11. CIF file (*.cif)<br />
+<br />
+B1. drag&amp;drop saved CIF file<br />
+B2. Edit<br />
+B3. Edit Data<br />
+B4. Unit Cell...<br />
+B5. select symmetry<br />
+B6. change [Space Group]<br />
+&nbsp; click bold<br />
+B7. Apply<br />
+B8. check structure<br />
+&nbsp; e.g.<br />
+&nbsp; P2 is OK<br />
+&nbsp; Pm is OK<br />
+&nbsp; P222 is OK<br />
+&nbsp; Pmm2 is OK<br />
+&nbsp; Pmmm is OK<br />
+B9. repeat B5-B8<br />
+B10. Structure parameters<br />
+B11. Remove duplicate atoms<br />
+B12. OK<br />
+B13. OK<br />
+<br />
+※ ブラベー格子は簡単に分かると思いますので、そこからさらに太字の記号を選択してください。誤った空間群では、明らかに元の構造とは違う構造が表示されます<br />
+※ 対称性の高い位置に元素を置換したり空孔を入れたりすれば、一般的に、高い対称性（空間群の番号が大きいもの）を選択して、第一原理計算で構造最適化しても多くの場合、問題はありません。なぜならば、高い対称性の構造をP1対称性（=対称性なし）として構造最適化しても、結局は高い対称性の構造になるからです（考えてみれば当然の話ではありますが......意外と気づきにくい。このHPを見てない場合、幾つか計算した後に気づくことになるでしょう）。たしかに例外もありますが、計算コストや計算が上手く行っているかどうかなどを知る為に、最初は対称性の高い構造で（対称性を高く設定して）計算し、徐々に対称性を落としていくことをオススメします<br />
+※ WIEN2kの場合は、PORTで1.0を0にすれば原子を固定しながら構造最適化が可能だと思われます（未確認）<br />
+------------------------------------------------------------------------------<br />
+■ 部分群（Subgroup）への変換<br />
+&nbsp;</div>
+
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/NeLyX_-k6BM" width="560"></iframe></div>
+<br />
+Transform into Subgroup<br />
+1. Drag &amp; Drop *.cif<br />
+2. Edit &gt; Edit Data &gt; Unit cell...<br />
+&nbsp;&nbsp; check [Space Group]<br />
+&nbsp;&nbsp; e.g. 225 Fm-3m<br />
+3. Remove symmetry<br />
+&nbsp;&nbsp; change P1<br />
+4. OK<br />
+5. open [Internet browser]<br />
+&nbsp;a) bilbao crystallographic server:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; <a href="http://www.cryst.ehu.es/">http://www.cryst.ehu.es/</a><br />
+&nbsp;b) Group-Subgroup Relations of Space Groups<br />
+&nbsp;c) SUBGROUPS<br />
+&nbsp;d) Enter the serial number of the space group:<br />
+&nbsp;&nbsp;&nbsp; choose it [space group]<br />
+&nbsp;e) submit<br />
+6. Edit &gt; Edit Data &gt; Unit cell...<br />
+7. Transform...<br />
+&nbsp;e.g. Pm (No.6)<br />
+&nbsp; 1&nbsp; 0&nbsp; 0&nbsp; 0.0<br />
+&nbsp; 0&nbsp; 0 -1&nbsp; 0.0<br />
+&nbsp; 0&nbsp; 1&nbsp; 0&nbsp; 0.0<br />
+8. OK<br />
+9. Apply<br />
+10. Keep structure parameters...<br />
+&nbsp; (this fix x, y, and z position)<br />
+11. Transform...<br />
+&nbsp; 1 0 0 0.0<br />
+&nbsp; 0 1 0 0.0<br />
+&nbsp; 0 0 1 0.0<br />
+12. OK<br />
+13. Apply<br />
+14. set [new space group]<br />
+&nbsp; (in order to maitain structure,<br />
+&nbsp; set [Origin choice])<br />
+15. Apply<br />
+16. Strictire parameters<br />
+17. Remove duplicate atoms<br />
+18. OK<br />
+19. OK<br type="_moz" />
+<br />
+※ 対称性の低い空間群への変換方法となる。これが門馬先生が望んでいたものかは分からないが一応作成してみた<br />
+※ 構成元素を変えたときなどに低い対称性に変化しているときに、このような操作をして構造と対称性を推定したりできる。推定される構造に対してVESTAでX線回折パターンを計算して実験と比較してみたり、第一原理計算をしてエネルギー的に安定な構造を探してみるのもよい<br />
+------------------------------------------------------------------------------<br />
+■ 結晶外形の可視化<br />
+&nbsp; Edit &gt; Edit Data &gt; Crystal shape<br />
+※ 上手く表示されない場合は、h k l の組を2種類以上にするなどしてみてください<br />
+※ へき開面を描くときに非常に役に立つ。へき開面と原子構造の並びを比較してみると理解が深まる<br />
+------------------------------------------------------------------------------<br />
+■ 磁気構造<br />
+<br />
+◇ 磁気モーメント<br />
+　時間を反転させるとスピンの向きが逆になる。時間反転で磁気モーメントが反転する（例えば、電子が回転して磁気が生じている場面を思い起こそう。時間を巻き戻せば電子は逆方向に回転することになって磁気モーメントも逆になる）。<br />
+<br />
+※ VESTAではBNS settingを採用している<br />
+------------------------------------------------------------------------------

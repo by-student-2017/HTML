@@ -1,0 +1,38 @@
+<p>　ここではABCAP（エービーキャップと呼ばれる）を用いて状態密度分布やバンド図を描く方法などを解説する。<br />
+------------------------------------------------------------------------------<br />
+ABCAPの利用方法<br />
+<br />
+a) マニュアルは下記のHPで得られるので利用は難しくないと思います。<br />
+<br />
+b) 結晶構造が空間群P1以外の物質は、TSPACEのHPにあるgenerator.tableを参考にして入力ファイルを作成して下さい。<br />
+TSPACE : <a href="http://www.cmp.sanken.osaka-u.ac.jp/~yanase/">http://www.cmp.sanken.osaka-u.ac.jp/~yanase/</a>　<br />
+<br />
+c)　状態密度分布用の入力ファイル（p2_dos.dta）について<br />
+　部分状態密度分布を描く場合はs-fまでの4種類でしか表示を指定できないので、各原子毎に4つの数字で区切った値として入力されていることを念頭に置いてマニュアルを読んでおくとよい。例えば単位胞に2原子（1番目O、2番目Cuを指定した場合）のみの場合には、<br />
+O 2p<br />
+1　　2<br />
+Cu 3d + 4s<br />
+2　　7　　5<br />
+Total<br />
+1　　9<br />
+となる。<br />
+　Cu 3d + 4sの次の行の最初の数値はCu 3dと4sの2つを加算するため、2が書かれ、Cu 3dを指定する7とCu 4sを指定する5がその後に入力される。一般的には下記のような対応関係の数値になる。<br />
+1 = 1番目の原子のs軌道、2 = 1番目の原子のp軌道<br />
+3 = 1番目の原子のd軌道、4 = 1番目の原子のf軌道<br />
+・・・・・・・<br />
+(n-1)*4 +1 = (n-1)番目の原子のs軌道、(n-1)*4+2 = (n-1)番目の原子のp軌道<br />
+(n-1)*4+3 = (n-1)番目の原子のd軌道、(n-1)*4+4 = (n-1)番目の原子のf軌道<br />
+n*4 +1 = Total<br />
+<br />
+d) バンド図用の入力ファイル（bn_pdos.dta）について<br />
+　既に存在しているフォーマットを用いて、バンド図用の入力ファイルを作成することができる。マニュアル[2]にその使用方法が書かれている。これを用いればN点や&Gamma;点を入力する必要がない。（abcap_0503では確認している）<br />
+<br />
+参考文献<br />
+[1] <a href="http://www.ciss.iis.u-tokyo.ac.jp/dl/index.php">http://www.ciss.iis.u-tokyo.ac.jp/dl/index.php</a><br />
+[2] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner2.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner2.pdf</a><br />
+[3] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner3.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/ABCAP_beginner3.pdf</a><br />
+[4] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD14/abcap_Mg2Si.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD14/abcap_Mg2Si.pdf</a><br />
+[5] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/band_cal_p.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD12/band_cal_p.pdf</a><br />
+------------------------------------------------------------------------------<br />
+　ABCAPは大変優れたコードで、私のような駄目人間が職を得てコード開発に関われたら幸せだなと思ってしまう。話は変わるが、ABCAPにはspin orbit couplingを計算可能なように改良したヴァージョンもあるのだとか。今後は、TDDFTやGW近似、PhononやEELS、スピンを分けた電気伝導度（ゼーベック係数含む）の計算が可能なように出来たらいいな&hellip;&hellip;。<br />
+------------------------------------------------------------------------------</p>

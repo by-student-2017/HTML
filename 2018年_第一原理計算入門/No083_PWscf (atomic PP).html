@@ -1,0 +1,656 @@
+&nbsp; ここではatomic(PWscf)を用いた PAW&amp;USPP 入力ファイルとその結果を掲載していく。<br />
+--------------------------------------------------------------------------------<br />
+■ atomic<br />
+&nbsp; atomic で作られたPAWポテンシャルとその入力ファイルは下記に掲載されている。
+<ul>
+	<li>PSLibrary 0.3.1: <a href="http://theossrv1.epfl.ch/Main/Pseudopotentials">http://theossrv1.epfl.ch/Main/Pseudopotentials</a></li>
+</ul>
+　必要となる原子のボタンを押してファイルを開き <pp_inputfile> </pp_inputfile> 間の部分を入力ファイルにすればよい。GIPAW形式にもなっている。GIPAW形式の擬ポテンシャルとしては下記がある。
+
+<ul>
+	<li>DC : <a href="https://sites.google.com/site/dceresoli/pseudopotentials">https://sites.google.com/site/dceresoli/pseudopotentials</a></li>
+</ul>
+ただし、こちらは入力ファイルがどのように作られているかは分からない。<br />
+--------------------------------------------------------------------------------<br />
+■ relationship output with input（出力と入力の関係）<br />
+<br />
+◆ generation configuration (config is OK in occupied state)<br />
+-----<br />
+/<br />
+3<br />
+-----<br />
+<br />
+◆ number_of_wfc=&quot;5&quot;<br />
+-----<br />
+$test<br />
+/<br />
+5<br />
+-----<br />
+<br />
+◆ valence configureation (other config is OK in unoccupied state)<br />
+-----<br />
+$test<br />
+/<br />
+5<br />
+(here)<br />
+-----<br />
+<br />
+◆ has_wfc=&quot;T&quot; -&gt; lsave_wfc=.true.,<br />
+<br />
+◆ core_correction=&quot;T&quot; -&gt; nlcc=.true.,<br />
+<br />
+◆ l_local=&quot;2&quot; -&gt; lloc=2,<br />
+<br />
+Note<br />
+◆ iswitch=3 -&gt; PP generation<br />
+◆ rel=1 -&gt; scalar relativistic, rel=2 -&gt; full relativistic, rel=0 -&gt; non relativistic<br />
+◆ pseudotype=1 -&gt; norm-conserving (single-projector), pseudotype=2 -&gt; norm-conserving (multi-projector) , pseudotype=3 -&gt; ultrasoft<br />
+◆ tm=.true. -&gt; Troullier-Martins, tm=.false. -&gt; rrkj<br />
+※ in tm=.false. and error case, set rho(0) = 0.001<br />
+<br />
+[1] <a href="ftp://ftp.ictp.it/shared/qetutorial/espresso-4.2.1/Doc/INPUT_LD1.html">ftp://ftp.ictp.it/shared/qetutorial/espresso-4.2.1/Doc/INPUT_LD1.html</a>&nbsp;<br />
+[2] <a href="http://indico.ictp.it/event/a11191/session/17/contribution/9/material/0/0.pdf">http://indico.ictp.it/event/a11191/session/17/contribution/9/material/0/0.pdf</a><br />
+[3] <a href="https://stuff.mit.edu/afs/athena/software/espresso_v5.0.1/i386_ubuntu1104/espresso-5.0.1/atomic/Doc/INPUT_LD1.html">https://stuff.mit.edu/afs/athena/software/espresso_v5.0.1/i386_ubuntu1104/espresso-5.0.1/atomic/Doc/INPUT_LD1.html</a><br />
+<br />
+pseudotype = 3 -&gt; USPP<br />
+lpaw -&gt; PAW<br />
+weite_coulomb -&gt; 1/r<br />
+--------------------------------------------------------------------------------<br />
+■ Co hole (NC)<br />
+$input<br />
+&nbsp; title=&#39;Coh&#39;,<br />
+&nbsp; zed=27.0,<br />
+&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p6 3d7 4s0 4p0 4d0&#39;,<br />
+&nbsp; iswitch=3,<br />
+&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp; rel=1,<br />
+/<br />
+$inputp<br />
+&nbsp; pseudotype=2,<br />
+&nbsp; file_pseudopw=&#39;Co.star1s-pbe-mt_gipaw.UPF&#39;,<br />
+&nbsp; lloc=2,<br />
+&nbsp; tm=.true.,<br />
+&nbsp; lgipaw_reconstruction=.true.,<br />
+/<br />
+3<br />
+3S 1 0 2.00 0.00 1.100 1.100<br />
+3P 2 1 6.00 0.00 1.100 1.100<br />
+3D 3 2 7.00 0.00 1.100 1.100<br />
+--------------------------------------------------------------------------------<br />
+■ Co hole (US)<br />
+<a class="element_anchor" href="http://www.quantum-espresso.org/wp-content/uploads/upf_files/Co.pbe-n-van_gipaw.UPF" target="_blank"><u><font color="#0066cc">Co.pbe-n-van_gipaw.UPF</font></u></a>&nbsp;(Method: Rappe Rabe Kaxiras Joannopoulos): 1s2 -&gt; 1s1&nbsp;(rrkj -&gt; tm)<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp; title=&#39;Co h&#39;,<br />
+&nbsp;&nbsp; zed=27.,<br />
+&nbsp;&nbsp; rel=1,<br />
+&nbsp;&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p6 3d8 4s1 4p0 4d0 5s0 5p0&#39;,<br />
+&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Co.star1s-pbe-n-tm_gipaw.UPF&#39;,<br />
+&nbsp;&nbsp; rcore=1.2,<br />
+&nbsp;&nbsp; lloc=-1,<br />
+&nbsp;&nbsp; rcloc=2.2000,<br />
+&nbsp;&nbsp; rmatch_augfun= 1.3,<br />
+&nbsp;&nbsp; tm=.true.<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp; new_core_ps=.true.,<br />
+&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+&nbsp;&nbsp; use_paw_as_gipaw=.true.<br />
+&nbsp;/<br />
+6<br />
+4S&nbsp; 1 0 1.00&nbsp; 0.00&nbsp; 2.20&nbsp; 2.50&nbsp; 0.0<br />
+4S&nbsp; 1 0 0.00&nbsp; 0.10&nbsp; 2.20&nbsp; 2.50&nbsp; 0.0<br />
+4P&nbsp; 2 1 0.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+4P&nbsp; 2 1 0.00&nbsp; 0.05&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+3D&nbsp; 3 2 8.00&nbsp; 0.00&nbsp; 1.50&nbsp; 2.10&nbsp; 0.0<br />
+3D&nbsp; 3 2 0.00&nbsp; 0.05&nbsp; 1.20&nbsp; 2.10&nbsp; 0.0<br />
+$test<br />
+/<br />
+6<br />
+4S&nbsp; 1 0 1.00&nbsp; 0.00&nbsp; 2.20&nbsp; 2.50&nbsp; 0.0<br />
+5S&nbsp; 1 0 0.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+4P&nbsp; 2 1 0.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+5P&nbsp; 2 1 0.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+3D&nbsp; 3 2 8.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+4D&nbsp; 3 2 0.00&nbsp; 0.00&nbsp; 2.40&nbsp; 2.60&nbsp; 0.0<br />
+--------------------------------------------------------------------------------<br />
+■ output<br />
+□ All-electron run<br />
+Etot = Ekin + Encl + Eh + Exc<br />
+<br />
+□ Testing the pseudopotential<br />
+Etotps = Ekin + Encl + Ehrt + Ecxc - Ecc + Epseu<br />
+<br />
+□ PP_HEADER generated<br />
+total_psenergy=&quot;-9.033924183255684E+001&quot;<br />
+total_psenergy=etotps<br />
+etosps: total pseudo-valence energy of PP<br />
+<br />
+References<br />
+<a href="http://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format/">http://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format/</a><br />
+--------------------------------------------------------------------------------<br />
+■ Fe<sub>2</sub>VAl<br />
+<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 557px; height: 399px;" />
+<div style="text-align: center;">Al.in (PAW)</div>
+<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 553px; height: 398px;" />
+<div style="text-align: center;">Al.ld1.in (USPP)</div>
+<br />
+<br />
+■ Fe (PAW)<br />
+Fe.in (atomic/examples/paw_examples/input/Fe.in)<br />
+----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Fe&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=26,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;[Ar] 4s2 3d6 4p0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=2.3,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2000<br />
+&nbsp;&nbsp; lloc=-2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcloc=2.2000<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Fe.pbe-paw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=8<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 2.3000<br />
+&nbsp;&nbsp; author=&#39;&quot;Lorenzo Paulatto&quot; <paulatto@sissa.it>&#39;<br />
+&nbsp;&nbsp; tm = .true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+6<br />
+3D&nbsp; 3 2 6.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+3D&nbsp; 3 2 0.00&nbsp;&nbsp; -0.40&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 2.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 0.00&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.70&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+----<br />
+Command: $HOME/espresso-5.1/bin/ld1.x &lt; Fe.in<br />
+<br />
+<br />
+■ V (PAW)<br />
+V.in (base: atomic/examples/paw_examples/input/Fe.in)<br />
+----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;V&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=23,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;[Ar] 4s2 3d3 4p0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=2.3,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2000<br />
+&nbsp;&nbsp; lloc=-2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcloc=2.2000<br />
+&nbsp;&nbsp; file_pseudopw=&#39;V.pbe-paw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=5<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 2.3000<br />
+&nbsp;&nbsp; tm = .true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+6<br />
+3D&nbsp; 3 2 3.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+3D&nbsp; 3 2 0.00&nbsp;&nbsp; -0.40&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 2.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4S&nbsp; 1 0 0.00&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.70&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+----<br />
+Command: $HOME/espresso-5.1/bin/ld1.x &lt; V.in<br />
+<br />
+<br />
+■ Al (PAW)<br />
+Al.in (base: atomic/examples/paw_examples/input/si.in)<br />
+-----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Al&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=13,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;[Ne] 3s2 3p1 3d-1&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=1.85,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2<br />
+&nbsp;&nbsp; lloc=2,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Al.pbe-paw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=3<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 1.80<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tm=.true.<br />
+&nbsp;&nbsp; !bessel_vloc=.true.<br />
+!&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+5<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 2.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 1.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3D&nbsp; 3&nbsp; 2 -1.00&nbsp; 0.20&nbsp; 1.65&nbsp; 1.65<br />
+-----<br />
+Command: $HOME/espresso-5.1/bin/ld1.x &lt; Al.in<br />
+<br />
+<br />
+■ Al (USPP)<br />
+Al.ld1.in<br />
+-----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp; atom=&#39;Al&#39;,&nbsp; dft=&#39;PBE&#39;,&nbsp; zed=13.0, config=&#39;1s2 2s2 2p6 3s2 3p1&#39;,<br />
+&nbsp;&nbsp; iswitch=3<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3, nlcc=.true.,rcore=1.4, lloc=1,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Al.pbe-nsp-rrkj-us.UPF&#39;,<br />
+&nbsp;/<br />
+2<br />
+3S 3 0 2.00&nbsp; 0.00 1.7 1.75<br />
+3P 3 1 1.00&nbsp; 0.00 1.7 1.75<br />
+&amp;test<br />
+&nbsp;&nbsp; configts(1)=&#39;3s2 3p1&#39;,<br />
+/<br />
+-----<br />
+Command: $HOME/espresso-5.1/bin/ld1.x &lt; Al.ld1.in<br />
+--------------------------------------------------------------------------------<br />
+■ NCPPの作成（調査中）<br />
+1.&nbsp;カットオフ半径の推定<br />
+&nbsp; Ti_r.ld1.in<br />
+&nbsp; -----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp; atom=&#39;Ti&#39;, dft=&#39;PBE&#39;, config=&#39;[Ar] 3d2 4s2 4p0&#39;<br />
+/<br />
+&nbsp;&nbsp;-----<br />
+2. $HOME/espresso-5.1/bin/ld1.x &lt; Ti_r.ld1.in<br />
+3. 下記の結果を得る。<br />
+&nbsp; s(3S/3S) =&nbsp; 1.000000&nbsp; <r> =&nbsp;&nbsp; 1.0069&nbsp; <r2> =&nbsp;&nbsp;&nbsp; 1.1699&nbsp; r(max) =&nbsp;&nbsp; 0.8702<br />
+&nbsp; s(3P/3P) =&nbsp; 1.000000&nbsp; <r> =&nbsp;&nbsp; 1.0860&nbsp; <r2> =&nbsp;&nbsp;&nbsp; 1.3907&nbsp; r(max) =&nbsp;&nbsp; 0.8985<br />
+&nbsp; s(3D/3D) =&nbsp; 1.000000&nbsp; <r> =&nbsp;&nbsp; 1.6171&nbsp; <r2> =&nbsp;&nbsp;&nbsp; 3.5729&nbsp; r(max) =&nbsp;&nbsp; 0.9811<br />
+&nbsp; s(4S/4S) =&nbsp; 1.000000&nbsp; <r> =&nbsp;&nbsp; 3.5138&nbsp; <r2> =&nbsp;&nbsp; 14.2491&nbsp; r(max) =&nbsp;&nbsp; 2.9123<br />
+&nbsp; s(4P/4P) =&nbsp; 1.000000&nbsp; <r> =&nbsp;&nbsp; 4.8653&nbsp; <r2> =&nbsp;&nbsp; 27.9369&nbsp; r(max) =&nbsp;&nbsp; 3.8227<br />
+&nbsp; 3S、3P、及び3Dはほぼ同じ r （a.u. 単位）の値である。擬ポテンシャルにするには4S や 4P は余りにも大きい。3Dより内側の軌道を内殻にすれば良さそうである。<br />
+※ カットオフ半径 rc は典型的に &rho;core(rc) &gt;= 2*&rho;valence(rc) となるものが選択される。&nbsp;&rho;core(r) = &rho;valence(r)近傍で非線形の効果が重要になってくる。 内殻補正のカットオフ半径は小さい方が精度が高くなるが、平面波の大きなカットオフ値が必要になる。<br />
+4. 入力ファイルの作成<br />
+&nbsp; Ti.ld1.in<br />
+&nbsp; -----<br />
+&amp;input<br />
+&nbsp;&nbsp; atom=&#39;Ti&#39;,&nbsp; dft=&#39;PBE&#39;,&nbsp; config=&#39;[Ar] 3d2 4s2 4p0&#39;,<br />
+&nbsp;&nbsp; iswitch=3<br />
+/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=1, nlcc=.true., rcore=2.0, lloc=1,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Ti.pbe-n-rrkj.UPF&#39;,<br />
+&nbsp;&nbsp; rho0=0.001,<br />
+/<br />
+3<br />
+3D 3 2 2.00&nbsp; 0.00 1.3 1.3<br />
+4S 4 0 2.00&nbsp; 0.00 2.9 2.9<br />
+4P 4 1 0.00&nbsp; 0.00 2.9 2.9<br />
+&nbsp;&amp;test<br />
+&nbsp;&nbsp; configts(1)=&#39;3d2 4s2 4p0&#39;<br />
+/<br />
+&nbsp; -----<br />
+&nbsp; ここで各変数の意味は下記のようになる。
+<ul>
+	<li>iswitch=3 ： 擬ポテンシャルを生成する</li>
+	<li>pseudotype=1&nbsp;： ノルム保存型擬ポテンシャルを生成する</li>
+	<li>nlcc = . true. &nbsp;： 非線形内殻補正を入れる</li>
+	<li>rcore &nbsp;： 内殻での電荷の平滑化の範囲（半径でa.u.単位）。設定している全ての軌道に対するカットオフ半径よりも小さな値が望ましいようである（要確認）。</li>
+	<li>lloc &nbsp;： l軌道の局所参照ポテンシャルを用いる。私の経験では、3Dや4Dと記述している部分で最外殻のlの軌道が lloc の値に対応していないとエラーがよく発生した。</li>
+	<li>下の方にある右側の数値&nbsp;： カットオフ半径。カットオフ半径は上記で得られた r を参考する。カットオフ半径が小さいと多くのカットオフを必要とする。</li>
+</ul>
+※ エラー(phi has nodes before r_c)が出て上手くいかない場合は、TM型の擬ポテンシャルとする tm=.ture. か&nbsp;小さな<em>&rho;(<i>r</i> = 0)&nbsp;</em> となるように(例えば、rho0=0.001) を &amp;inputp 内に記述する。これはRRKJでは3つか4つのベッセル関数を用いているためである。指数関数を用いた多項式によるTM型であれば問題ないが非常に頑丈だ が粗野である。rho0=0.001 は不運にもs軌道に対してしか働かない。<br />
+5. $HOME/espresso-5.1/bin/ld1.x &lt; Ti.ld1.in<br />
+6. 下記の結果を得る。<br />
+&nbsp; Wfc&nbsp;&nbsp; 3D&nbsp; rcut= 1.296&nbsp; Estimated cut-off energy=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 137.82 Ry<br />
+&nbsp; This function has&nbsp;&nbsp;&nbsp; 0 nodes for 0 &lt; r &lt;&nbsp;&nbsp;&nbsp; 1.296<br />
+　これは、3D でのカットオフが137.82 Ry 必要となることを意味する。これは計算できないカットオフの大きさではないが、比較的大きなカットオフ値であり計算が大変になる。<br />
+&nbsp; 3 2&nbsp;&nbsp;&nbsp;&nbsp; 3D&nbsp;&nbsp; 1( 2.00)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.40319&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.40457&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00138<br />
+&nbsp;&nbsp;1 0&nbsp;&nbsp;&nbsp;&nbsp; 4S&nbsp;&nbsp; 1( 1.00)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.38394&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.38420&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00026<br />
+&nbsp;&nbsp;2 1&nbsp;&nbsp;&nbsp;&nbsp; 4P&nbsp;&nbsp; 1( 1.00)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.15248&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.15237&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.00011<br />
+&nbsp;&nbsp;dEtot_ae =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.226061 Ry<br />
+&nbsp;&nbsp;dEtot_ps =&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.226250 Ry,&nbsp;&nbsp; Delta E=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.000189 Ry<br />
+　 上記の記述も得られる。これらは全電子計算（All Electron: AE）と擬ポテンシャル（PP）でのエネルギー差である。右側にある数値が小さいことを確認する。1 mRy 程度である。Delta E は 0.2 mRy 程度である。Delta E は 0.001 Ryのオーダーが非常に良いが、0.01 Ry のオーダーでも受け入れられる精度である。あなたが欲しいエネルギーの精度とカットオフを rcore や カットオフ半径を変えて探すと良い。<br />
+7. 準内殻を得たい場合には、例えば下記のようにすれば良い。<br />
+&nbsp; -----<br />
+&amp;input<br />
+&nbsp;&nbsp; atom=&#39;Ti&#39;,&nbsp; dft=&#39;PBE&#39;,&nbsp; config=&#39;[Ar] 3d2 4s2 4p0&#39;,<br />
+&nbsp;&nbsp; iswitch=3<br />
+/<br />
+&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=1, nlcc=.true., lloc=-1, rcloc=1.3<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Ti.pbe-sp-rrkj.UPF&#39;<br />
+/<br />
+3<br />
+3S 3 0 2.00&nbsp; 0.00 1.1 1.1<br />
+3P 3 1 6.00&nbsp; 0.00 1.2 1.2<br />
+3D 3 2 2.00&nbsp; 0.00 1.3 1.3<br />
+&amp;test<br />
+&nbsp;&nbsp; configts(1)=&#39;3s2 3p6 3d2 4s2 4p0&#39;,<br />
+/<br />
+&nbsp; -----<br />
+　3D, 4S, 4P の部分が 3S, 3P, 3D になっていることが分かる。エラーが出ずに欲しいエネルギー精度で小さいカットオフが得られるように「rcore、lloc 、各軌道のカットオフ半径」 や「lloc=-1 と rcloc 」を調整する。<br />
+※ lloc=-1 とすると各軌道でのカットオフ半径の記述が無視されて、rcloc の値が採用される。<br />
+※&nbsp;rcore は自動で計算されるが、s軌道が最外殻の系では rcore を指定しないと計算が走らないことが多い。<br />
+8. check<br />
+&nbsp; -----<br />
+&nbsp; gnuplot
+<pre>
+plot [-2:2][-20:20] &#39;ld1.dlog&#39; u 1:2 w l lt 1, &#39;ld1.dlog&#39; u 1:3 w l lt 2,\
+                    &#39;ld1.dlog&#39; u 1:4 w l lt 3, &#39;ld1ps.dlog&#39; u 1:2 lt 1, \
+                  &#39;ld1ps.dlog&#39; u 1:3     lt 2, &#39;ld1ps.dlog&#39; u 1:4 lt 3</pre>
+&nbsp; -----<br />
+&nbsp; 対数微分が内殻の軌道が存在するエネルギー近傍以外でほとんど一致していることを確認する。上手く線に乗っていれば、散乱（位相シフト）が再現できる。<br />
+　※ 上手くフィットしない場合は、3S などでの 左から5つめの 0.00 を適切な値にすると上手くいくかもしれない。<br />
+&nbsp; -----<br />
+&nbsp; gnuplot&nbsp;
+<pre>
+plot [0:5] &#39;ld1ps.wfc&#39; u 1:2 lt 1    , &#39;ld1ps.wfc&#39; u 1:3 lt 3    , \
+           &#39;ld1ps.wfc&#39; u 1:4 lt 2    , &#39;ld1ps.wfc&#39; u 1:5 lt 1 w l, \
+           &#39;ld1ps.wfc&#39; u 1:6 lt 3 w l, &#39;ld1ps.wfc&#39; u 1:7 lt 2 w l</pre>
+&nbsp; -----<br />
+　設定したカットオフ半径以上で、線と一致していれば、上手く動径分布関数を再現できていることが分かる。<br />
+<br />
+<br />
+■ PAWの作成（調査中）<br />
+PAW (atomic input form): <a href="http://theossrv1.epfl.ch/Main/Pseudopotentials">http://theossrv1.epfl.ch/Main/Pseudopotentials</a><br />
+<br />
+1. Fe.in<br />
+&nbsp; -----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Fe&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=26,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;[Ar] 4s2 3d6 4p0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=2.3,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2000<br />
+&nbsp;&nbsp; lloc=-2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcloc=2.2000<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Fe.pbe-paw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=8<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 2.3000<br />
+&nbsp;&nbsp; author=&#39;&quot;Lorenzo Paulatto&quot; <paulatto@sissa.it>&#39;<br />
+&nbsp;&nbsp; tm = .true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+6<br />
+3D&nbsp; 3 2 6.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+3D&nbsp; 3 2 0.00&nbsp;&nbsp; -0.40&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 2.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 0.00&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.70&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+&nbsp; -----
+<ul>
+	<li>nld=3 : the number of logarithmic derivatives to be calculated</li>
+	<li>eminld=-10 : Energy range (min energy, in Ry) at which logarithmic derivatives are calculated</li>
+	<li>emaxld=10 : Energy range (max energy, in Ry) at which logarithmic derivatives are calculated</li>
+	<li>deld=0.01d0 : Delta e (Ry) of energy for logarithmic derivatives</li>
+	<li>rlderiv=2.3 : radius (a.u.) at which logarithmic derivatives are calucalted</li>
+	<li>new_core_ps = .true. : pseudized the core charege with bessel functions</li>
+	<li>zval=8 : zval is automatically calculated from available data. if the value of zval is provided in input, it will be checked versus the calculated value. The only case in which you need to explicitly provide the value of zval for noninteger zval (i.e. half core-hole psudo-potentials)</li>
+	<li>lpaw=.true. : produce a PAW dataset, experimental feature only for psudotype=3</li>
+	<li>lnc2paw=.false. :</li>
+	<li>which_augfun =&#39;BESSEL&#39; : Use Bessel functions to pseudize the Q</li>
+	<li>rmatch_augfun= 2.3000 : pseudization radius for the augmentation functions. Presently it has the same value for all L.</li>
+</ul>
+2. $HOME/espresso-5.1/bin/ld1.x &lt; Fe.in<br />
+<br />
+■ 重要な記述[1, 6]<br />
+------<br />
+rcloc = matching radius (a.u.) for local pseudo-potential (no default)&nbsp;<br />
+&nbsp; Must be specified only if lloc=-1, otherwise the corresponding value of rcut is used.&nbsp;<br />
+rcore= matching radius (a.u.) for the smoothing of the core charge<br />
+&nbsp; If not specified, the matching radius is determined<br />
+&nbsp;&nbsp;by the condition rho_core(rcore) = 2*rho_valence(rcore)<br />
+------
+<dl>
+	<dt>-</dt>
+	<dd>in transition metals, whose typical outer electronic configuration is something like (<i>n</i> = main quantum number) <i>nd</i><sup><font size="2">i</font></sup>(<i>n</i> + 1)<i>s</i><sup><font size="2">j</font></sup>(<i>n</i> + 1)<i>p</i><sup><font size="2">k</font></sup>, it is not always evident that the <i>ns</i> and <i>np</i> states (``semicore states&#39;&#39;) can be safely put into the core. The problem is that <i>nd</i> states are localized in the same spatial region as <i>ns</i> and <i>np</i> states, deeper than (<i>n</i> + 1)<i>s</i> and (<i>n</i> + 1)<i>p</i> states. This may lead to poor transferability. Typically, PP&#39;s with semicore states in the core work well in solids with weak or metallic bonding, but perform poorly in compounds with a stronger (chemical) type of bonding.</dd>
+	<dt>-</dt>
+	<dd>Heavy alkali metals (Rb, Cs, maybe also K) have a large polarizable core. PP&#39;s with just one electron may not always give satisfactory results.</dd>
+	<dt>-</dt>
+	<dd>In some II-VI and III-V semiconductors, such as ZnSe and GaN, the contribution of the <i>d</i> states of the cation to the bonding is not negligible and may require explicit inclusion of those <i>d</i> states into the valence.</dd>
+</dl>
+------<br />
+NC-PP&#39;s<br />
+even less for 4f electrons : r<sub><font size="2">c</font></sub>&nbsp;= 0.7-0.8 a.u. : &gt;=100 Ry<br />
+second-row(2p) elements: r<sub><font size="2">c </font></sub>=1.1-1.2 a.u. : 50-70 Ry<br />
+3d transiton metals : r<sub><font size="2">c </font></sub>=1.1-1.2 a.u. : &gt; 80 Ry<br />
+highest l have slower convergence for the same r<sub><font size="2">c</font></sub><br />
+<br />
+US-PP&#39;s<br />
+second-row (2p) elements : NC r<sub><font size="2">c / US </font></sub>r<sub><font size="2">c = 1.3 / 1.5 a.u.</font></sub><br />
+3d transiton metals : NC r<sub><font size="2">c / US </font></sub>r<font size="2">c = 1.7 / 2.2 a.u.</font><br />
+do not forget that the sum of the r<sub><font size="2">c</font></sub> of two atoms should not exceed the typical bond length of those atoms.<br />
+------<br />
+&nbsp; A big problem in NC-PP&#39;s is how strike a compromise between softness and transferability, especially for difficult elements. The basic question: ``how much should I push r<sub><font size="2">c</font></sub> outwards in order to have reasonable results with a reasonable PW cutoff&#39;&#39;. has no clear-cut answer. The choice of r<sub><font size="2">c</font></sub> at the outermost maximum for ``difficult&#39;&#39; elements (those described in Sec.<a href="http://www.quantum-espresso.org/wp-content/uploads/Doc/pseudo-gen/node8.html#pseudiz">2.2.1</a>): typically 0.7-0.8 a.u, even less for 4f electrons, yields very hard PP&#39;s (more than 100 Ry needed in practical calculations). With a little bit of experience one can say that for second-row (2p) elements, r<sub><font size="2">c</font></sub> = 1.1 - 1.2 will yield reasonably good results for 50-70 Ry PW kinetic energy cutoff; for 3d transition metals, the same r<sub><font size="2">c</font></sub> will require &gt; 80 Ry cutoff (highest l have slower convergence for the same r<sub><font size="2">c</font></sub>). The above estimates are for TM pseudization. RRKJ pseudization will yield an estimate of the required cutoff. For multiple-projectors PP&#39;s, the r<sub><font size="2">c</font></sub> of unbound states may be chosen in the same range as for bound states. Use small r<sub><font size="2">c</font></sub> and don&#39;t try to push them outwards: the US pseudization will take care of softness. US pseudization radii can be chosen much larger than NC ones (e.g. 1.3&divide; 1.5 a.u. for second-row 2p elements, 1.7&divide; 2.2 a.u. for 3d transition metals), but do not forget that the sum of the r<sub><font size="2">c</font></sub> of two atoms should not exceed the typical bond length of those atoms.<br />
+&nbsp; Note that it is the hardest atom that determines the PW cuto in a solid or molecule. Do not waste time trying to nd optimally soft PP&#39;s for element X if element Y is harder then element X.<br />
+------<br />
+&nbsp; the pseudopotential web-page at <a href="http://www.quantum-espresso.org/">www.quantum-espresso.org/</a>&nbsp; with the label &quot;*star1s*_gipaw*&quot; for K-edges, &quot;*star2s*_gipaw*&quot; for L1-edges and so on.<br />
+[1] <a href="http://www.quantum-espresso.org/wp-content/uploads/Doc/pseudo-gen/node1.html">http://www.quantum-espresso.org/wp-content/uploads/Doc/pseudo-gen/node1.html</a><br />
+[2] <a href="https://sites.google.com/site/dceresoli/">https://sites.google.com/site/dceresoli/</a><br />
+[3] <a href="http://qe-forge.org/pipermail/pw_forum/2007-October/081886.html">http://qe-forge.org/pipermail/pw_forum/2007-October/081886.html</a><br />
+[4] <a href="http://www.abinit.org/documentation/helpfiles/for-v7.8/tutorial/lesson_paw2.html">http://www.abinit.org/documentation/helpfiles/for-v7.8/tutorial/lesson_paw2.html</a><br />
+[5] <a href="http://www.abinit.org/documentation/helpfiles/for-v7.8/tutorial/lesson_paw3.html">http://www.abinit.org/documentation/helpfiles/for-v7.8/tutorial/lesson_paw3.html</a><br />
+[6] <a href="http://www.nist.gov/pml/data/dftdata/index.cfm">http://www.nist.gov/pml/data/dftdata/index.cfm</a><br />
+[7] <a href="http://qe-forge.org/pipermail/pw_forum/2011-September/096300.html">http://qe-forge.org/pipermail/pw_forum/2011-September/096300.html</a>&nbsp;<br />
+[8] <a href="http://www.fisica.uniud.it/~giannozz/QE-Tutorial/tutorial_pseudo.html">http://www.fisica.uniud.it/~giannozz/QE-Tutorial/tutorial_pseudo.html</a><br />
+[9] <a href="ftp://ftp.ictp.it/shared/qetutorial/espresso-4.2.1/Doc/INPUT_LD1.html">ftp://ftp.ictp.it/shared/qetutorial/espresso-4.2.1/Doc/INPUT_LD1.html</a><br />
+[10] <a href="http://qe-forge.org/pipermail/pw_forum/2009-October/089260.html">http://qe-forge.org/pipermail/pw_forum/2009-October/089260.html</a><br />
+--------------------------------------------------------------------------------<br />
+■ under testing ( 1s core-hole type)<br />
+USPP: http://www.quantum-espresso.org/pseudopotentials/#<br />
+<br />
+■ Fe_1sh.in<br />
+-----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Fe&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=26,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p6 4s2 3d6 4p0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=2.3,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2000<br />
+&nbsp;&nbsp; lloc=-2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcloc=2.2000<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Fe.pbe-star1s-gipaw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=9<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 2.3000<br />
+&nbsp;&nbsp; tm = .true.<br />
+&nbsp;&nbsp; !bessel_vloc=.true.<br />
+&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+6<br />
+3D&nbsp; 3 2 6.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+3D&nbsp; 3 2 0.00&nbsp;&nbsp; -0.40&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 2.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 0.00&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.70&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+-----<br />
+<br />
+<br />
+■ V_1sh.in<br />
+-----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;V&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=23,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p6 4s2 3d3 4p0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-10,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=2.3,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2000<br />
+&nbsp;&nbsp; lloc=-2,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcloc=2.2000<br />
+&nbsp;&nbsp; file_pseudopw=&#39;V.pbe-star1s-gipaw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=6<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 2.3000<br />
+&nbsp;&nbsp; tm = .true.<br />
+&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+6<br />
+3D&nbsp; 3 2 3.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+3D&nbsp; 3 2 0.00&nbsp;&nbsp; -0.40&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.2000<br />
+4S&nbsp; 1 0 2.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4S&nbsp; 1 0 0.00&nbsp;&nbsp;&nbsp; 0.30&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.00&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+4P&nbsp; 2 1 0.00&nbsp;&nbsp;&nbsp; 0.70&nbsp;&nbsp;&nbsp; 1.50&nbsp;&nbsp;&nbsp; 2.5000<br />
+-----<br />
+<br />
+<br />
+■ Al_1sh.in<br />
+-----<br />
+&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Al&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=13,<br />
+&nbsp;&nbsp;&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p1 3d-1&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=1.85,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2<br />
+&nbsp;&nbsp; lloc=2,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Al.pbe-star1s-gipaw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=4<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 1.80<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tm=.true.<br />
+&nbsp;&nbsp; !bessel_vloc=.true.<br />
+&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+5<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 2.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 1.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3D&nbsp; 3&nbsp; 2 -1.00&nbsp; 0.20&nbsp; 1.65&nbsp; 1.65<br />
+-----<br />
+<br />
+<br />
+■ Mg_1sh.in (Reference: <a href="http://theossrv1.epfl.ch/Main/Pseudopotentials">http://theossrv1.epfl.ch/Main/Pseudopotentials</a>)<br />
+-----<br />
+&nbsp;&nbsp;&amp;input<br />
+&nbsp;&nbsp;&nbsp; title=&#39;Mg&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zed=12<br />
+&nbsp;&nbsp;&nbsp; config=&#39;1s1 2s2 2p6 3s2 3p0 3d0&#39;<br />
+&nbsp;&nbsp;&nbsp; iswitch=3,<br />
+&nbsp;&nbsp;&nbsp; dft=&#39;PBE&#39;<br />
+&nbsp;&nbsp;&nbsp; nld=3,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; eminld=-4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; emaxld=4,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; deld=0.01d0,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rlderiv=1.85,<br />
+&nbsp;/<br />
+&nbsp;&amp;inputp<br />
+&nbsp;&nbsp; pseudotype=3,<br />
+&nbsp;&nbsp; nlcc=.true.,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; new_core_ps = .true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rcore=1.2<br />
+&nbsp;&nbsp; lloc=2,<br />
+&nbsp;&nbsp; file_pseudopw=&#39;Mg.pbe-star1s-gipaw_kj.UPF&#39;<br />
+&nbsp;&nbsp; zval=3<br />
+&nbsp;&nbsp; lpaw=.true.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; lnc2paw=.false.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; which_augfun =&#39;BESSEL&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; rmatch_augfun= 1.80<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tm=.true.<br />
+&nbsp;&nbsp; !bessel_vloc=.true.<br />
+&nbsp;&nbsp; lgipaw_reconstruction=.true.<br />
+!nX n&nbsp; l&nbsp;&nbsp; occ&nbsp;&nbsp; nrg&nbsp;&nbsp; rmin&nbsp;&nbsp; rcut<br />
+&nbsp;/<br />
+5<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 2.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3S&nbsp; 1&nbsp; 0&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 0.00&nbsp; 0.00&nbsp; 1.50&nbsp; 1.80<br />
+3P&nbsp; 2&nbsp; 1&nbsp; 0.00&nbsp; 2.00&nbsp; 1.50&nbsp; 1.80<br />
+3D&nbsp; 3&nbsp; 2&nbsp; 0.00&nbsp; 0.20&nbsp; 1.65&nbsp; 1.65<br />
+-----<br />
+--------------------------------------------------------------------------------</paulatto@sissa.it></r2></r></r2></r></r2></r></r2></r></r2></r></paulatto@sissa.it>

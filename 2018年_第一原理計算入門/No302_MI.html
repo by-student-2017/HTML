@@ -1,0 +1,111 @@
+-----------------------------------------------------------------------<br />
+■ マテリアル・インフォマティクス（MI）に関する情報（2018年）&nbsp;[1]<br />
+<br />
+◇ 基本的な情報<br />
+・ データ科学は基本的に内挿しかできない<br />
+・ 内挿範囲か外挿範囲かを明らかにする方法はわからない<br />
+　現状、新しいデータを入れてみて、それが上手くいくかを調べて評価するしかない<br />
+・ 目的の性能が外挿範囲にある場合には下記の2つの事例が起こることがある<br />
+　1) 外挿範囲に近い内挿範囲の端に予測が集まる<br />
+　2) もし、外挿範囲で予測がされたとしても目的の性能が出ない<br />
+　このようなことになるため、予測された結果に対して、第一原理計算（例えば、Gaussian 09でB3LYP/6-31+G(d)）や実験をしてデータを追加し、またモデルを作って予測するというサイクルを繰り返して、少ないステップで目的の性能が得られるようにしていくことが必要となる<br />
+・ 失敗のデータは、その失敗の範囲を避けるために必要<br />
+　成功のデータから、成功の範囲外を失敗として失敗のデータを作ったりする（PU Learning）<br />
+・ 偏りのあるデータは、偏った結果しか生み出さない<br />
+・ プロは数ヶ月（約6ヶ月程度）かけて訓練モデルを作る<br />
+・ 50個程度のデータでは、普通にやってできない<br />
+　データ解析している人なら分かる。50個程度のデータでニューラルネットワーク（NN）を作るのもマジックに近い。そのため、各物性についてNNを1000種類作って転移学習（入力層から中間層の最終段までをそのまま用いて、中間層の最終段から出力層の関数を線形にして用いる）をさせもっとも当てはまりの良いものを探す<br />
+・ 機械学習で得られたモデルは、理解したいが難しい<br />
+・ NNの伝達関数はReLUで、出力層の前のみ線形（Linear）である。そのため、入力層で非線形のデータを入れる（例えば、x だけでなく、x<sup>2</sup>などである）<br />
+・ NNのデータ数の目安はない。また、ノード（節）の数や層数も最適なものが分からないため、自動でそれらの値やパラメータを変えて、最適なものを探すプログラムを作る必要がある<br />
+　例えば、NNの作成では、目的の物性と強い相関のありそうなデータの多い他の物性に対して、初めはDropout (0.2) 、入力層は650程度、中間層のノード（節）数を100, 50, 10程度の3層としてみて、それから色々とノード（節）の数や層数などを色々と条件を変えてNNを1000パターン程度作り、それを中間層の最終段（この例では10）と出力層の間の関数を線形にして、この線形の部分だけ目的の物性のデータに対して最適化する。そして、目的の物性と最も当てはまりの良いNNを採用するという手順をとる。<br />
+・ 有機で学習させたモデルを無機に当てはめると上手くいかない。逆もまたしかり<br />
+　例えば、t-SNE（t-distributed Stochastic Neighbor Embedding）を使って、高次元空間から低次元空間に変えて、データの分布を見てみるとよい）。ランダムフォレストよりもNNの方が当てはまりが良い。NNでは傾向は一致するので何かしらの関係はある。そのため中間層の最終段から出力層の伝達関数の係数を調整すると上手くいく（転移学習の正当性を示している可能性がある）<br />
+・ 欠損にバイアスがあるとき、穴埋めしてはいけない<br />
+　値を変えて結果を検証することが必要<br />
+・ 同じ予測をするために色々な解がある（多様性がある）<br />
+・ 統計学の共通原理： 汎化性能の高いモデルが最良<br />
+　同等の汎化性能を達成するモデルは数多く存在する<br />
+<br />
+◇&nbsp;予測と理解<br />
+・ 機械学習の有用性： （複雑な）経験則の発見（因果関係でない）<br />
+・ 逆問題や因果効果の定量に機械学習を活用する場合は、「因果的なモデル」を作る必要がある<br />
+・ 機械学習による「理解」の難しさがある： 認識の多様性<br />
+　クロスバリデーション&amp;モデル選択だけでは不十分<br />
+　XAIにおける解釈・説明可能性の議論は、意思決定モデルを選択した後の話となる<br />
+　XAI: 例えば、複雑なモデルを可読性の高いモデル（決定木、ルールモデルなど）で近似（変換）する<br />
+・ 一般に線形モデルは解釈性が高いと言われている<br />
+・ 「人間の認識能力で理解可能な側面を理解している」だけに過ぎず、「現象の理解」とは別の次元<br />
+-----------------------------------------------------------------------<br />
+■ 理論&nbsp;[1]<br />
+<br />
+◇&nbsp;多重共線性 （multicollinearity）<br />
+・ これが強いものがあると予測性能が悪くなる<br />
+※ 行列での逆行列を作る条件に似ている。必要なデータ数に対して実際のデータが少ないと逆行列が作れない。比例関係（線形性）のあるデータ列または行があると逆行列が作れない。<br />
+<br />
+◇ L1 正則化<br />
+・ L1 正則化では、使われない係数が0になる（少数の代表的な変数を選択）<br />
+　この機能を使って、係数が0にならなかった変数だけにすると、ロバスト性がなくなる<br />
+　&rarr; 似たような変数はロバスト性のために重要となる。独立性の高い入力変数だけにすればいいというわけではない<br />
+・ L1 正則化は、ラグランジュの未定乗数法を解いているのと同等<br />
+<br />
+◇ L2 正則化<br />
+・ 係数の値が、まとまった同じような値をとるようになる（相関の高い変数をまとめて、ゼロに近づける）<br />
+<br />
+◇ L1 + L2<br />
+・ 似たものをまとめて変数にする（重要な変数間に高い相関、そこから複数の変数を選択する傾向がある）<br />
+・ L1 + L2の方が、L1やL2だけよりも当てはまりは良い<br />
+※&nbsp;L1とL2の比率を変えて最も当てはまりが良い比率を探すようにプログラムを作成して運用すればよい<br />
+<br />
+◇ 交絡因子（confounding factor）<br />
+・ これを取り除くにはランダムでデータを得るようにする<br />
+<br />
+※ 左欄の「機械学習」もあわせて読みください。L1正則化とL2正則化がなぜ上記のようになるかは、[Hastie et al, The Elements of Statistical Leaning: Data Mining]をお読みください。<br />
+-----------------------------------------------------------------------<br />
+■ ベイズ最適化<br />
+<br />
+◇ ベイズの定理<br />
+<img src="data:image/png;base64,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" /><br />
+　実際にはこれを下記のようにして用いる。<br />
+<img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALIAAAAcCAYAAADFnOX2AAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAROSURBVHhe7Zw9UuswEMc37yxJigwnMCfIe00qWjqnhIYuN6BxStKlpXJDfAJyAoYC5y5+Wkl2/KFPS2Dj0W/GkFjWevXXSlrZDLOCAIHAL+cP/x0I/GpCIAcmQQjkwCQIgRyYBB4DOYPtNuOfhyHbbokXYyRow+ivg9Z/fGrhzqmIISY/h2YsftQJ2jBc76+u7yWQT7HsBnmRRICP9+gR04tORZLktLQJcZRd0CBPoqp+aaNxrlNHbGcoRNp8T5tMtB5OG3mMIKZxIvffPZDzpIgkxk9xs1Po98rRNgqR8R6t0ZgncSEcD4RTHEnLfhSFNnZt0gegqdaDaKPSgWATJzL/nQMZbyr2kYgP7ZviyJONTFVnsRFbFZ/iIlL1Binvzmo/j1wbxKZNukC20HoAbdQ6WMaJxH/HzV4G6SGC1YJ/bbCAVXSGx+d6ij6H5d2KlNhC6t0AHFK0dYH91wbeH+asSMRiBdEhlWwOyIZjNoMZHtXGo3aOHLf7Cz/vgkobxLJNSiy0FmqD7Rdspi57uL3dE+9c0OlgGSeyvuUBfYUuedepvZzmQZRoC5bHBjh6sK7RDKCZdagtsvQqUoorolGOtEY6nQVJLob5WZSQUoYqbTHWR6cNYtwm3YxMMNZapg2er/mL/tc06eBdBxPfEbH/ktSCXRxVSx9bBjtLH+8I5e3LBqtEoWg6i9tRphQV6L9gOSM24lZ91gGijlVhoI+FNvo2abQpMdJaog0Fy4jPaEfbX4gnHRAj3xGx/+LUIkvhEN3A7ljAy5qf68v8Ad7zBKLzIywclqnL2yucIYZd7+WXsVoK6kd38M/GrCd9fLWpwlnrNbwUG0jvAY7vD2SB1zCiOBEGcpYeIN69wLpsyeUNXs8R3Jn2draFxnNv4uSRDFU4v8Jbz0jOP89kYG+I1A7MlwBfdQcwf+MfLXDWh+OlTV61xlw5hc0R4N4gmMYUJ4JAxs6NYVNTN3t+hHO8A9OJ4/L1wT9dmePOBm5ANCHqYQEX153qxRqWn/dQ7uWy7V8yoySQtzsu21fXdHHXh+GnTf605kFcYGCS2VEbzCOLE55iXGnlRyyHlOQ4NK/p5pfdOix3Uifz8jyQvSywyWNZ7ia+nvuC+Vj9mnLDgYfKT1N9JNqU2LVJro291iJt8JykDbKc1YMOveNEYK8TyO23TvZGS9GxzNQOUtar07JBDq0ZhIonENUD5vqItEH6tEmkDVKeb9lUGfSkjRcdbH1HJP63AhlHhHj0yMBRpbu3GWXDPICzqy9bDez0ma42Q+lAkPjfzJExWQe7Hfz6KYEP+lB/PGTpByRPrvm0AEt9JqvNgDpI/ecBTUcNfqWH9lleEz/v733NOh5nrxp99ZmaNmPVQfJCxBYfQvvpLPVfWQ1B0Ibh3gaV/54CmfBteak5XnMxnwRtGA466PwP/w4gMAkc//otEBgHIZADkyAEcmAShEAOTACA/22dZaJnCgcnAAAAAElFTkSuQmCC" /><br />
+ここで、Yは物性値、Sは構造（通常は数値や文字として入力にする）、p（B|A）はAのときにBとなる確率である。<br />
+　この方法を用いて、構造と物性値のデータからP(Y|S)を作り、上式のベイズの定理で目的の物性値Yを示す構造SをMCMC（マルコフ連鎖モンテカルロ法）などを用いて探せばよい。p(S)を、Sの構造の一部分のAを用いたp(S|A)とすることで、化合物らしい構造を生成するようにすることもできる。<br />
+・ 構造を数値や文字に変換するものを記述子（Descriptor）と呼ぶ。例えば、化学構造を数字と文字に変換する方法としてSMILESによる方法がある（込め この記述方法が現代のデータ科学で重要になるとは思わなかった）。SMILESの利用例としてSeq2Seqがあげられる（Seq2Se1は文法エラーが2%、その2%内の98%が構成元素の位置の入れ違い。ちなみに、Seq2Seqの反応中心部位の予測精度は90%程度、反応物ペアの反応の有無の予測は86.4%となる）<br />
+・ 無機物では、組成比（Fraction）や原子番号、原子半径などを入力に用いたりする<br />
+※ 式の導出については、多くのHPや教科書に記載されているので、ここでは省略する<br />
+※ p(S|Y)はPosteriorやBackward prediction, p(Y|S)はLikelihoodやForward prediction, p(S)はPriorやPrior distributionと呼ばれたりする<br />
+<br />
+◇ 実験計画法&nbsp;[1]<br />
+・ 探索： （回帰関数での）推定精度を上げるために、分散が高い領域を選択<br />
+・ 活用： 回帰関数から最大値が存在しそうな領域を選択<br />
+・ 平均と分散から獲得関数を導出し、次に実験する構造や組成を決定する<br />
+・ 獲得関数には数多くの種類がある。例えば下記のようなものが有名である<br />
+　・ Expected Improvement<br />
+　・ Probability of Improvement<br />
+　・ Thompson Sampling<br />
+　などである。Rでは「rBaysianOptimization」に組み込まれている。<br />
+・ 多くの場合、回帰モデルはガウス過程である<br />
+　Rasmussen and Williams, MIT Press, 2006.<br />
+・ 実験計画法を評価している論文は、Brouch et al., arXiv, 2010.などがある<br />
+<br />
+◇ Kriging [2]<br />
+・ Qiitaでの「PRML第6章 ガウス過程による回帰 Python実装」を参考にすればよい<br />
+・ Krigingは、ガウス過程回帰とベイズ最適化による空間補完法<br />
+・ Krigingは、導入は容易だが、効率は仮想スクリーニングに劣る<br />
+-----------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] R. Yoshida, Johokiko, 2018.<br />
+・ 高品質・大量の仮想物質を作製・保有することが、莫大な価値を生み出す<br />
+　製薬会社： 1億から10億の仮想ライブラリ<br />
+・ 逆合成（Retrosynthesis）では、著書 Alan Aspuru-guzikを調べてみるとよい。MCTS（Monte Carlo Tree Seach）なども用いられる<br />
+　※ 高い性能の組成や合金を予測してもそれが存在しなかったり適切に合成できなければ意味がない。そのため、その組成や合金が存在するかどうかや適切な合成経路を予測する機械学習などが存在している。<br />
+・ あらゆるものはデジタル化してとっておくこと（不完全でもいいからとれるものはデータをとっておくことが重要）。データは「New Oil」<br />
+[2] T. Mizoguchi, JFCC, 2018.<br />
+・ 予測は予測モデル＝Predictor（回帰器）を用いて行う<br />
+・ 仮想スクリーニング： S. Kiyohara et al., Sci. Adv. (2016) 2, e1600746.,<br />
+・ ベイズ最適化（Kriging）： S. Kiyohara et al.,&nbsp;Jpn. J. Appl. Phys. 55&nbsp;(2016) 045502.<br />
+・ 転移学習： H. Oda et al., J. PHys. Soc, Jpn, 86 (2017) 123601.<br />
+・ 酸化物： S. Kikuchi et al, Physica&nbsp;B (2018).<br />
+・ 粒界偏析： S. Kiyohara et al., Physica B (2018).<br />
+・ 粒界偏析： S. Kiyohara et al, J. Chem. Phys. (2018).<br />
+-----------------------------------------------------------------------&nbsp;

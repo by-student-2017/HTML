@@ -1,0 +1,278 @@
+　ここではMEMを用いた解析に関連する情報を掲示していきます<br />
+--------------------------------------------------------------------------------<br />
+■ github:&nbsp;<a href="https://github.com/by-student-2017/conversion">https://github.com/by-student-2017/conversion</a><br />
+--------------------------------------------------------------------------------<br />
+■ 電子エネルギー密度 （Electronic energy density *.ted）： he(r) = g(r) + v(r)<br />
+※ ( 2* g(r) + v(r) = (?2 /&nbsp;4m) * ▽<sup><font size="2">2</font></sup>&rho;(r) )<br />
+*.grd: density (e/Ang^3) = &rho;(r)<br />
+*e.grd: energy (E/Ang^3) = he(r) (*.ted &gt; File &gt; Export Data *.grd &gt; mv *e.grd)<br />
+--------------------------------------------------------------------------------<br />
+#!/usr/bin/python<br />
+import sys,math<br />
+from numpy import *<br />
+<br />
+if len(sys.argv) == 1:<br />
+&nbsp;print &#39;No file name provided!&#39;<br />
+&nbsp;print &#39;For example, &gt;./grd2xplor.py test (it need test.grd and teste.grd)&#39;<br />
+&nbsp;print &#39;also see comment part of this code.&#39;<br />
+&nbsp;exit()<br />
+try:<br />
+&nbsp;base = sys.argv[1]<br />
+&nbsp;f1 = base + &#39;.grd&#39;<br />
+&nbsp;f2 = base + &#39;e.grd&#39;<br />
+&nbsp;file1 = open(f1,&#39;r&#39;)<br />
+&nbsp;file2 = open(f2,&#39;r&#39;)<br />
+except IOError, (errno, msg):<br />
+&nbsp;print &#39;grd file open error!&#39;<br />
+&nbsp;exit()<br />
+<br />
+f4 = base + &#39;.dos&#39;<br />
+file4 = open(f4,&#39;w&#39;)<br />
+#f5 = base + &#39;.spc&#39;<br />
+#file5 = open(f5,&#39;w&#39;)<br />
+<br />
+###############################################################<br />
+# read charge density grd<br />
+for line in file1:<br />
+&nbsp;#file4.write(&#39;\n&#39;)<br />
+&nbsp;#file4.write(&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&#39; + &#39;\n&#39;)<br />
+&nbsp;#file4.write(line)<br />
+&nbsp;break<br />
+<br />
+for line in file1:<br />
+&nbsp;LCA = float( line[ 1: 8].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCB = float( line[ 9:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCC = float( line[18:26].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANA = float( line[27:35].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANB = float( line[36:44].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANG = float( line[45:53].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print LCA, LCB, LCC, ANA, ANB, ANG<br />
+&nbsp;break<br />
+<br />
+for line in file1:<br />
+&nbsp;PX = int( line[ 1: 5].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PY = int( line[ 6:11].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PZ = int( line[12:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print PX, PY, PZ<br />
+&nbsp;break<br />
+<br />
+#file4.write(&quot;{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}&quot;.format(PX, 0, (PX-1), PY, 0, (PY-1), PZ, 0, (PZ-1)) )<br />
+#file4.write(&#39;\n&#39;)<br />
+#file4.write(&quot;{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}&quot;.format(LCA, LCB, LCC, ANA, ANB, ANG) )<br />
+#file4.write(&#39;\n&#39;)<br />
+#file4.write(&#39;ZYX&#39;)<br />
+<br />
+D3 = zeros([PX+10, PY+10, PZ+10])<br />
+D1 = zeros([(PX+1)*(PY+1)*(PZ+1)])<br />
+#sum = 0<br />
+#var = 0<br />
+#esd = 0<br />
+DI4sum = 0<br />
+<br />
+I1 = 0<br />
+I2 = 0<br />
+I3 = 0<br />
+for line in file1:<br />
+&nbsp;for I0 in range(6):<br />
+&nbsp;&nbsp;den = line[ (1+15*I0):(15+15*I0)].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;if den &lt;&gt; &#39;&#39;:<br />
+&nbsp;&nbsp;&nbsp;D3[I1][I2][I3+I0] = float(den)<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+0] = float( line[ 1:15].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+1] = float( line[16:30].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+2] = float( line[31:45].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+3] = float( line[46:60].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+4] = float( line[61:75].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#D3[I1][I2][I3+5] = float( line[76:90].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#print D3[I1][I2][I3+I0]<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( D3[I1][I2][I3+I0]) )<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;#sum += float(den)<br />
+&nbsp;I3 += 6<br />
+&nbsp;if I3 &gt;= PZ :<br />
+&nbsp;&nbsp;I3 = 0<br />
+&nbsp;&nbsp;I2 += 1<br />
+&nbsp;&nbsp;if I2 &gt;= PY :<br />
+&nbsp;&nbsp;&nbsp;I2 = 0<br />
+&nbsp;&nbsp;&nbsp;I1 += 1<br />
+&nbsp;&nbsp;&nbsp;if I1 &gt;= PX :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;break<br />
+<br />
+#sum /= (PX * PY * PZ)<br />
+<br />
+I4 = 0<br />
+for I1 in range(PZ):<br />
+&nbsp;#file4.write( &#39;\n&#39; )<br />
+&nbsp;#file4.write(&quot;{: &gt;7d}&quot;.format( I1 ) )<br />
+&nbsp;for I2 in range(PY):<br />
+&nbsp;&nbsp;for I3 in range(PZ):<br />
+&nbsp;&nbsp;&nbsp;#if ( I4 % 6 ) == 0 :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#file4.write( &#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( D3[I1][I2][I3] ) )<br />
+&nbsp;&nbsp;&nbsp;#var += ( D3[I1][I2][I3] - sum )**2<br />
+&nbsp;&nbsp;&nbsp;D1[I4] = D3[I1][I2][I3]<br />
+&nbsp;&nbsp;&nbsp;I4 += 1<br />
+<br />
+DI4sum = I4 - 1<br />
+#print DI4sum, ((PX * PY * PZ) -1)<br />
+#file4.write( &#39;\n&#39; + &#39;-9999&#39; + &#39;\n&#39;)<br />
+#var /= ((PX * PY * PZ) -1)<br />
+#esd = sqrt(var)<br />
+#file4.write( &quot;{: &gt;12.5e}{: &gt;12.5e}&quot;.format(sum, esd) )<br />
+#file4.write(&#39;\n&#39;)<br />
+<br />
+#test<br />
+#print I4<br />
+#print ((PX-1) * (PY-1) * (PZ-1))<br />
+file1.close()<br />
+###############################################################<br />
+# read charge density e.grd<br />
+for line in file2:<br />
+&nbsp;#file4.write(&#39;\n&#39;)<br />
+&nbsp;#file4.write(&#39;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&#39; + &#39;\n&#39;)<br />
+&nbsp;#file4.write(line)<br />
+&nbsp;break<br />
+<br />
+for line in file2:<br />
+&nbsp;LCA = float( line[ 1: 8].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCB = float( line[ 9:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;LCC = float( line[18:26].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANA = float( line[27:35].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANB = float( line[36:44].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;ANG = float( line[45:53].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print LCA, LCB, LCC, ANA, ANB, ANG<br />
+&nbsp;break<br />
+<br />
+for line in file2:<br />
+&nbsp;PX = int( line[ 1: 5].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PY = int( line[ 6:11].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;PZ = int( line[12:17].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;#print PX, PY, PZ<br />
+&nbsp;break<br />
+<br />
+#file4.write(&quot;{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}{: &gt;8d}&quot;.format(PX, 0, (PX-1), PY, 0, (PY-1), PZ, 0, (PZ-1)) )<br />
+#file4.write(&#39;\n&#39;)<br />
+#file4.write(&quot;{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}{: &gt;12.4f}&quot;.format(LCA, LCB, LCC, ANA, ANB, ANG) )<br />
+#file4.write(&#39;\n&#39;)<br />
+#file4.write(&#39;ZYX&#39;)<br />
+<br />
+Vpixel = (LCA * LCB * LCC) / (PX * PY * PZ)<br />
+<br />
+E3 = zeros([PX+10, PY+10, PZ+10])<br />
+E1 = zeros([(PX+1)*(PY+1)*(PZ+1)])<br />
+#sum = 0<br />
+#var = 0<br />
+#esd = 0<br />
+EI4sum = 0<br />
+<br />
+I1 = 0<br />
+I2 = 0<br />
+I3 = 0<br />
+Sign = -1.0<br />
+for line in file2:<br />
+&nbsp;for I0 in range(6):<br />
+&nbsp;&nbsp;#print line[0+15*I0:1+15*I0]<br />
+&nbsp;&nbsp;ene = line[ (1+15*I0):(15+15*I0)].replace(&#39; &#39;,&#39;&#39;)<br />
+&nbsp;&nbsp;if line[0+15*I0:1+15*I0] == &#39;-&#39;:<br />
+&nbsp;&nbsp;&nbsp;Sign = -1.0<br />
+&nbsp;&nbsp;else :<br />
+&nbsp;&nbsp;&nbsp;Sign = 1.0<br />
+&nbsp;&nbsp;if ene &lt;&gt; &#39;&#39;:<br />
+&nbsp;&nbsp;&nbsp;E3[I1][I2][I3+I0] = float(ene) * Sign<br />
+&nbsp;&nbsp;&nbsp;#print float(ene) * Sign<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+0] = float( line[ 0:15].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+1] = float( line[16:30].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+2] = float( line[31:45].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+3] = float( line[46:60].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+4] = float( line[61:75].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#E3[I1][I2][I3+5] = float( line[76:90].replace(&#39; &#39;,&#39;&#39;) )<br />
+&nbsp;&nbsp;&nbsp;#print E3[I1][I2][I3+I0]<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( E3[I1][I2][I3+I0]) )<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;#sum += float(ene)<br />
+&nbsp;I3 += 6<br />
+&nbsp;if I3 &gt;= PZ :<br />
+&nbsp;&nbsp;I3 = 0<br />
+&nbsp;&nbsp;I2 += 1<br />
+&nbsp;&nbsp;if I2 &gt;= PY :<br />
+&nbsp;&nbsp;&nbsp;I2 = 0<br />
+&nbsp;&nbsp;&nbsp;I1 += 1<br />
+&nbsp;&nbsp;&nbsp;if I1 &gt;= PX :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;break<br />
+<br />
+#sum /= (PX * PY * PZ)<br />
+<br />
+I4 = 0<br />
+for I1 in range(PZ):<br />
+&nbsp;#file4.write( &#39;\n&#39; )<br />
+&nbsp;#file4.write(&quot;{: &gt;7d}&quot;.format( I1 ) )<br />
+&nbsp;for I2 in range(PY):<br />
+&nbsp;&nbsp;for I3 in range(PZ):<br />
+&nbsp;&nbsp;&nbsp;#if ( I4 % 6 ) == 0 :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#file4.write( &#39;\n&#39;)<br />
+&nbsp;&nbsp;&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( E3[I1][I2][I3] ) )<br />
+&nbsp;&nbsp;&nbsp;#var += ( E3[I1][I2][I3] - sum )**2<br />
+&nbsp;&nbsp;&nbsp;E1[I4] = E3[I1][I2][I3]<br />
+&nbsp;&nbsp;&nbsp;I4 += 1<br />
+<br />
+EI4sum = I4 - 1<br />
+#print EI4sum, ((PX * PY * PZ) -1)<br />
+#file4.write( &#39;\n&#39; + &#39;-9999&#39; + &#39;\n&#39;)<br />
+#var /= ((PX * PY * PZ) -1)<br />
+#esd = sqrt(var)<br />
+#file4.write( &quot;{: &gt;12.5e}{: &gt;12.5e}&quot;.format(sum, esd) )<br />
+#file4.write(&#39;\n&#39;)<br />
+<br />
+#test<br />
+#print I4<br />
+#print ((PX-1) * (PY-1) * (PZ-1))<br />
+file2.close()<br />
+###############################################################<br />
+#Write DOS<br />
+# convert<br />
+#file4.write( &#39; eV, dens&#39; + &#39;\n&#39; )<br />
+I1 = 0<br />
+for I1 in range(DI4sum):<br />
+&nbsp;# convert [hartree / bohr^3] -&gt; [hartree / ang^3]<br />
+&nbsp;#E1[I1] = E1[I1] * 6.748333<br />
+&nbsp;# convert [eV / e]<br />
+&nbsp;#E1[I1] = ( E1[I1] * 27.2116 ) / D1[I1]<br />
+&nbsp;# convert [eV]<br />
+&nbsp;E1[I1] = ( E1[I1] * 27.2116 ) * Vpixel<br />
+&nbsp;D1[I1] = D1[I1] * Vpixel<br />
+&nbsp;# print eV, density<br />
+&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( E1[I1]) )<br />
+&nbsp;#file4.write(&#39;,&#39;)<br />
+&nbsp;#file4.write(&quot;{: &gt;12.5e}&quot;.format( D1[I1] ) )<br />
+&nbsp;#file4.write(&#39;\n&#39;)<br />
+<br />
+# gaussian broadening<br />
+sigma = 0.02<br />
+delta = 0.02<br />
+step&nbsp; = 1200<br />
+EDOS = zeros([step])<br />
+IDOS = zeros([step])<br />
+I1 = 0<br />
+for I1 in range(step):<br />
+&nbsp;EDOS[I1] = delta * ( I1 - step * 0.5)<br />
+<br />
+I1 = 0<br />
+I2 = 0<br />
+for I1 in range(DI4sum):<br />
+&nbsp;if E1[I1] &lt; (delta*(step+10)) :<br />
+&nbsp;&nbsp;#print I1<br />
+&nbsp;&nbsp;for I2 in range(step):<br />
+&nbsp;&nbsp;&nbsp;#print D1[I1], (1/(sqrt(2.0*pi)*sigma))*exp(-(1.0/2.0)*((EDOS[I2]-E1[I1])/sigma)**2.0), I2<br />
+&nbsp;&nbsp;&nbsp;IDOS[I2] = IDOS[I2] + D1[I1] * (1/(sqrt(2.0*pi)*sigma))*exp(-(1.0/2.0)*((EDOS[I2]-E1[I1])/sigma)**2.0)<br />
+<br />
+file4.write( &#39; eV, dos&#39; + &#39;\n&#39; )<br />
+I1 = 0<br />
+for I1 in range(step):<br />
+&nbsp;file4.write(&quot;{: &gt;12.5e}&quot;.format( EDOS[I1]) )<br />
+&nbsp;file4.write(&#39;,&#39;)<br />
+&nbsp;file4.write(&quot;{: &gt;12.5e}&quot;.format( IDOS[I1] ) )<br />
+&nbsp;file4.write(&#39;\n&#39;)<br />
+<br />
+file4.close()<br />
+#file5.close()<br />
+<br />
+--------------------------------------------------------------------------------

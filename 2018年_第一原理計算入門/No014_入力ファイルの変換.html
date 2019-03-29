@@ -1,0 +1,505 @@
+　ここでは各種の入力ファイルを変換する方法を解説していく（以下、WIEN2k以外は全て無料）<br />
+------------------------------------------------------------------------------<br />
+1) VESTA<br />
+&nbsp; 優れた結晶描画ソフト。<br />
+使用方法は <a href="http://e-m.skr.jp/sub/VESTA-v001-gaku.pdf">http://e-m.skr.jp/sub/VESTA-v001-gaku.pdf</a>&nbsp;を参照するとよい。<br />
+<br />
+1.5) WIEN2kがある場合（アカデミックは&euro;400なので円高のときに買って貰おう）<br />
+&nbsp; スーパーセルや置換した構造を作成するのに便利。使用方法は下記HPを参照。<br />
+&nbsp; <a href="http://www.wien2k.at/reg_user/textbooks/DFT_and_LAPW-2_cottenier.pdf">http://www.wien2k.at/reg_user/textbooks/DFT_and_LAPW-2_cottenier.pdf</a><br />
+&nbsp; 再度 VESTAに入れて cif 形式で保存。<br />
+<br />
+2)&nbsp;cif2cell: ABINIT, exciting, elk, Fleur<br />
+ありがたいことにアドヴァイスを頂きまして、cif2cellを用いることで、cifファイルからABINIT用の入力ファイルを作成できることが分かりました（とても感謝。以下でそれを紹介&amp;筆者がUbuntu10.04でトライした結果を記述する）。<br />
+<br />
+2.5) XtalEdit<br />
+&nbsp; XtalEdit では Supercell を作成できる。[1,2]（調査中）<br />
+[1] <a href="http://pmt.sakura.ne.jp/wiki/images/XtalEdit_materia.pdf">http://pmt.sakura.ne.jp/wiki/images/XtalEdit_materia.pdf</a><br />
+[2] <a href="http://pmt.sakura.ne.jp/wiki/index.php?title=XtalEdit%E3%81%AE%E5%9F%BA%E6%9C%AC%E7%9A%84%E3%81%AA%E4%BB%95%E7%B5%84%E3%81%BF">http://pmt.sakura.ne.jp/wiki/index.php?title=XtalEdit%E3%81%AE%E5%9F%BA%E6%9C%AC%E7%9A%84%E3%81%AA%E4%BB%95%E7%B5%84%E3%81%BF</a><br />
+<br />
+2.6) xband<br />
+&nbsp; SPRKKRやAkaiKKR、exciting などの入力ファイルが作成できる。[1]<br />
+[1] <a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=10&amp;catid=4&amp;Itemid=7&amp;lang=en">http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=10&amp;catid=4&amp;Itemid=7&amp;lang=en</a>　<br />
+<br />
+3) QE-ABINIT: PWscf<br />
+&nbsp; QE-ABINIT を用いて ABINIT の入力ファイルから PWscf&nbsp; 用の入力ファイルを作成できる。<br />
+<br />
+4) Xcrysden: WIEN2k<br />
+&nbsp; PWscf で最適化した構造での入力ファイルをXcrysden で 作成し、WIEN2kで磁性材料を計算する。<br />
+<br />
+5) C-Tools<br />
+　基本的な計算（DOS, band, 構造最適化）に必要な入力ファイルを作ってくれる。ここまで作ってあって、どうしてXCタイプにSOCやDFT-U、HSE、GW、mbj、CI、CCSD(T)がないのだろうか？ 他の物性の計算（unfolding、輸送、フォノン、吸収、NMR）も指定できない。ここまで作ってあってもったいないなーと思う。そこが完備されて他の多くのコードにも対応していれば世界一になれたのに。この他に、形成エネルギーのガイドも作ってあると色々と幅が広がるのだが......。<br />
+[1] <a href="http://ma.cms-initiative.jp/ja/listapps/C-Tools/C-Tools">http://ma.cms-initiative.jp/ja/listapps/C-Tools/C-Tools</a><br />
+[2] <a href="http://sourceforge.net/projects/c-tools" target="_blank">http://sourceforge.net/projects/c-tools</a> （<u><font color="#0066cc">C-TOOLS062_WIN.zip</font></u> はWindows用）<br />
+------------------------------------------------------------------------------<br />
+その他の各ソフトの相関図は下記HPでまとめられている。<br />
+<a href="http://nitrogen14.blog51.fc2.com/blog-entry-70.html">http://nitrogen14.blog51.fc2.com/blog-entry-70.html</a>　<br />
+------------------------------------------------------------------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+スーパーセルで元素置換した構造の入力ファイルの作成と構造最適化（概要）<br />
+1) cif形式の入力ファイルの作成（下記の3つの方法が思いつく）<br />
+&nbsp; A)&nbsp;データベースから cif&nbsp;形式のファイルをダウンロード<br />
+&nbsp;&nbsp;&nbsp; （左記の「データベース」にまとめているHPなどを参照するとよい）<br />
+&nbsp; B) ピアソンのデータブックからVESTAに構造を入力<br />
+&nbsp;&nbsp;&nbsp; （ピアソンのデータで上手くいかない場合は、他のデータベースと比較したり、構造をVESTAで表示させてみるとよい。原子間距離が小さすぎたりしていないだろうか？）<br />
+&nbsp; C) 粉末XRDの結果をリートベルト解析して構造を明らかにし、cif 形式のファイルを作る<br />
+&nbsp;&nbsp;&nbsp; （方法が分かり次第まとめる）<br />
+<br />
+2) WIEN2k<br />
+&nbsp; WIEN2kがある場合は[single prog.]でスーパーセルや真空層を入れた構造が簡単にできる。<br />
+<br />
+3) ABINIT<br />
+&nbsp; cif2cell を用いて入力ファイルを作成する。<br />
+&nbsp; exciting, elk, Fleur で磁性材料を計算。TDDFTやXASをexcitingで計算。CPMD, VASPの入力ファイル作成も可能。<br />
+cif2cell でスーパーセルや真空層を考慮した入力ファイルも作成できる（下記に詳細を記載）。動作チェック中。VASPとCPMDはかなり優遇されている。羨ましい。<br />
+<br />
+4) PWscf<br />
+&nbsp; a) 「QE-ABINIT」&rarr;「Src」にABINITの入力ファイルを入れる。<br />
+&nbsp; b) 「QE-ABINIT」&rarr;「Src」&rarr;「abinit2pw.plx」をTerminalに入れて「Enter」を押す。<br />
+&nbsp; b)&nbsp;ABINITの入力ファイル名を入れて入力する。<br />
+&nbsp; c) output.pw を用いる。&larr;ファイルの名称は、組成名とセルの大きさを併記（例えば、SrTi1-xFexO3_2x2x2 などが良いだろう）。（組成名は論文にあるものを使うか、周期律表の原子番号の順、アルファベット順で並べることが考えられる。どれがいいかは不明。準結晶では、論文 または 原子番号順 としてきた）<br />
+&nbsp; d) PWgui では入力の形式が僅かに違うのか受けつけない。Ubuntu 10.04 では PWgui 4.2 だと動作する（Runまでは試していない）。<br />
+<br />
+5) Xcrysden<br />
+&nbsp; 「File」&rarr;「Save WIEN2k Struct File」で case.struct を作成し、WIEN2kで磁性材料を計算する。<br />
+------------------------------------------------------------------------------<br />
+<br />
+各種ソフトのインストールと使い方<br />
+------------------------------------------------------------------------------<br />
+VESTA<br />
+1)&nbsp;download: <a href="http://jp-minerals.org/vesta/en/download.html">http://jp-minerals.org/vesta/en/download.html</a><br />
+2)&nbsp;tar xvf VESTA-x86_64.tar.bz2<br />
+------------------------------------------------------------------------------<br />
+cif2cell （まだ枯れてなさそうなので、最新のものを今後も検討していく）<br />
+（以下はCentOS 5系でインストールや使用方法、オプションの助言を頂いたものを含めて記載）<br />
+PyCifRW library のインストール　（cif2cell インストールの準備1）<br />
+1) CentOS 5 系の場合<br />
+&nbsp; yum instll python-setuptools.noarch<br />
+2) CentOS 6.4<br />
+3) Fedora18<br />
+&nbsp; yum install python-setuptools<br />
+&nbsp; yum install python-devel<br />
+4) Ubuntu 10.04 の場合<br />
+&nbsp; sudo apt-get install python-setuptools<br />
+&nbsp; sudo apt-get install python-dev<br />
+&nbsp; sudo apt-get install imagemagick<br />
+&nbsp; sudo apt-get install graphicsmagick-imagemagick-compat<br />
+<br />
+以下は Ubuntu10.04 での結果<br />
+PyCifRW library のインストール　（cif2cell インストールの準備2）<br />
+PyCifRW-3.3.tar.gz の場合<br />
+1) download: <a href="http://pycifrw.berlios.de/">http://pycifrw.berlios.de/</a><br />
+2) tar zxvf PyCifRW-3.3.tar.gz<br />
+3) cd PyCifRW-3.3<br />
+4) sudo python setup.py install<br />
+5) import CifFile と入力してテストする。<br />
+<br />
+cif2cell のインストール<br />
+1) download: <a href="http://cif2cell.sourceforge.net/">http://cif2cell.sourceforge.net/</a><br />
+2) tar zxvf cif2cell-0.2.6.tar.gz<br />
+3) cd cif2cell-0.2.6<br />
+4) sudo python setup.py install&nbsp;<br />
+<br />
+cif2cell の環境設定<br />
+.bashrc に下記を書き込む。<br />
+#cif2cell &larr;コメント<br />
+export CIF2CELL=$HOME/cif2cell-0.2.6 &larr;cif2celｌ があるディレクトリを書き入れる。<br />
+PATH=&quot;$PATH:$CIF2CELL&quot; &larr;PATHにパスを通している。<br />
+<br />
+■ Install (cif2cell-1.2.10)<br />
+-----<br />
+1. tar zxvf cif2cell-1.2.10.tar.gz<br />
+2. cd cif2cell-1.2.10<br />
+3. gedit cif2cell<br />
+<br />
+before-----line 1608<br />
+incarfile = INCARFile(cd,docstring=docstring,vca=options.vca,prioritylist=prioritylist,encutfac=encutfac)<br />
+<br />
+after-------line 1608<br />
+incarfile = INCARFile(cd,docstring=docstring,potcardir=lib,vca=options.vca,prioritylist=prioritylist,encutfac=encutfac)<br />
+<br />
+4. sudo python setup.py install<br />
+-----<br />
+<br />
+cif2cell の使用方法<br />
+a) VASP: cif2cell -p vasp -f Ni20Mn3P6.cif --vasp-cartesian-positions<br />
+b)&nbsp;ABINIT: cif2cell -p&nbsp;abinit -f SrTiO3.cif&nbsp;-o SrTiO3.in<br />
+c) exciting: cif2cell -p&nbsp;exciting -f SrTiO3.cif&nbsp;<br />
+d) Fleur: cif2cell -p&nbsp;fleur -f SrTiO3.cif<br />
+e) elk: cif2cell -p&nbsp;elk -f SrTiO3.cif<br />
+f) CPMD: cif2cell -p&nbsp;cpmd -f SrTiO3.cif -o SrTiO3.inp<br />
+g) CASTEP: cif2cell -p&nbsp;castep -f SrTiO3.cif -o SrTiO3.cell<br />
+h) pwscf(&gt;=cif2cell-1.2.0): cif2cell -p pwscf -f SrTiO3.cif -o SrTiO3.in<br />
+i) siesta: cif2cell -p siesta -f SrTiO3.cif -o SrTiO3.fdf<br />
+※ cif2cell -h でヘルプを表示。<br />
+※&nbsp;conventional unit cell の場合: --no-reduce を最後に付ける。<br />
+&nbsp; 学習（学生向け）:<a href="http://www.geocities.jp/gchembio/kb2/pdf/2011_kb2_lecture_2.pdf">http://www.geocities.jp/gchembio/kb2/pdf/2011_kb2_lecture_2.pdf</a><br />
+※ ファイル名を変える場合: -o 別のファイル名<br />
+※ cifs 中に 動作テスト用の cif ファイルが入れられている。<br />
+※ cif 形式でも受け付けないことがあるので、VESTAに入れて cif 形式で書き出すとよい。<br />
+※ --no-reduce のオプションを用いるとconventiuonal cell になる。<br />
+error case<br />
+A. Error: could not read case.cif. では_cgraph_comments に改行があるとエラーが表示される。ここにはICSD のタイトルが格納される。<br />
+B. Error: cell setup: Insufficient symmetry information to reduce to primitive cell (need space group number or Hermann-Mauguin symbol). では _symmetry_Int_Tables_number 空間群の数値　書き入れるとことで対処できる。<br />
+<br />
+-----(cif2cell-1.2.10)<br />
+■ Usage<br />
+(delete --supercell=[2,2,2] or --no-reduce under your calculation conditions)<br />
+(modify -vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; in your environment)<br />
+<br />
+◆ VASP (version 5.x) (to get pirimitive cell)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations -f case.cif<br />
+<br />
+◆ VASP (version 5.x) (to get 2x2x2 pirimitive cell)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations --supercell=[2,2,2] -f case.cif<br />
+<br />
+◆ VASP (version 5.x)<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&#39;/home/test/vasp_v5.3/potpaw_PBE&#39; --vasp-pseudo-priority=&quot;_d,_pv,_sv,_h,_s&quot; --vasp-print-species --vasp-cartesian-lattice-vectors --print-symmetry-operations&nbsp; --supercell=[2,2,2] --no-reduce&nbsp; -f case.cif<br />
+<br />
+◆ PWscf<br />
+&nbsp; cif2cell -p pwscf --setup-all --print-symmetry-operations --pwscf-atomic-units --pwscf-pseudostring=.pbe-spn-kjpaw_psl.1.0.0.UPF --supercell=[2,2,2] --no-reduce&nbsp; -f case.cif<br />
+<br />
+◆ Abinit<br />
+&nbsp; cif2cell -p abinit --print-seitz-matrices --supercell=[2,2,2] --no-reduce -f case.cif<br />
+-----<br />
+<br />
+<br />
+□ スーパーセルを作成する場合1<br />
+1) VESTA に構造を入力させる。（cif データを読み取らせてもよい）<br />
+2) 「Objects」&rarr;「Bounary...」&rarr;「Ranges of fractional coordinates」で拡張させたい倍率を入力。<br />
+3) 「Edit Data」&rarr;「Structure parameter」&rarr;「Remove duplicate atoms」<br />
+4) 「File」&rarr;「Export Data...」&rarr;右下を「xtl file(*.xtl)」にしてSAVE。<br />
+5) Excel, OpneOffice Calc, Liveroffice Calc で xlt ファイルを開く。<br />
+&nbsp; Liveroffice Calc： Liveroffice Calc を開いて、xlt ファイルをドラッグして入れる。<br />
+Fixed width などで区切る。（もっとよい方法も模索中）<br />
+6) 右側の空いている列にNAME の列をコピーして、後はその右側を下記のようにして、X, Y, Z を計算する。<br />
+7) a, b, c に対応する座標において、「Ranges of fractional coordinates」で拡張させた倍率だけ、各原子の座標を割る。<br />
+8) 元のファイルにNAMEからEOFの前までをコピー&amp;ペーストする。<br />
+9) VESTAで取り込み、a, b. c はそのままの値なので、「Ranges of fractional coordinates」で拡張させた倍率を掛けた値を入力する。<br />
+10)&nbsp; cif 形式で保存する。<br />
+参考：<a href="http://www.mail-archive.com/siesta-l@uam.es/msg02999.html">http://www.mail-archive.com/siesta-l@uam.es/msg02999.html</a><br />
+<br />
+□&nbsp;スーパーセルを作成する場合2<br />
+1) cif2cell -p castep -f SrTiO3.cif -o SrTiO3.cell --supercell=2,1,1<br />
+2) SrTiO3.cell を VESTA に入れて 同じ名称で cif ファイル形式で保存。<br />
+&nbsp; VESTAでの手順：「VESTA」&rarr;「SrTiO3.cellファイルを画面の中に入れる」&rarr;上の欄にある「File」&rarr;「Export Data...」&rarr;「Browse for other folders」&rarr;「Nameにファイル名を入力」&rarr;「Plasesなどから保存したい場所を選択」&rarr;「右下を CIF File (*.cif)にする」&rarr;「SAVE」<br />
+3) cif2cell -p castep -f SrTiO3.cif -o SrTiO3.cell --supercell=1,2,1<br />
+4) SrTiO3.cell を VESTA に入れて 同じ名称で cif ファイル形式で保存。<br />
+&nbsp; VESTAでの手順：上記 2)&nbsp;と同様。<br />
+5) cif2cell -p castep -f SrTiO3.cif -o SrTiO3.cell --supercell=1,1,2<br />
+6) SrTiO3.cell を VESTA に入れて 同じ名称で cif ファイル形式で保存。<br />
+&nbsp; &nbsp;ドープした系を作る場合：上の欄にある「Edit」&rarr;「Edit Data」&rarr;「Structure Parametars...」&rarr;「Structure Parametars」&rarr;「下の欄にある NoAtom から置換したい場所の原子を選択」&rarr;「Symbol... を押して置換する元素名を選択」&rarr;「Labelも元素名にする」&rarr;「Apply を押して画面を確認」&rarr;問題が無ければ「OK」&rarr;「Cif 形式で保存」<br />
+7) cif2cell -p abinit -f SrTiO3.cif -o SrTiO3.in<br />
+<br />
+※ 6) でのcif形式での保存は上記2)と同じ。」（「File」&rarr;「Export Data...」&rarr;「Browse for other folders」&rarr;「Nameにファイル名を入力」&rarr;「Plasesなどから保存したい場所を選択」&rarr;「右下を CIF File (*.cif)にする」&rarr;「SAVE」）<br />
+<br />
+参考: SrTiO3 の単位胞でのパラメーター<br />
+3.9819　3.9819&nbsp;3.9819&nbsp;[Angstrom]<br />
+90 90 90 [degrees]<br />
+Sr 38 0.00<br />
+Ti 22 0.00<br />
+O 8 0.00<br />
+Sr 0.5 0.5 0.5<br />
+Ti 0.0 0.0 0.0<br />
+O 0.5 0.0 0.0<br />
+O 0.0 0.5 0.0<br />
+O 0.50 0.0 0.5<br />
+または<br />
+Sr&nbsp;0.0 0.0 0.0<br />
+Ti 0.5 0.5 0.5<br />
+O 0.0 0.5 0.5<br />
+O 0.5 0.0 0.5<br />
+O 0.5 0.5 0.0<br />
+（Phase のサンプルファイルを参考に作成）<br />
+<br />
+参考: Fe2VAlの単位胞でのパラメーター Abinit (PAW calculation)<br />
+--- case.files ---<br />
+case.in<br />
+case.out<br />
+casei<br />
+caseo<br />
+casex<br />
+Fe-GGA-sp_semicore-atompaw.paw<br />
+v.PBE.atompaw.paw<br />
+al.PBE.atompaw.paw<br />
+<br />
+cif2cell で作製したcase.in に下記を書き入れる。<br />
+--- case.in ---<br />
+ionmov 3&nbsp;# 原子位置の最適化<br />
+optcell 2 # 格子定数の最適化<br />
+ntime 10<br />
+tolmxf 5.0d-4<br />
+prtcif 1 # 収束後にcifファイルを出力の指定<br />
+<br />
+nsppol 2 # upとdownスピンを入れた計算の指定<br />
+ecut 15 # 擬ポテンシャルのカットオフ<br />
+pawecutdg 40 # PAWで更に必要になるカットオフ<br />
+ixc 11 # 交換相関項をPBEに<br />
+<br />
+nsym 1 # 空間群をNo.1(P)に設定する。<br />
+<br />
+occopt 7<br />
+tsmear 0.01<br />
+kptopt 1<br />
+ngkpt 3 3 3 # 3x3x3 のk点メッシュ<br />
+#toldfe 1.0d-5<br />
+toldff 5.0d-5<br />
+ecutsm 0.5 #<br />
+------<br />
+------------------------------------------------------------------------------<br />
+XtalEdit<br />
+1) XtalEdit: <a href="http://pmt.sakura.ne.jp/wiki/index.php?title=Install_XtalEdit">http://pmt.sakura.ne.jp/wiki/index.php?title=Install_XtalEdit</a><br />
+2) download: <a href="http://pmt.sakura.ne.jp/XtalEdit/XtalEdit091d.tar.gz">http://pmt.sakura.ne.jp/XtalEdit/XtalEdit091d.tar.gz</a><br />
+<br />
+Install for Linux (Ubuntu 10.04)<br />
+1) 周辺ソフトのインストール<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sudo apt-get install openjdk-6-jre<br />
+&nbsp;&nbsp;&nbsp; sudo&nbsp;apt-get install python python-numpy rasmol&nbsp;（これは必要ないかもしれない）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sudo apt-get&nbsp;install python-numeric&nbsp;（これは必要ないかもしれない）<br />
+&nbsp;&nbsp;&nbsp; sudo apt-get install python-numeric-ext&nbsp;（これは必要ないかもしれない）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;sudo apt-get install rasmol&nbsp;（これは必要ないかもしれない）<br />
+&nbsp;&nbsp;&nbsp; sudo apt-get install sun-java6-jre&nbsp;（これはインストールできなかった）<br />
+2) mkdir XtalEdit または 好きなところに XtalEdit という名称のファイルを作る<br />
+3) cd XtalEdit<br />
+4) 「Create Document」&rarr;「Empty File」<br />
+5) 作成した new file に下記HPで 青い点線で囲まれた部分をコピー&amp;ペーストしSAVE。<br />
+&nbsp; <a href="http://pmt.sakura.ne.jp/wiki/index.php?title=Install_XtalEdit">http://pmt.sakura.ne.jp/wiki/index.php?title=Install_XtalEdit</a><br />
+6) chmod +x &quot;new file&quot; または &quot;new file&quot;を右クリックして、「Properties」&rarr;「Permission」&rarr;「Execute:」の右にあるボックスにチェックを入れて「close」を押す。<br />
+7) ファイルの修正<br />
+&nbsp; 左クリック2回の後に、「Display」を選択する。または、「Open With Text Editor」<br />
+&nbsp;&nbsp;wget <a href="http://superb-west.dl.sourceforge.net/sourceforge/numpy/numpy-1.3.0.tar.gz">http://superb-west.dl.sourceforge.net/sourceforge/numpy/numpy-1.3.0.tar.gz</a><br />
+&nbsp; 上記の部分の前に#を付けて下記を次の行に追加する。<br />
+&nbsp; wget <a href="http://pypi.python.org/packages/source/n/numpy/numpy-1.3.0.tar.gz">http://pypi.python.org/packages/source/n/numpy/numpy-1.3.0.tar.gz</a><br />
+8) &quot;new file&quot; をTerminal に入れて「Enter」を押す。<br />
+9) ./XtalEdit で実行。（現在 Rasmol が動かない）<br />
+参考：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-96.html">http://nitrogen14.blog51.fc2.com/blog-entry-96.html</a>　<br />
+<a href="http://nitrogen14.blog51.fc2.com/blog-entry-22.html">http://nitrogen14.blog51.fc2.com/blog-entry-22.html</a><br />
+------------------------------------------------------------------------------<br />
+&nbsp;xband<br />
+1) HOMEの下にSPRKKRのフォルダを作る<br />
+2) その中に xband_231209b.tar.gz を入れる<br />
+3) tar zxvf xband*<br />
+4) .bashrc に下記を加える<br />
+&nbsp; export XBANDPATH=$HOME/SPRKKR/band<br />
+&nbsp; export PATH=$PATH:$XBANDPATH:<br />
+5) xband<br />
+------------------------------------------------------------------------------<br />
+QE-ABINIT (abinit2pw.plx )<br />
+1) download: <a href="http://qe-forge.org/frs/?group_id=10">http://qe-forge.org/frs/?group_id=10</a><br />
+2)&nbsp;tar zxvf QE-ABINIT.tar.gz<br />
+3) 解凍された「QE-ABINIT」&rarr;「Src」を開く。その中に abinit2pw.plx と input.pw がある。<br />
+3)&nbsp;abinit2pw.plx の書き換え<br />
+&nbsp;&nbsp;&nbsp;abinit2pw.plx を開いて下記の部分を書き換えSAVEする。<br />
+&nbsp;&nbsp; a)&nbsp;誤りの修正1<br />
+&nbsp;&nbsp;&nbsp;&nbsp; print FILEPWOUT &quot; $cell31 $cell22 $cell33\n&quot;; &larr; miss<br />
+&nbsp;&nbsp;&nbsp;&nbsp; print FILEPWOUT &quot; $cell31 $cell32 $cell33\n&quot;; &larr; correct<br />
+&nbsp;&nbsp; b)&nbsp; 誤りの修正2<br />
+&nbsp;&nbsp;&nbsp;&nbsp; elsif(@pwsplitline[0] =~ /nspin/ &amp;&amp; length($nspint) !~ 0){print FILEPWOUT &quot; nspin = $nspin,\n&quot;;} &larr; miss<br />
+&nbsp;&nbsp;&nbsp;&nbsp; elsif(@pwsplitline[0] =~ /nspin/ &amp;&amp; length($nspin) !~ 0){print FILEPWOUT &quot; nspin = $nspin,\n&quot;;} &larr; correct<br />
+&nbsp;&nbsp; c) K_POINTS automatic の直ぐ後を改行するのが面倒な場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp; print FILEPWOUT &quot; @meshk $shift $shift $shift\n&quot;; を下記のように書き換える。<br />
+&nbsp;&nbsp;&nbsp;&nbsp; print FILEPWOUT &quot;\n @meshk $shift $shift $shift\n&quot;;<br />
+&nbsp;&nbsp; c) 最新版に修正<br />
+&nbsp;&nbsp;&nbsp;&nbsp; if($abinitsplitline[0] =~ /nspp/)&nbsp;&larr;&nbsp;old<br />
+&nbsp;&nbsp;&nbsp;&nbsp; if($abinitsplitline[0] =~ /nsppol/)&nbsp; &larr; new<br />
+&nbsp; d) 修正<br />
+&nbsp;&nbsp;&nbsp;&nbsp; chop($fileinput);&nbsp; &larr; miss<br />
+&nbsp;&nbsp;&nbsp;&nbsp; chomp($fileinput);&nbsp; &larr; correct<br />
+4) input.pw 書き換え（削除）<br />
+&nbsp; 出力させたいキーワードを削除して SAVE する。私の場合は下記を削除する。<br />
+&nbsp;&nbsp; prefix=&#39;pw&#39;,<br />
+&nbsp;&nbsp; outdir=&#39;tmp&#39;<br />
+5) input.pw の書き換え（追加）<br />
+&nbsp; 出力させたいキーワードを入力して SAVE する。下記の項目を入れておくと便利だろう。<br />
+&nbsp;&nbsp;&nbsp; occupations = ,　&larr; （ギャップがある系の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; degauss = ,　&larr; （ギャップがある系の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; smearing = ,　&larr; （ギャップがある系の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; nspin = ,　&larr; （スピンを入れた計算をしたくない場合は入れない）<br />
+そうすると下記のようになる。<br />
+&amp;system&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ibrav= 2,&nbsp;<br />
+&nbsp;&nbsp;&nbsp; celldm = ,<br />
+&nbsp;&nbsp; &nbsp;nat= ,<br />
+&nbsp;&nbsp;&nbsp; ntyp= ,<br />
+&nbsp;&nbsp;&nbsp; ecutwfc = ,<br />
+&nbsp;&nbsp;&nbsp; occupations = ,　&larr; （絶縁体の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; degauss = ,　&larr; （絶縁体の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; smearing = ,　&larr; （絶縁体の場合は基本的に入れない）<br />
+&nbsp;&nbsp;&nbsp; nspin = ,<br />
+/<br />
+6) input.pw の書き換え（リンク先の入力）<br />
+&nbsp; pseudo_dir = &#39;.&#39;, にて、擬ポテンシャルがある場所を入力しておくと良いだろう。<br />
+&nbsp; 例えば、 私の環境の場合は、pseudo_dir = &#39;/home/ubuntu11/espresso-4.3.2/pseudo/&#39; ,<br />
+7) 以上の修正が終わったら、abinit2pw.plx を右クリックして、「Properties」&rarr;「Permission」&rarr;「Execute:」の右にあるボックスにチェックを入れて「close」を押す。<br />
+<br />
+abinit2pw.plx の使用方法<br />
+1) cif2cell にて、abinit 用の入力ファイルを作成する。<br />
+2) abinit 用の入力ファイルでのコマンドの順番を以下のように書き換えつつ注意を払う。<br />
+&nbsp; a) &nbsp;acell は 3*9.28 などの表記を止めて、x, y, z軸の格子定数を書き込む。<br />
+&nbsp;&nbsp;&nbsp; つまり、9.28&nbsp;9.28&nbsp;9.28 とする。<br />
+&nbsp; b) 以下の順に並べ直す。<br />
+&nbsp;&nbsp;&nbsp; acell<br />
+&nbsp;&nbsp;&nbsp; rprim<br />
+&nbsp;&nbsp;&nbsp; ntypat<br />
+&nbsp;&nbsp;&nbsp; znucl<br />
+&nbsp;&nbsp;&nbsp; natom<br />
+&nbsp;&nbsp;&nbsp; typat<br />
+&nbsp;&nbsp;&nbsp; xred<br />
+&nbsp; c)&nbsp;xred の直後は改行する。座標は次の行から記述されるようにする。<br />
+&nbsp; d) ecut&nbsp;12.5 を加える。（他の値でよい）<br />
+&nbsp; e) kptopt 1 を加える。<br />
+&nbsp; f) ngkpt&nbsp;4&nbsp;4&nbsp;4 を加える。&larr;（2x2x2 のスーパーセルならこの程度の値）<br />
+&nbsp;&nbsp;g)&nbsp; nshiftk 1&nbsp;を加える。&larr;（最適なk点グリッドを自動で作成させるコマンド）<br />
+&nbsp; h)&nbsp;occopt 7&nbsp;を加える。&larr; （絶縁体の場合は基本的に入れない）<br />
+&nbsp; i)&nbsp;tsmear 0.01 を加える。&larr; （絶縁体の場合は基本的に入れない）<br />
+&nbsp; j)&nbsp;nsppol 2&nbsp;を加える。<br />
+&nbsp; ※ 上記の d) ～ ｊ) までは下記のようにテンプレートを作っておくと良いだろう。<br />
+ecut 12.5<br />
+kptopt 1<br />
+ngkpt&nbsp;4&nbsp;4&nbsp;4<br />
+nshiftk 1<br />
+occopt 7<br />
+tsmear 0.01<br />
+nsppol 2<br />
+&nbsp;&nbsp; ※ 空白行はあってもよいが、コマンド（またはキーワード）の前に空白があってはならない。<br />
+3) QE-ABINITのファイルのSrcに Abinit用の入力ファイルをコピーする。<br />
+4) terminalを起動して、cd で QE-ABINIT/Srcをカレントディレクトリにする。<br />
+5) abinit2pw.plx と入力して、abinit 用の入力ファイルの名称を入力する。<br />
+6) output.pw にその結果が出力される。<br />
+※ input.pw を下記のように、加筆しておくと、読み込まれるデータが増える。<br />
+&amp;control<br />
+&nbsp;&nbsp;&nbsp; calculation = &#39;scf&#39;<br />
+&nbsp;&nbsp;&nbsp; restart_mode=&#39;from_scratch&#39;,<br />
+&nbsp;&nbsp;&nbsp; pseudo_dir = &#39;/home/espresso-4.3.2/pseudo/&#39;,<br />
+/<br />
+&amp;system&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp; ibrav=&nbsp; 2,<br />
+&nbsp;&nbsp;&nbsp; celldm = ,<br />
+&nbsp;&nbsp;&nbsp; nat=&nbsp; ,<br />
+&nbsp;&nbsp;&nbsp; ntyp= ,<br />
+&nbsp;&nbsp;&nbsp; ecutwfc = ,<br />
+&nbsp;&nbsp;&nbsp; occupations = ,<br />
+&nbsp;&nbsp;&nbsp; degauss = ,<br />
+&nbsp;&nbsp;&nbsp; smearing = ,<br />
+&nbsp;&nbsp;&nbsp; nspin = ,<br />
+/<br />
+&amp;electrons<br />
+&nbsp;&nbsp;&nbsp; mixing_beta = 0.7<br />
+&nbsp;&nbsp;&nbsp; conv_thr =&nbsp; 1.0d-8<br />
+/<br />
+<br />
+PWgui を用いる場合<br />
+1) PWgui で開く前に、output.pw で K_POINTS automatic の直ぐ後を改行してSAVE。<br />
+&nbsp;&nbsp; (abinit2pw.plx を書き換えた場合には、K_POINTS の直ぐ後の改行は必要無い)<br />
+2) PWgui を開く。<br />
+&nbsp; 私の場合は、「Terminal」を開くき、cd と入力して スペースを入れ、サンプル名.pwを入れたファイルを「Terminal」の画面にドラッグし、「Enter」を押す。<br />
+3) 構造最適化する場合は、 「Control」で&lt;ve-relax&gt;のある行を選択。<br />
+&nbsp; prefix と outdir&nbsp;を好きなように変える。（私の場合はこの部分を削除して無しにしている）&nbsp;<br />
+4) 「System」での ectrho を入力。直ぐ上の欄の ecutwfc が25だったら、200で良いだろう。<br />
+&nbsp; ectrho&nbsp;&gt;= 4&nbsp;* ecutwfc だが、論文などを見ると UPF 使用の場合は 8～12倍の値にしている。<br />
+&nbsp; 「System」&rarr;「Optional variables」&nbsp;<br />
+&nbsp; --Occupations-- にて、　<br />
+&nbsp; occupations は smearing<br />
+&nbsp; degauss は abinit&nbsp;での値の倍、つまり&nbsp;0.01 で良いだろう（Hatree &rarr; Ry 単位に変換の為）。<br />
+&nbsp;&nbsp;smearing は gaussian<br />
+&nbsp; --spin polarization -- で Yes を選択<br />
+&nbsp; Startin magnetization では通常、 全て 1 (up) で良いだろう。<br />
+&nbsp; ※ もし ｔot_magnetization を入力しなさいと error が出たら、通常、 -1 を入力する。<br />
+&nbsp; （1を入力した後に 「Edit」&rarr;「Input with editor」で編集し、-1 に書き換える）<br />
+5) 「Lattice &amp; Atoms」で Pseudopotential-file を指定。<br />
+6) SAVE した後に、View で構造と入力ファイルを確認する。<br />
+7) Run (他の計算の詳細は左の欄のPWscfを参照）<br />
+8) 計算が終了したら、バックアップのためにファイルをコピーしておく。<br />
+※ CODなどからのcifファイルを用いてPWscf で構造最適化（Type calculation (calculation): Ionic ......&lt;vc-relax&gt;を選択）すると、Core i5 で 3スレッド での 計算をした場合、SrTiO3の構造でk点を6x6x6にして、約6時間くらい掛かかった。<br />
+※ <a href="mailto:Mn@SrTiO3">SrTi0.865Mn0.125O3</a> の 2x2x2 のスーパーセルで、k点 4x4x4 では、25.5h 掛かった。<br />
+※ output.pw のファイルを適当な名称に変えて、PWgui で開き、入力欄の右にある Help を読みながら、足らない部分を入力する。（多分、擬ポテンシャルのファイルの場所と、計算で用いる擬ポテンシャルを指定すれば計算ができると思う。後は左欄のPWscfを参照）<br />
+※ 絶縁体の場合での設定では、 ｔot_magnetization を -1 以外の数値で入力しないとエラーが出ることがある。 ｔot_magnetization を 0 にしたりするなど色々とトライしてみるとよい。<br />
+※ 半導体の場合は degauss の値を小さくして結果に違いが無いかを調べることが必要。<br />
+※ degauss を限りなく小さな値、例えば、 0.0000002 にしても動作しているようだ（SCFは無事終了。DOSの確認中）。degauss のこの値は、tsmear だと、0.0000001 に対応。<br />
+※ スーパーセルで4x4x4など、規模が大きくなると計算できなくなる場合がある。tsmear を0.001にしてみたり、 k-point type を Gamma point only &lt;gamma&gt; にして計算してみたりするとよい。SrTiO3で4x4x4のgamma point only だと 16 GB（12GBは必要）でメモリが収まるかもしれない。<br />
+※ 擬ポテンシャルによっては、EFの値がupとdownで物理的に許容できない場合になることがある。問題となった擬ポテンシャルの例を下記に挙げる。<br />
+Ta 180.94790 Ta.pbe-nsp-van.UPF<br />
+Sr 87.62000 Sr.pbe-nsp-van.UPF<br />
+Ni 58.69340 Ni.pbe-nd-rrkjus.UPF<br />
+Ti 47.88000 Ti.pbe-sp-van_ak.UPF<br />
+O 15.99940 O.pbe-van_ak.UPF<br />
+------------------------------------------------------------------------------<br />
+XCrySDenのセットアップ : http://www.xcrysden.org/XCrySDen.html<br />
+1) tar zxvf xc-1.4.1bin-linuxPC-static.tar.gz<br />
+2) cd XCrySDen-1.4.lbin-static<br />
+3) ./xcConfigure<br />
+4) Please specify XCRYSDEN_SCRATCH directory<br />
+&nbsp; (default: /home/lecture/cp120/xcrys_tmp): (enter)<br />
+5) Do you have a CRYSTAL package ([y]es/[n]o): n<br />
+6) Specify print command (default: lpr -h): (enter)<br />
+7) Do you want to enable the BABEL program ([y]es/[n]o): n<br />
+8) Do you want to enable image conversion program ([y]es/[n]o): y<br />
+9) Which image conversion program<br />
+&nbsp; (default: //bin/X11/convert): (enter)<br />
+10) Do you want to enable whirlgif program ([y]es/[n]o): n<br />
+11) Do you want to enable mpeg_encode program ([y]es/[n]o): y<br />
+12) Which mpeg_encode program<br />
+(default: //bin/mpeg_encode): (enter)<br />
+13) Is this correct ([y]es/[n]o): y<br />
+14) Would you like to edit ~/.xcrysden/custom-definitions<br />
+file now ([y]es/[n]o): n<br />
+以上で終了。最新版の1.5でなくても十分に他のプログラムが使える。大変良い意味で枯れたプログラムである。これまでのところ、ユーザー側で明示的にパスを通さなくても、WIEN2kやPWguiは動作してくれる。<br />
+※ 上記の7) のbabelはubuntu10.04でopenbabelをインストールした場合には、y で良い。<br />
+参考HP : <a href="http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html">http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html</a>　<br />
+------------------------------------------------------------------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+XtalEdit の修正例<br />
+新しいファイルを作り、Terminal でcd のコマンドを用いて新しいファイルに入り、下記にある wget http://....（以下省略） を入力してインストールが開始されるか調べてみて下さい。インストールされなければ、http:// 以降のアドレスが変更されたりしています。新しい場所を設定して下さい。<br />
+--------------------------------------<br />
+#!/bin/csh<br />
+<br />
+setenv xroot $PWD<br />
+echo $xroot<br />
+<br />
+#### Install Python (and Numerical Python) to XtalEdit/Python/python ###<br />
+#wget http://easynews.dl.sourceforge.net/sourceforge/numpy/Numeric-22.0.tar.gz<br />
+#wget http://superb-west.dl.sourceforge.net/sourceforge/numpy/numpy-1.3.0.tar.gz<br />
+wget http://pypi.python.org/packages/source/n/numpy/numpy-1.3.0.tar.gz<br />
+wget http://www.python.org/ftp/python/2.5.4/Python-2.5.4.tgz<br />
+tar zxvf numpy-1.3.0.tar.gz<br />
+tar xfz Python-2.5.4.tgz<br />
+cd Python-2.5.4<br />
+./configure --prefix=$xroot/Python<br />
+make<br />
+make install<br />
+<br />
+setenv PYTHONHOME $xroot/Python # This is necessary.<br />
+cd $xroot/numpy-1.3.0<br />
+$xroot/Python/bin/python setup.py install<br />
+<br />
+### Install XtalEdit<br />
+xtal:<br />
+<br />
+cd $xroot<br />
+wget http://pmt.sakura.ne.jp/XtalEdit/XtalEdit091d.tar.gz<br />
+tar zxvf XtalEdit091d.tar.gz<br />
+mv XtalEdit/* .<br />
+rm -rf XtalEdit<br />
+<br />
+### make script XtalEdit<br />
+cat &lt;&lt;EOF &gt;XtalEdit<br />
+#!/bin/csh<br />
+setenv PATH &quot;$xroot/Python/bin/:\${PATH}&quot;<br />
+echo \$PATH<br />
+setenv PYTHONHOME $xroot/Python # This is necessary.<br />
+#xxx/j2re1.4.2_01/bin/java -cp ./classes XtalEdit<br />
+java -jar ./XtalEdit.jar<br />
+EOF<br />
+chmod +x XtalEdit<br />
+<br />
+#patch on Jun7-2009. Okuno(Fuji film co.) sended me his new Vasp_export.py.<br />
+wget http://pmt.sakura.ne.jp/XtalEdit/Vasp_export.py<br />
+mv Vasp_export.py UserModule/Vasp/<br />
+<br />
+echo &quot; OK! end of installation of XtalEdit (Python + Numerical Python in addition)&quot;<br />
+echo &quot; You have to install jave from http://java.sum.com/j2se/1.4.2/download.html&quot;<br />
+echo &quot; Then set java path in the script XtalEdit and Run XtalEdit!&quot;<br />
+--------------------------------------<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,211 @@
+&nbsp; NEB (Nudged Elastic Band ) and ESM (有効遮蔽媒質法) calculation<br />
+--------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+◇ H2 + H&nbsp; &lt;==&gt; H + H2<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd NEB<br />
+3. cd examples<br />
+4. run_example<br />
+<br />
+◇ H atom diffusion on Al(001) surface<br />
+Effective Screening Medium Method (ESM) and constant bias potential (constant-mu) method.<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd NEB<br />
+3. cd examples<br />
+4. ESM_example<br />
+5. run_example<br />
+<br />
+◇ H2 + H&nbsp; &lt;==&gt; H + H2<br />
+1. gedit H2+H.in<br />
+----------<br />
+BEGIN<br />
+BEGIN_PATH_INPUT<br />
+&amp;PATH<br />
+&nbsp; restart_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &#39;from_scratch&#39;<br />
+&nbsp; string_method&nbsp;&nbsp;&nbsp;&nbsp; = &#39;neb&#39;,<br />
+&nbsp; nstep_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 20,<br />
+&nbsp; ds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 2.D0,<br />
+&nbsp; opt_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;broyden&quot;,<br />
+&nbsp; num_of_images&nbsp;&nbsp;&nbsp;&nbsp; = 7,<br />
+&nbsp; k_max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.3D0,<br />
+&nbsp; k_min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.2D0,<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;auto&quot;,<br />
+&nbsp; path_thr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.1D0,<br />
+/<br />
+END_PATH_INPUT<br />
+BEGIN_ENGINE_INPUT<br />
+&amp;CONTROL<br />
+&nbsp; prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;H2+H&quot;<br />
+&nbsp; outdir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;tmp&quot;,<br />
+&nbsp; pseudo_dir&nbsp;&nbsp;&nbsp;&nbsp; = &quot;/home/student/q-e-qe-6.3/pseudo/&quot;,<br />
+/<br />
+&amp;SYSTEM<br />
+&nbsp; ibrav&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0,<br />
+&nbsp; nat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 3,<br />
+&nbsp; ntyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1,<br />
+&nbsp; ecutwfc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 20.0D0,<br />
+&nbsp; ecutrho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 100.0D0,<br />
+&nbsp; nspin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 2,<br />
+&nbsp; starting_magnetization = 0.5D0,<br />
+&nbsp; occupations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;smearing&quot;,<br />
+&nbsp; degauss&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.03D0,<br />
+/<br />
+&amp;ELECTRONS<br />
+&nbsp; conv_thr&nbsp;&nbsp;&nbsp; = 1.D-8,<br />
+&nbsp; mixing_beta = 0.3D0,<br />
+/<br />
+&amp;IONS<br />
+/<br />
+ATOMIC_SPECIES<br />
+H&nbsp; 1.00794&nbsp; HUSPBE.RRKJ3<br />
+BEGIN_POSITIONS<br />
+FIRST_IMAGE<br />
+ATOMIC_POSITIONS { bohr }<br />
+H&nbsp;&nbsp; -4.56670009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 1&nbsp; 0&nbsp; 0<br />
+H&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0&nbsp; 0&nbsp; 0<br />
+H&nbsp;&nbsp;&nbsp; 1.55776676&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 1&nbsp; 0&nbsp; 0<br />
+LAST_IMAGE<br />
+ATOMIC_POSITIONS { bohr }<br />
+H&nbsp;&nbsp; -1.55776676&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+H&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+H&nbsp;&nbsp;&nbsp; 4.56670009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+END_POSITIONS<br />
+K_POINTS { gamma }<br />
+CELL_PARAMETERS { bohr }<br />
+&nbsp; 12.00000&nbsp; 0.00000&nbsp; 0.00000<br />
+&nbsp;&nbsp; 0.00000&nbsp; 5.00000&nbsp; 0.00000<br />
+&nbsp;&nbsp; 0.00000&nbsp; 0.00000&nbsp; 5.00000<br />
+END_ENGINE_INPUT<br />
+END<br />
+----------<br />
+2. mpirun -np 2&nbsp; $HOME/q-e-qe-6.3/bin/neb.x -inp&nbsp; H2+H.in | tee H2+H.out<br />
+3. xcrysden --axsf H2+H.axsf<br />
+<br />
+◇ 「H2 + H&nbsp; &lt;==&gt; H + H2」での入力ファイルの違い<br />
+・&nbsp;ファイル名に特に記述無し<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;auto&quot;,<br />
+　奇数個のポイント（Image）を作ることで、中央のポイントが「saddle point」となるようにしている<br />
+・ symmetry<br />
+&nbsp; CI_scheme&nbsp;の記述無し<br />
+　偶数個のポイント（Image）を作ることで、中央付近のポイントが「saddole point」にならないようにしている<br />
+・ asymmetry<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;manual&quot;<br />
+　上記の設定をすることで、CLIBING_IMAGESで指定したポイント（Image）が「saddole point」となるようにしている<br />
+※ これらの入力ファイルでは、平面波のカットオフと計算の収束を判定するための閾値、セルの大きさを小さくして精度を落としている。実際の計算では、カットオフは擬ポテンシャルに記載の値を採用し、計算の収束を判定するための閾値をディフォルト値にしたり、分子の場合は10Åほど何も無い真空の層が必要になる。<br />
+<br />
+◇ 「H atom diffusion on Al(001) surface」での入力ファイルの違い<br />
+1. ESM（有効遮蔽媒質法）無し<br />
+2. ESM（bc3）を用いる<br />
+&nbsp; assume_isolaed=&#39;esm&#39;<br />
+&nbsp; exm_bc=&#39;bc3&#39;<br />
+3.&nbsp;定バイアス電位 (constat-&mu;) 条件 + ESM<br />
+　フェルミエネルギーに上記2.を用いる<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.332504<br />
+&nbsp; assume_isolaed=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+4. フェルミエネルギーを -0.5 Vに設定 + ESM<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.369253<br />
+&nbsp; fcp_tot_charge_first = 0.021755<br />
+&nbsp; fcp_tot_charge_last = 0.022195<br />
+&nbsp; assume_isolated=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+&nbsp; ※ fcp_mu = -0.332504 -0.5/13.6058 = -0.369253<br />
+5. フェルミエネルギーを +0.5 Vに設定 + ESM<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.295755<br />
+&nbsp; fcp_tot_charge_first = -0.021744<br />
+&nbsp; fcp_tot_charge_last = -0.021744<br />
+&nbsp; assume_isolated=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+&nbsp; ※ fcp_mu = -0.332504 +0.5/13.6058 = -0.295775<br />
+※ docのINPUT_NEB&nbsp;と PW/examples/ESM_example/README を読むと入力ファイルの詳細について記述されている。<br />
+&nbsp; bc1： [Vacuum-slab-Vacuum]（境界条件）での計算<br />
+&nbsp; bc2：&nbsp;[Metal-slab-metal]（境界条件）での計算、Constant-&mu;法が可能<br />
+&nbsp; bc3： [Vacuum-slab-metal]（境界条件）での計算、Constant-&mu;法が可能<br />
+※ z=0でAlが配置され、z=3.11の高さに水素、水素の半径程度、10Åの真空層となるように単位胞が作られている。<br />
+※ 原子位置の横にある0や1は、MDや構造最適化で原子を動かす時に1を指定する。マニュアルには、Force（ちから）に掛ける係数となっている。0であればForceがかからずに動かない。1であればForceがかかり原子が動くことになる。<br />
+※ 原子の動きに対称性がない場合には、nosym = .TRUE.を入れる程度で、string_method = &#39;neb&#39;, opt_scheme =&#39;broyden&#39;を入力ファイルに記述すれば、入力ファイルの作成はSCFなどと対して変わらない。<br />
+※ string_method = &#39;neb&#39;は記述しなくてもディフォルトでnebになっている。<br />
+※ 有効遮蔽媒質法(ESM法)は、電荷を有するスラブモデルあるいは電場印加条件下にあるスラブモデ [1]<br />
+<br />
+◇ PW/examples/ESM_example/README<br />
+----------<br />
+1) &#39;bc1&#39; : Immerse the slab between two semi-infinite vacuum regions;<br />
+2) &#39;bc2&#39; : Immerse the slab between two semi-infinite metallic electrodes, with optional fixed field applied between them. Constant-mu method is available for controlling the Fermi energy.<br />
+3) &#39;bc3&#39; : Immerse the slab between one semi-infinite vacuum region (left-hand side) and one semi-infinite metallic electrode (right-hand side). Constant-mu method is available for controlling the Fermi energy.<br />
+<br />
+Two dimensional (xy-plane) average charge density and electrostatic potentials are printed out into &#39;esm1&#39; file.<br />
+<br />
+The example calculation proceeds as follows:<br />
+<br />
+esm_bc = &#39;pbc&#39;:<br />
+<br />
+1) make a self-consistent calculation for H2O with esm_bc = &#39;pbc&#39; (ESM off)<br />
+&nbsp;&nbsp; (input=H2O_pbc.in, output=H2O_pbc.out). Using &#39;pbc&#39; causes the<br />
+&nbsp;&nbsp; code to print out the density and potential (hartree + local) along z, even<br />
+&nbsp;&nbsp; though ESM is disabled. Note that the molecule has a z-oriented dipole.<br />
+<br />
+esm_bc = &#39;bc1&#39;:<br />
+<br />
+4) make a self-consistent calculation for H2O with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=H2O_bc1.in, output=H2O_bc1.out). This simulates the water molecule<br />
+&nbsp;&nbsp; in an infinite vacuum along the z-direction, preventing dipole-dipole<br />
+&nbsp;&nbsp; interaction between periodic images.<br />
+<br />
+6) make a self-consistent calculation for graphene with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=graphene_bc1.in, output=graphene_bc1.out).<br />
+&nbsp;&nbsp; Stress calculation is enabled.<br />
+<br />
+7) make a variable cell (vc-relax) calculation for graphene with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=graphene_bc1_vc-relax.in, output=graphene_bc1_vc-relax.out).<br />
+&nbsp;&nbsp; This simulation starts from slightly distorted cell (angle of lattice vector<br />
+&nbsp;&nbsp; is 117 degree) and ends with hexagonal cell (angle of lattice vector is 120<br />
+&nbsp;&nbsp; degree).<br />
+<br />
+esm_bc = &#39;bc3&#39;:<br />
+<br />
+11) make a self-consistent calculation for Al(001) with esm_bc = &#39;bc3&#39; to<br />
+&nbsp;&nbsp; simulate a slab in contact with semi-infinite&nbsp; metal electrode (right-<br />
+&nbsp;&nbsp; hand side).<br />
+&nbsp;&nbsp; (input=Al001_bc3.in, output=Al001_bc3.out).<br />
+<br />
+12) make a self-consistent calculation for Al(001) with esm_bc = &#39;bc3&#39; to<br />
+&nbsp;&nbsp; simulate a slab in contact with semi-infinite metal electrode with<br />
+&nbsp;&nbsp; a weakly negative (-0.02e) overall charge (input=Al001_bc3_m002.in,<br />
+&nbsp;&nbsp; output=Al001_bc3_m002.out). Note that the charge migrates to the right<br />
+&nbsp;&nbsp; surface of the slab.<br />
+<br />
+13) Repeat #6 but with a weakly positive (+0.02e) overall charge<br />
+&nbsp;&nbsp; (input=Al001_bc3_p002.in, output=Al001_bc3_p002.out).<br />
+<br />
+14) make a &#39;relax&#39; calculation on both geometory and Fermi energy for Al(001)<br />
+&nbsp;&nbsp; with esm_bc = &#39;bc3&#39; (input=Al001_bc3_v00.in, output=Al001_bc3_v00.out).<br />
+&nbsp;&nbsp; The target Fermi energy is set to that of the neutral surface (#11, Vpzc).<br />
+&nbsp;&nbsp; (input=Al001_bc3_v00.in, output=Al001_bc3_v00.out).<br />
+&nbsp; &nbsp;<br />
+15) Repeat #8 but with a higher target Fermi energy (+0.5V vs Vpzc).<br />
+&nbsp;&nbsp; (input=Al001_bc3_vp05.in, output=Al001_bc3_vp05.out).<br />
+<br />
+16) Repeat #8 but with a lower target Fermi energy (-0.5V vs Vpzc).<br />
+&nbsp;&nbsp;&nbsp; (input=Al001_bc3_vm05.in, output=Al001_bc3_vm05.out).<br />
+<br />
+17) make a self-consistent calculation for graphene with esm_bc = &#39;bc3&#39;<br />
+&nbsp;&nbsp;&nbsp; (input=graphene_bc3.in, output=graphene_bc3.out).<br />
+<br />
+18) make a variable cell (vc-relax) calculation for graphene with esm_bc = &#39;bc3&#39;<br />
+&nbsp;&nbsp;&nbsp; (input=graphene_bc3_vc-relax.in, output=graphene_bc3_vc-relax.out).<br />
+&nbsp;&nbsp;&nbsp; The graphene is weakly positive (+0.02e) overall charge. The angle of the<br />
+&nbsp;&nbsp;&nbsp; unit cell is converged to 120 degree.<br />
+----------<br />
+<br />
+<br />
+◇ tools (underconstruct)<br />
+1. sudo apt-get install gawk<br />
+2. gedit path_interpolation.sh<br />
+--------------------------------------------------------------------------------<br />
+■ References<br />
+[1] <a href="http://www.openmx-square.org/openmx_man3.7jp/node118.html">http://www.openmx-square.org/openmx_man3.7jp/node118.html</a><br />
+--------------------------------------------------------------------------------
