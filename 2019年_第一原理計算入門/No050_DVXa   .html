@@ -1,0 +1,1339 @@
+　ここではDVXa関連の情報について纏める。<br />
+------------------------------------------------------------------------------<br />
+■ 基本的な情報<br />
+　書籍『はじめての電子状態計算』にあるDV-Xa法 SCAT プログラムは非相対論版である。以下のプログラムはDV-Xa研究協会や夏の学校などに参加したり、ディベロッパーにお願いしたり、『新版 はじめての電子状態計算』を購入したりして入手することができる（原子番号が50を超える原子を扱う場合は相対論版が良いだろう）。<br />
+A. 相対論版DV-Xa法プログラム(相対論版 dvxar)<br />
+B. 遷移確率計算プログラム(sxs及びsxsplt)<br />
+C. 全エネルギー計算プログラム（TESDA及びCoulomb)（開発者に相談）<br />
+D. 対称軌道作成プログラム(makef25)<br />
+E. 配置間相互作用を考慮したプログラム(DVME法)[DMEX1]<br />
+F. CVV Auger スペクトルの計算プログラム（入手可能かは不明）<br />
+※ Linux PCの方が性能が良い場合は、wineをインストールして、下記と同様にすれば良い。<br />
+wineの起動コマンドは[wine cmd]となる。$HOME/.wine/drive_c が主に使用するディレクトリになる。<br />
+------------------------------------------------------------------------------<br />
+■ セットアップ<br />
+1) 黄色い本に記載のあるようにデータを配置する。<br />
+2) <a href="http://chem.sci.hyogo-u.ac.jp/hajimete/download.html">http://chem.sci.hyogo-u.ac.jp/hajimete/download.html</a> から最新のデータを得る。<br />
+3)&nbsp;解凍して同名のファイルに中身をコピーする。<br />
+<br />
+■ SCF計算<br />
+1) setdvxa.bat のあるファイルで、shift を押しながら右クリックして「コマンドウインドウをここで開く(W)」を選択する。<br />
+2) setdvxa<br />
+3) cd calc<br />
+4) mkdir 計算したい系の名称<br />
+5) cd 計算したい系の名称<br />
+6) notepad f01<br />
+&nbsp; 入力ファイル f01 を作成する。<br />
+7) makef25 （makef25 が無い場合は飛ばす）<br />
+8) makef05<br />
+9) f06zp を他のファイルからコピー&amp;ペーストし、 ncycm の値を50 など大きな値にする。<br />
+10) dvscat<br />
+以上で基本的な使い方は終了である。後は黄色い本の裏表紙の裏に計算したい事項の記載（DOS用の入力ファイルの作り方など）や入力するコマンド（これだけでよい）が記載されている。<br />
+<br />
+■ 重要な計算<br />
+□ Mulliken population analysis<br />
+1) 上記のSCF計算を終わらせる。<br />
+2) popanl<br />
+3) f08p に結果が記載されている。<br />
+※ 共有結合の強さを評価する助けとなる。<br />
+<br />
+□ Bond Overlap population analysis<br />
+1) 上記のSCF計算を終わらせる。<br />
+2) bndodr<br />
+3) bn8 に結果が記載されている。<br />
+※ 軌道間の相互作用を評価する助けとなる。<br />
+<br />
+□ Net charge<br />
+1) 上記のSCF計算を終わらせる。<br />
+2) netc<br />
+3) i08&nbsp;に結果が記載されている。<br />
+※ イオン性と共有結合性のどちらが強いかを評価する助けとなる。<br />
+<br />
+□ 分子軌道の波動関数と電子密度のプロット<br />
+1) 上記のSCF計算を終わらせる。<br />
+2) wavnum3<br />
+3) makec04<br />
+&nbsp;c04 と c05 が作成される。<br />
+4) c04 を編集<br />
+&nbsp; 2行目：縦軸　横軸のメッシュ数<br />
+&nbsp; 3行目：メッシュの開始点<br />
+&nbsp; 4行目：横軸の間隔<br />
+&nbsp; 5行目：縦軸の間隔<br />
+&nbsp; 6行目：プロットする軌道の数　軌道の番号（プロットする軌道の数で入力した数だけ入力）<br />
+5) c05<br />
+&nbsp; 6行目以降（最後の行を除く）：プロットする等高線の値<br />
+6) contr<br />
+7) cmap<br />
+8) dvplot で、 Wに番号が付いたものと、chg を指定する。<br />
+※&nbsp; <a href="https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf">https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf</a> などの例がある。<br />
+スピン密度の差を議論したい場合<br />
+9) 上向きスピンは chg をプロットする。差スピン密度は drho を用いる。<br />
+10) c04 の 6行目の最初の数値を1にする。<br />
+11) drho cXX cYY cZZ<br />
+&nbsp;XX, YY, ZZ&nbsp;には数値が入る<br />
+12) contmap xZZ dspin<br />
+13) dvplot dspin を指定する。<br />
+※ VESTAを用いたプロット方法は <a href="http://www.chem.ous.ac.jp/~gsakane/HidemaruDV/HidemaruDV.pdf">http://www.chem.ous.ac.jp/~gsakane/HidemaruDV/HidemaruDV.pdf</a> に非常に詳しく記載されている。<br />
+<br />
+□ Overlap population analysis<br />
+1) 上記のSCF計算を終わらせる。<br />
+2) lb4s と lb5s を他のファイルからコピー&amp;ペーストする<br />
+3) lb4s の編集<br />
+&nbsp; 1行目：原子間での結合を計算する組の数（2行目と3行目の記述を繰り返す数）<br />
+&nbsp; 2行目：計算する（軌道の）ペアの数　得られた結果を割る数<br />
+&nbsp; 3行目：上記の1項目に入力した数だけ（軌道の）ペアとなる&nbsp; 原子の番号 - 原子の番号　を記述する。<br />
+&nbsp; 4行目以降：2行目と3行目を、1行目で入力した数値 - 1 だけ繰り返す。&nbsp;<br />
+4) lb5s の編集（特に編集する必要はないが一応記しておく）<br />
+&nbsp; 1行目：プロットのエネルギー範囲 [eV]<br />
+&nbsp; 2行目：x, y 軸の長さと目盛り間隔<br />
+&nbsp; 5行目：半値幅<br />
+&nbsp;&nbsp;6行目：プロットのオプション（黄色い本参照）<br />
+&nbsp; 7行目：値の最大値<br />
+&nbsp; 9行目：プロットの順番<br />
+5) lvlbnds<br />
+6) dvplot で lb7s を指定する。<br />
+※ T. Mizoguchi et al., Phys. Rev. B 61 (2000) 2180.では、遷移状態計算を行った後に、Overlap population analysis を行って非占有準位でのピーク構造がどのような結合から形成されているのかを議論している。<br />
+<br />
+□ 遷移状態計算[10, TSX1, TSX2, TSX3, TSX4, TSX5]<br />
+・光電子スペクトルのピークエネルギーはSlaterのtransition state methodを用いると精度良く計算することが出来、少し慎重に計算すると一般には内殻レベルに関しては1%以内、価電子領域では0.1 eV程度の正確さでピークエネルギーを再現できる[TSX2]。<br />
+・NiOの酸素K殻ELNESの理論計算を行った結果、このスペクトルについては多体効果を考慮しなくともNi同士の軌道間相互作用を考えることで解釈が可能なことが示される[TSX5]。<br />
+・下記の論文を参照するとよい。<br />
+<a href="https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf">https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf</a>　<br />
+・ 遷移状態計算を行った場合、小さなクラスターでも空孔を入れた状態における波動関数が、大きなクラスターで計算したものと同様の波動関数が形成される場合は、大きなクラスターを用いなくとも実験をよく再現できる。<br />
+・ K端やL1端のようにp軌道成分だけのPDOSを用いる場合には吸収断面積（PACS; photo-absorption cross section)までの計算が必要ない場合がある。<br />
+・ 遷移エネルギーを計算する場合はスピン分極を考慮して計算を行う。<br />
+・ 多重散乱法 FFFT8と第一原理計算、実験結果との比較もされている。<br />
+計算手順<br />
+1) f01 を作成<br />
+2) makef25<br />
+&nbsp; Select Symmetry では上記に表示された数値（対称性を表す記号の左の数値）を入力する。<br />
+&nbsp;&nbsp;Select orbital では、ランタノイド系列以後の重い元素でない場合、spdである 1 を入力する。<br />
+&nbsp; NEW is reset for ... と表示されるので、対称性に対応させてNEQをリセットしたい場合は Yesの 1を選択する。<br />
+3) makef05<br />
+4) dvscat<br />
+&nbsp; 収束するまで dvscat を繰り返す。dvscatを押すのが面倒な場合は f06zp を編集し ncycm の下の数値を200などと大きくしておく。<br />
+&nbsp; 後は、<a href="http://www.chem.ous.ac.jp/~gsakane/STS.html">http://www.chem.ous.ac.jp/~gsakane/STS.html</a>&nbsp;に従えばよい。<br />
+5) f08e を見て電子を0.5取り去り、0.5付けたい軌道の番号（2列目）と対称性（3列目）を決める。<br />
+&nbsp; f08 の一番右側が電子の占有数である。同じ対称性の占有軌道から同じ対称性の非占有軌道をしていすると良いだろう。<br />
+&nbsp; wavnum と コマンドプロンプトに入力して、出力されたファイルも参照すると良い。<br />
+6) 新しいディレクトリを作成し、先ほど計算した f17, f25, f26 を新しく作成したディレクトリに入れる。<br />
+7) f26 の6行目を編集。6行目の順番は下記のようになる。<br />
+&nbsp; ノンスピンの場合：TL LSY1 REMV1 LSY2 JLV2 REMV2 LSY3 JLV3 REMV3<br />
+&nbsp; スピンの場合：TL KSP1 LSY1 REMV1 KSP2 LSY2 JLV2 REMV2 KSP3 LSY3&nbsp;JLV3 REMV3<br />
+&nbsp; ここで、 TL：全電子数、<br />
+&nbsp; KSP1,KSP2, KSP3：スピンがup なら 1、スピンがdown なら 2<br />
+&nbsp; LSY1, LSY2, LSY3：f25に上から順番に対称性の記号に番号が振られていると考える（合計するとf05の中程{bohr単位で座標が書かれている部分の上に記述している}に記載されているnsymの値と一緒になることが分かる）。電子を動かす対称性の番号を記入する。<br />
+&nbsp; JLV1, JLV2, JLV3：f08e に記載されている電子数を変化させたい軌道のエネルギー（6行目）と対称性（3行目）の記号が記載されている 2行目の数値を入れる。<br />
+&nbsp; REMV1, REMV2, REMV3：電子の増減量<br />
+8) f26を書き換えたら、dvscat と入力する。<br />
+9) 遷移エネルギー = 遷移状態法での全エネルギー - 遷移する前での全エネルギー<br />
+&nbsp; 1%程度の誤差が生じる。実験スペクトルと比較する場合には、横軸（エネルギー）を、実験値のピークと合うようにシフトさせても良いだろう。<br />
+XMCD: http://tdl.libra.titech.ac.jp/hkshi/xc/contents/pdf/117076547/10<br />
+<br />
+□ 紫外可視吸収スペクトル[UVX1]<br />
+A. PDOSを計算する。<br />
+B. sxs または rsxs の計算を行う。<br />
+※ H. Yoshida et al., Jpn. J. Appl. Phys. 45 (2006) 146. ではPDOSと rsxs の双方の結果が記載されている。<br />
+<br />
+□ XAS&amp;ELNESスペクトル[12-20]<br />
+&nbsp; DV-Xa研究協会会報、Vol. 9, No. 2&nbsp;(1996) で吸収スペクトルの報告が多い。<br />
+A. 遷移エネルギーの絶対値はSlaterの遷移状態法により求める。<br />
+&nbsp; 上記の遷移状態計算を参照。<br />
+B. 遷移確率&lt;f|r|i&gt;を求める。<br />
+&nbsp; sxs または rsxs の計算を行う。rsxs の計算方法は相対論版DV-Xa計算プログラムに詳細な記載がある。下記は sxs の場合。<br />
+&nbsp; 1) 上記のSCF計算を終わらせる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;余談であるが、dvscat でSCF計算して出力された f09とf39を用いる。<br />
+&nbsp; 2) s04 を編集する。<br />
+&nbsp;&nbsp;&nbsp; 1行目：IATM&nbsp; JPRT (2I5の形式で入力)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;IATM は&nbsp;計算の中心となるNEQの番号。つまり&lt;f|r|i&gt;のrの中心を示す。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JPRT は core&nbsp;orbital の属する原子の番号のオプション。0が通常表示。1,2は各x, y, zでの遷移確率を出力させる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;2行目：LNLN&nbsp; E0 (I5, F15.7 の形式で入力）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LNLN は NEQの番号&nbsp;主量子数 方位量子数　0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; E0 は core orbital のLOCA+NNLZcore orbitalのエネルギー固有値（Ry単位）。小数点を付ける。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ※ 2行目の最初は分かりにくいが、左から詰めて記述する。NEQが1桁の場合は最初は空白にし、NEQの後にはスペースを入れずに主量子数と方位量子数を書き入れる。そして、その直後に0を記入する。この後は、推定されるエネルギー準位(Ry単位）を記入する。<br />
+&nbsp; 3) copy d04 s05<br />
+&nbsp; 4) sxs<br />
+&nbsp; 5) sxsplot<br />
+&nbsp; 6) copy d04 sp4<br />
+&nbsp;&nbsp;&nbsp; IGL=GAUS または LORE、 IAE=ABSO&nbsp;または EMIS、 NSPIN=1 または 2<br />
+&nbsp;&nbsp;&nbsp; E0, E1,&nbsp;DX は　d04 または&nbsp;x04 と同じ<br />
+&nbsp;&nbsp;&nbsp; SIG(I), I=1, NCORE は d04 または x04 と同じ<br />
+&nbsp;&nbsp;&nbsp; NPRT, IPRT(I), I=1, NCORE&nbsp;は d04 または x04 と同じ<br />
+&nbsp;&nbsp;&nbsp; FCS(I), I=1, NCORE&nbsp;は d04 または x04 と同じ<br />
+&nbsp;&nbsp;&nbsp; ※ 難しく書いてしまったが、要するに、sp4はd04と同じである。違うのは、1行目の第1項で、GAUS を下記に書き換える。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;発光の場合：GAUSEMIS または LOREEMIS<br />
+&nbsp;&nbsp;&nbsp; 吸収の場合：GAUSABSO または LOREABSO<br />
+&nbsp; 7) copy d05 sp5<br />
+&nbsp; 8) pltsxs<br />
+&nbsp; 9) dvplot で sp7 を指定する。<br />
+&nbsp; ※ 出力されたファイルで、 s08 の一番右の数値が遷移確率を表す。ssp7 は表計算ソフトで結果を開ける。<br />
+C. X線吸収スペクトルの計算（sxsの計算の詳細は上記 遷移確率&lt;f|r|i&gt;を求める を参照）<br />
+&nbsp;&nbsp;1) 遷移状態計算 を行う。<br />
+&nbsp;&nbsp;&nbsp; 遷移を開始する電子の占有軌道を -0.5 し、&nbsp;電子が移動する先の非占有軌道を 0.5 増やす。&nbsp;&nbsp;<br />
+&nbsp;&nbsp;2) s04 を編集し、sp4 と sp5 を準備して、sxs と入力して計算する。<br />
+&nbsp; 3) sxsplt<br />
+&nbsp; 4) pltsxs<br />
+&nbsp;&nbsp;5) dvplot で sp7 を指定する。<br />
+D. DVME法により求める[MEX1, MEX2]。<br />
+<br />
+□ 発光（PES or XES）スペクトル<br />
+A. half-filled MOでの計算[TX1]<br />
+&nbsp; 1) 下方遷移することになる軌道を0.5個にして計算する。飛ばされる内殻は満たされたままにする（計算方法は上記の遷移状態計算を参照）。<br />
+B. SXS-TS （蛍光X線スペクトル）（sxsの計算の詳細は上記 遷移確率&lt;f|r|i&gt;を求める を参照）<br />
+&nbsp;&nbsp;1) 遷移状態計算 を行う。<br />
+&nbsp;&nbsp;&nbsp;&nbsp; この場合に、遷移すると考える占有軌道を二つとも -0.5 とする。<br />
+&nbsp;&nbsp;2) s04 を編集し、sp4 と sp5 を準備して、sxs と入力して計算する。<br />
+&nbsp;&nbsp;3) sxsplt<br />
+&nbsp;&nbsp;4) pltsxs<br />
+&nbsp;&nbsp;5) dvplot で sp7 を指定する。<br />
+<br />
+□ Auger electron&nbsp;energy&nbsp;[AX1, AX2]<br />
+A. 計算方法[AX2]<br />
+&nbsp; E<sub>Auger</sub> = |E<sub>i </sub>- E<sub>f</sub>|&nbsp;≒ |E(A) - E(B) - E(C) - E<sub>C</sub>(BC) - E<sub>E</sub>(BC)|<br />
+&nbsp; E<sub>Auger</sub>: Auger electron energy （オージェ電子エネルギー）<br />
+&nbsp; E<sub>i</sub>: Total energy of initial state（始状態の全エネルギー）<br />
+&nbsp; E<sub>f</sub>: Total energy of final state（終状態の全エネルギー）<br />
+&nbsp; E(A): Binding energy of A orbital in ground state（軌道Aの基底状態エネルギー。軌道Aは電子線やX線によって励起されて最初に正孔が出来る軌道）<br />
+&nbsp; E(B): Binding energy of B orbital in ground state（軌道Bの基底状態のエネルギー。軌道Bは電子が軌道B&rarr;軌道Aとなる軌道B）<br />
+&nbsp; E(C): Binding energy of C orbital in ground state（軌道Cの定常状態のエネルギー。軌道Cは電子が軌道B&rarr;軌道Aへ落ちる時にエネルギーを得る軌道）<br />
+&nbsp;&nbsp;E<sub>C</sub>(BC): Coulomb integral between B and C orbital<br />
+&nbsp; E<sub>E</sub>(BC): Exchange integral between B and C orbital<br />
+&nbsp; 文献によっては E<sub>C</sub>(BC)及びE<sub>E</sub>(BC)を終状態での正孔同士の反発又は相関エネルギーとして一括して記述している文献もある[TX1]。<br />
+<br />
+B. Augerスペクトルの計算法[AX3, TX1]<br />
+a. Core-Core-Valence (CCV) Auger 遷移[TX1]<br />
+&nbsp; 計算式： A<sub>CCV</sub>(E) = C<sub>s</sub> &rho;&#39;<sub>s</sub>(E)&nbsp;+ C<sub>p</sub> &rho;&#39;<sub>p</sub>(E)<br />
+&nbsp; ここで、&rho;&#39;<sub>l</sub> は正孔のある終状態の局所状態密度分布、C<sub>l</sub>は原子のAuger遷移行列要素。lはsまたはpを示す。<br />
+&nbsp; DV-Xa法SCATでの計算方法[AX3]<br />
+&nbsp; 1) SCF計算を行う<br />
+&nbsp; 2) maked04 でd04とd05を作成し、x04とx05にそれぞれ名称を変更する<br />
+&nbsp; 3)&nbsp;HOMO を 0 eV にする（2行目の右端を1にする）<br />
+&nbsp; 4)&nbsp;エネルギー範囲と半値幅は実験スペクトルと比較できるように適切な値を記入する<br />
+&nbsp; 5)&nbsp;Augerに関係する原子のみを選択し、考えられるAuger遷移に関連するValenceの原子に（DOSをプロットするときのように0以外の）数値を記入する。それ以外のものは0へ。<br />
+&nbsp; 6)&nbsp;&nbsp;倍率を記入するところには、考えられるAuger遷移の比率をデータテーブル[DT]を参考に記入する。<br />
+&nbsp; 7) xps のプログラムを動かす<br />
+&nbsp; 8) 出力されたx07をdvplotで、xx7をigorやsma4winでプロットする<br />
+&nbsp; 9) 実験結果ではプラズモン励起によるエネルギー損失サテライト線を差し引いて、計算結果と比較してみるとよい<br />
+&nbsp; [DT] M. H. Chem et al., Atomic Data Nucl. Data Tables 45 (1990) 1.<br />
+b. Core-Valence-Valence(CVV) Auger 遷移[AX4]<br />
+&nbsp; 計算式：A<sub>CVV</sub>(E) = C<sub>ss</sub> R<sup>2</sup><sub>s</sub> &rho;<sub>s</sub>(E)&lowast;&rho;<sub>s</sub>(E) +&nbsp;C<sub>sp</sub> R<sub>s</sub> R<sub>p</sub> &rho;<sub>s</sub>(E)&lowast;&rho;<sub>p</sub>(E)&nbsp;+ C<sub>pp</sub> R<sup>2</sup><sub>p</sub>&nbsp;&rho;<sub>p</sub>(E)&lowast;&rho;<sub>p</sub>(E)<br />
+&nbsp;&nbsp;A<sub>CVV</sub>(E) ～( &rho;&lowast;&rho;&#39;(E) ) / (&nbsp;[1 - &Delta;U &int;( &rho;&lowast;&rho;(E) / (E-&epsilon;) ) d&epsilon;]<sup>2</sup> + [&Delta;U&pi;&rho;&lowast;&rho;&#39;(E)]<sup>2</sup>&nbsp;)<br />
+&nbsp; ここでの&nbsp;&lowast;&nbsp;は畳み込み積分を示す。&nbsp;<br />
+&nbsp; 1) f08またはf08pから手作業で計算<br />
+c. half-filled MOsでの計算[TX1]<br />
+&nbsp; 1) Auger遷移に関係する軌道全てを0.5個ずつにして計算する（計算方法は上記の 遷移状態計算を参照）。<br />
+<br />
+□ その他<br />
+■ 鏡面対称性の作成の仕方1<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+2. symOrbでsを押して探索させCsが表示される<br />
+3. f01を出力する<br />
+4. f01のNEWを見やすいように並べて、同じNEWのXYZの値を揃える<br />
+5. makef25<br />
+6. makef05<br />
+7. dvscat<br />
+<br />
+■ 鏡面対称性の作成の仕方2（鏡面対称性のあるf01がmakef25で自動認識されない場合など）<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+&nbsp;（displatで鏡面対称性を作ると入力ファイルに対して少し安心できる）<br />
+（ここでNEWが順番になるようにコピー＆ペーストしておくとf25を比較しやすくなるが、f25.inでのチェックは難しくなる）<br />
+2. Excelなどでf01を読み取り、angstromの場合は1.889725989倍してbohr(atomic)単位にする。桁数は揃えておきたい（Excelのボタンにある）。<br />
+3. f25.inの名称のファイルを作る（makef25sでｚに対して+と-の座標ができる）。Excelのデータをコピー&amp;ペーストする。置換でTabを空白に変えておく。<br />
+Cs<br />
+&nbsp;考慮に入れる軌道（第四と五周期の原子があるならばd、第六周期があるならばf）<br />
+bohr(atomic)単位で座標を入力する（鏡面に対する片方のみを記述する）<br />
+4. makef25sを入力し、作成されたf25を確認、f25の形式と同じ順番となるようにf01を確認する<br />
+5. makef05<br />
+6. dvscat<br />
+<br />
+■ f06zp（金属の場合には下記のようにするとよい）<br />
+Youtube動画；<a href="https://www.youtube.com/watch?v=rDhDyGlYtz0">https://www.youtube.com/watch?v=rDhDyGlYtz0</a><br />
+----------<br />
+ncycm pdec pinc phmx fcvj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phmt<br />
+&nbsp; 400 0.90 1.02 0.50 0.70&nbsp;&nbsp; 0.00000<br />
+<br />
+&nbsp; jtd&nbsp; ftd<br />
+&nbsp;&nbsp;&nbsp; 2 0.20<br />
+<br />
+&nbsp; jsw&nbsp; fsw jswc&nbsp; nkp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tdxm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phsw<br />
+&nbsp;&nbsp;&nbsp; 0 0.80&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp; 5.00000&nbsp;&nbsp; 0.01000<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cvj&nbsp; jch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; chj<br />
+&nbsp;0.0010000&nbsp;&nbsp;&nbsp; 0 0.0010000<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig3<br />
+&nbsp;&nbsp; 0.01000&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tdxc1&nbsp;&nbsp;&nbsp;&nbsp; tdxc2 mdst<br />
+&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000&nbsp;&nbsp;&nbsp; 1<br />
+----------日本語<br />
+通常用いるのは<strong>mdst</strong>と<strong>sig1</strong>です．<br />
+<strong>&nbsp; mdst=0</strong>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; GB，FDオフ<br />
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =1</strong>&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Gaussian Broadening<br />
+<strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </strong>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fermi-Drac Distribution<br />
+<strong>&nbsp; sig1</strong><strong>&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; </strong>GBの時は半値幅の1/2（正規分布の&sigma;値）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FDの時は温度（K）<br />
+文献等ではGBの時0.05～0.1 eV程度が用いられるようですが，0.01eVでも効果はあります．また，GB/FDを使うと安定して収束に向かうようになります．すなわち，収束に向かう軌道の割合（f06zの左から三つ目の値）が高くなります．通常の設定では収束に向かう軌道の割合が60%未満になったときにMixingを小さくするようになっていますが，GB/FDを使う場合は，この設定値（fcvj）をもう少し大きくしたほうが，収束が早くなる場合があります．<br />
+参考文献：DV2.doc; <a href="http://chem.sci.hyogo-u.ac.jp/hajimete/download.html">http://chem.sci.hyogo-u.ac.jp/hajimete/download.html</a><br />
+----------English<br />
+ncycm = number of cycle<br />
+cvj = convergence parameter (Please, change cvj to more large value by using of many atoms, e.g. cvj = 0.01 -0.001 at 150 atoms)<br />
+mdst: 0 = off, 1 = Gaussian Broadening (GB), 2 = Fermi-Drac Distribution (FD)<br />
+sig1: half width * 1/2 for GB (sigma of Gaussian distribution), Kelvin for FD<br />
+Papers often use 0.05 - 0.10 eV for GB, but there is effect by using of 0.01 eV.<br />
+fcvj: change 0.6 to 0.7, 0.7 setting is faster than 0.6.<br />
+tdxc1 less than tdxc: use sig1<br />
+tdxc2 less than tdxc less than and equal to tdxc1: use sig2<br />
+tdxc less than and equal to tdxc2: use sig3<br />
+tdxc = The amount of movement of the charge (value on the left in f06z)<br />
+Can not recommend setting sig2, sig3, tdxc1, tdxc2, because population change might occuers.<br />
+------------------------------------------------------------------------------<br />
+■ プログラムの入手法[DX00]<br />
+□ DV-Xa分子軌道法プログラム本体（次世代DVSCAT実行ファイル群、DISPLAT一式）<br />
+&nbsp; <a href="http://chem.sci.hyogo-u.ac.jp/hajimete/download.html">http://chem.sci.hyogo-u.ac.jp/hajimete/download.html</a><br />
+□ 教育用分子軌道計算システム eduDV（Fortranプログラム群、バッチファイル群）<br />
+&nbsp; <a href="http://www.chem.ous.ac.jp/%7Egsakane/fun/index.html#edudv">http://www.chem.ous.ac.jp/%7Egsakane/fun/index.html#edudv</a><br />
+□ 結晶構造及び電子・核密度等の三次元可視化プログラムVESTA<br />
+&nbsp; <a href="http://jp-minerals.org/vesta/jp/">http://jp-minerals.org/vesta/jp/</a><br />
+□ 構造ファイル変換ユーティリティ Open Babel<br />
+&nbsp; <a href="http://openbabel.org/wiki/Main_Page">http://openbabel.org/wiki/Main_Page</a><br />
+□ 秀丸エディタ（シェアウェア）<br />
+&nbsp; <a href="http://hide.maruo.co.jp/software/hidemaru.html">http://hide.maruo.co.jp/software/hidemaru.html</a><br />
+□ DV-Xa法計算支援環境（秀丸エディタマクロ集）<br />
+&nbsp; <a href="http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_7.html">http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_7.html</a><br />
+□ DV-Xa法計算支援環境利用の手引き（PDF文書）<br />
+&nbsp; <a href="http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_1.html">http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_1.html</a><br />
+□ DV-Xa関連のページ<br />
+&nbsp; <a href="http://imac.eng.kagawa-u.ac.jp/dvxa/dvxa.html">http://imac.eng.kagawa-u.ac.jp/dvxa/dvxa.html</a>　<br />
+------------------------------------------------------------------------------<br />
+■ upgrade（詳細は文献[4]を参照）<br />
+1) CDからデータをインストール<br />
+2)&nbsp;「はじめての電子状態計算ホームページ」での「ダウンロードページ」から dvxa_v1_04 [DX0]をダウンロードし置き換える。displat_fullやsymchkなども置き換えると良い。<br />
+※ dvscat2を利用したい場合は、windows7 64 bitを利用している場合は DV-Xa法に関するブログ にて dvscat2 を書き換える。<br />
+------------------------------------------------------------------------------<br />
+■ Linux上でのセットアップ（編集中）<br />
+------------------------------------------------------------------------------<br />
+■ 入力ファイルの変換（詳細は文献[4]を参照）<br />
+&nbsp; 「秀丸エディタ」を有していれば文献[4]によりVESTAからDV-Xaの入力ファイルのf01を簡単に得ることが出来る。ここでは「秀丸エディタ」を用いずに無料で入力ファイルを変換する方法を解説する（予定）。<br />
+------------------------------------------------------------------------------<br />
+DV-Xa法による新材料設計[APX1]<br />
+□ 基本的な材料設計指針：<br />
+&nbsp; 伝導性や磁性、光応答性など物性測定結果をもとに、分子軌道計算と分子動力学計算を行い、材料合成にフィードバックする。<br />
+<br />
+□ 伝導性の良い材料を設計するためには：<br />
+&nbsp; エネルギー準位計算を行い、易動度（mobility）を高くするための指針（電子相関）、HOMO-LUMOギャップの減少（半導体の場合）、キャリア濃度の増大（金属の場合）など。<br />
+<br />
+□ 新しい超伝導体を得るためには：<br />
+&nbsp; これまでのクーパー対とは異なる考え方。互いに反発する電子間に引力を持たせるためにスピン（反強磁性）を用いる。d-&pi;相互作用を用いた超伝導材料の設計。<br />
+<br />
+□ 光応答性の高い材料を設計するには：<br />
+&nbsp; DOSの議論（光の吸収・発光）。金属錯体における色のメカニズム（d-d, d-&pi;, &pi;-&pi;*, M&rarr;L遷移など）。遷移状態法によるエネルギー計算。<br />
+<br />
+□ 熱電性能の高い材料を設計するためには：<br />
+&nbsp; 熱電性能指数Zを大きくする。具体的にはゼーベック係数Sを大きくし、電気伝導度&sigma;を大きくし、熱伝導を小さくする。そのためには半導体が良い。格子振動の寄与も重要。<br />
+<br />
+□ 材料としての金属錯体の特徴：<br />
+&nbsp; 高い設計性と高い機能発現性を同時に兼ね備える。特殊な酸化状態・電子状態を有し、低次元物性材料としての応用も可能。<br />
+<br />
+□ 強い磁性材料を設計するためには：<br />
+&nbsp; スピン間に働く相互作用の調整と、バルクにスピンを同じ向きに合わせるための単結晶合成技術が必要。さらにVESTAを用いて波動関数を三次元可視化することにより、視覚的にスピン間の相互作用を予測することが可能。<br />
+------------------------------------------------------------------------------<br />
+■ 便利な情報<br />
+A. 『はじめての電子状態計算』の裏表紙の裏には便利なコマンド表が記述されている。<br />
+B. RIETAN-PFとDV-Xa法SCATは「秀丸エディタ」との併用が便利である。<br />
+C. 収束条件を0.01 eとした報告もある[12]。（計算が収束しなければ検討してみても良いだろう）<br />
+------------------------------------------------------------------------------<br />
+Q&amp;A [QX1, QX2]<br />
+A. クラスターのとり方について<br />
+&nbsp; 共有結合が強く、group unitがハッキリしている場合は、それを途切れないようにすることが重要であろう。従って、中心原子から一定距離で切った球形のクラスターよりもgroup unitを数個つないだクラスターが良い結果を生むようである。（下記の「C. クラスター内の電子数の決め方」も参照）<br />
+<br />
+B. クラスターの終端の取り扱い<br />
+&nbsp; 水素終端（クラスターの外側に水素を配置する）では、水素化合物の電子状態を計算していることになっており、水素のレベルが価電子帯あるいは伝導帯に混成してしまう。半導体のバンドギャップの計算にはほとんど問題はないが、X線蛍光あるいは吸収スペクトルの計算では、注意しないと水素と混成したレベルが重畳してしまう。<br />
+<br />
+C. クラスター内の電子数の決め方<br />
+&nbsp; 全ての化合物のクラスター計算において、電子数は化学ポテンシャルを表現しているので、原則として、中性のクラスターをとるのではなく、適当な電子数のクラスター（イオン）で計算すべきである。しかし、多くの金属性金属間化合物のように、構成原子間での電荷移動量が少なく、電子数の微少な変化によって全体の電子状態が大きく変化しない場合は、あまりこの電子数に神経質になる必要はないだろう。また大きなクラスターをとると、総電子数を中性にとっていても、クラスター表面を一皮むいたクラスターの内側での電子数が、実際の物質の状態をよく反映している場合もある。（計算する系の価数をよく考慮して電子数の取り方を決める。同じクラスターを用いても、電子数を変化させることで、電気伝導性のあるTiO｛クラスターでは(TiO6)<sup>10-</sup>あるいは(TiO6)<sup>10+</sup>｝と絶縁体TiO2｛クラスターでは(TiO6)<sup>8-</sup>｝を表現できる）（私はあまり頭が良くなかったので、30～100原子程度の大規模なクラスターを構築して計算し、中心部分の電子状態をバルクの電子状態とした）<br />
+<br />
+D. 不純物を挿入した場合、クラスターの大きさは影響するのか？<br />
+&nbsp; 浅い準位を発生するドナーやアクセプター不純物を挿入した場合、不純物準位の波動関数が大きく広がっているため、クラスターの大きさは電子状態に影響を与える。深い準位を発生するような不純物を挿入した場合、不純物準位の波動関数は比較的局在しているためクラスターをあまり大きくとらなくても電子状態への影響は小さいと思われる。しかし、シリコン母体そのものの波動関数が非局在化しており、クラスターのサイズによって影響を受けていることに変わりはない。不純物原子の周囲で格子歪が生じている可能性が高いため、このことも考慮する必要がある。<br />
+<br />
+E. SXSの精度はサンプル点数にどう依存するか？<br />
+&nbsp; 配布版SXSでは、軽原子1個あたり、約6000点のサンプル点を用いて、積分値が10～20%ばらつく。<br />
+<br />
+F. 高いAOのpupulation が負になる場合があるが、それで良いのか？<br />
+&nbsp; 負のorbital populationは、その原子軌道が分子軌道のなかで、おもに反結合性の寄与をしていることを示していて、とくに気にする必要はない。結晶を調べるため、負に帯電したクラスターを考える場合は現れやすい。解析上扱いにくい場合は、それら軌道を除くのも方法である。<br />
+------------------------------------------------------------------------------<br />
+DV-Xaの新展開[DX1, DX2, DX3]<br />
+------------------------------------------------------------------------------<br />
+■ 理論的背景[7, 8, TX1, TX2]<br />
+A. 一電子近似（または平均場近似）<br />
+&nbsp; 多体波動関数 &psi;(r1, r2, r3 ......, r<sub>N</sub>) を &psi;<sub>1</sub>(r1) &times; &psi;<sub>2</sub>(r2) &times; ...... &times; &psi;<sub>N</sub>(r<sub>N</sub>) とした一電子の波動関数の掛け算に近似する。当然ながら両者は「イコール」では結べないので、この近似に対処することが必要となる（この対処方法が後に述べる「密度汎関数理論」である）。<br />
+<br />
+B. 時間に依存しないSchr&ouml;dinger方程式（原子単位系）<br />
+&nbsp; ハミルトニアン H =&nbsp;&Sigma;<sub>m</sub>( -1/2▽<sup>2</sup><sub>m </sub>- &Sigma;<sub>N </sub>Z<sub>N</sub>/r<sub>iN</sub>) + &Sigma;<sub>i&ne;j </sub>1/r<sub>ij</sub>　+ &Sigma;<sub>N&ne;l </sub>Z<sub>N</sub>Z<sub>l</sub>/r<sub>Nl</sub><br />
+&nbsp; エネルギー E = &lt;&psi;|H|&psi;&gt;<br />
+ここで、mは全粒子（電子と原子核）に対する添字、iとjは電子の添字、kとlは原子核の添字、Z<sub>N</sub>は原子Nの原子番号、r<sub>iN</sub>とr<sub>ij</sub>とr<sub>Nl</sub>は二個の粒子間の距離である。最初の項が運動エネルギー項、二番目の項が電子-核間の引力、三番目の項が電子間反発、四番目が核間反発に相当する。<br />
+<br />
+C. Born-Oppenheimer（断熱）近似<br />
+&nbsp;&nbsp;陽子は電子の約1860倍の質量を持つために、電子から見れば陽子はほとんど動いていないように考えることが出来る。電子と核を分離すれば下記のようになる。<br />
+&nbsp; ハミルトニアン H<sub> </sub>= &Sigma;<sub>i</sub> ( -1/2▽<sup>2</sup><sub>i </sub>- &Sigma;<sub>N </sub>Z<sub>N</sub>/r<sub>iN</sub>) + &Sigma;<sub>i&ne;j </sub>1/r<sub>ij　</sub>+ &Sigma;<sub>N </sub>(-1/2▽<sup>2</sup><sub>N</sub>)&nbsp; + &Sigma;<sub>N&ne;l </sub>Z<sub>N</sub>Z<sub>l</sub>/r<sub>Nl</sub><br />
+&nbsp;ここで、iは電子に対する添字。 四番目の核の運動エネルギー項と五番目の核間反発は核の位置を固定したので、繰り返し計算（SCF計算）　のどこか（最初や最後）で計算してしまえば定数として扱うことが可能となり、計算コストを削減することができる。<br />
+&nbsp; もし、陽子の位置を固定していなければ計算時間はとても掛かるのだけれど、ハミルトニアンHから、核の振動状態、回転状態、並進状態に関する情報を得ることが出来る。つまり分子の振動スペクトルを予測することが可能となることは覚えておかれたい。<br />
+<br />
+D. Hartree-Fock方程式<br />
+&nbsp; Schr&ouml;dinger方程式に変分法を適用し、ラグランジュの未定乗数法を用いると下記のHartree-Fock方程式を得ることが出来る。<br />
+&nbsp; h<sub>i</sub> &psi;<sub>i</sub>(r<sub>i</sub>) = &epsilon;<sub>i</sub> &psi;<sub>i</sub>(r<sub>i</sub>)<br />
+&nbsp; ハミルトニアン h<sub>i</sub> = -1/2▽<sup>2</sup> - &Sigma;<sub>N</sub>Z<sub>N</sub>/r<sub>iN</sub> + &Sigma;<sub>j</sub> &int; (&psi;<sup>*</sup><sub>j</sub>(r<sub>j</sub>)&psi;<sub>j</sub>(r<sub>j</sub>)/r<sub>ij</sub> ) dr<sub>j</sub>&nbsp;+ V<sub>xc</sub>(r<sub>i</sub>)<br />
+ここで、最後の項は記述が複雑なので省略する。この最後の項は次に述べる「密度汎関数理論」によって、様々に記述される。<br />
+<br />
+E. 密度汎関数理論<br />
+&nbsp; ホーエンベルグとコーンにより、背理法を用いて「電荷密度の分布とエネルギー」が1対1の関係を持つことが証明された。これにより、一電子近似（または平均場近似）やBorn-Oppenheimer近似などの近似を用いても、厳密解と同じ「電荷密度の分布とエネルギーの関係」を与えることができれば良いことが分かった。そこで、複雑な計算となる交換・相関項を簡単な形に書き換えることが行われている。例えば、交換相関項は波動関数では無く電荷密度分布を関数としたものにするなどである。[XCX1, XCX2]<br />
+<br />
+F. 数値計算<br />
+&nbsp; 分子軌道を原子軌道の線形結合として下記のように表してみる。<br />
+&nbsp; &psi;<sub>i</sub>(r<sub>i</sub>) = &Sigma;<sub>m</sub> C<sub>mi</sub> &Phi;<sub>m</sub>(r<sub>i</sub>)<br />
+&nbsp; これをHartree-Fock方程式やHartree-Fock-Slater方程式などに代入して展開し、左から原子軌道を掛けて積分すると、原子軌道は直交基底なので、次の永年方程式を得ることが出来る。<br />
+&nbsp; (H - &epsilon;S)C = 0<br />
+&nbsp; ここで、Hは共鳴積分、&epsilon;は固有値、Sは重なり積分、Cは固有ベクトルである。この永年方程式を手作業では数学の授業で習った固有値を解く手法で求めることができるが、計算機ではそれに適した固有値と固有ベクトルを求めるアルゴリズムを用いて解く。また、HやSでは積分を行う必要があるので、&Sigma;で代用してある程度の実空間の点で済ませる。この点の取り方がDV-Xa法ではDVサンプルポイントの取り方となる。この部分は並列化が可能なため、誰かが並列化用に書き換えてくれると嬉しい。<br />
+※ 余談であるが、並列化の例であれば、DV-Xa法SCATをFortran77からC++に書き換えてMPI並列した報告がある[MX1]。<br />
+------------------------------------------------------------------------------<br />
+■ 重要なプログラム・アルゴリズム解説[7]<br />
+------------------------------------------------------------------------------<br />
+■ プログラミングでの重要な点<br />
+A. DV-Xa法 SCAT は Fortran77形式で記述されている。<br />
+B. Fortran77形式ではcommon文を用いてルーチン間のデータをやり取りすることが主流であった。<br />
+C. common文では旧帝などでの大型計算機の場合などを除き、多くの場合、メモリーは2GB程度までしか利用出来ない。<br />
+D. どのプログラムでも、配列やcommon文でのデータの利用範囲には注意が必要となる。また、データの書き出し、読み出しにも注意が必要となる（小規模の系で計算が可能な場合はそのバグの多くがこの問題であることが多い）。<br />
+E. 上記Dの問題に対処するには、「徐々に系の規模を大きくしてどの時点でエラーが表示されるかを知る」及び「その時点でのデータのチェック」、「初期値の設定忘れが無いかチェック」、「オプションを付けてコンパイルを行う」ことである。<br />
+F. コンパイラでのオプションは左欄にある「コンパイラの設定」を参照するとよいだろう。<br />
+------------------------------------------------------------------------------<br />
+■ サブルーチン[7]<br />
+1) MAINS<br />
+&nbsp; このプログラムのメインルーチンである。計算を実際に行う下記の2)～6)までの各サブルーチンを呼び出している。<br />
+<br />
+2) DINTAL<br />
+&nbsp;&nbsp;□ 計算に必要なデータの設定<br />
+&nbsp; □ MAINSから呼ばれる。計算を行おうとする系についての各種のデータを設定するルーチン。計算に必要なデータは（一部は別のサブルーチンで読まれる）ここで読み込まれたり、計算を行って設定される。サブルーチンDINTALは主としていくつかのread文とサブルーチンのcall文、その他から成っている。<br />
+<br />
+3) ATCALC<br />
+&nbsp; □ 原子軌道の計算<br />
+&nbsp; □ MAINSから呼ばれる。クラスターを構成する原子のうち種類が（原子の種類のみならず、空間的性質についても）同じ原子、すなわちreference原子についての諸量を計算するルーチンである。結果はcommon文 PRCORE、PROND、PRMESHでやり取りされる。<br />
+<br />
+4) CATOM<br />
+&nbsp; □ 分子軌道の繰り返し計算<br />
+&nbsp; □ SCF分子軌道の繰り返し計算の部分である。サブルーチンの概要は以下の通りである。<br />
+&nbsp; ポテンシャル用原子を加える場合、その加えるポテンシャル用原子のクーロンポテンシャルを集計しておいてからSCF計算に必要な必要な諸量をread文で読み、基底関数をセットして（SSOGT）、Fock行列及び重なり行列を形成し（FOCKM）、対角化問題を解き（EMERGE）、MullkenのPopulation Analysisに従って密度解析を行い（CHRANL）、SCF収束判定をして（JUDGES）、次のステップのデータを整える（CHMIXS）、といった手順で繰り返し計算を進める。<br />
+<br />
+5) POPANL<br />
+&nbsp; □ Mullikenの電荷密度解析<br />
+&nbsp; □ 分子軌道が求められた後、密度解析を行うルーチンである。このルーチンを通って全体の計算は終了するので、次に引き渡す結果となるものはない。また、必要なデータはcommon文から得られる。密度解析及び結果の印字は各対称ブロックごとに行われる。実際の計算は、ループ内でサブルーチンを呼んで、そこで行われている。<br />
+<br />
+6) SFSTOR<br />
+&nbsp; □ ファイル操作<br />
+※ 上記の2)～6)までの各サブルーチンでは更に下位のサブルーチンを多数呼び出している。<br />
+------------------------------------------------------------------------------<br />
+■ DINTALとそれから主に呼ばれる下位のサブルーチンの詳細<br />
+□ DINTAL<br />
+&nbsp; read文で読み込んでいる内容は以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; iout: 出力ファイル場号。標準出力は6番であるが、それ以外（尚且つ入力等の既に使われている番号以外）を指定することによって、計算結果をファイルに落とすことができる。<br />
+&nbsp;&nbsp;&nbsp; mmol: クラスターの名前<br />
+&nbsp;&nbsp;&nbsp; rido: 原子軌道の計算において加える井戸型ポテンシャルの半径（a.u. 単位）<br />
+&nbsp;&nbsp;&nbsp; vido: 原子軌道の計算において加える井戸型ポテンシャルの深さ（a.u. 単位）<br />
+&nbsp;&nbsp;&nbsp; idoa: 原子軌道の計算を行う場合に井戸型ポテンシャルを加えるかどうかのパラメータ。0のときは加えない。1, 2はそれぞれ、タイプ1、タイプ2である。タイプ1は距離が遠くなるにつれ値が減少していくポテンシャル。タイプ2は距離が遠くなるについて値が増加していくポテンシャルである。<br />
+&nbsp;&nbsp;&nbsp; macf:<br />
+&nbsp;&nbsp;&nbsp; ngrd:<br />
+&nbsp;&nbsp;&nbsp; ncycle: SCF分子軌道計算をする際の繰り返しの上限<br />
+&nbsp;&nbsp;&nbsp; ntabpt: 原子軌道計算をする際の原子のmesh数<br />
+&nbsp;&nbsp;&nbsp; nnst:<br />
+&nbsp;&nbsp;&nbsp; ltime: CPUの上限（msec単位）<br />
+&nbsp;&nbsp;&nbsp; ntape:<br />
+&nbsp;&nbsp;&nbsp; jprt: 出力のオプション。-4から5までの値を判定に用いている。<br />
+&nbsp;&nbsp;&nbsp; tolm: SCF分子軌道計算でのthreshold<br />
+&nbsp;&nbsp;&nbsp; nat: クラスターを構成する原子の個数<br />
+&nbsp;&nbsp;&nbsp; ndat: クラスターを構成する原子のうち原子軌道計算をする原子、すなわちreference原子の個数<br />
+&nbsp;&nbsp;&nbsp; ncore: reference原子の原子軌道の和<br />
+&nbsp;&nbsp;&nbsp; natoms: ポテンシャルを含めたクラスターを構成する原子の個数<br />
+&nbsp;&nbsp;&nbsp; ntypes: ポテンシャルを含めたクラスターを構成する原子のうちのreference原子の個数<br />
+&nbsp;&nbsp;&nbsp; mq: Madelungポテンシャルを加えるかどうかのパラメータ。0で加えない、1で加える。<br />
+&nbsp;&nbsp;&nbsp; jptg: DVサンプルポイントを計算するかどうかのパラメータ。0でない値が入っている場合、DVサンプルポイントの計算は行われない（サンプルポイント及び球面調和関数は既に分かってファイルにある場合）<br />
+&nbsp;&nbsp;&nbsp;neq(i): クラスターを構成する原子のreference原子番号<br />
+&nbsp;&nbsp; z(i): クラスターを構成する原子の原子番号<br />
+&nbsp;&nbsp; tl: クラスターの全電子数<br />
+&nbsp;&nbsp; lsy1, jlv1, remv1: 遷移状態計算を行う場合の電子の数を変化させる分子軌道の属する対称ブロックと分子軌道のレベル及び変化させる電子数である。remv1は-0.5で0.5個電子を放出し、+0.5で0.5個電子を受け取ることになる。<br />
+&nbsp;&nbsp; lys2, jlv2, remv2: クラスターのイオン化エネルギーの計算の場合、電子の数が変化する分子軌道は1つであるが、1電子励起状態の場合は2つになる。<br />
+&nbsp;&nbsp;&nbsp;lsy, jlv3, remv3:<br />
+&nbsp;&nbsp; itime: 前回の計算はどのサブルーチンで終了したか？ 今回はどこから計算するかを示すパラメータ（CPUを制限しているために終了した場合）<br />
+&nbsp;&nbsp; jout(i,j): 原子軌道に関するデータ。一般に0である。1の場合、原子軌道のbaseから除く。2の場合、最後の結果の出力に際してこの原子軌道については出力しない。<br />
+<br />
+&nbsp; DINTALからはいつかのサブルーチンを呼んでいる。呼んでいるサブルーチンとそのサブルーチンで行われていることの概略は以下の通りと成る。<br />
+&nbsp; □ FREAD　入力データをフォーマット等は気にせずに単なる文字列としてそのまま別のファイルにコピーする<br />
+&nbsp; □ CONSNT　定数の設定<br />
+&nbsp; □ FILGEN　ファイル番号の設定<br />
+&nbsp; □ INITIA　配列の初期化<br />
+&nbsp; □ DINPT　各reference原子についての変数の読み込みと設定<br />
+&nbsp; □ RHOB　原子の電荷密度の初期値の読み込み又は計算<br />
+&nbsp; □ DIMCHK　各データの次元のチェックとファイルへの書き込み<br />
+&nbsp; □ CORES　原子軌道についてのいくつかの変数の設定<br />
+&nbsp; □ SYMTRY　対称軌道を用いる場合はその構築又は原子軌道に関する情報のまとめ<br />
+&nbsp; □ ATMPOS　原子の位置や係数について<br />
+&nbsp; □ MDINPT　mq=1 の場合呼ばれ、Madelungポテンシャルについてのデータを読み込む<br />
+&nbsp; □ PTGET　DVサンプルポイントと各点における各原子軌道の動径関数を計算する<br />
+<br />
+&nbsp; □ FREAD　DINTAL及びCATOMにより呼ばれる。入力データをファイルに書き込むルーチンである。DINTALで呼ばれる場合、引数のiparaは1であり、行番号30で文番号600に飛ぶ。標準入力データファイルを行うごとに最後の行まで呼んでいく。ifl7ファイルに内容をそのまま書き込んでいる。CATOMで呼ばれる場合は引数のiparaは0である。ifl7ファイルの内容をiwrt、即ちjfl3ファイルにそのまま書き込んでいる。ただし、各原子軌道に割り振られた電子数は新しい値としている。<br />
+&nbsp; □ CONSNT　定数を設定するルーチンである。引数msは単位系のオプションで、msが3以下の場合Rydberg単位、4以上の場合au単位の値になる。結果はcommon文CNSTで引き渡される<br />
+&nbsp; □&nbsp;FILGEN　いろいろなファイル番号を設定している。結果はcommon文IOCNTLで引き渡される。<br />
+&nbsp;&nbsp;&nbsp; iegi: 分子軌道係数coeを保存しておくファイル<br />
+&nbsp;&nbsp;&nbsp; itp: DVサンプルポイントに関するデータであるサンプルポイント密度、各原子との距離、mesh点を保存しておくファイル<br />
+&nbsp;&nbsp;&nbsp;&nbsp;iyl: 使われていない<br />
+&nbsp;&nbsp;&nbsp; isav: 使われていない<br />
+&nbsp;&nbsp;&nbsp; ipun: 計算の途中で得られた原子の電荷密度を保存しておくファイル<br />
+&nbsp;&nbsp;&nbsp; ifl1: 使われていない<br />
+&nbsp;&nbsp;&nbsp; ifl2: 対称軌道に関するデータを読み込むファイル。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ifl3: 原子の電子密度を読み込むファイル（初期データを作成する場合もブランクデータをreference原子の数だけ入れておく必要がある）。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ifl4: 使われていない<br />
+&nbsp;&nbsp;&nbsp; ifl5: 結果の出力ファイルである。一般にioutに等しい。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;ifl6:&nbsp;結果の出力ファイルである。一般にioutに等しい。<br />
+&nbsp;&nbsp;&nbsp; jfl1: 使われていない<br />
+&nbsp;&nbsp;&nbsp; jfl2: Madelungポテンシャルに関する入力データのファイル<br />
+&nbsp;&nbsp;&nbsp; jfl3: FREADにおいて入力データを書き込むファイル<br />
+&nbsp;&nbsp;&nbsp; jfl4: 密度解析の結果である出力することにした軌道についての情報や軌道エネルギー、overlap population&nbsp;を保存しておくファイル<br />
+&nbsp;&nbsp;&nbsp; jfl5: 使われていない<br />
+&nbsp;&nbsp;&nbsp; jfl6: 使われていない<br />
+&nbsp;&nbsp;&nbsp; jfl7: 使われていない<br />
+&nbsp;&nbsp;&nbsp; jfl8: 使われていない<br />
+&nbsp; □ INITIA　k個の要素を持つ一次元配列に0.0を代入、即ち初期化するルーチン<br />
+&nbsp; □ RNUCLR　原子の半径を計算するルーチン。引数のうちzは原子番号、rnucは原子半径、anucは核の質量数である。データbnucには各原子の核の質量数が格納されている。<br />
+&nbsp; □ DINPT　各reference原子(ne)ごとに呼ばれる。引数のうちne、ms以外は全てここでの結果である。read文で読み込んでいる内容は以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; name: reference原子の名前<br />
+&nbsp;&nbsp;&nbsp; loco: この原子の順番。大抵は順番に読み込んでいく。<br />
+&nbsp;&nbsp;&nbsp; n: mesh数<br />
+&nbsp;&nbsp;&nbsp; j: 原子の原子軌道の数<br />
+&nbsp;&nbsp;&nbsp; ja:&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;zn: 原子の原子番号<br />
+&nbsp;&nbsp;&nbsp; xalph: 原子のXa値<br />
+&nbsp;&nbsp;&nbsp; rn: 最大mesh点距離<br />
+&nbsp;&nbsp;&nbsp; h: mesh間の増分<br />
+&nbsp;&nbsp;&nbsp; xion:&nbsp;<br />
+&nbsp;&nbsp;&nbsp; anuc: 原子の質量数<br />
+&nbsp;&nbsp;&nbsp; xni: 原子軌道のn値（主量子数）<br />
+&nbsp; &nbsp; xli: 原子軌道のl値（方位量子数）&nbsp;<br />
+&nbsp;&nbsp;&nbsp; xei: 原子軌道の固有値<br />
+&nbsp;&nbsp;&nbsp; xzi: 原子軌道の占有電子数<br />
+&nbsp;&nbsp;&nbsp; xz2i:<br />
+&nbsp; □ RHOB　各reference原子(ne)ごとに呼ばれる。aがrh, iatcの結果、bがworking file、それ以外は入力データである。番号ifl3だるファイルに何か値が入っているかどうか最初の5点をreadしてみる。もし何か値が入っていた場合は、iatcは0となり残りのデータを読み込む（readする）。値が入っていなかった場合はiatcは1となり、このサブルーチンで初期データを作成する。電荷密度は&rho;(r)であるが、ここでは-4&pi;r<sup>2</sup>&rho;(r)の値を各mesh点上の値としてau単位で計算する。<br />
+&nbsp; □ DIMCHK　ここまでのデータをもとに次元のチェックを行い、入力データとして出力ファイルに書き込む。データのやり取りは全てcommon文を通して行われる。<br />
+&nbsp; □ CORES　reference原子の原子軌道についての変数を設定する。mstar、nco、indxが結果である。reference原子を順に並べて、その原子軌道について順に見ていったときのi番目のreference原子の原子軌道の始まる数がmstar(i)、i番目のreference原子のもつ原子軌道の数がnco(i)である。indx(i)はi番目の原子軌道の属するreference原子（何番目のreference原子か？）である。<br />
+&nbsp; □ SYMTRY　DV-Xa法では分子軌道は原子軌道（SCF計算毎に得られる電荷密度分布を用いてreference原子毎に計算した原子軌道）の線形結合で表されるが、計算及び定性的解釈の容易さから対称軌道の線形結合で表すことが多い。原子軌道及び対称軌道についての諸量を整えているのがこのサブルーチンである。引数のうちkkk2、nsym、naos、nmos、maos、misos、isyml、jsyml、lorb、mtitl、lmaxz、neq、nco、mstar、locor、indx、eignl、lval、loca、nbpot、kat、mcopt、mval、npart、mval1、ichi、kido、nchi、mcor、mn、natom、cnが結果である。対称軌道を用いない場合はこのサブルーチン内でASYMTYを読んでおり、そこで諸量を整える。このサブルーチンの詳細は以下の通りである。<br />
+&nbsp; 分子の軌道関数は分子軌道の1つのSlater行列式で表される。分子軌道は原子軌道の線形径都合で表される。原子軌道は分子を構成する原子の原子軌道とそのものを用いても良いが、対称性のある分子の場合、対称軌道を用いた方が重なり積分行列やFock行列がblock outあするので、計算時間の短縮及び定性的解釈の容易さが期待される。<br />
+&nbsp; サブルーチンSYMTRYでは、対称軌道の読み込みと各種データの構築を行っている。また、対称軌道を用いない場合も、このサブルーチンの中で、サブルーチンASYMTYを呼び出し、データを整えている。<br />
+&nbsp;&nbsp;&nbsp; mtitle: 対称ブロックの各名称及びコメントに関するデータ<br />
+&nbsp;&nbsp;&nbsp; npat(i): 対称軌道を構成するbasisを線形結合の順に並べた際のbasisの番号<br />
+&nbsp;&nbsp;&nbsp; eignl(i): 対称軌道を構成するbasisの規格化された線形結合を、順番に書き下したもの。npart(i)の順に規格化した値が入る。<br />
+&nbsp;&nbsp;&nbsp; kido(i): 対称軌道を構成するbasisの(n * 100 + l)値<br />
+&nbsp;&nbsp;&nbsp; kat(i): 対称軌道を構成するbasisの個数<br />
+&nbsp;&nbsp;&nbsp; mval1(i): 対称軌道を構成するbasisの線形結合のうち最後のbasisのm値<br />
+&nbsp;&nbsp;&nbsp; ichi(i): 対称軌道を構成するbasisのうち初頭のbasisの属する原子番号<br />
+&nbsp;&nbsp;&nbsp; nchi(i): 対称軌道を構成するbasisのうち初頭のbasisの属するreference原子番号<br />
+&nbsp;&nbsp;&nbsp; mcor(i): 対称軌道を構成するbasisの原子軌道番号<br />
+&nbsp;&nbsp;&nbsp; loca(i): 対称軌道を構成するbasisの属する原子番号<br />
+&nbsp;&nbsp;&nbsp; nbpt(i): lcoa(i) のbasisの属するreference原子番号<br />
+&nbsp;&nbsp;&nbsp; mcopt(i): joca(i) のbasisの属するreference原子の原子軌道番号<br />
+&nbsp;&nbsp;&nbsp; mval(i): lcoa(i)のbasisのm値<br />
+&nbsp;&nbsp;&nbsp; lval(i): loca(i)のbasisのl値<br />
+&nbsp;&nbsp;&nbsp; lmaxz(i): 分子を構成する各原子の最大値<br />
+&nbsp;&nbsp;&nbsp; norb(i): 各対称ブロックを構成する対称軌道の数。入力のndimの値とは異なる場合がある。<br />
+&nbsp;&nbsp;&nbsp; lorb(i): その対称ブロックの前のブロックまでに用いられた対称軌道の数<br />
+&nbsp;&nbsp;&nbsp; 配列になっていない下記の変数の意味は次の通りである。<br />
+&nbsp;&nbsp;&nbsp; naos: basisの数<br />
+&nbsp;&nbsp;&nbsp; nmos: 対称軌道の数（=naos）<br />
+&nbsp;&nbsp;&nbsp; maos: npart(i)の要素の数、すなわち、basisの総数<br />
+&nbsp;&nbsp;&nbsp; misos: 構成する対称軌道の数が最大のブロックのその対称軌道の数<br />
+&nbsp;&nbsp;&nbsp; ksiz: 一次元化したときの行列要素の総数<br />
+&nbsp;&nbsp;&nbsp;&nbsp;対称性を利用しない場合は、サブルーチン SYMTRYの中で、サブルーチンASYMTYが呼ばれ、そこで各データが構築される。SYMTRYで入力されるデータはnsymとisyml(i)、jsyml(i)であり、それぞれ、nsym=1、isyml(1)=0、jsyml(1)=0である。各変数は1つのbasisより成る対称軌道と考えられる。<br />
+&nbsp; □ ASYMTY（SYMTRYより呼ばれる）　分子軌道がクラスターを構成する原子の原子軌道そのものの線形結合で表されるとした場合の原子軌道に関する諸量を整えている。引数のうちnaos、mm、ibs、ii、mval1、ichi、nchi、kido、mcor、mcopt、mval、lval、loca、nbpt、kat、indx、lmaxz、npart、eign1が結果である。<br />
+&nbsp; ASYMTYが呼ばれる場合、SYMTRYで入力されるデータはnsym、isyml(i)、jsyml(i)についてそれぞれ、nsym=1、isyml(1)=0、jsyml(1)=0である。これは分子によらず対称性を用いない場合は常に同じである。各変数は1つのbasisより成る対称軌道であると考えると対称軌道を用いる場合との対称を付けやすい。<br />
+&nbsp; □ ATMPOS　クラスターを構成する原子のx, y, z座標及びDVサンプルポイントについての諸量を整えている。引数のうち結果は neqp、kplv、exalf、exafc、xfac、xvp、yvp、zvp、vechas、tick、alf、r0、beta、gamma、wltabである。read文がいつかあるが、それらの内容は以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; xvp, yvp, zvp: クラスターを構成する原子のx, y, z座標及び点電荷を加える場合のそのx, y, z座標<br />
+&nbsp;&nbsp;&nbsp; neqp: その原子の種類<br />
+&nbsp;&nbsp;&nbsp; exafl: 各原子の勢力範囲外でのXa値<br />
+&nbsp;&nbsp;&nbsp; vecbas:&nbsp; DVサンプル点をランダムに発生させるもとになる無理数<br />
+&nbsp;&nbsp;&nbsp; tick: クラスターを構成する原子に割り当てるDVサンプル点の割合<br />
+&nbsp;&nbsp;&nbsp; alf:<br />
+&nbsp;&nbsp;&nbsp; r0: クラスターを構成する原子の勢力範囲の半径（原子半径程度の値 in au）<br />
+&nbsp; □ MDINPT　Madelungポテンシャルを加えた計算を行う場合に必須な各種データを読み込み、計算を行い、点電荷を置くx, y, z座標と点電荷の大きさについての情報を得るサブルーチンである。引数のうち結果は、axx、ayy、azz、chz、kmadであり、xx、yy、zz、neqv、xot、yot、zot、ezはこのサブルーチン内でread文で読み込まれる。読み込まれる変数の意味をまとめると以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; katoms: 単位格子内の原子の数（Madelungポテンシャルを発生させるための原子数）<br />
+&nbsp;&nbsp;&nbsp; ntype: イオン種の数<br />
+&nbsp;&nbsp;&nbsp; nout: defectとして除く原子数<br />
+&nbsp;&nbsp;&nbsp; ez: イオンの価数<br />
+&nbsp;&nbsp;&nbsp; ax, ay, az: 単位格子の格子軸の長さ（原子単位）格子定数<br />
+&nbsp;&nbsp;&nbsp; xx, yy, zz: 格子軸の長さを単位とする格子内原子のx, y, z座標<br />
+&nbsp;&nbsp;&nbsp; neqv: 格子内原子のイオン種の番号<br />
+&nbsp;&nbsp;&nbsp; mx, my, mz: 計算上あらかじめ発生させるMadelungポテンシャルに含める点電荷の範囲（格子定数単位）<br />
+&nbsp;&nbsp;&nbsp; xot, yot, zot: defectとして除く原子の座標（原子単位）<br />
+&nbsp; このサブルーチンにおいて実際になされているのは、必要なデータのread文による読み込みと結果の書きだしであり、点電荷についての諸量の計算はLTTCEいて行われている。<br />
+&nbsp; □ LTTCE (MDINTPにより呼ばれる)　Madelungポテンシャルとして考える点電荷の位置や大きさを計算するルーチンである。引数のうち結果はkk、axx、azz、chz、kmadである。Madelungポテンシャルについての入力データは単位格子に関してであるので、ここでそれらをもとに全点電荷の位置と大きさを求める。<br />
+&nbsp; □ POTM(PTGETより呼ばれる)　Madelungポテンシャルの値を計算するルーチンである。あるDVサンプルポイントごとに呼ばれる。<br />
+&nbsp; □ PTGET　DVサンプルポイント全てのx, y, z座標と各点におけるクラスターを構成する原子の原子軌道の角度成分の値を計算し、結果をファイルに書き出しておく。引数の大半は入力データで、結果はkpl1、yl1、ylである。<br />
+&nbsp;&nbsp;&nbsp; call DVPT　DVサンプルポイントのx, y, z座標を求める。<br />
+&nbsp;&nbsp;&nbsp; r2(i): あるDVサンプルポイントとi番目の原子との距離<br />
+&nbsp;&nbsp;&nbsp; call KPLGET　あるDVサンプルポイントと原子iとの間の距離r2(i)に相当するその原子が参照しているreference原子のmesh点（ kpl1(i) ）を求める。<br />
+&nbsp;&nbsp;&nbsp; den: DVサンプルポイント密度である。原子に関して和を取って得られる。<br />
+&nbsp;&nbsp;&nbsp; call YLMGET, HARM　原子軌道の角度部分、すなわち球面調和関数の値を求め順番に格納する。<br />
+&nbsp; □ DVPT　あるDVサンプルポイントのx, y, z座標を計算する。引数のうちxp, yp, zpが結果、すなわちnn番目のDVサンプルポイントのx, y, z座標である。<br />
+&nbsp; □ KPLGET　あるDVサンプルポイントとi番目の原子との距離（rnu）に相当するその原子が参照しているreference原子のmesh点（kpl1）を求める。kpl1が原子中心から近すぎたり（原子中心付近）、遠すぎたり（最遠mesh点距離）、原子半径程度の値（r0）付近であった場合は適宜補正を加える。<br />
+&nbsp; □ YLMGET　あるDVサンプルポイントにおけるi番目の原子の原子軌道の角度部分を求める。引数のうち結果はylである。DVサンプルポイントのx, y, z座標（xz, yz, zz）及び考えている原子との距離（rnu）から実際の計算に便利なように諸量を求め、ALM1を呼び出して球面調和関数を求めている。<br />
+&nbsp; □ ALM1（YLMGETより呼ばれる）　実数型球面調和関数を逐次的に求める。ylが結果である。<br />
+&nbsp; □ HARM（PTGETより呼ばれる）　YLMGET及びALM1で計算された実数型球面調和関数は2次元配列の形で結果が得られているので、このルーチンで一次元配列に直している。yl1がその結果になる。<br />
+------------------------------------------------------------------------------<br />
+■ ATCALCから主に呼ばれる下位のサブルーチンの詳細<br />
+&nbsp; □ ATNSCL　reference原子の原子軌道計算を行って原子の電荷密度を求める。引数のうち、結果はrh、xz、xe、iido、xn、xl、rbar1、vbar1であり、a、c、d、y、 vrはworking fileである。<br />
+&nbsp;&nbsp;&nbsp; jj: 原子を構成する原子軌道の数<br />
+&nbsp;&nbsp;&nbsp; nc1: 原子軌道計算における繰り返しの上限<br />
+&nbsp;&nbsp;&nbsp; delvr: 原子軌道計算におけるthreashold<br />
+&nbsp;&nbsp;&nbsp; rbar1: 原子の井戸型ポテンシャルの半径<br />
+&nbsp;&nbsp;&nbsp; vbar1: 原子の井戸型ポテンシャルの深さ<br />
+&nbsp;&nbsp;&nbsp; ph: 繰り返しの際に取り込む前回の結果の割合<br />
+&nbsp;&nbsp;&nbsp; phi: 繰り返しの際に取り込む前回の結果の割合を調整するパラメータ<br />
+&nbsp;&nbsp;&nbsp; xn(i): 原子軌道のn値<br />
+&nbsp;&nbsp;&nbsp; xl(i): 原子軌道のl値<br />
+&nbsp;&nbsp;&nbsp; xe(i): 原子軌道の軌道エネルギー<br />
+&nbsp;&nbsp;&nbsp; xz(i): 原子軌道の占有電子数<br />
+&nbsp; □&nbsp;CLPOT（ATNSCL、CATOM及びSSOGTより呼ばれる）　原子のクーロンポテンシャルをシンプソン則で求めるルーチンである。引数のうち結果はクーロンポテンシャルvhであれい、c、dはworking fileである。<br />
+&nbsp;&nbsp;&nbsp; p4: 1/4&pi;<br />
+&nbsp; □&nbsp;HFCAL（ATNSCLから呼ばれる）　原子の原子軌道の動径分布をSchr&ouml;dinger方程式を数値的に解くことで得、原子の電荷密度を計算するルーチンである。引数のうち結果はrhである。<br />
+&nbsp;&nbsp;&nbsp; pi4: 4&pi;<br />
+&nbsp;&nbsp;&nbsp; third: 1/3<br />
+&nbsp; □ WELPOT（HFSCAL及びSSOWVより呼ばれる）　r &gt; r0 での井戸型ポテンシャルの計算を行うルーチンである。引数のうち結果はvrである。他のポテンシャルが計算上 rV(r)の形をしているのと同様に井戸型ポテンシャルも rV(r) の形で求める。<br />
+&nbsp;&nbsp;&nbsp; タイプ1　井戸型ポテンシャルに加えて、r &gt; r0 では -1/r に比例するポテンシャルにする<br />
+&nbsp;&nbsp;&nbsp; タイプ2　井戸型ポテンシャルに加えて、r &gt; r0 で直線的に大きくなるポテンシャルにする<br />
+&nbsp; □ SINPT（HFSCAL及びSSOWVより呼ばれる）　Schr&ouml;dinger方程式の動径部分を数値的に求めていく際の初期データ、すなわちHamming法における積分間隔の設定とポテンシャル rV(r) の3字のべき級数展開における展開係数の計算を行うルーチンである。引数のうち結果は、eps、rbar、vbar、h3、ha1、ha2、ha3、ha4、ha5、ha6、ha7、ha8、ha9、fdll、voc、ndebuであるが、このうち実際には、eps、rbar、vbar、ha1、ha2、fdll、voc、ndebuしか今後の計算で用いられていない。<br />
+&nbsp; □ HUMMG（SHEQより呼ばれる）　Hamming法による微分方程式の解を求めるルーチンである。引数のうち結果はda、db、aである。このうちda、dbは次の初期値であり、aが求めたい波動関数である。求めようとしている方程式は2次微分方程式である。波動関数の2次微分量から1次微分量を求め、1次微分量から波動関数を求めるといった2段階の手法をとっている。変数のうちaで始まるものが1次微分量から波動関数を得る際に関係するもの、bで始まるものが2次微分量から1次微分量に関するものである。<br />
+&nbsp;&nbsp;&nbsp; fmodc: 112/121<br />
+&nbsp;&nbsp;&nbsp; fcorc: 9/121<br />
+&nbsp; □ DIFSTR（SHEQより呼ばれる）　Hamming法による微分方程式の数値解ルーチンにおいて必要となる初期値の計算を行うルーチンである。引数のうち結果はa、da、dbである。<br />
+&nbsp; □ DIADL（SHEQより呼ばれる）　波動関数の規格化の計算をシンプソン則を用いて行うfunction文である。<br />
+&nbsp; □ SHEQ（HFSCAL及びSSOWVより呼ばれる）　Schr&ouml;dinger方程式を数値的に解くルーチンである。引数のうち結果は波動関数の動径部分であるaとその軌道エネルギーであるeの2つである。計算は主として7つの部分より成る。<br />
+------------------------------------------------------------------------------<br />
+■ CATOMから主に呼ばれる下位のサブルーチンの詳細<br />
+&nbsp; read文で読み込んでいる内容は以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; nscf: SCF法のタイプをしていするパラメータ（SCCFなど）及び収束の如何にかかわらず、繰り返しを打ち切るかどうかのパラメータ。wellで井戸型ポテンシャルを考慮する。1111またはaaaaで打ち切りと見なす。入力データの最後には必ず必要である。<br />
+&nbsp;&nbsp;&nbsp; nscc: これといって使われていない<br />
+&nbsp;&nbsp;&nbsp; mmod: これといって使われていない<br />
+&nbsp;&nbsp;&nbsp; mfix: nfixでitape=1、ireeでitape=0<br />
+&nbsp;&nbsp;&nbsp; mflz: nflzでntape=1、nfulでntape=0<br />
+&nbsp;&nbsp;&nbsp; nmax: DVサンプルポイント数。0でディフォルト値 500が代入される。プログラムの初めにreadされた値より大きい場合は、初めの値になる。<br />
+&nbsp;&nbsp;&nbsp; phm: 繰り返しの際に取り込む前回の結果の割合。1.0d-7より小さいとき、ディフォルト値になり、0.3が代入される。<br />
+&nbsp;&nbsp;&nbsp; del: baseの計算をする際のthreasholdの元となるパラメータ。使われていない<br />
+&nbsp;&nbsp;&nbsp; shikii: 原子の電界に関するしきい値<br />
+&nbsp;&nbsp;&nbsp; jprt: 出力のオプション<br />
+&nbsp;&nbsp;&nbsp; iwre: 出力のオプション<br />
+&nbsp;&nbsp;&nbsp; ndwav: 出力のオプション<br />
+&nbsp;&nbsp;&nbsp; ndvr: 出力のオプション<br />
+&nbsp;&nbsp;&nbsp; ja: SUBWTRで使われている。結果の出力を何番目から始めるか。0でディフォルト値1が代入され、最初から出力を始めることになる。<br />
+&nbsp;&nbsp;&nbsp; ls: SUBWTRで使われる。結果の出力をどこまで行うか。<br />
+&nbsp; □ SSOGT　DV-Xa法では分子軌道は原子軌道の線形結合で表されるLCAO近似を採用している。原子軌道、すなわち基底関数は解析的な形ではなく数値的な形で得られるが、それを求めるのが本サブルーチンである。最終的な結果はeco、vht、snloであり、common文でやり取りされる。<br />
+&nbsp; □ BASCRT　ある原子の原子軌道、すなわち基底関数を算出するルーチンである。引数のうち結果はvht、snlo、ecoであり、c、dはworking fileである。<br />
+&nbsp;&nbsp;&nbsp; call SSOPOT　周囲の原子の影響を考慮した全ポテンシャルの算出を行う。ndvrが5より大きい場合、全ポテンシャルを出力する。<br />
+&nbsp;&nbsp;&nbsp; call SSOWV　原子軌道の動径部分を求める。<br />
+&nbsp; □ SSOPOT（BASCRTより呼ばれる）　周囲の原子の影響を考慮した全ポテンシャルを算出するルーチンである。引数のうち結果は全ポテンシャルvhtであるサブルーチンBASCRTは各reference原子毎に呼ばれるものであった。何番目のreference原子かを示す引数がndであり、naはndをreference原子をとする原子の中の最初の原子を示している。<br />
+&nbsp;&nbsp;&nbsp; call SUMCH　周囲の原子の影響を考慮したポテンシャルを算出する<br />
+&nbsp; □&nbsp;SUMCH（SSOPOTより呼ばれる）　マフィンテイン型のポテンシャル及び電荷密度を得るルーチンである。引数のうち結果はchsmである。入力のchatがポテンシャルか又は電荷密度であるので、結果もそれに従ってどちらかの値になる。&nbsp;&nbsp;&nbsp;<br />
+&nbsp; □ DINTX（SUMCHより呼ばれる）　マフィンティン型積分を数値積分で行うルーチンである。引数のうち結果はsumである。rhが積分計算をする関数である。<br />
+&nbsp; □ SSOWV（BASCRTより呼ばれる）　原子の波動関数の動径部分を求めるルーチンである。ATCALCブロックにおけるサブルーチンHFSCALとほぼ同じルーチンである。引数のうち結果はxx、aである。<br />
+&nbsp;&nbsp;&nbsp; call SINPT　Schr&ouml;dinger方程式の数値解を求めるルーチンSHEQに必要な諸量を計算する。<br />
+&nbsp;&nbsp;&nbsp; call SINPT　全ポテンシャルに井戸型ポテンシャルを加えた場合のSHEQの初期データを構築する<br />
+&nbsp; □ FOCKM　Fock行列及び重なり行列を求めるルーチンである。結果smx1、smx2、fmxはcommon文でやり取りされる。各DVサンプルポイントについてループを取り幾つかのサブルーチンを呼んでFock行列と重なり行列を算出している。このサブルーチン内でcallしているサブルーチンとその内容の概略は以下の通りである。<br />
+&nbsp; ・CPOTG　全ポテンシャルについてそのDVサンプルポイントでの値を補間して得る<br />
+&nbsp; ・CHARB　電荷密度についてそのDVサンプルポイントでの値を補間して得る<br />
+&nbsp; ・XPOTG　交換ポテンシャルについてそのDVサンプルポイントでの値を補間して得る<br />
+&nbsp; ・BASGET　波動関数についてそのDVサンプルポイントでの値を補間して得る<br />
+&nbsp; ・SOGET　対称軌道を考慮したDVサンプルポイントでの波動関数を得る<br />
+&nbsp; ・HSMATX　Fock行列、重なり行例を足しあげることで求める<br />
+&nbsp; ・DEGEN　DVサンプルポイントの重みについて考慮する<br />
+&nbsp; サブルーチンFOCKMで呼び出すcall については以下の通りである。<br />
+&nbsp;&nbsp;&nbsp; call BASGET　h(r<sub>k</sub>) &Phi;<sub>v</sub>(r<sub>k</sub>)と&Phi;<sub>v</sub>(r<sub>k</sub>)を求める<br />
+&nbsp;&nbsp;&nbsp; call SOGET　BASGETで求められた波動関数についての量はbaseに関するものであるので、ここで対称性も考慮したh(r<sub>k</sub>)&Phi;<sub>v</sub>(r<sub>k</sub>)と&Phi;<sub>v</sub>(r<sub>k</sub>)を求める<br />
+&nbsp;&nbsp;&nbsp; call HSMATX　Fock行列要素、重なり行列要素を得る。ループの途中ではどちらも途中結果であり、ループが全て終了した時点でそれぞれ意味ある値になる。<br />
+&nbsp; □ CPOTG（FOCKMより呼ばれる）　あるDVサンプルポイントにおける全ポテンシャルの値を、補間により求めるルーチンである。引数のうち結果はpotである。全ポテンシャルはreference原子の各mesh点上の値として得られている。DVサンプルポイントはランダムに決められているので、当然mesh点上に来るとは限らない。そこで、そのサンプルポイントに最近のmesh点の値を用いて補間することでポイント上の値を得る。<br />
+&nbsp; □ CHARB（FOCKMより呼ばれる）　あるDVサンプルポイントにおける電荷密度の値を補間により求めるサブルーチンである。引数のうち結果はcharである。これまでで得られた電荷密度はreference原子についての各mesh点上での値であり、連続的に得られているのではなかった。サンプルポイント上での値は、そのmesh点上での値を用いて補間することで得られる。<br />
+&nbsp; □ XPOTG（FOCKMより呼ばれる）　あるDVサンプルポイントにおける交換ポテンシャルの値を求めるサブルーチンである。引数のうち結果はxpotである。交換ポテンシャルは-6a{3/8&pi; * &rho;(r)}^1/3の形をしている。ここでaはXa値であり、各原子によって異なった値を取りうる量である。原子の計算ではXa値は一義的に決まるが、分子では構成原子から均一に寄与を受けた値と考えて計算を進める。<br />
+&nbsp; □ BASGET（FOCKMより呼ばれる）　あるDVサンプルポイントにおける波動関数の値を補間により求めるサブルーチンである。引数のうち結果はbas1とtbas1である。Schr&ouml;dinger方程式を数値的に解くルーチンSHEQで得られた波動関数は、各mesh点上での値としてであった。一方、角度部分である球面調和関数は、各DVサンプルポイント上での値が得られていた。このサブルーチンでは、DVサンプルポイント上で補間した動径部分と球面調和関数により、そのDVサンプルポイントでの原子軌道を求める。<br />
+&nbsp; □ SOGET（FOCKMより呼ばれる）　対称軌道は原子軌道をbasisとして構築される。あるDVサンプルポイントでの原子軌道の値はBASGETで得られるので、ここではそれらを用いて対称軌道を作成し、軌道wav11(i)及び運動エネルギーが作用したtwav11(i)を得る。引数のうち結果はwav11, twav11である。<br />
+&nbsp; □ HSMAX（FOCKMより呼ばれる）　Fock行列及び重なり行列を求めるルーチンである。引数のうち結果はfmx1、smx1である。Fock行列及び重なり行列は実対称行列になるので、下三角部分のみ計算し、一次元化して配列に記録する。また、対称軌道を用いる場合は、各対称性に関して行列がブロックアウトする。そこで、その各ブロックの下三角部分を一次元化していく。対称性に関して縮退がある場合は、縮退度分足し込んで各行列要素が得られる。<br />
+&nbsp; □ DEGEN（FOCKMより呼ばれる）　DV数値積分は各サンプルポイントでの重みをかけて和をとるものであるが、サブルーチンHSMATXではサンプルポイント密度の逆数を掛けて行列要素を得ており、サンプルポイントの総数分大きい値になっている。HSMATXはサンプルポイントの数だけ呼ばれるので、この中でサンプルポイントに依存しない量の演算を行うのは、CPU的に無駄である。そこで、このルーチンで正しいDV数値積分値を求めている。HSMATXでは対称性に関して縮退がある場合はその縮退度分足し込んであった。ここでは、そこで、その分余計に割らなければならない。引数のうち結果は、smx1、fmx1である。a1は重み因子と言えるが、大体が1.0が代入される。<br />
+&nbsp; □ INTERP（CPOTG、CHARB、BASGETより呼ばれる）　Lagrange補間多項式による関数の補間を行うルーチンである。引数のうちrは距離、pは補間すべき関数、rsは補間すべき点、psは補間された結果である。<br />
+&nbsp; □ EMERGE（CATOMより呼ばれる）　これまででFock行列及び重なり行列が求められている。ここでは、分子軌道法の主たる計算部分である対角化を行っている。今得られている永年方程式はHC=ESCといった形をしており、一般的な対角化問題になっていない。また、各行列はブロック対角化されているので、各ブロックごとに対角化問題を解けばよいことになる。結果はcommon文を通してやり取りされている。結果は、eet、ititl、ntitl、coeである。<br />
+&nbsp;&nbsp;&nbsp; call INDXG　下三角行列を一次元化する場合の区切りを示すパラメータであるndexを得ている<br />
+&nbsp;&nbsp;&nbsp; call HAUSU　一般対角か問題への帰着及び対角化はサブルーチンHAUSUで行う。<br />
+&nbsp;&nbsp;&nbsp; call ORDRNG　各ブロックごとに固有値が得られているが、ここでORDRNGを呼んで全体として小さい順に入れ替えを行っている（実際には入れ替えているのではなく順番をファイルにとっておく）。<br />
+&nbsp; □ HAUSU（EMERGEより呼ばれる）　HC=ESCといった形を持つ対角化問題をHouseholder法で解くサブルーチンである。結果は固有値がd、固有ベクトルがcoeである。ルーチンはいくつかのサブルーチンを呼んでいる。以下、内容を纏める。<br />
+&nbsp; ・ HREDUO　HC=ECといった一般対角化問題に帰着させる<br />
+&nbsp; ・ HTRIDI　三重対角化を行う<br />
+&nbsp; ・ UNITM　固有ベクトルに初期値を代入する<br />
+&nbsp; ・ TQL2　QL分解を行って固有値、固有ベクトルを求める<br />
+&nbsp; ・ HTRIBK　得られた固有ベクトルを2次元化する<br />
+&nbsp; ・ HREBAK　得られた固有ベクトルを元の値に還元する<br />
+&nbsp; □ ORDRNG（EMERGEより呼ばれる）　対角化により得られた固有値を小さい順に並べ替え、固有ベクトルをそれに対応させるルーチンである。引数のうち結果は、ititl、ntitl、eet、ispinである。入力データはブロックアウトした各ブロックの固有値smxwである。これを小さい順にして全固有値が入るべくeetに入れ直す。ititlにはどの対称ブロックに属しているかの情報が、ntitlには小さい順に並べ替えたときの固有値が各対称ブロックにおいて元々何番目にあったかについての情報が入れられる。ispinはスピンの別であるが、閉殻系の場合、常に1となる。また、対称軌道を用いない場合、ititlも常に1が入ることになる（対称軌道を用いないということは、1種類の対称ブロックであると考えると明白である）。縮退している時にはその縮退度の数だけ呼ばれ、固有値が整えられる。<br />
+&nbsp; □ CHRANL（CATOMより呼ばれる）　これまで得られた分子軌道からMullikenの密度解析を行って電荷の再分配、すなわち原子軌道に入る電子数の計算を行うルーチンである。結果はcommon文でやり取りされ、xam、clno、niiである。ss、rhoi、csijはworking filesである。<br />
+&nbsp;&nbsp;&nbsp; call OCCUPS　電子を下から順に詰めていく。遷移状態の計算もここで行われる。<br />
+&nbsp;&nbsp;&nbsp; call NIIG　軌道係数はORDRNGにおいて変化しないので、全固有値の小さい順ではなく、対角化されて得られた順になっている。ここで、その固有ベクトルが何番目のレベルのものであるかの対応づけを行っている。<br />
+&nbsp; □ OCCUPS（CHRANLより呼ばれる）　これまでで分子軌道及び軌道エネルギーが得られているので、ここでは、各軌道にレベルの低い方から順に電子を詰めていく。一般的閉殻系の場合、電子は下から2個ずつ入っていく。遷移状態の計算を行う場合は、電子数を操作して軌道に詰めていく。引数のうち結果はelnoであり、各軌道に入る電子数が得られる。<br />
+&nbsp; □ NIIG（CHRANLより呼ばれる）　分子軌道の軌道係数、すなわち対角化で得られた固有ベクトルは得られた順にファイルに保存されている。一方、軌道エネルギーはORDRNGにおいて小さい順に並べ変えられている。ここでは、その軌道が何番目のレベルのものに相当するかをniiとして求めている。<br />
+&nbsp;&nbsp;&nbsp; call CIJS　ある分子軌道のoverlap populationを得る<br />
+&nbsp;&nbsp;&nbsp; call ORBPOP　orbital population のもとを得る<br />
+&nbsp;&nbsp;&nbsp; call GRSPOP　原子軌道に電子を割り振り各軌道に属する電子数xzmを得る<br />
+&nbsp; □&nbsp;CIJS（MULCHS、SLVPOP及びDENMTXより呼ばれる）　二次元配列を一次元化した場合の掛け算。あるlのもので、c(i,l)*c(l,j)**(ij)を一次元化して得る。軌道lのoverlap populationである。nは行列cの大きさ、cr、srはそれぞれ一次元化された軌道係数と重なり行列、csijが一次元化された結果である。&nbsp;&nbsp;&nbsp;<br />
+&nbsp; □ ORBPOP（MULCHS、SLVPOPより呼ばれる）　あるlのもとで、&Sigma;<sub>j</sub>c(i,l)*c(j,l)*s(i,j) = &Sigma;<sub>j</sub>cs(i,j) = ss(i)の計算を行っている。nは行列ssの大きさ、csijは一次元化されたcs(i,j)である。ssがこのルーチンの結果になる。<br />
+&nbsp; □ GRSPOP（MULCHSより呼ばれる）　各原子軌道に電子の再分配を行う。mcorは、対称軌道を構成するbasisである原子軌道のうち初頭のbasisの属するreference原子軌道についてのデータである。それが同じ物について和を取っていく。<br />
+&nbsp; □ JUDGES（CATOMより呼ばれる）　分子軌道計算が収束したかどうかを判定するルーチンである。引数のうち結果はlitern、xzxである。収束している場合liternは1、していない場合は0の値が代入される。<br />
+&nbsp; □ CHMIXS（CATOMより呼ばれる）　繰り返しの次の初期データを作成するルーチンである。引数のうち結果はrhoである。これまでで、分子軌道とMullikenの密度解説により再分配された、原子軌道の電子の占有数が得られている。こから新たに電荷密度を計算して求め、混合比を考慮して繰り返しの次の初期データとしている。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ POPANLから主に呼ばれる下位のサブルーチンの詳細<br />
+&nbsp; □ CNUM　密度行列の出力に要する諸量の設定<br />
+&nbsp; □ SLVPOP　orbital populationの計算<br />
+&nbsp; □ LVLPOP　結果の出力<br />
+&nbsp; □ DENMTX　密度行列の計算<br />
+&nbsp; □ KAKZO　密度解析の結果の出力<br />
+<br />
+&nbsp; □ CNUM　各対称ブロックごとに呼ばれ、密度解析の結果の出力に必要な諸量を整える。引数のうち結果はkct、numb、num、knum、kkである。<br />
+&nbsp; □ SLVPOP　各対称ブロックごとに呼ばれ、ここで、その対称ブロックの軌道のoverlap population の計算を行っている（分子軌道係数から得られる量であり、まだ軌道の占有数は作用されていない）。引数のうち結果はdである。また、結果は軌道エネルギーと共にファイル番号jfl4に保存される。<br />
+&nbsp; □ LVLPRT　各対称ブロックごとに呼ばれ、軌道エネルギー、軌道のoverlap populationについて出力を行うルーチンである。クラスターが大きくなるにつれ結果も増加するので、CNUMのインデックスをもとに、出力の制限を行っている。<br />
+&nbsp; □ DENMTX　各対称ブロックごとに呼ばれる。あるレベルを構成する各軌道に電子を振り分けたときの値、すなわちorbital populationであるeiejを得る。<br />
+&nbsp; □ KAKZO　各対称ブロックごとに呼ばれる。niは出力の桁数を指定するパラメーターであり、実際の出力はni-1桁になる。<br />
+&nbsp; □ UNITM（HAUSUより呼ばれる）　ある行列を単位行列とするルーチンである（対角項は1.0、非対角項は0.0をい代入する）。<br />
+&nbsp; □ ACOPY（EMERGE、FOCKMより呼ばれる）　引数のうち結果はf2であり、f1をf2にコピーするルーチンである。<br />
+&nbsp; □ RHSAVE（ATCALC、CATOMより呼ばれる）　原子の電荷密度について得られた結果をファイルに書き出しておくルーチンである。4&pi;r<sup>2</sup>&rho;(r)の形にしてファイル番号ipunに書き込んでいる。読み込むときは通常のread文で行われる。<br />
+&nbsp; □ SNMES（DINTXより呼ばれる）　シンプソン則による積分計算のfunction文である。<br />
+------------------------------------------------------------------------------<br />
+重要な文献&amp;HP<br />
+[1] はじめての電子状態計算ホームページ： <a href="http://chem.sci.hyogo-u.ac.jp/hajimete/">http://chem.sci.hyogo-u.ac.jp/hajimete/</a><br />
+[2] DV-Xa法に関するブログ： <a href="http://chem.sci.hyogo-u.ac.jp/dvxa_blog/">http://chem.sci.hyogo-u.ac.jp/dvxa_blog/</a>&nbsp;<br />
+[3] ベータ版ダウンロードページ： <a href="http://www.dvxa.org/">http://www.dvxa.org/</a>&nbsp;<br />
+[4] 坂根弦太・DV-Xa法計算支援環境を構築するためのリンク集01： <a href="http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_1.html">http://www.chem.ous.ac.jp/~gsakane/dvxa_assistance_environment_1.html</a>&nbsp;から 「DV-X&alpha;法計算支援環境利用の手引き（pdf文書, 2010/11/27; 146頁; 11.0 MB）」をダウンロードする<br />
+[5] DV-Xaホームページ： <a href="http://www.dvxa.org/">http://www.dvxa.org/</a><br />
+[6] 楽しい電子状態計算： <a href="http://www.chem.ous.ac.jp/~gsakane/fun/">http://www.chem.ous.ac.jp/~gsakane/fun/</a><br />
+[7] 岩沢美佐子ら、DV‐X&alpha;法による電子状態計算―そのプログラムと解説、三共出版<br />
+[8] 『電子構造論による化学の探究』<br />
+[9] 第一原理計算　～構造最適化に向けた 材料・デバイス別 事例集～、情報機構<br />
+[10] Slater Transition Stateの計算やイオン化エネルギーの計算、１電子励起状態の計算などを行う際の電子の移動方法: <a href="http://www.chem.ous.ac.jp/~gsakane/STS.html">http://www.chem.ous.ac.jp/~gsakane/STS.html</a><br />
+[TX1] H. Adachi et al., &quot;Hartree-Fock-Slater Method for Materials Science&quot;, Springer, 2005., google books; <a href="http://books.google.co.jp/books?id=A0-sWjTpi0gC&amp;pg=PA338&amp;lpg=PA338&amp;dq=Auger+CVV+DV-Xa&amp;source=bl&amp;ots=yUeiIwVzgl&amp;sig=bXu1vKtuyEPNnSKB_vxlXVf70Sw&amp;hl=ja&amp;sa=X&amp;ei=dwEiUaqAGYbymAX2-YGICA&amp;ved=0CDMQ6AEwAQ#v=onepage&amp;q=Auger%20CVV%20DV-Xa&amp;f=false">http://books.google.co.jp/books?id=A0-sWjTpi0gC&amp;pg=PA338&amp;lpg=PA338&amp;dq=Auger+CVV+DV-Xa&amp;source=bl&amp;ots=yUeiIwVzgl&amp;sig=bXu1vKtuyEPNnSKB_vxlXVf70Sw&amp;hl=ja&amp;sa=X&amp;ei=dwEiUaqAGYbymAX2-YGICA&amp;ved=0CDMQ6AEwAQ#v=onepage&amp;q=Auger%20CVV%20DV-Xa&amp;f=false</a><br />
+------------------------------------------------------------------------------<br />
+DV-Xa研究協会会報<br />
+[TSX1] 足立裕彦、DVXa研究協会会報、8 (1995) 94.: ピーク強度に関しては、ScofieldがHartree-Fock-Slater modelで計算した原子のionization cross-sectionなどを用いて、それにatomic orbital populationをかけたものの和を取って求めている。この論文ではDV-Xa法を用いてイオン化確率を求めるプログラムを開発している。（FeO<sub>6</sub><sup>8-</sup>は非常に良い一致を示している）<br />
+[TSX2] 宇田英一郎ら、DVXa研究協会会報、5 (1992) 25.: 硫黄化合物の蛍光X線（K&beta;線）スペクトルの計算が行われている。その結果では遷移状態計算よるよりも通常の基底状態の計算が良い一致を示す結果となった。これは「S6のような価電子帯が込み入った多数の分子軌道からなる系で内殻と外殻に0.5個ずつ空孔を配置した遷移状態のSCF計算をすると空孔の影響で価電子帯中の分子軌道の順位が入れ替わり空孔が別の分子軌道に移動してしまうことが多い。（中略）目的とする分子軌道に空孔を置いて計算を収束させたかどうか疑わしいというところにある」としている。計算値のブロードニングは、ローレンツ曲線で行い、半値幅は気体で1 eV, 分子性結晶の固体で1.5 eV, イオン性結晶の固体で2 eVとしている。<br />
+[TSX3] 関根理香、DVXa研究協会会報、9 (1996) 41.:<br />
+[TSX4] 向山毅、DVXa研究協会会報、8 (1995) 310.: COでのO 1s 及び C 1s空孔に対するK X線の放出率を、Frozen-orbital(FR)近似、遷移状態（Transition state, TR）法、そして、始状態では内殻に正孔があり、終状態では正孔が外殻に移った後のポテンシャルで計算した波動関数により遷移確率を計算したRelaxed-orbital approximation（RX）法で比較している。これらの計算結果の値は異なっているが、相対放出率はどのような近似で計算してもあまり差のないことが示されている。<br />
+[TSX5] 神田英之ら、DVXa研究協会会報、10 (1997) 41.: NiOの酸素K殻ELNESの計算を行っている。[Ni<sub>19</sub>O<sub>44</sub>]<sup>50-</sup>クラスターで、遷移状態法を用いて、酸素2p非占有軌道の部分状態密度（PDOS）と実験結果と比較している。ピークの数と相対的な位置は、実験と比較的良い一致を示す。ピーク強度比は525 eV近傍のピークのみ大きい。<br />
+[UVX1] 丸山睦弘ら、DVXa研究協会会報、8 (1995) 229.: M(bpy)2(CN)(M=Fe, Ru, Os)錯体の電子状態を計算している。遷移状態法を用いて紫外可視吸収スペクトルを計算。実験結果と比較的良い一致。<br />
+[12] 脇田久伸ら、DVXa研究協会会報、6 (1993) 87.: 窒素を配位原子とする銅（Ⅱ）錯体のXANESスペクトルを計算。モデルは結晶の構造解析結果をもとに構築。遷移状態法を用いたのかなどの詳細は未記載。（私の私見では、ブロードニング幅を調節すれば実験値と比較的良い一致を示しているように思える）<br />
+[13] 田中功ら、DVXa研究協会会報、7 (1994) 59.:(Mg13O14)2-と(Si5O16)12-クラスターでELNESを計算。遷移エネルギーの絶対値をSlaterの遷移状態法により求めた。遷移エネルギーの実験値との誤差は0.5%であった。（ピーク強度は合わないがピークの帰属は可能に見える）<br />
+[14] 松尾修司ら、DVXa研究協会会報、7 (1994) 145.: 窒素を配位原子とする銅（Ⅱ）錯体のXANESスペクトルを計算。原子間距離をXANESスペクトルからDV-Xa法を用いて見積もっている。<br />
+[15] 吉矢真人ら、DVXa研究協会会報、8 (1995) 102.: a-Quartz（[Si<sub>5</sub>O<sub>15</sub>]<sup>12-</sup>）のX線吸収スペクトルの計算を行っている。ELNESスペクトルのSi L2,3 edgeとO K edgeの実験値と、Si-3s/3dとO-2pの基底状態と遷移状態での部分状態密度（PDOS）との比較を行っている。また、光学遷移確率（PACS{Photoabsorption Cross Section}）をそれぞれ基底状態と遷移状態について計算している。結果は、Si L23 edgeとの比較において基底状態と遷移状態のPDOSには大きな違いが認められない（どちらかというと基底状態のPDOSの方が実験値によく対応している）。一方、O K edge は遷移状態でのPDOSの方が一致が良い。PDOSとPACSの差は非常に小さい。<br />
+[16] 川崎晋司ら、DVXa研究協会会報、8 (1995) 237.: C60F46クラスターを用いて、遷移状態計算法を用いて1つのC 1s に対して計算を行い、C 2p 非占有準位と実験値と比較。比較的良い一致。<br />
+[17] 溝口照康ら、DVXa研究協会会報、13 (2000) 175.: 吸収断面積(PACS)を計算。（この他にも、この年の会報では参考になる吸収スペクトルの報告がある）<br />
+[18] 四元健司ら、DVXa研究協会会報、13 (2000) 178.: sxs計算によりFe K edge XANESのスペクトル計算をしている。<br />
+[19] 松尾修司ら、DVXa研究協会会報、16 (2003) 182.: sxs計算によりBr L3&nbsp;edge XANESのスペクトル計算をしている。ブロードニングの半値幅はNaBrで1.5 eV、KBrで1.25 eVとしている。L2,3吸収近傍スペクトルの形状に目立った違いが見られなければ、非相対論のコードでもスペクトル解析に有効であることを示している。<br />
+[20] 越野雅至ら、DVXa研究協会会報、17 (2004) 60.:&nbsp; F4TCNQスペクトルをDV-Xa法で再現するには、1s準位のエネルギーシフトが大きいため、core-hole効果と遷移確率を取り入れた遷移状態計算が不可欠であるとしている。<br />
+[MEX1] 宮前亨ら、DVXa研究協会会報、15 (2002) 109.<br />
+[MEX2] 渡邊真太、DVXa研究協会会報、21 (2008) 18.<br />
+[AX1] 田中康三ら、DVXa研究協会会報、5 (1992) 17.: Zn4Oクラスターに対するAugerスペクトルの計算。遷移状態法によって酸素の部分状態密度を求め、さらにそれのSelf-convolutionによりAuger電子スペクトルを計算している。計算結果は実験結果と比較的良い一致を示している。<br />
+[AX2] T. Yamamoto and M. Uda, DVXa研究協会会報、7 (1994) 154.:<br />
+[AX3] 山本知之、DVXa研究協会会報、12 (1999) 2.: <a href="http://www.process.mtl.kyoto-u.ac.jp/DV-XaPDF/DVXa12-2-1999.pdf">http://www.process.mtl.kyoto-u.ac.jp/DV-XaPDF/DVXa12-2-1999.pdf</a><br />
+[AX4] 茂木昌都ら、DVXa研究協会会報、16 (2003) 260.: Al化合物のKLVオージェスペクトル<br />
+[APX1] 石井知彦、DVXa研究協会会報、17 (2004) 335.<br />
+[QX1] DVXa研究協会会報、7 (1994):<br />
+[QX2] DVXa研究協会会報、7 (1994) 269:<br />
+[DX00] 水野正隆、DVXa研究協会会報、21 (2008) 13:<br />
+[DX0] 水野正隆、DVXa研究協会会報、20 (2007) 242:<br />
+[DX1] 足立裕彦、DVXa研究協会会報、9 (1996) 180:<br />
+[DX2] DVXa研究協会会報、9 (1996) 112:<br />
+[DX3]DVXa研究協会会報、16 (2003) 84:<br />
+[TX1] 森永正彦、DVXa研究協会会報、6 (1993) 167.:<br />
+[TX2] 早藤貴範、DVXa研究協会会報、7 (1994) 134.:<br />
+[XCX1] 岩沢美佐子ら、DVXa研究協会会報、7 (1994) 197.:<br />
+[XCX2] 小野倫也ら、DVXa研究協会会報、10 (1997) 40.: LDAに拡張する方法がよく分かる。GGAは実空間差分法が良いとの結果。<br />
+[MX1] 野村重孝ら、DVXa研究協会会報、16 (2003) 106.:<br />
+[DMEX1] 吉田尚史、小笠原一禎、DVXa研究協会会報、20 (2007) 235.:<br />
+------------------------------------------------------------------------------<br />
+<br />
+（下記は編集中）<br />
+-------------------------------------------------------------------------------<br />
+VESTAで出力可能なXYZファイルから SCAT F01のひな形を作成する Fortran90 プログラム<br />
+<br />
+下記はVESTAで出力可能なXYZファイルからSACAT f01を作るプログラムです。<br />
+&nbsp;<br />
+xyz2f01.f 90のコンパイル<br />
+1. テキストファイルに下記のプログラムをコピー&amp;ペーストし、xyz2f01.f 90という名称でSAVEします。<br />
+2. Terminal を開いて、cd で&nbsp;xyz2f01.f90&nbsp;&nbsp; のあるディレクトリをカレントディレクトにします。<br />
+3. g95 xyz2f01.f90&nbsp; -o xyz2f01&nbsp; などとしてコンパイルします（コンパイラによっては、g95 が gfortran や ifort になる）。そうすると、実行ファイルが作成されます。<br />
+<br />
+使い方<br />
+1. VESTAでxyz形式で出力します。<br />
+2. xyz2f01.exe と VESTAでxyz形式で出力させたファイル を同じフォルダに入れます。<br />
+3. コマンドプロンプト上で、xyz2f01.exe VESTAでxyz形式で出力させた名称 を入力します。<br />
+4. f01のひな形が作られます（マーデルングの指定はご自身でして下さい）。<br />
+<br />
+xyz2f01.f90<br />
+-------------------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; program xyz2f01<br />
+*&nbsp;&nbsp;&nbsp;&nbsp; XMol XYZ output by VESTA --&gt; SCAT F01 (template)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character file1*512, line1*100, line2*100, symbol*2, elem(111)*2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+data (elem(j), j = 1, 111)/ &#39; H&#39;,&#39;He&#39;,&#39;Li&#39;,&#39;Be&#39;,&#39; B&#39;,&#39; C&#39;,&#39; N&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39; O&#39;,&#39; F&#39;,&#39;Ne&#39;,&#39;Na&#39;,&#39;Mg&#39;,&#39;Al&#39;,&#39;Si&#39;,&#39; P&#39;,&#39; S&#39;,&#39;Cl&#39;,&#39;Ar&#39;,&#39; K&#39;,&#39;Ca&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Sc&#39;,&#39;Ti&#39;,&#39; V&#39;,&#39;Cr&#39;,&#39;Mn&#39;,&#39;Fe&#39;,&#39;Co&#39;,&#39;Ni&#39;,&#39;Cu&#39;,&#39;Zn&#39;,&#39;Ga&#39;,&#39;Ge&#39;,&#39;As&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Se&#39;,&#39;Br&#39;,&#39;Kr&#39;,&#39;Rb&#39;,&#39;Sr&#39;,&#39; Y&#39;,&#39;Zr&#39;,&#39;Nb&#39;,&#39;Mo&#39;,&#39;Tc&#39;,&#39;Ru&#39;,&#39;Rh&#39;,&#39;Pd&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Ag&#39;,&#39;Cd&#39;,&#39;In&#39;,&#39;Sn&#39;,&#39;Sb&#39;,&#39;Te&#39;,&#39; I&#39;,&#39;Xe&#39;,&#39;Cs&#39;,&#39;Ba&#39;,&#39;La&#39;,&#39;Ce&#39;,&#39;Pr&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Nd&#39;,&#39;Pm&#39;,&#39;Sm&#39;,&#39;Eu&#39;,&#39;Gd&#39;,&#39;Tb&#39;,&#39;Dy&#39;,&#39;Ho&#39;,&#39;Er&#39;,&#39;Tm&#39;,&#39;Yb&#39;,&#39;Lu&#39;,&#39;Hf&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Ta&#39;,&#39; W&#39;,&#39;Re&#39;,&#39;Os&#39;,&#39;Ir&#39;,&#39;Pt&#39;,&#39;Au&#39;,&#39;Hg&#39;,&#39;Tl&#39;,&#39;Pb&#39;,&#39;Bi&#39;,&#39;Po&#39;,&#39;At&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Rn&#39;,&#39;Fr&#39;,&#39;Ra&#39;,&#39;Ac&#39;,&#39;Th&#39;,&#39;Pa&#39;,&#39; U&#39;,&#39;Np&#39;,&#39;Pu&#39;,&#39;Am&#39;,&#39;Cm&#39;,&#39;Bk&#39;,&#39;Cf&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&#39;Es&#39;,&#39;Fm&#39;,&#39;Md&#39;,&#39;No&#39;,&#39;Lr&#39;,&#39;Rf&#39;,&#39;Db&#39;,&#39;Sg&#39;,&#39;Bh&#39;,&#39;Hs&#39;,&#39;Mt&#39;,&#39;Ds&#39;,&#39;Rg&#39;/<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open (unit&nbsp; = 2, file =&nbsp; &#39;F01&#39;, form = &#39;formatted&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;status = &#39;unknown&#39;, access =&nbsp; &#39;sequential&#39;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2, &#39;(a)&#39;) &#39;| Z ||NEQ||&nbsp;&nbsp; X&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp; Y&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp; Z&nbsp;&nbsp;&nbsp; |&#39;<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; call getarg(1, file1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open (unit = 1, file = file1, form = &#39;formatted&#39;, status = &#39;old&#39;,<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp; access = &#39;sequential&#39;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1, *) natom<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1,&#39;()&#39;) ! Skip a line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i = 1, natom<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1, &#39;(a)&#39;) line1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, 100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line1(j:j) .ne. &#39; &#39;) exit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ibegin = j<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = ibegin + 1, 100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (line1(j:j) .eq. &#39; &#39;) exit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; iend = j - 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; len_symbol = iend - ibegin + 1 ! length of the chemical symbol<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; select case (len_symbol)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case (1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; line2 = &#39;&#39;&#39; &#39;//line1(ibegin:iend)//&#39;&#39;&#39;&#39;//<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; trim(line1(iend+1:))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case (2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; line2 = &#39;&#39;&#39;&#39;//line1(ibegin:iend)//&#39;&#39;&#39;&#39;//<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; trim(line1(iend+1:))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case default<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,&#39;(a)&#39;) &#39; Too long symbol: &#39;//line1(ibegin:iend)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end select<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(line2,*) symbol, x, y, z<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, 111<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (symbol .eq. elem(j)) go to 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6, &#39;(2a)&#39;) &#39; A bad chemical symbol in *.xyz: &#39;, symbol<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stop<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; write(2, &#39;(2i5, 3(f10.5))&#39;) j, i, x, y, z<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(unit = 1)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;---------------------------------------------&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;|NEQ||&nbsp; CHG&nbsp;&nbsp; ||U/D||&nbsp;&nbsp; RD&nbsp;&nbsp; ||&nbsp;&nbsp; VD&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 1&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;---------------------------------------------&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Unit&nbsp;&nbsp;&nbsp;&nbsp; (0: Angstrom&nbsp; 1: Atomic)&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Spin&nbsp;&nbsp;&nbsp;&nbsp; (0: Non-spin&nbsp; 1: Spin&nbsp; )&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; M.P.&nbsp;&nbsp;&nbsp;&nbsp; (0: No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1: Yes&nbsp;&nbsp; )&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(2,&#39;(a)&#39;) &#39;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Sample point (&lt;100000, = 0 Autoset)&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(unit = 2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+-------------------------------------------------------------------------------<br />
+<br />
+-------------------------------------------------------------------------------<br />
+f03ひな形作成 Fortran77 プログラム<br />
+-------------------------------------------------------------------------------<br />
+下記はf01からf03のひな形を作るプログラムです（編集中）<br />
+A. makef03.bat の作成<br />
+1. テキストフォルダを開いて 下記のmakef03.bat をコピー&amp;ペースとして、makef03.bat という名称でSAVEする。<br />
+2. 作成した makef03.bat を exec ファイルへ入れる。<br />
+<br />
+B. makef03.f のコンパイル<br />
+1. テキストファイルに下記のプログラムをコピー&amp;ペーストし、makef03.f という名称でSAVEします。<br />
+2. 各行の位置はFortran77の形式に揃えてください。<br />
+3. Terminal を開いて、cd で makef03.f&nbsp; のあるディレクトリをカレントディレクトにします。<br />
+4. gfortran makef03.f&nbsp; -o&nbsp;makef03 と入力します。そうすると、実行ファイルが作成されます。<br />
+5. 作成したmakef03.exe をobject ファイルへ入れる。<br />
+<br />
+使い方<br />
+1. f01に通常と同じようにマーデルングポテンシャルの記述をします。<br />
+2. f01に下記のオプション記述を追加します。<br />
+（編集中）<br />
+3. makef03と入力すると、f03が形成されます。<br />
+<br />
+makef05をベースに作成（エンベッド法を念頭において作っていたので、Embedded Method とありますが、気にしないで下さい）<br />
+<br />
+f01の下の部分「Deviation of Length from Center&nbsp; :&nbsp; 1 %」から下記<br />
+のように記入します（コピーアンドペーストで対処できます）。<br />
+<br />
+記入例：f01<br />
+<br />
+| Z ||NEQ||&nbsp;&nbsp; X&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp; Y&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp; Z&nbsp;&nbsp;&nbsp; |<br />
+&nbsp;&nbsp; 13&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp; 26&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp; 1.44025&nbsp;&nbsp; 1.44025&nbsp;&nbsp; 1.44025<br />
+------------------------------------------------------------------<br />
+|NEQ||&nbsp; CHG&nbsp;&nbsp; ||U/D||&nbsp;&nbsp; RD&nbsp;&nbsp; ||&nbsp;&nbsp; VD&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 1<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -3.0<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3.0<br />
+------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Unit&nbsp;&nbsp;&nbsp;&nbsp; (0:angstrom&nbsp; 1:atomic)<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Spin&nbsp;&nbsp;&nbsp;&nbsp; (0:non-spin&nbsp; 1:spin&nbsp; )<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp; M.P.&nbsp;&nbsp;&nbsp;&nbsp; (0:No&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1:Yes&nbsp;&nbsp; )<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp; Sample Point ( &lt;100000, =0 autoset )<br />
+<br />
+Deviation of Coordination Number :&nbsp; 1 %<br />
+Deviation of Length from Center&nbsp; :&nbsp; 1 %<br />
+<br />
+------------------------------------------------------------------<br />
+&nbsp;&nbsp; Embedded Method&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; XD&nbsp;&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; YD&nbsp;&nbsp;&nbsp;&nbsp; ||&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ZD&nbsp;&nbsp;&nbsp;&nbsp; |<br />
+LATTICE CONSTANT&nbsp;&nbsp;&nbsp; | 200.0000000000 200.0000000000&nbsp;&nbsp; 4.0000000000 (real&nbsp;&nbsp; /angstrom)<br />
+TRANSITION EXPANSION|&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 999 (integer/LATTICE CONSTANT)<br />
+SHIFT QUANTITY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; |&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.0000000000 (real&nbsp;&nbsp; /LATTICE CONSTANT)<br />
+CLACULATION RANGE &plusmn;|&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.5000000000 999.0000000000 (real&nbsp;&nbsp; /LATTICE CONSTANT)<br />
+------------------------------------------------------------------<br />
+<br />
+「LATTICE CONSTANT」の行は格子定数を&Aring;単位で記入してください。<br />
+オプションは、*の後に入れます。<br />
+1:x軸ならx軸の座標で最も数値の大きい値をもつ原子を省く。y,zも同様。<br />
+そのため、最外部の原子が省かれ重なりを気にしなくてよくなる。ただし、斜めの構造を持つ結晶には対応していない。<br />
+2:手動で重なる部分を省いて、それに対応する格子定数を入れる場合に用いる。<br />
+以下は、格子定数を単位として何倍の範囲を考慮したいかを記入していきます。<br />
+「TRANSITION EXPANSION」の行は並進拡張（より広げる数）の記入場所です。<br />
+「SHIFT QUANTITY」の行は原点からどれだけ電荷を移動させるかを入力します。<br />
+「CLACULATION RANGE &plusmn;」の行は&plusmn;の範囲で実際に計算する範囲を指定します。<br />
+<br />
+*注1：LATTICE CONSTANTの値は、1次元周期の場合、他の軸で電荷の影響が殆んど無いように距離を多く記入してください。2次元の場合も同様です。<br />
+<br />
+makef03.bat<br />
+------------------------------------------------------------------------------<br />
+@echo off<br />
+if not &quot;%1&quot;==&quot;&quot; cd %1<br />
+if not exist f01 goto quit<br />
+%dvdir%\object\makef03.exe<br />
+goto end<br />
+:quit<br />
+echo f01 not exist<br />
+:end<br />
+------------------------------------------------------------------------------<br />
+<br />
+<br />
+makef03.f プログラム<br />
+------------------------------------------------------------------------------<br />
+c=======================================================================<br />
+c&nbsp; makef03.f (from makef05.f)<br />
+c&nbsp;&nbsp; make f03 from f01&nbsp;<br />
+c&nbsp;&nbsp; 2007. 9.26&nbsp; Version 1.0&nbsp;&nbsp; written by ******<br />
+c&nbsp;&nbsp; 2007. 9.26&nbsp; Version 1.1&nbsp;&nbsp; auto lattice parameter option<br />
+c&nbsp;&nbsp; *計算機センター等で処理を行なわせる場合は、この日本語の文は省いて<br />
+c&nbsp;&nbsp; ください。*を先頭につけておきますので、検索して取り除いてください。<br />
+c=======================================================================<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IMPLICIT REAL*8(A-H,O-Z)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*6 chstr,dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*4 chstr2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*2 dum2,chstr3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*1 uord(100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DIMENSION NEQ(1000),Z(1000),NAME(10)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ,XN(100,100),XL(100,100),XE(100,100),XZ(100,100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ,KCORE(100),ISYML(21),JSYML(21),IAT(100),JJ(100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ,RR(10),TIC(2100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension xv(1000),yv(1000),zv(1000),nz(1000),ch(1000)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension rda(200),vda(200)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension xz2(100,100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dimension nzs(200)<br />
+c ---------------------------------------------------------------------<br />
+c additon 2007.9.26<br />
+c =====================================================================<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 lcx,lcy,lcz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 ntex,ntey,ntez<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 sqx,sqy,sqz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 crx,cry,crz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 zero<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 lcux,lcuy,lcuz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 xvut,yvut,zvut<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*1 odlc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 mxv,myv,mzv<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 nc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 ATOMS<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA zero/0/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA mxv,myv,mzv/0,0,0/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA nc/0/<br />
+c =====================================================================<br />
+c&nbsp; *新たに追加したデータの定義です<br />
+c ---------------------------------------------------------------------<br />
+<br />
+c ---------------------------------------------------------------------<br />
+c&nbsp; chstr= DATA chstr/&#39;------&#39;/<br />
+c&nbsp; dum=*f01の読み取り<br />
+c&nbsp; chstr2= DATA chstr2/&#39;Nsym&#39;/<br />
+c&nbsp; du2=<br />
+c&nbsp; chstr3= DATA chstr3/&#39;XD&#39;/<br />
+c&nbsp; uord=<br />
+<br />
+c&nbsp; NEQ=*クラスターを構成する原子が何番目の原子にあたるか<br />
+c&nbsp; Z=*クラスターを構成する原子の原子番号<br />
+c&nbsp; NAME=*対称ブロックの名前<br />
+c&nbsp; XN=*原子軌道のn値<br />
+c&nbsp; XL=*原子軌道のl値<br />
+c&nbsp; XE=*原子軌道の軌道エネルギー<br />
+c&nbsp; XZ=*原子軌道の電子(の占有)数<br />
+c&nbsp; KCORE=*その軌道について出力するかどうかの情報が入れられている。<br />
+c&nbsp;&nbsp; joutが通し番号で入っている。<br />
+c&nbsp;&nbsp; jout=原子軌道に関するデータ。一般に0である。<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =1 原子軌道のbaseから除く<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =2 最後の出力onlyのルーチンで使われる。<br />
+c&nbsp; ISYML=*対称ブロックを扱うかのパラメータ、通常1<br />
+c&nbsp; JSYML=*対称ブロックの縮重度 1:縮重なし 2:2重縮重 3:3重縮重<br />
+c&nbsp; IAT=<br />
+c&nbsp; JJ=*原子を構成する原子軌道の数<br />
+c&nbsp; RR= DATA RR/1.0,2.0,2.0,2.5,2.5,3.0,3.0,3.0,3.0,3.0/<br />
+c&nbsp; TIC=<br />
+<br />
+c&nbsp; xv,yv,zv=原子のx,y,z座標<br />
+c&nbsp; nz=原子番号<br />
+c&nbsp; ch=<br />
+c&nbsp; rda=<br />
+c&nbsp; vda=<br />
+c&nbsp; xz2=<br />
+c&nbsp; nzs=<br />
+c --------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA RR/1.0,2.0,2.0,2.5,2.5,3.0,3.0,3.0,3.0,3.0/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA chstr/&#39;------&#39;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA chstr2/&#39;Nsym&#39;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; DATA chstr3/&#39;XD&#39;/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IOUT=8<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INPUT=3<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(3,FILE=&#39;nonrel&#39;)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(4,FILE=&#39;radii&#39;)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(5,FILE=&#39;f01&#39;)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(8,FILE=&#39;f05&#39;)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(25,FILE=&#39;f25&#39;)<br />
+c ---------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; OPEN(13,FILE=&#39;f03&#39;)<br />
+c ---------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NCYCLE=10<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; N999=99999<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NTABPT=300<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NMAXK=5000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NNST=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LT=999<br />
+c ---------------------------------------------------------------------<br />
+c&nbsp; NCYCLE=*SCF軌道計算をする際の繰り返しの上限<br />
+c&nbsp; N999=*<br />
+c&nbsp; NTABPT=*原子軌道計算をする際のメッシュ数。<br />
+c&nbsp;&nbsp; 0でデフォルト値の選択になり、300が入る<br />
+c&nbsp; NMAXK=*DVサンプルポイントの数<br />
+c&nbsp; NNST=*<br />
+c&nbsp; LT=*<br />
+c ---------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATOA=0.529177000000D0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UT=1/ATOA<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NCORE=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NDAT=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TL=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; extch=0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nspat=500<br />
+c ---------------------------------------------------------------------<br />
+c&nbsp; ATOA=*&Aring;から原子単位に変換する場合に割る値<br />
+c&nbsp; UT=1/ATOA *こちらを掛けると計算が速くなる（演算は掛け算の方が速い）<br />
+c&nbsp; NCORE=*reference原子の原子軌道の総数<br />
+c&nbsp; NDAT=*クラスターを構成する原子のうち原子軌道計算をする原子、即ち<br />
+c&nbsp;&nbsp; reference原子の総数<br />
+c&nbsp; TL=*全電子数<br />
+c&nbsp; extch=*<br />
+c&nbsp; nspat=*<br />
+c ---------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MDBL=0<br />
+c ---------------------------------------------------------------------<br />
+c MDBL=*f01のx,y,z座標がdoubleタイプであるかを判定。0:普通 1:double型<br />
+c ---------------------------------------------------------------------<br />
+c =====================================================================<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,740) dum2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (dum2.eq.chstr3) MDBL=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind 5<br />
+&nbsp; 740 format(17x,a2)<br />
+c ---------------------------------------------------------------------<br />
+c *f05の一行目を読み込んで、doubleタイプであれば MDBL=1 とする。<br />
+c =====================================================================<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jsep=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,1000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,750) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (dum.eq.chstr) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (jsep.eq.0) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isep1=i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; jsep=jsep+1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NAT=i-2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NATOMS=NAT<br />
+c&nbsp;&nbsp; -------------------------------------------------------------------<br />
+c&nbsp;&nbsp; *dumでf01ファイルの内容を文字として読み込んでいって、<br />
+c&nbsp;&nbsp; 行を---が見つかるまで数えて上下2つを引いて原子の個数とする<br />
+c&nbsp;&nbsp; -------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else if (jsep.eq.1) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind 5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; isep2=i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 70<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp; 750 format(a6)<br />
+c ---------------------------------------------------------------------<br />
+c&nbsp; jsep=*原子の位置座標(0)のデータと電荷のデータ(1)の切り替えに用いる<br />
+c&nbsp; isep1=*---から---までを含めた原子の位置座標の行数を数える<br />
+c&nbsp; NAT=*ポテンシャル用原子も含めたクラスターを構成する原子の個数<br />
+c&nbsp; NATOMS=*ポテンシャル用原子も含めたクラスターを構成する原子の個数<br />
+c&nbsp; isep2=*原子の位置座標からデータと電荷のデータの---まで行数を数える<br />
+c ---------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp; 70 continue<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; KSP=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; REMV=0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RD=2.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VD=-2.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IDOA=-1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOLM=0.1D-05<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; JPRT=-3<br />
+c --------------------------------------------------------------------<br />
+c&nbsp; KSP=*<br />
+c&nbsp; REMV=*<br />
+c&nbsp; RD=*<br />
+c&nbsp; VD=*<br />
+c&nbsp; IDOA=*井戸型ポテンシャルを加えるかのパラメータ<br />
+c&nbsp;&nbsp; 0:加えない 1:タイプ1 2:タイプ2<br />
+c&nbsp; TOLM=*分子軌道の繰り返し計算におけるthreshold<br />
+c&nbsp; JPRT=*出力のオプション<br />
+c --------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,*)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (MDBL.eq.0) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,710) nz(i),NEQ(i),xv(i),yv(i),zv(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,715) nz(i),NEQ(i),xv(i),yv(i),zv(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nzs(neq(i))=nz(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Z(i)=real(nz(i))<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (NEQ(i).gt.NDAT) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NDAT=NEQ(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NTYPES=NDAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp; 710 format(2i5,3f10.5)<br />
+&nbsp; 715 format(2i5,3f15.10)<br />
+c ----------------------------------------------------------------------<br />
+c&nbsp; NTYPES=*ポテンシャル用原子も含めたクラスターを構成する原子のうちの<br />
+c&nbsp;&nbsp; reference原子の和<br />
+c ----------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c----- Error check in f01 ----------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (nzs(neq(i)).ne.nz(i)) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,713) neq(i)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 999<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp; 713 format(&#39;Error -- duplicated Z in NEQ(&#39;,i2,&#39;)&#39;)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NDAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j=1,NAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (neq(j).eq.i) goto 80<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(*,714) i<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 999<br />
+&nbsp;&nbsp; 80&nbsp; continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp; 714 format(&#39;Error -- missing NEQ(&#39;,i2,&#39;)&#39;)<br />
+c-----------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NDAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ch(i)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vda(i)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rda(i)=0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,*)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,711) IDOA<br />
+&nbsp; 711 format(40x,i5)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,isep2-isep1-2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,712) ii,ch(ii),uord(ii),rdi,vdi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (ii.le.NDAT) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (rdi.ne.0) rda(ii)=rdi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (vdi.ne.0) vda(ii)=vdi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (ii.eq.0.and.ch(ii).ne.0) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; extch=extch+ch(ii)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IF (IDOA.eq.-1) IDOA=0<br />
+&nbsp; 712 format(i5,f10.5,2x,a,2x,2f10.5)<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *|NEQ||&nbsp; CHG&nbsp;&nbsp; ||U/D||&nbsp;&nbsp; RD&nbsp;&nbsp; ||&nbsp;&nbsp; VD&nbsp;&nbsp; |&nbsp;&nbsp;&nbsp; 1 の欄の読み取り<br />
+c&nbsp; 井戸型ポテンシャルの1タイプを加える<br />
+c -----------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icalt=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=2,NAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (nz(i).ne.nz(1)) icalt=2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; icalt=*<br />
+c&nbsp; icalt2=*<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *<br />
+c -----------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NDAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (rda(i).eq.0.or.vda(i).eq.0) then<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; call setwell(rdi,vdi,IDOA,nzs(i),ch(i),icalt)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rda(i)=rdi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; vda(i)=vdi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (rda(i).eq.0) rda(i)=rd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (vda(i).eq.0) vda(i)=vd<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *<br />
+c -----------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,*)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,700) jut<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (jut.eq.1) UT=1.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,700) ISN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,700) MQ<br />
+&nbsp; 700 format(i5)<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *UnitからM.P.までのオプションの設定を読み込む<br />
+c -----------------------------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,720) NMAXK<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (NMAXK.eq.0) NMAXK=nspat*NAT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (NMAXK.gt.99999) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NNST=log10(real(NMAXK))-4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NMAXK=NMAXK/10**NNST<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp; 720 format(i5)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp; read(5,730) icalc<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (icalc.eq.0.or.icalc.gt.10) icalc=10<br />
+c 730 format(i5)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; icalc=1<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *DVサンプルポイントの数(NMASK)でSample Pointのオプションを読み込む<br />
+c -----------------------------------------------------------------------<br />
+<br />
+c -----------------------------------------------------------------------<br />
+c additon 2007.9.26<br />
+c =======================================================================<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,721) dum<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,731) odlc,lcx,lcy,lcz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,741) ntex,ntey,ntez<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,751) sqx,sqy,sqz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(5,751) crx,cry,crz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp; 721 format(A6)<br />
+&nbsp; 731 format(18x,A1,3x,3F15.10)<br />
+&nbsp; 741 format(22x,3I15)<br />
+&nbsp; 751 format(22x,3F15.10)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c =======================================================================<br />
+c&nbsp; *追加のデータを読み込ませる<br />
+c -----------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NAT<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TL=TL+Z(i)-ch(neq(i))<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TL=TL-extch<br />
+c -----------------------------------------------------------------------<br />
+c&nbsp; *<br />
+c -----------------------------------------------------------------------<br />
+c -----------------------------------------------------------------------<br />
+c additon 2007.9.26<br />
+c =======================================================================<br />
+c -----[pre1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NATOMS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(odlc.eq.&#39;1&#39;)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(xv(i).ge.mxv)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mxv=xv(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(yv(i).ge.myv)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; myv=yv(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(zv(i).ge.mzv)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mzv=zv(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----------<br />
+c&nbsp; *最外にある原子の座標を探す<br />
+c ----------<br />
+c -----[pre2]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NATOMS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(odlc.eq.&#39;1&#39;)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(xv(i).eq.mxv .or. yv(i).eq.myv .or. zv(i).eq.mzv)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nc=nc+1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----------<br />
+c&nbsp; *最外にある原子の数をカウント<br />
+c ------[pre3]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(odlc.eq.&#39;1&#39;)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATOMS=NATOMS-nc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ATOMS=NATOMS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+c -----<br />
+c&nbsp; *基本的な周期を作るのに必要な原子の数を示すようにさせる<br />
+c -----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,801) ATOMS,NTYPES,zero<br />
+c -----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,811) (real(-nzs(i)),i=1,NTYPES)<br />
+c -----LATTICE CONSTANT / atomic-----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcux=lcx*UT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcuy=lcy*UT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lcuz=lcz*UT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,831) lcux,lcuy,lcuz<br />
+c -----charge coordinate-----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i=1,NATOMS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(odlc.eq.&#39;1&#39;)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(xv(i).ne.mxv .and. yv(i).ne.myv .and. zv(i).ne.mzv)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xvut=xv(i)*UT/lcux<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yvut=yv(i)*UT/lcuy<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zvut=zv(i)*UT/lcuz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,821) xvut,yvut,zvut,NEQ(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xvut=xv(i)*UT/lcux<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; yvut=yv(i)*UT/lcuy<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zvut=zv(i)*UT/lcuz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,821) xvut,yvut,zvut,NEQ(i)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c -----TRANSITION EXPANSION-----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,801) ntex,ntey,ntez<br />
+c -----SHIFT QUANTITY -----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,831) sqx,sqy,sqz<br />
+c -----CLACULATION RANGE *&plusmn;----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; WRITE(13,831) crx,cry,crz<br />
+c -----------------------------------------------------------------------<br />
+c define format<br />
+&nbsp; 801 format(3I5)<br />
+&nbsp; 811 format(8F10.5)<br />
+&nbsp; 821 format(3F20.10,I5)<br />
+&nbsp; 831 format(3F20.10)<br />
+c -----------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; END<br />
+c =======================================================================<br />
+<br />
+-----------------------------------------------------------------------------<br />
+&nbsp;

@@ -1,0 +1,156 @@
+EELSMODEL (http://www.eelsmodel.ua.ac.be/)<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1-3]<br />
+<br />
+・QSTEM<br />
+&nbsp; TEM/STEMの像シミュレーション<br />
+&nbsp; https://www.physics.hu-berlin.de/en/sem/software/software_qstem<br />
+・Dr. Probe<br />
+&nbsp; TEM/STEMの像シミュレーション<br />
+&nbsp; http://www.er-c.org/barthel/drprobe/<br />
+&nbsp; https://github.com/QSTEM/QSTEM<br />
+・PyQSTEM<br />
+&nbsp; https://github.com/jacobjma/PyQSTEM<br />
+・Prismatic<br />
+&nbsp; http://prism-em.com/<br />
+・EELSMODEL<br />
+&nbsp; http://www.eelsmodel.ua.ac.be/<br />
+<br />
+・ ReciPro<br />
+&nbsp; 電子回折パターンのシミュレーション<br />
+&nbsp; http://pmsl.planet.sci.kobe-u.ac.jp/~seto/?page_id=19&amp;lang=ja<br />
+・ EDA<br />
+&nbsp; 電子回折パターンのシミュレーション<br />
+&nbsp; http://www-gbs.eps.s.u-tokyo.ac.jp/kogure/EDANA/EDA/EDANA_E.htm<br />
+<br />
+・ VESTA<br />
+&nbsp; 結晶構造のモデリングと可視化<br />
+&nbsp; http://jp-minerals.org/vesta/jp/<br />
+・ ImageJ (Win, Linux, Mac)<br />
+&nbsp; NIHが公開している画像と解析ソフト。DMファイルも扱える<br />
+・ GMS (Gatan Microscopy Suite) (Win)<br />
+&nbsp; Free-offline版<br />
+<br />
+[1] 便利なフリーウェア<br />
+&nbsp; https://aem-www.imr.tohoku.ac.jp/便利なフリーウェア/<br />
+[2] Advanced Data Processing and Simulations<br />
+&nbsp; https://www.superstem.org/learn/resources<br />
+[3] Electron Microscopy Software<br />
+&nbsp; http://jiam.utk.edu/facilities/microscopy/software.php<br />
+------------------------------------------------------------------------------<br />
+■ EELSMODEL (Windows 10 (64 bit))<br />
+(http://www.eelsmodel.ua.ac.be/downloads)<br />
+<br />
+□ Install<br />
+・EELSModel 4.1.0 (25 MB) EELSModel_setup_4_1.exe<br />
+1. windows_EELSModel_setup_4_1.exe<br />
+2. All [Next&gt;] &gt; I accept the agreement &gt; [Next&gt;] &gt; [Next&gt;]<br />
+&nbsp; &gt; [check] Create a desktop icon &gt; [Next&gt;] &gt; [Install] &gt; [Finish]<br />
+3. OK<br />
+------------------------------------------------------------------------------<br />
+■ Tutorials<br />
+(eelsmodel_tutorial.doc)<br />
+<br />
+◇ Example data<br />
+&nbsp; C:\Program Files\EELSMODEL\Examples<br />
+<br />
+◇ data and information<br />
+&nbsp; &nbsp;calibrated core loss EELS spectrum (DM3 or MSA format)<br />
+&nbsp; &nbsp;acceleration voltage<br />
+&nbsp; &nbsp;collection angle<br />
+&nbsp; &nbsp;convergence angle<br />
+&nbsp; &nbsp;EELSMODEL\Noise_measure_script\measure_noise_properties_oversampling.s (1k camera&#39;s) &gt; EELSMODEL \ release \ detector.txt<br />
+<br />
+◇ Example1 quantifying core less spectra<br />
+0. data and information<br />
+&nbsp; Core loss: C:\Program Files\EELSMODEL\Examples\Round robin\T3_A3\region3\SI_HL2_cal.dm3<br />
+&nbsp; Low loss: C:\Program Files\EELSMODEL\Examples\Round robin\T3_A3\region3\LL_cal.msa<br />
+&nbsp; Ghost-spectrum: C:\Program Files\EELSMODEL\Examples\Round robin\T3_A3\region3\ BG_cal.msa<br />
+&nbsp; experimental conditions<br />
+&nbsp; -----<br />
+&nbsp; microscope: Jeol 3000F + GIF2000 1K camera<br />
+&nbsp; diffraction mode EELS, 2mm entrance aperture, 15 cm camera length<br />
+&nbsp; acceleration voltage: 300 kV<br />
+&nbsp; collection angle=4.12 mrad (obtained from pre-calibrated camera length and EELS entrance aperture)<br />
+&nbsp; convergence angle= 0.27 mrad (obtained from a diffraction patern and measuring the size of the diffraction discs due to beam convergence with respect to the 2mm entrance aperture)<br />
+&nbsp; aquisition time=0.2 s<br />
+&nbsp; ghost-spectrum (50s) &gt; smoothing &gt; corrected to the 0.2 s<br />
+&nbsp; -----<br />
+1. EELSMODEL<br />
+2. File &gt; open DM3 (Core loss data)<br />
+&nbsp; Examples\Round robin\T3_A3\region3\SI_HL2_cal.dm3<br />
+3. File &gt; open spectrum (Low loss)<br />
+&nbsp; Examples\Round robin\T3_A3\region3\LL_cal.msa<br />
+4. (click) [e- counts vs energy [eV] windos<br />
+5. Model &gt; New Model<br />
+6. Model &gt; Component<br />
+7. Model &gt; choose detector &gt; EMAT 3000F GIF2000 1k &gt; OK<br />
+8. Power law backgro... &gt; Add<br />
+9. Region Select (on the upper left, hiding in the window)<br />
+&nbsp; &gt; select region (e.g., 50 - 150 eV) &gt; right-click on Power law b...<br />
+10. Add Xsections<br />
+&nbsp; B<br />
+&nbsp; N<br />
+&nbsp; alpha=0.27 mrad, beta=4.12 mrad, 300 kV and 1.5 eV resolution<br />
+10. Make cross sections<br />
+11. (click) LL_cal (window)<br />
+12. Multiple scattering... &gt; Add<br />
+13. File &gt; Save project<br />
+14. Model &gt; Fit &gt; Levenberg Marquardt Poisson &gt; OK &gt; Do Iterations (on Fitter options)<br />
+&nbsp; (check) Tolerance reached (window)<br />
+&nbsp; Likelihood merrit function&nbsp;<br />
+&nbsp; The model is accepted at a confidence level of<br />
+15. B K &gt; add Monitor (Model components (window)) &gt; (click) stre... &gt; ratio p1/p2 &gt; OK<br />
+16. [check] Fit all in multispectrum &gt; Do Iterations (on Fitter options) &gt; Save params as .txt<br />
+17. B K Fine str... (on Model components (window))<br />
+&nbsp;&gt; (click) E wi.. (=E width) &gt; [check] Changeable &gt; 300 [Parameter value] &gt; [uncheck] Changeable &gt; OK<br />
+18. Region Select (on the upper left, hiding in the window)<br />
+&nbsp; low energy are (e.g. 0-20 eV) &gt; Edit &gt; Exclude point<br />
+&nbsp; high energy are (e.g. 650-700 eV) &gt; Edit &gt; Exclude point<br />
+&nbsp; &gt; Do Iterations (on Fitter options)<br />
+19. B K Fine str... (on Model components (window))<br />
+&nbsp;&gt; right-click &gt; (change &quot;nr of points&quot;) 46 -&gt; 80<br />
+20. File &gt; Open Spectrum<br />
+&nbsp; EELSMODEL\Examples\Round robin\T3_A3\region3\ BG_cal.msa<br />
+21. FixedPattern (Model components (window)) &gt; Add &gt; All [OK]<br />
+22. (righ-click = unlock) (Model components (window)) &gt; Do Iterations (on Fitter options)<br />
+23. File &gt; Save project<br />
+24. File &gt; Save params as .txt<br />
+<br />
+◇ Fitting low loss spectra EELSMODEL<br />
+1. File &gt; Open DM3<br />
+&nbsp; Examples\low_loss_diamond\diamond_no_bkg_deconv.dm3<br />
+2. (click) spectra window<br />
+3. Model &gt; New model<br />
+4. Model &gt; Component<br />
+&nbsp; Dielectric Model Li... &gt; Add<br />
+&nbsp; &gt; enter number of points [10] &gt; OK<br />
+&nbsp; &gt; 5.8081 [Parameter value] (for Eps0) &gt; OK<br />
+&nbsp; &gt; 0.1 [Parameter value] (for srength) &gt; OK<br />
+&nbsp; &gt; 3E5 [Parameter value] (for E0) &gt; OK<br />
+&nbsp; &gt; 5e-8 [Parameter value] (for absolute thickness [m]) &gt; OK<br />
+&nbsp; &gt; 20e-3 [Parameter value] (for thetamax [rad]) &gt; OK<br />
+&nbsp; &gt; OK (for Estop [eV])<br />
+5. Model &gt; Fit &gt; GSL: Least Squares &gt; OK<br />
+6. Do Iterations (on Tolerance reached)<br />
+7. (right-click) Dielectric M... (on Model component window)<br />
+&nbsp; [chack] Apply relativistic correction<br />
+&nbsp; nr. of points [10] -&gt; [40]<br />
+8. Do Iterations (on Tolerance reached)<br />
+<br />
+※ Eps0: dielectric constant at zero energy loss<br />
+&nbsp; Eps0 = n^2<br />
+&nbsp; n: refractive index<br />
+&nbsp; diamond, n = 2.41 -&gt; 2.41^2 = 5.8081<br />
+<br />
+※ In my case, &quot;[unchack] Apply relativistic correction&quot; is good fit.<br />
+------------------------------------------------------------------------------<br />
+■ database<br />
+&nbsp; EELS database - http://www.cemes.fr/~eelsdb/<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+[1] Table of Contents<br />
+&nbsp; http://prism-em.com/tutorialSuperSTEM/<br />
+[2] Prismatic GUI Tutorial Decahedral Nanoparticle<br />
+&nbsp; http://prism-em.com/tutorial/<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,275 @@
+<p>&nbsp; NEB (Nudged Elastic Band ) and ESM (有効遮蔽媒質法) calculation<br />
+--------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+◇ H2 + H&nbsp; &larr;&rarr; H + H2<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd NEB<br />
+3. cd examples<br />
+4. run_example<br />
+<br />
+◇ H atom diffusion on Al(001) surface<br />
+Effective Screening Medium Method (ESM) and constant bias potential (constant-mu) method.<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd NEB<br />
+3. cd examples<br />
+4. ESM_example<br />
+5. run_example<br />
+<br />
+◇ H2 + H&nbsp; &larr;&rarr; H + H2<br />
+1. gedit H2+H.in<br />
+----------<br />
+BEGIN<br />
+BEGIN_PATH_INPUT<br />
+&amp;PATH<br />
+&nbsp; restart_mode&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &#39;from_scratch&#39;<br />
+&nbsp; string_method&nbsp;&nbsp;&nbsp;&nbsp; = &#39;neb&#39;,<br />
+&nbsp; nstep_path&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 20,<br />
+&nbsp; ds&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 2.D0,<br />
+&nbsp; opt_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;broyden&quot;,<br />
+&nbsp; num_of_images&nbsp;&nbsp;&nbsp;&nbsp; = 7,<br />
+&nbsp; k_max&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.3D0,<br />
+&nbsp; k_min&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.2D0,<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;auto&quot;,<br />
+&nbsp; path_thr&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.1D0,<br />
+/<br />
+END_PATH_INPUT<br />
+BEGIN_ENGINE_INPUT<br />
+&amp;CONTROL<br />
+&nbsp; prefix&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;H2+H&quot;<br />
+&nbsp; outdir&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;tmp&quot;,<br />
+&nbsp; pseudo_dir&nbsp;&nbsp;&nbsp;&nbsp; = &quot;/home/student/q-e-qe-6.3/pseudo/&quot;,<br />
+/<br />
+&amp;SYSTEM<br />
+&nbsp; ibrav&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0,<br />
+&nbsp; nat&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 3,<br />
+&nbsp; ntyp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 1,<br />
+&nbsp; ecutwfc&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 20.0D0,<br />
+&nbsp; ecutrho&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 100.0D0,<br />
+&nbsp; nspin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 2,<br />
+&nbsp; starting_magnetization = 0.5D0,<br />
+&nbsp; occupations&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;smearing&quot;,<br />
+&nbsp; degauss&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 0.03D0,<br />
+/<br />
+&amp;ELECTRONS<br />
+&nbsp; conv_thr&nbsp;&nbsp;&nbsp; = 1.D-8,<br />
+&nbsp; mixing_beta = 0.3D0,<br />
+/<br />
+&amp;IONS<br />
+/<br />
+ATOMIC_SPECIES<br />
+H&nbsp; 1.00794&nbsp; HUSPBE.RRKJ3<br />
+BEGIN_POSITIONS<br />
+FIRST_IMAGE<br />
+ATOMIC_POSITIONS { bohr }<br />
+H&nbsp;&nbsp; -4.56670009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 1&nbsp; 0&nbsp; 0<br />
+H&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0&nbsp; 0&nbsp; 0<br />
+H&nbsp;&nbsp;&nbsp; 1.55776676&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 1&nbsp; 0&nbsp; 0<br />
+LAST_IMAGE<br />
+ATOMIC_POSITIONS { bohr }<br />
+H&nbsp;&nbsp; -1.55776676&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+H&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+H&nbsp;&nbsp;&nbsp; 4.56670009&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.00000000<br />
+END_POSITIONS<br />
+K_POINTS { gamma }<br />
+CELL_PARAMETERS { bohr }<br />
+&nbsp; 12.00000&nbsp; 0.00000&nbsp; 0.00000<br />
+&nbsp;&nbsp; 0.00000&nbsp; 5.00000&nbsp; 0.00000<br />
+&nbsp;&nbsp; 0.00000&nbsp; 0.00000&nbsp; 5.00000<br />
+END_ENGINE_INPUT<br />
+END<br />
+----------<br />
+2. mpirun -np 2&nbsp; $HOME/q-e-qe-6.3/bin/neb.x -inp&nbsp; H2+H.in | tee H2+H.out<br />
+3. xcrysden --axsf H2+H.axsf<br />
+<br />
+◇ 「H2 + H&nbsp; &larr;&rarr; H + H2」での入力ファイルの違い<br />
+・&nbsp;ファイル名に特に記述無し<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;auto&quot;,<br />
+　奇数個のポイント（Image）を作ることで、中央のポイントが「saddle point」となるようにしている<br />
+・ symmetry<br />
+&nbsp; CI_scheme&nbsp;の記述無し<br />
+　偶数個のポイント（Image）を作ることで、中央付近のポイントが「saddole point」にならないようにしている<br />
+・ asymmetry<br />
+&nbsp; CI_scheme&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = &quot;manual&quot;<br />
+　上記の設定をすることで、CLIBING_IMAGESで指定したポイント（Image）が「saddole point」となるようにしている<br />
+※ これらの入力ファイルでは、平面波のカットオフと計算の収束を判定するための閾値、セルの大きさを小さくして精度を落としている。実際の計算では、カットオフは擬ポテンシャルに記載の値を採用し、計算の収束を判定するための閾値をディフォルト値にしたり、分子の場合は10Åほど何も無い真空の層が必要になる。<br />
+<br />
+◇ 「H atom diffusion on Al(001) surface」での入力ファイルの違い<br />
+1. ESM（有効遮蔽媒質法）無し<br />
+2. ESM（bc3）を用いる<br />
+&nbsp; assume_isolaed=&#39;esm&#39;<br />
+&nbsp; exm_bc=&#39;bc3&#39;<br />
+3.&nbsp;定バイアス電位 (constat-&mu;) 条件 + ESM<br />
+　フェルミエネルギーに上記2.を用いる<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.332504<br />
+&nbsp; assume_isolaed=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+4. フェルミエネルギーを -0.5 Vに設定 + ESM<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.369253<br />
+&nbsp; fcp_tot_charge_first = 0.021755<br />
+&nbsp; fcp_tot_charge_last = 0.022195<br />
+&nbsp; assume_isolated=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+&nbsp; ※ fcp_mu = -0.332504 -0.5/13.6058 = -0.369253<br />
+5. フェルミエネルギーを +0.5 Vに設定 + ESM<br />
+&nbsp; lfcpopt = .TRUE.<br />
+&nbsp; fcp_mu = -0.295755<br />
+&nbsp; fcp_tot_charge_first = -0.021744<br />
+&nbsp; fcp_tot_charge_last = -0.021744<br />
+&nbsp; assume_isolated=&#39;esm&#39;<br />
+&nbsp; esm_bc=&#39;bc3&#39;<br />
+&nbsp; ※ fcp_mu = -0.332504 +0.5/13.6058 = -0.295775<br />
+※ docのINPUT_NEB&nbsp;と PW/examples/ESM_example/README を読むと入力ファイルの詳細について記述されている。<br />
+&nbsp; bc1： [Vacuum-slab-Vacuum]（境界条件）での計算<br />
+&nbsp; bc2：&nbsp;[Metal-slab-metal]（境界条件）での計算、Constant-&mu;法が可能<br />
+&nbsp; bc3： [Vacuum-slab-metal]（境界条件）での計算、Constant-&mu;法が可能<br />
+※ z=0でAlが配置され、z=3.11の高さに水素、水素の半径程度、10Åの真空層となるように単位胞が作られている。<br />
+※ 原子位置の横にある0や1は、MDや構造最適化で原子を動かす時に1を指定する。マニュアルには、Force（ちから）に掛ける係数となっている。0であればForceがかからずに動かない。1であればForceがかかり原子が動くことになる。<br />
+※ 原子の動きに対称性がない場合には、nosym = .TRUE.を入れる程度で、string_method = &#39;neb&#39;, opt_scheme =&#39;broyden&#39;を入力ファイルに記述すれば、入力ファイルの作成はSCFなどとたいして変わらない。<br />
+※ string_method = &#39;neb&#39;は記述しなくてもディフォルトでnebになっている。<br />
+※ 有効遮蔽媒質法(ESM法)は、電荷を有するスラブモデルあるいは電場印加条件下にあるスラブモデル[1]<br />
+<br />
+◇ PW/examples/ESM_example/README<br />
+----------<br />
+1) &#39;bc1&#39; : Immerse the slab between two semi-infinite vacuum regions;<br />
+2) &#39;bc2&#39; : Immerse the slab between two semi-infinite metallic electrodes, with optional fixed field applied between them. Constant-mu method is available for controlling the Fermi energy.<br />
+3) &#39;bc3&#39; : Immerse the slab between one semi-infinite vacuum region (left-hand side) and one semi-infinite metallic electrode (right-hand side). Constant-mu method is available for controlling the Fermi energy.<br />
+<br />
+Two dimensional (xy-plane) average charge density and electrostatic potentials are printed out into &#39;esm1&#39; file.<br />
+<br />
+The example calculation proceeds as follows:<br />
+<br />
+esm_bc = &#39;pbc&#39;:<br />
+<br />
+1) make a self-consistent calculation for H2O with esm_bc = &#39;pbc&#39; (ESM off)<br />
+&nbsp;&nbsp; (input=H2O_pbc.in, output=H2O_pbc.out). Using &#39;pbc&#39; causes the<br />
+&nbsp;&nbsp; code to print out the density and potential (hartree + local) along z, even<br />
+&nbsp;&nbsp; though ESM is disabled. Note that the molecule has a z-oriented dipole.<br />
+<br />
+esm_bc = &#39;bc1&#39;:<br />
+<br />
+4) make a self-consistent calculation for H2O with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=H2O_bc1.in, output=H2O_bc1.out). This simulates the water molecule<br />
+&nbsp;&nbsp; in an infinite vacuum along the z-direction, preventing dipole-dipole<br />
+&nbsp;&nbsp; interaction between periodic images.<br />
+<br />
+6) make a self-consistent calculation for graphene with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=graphene_bc1.in, output=graphene_bc1.out).<br />
+&nbsp;&nbsp; Stress calculation is enabled.<br />
+<br />
+7) make a variable cell (vc-relax) calculation for graphene with esm_bc = &#39;bc1&#39;<br />
+&nbsp;&nbsp; (input=graphene_bc1_vc-relax.in, output=graphene_bc1_vc-relax.out).<br />
+&nbsp;&nbsp; This simulation starts from slightly distorted cell (angle of lattice vector<br />
+&nbsp;&nbsp; is 117 degree) and ends with hexagonal cell (angle of lattice vector is 120<br />
+&nbsp;&nbsp; degree).<br />
+<br />
+esm_bc = &#39;bc3&#39;:<br />
+<br />
+11) make a self-consistent calculation for Al(001) with esm_bc = &#39;bc3&#39; to<br />
+&nbsp;&nbsp; simulate a slab in contact with semi-infinite&nbsp; metal electrode (right-<br />
+&nbsp;&nbsp; hand side).<br />
+&nbsp;&nbsp; (input=Al001_bc3.in, output=Al001_bc3.out).<br />
+<br />
+12) make a self-consistent calculation for Al(001) with esm_bc = &#39;bc3&#39; to<br />
+&nbsp;&nbsp; simulate a slab in contact with semi-infinite metal electrode with<br />
+&nbsp;&nbsp; a weakly negative (-0.02e) overall charge (input=Al001_bc3_m002.in,<br />
+&nbsp;&nbsp; output=Al001_bc3_m002.out). Note that the charge migrates to the right<br />
+&nbsp;&nbsp; surface of the slab.<br />
+<br />
+13) Repeat #6 but with a weakly positive (+0.02e) overall charge<br />
+&nbsp;&nbsp; (input=Al001_bc3_p002.in, output=Al001_bc3_p002.out).<br />
+<br />
+14) make a &#39;relax&#39; calculation on both geometory and Fermi energy for Al(001)<br />
+&nbsp;&nbsp; with esm_bc = &#39;bc3&#39; (input=Al001_bc3_v00.in, output=Al001_bc3_v00.out).<br />
+&nbsp;&nbsp; The target Fermi energy is set to that of the neutral surface (#11, Vpzc).<br />
+&nbsp;&nbsp; (input=Al001_bc3_v00.in, output=Al001_bc3_v00.out).<br />
+&nbsp; &nbsp;<br />
+15) Repeat #8 but with a higher target Fermi energy (+0.5V vs Vpzc).<br />
+&nbsp;&nbsp; (input=Al001_bc3_vp05.in, output=Al001_bc3_vp05.out).<br />
+<br />
+16) Repeat #8 but with a lower target Fermi energy (-0.5V vs Vpzc).<br />
+&nbsp;&nbsp;&nbsp; (input=Al001_bc3_vm05.in, output=Al001_bc3_vm05.out).<br />
+<br />
+17) make a self-consistent calculation for graphene with esm_bc = &#39;bc3&#39;<br />
+&nbsp;&nbsp;&nbsp; (input=graphene_bc3.in, output=graphene_bc3.out).<br />
+<br />
+18) make a variable cell (vc-relax) calculation for graphene with esm_bc = &#39;bc3&#39;<br />
+&nbsp;&nbsp;&nbsp; (input=graphene_bc3_vc-relax.in, output=graphene_bc3_vc-relax.out).<br />
+&nbsp;&nbsp;&nbsp; The graphene is weakly positive (+0.02e) overall charge. The angle of the<br />
+&nbsp;&nbsp;&nbsp; unit cell is converged to 120 degree.<br />
+----------<br />
+<br />
+◇ tools (underconstruct)<br />
+1. sudo apt-get install gawk<br />
+2. gedit path_interpolation.sh<br />
+--------------------------------------------------------------------------------<br />
+■ ESM-RISM [3-13]<br />
+<br />
+・注目する吸着分子や反応分子以外の電解質を溶液理論モデル（古典溶液理論 RISM: Reference Interaction Site Model）に置換することで従来の第一原理MDの約1/10の計算時間で界面構造や反応性の詳細な情報を取得可能 [2]<br />
+・電解液の組成や塩濃度の指定が可能 [2]<br />
+・バイアス印加はESM法で行う [2]<br />
+・Quantum Espresso (ver. 6.1)に導入されている<br />
+<br />
+□ 有効遮蔽媒質法(ESM: Effective Screening Medium)[4]<br />
+・ポアソン方程式に対して、任意の1座標軸（たとえばz軸）の境界条件を任意に設定することが可能である。残りの二つの座標軸（x-y軸）に関しては周期境界条件（PBC: Periodic Boundary Condition）を課す。<br />
+<br />
+□ 古典溶媒理論(RISM: Reference Interaction Site Model)[4]<br />
+・溶液側をRISMで扱うことにより、一度の計算で熱力学極限での分布関数が得られる点がRISMを利用することの最大のメリットであり、第一原理分子動力学（MD）を用いると非常に長時間の計算を要する。<br />
+・RISMとのハイブリッド計算を行う場合には、明示的に原子をDFTで計算する領域と、暗黙的に溶媒領域をRISMで扱う領域の二つに分けて考える必要があり、電極や反応種を明示的に扱い、その周りの環境の部分を暗黙的に扱うのが通常の扱い方である。<br />
+<br />
+□ ESM-RISM[4-13]<br />
+・「Unit cell」領域がDFT計算で扱う範囲で、「Expand cell」がRISMで扱う領域。「Expand cell」は「Unit cell」の領域を含み、「Unit cell」の領域よりも大きい（例えば、x-yは同じでzのみ「Expand cell」が長い）。<br />
+・「Expand cell」内の各イオンの濃度は電圧により変化することが可能であることから、電気二重層も自然に扱うことが可能となっている。これはRISMがグランドカノニカルアンサンブルに立脚して理論が組み立ててあるからであり、粒子浴を接続できない通常の分子動力学ではこのようなことは難しい。<br />
+・通常の実験と比較する際には相対値があれば十分なのでESM-RISMで計算される静電ポテンシャル&Phi;<sub>s</sub>を原点として利用できる。<br />
+・それぞれの分子近傍の電解質濃度が異なるが、遠方でユーザーの指定値に接続するようにRISMが自動的に局所的な濃度を調整する。一旦、基準とする酸化還元電位が求まると<br />
+&nbsp; E(H<sup>+</sup>/H<sub>2</sub>)[vs &Phi;<sub>s</sub>] = -&mu;<sub>e</sub><sup>SHE</sup>/e[vs &Phi;<sub>s</sub>]<br />
+と置くことで、電極電位の基準となる化学ポテンシャル（&mu;<sub>e</sub><sup>SHE</sup>）が決まる（ここでSHEは標準水素電極（Standard Hydrogen Electrode）を意味する）。この&mu;<sub>e</sub><sup>SHE</sup>を基準として対象とする系の電子の化学ポテンシャル&mu;<sub>e</sub>を測るとSHE基準での電圧が以下のように計算できる。<br />
+&nbsp; E(SHE) = -(&mu;<sub>e </sub>- &mu;<sub>e</sub><sup>SHE</sup>)/e<br />
+電解質溶液を変えない限り、&mu;<sub>e</sub>はいつでもSHE基準の電位に変換することができるので、任意の電極材料で電気化学反応の計算がSHE基準の電圧を制御しながら計算ができるようになる。<br />
+・電極界面系では、電子の化学ポテンシャルは金属のフェルミエネルギーでコントロールされる。つまり、系の電子数が変化することになる。このような系ではギブス自由エネルギーではなく、グランドポテンシャルを定義してエネルギー論を展開する必要がある。グランドポテンシャル&Omega;は、<br />
+&nbsp; &Omega; = A - &mu;<sub>e</sub>*&Delta;N<sub>e</sub> = E<sub>DFT</sub> + &Delta;A<sub>RISM</sub> - &mu;<sub>e</sub>*&Delta;N<sub>e</sub><br />
+となる。ここで、E<sub>DFT</sub>はDFTの全エネルギー（ここでE<sub>DFT</sub>は自由エネルギーに等しいと仮定する）、&Delta;A<sub>RISM</sub>はRISMの溶媒和自由エネルギー、&Delta;N<sub>e</sub>は電子系（DFT計算部分）の余剰電荷量である。<br />
+・化学式の左辺に対応するグランドポテンシャルを&Omega;<sub>L</sub>、右辺を&Omega;<sub>R</sub>とすると、それらを&mu;<sub>e</sub>に対して計算・プロットして、&Omega;<sub>L</sub>と&Omega;<sub>R</sub>が交差する電位が&rdquo;平衡電位&rdquo;となる（※ この一連の部分は私の理解が誤っていたら申し訳ない）。<br />
+・今後（文献[4]は2020年1月31日に出版）、RISMより優れた手法、たとえばグランドカノニカルアンサンブルを実現できる分子動力学手法が開発されたとしても、電極電位の定義の仕方はそのまま適用できる。<br />
+<br />
+◇ 電極電位<br />
+・標準水素電極（SHE）電位<br />
+&nbsp; (1/2)*H<sub>2</sub>(gas) + H<sub>2</sub>O (sol) &larr;&rarr; H<sub>3</sub>O<sup>+</sup> (sol) + e<sup>-</sup><br />
+・Liの標準電極電位 (Li/Li<sup>+</sup>)<br />
+&nbsp; Li (metal) &larr;&rarr; Li<sup>+</sup> (sol) + e<sup>-</sup><br />
+&nbsp; ここで、gasは気体中の分子、solは電解質溶液中のイオン/分子、metalはバルク金属である。リチウムイオン電池などで用いられる<br />
+・ESM-RISMで計算される静電ポテンシャル&Phi;<sub>s</sub>を、溶液と真空界面の分極を考慮に入れて&Phi;<sub>sv</sub>までつなげると（省略）、&Phi;<sub>s</sub>には真空から見れば真空と溶液の界面の分極の効果が入っていないことがわかる。&Phi;<sub>sv</sub>は溶液の外側の真空であり絶対的な原点であり、電解質溶液の種類や濃度によらない。一方、&Phi;<sub>s</sub>はバルク中のポテンシャルであり、電解質溶液の種類や濃度に依存する。したがって、&Phi;<sub>s</sub>は絶対的な原点とはなり得ないが、電解質溶液の種類や濃度を決めると、電圧を変えたり、電極界面で反応が起こったりしても、&Phi;<sub>s</sub>は真空から見て（つまり、&Phi;<sub>sv</sub>から見て）変化しない。したがって、ここを静電ポテンシャルの原点とすることが可能であり、通常の実験と比較する際には相対値があれば十分なので&Phi;<sub>s</sub>を原点として利用できる。<br />
+・PZC (Potential of Zero Charge)<br />
+&nbsp; 電極表面が中性となる電圧を指す。電圧が-1[V vs PZC]とすると表面は正に帯電する（酸素原子などを引き付ける）。逆に+1[V vs PZC]とすると電極表面は負に帯電する（水素原子などを引き付ける）。<br />
+--------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 概要 (有効遮蔽媒質法(ESM法)) (OpenMX)<br />
+&nbsp; <a href="http://www.openmx-square.org/openmx_man3.7jp/node118.html">http://www.openmx-square.org/openmx_man3.7jp/node118.html</a><br />
+[2]&nbsp;ESM-RISM法による電気化学界面の構造･反応シミュレーション<br />
+&nbsp;&nbsp;http://www.nissan-arc.co.jp/service/055_D115.html<br />
+[3] 界面原子ダイナミクス・反応シミュレータ (ESM-RISM)<br />
+&nbsp;&nbsp;https://www.admat.or.jp/library/5975666db3de4b020a7803ae/5d282efc3eaf67ae0dbd8324.pdf&nbsp;<br />
+[4] <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">理化学研究所編『23の先端事例がつなぐ計算科学のフロンティア』近代科学社、2020</span><br />
+[5] M. Otani and O. Sugino, Phys. Rev. B 73 (2006) 115407-1-11.<br />
+[6] N. Bonnet et al., Phys. Rev. Lett., 109 (2012) 266101-1-5.<br />
+[7] S. Nishihara and M. Otani, Phys. Rev. B 96 (2017) 115429-1-6.<br />
+&nbsp; 3次元周期境界条件を用いた系におけるハイブリッド計算（いわゆる3D-RISM計算）<br />
+&nbsp; バルク構造内に閉じ込められた溶液の状態を計算することも可能<br />
+[8] J. Haruyama et al., Phys. Rev. Mater., 2 (2018) 095801-1-11.<br />
+[9] 大谷実ら『固体物理』44 (2009) 55.<br />
+[10] 大谷実ら『日本物理学会誌』64 (2009) 777.<br />
+[11] 大谷実『金属』80 (2010) 115.<br />
+[12] M. Otani, Rev. Polarogr. 64 (2018) 79.<br />
+[13] S. Torasatti, Pure &amp; Appl. Chem. 56 (1986) 955-966.<br />
+&nbsp; Torasattiが定めた一般的に用いられる絶対電極電位 &mu;<sub>e</sub><sup>abs</sup> = (&epsilon;<sub>f</sub> - &Phi;<sub>sv</sub>)/e [V]<br />
+&nbsp; Torasattiが採用した原点は電解質溶液のすぐ外側に真空を置いたときのその真空準位（&Phi;<sub>sv</sub>）である。<br />
+&nbsp; Torasattiも&Phi;<sub>s</sub>を原点として採用できることは指摘しているが、実験的には観測可能量ではないことから、実験的に測定可能な&Phi;<sub>sv</sub>を原点として採用している。<br />
+[14] 3D-RISMを中心とした生体機能解析<br />
+&nbsp; https://www.ssken.gr.jp/MAINSITE/download/newsletter/2012/20120820-sci-1/lecture-02/SSKEN_sci2012-1_yoshida_presentation.pdf<br />
+[15] https://eisconsortium.org<br />
+&nbsp; 大谷先生が主宰する電気化学界面シミュレーションコンソーシアムにて定期的に研究会やチュートリアルなどが行われている。ESM-RISM計算では溶液の領域を明示的に扱わないので、計算負荷が小さく企業の研究現場においても積極的に使われはじめており、電池材料の研究のみならず、金属材料の腐食のシミュレーションも行われはじめている。<br />
+※ 利用者は、コンパイラ（例えばgfortranかIntel fortran）のどれが動作保証されているか一応確認しておいてください。<br />
+--------------------------------------------------------------------------------</p>

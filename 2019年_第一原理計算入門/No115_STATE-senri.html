@@ -1,0 +1,173 @@
+　ここではSTATE-senriについて少しだけメモ書きをする。<br />
+------------------------------------------------------------------------------<br />
+■ node数の決め方<br />
+<br />
+出力ファイル（nfoutなど）を見ると下記の記述がある（たとえば、less nfout などとしてみる）。<br />
+&nbsp;===================================================<br />
+&nbsp;===&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; MPI PARALLELIZATION INFORMATION&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ===<br />
+&nbsp;===================================================<br />
+&nbsp;=== TOTAL NUMBER OF K-POINTS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 64 ===<br />
+&nbsp;=== K-POINT DIVISOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8 ===<br />
+&nbsp;=== TOTAL NUMBER OF BANDS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 36 ===<br />
+&nbsp;=== BAND DIVISOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3 ===<br />
+&nbsp;=== TOTAL NUMBER OF G-VECTORS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp; 2463 ===<br />
+&nbsp;=== G-VECTOR DIVISOR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; :&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1 ===<br />
+&nbsp;===================================================<br />
+<br />
+node = K-POINT DIVISOR * BAND DIVISOR となるように node 数を指定する。<br />
+export OMP_NUM_THREADS=16 は 16スレッド並列するが、node数の指定には関係ない。<br />
+※ 初心者は一度走らせて、この値を参考にnode数を指定してみるのもよい。<br />
+※ ダビッドソンは系が小さいときに収束が速い。一方、RMMは系が大きいときに収束が速い。RMMが常に収束が速いと考えるのは誤り。<br />
+------------------------------------------------------------------------------<br />
+■ 結果の見方<br />
+最後の部分を見たいとき： tail nfout<br />
+全体を見たいとき： less nfout<br />
+MDの結果をみたいとき： grep MD&nbsp; nfout<br />
+全エネルギーの結果を見たいとき： grep ETOT nfout<br />
+スピンの結果を見たいとき： grep -i charge nfout<br />
+　Charge Density =&nbsp; up&nbsp; down&nbsp; up+down として記述されている。<br />
+------------------------------------------------------------------------------<br />
+■ スラブモデルを用いたFe中にCを入れた計算（第一原理MDで計算する）<br />
+（Feの初期のスピンを少しupが多いようにしている）<br />
+※ <a href="http://www-cp.prec.eng.osaka-u.ac.jp/puki_state/index.php?%E8%A8%88%E7%AE%97%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9%2FSTATE%2FCO%20molecule">http://www-cp.prec.eng.osaka-u.ac.jp/puki_state/index.php?%E8%A8%88%E7%AE%97%E3%82%B3%E3%83%BC%E3%83%89%E3%81%AE%E4%BD%BF%E3%81%84%E6%96%B9%2FSTATE%2FCO%20molecule</a>　 を参照<br />
+<br />
+◇ スクリプトで書き換える部分<br />
+-----<br />
+ln -fs ~/STATE/gncpp/pot.C_pbe1 fort.37<br />
+ln -fs ~/STATE/gncpp/pot.Fe_pbe3 fort.38<br />
+<br />
+mpiexec -stdin nfinp_1 -stdout nfout_1 ./STATE_A<br />
+mpiexec -stdin nfinp_2 -stdout nfout_2 ./STATE_A<br />
+mpiexec -stdin nfinp_3 -stdout nfout_3 ./STATE_A<br />
+mpiexec -stdin nfinp_4 -stdout nfout_4 ./STATE_A<br />
+mpiexec -stdin nfinp_5 -stdout nfout_5 ./STATE_A<br />
+mpiexec -stdin nfinp_6 -stdout nfout_6 ./STATE_A<br />
+-----<br />
+※ 擬ポテンシャルの後のfort.37の数値は、用いる擬ポテンシャルが増える毎に+1した値を記述する。<br />
+<br />
+◇ 1. 入力ファイル(nfinp_1)<br />
+-----<br />
+&nbsp;&nbsp; 0 0 0 0 0 0<br />
+&nbsp;&nbsp; 5.5000 20.0000&nbsp;&nbsp; 2&nbsp;&nbsp; 6&nbsp;&nbsp; 6&nbsp;&nbsp; : GMAX, GMAXP, NTYP, NATM, NATM2<br />
+&nbsp;&nbsp; 1&nbsp; 0&nbsp; : number of space group, type of bravis lattice<br />
+&nbsp;&nbsp; 5.415&nbsp; 5.415&nbsp; 29.727&nbsp; 90.0&nbsp;&nbsp; 90.0&nbsp; 90.0&nbsp; : a,b,c,alpha,beta,gamma<br />
+&nbsp;&nbsp;&nbsp; 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp; : knx,kny,knz, k-point shift<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; : NCORD, NINV,&nbsp;&nbsp; : IWEI, IMDTYP, ITYP<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5.9150000000&nbsp; 1&nbsp;&nbsp; 1&nbsp; 1&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp; 1&nbsp;&nbsp; 0&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp; 1&nbsp;&nbsp; 1&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 5.4150000000&nbsp; 1&nbsp;&nbsp; 1&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2.7075000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8.1225000000&nbsp; 1&nbsp;&nbsp; 1&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp; 10.8300000000&nbsp; 1&nbsp;&nbsp; 1&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 6&nbsp; 0.1500&nbsp; 51577.50 3 1 0.d0&nbsp; : TYPE 1IATOMN,ALFA,AMION,ILOC,IVAN<br />
+&nbsp;&nbsp; 26&nbsp; 0.1500&nbsp; 51577.50 3 1 0.5d0&nbsp; : TYPE 2IATOMN,ALFA,AMION,ILOC,IVAN<br />
+&nbsp;0 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; : IPRE, IPRI<br />
+&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 200&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 57200.00&nbsp; 0 : NMD1, NMD2, iter_last, CPUMAX,ifstop<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp; : Simple=1,Broyd2=3,Blugel=6,&nbsp;&nbsp;&nbsp; 1:charge, 2:potential mix.<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; 0.01 : starting mixing, kbxmix,alpha<br />
+&nbsp;&nbsp; 0.60&nbsp; 0.50&nbsp; 0.60&nbsp; 0.70&nbsp; 1.00&nbsp;&nbsp;&nbsp; : DTIM1, DTIM2, DTIM3, DTIM4, dtim_last<br />
+&nbsp; 30.00&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.10D-08&nbsp; 1.d-06&nbsp; : DTIO ,IMDALG, IEXPL, EDELTA<br />
+&nbsp; -0.0020&nbsp; 0.10D+02&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : WIDTH,FORCCR,ISTRESS<br />
+ggapbe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : XCTYPE, nspin<br />
+&nbsp;&nbsp; 1.00&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : destm, n_stm<br />
+&nbsp;102&nbsp; : NBZTYP 0-SF, 1-BK, 2-SC, 3-BCC, 4-FCC, 5-DIA, 6-HEX<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; : NKX, NKY, NKZ<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; 0&nbsp;&nbsp; : NKX2,NKY2,NKZ2<br />
+&nbsp;&nbsp; 36&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEG<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 0; random numbers, 1; matrix diagon<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : evaluation of eko difference.0 = no ,1 = yes<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0.0<br />
+-----<br />
+※ 他の系を計算する時には、基本的に 「&nbsp;0 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw」の前の行までを計算する系にたいするものに書き換える。これらはVESTAで入力しているような結晶構造に関するデータである。NEGを使うバンド数に書き換える。<br />
+※ 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000000&nbsp; 1&nbsp;&nbsp; 0&nbsp; 2&nbsp; 0.0 0.0&nbsp; 0 での x, y, z 座標の後の2場面が0だと原子位置を移動可能にしない。1だと移動可能にする。<br />
+<br />
+◇ 2. diff nfinp_1 nfinp_2<br />
+15c15<br />
+&lt;&nbsp; 0 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+---<br />
+&gt;&nbsp; 1 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+19c19<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; 0.01 : starting mixing, kbxmix,alpha<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; 0.1 : starting mixing, kbxmix,alpha<br />
+※ 前回の電子構造を用いるように0-&gt;1にする。ミキシングパラメーター（前回と今回の結果の混ぜ具合）を大きくする。<br />
+<br />
+◇ 3. diff nfinp_2 nfinp_3<br />
+17,19c17,19<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 200&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 57200.00&nbsp; 0 : NMD1, NMD2, iter_last, CPUMAX,ifstop<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp; : Simple=1,Broyd2=3,Blugel=6,&nbsp;&nbsp;&nbsp; 1:charge, 2:potential mix.<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp; 0.1 : starting mixing, kbxmix,alpha<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; 200&nbsp;&nbsp; 200&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 57200.00&nbsp; 0 : NMD1, NMD2, iter_last, CPUMAX,ifstop<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp; 1&nbsp; : Simple=1,Broyd2=3,Blugel=6,&nbsp;&nbsp;&nbsp; 1:charge, 2:potential mix.<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 40&nbsp; 0.3 : starting mixing, kbxmix,alpha<br />
+※ 電子構造最適化の最大ステップ数を10から200にする。単純混合法からBroyden法（計算の収束が単純混合より速いと言われる）にミキシングの方法を変え、ミキシングに用いる履歴の回数を増加させる。ミキシング量を増加。<br />
+<br />
+◇ 4. diff nfinp_3 nfinp_4<br />
+22c22<br />
+&lt;&nbsp;&nbsp; -0.0020&nbsp; 0.10D+02&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : WIDTH,FORCCR,ISTRESS<br />
+---<br />
+&gt;&nbsp;&nbsp; -0.0020&nbsp; 0.10D-02&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : WIDTH,FORCCR,ISTRESS<br />
+29c29<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+31c31<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+※ フォースが荒い値になっていたので厳しくする。nonlocal pseudopotential の計算方法を1のG-spaceから0のR-space（Davidsonの時には使用しない）に変更。imsd=2のDavidsonから、imsd=1のRMMにする。<br />
+※ 系が大きいときはR-spaceが有利。実空間だとポテンシャルを掛けるのに対角項だけで良くなるので系が大きくなると速い。<br />
+<br />
+◇ 5. diff nfinp_4 nfinp_5<br />
+15c15<br />
+&lt;&nbsp; 1 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+---<br />
+&gt;&nbsp; 1 1 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+29c29<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+31c31<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+※&nbsp; 二つ目にある0を1にして前回の原子構造を用いるようにする。nonlocal pseudopotential の計算方法を0のR-space（Davidsonの時には使用しない）から1のG-spaceに変更。imsd=1のRMMからimsd=2のDavidsonにする。<br />
+<br />
+◇ 6. diff nfinp_5 nfinp_6<br />
+15c15<br />
+&lt;&nbsp; 1 0 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+---<br />
+&gt;&nbsp; 1 1 0 0 0 : ICOND 0-MD, 1-CONT.MD, 2-WAVE FN,, 3-WAVE FN CONT.,&nbsp; iconstpw<br />
+29c29<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NEXTST(MB)<br />
+31c31<br />
+&lt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+---<br />
+&gt;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0(MB) : imsd, i_2lm, i_sd2another, wksz for phase<br />
+21c21<br />
+&lt;&nbsp;&nbsp; 30.00&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.10D-08&nbsp; 1.d-06&nbsp; : DTIO ,IMDALG, IEXPL, EDELTA<br />
+---<br />
+&gt;&nbsp; 500.00&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.10D-08&nbsp; 1.d-06&nbsp; : DTIO ,IMDALG, IEXPL, EDELTA<br />
+※ MDでの仮想時間増加量を30-&gt;500 a.u. (40 a.u. <span class="st">≒</span> 1 fs), アルゴリズムをquenched MDから DIIS MD へ。<br />
+------------------------------------------------------------------------------<br />
+■ broyden法<br />
+<a href="http://www.ae.keio.ac.jp/lab/soc/takeuchi/japla/works/regular/06/shimura0608.pdf">http://www.ae.keio.ac.jp/lab/soc/takeuchi/japla/works/regular/06/shimura0608.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ 実空間法での利点<br />
+&nbsp; FFT（高速フーリエ変換）は並列化が難しい。実空間法ではFFTを必要としないために並列化での効率を挙げられる可能性がある。下記の文献に記載のあるように行列&times;行列積の形で処理することでO(N<sup>2</sup>)の計算速度を実現している。<br />
+[1] <a href="http://www2.ccs.tsukuba.ac.jp/ccs/colloquium/CS-colloquium/file/20090413_iwata.pdf">http://www2.ccs.tsukuba.ac.jp/ccs/colloquium/CS-colloquium/file/20090413_iwata.pdf</a><br />
+[2] <a href="http://www.nsc.riken.jp/sympo2007/poster-session/abstract/P-23iwata.pdf">http://www.nsc.riken.jp/sympo2007/poster-session/abstract/P-23iwata.pdf</a><br />
+　DFT 全体の計算量は部分対角化および Gram-Schmidt 直交化のO(N<sup>3</sup>)でスケールされるが、これらのルーチンはともに大部分の演算がBLAS3 レベルの行列&times;行列積の形で処理できるため非常に高い演算性能を引き出すことができ、実際これらの部分の計算時間はO(N<sup>2</sup>)のCGと大差ない程度に納まっている。<br />
+[3] <a href="http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD15/v4c.pdf">http://www.dyn.ap.eng.osaka-u.ac.jp/CMD/CMD15/v4c.pdf</a><br />
+[4] <a href="http://www.cc.u-tokyo.ac.jp/support/press/news/VOL11/special/200902SP-tsuchida.pdf">http://www.cc.u-tokyo.ac.jp/support/press/news/VOL11/special/200902SP-tsuchida.pdf</a><br />
+[5] <a href="http://computics-material.jp/jpn/symposium/20110301/pdf/04_1740_1750_ono.pdf">http://computics-material.jp/jpn/symposium/20110301/pdf/04_1740_1750_ono.pdf</a><br />
+[6] 実空間法： <a href="http://ja.wikipedia.org/wiki/%E5%AE%9F%E7%A9%BA%E9%96%93%E6%B3%95">http://ja.wikipedia.org/wiki/%E5%AE%9F%E7%A9%BA%E9%96%93%E6%B3%95</a><br />
+[7] <a href="http://www.nsc.riken.jp/sympo2007/poster-session/indexing/iP-23iwata.pdf">http://www.nsc.riken.jp/sympo2007/poster-session/indexing/iP-23iwata.pdf</a><br />
+------------------------------------------------------------------------------

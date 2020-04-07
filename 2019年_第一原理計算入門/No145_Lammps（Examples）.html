@@ -1,0 +1,1175 @@
+Lammps (Example) (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ Install (windows 10 (64 bit))<br />
+(http://rpm.lammps.org/windows.html)&nbsp;<br />
+1. 64-bit Windows download area &nbsp;&gt; LAMMPS-64bit-latest-MPI.exe<br />
+2. LAMMPS-64bit-latest-MPI.exe<br />
+<br />
+※ MPICH2やMicrsoftのMPIも入れて指示に従って行ってみたが、一つのジョブを複数のコアで分けるのではなく、一つのジョブをそのまま複数のコアで個別に計算してしまう。仕方ないのでOpenMP並列か1 CPUで計算を行う。<br />
+------------------------------------------------------------------------------<br />
+■ Install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+<br />
+□ install (easy method) (2019/05/14)<br />
+1. sudo apt-get install lammps<br />
+2. which lammps<br />
+&nbsp; /usr/bin/lammps<br />
+<br />
+◇ Usage<br />
+1. mpirun -np 6 lammps &lt; case.in<br />
+&nbsp; ※ aireboやeam/alloyなどが動作する<br />
+&nbsp; ※ [LAMMPS tutorials](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials)の動作も確認<br />
+<br />
+◇ remove (削除したい場合)<br />
+1. sudo apt-get remove lammps<br />
+------------------------------------------------------------------------------<br />
+□ Important information!<br />
+<br />
+・The potential used has a corresponding &quot;units&quot;<br />
+&nbsp; （使用するポテンシャルには対応する&quot;units&quot;がある。exampleの例を参考にrealかatomicかなどを指定する必要がある）<br />
+&nbsp; （Tersoffなどではポテンシャルファイルに記載されていたりする。ポテンシャルの指示に従えばよい）<br />
+・In case of &quot;Error: Lost atoms&quot;, set &quot;dt&quot; to a value smaller than the current value.<br />
+&nbsp; （&quot;Error : Lost atoms&quot;の場合には、&quot;dt&quot;を現在の値よりもより小さい値にする（原子が周期をまたぎ過ぎることを防ぐ））<br />
+・Since the Gear method has good accuracy, &quot;dt&quot; can be made larger than the Verlet method.<br />
+&nbsp; (ギア法は精度が良いのでベルレ法よりも&quot;dt&quot;をより大きくできる)<br />
+・The results of &ldquo;nose&rdquo; and &ldquo;scaling&rdquo; are almost the same.<br />
+&nbsp; （能勢法とスケーリング法は結果がほぼ同じになる）<br />
+&nbsp; （能勢法は数学的な厳密性を求めたり、熱の揺らぎを小さいしたい場合に用いられる）<br />
+・The virtual mass of the &ldquo;nose&rdquo; method has no physical meaning. It is sufficient if the temperature can be controlled well.<br />
+&nbsp; （能勢法の仮想質量には物理的意味はない。温度を上手く制御できればよい）<br />
+・<br />
+The temperature is calculated from the kinetic energy. For this reason, when the energy corresponding to the temperature given to the kinetic energy flows to the potential energy, the temperature decreases. This is often seen early in the calculation.<br />
+&nbsp; （温度は運動エネルギーから計算される。そのため、運動エネルギーに与えた温度分のエネルギーが位置エネルギーに流れると温度が下がる。これは計算の初期においてよく見られる）<br />
+<br />
+◇ Note (https://lammps.sandia.gov/doc/fix_nh.html)<br />
+&nbsp; A Nose-Hoover thermostat will not work well for arbitrary values of Tdamp. If Tdamp is too small, the temperature can fluctuate wildly; if it is too large, the temperature will take a very long time to equilibrate. A good choice for many models is a Tdamp of around 100 timesteps. Note that this is NOT the same as 100 time units for most units settings. A simple way to ensure this, is via using an immediate variable expression accessing the thermo property &lsquo;dt&rsquo;, which is the length of the time step. Example:<br />
+&nbsp; fix 1 all nvt temp 300.0 300.0 $(100.0*dt)<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+□ LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+に従って計算の技術を取得していくと良い（特に物理系の材料の方向け）。<br />
+<br />
+□ VESTAとcif2cellを用いた構造ファイルの作成<br />
+1. VESTA (remove symmetry -&gt; P1) &gt; cif<br />
+2. cif &gt; cif2cell -p lammps -f &nbsp;*.cif<br />
+※ 上記は atom_style atomic タイプのものとなる<br />
+<br />
+□ VMDを用いた構造ファイルの作成<br />
+1. VMD<br />
+2. File &gt; New Molecule...&nbsp;<br />
+・MOPAC2016 or Avogadro, VESTA<br />
+&nbsp; &gt; (Filename: [) Browse... &gt; *.xyz (e.g. _opt.xyz)<br />
+&nbsp; &gt; Determine file type: [XYZ] or [Automatically] &gt; Load<br />
+・VASP (from VESTA) (for periodic system)<br />
+&nbsp; (need some space, e.g. &quot; &nbsp; &nbsp;C &nbsp; &nbsp;H &quot; is good, &quot; &nbsp; &nbsp;C &nbsp; &nbsp;H&quot; is bad.)<br />
+&nbsp; &gt; (Filename: [) Browse... &gt; *.vasp<br />
+&nbsp; &gt; Determine file type: [VASP_POSCAR] &gt; Load<br />
+3. Graphics &gt; Representations &gt; CPK (in Drawing Method)<br />
+&nbsp; &gt; Name (in Coloring Method)<br />
+4. Graphics &gt; Colors...<br />
+&nbsp; &gt; Name (in Categories) &gt; Names [H] &gt; (check Colors)<br />
+&nbsp; ※ if you can see pink color from *.vasp, check *.vasp input file and add a space after the last atom (e.g. change &quot; &nbsp; &nbsp;C &nbsp; &nbsp;H&quot; to &quot; &nbsp; &nbsp;C &nbsp; &nbsp;H &quot;).<br />
+5. Extensions &gt; Tk Console<br />
+&nbsp; &gt; topo writelammpsdata c:/Users/username/Desktop/file.dat full<br />
+※ Please change &quot;username&quot; of your PC.<br />
+※ full or atomic, &nbsp;angle, etc<br />
+------------------------------------------------------------------------------<br />
+□ VESTAとOpenBableを用いた構造ファイルの作成<br />
+1. VESTA (remove symmetry -&gt; P1) &gt; cif<br />
+2. cif &gt; Openbabel &gt; lmpdat<br />
+※ 上記は atom_style full でのものとなる<br />
+<br />
+□ 炭化水素の例-1- (MEAM ポテンシャル）<br />
+・ NISTのIsobutaneのポテンシャルと入力ファイル<br />
+（https://www.ctcms.nist.gov/potentials/system/CH/）に炭化水素のポテンシャルと入力ファイルの例がある。<br />
+&nbsp; Nouranian_CH_library.meam<br />
+&nbsp; Nouranian_CH.meam<br />
+&nbsp; Isobutane.in<br />
+&nbsp; Isobutane.dat<br />
+&nbsp; これらをダウンロードして用いる。<br />
+・datは上記のVESTAとOpenbaleを利用したものでよい<br />
+・ztc.in (Isobutane.inを参考に書き換える)<br />
+----------<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+clear<br />
+<br />
+# structure settings<br />
+units metal<br />
+boundary p p p<br />
+atom_style full<br />
+read_data ztc.dat<br />
+<br />
+# potential settings<br />
+pair_style meam<br />
+pair_coeff * * Nouranian_CH_library.meam C H Nouranian_CH.meam C H<br />
+<br />
+# output setting<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dumpXYZ all xyz 100 ztc_lammps.xyz<br />
+<br />
+# run structure optimization<br />
+minimize 1e-25 1e-25 10000 10000<br />
+<br />
+# RDF calculation<br />
+reset_timestep 0<br />
+compute gofr all rdf 100 &nbsp;1 1 &nbsp;2 2 &nbsp;1 2 &nbsp;# C-C, H-H, C-H<br />
+fix rdf all ave/time 100 10 1000 c_gofr[*] file rdf.dat mode vector<br />
+run 1000<br />
+----------<br />
+・ mpiexec -np 1 lmp_mpi -in ztc.lmp<br />
+・ gnuplot<br />
+・ plot &quot;rdf.dat&quot; u 2:3 w l<br />
+・ 出力された xyzファイル（ここでは ztc_lammps.xyz)の中に各サイクルでの構造の結果が記載されている。必要なものだけを残して、Avogadroに入れてxyz形式で出力し、サクラダエディタなどのライティングソフトで元素名を正しいものに置換してVESTAで出力すればよい。<br />
+※ 周期構造の場合、周期構造を対称性P1などで作成し、AvogadroからのxyzをimportしてVASP形式で出力すればよい。<br />
+※ 原子間距離が近すぎるものがあったり、六員環が大きく歪んでいたり、六員環が壊れていたりする<br />
+※ minimize は緩和計算で0 Kと同等のイメージ。必要な設定はポテンシャルで、通常のMDでの計算で必要な質量や時間刻み、アンサンブルの設定は必要ではない。ディフォルトではCG法（共役勾配法）で最小のポンテシャルになる位置に移動する<br />
+※ RDFの出力であるrdf.datは[番号, 半径r]の後は[g(r), sum of g(r)]の繰り返し。全体が欲しければ compute gofr all rdf 100 とすればよい。<br />
+※ ave/timeの後の数値は 100 * 10 = 1000 でrunの回数とも対応させると動いた<br />
+<br />
+□ 炭化水素の例-2- (REBO ポテンシャル）<br />
+（C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples）にポテンシャルと入力ファイルの例が記載されている。<br />
+&nbsp; Exampleのaireboを周期の指定以外ほぼそのまま用いる。<br />
+・ CH.airebo (C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples にある)<br />
+・ ztc.in (in.airebo を参考に書き換える)<br />
+----------<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+# Intialization<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;metal<br />
+dimension &nbsp; &nbsp; &nbsp;3<br />
+boundary &nbsp; &nbsp; &nbsp; p p p<br />
+atom_style &nbsp; &nbsp; full<br />
+<br />
+# Atom Definition<br />
+read_data &nbsp; &nbsp; &nbsp;ztc.dat<br />
+replicate &nbsp; &nbsp; &nbsp;1 1 1<br />
+<br />
+neighbor &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.5 bin<br />
+neigh_modify &nbsp; &nbsp; &nbsp; &nbsp;delay 5 every 1<br />
+<br />
+# Potential setting<br />
+pair_style &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;airebo 3.0 1 1<br />
+pair_coeff &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;* * CH.airebo C H<br />
+<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;all create 298.0 761341<br />
+<br />
+# Output<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dumpXYZ all xyz 100 ztc_lammps.xyz<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 all nve<br />
+timestep &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.0005<br />
+thermo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;100<br />
+<br />
+# run calculation<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1000<br />
+<br />
+# RDF calculation<br />
+reset_timestep 0<br />
+compute gofr all rdf 100 &nbsp;1 1 &nbsp;2 2 &nbsp;1 2 &nbsp;# C-C, H-H, C-H<br />
+fix rdf all ave/time 100 10 1000 c_gofr[*] file rdf.dat mode vector<br />
+run 1000<br />
+----------<br />
+・ mpiexec -np 1 lmp_mpi -in ztc.lmp<br />
+・ gnuplot<br />
+・ plot &quot;rdf.dat&quot; u 2:3 w l<br />
+・ 出力された xyzファイル（ここでは ztc_lammps.xyz)の中に各サイクルでの構造の結果が記載されている。必要なものだけを残して、Avogadroに入れてxyz形式で出力し、サクラダエディタなどのライティングソフトで元素名を正しいものに置換してVESTAで出力すればよい。<br />
+※ 周期構造の場合、周期構造を対称性P1などで作成し、AvogadroからのxyzをimportしてVASP形式で出力すればよい<br />
+※ 原子間距離が近すぎるものがあったり、六員環が大きく歪んでいたり、六員環が壊れていたりする<br />
+※ ポテンシャルには対応するunitsがある。今回用いてるCH.aireboはunits metalとなる<br />
+&nbsp; ちなみに、metalとrealではdtの単位も大きく異なる<br />
+&nbsp; 0.0005 [ps] (units metal) = 0.5 [fs] (units real)<br />
+※ velocityの最後の数値 761341 は乱数を発生させるための値。どのような値でもよい。同じ計算条件で同じ値を用いると出現する乱数の列は同じになる<br />
+※ RDFの出力であるrdf.datは[番号, 半径r]の後は[g(r), sum of g(r)]の繰り返し。全体が欲しければ compute gofr all rdf 100 とすればよい。PDFもg(r)と書かれれるので注意。g(r)がRDFやPDFかどうかよく注意すること。<br />
+(https://www.mawi.uni-stuttgart.de/aktuelles_lehrangebot/documents/LS1/SoSe17/DMMS_9_2017.pdf)を参照。<br />
+※ ave/timeの後の数値は 100 * 10 = 1000 でrunの回数とも対応させると動いた。<br />
+※ 液体からアモルファスにする時には、急に0 Kにするとおかしな結果になる。SW(Stillinger-Waber)ポテンシャルを用いて、2.32 g/cm^3の密度のSiを1250 Kでアニールすると、z軸から見て1/4を覆うクラスターの大きさになるのが0.86 nm, 約半分が1.15 nm, ほぼ全てが1.73 nsとなる。 (P.Beaucage et al., Phys. Rev. B 71 (2005) 094102.<br />
+<br />
+□ 炭化水素の例-3- (ReaxFF ポテンシャル）<br />
+(C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples\reax\ci-reaxFF)]<br />
+・ ci-reaxFF_ZBL.dat (C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples にある)<br />
+・ control (C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples にある)<br />
+・ ztc.in (in.ci-reax.CHを参考に書き換える)<br />
+----------<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+# Intialization<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;real<br />
+dimension &nbsp; &nbsp; &nbsp;3<br />
+boundary &nbsp; &nbsp; &nbsp; p p p<br />
+atom_style &nbsp; &nbsp; full<br />
+<br />
+# Atom Definition<br />
+read_data &nbsp; &nbsp; &nbsp;ztc.dat<br />
+<br />
+pair_style &nbsp; &nbsp; &nbsp;hybrid/overlay reax/c control checkqeq no table linear 11000<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * reax/c ffield.ci-reax.CH C H<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 1 table ci-reaxFF_ZBL.dat CC_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 2 table ci-reaxFF_ZBL.dat CH_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;2 2 table ci-reaxFF_ZBL.dat HH_cireaxFF<br />
+<br />
+timestep &nbsp; &nbsp; &nbsp; &nbsp;0.25<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 all nve<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2 all temp/berendsen 298.0 298.0 100.0<br />
+<br />
+#dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 all atom 30 dump.ci-reax.lammpstrj<br />
+# Output<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dumpXYZ all xyz 100 ztc_lammps.xyz<br />
+<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 3000<br />
+<br />
+# RDF calculation<br />
+reset_timestep 0<br />
+compute gofr all rdf 100 &nbsp;1 1 &nbsp;2 2 &nbsp;1 2 &nbsp;# C-C, H-H, C-H<br />
+fix rdf all ave/time 100 10 1000 c_gofr[*] file rdf.dat mode vector<br />
+run 1000<br />
+----------<br />
+・ ztc.in （minimize settings）<br />
+----------<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+# Intialization<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;metal<br />
+dimension &nbsp; &nbsp; &nbsp;3<br />
+boundary &nbsp; &nbsp; &nbsp; p p p<br />
+atom_style &nbsp; &nbsp; full<br />
+<br />
+# Atom Definition<br />
+read_data &nbsp; &nbsp; &nbsp;ztc.dat<br />
+<br />
+pair_style &nbsp; &nbsp; &nbsp;hybrid/overlay reax/c control checkqeq no table linear 11000<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * reax/c ffield.ci-reax.CH C H<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 1 table ci-reaxFF_ZBL.dat CC_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 2 table ci-reaxFF_ZBL.dat CH_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;2 2 table ci-reaxFF_ZBL.dat HH_cireaxFF<br />
+<br />
+# Output<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dumpXYZ all xyz 100 ztc_lammps.xyz<br />
+<br />
+minimize 1e-25 1e-25 10000 10000<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1000<br />
+<br />
+# RDF calculation<br />
+reset_timestep 0<br />
+compute gofr all rdf 100 &nbsp;1 1 &nbsp;2 2 &nbsp;1 2 &nbsp;# C-C, H-H, C-H<br />
+fix rdf all ave/time 100 10 1000 c_gofr[*] file rdf.dat mode vector<br />
+run 1000<br />
+----------<br />
+※ minimize は緩和計算で0 Kと同等のイメージ。必要な設定はポテンシャルで、通常のMDでの計算で必要な質量や時間刻み、アンサンブルの設定は必要ではない。ディフォルトではCG法（共役勾配法）で最小のポンテシャルになる位置に移動する<br />
+・ ztc.in （velocity settings）<br />
+----------<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+# Intialization<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;real<br />
+dimension &nbsp; &nbsp; &nbsp;3<br />
+boundary &nbsp; &nbsp; &nbsp; p p p<br />
+atom_style &nbsp; &nbsp; full<br />
+<br />
+# Atom Definition<br />
+read_data &nbsp; &nbsp; &nbsp;ztc.dat<br />
+replicate &nbsp; &nbsp; &nbsp;1 1 1<br />
+<br />
+pair_style &nbsp; &nbsp; &nbsp;hybrid/overlay reax/c control checkqeq no table linear 11000<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * reax/c ffield.ci-reax.CH C H<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 1 table ci-reaxFF_ZBL.dat CC_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 2 table ci-reaxFF_ZBL.dat CH_cireaxFF&nbsp;<br />
+pair_coeff &nbsp; &nbsp; &nbsp;2 2 table ci-reaxFF_ZBL.dat HH_cireaxFF<br />
+<br />
+neighbor &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.5 bin<br />
+neigh_modify &nbsp; &nbsp; &nbsp; &nbsp;delay 5 every 1<br />
+<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;all create 298.0 761341<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 all nve<br />
+timestep &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.0005<br />
+thermo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;100<br />
+<br />
+# Output<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dumpXYZ all xyz 100 ztc_lammps.xyz<br />
+<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1000<br />
+<br />
+# RDF calculation<br />
+reset_timestep 0<br />
+compute gofr all rdf 100 &nbsp;1 1 &nbsp;2 2 &nbsp;1 2 &nbsp;# C-C, H-H, C-H<br />
+fix rdf all ave/time 100 10 1000 c_gofr[*] file rdf.dat mode vector<br />
+run 1000<br />
+----------<br />
+※ ポテンシャルには対応するunitsがある。今回用いているCH.aireboはunits metalとなる<br />
+&nbsp; ちなみに、metalとrealではdtの単位も大きく異なる<br />
+&nbsp; 0.0005 [ps] (units metal) = 0.5 [fs] (units real)<br />
+※ velocityの最後の数値 761341 は乱数を発生させるための値。どのような値でもよい。同じ計算条件で同じ値を用いると出現する乱数の列は同じになる<br />
+[ReaxFF1] http://d.hatena.ne.jp/ufssf/20110602/1306995634<br />
+<br />
+□ 固体・溶融塩、イオン液体、ガラスの入力ファイルと計算例<br />
+・分子動力学計算の実践講習 -溶融塩とイオン液体-<br />
+(http://amorphous.tf.chiba-u.jp/MS講習会/molten.html#org7303de4)<br />
+※ 平均自乗変位は計算の後半の直線部分を用いて計算する（計算初期はまだ十分緩和していない）<br />
+◇ 熱伝導率（HPに記載されているが重要なので抜き出す）<br />
+----（これで正しいか未確認）<br />
+fix f1 all nve<br />
+compute KE all ke/atom<br />
+compute PE all pe/atom<br />
+compute Stress all stress/atom NULL virial<br />
+compute flux all heat/flux KE PE Stress<br />
+variable Jx equal c_flux[1]/vol<br />
+variable Jy equal c_flux[2]/vol<br />
+variable Jz equal c_flux[3]/vol<br />
+fix f2 all print 1 &quot;${step} ${Jx} ${Jy} ${Jz}&quot; file output.flux<br />
+----（これで正しいか未確認）<br />
+Jx(step)Jx(step+1)<br />
+kappa(x axis) = (V/(kb*T^2))*&Sigma;Jx(0)*Jx(step)&larr;（stepを変えて&Sigma;を取る）<br />
+----<br />
+◇ Default: none (https://lammps.sandia.gov/doc/compute_heat_flux.html)に記載もある<br />
+◇ LAMMPSで熱伝導率計算 (https://justice-vsbr.hatenablog.com/entry/2018/08/01/214445)<br />
+<br />
+□ 粘性率<br />
+&nbsp; 下に記載のページに入力ファイルの例が記載されている<br />
+◇ 8.4.6. Calculate viscosity (https://lammps.sandia.gov/doc/Howto_viscosity.html)<br />
+<br />
+□「LAMMPSと連携ソフトウエアによる有機材料の分子動力学計算」<br />
+&nbsp; https://staff.aist.go.jp/makoto-yoneya/LAMMPS/organic/<br />
+<br />
+□ input example<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_Examples_for_Hydrocarbons)<br />
+<br />
+□ IR spectra<br />
+1. git clone https://github.com/EfremBraun/calc-ir-spectra-from-lammps.git<br />
+2. cd calc-ir-spectra-from-lammps<br />
+3. lammps -in in.infrared<br />
+4. python calc-ir-spectra.py<br />
+5. eog IR-zoom-spectra.png<br />
+[IR1] [lammps-users] Script for calculating IR spectra<br />
+&nbsp; https://lammps.sandia.gov/threads/msg64502.html<br />
+&nbsp; calc-ir-spectra-from-lammps<br />
+&nbsp; https://github.com/EfremBraun/calc-ir-spectra-from-lammps<br />
+※ dipoleの単位はrealとmetalで同じcharge*Angstromsなのであまり気にせず色々なポテンシャルを試せるかもしれない。しかし、chargeの指定が必要と思われる。<br />
+※「双極子モーメントと分極率テンソルを計算し、その時間変化の自己相関関数のフーリエ変換をすることによって、IRとRamanスペクトルの振動数だけでなく強度を求めることができる」と&rdquo;http://www.nabit.hiroshima-u.ac.jp/aida/research/research_2_flame.htm&rdquo;に記載されている。<br />
+<br />
+□ ThemalToools<br />
+[TT1] ThermalTools<br />
+&nbsp; https://github.com/USCCACS/ThermalTools<br />
+<br />
+□ Grand Canonical Monte Carlo (GCMC) simulation<br />
+[GCMC1] https://www.scm.com/doc/ReaxFF/GCMC.html<br />
+[GCMC2] https://lammps.sandia.gov/threads/binwE2C_MPMBy.bin<br />
+[GCMC3] https://digital.library.adelaide.edu.au/dspace/bitstream/2440/112038/2/02whole.pdf&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ units and potential<br />
+<br />
+□ units metal<br />
+・Stillinger-Weber<br />
+・Tersoff<br />
+・EAM, FS<br />
+・MEAM<br />
+・REBO, AIREBO<br />
+・COMB<br />
+・EIM<br />
+・adiabatic core/shell model<br />
+・Streitz-Mintmire<br />
+・vashishta<br />
+<br />
+□ units real<br />
+・OPLS<br />
+・OPLS &amp; Amber (https://github.com/agiliopadua/ilff)<br />
+・CHARMM(charmm22)<br />
+・dreiding<br />
+・ReaxFF<br />
+<br />
+[UP1] C:\Program Files\LAMMPS 64-bit 18Jun2019\Examples<br />
+------------------------------------------------------------------------------<br />
+■ potential files<br />
+<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">■ potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[1] NIST Interatomic Potential</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.ctcms.nist.gov/potentials/</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.ctcms.nist.gov/potentials/resources.html</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[2] Database of Published Interatomic Potential Parameters</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.ucl.ac.uk/klmc/Potentials/</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[3] EAM potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://sites.google.com/site/eampotentials/Home</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[4] JARVIS for Force-fields</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.ctcms.nist.gov/~knc6/periodic.html</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[5] Embedded Atom Method (EAM) Tabulation</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://atsimpotentials.readthedocs.io/en/latest/potentials/eam_tabulation.html</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[6] Carbon Potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; http://www.carbonpotentials.org/potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[7] XMD - Molecular Dynamics for Metals and Ceramics&nbsp;</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; http://xmd.sourceforge.net/eam.html</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[8] Potentials generated with potfit</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.potfit.net/wiki/doku.php?id=potentials:main</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[9] Interatomic Potential Generation</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/Interatomic_Potential_Generation</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[10] Potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://norman.jiht.ru/wiki/index.php/Potentials</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[11] Dr. Adri van Duin&nbsp;</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.engr.psu.edu/adri/</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・単体および任意の組み合わせに適用可能なポテンシャルとしてGEAMがある。2001年と2004年のものがある。</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[12] Welcome to the Knowledgebase of Interatomic Models! (OpenKIM)</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://openkim.org/</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[13] potential_LAMMPS Reference Records</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://github.com/usnistgov/iprPy/tree/master/library/potential_LAMMPS</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="background-color: rgb(255, 255, 255); color: black; display: inline; float: none; font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[14] KIST Integrated Force Field Platform</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="background-color: rgb(255, 255, 255); color: black; display: inline; float: none; font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; http://kiff.vfab.org/</span><br />
+<br />
+□ Avogadro<br />
+--------------------<br />
+・SPC<br />
+-----<br />
+#The SPC water potential<br />
+pair_style &nbsp; &nbsp; &nbsp;lj/cut/coul/cut 9.8 9.8<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 1 0.15535 3.5533<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* 0 0.00000 0.0000<br />
+bond_style &nbsp; &nbsp; &nbsp;harmonic<br />
+angle_style &nbsp; &nbsp; harmonic<br />
+dihedral_style &nbsp;none<br />
+improper_style &nbsp;none<br />
+bond_coeff &nbsp; &nbsp; &nbsp;1 100.00 &nbsp; 1.000<br />
+angle_coeff &nbsp; &nbsp; 1 100.00 109.47<br />
+special_bonds &nbsp; lj/coul 0.0 0.0 0.5<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RigidOHBonds all shake 0.0001 20 0 b 1 a 1<br />
+-----<br />
+<br />
+・SPC/E<br />
+-----<br />
+#The SPC/E water potential<br />
+pair_style &nbsp; &nbsp; &nbsp;lj/cut/coul/long 9.8 9.8<br />
+kspace_style &nbsp; &nbsp;pppm 1.0e-4<br />
+pair_coeff &nbsp; &nbsp; &nbsp;1 1 0.15535 3.5533<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* 0 0.00000 0.0000<br />
+bond_style &nbsp; &nbsp; &nbsp;harmonic<br />
+angle_style &nbsp; &nbsp; harmonic<br />
+dihedral_style &nbsp;none<br />
+improper_style &nbsp;none<br />
+bond_coeff &nbsp; &nbsp; &nbsp;1 100.00 &nbsp; 1.000<br />
+angle_coeff &nbsp; &nbsp; 1 100.00 109.47<br />
+special_bonds &nbsp; lj/coul 0.0 0.0 0.5<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RigidOHBonds all shake 0.0001 20 0 b 1 a 1<br />
+-----<br />
+※ Ewald法の一種であるPPPM法での設定が追加されている<br />
+--------------------<br />
+[HOD1] 6. How-to discussions (https://www.afs.enea.it/software/lammps/doc17/html/Section_howto.html#howto-10)<br />
+------------------------------------------------------------------------------<br />
+■ 分子動力学でよく使われる計算条件 [MD1]<br />
+<br />
+・総ステップ数： 5000 - 10000 steps<br />
+&nbsp; 100000 steps (NEV, NTP)（緩和、セルサイズ算出、本計算）<br />
+・時間刻み幅： 0.5 - 1.0 fs<br />
+&nbsp; 水素などの軽い原子: 0.1 fs<br />
+&nbsp; 固体系: 0.5 - 5 fs<br />
+・出力間隔： 100 step&nbsp;<br />
+・温度： 298 K<br />
+・圧力： 1 atm = (0.101325 MPa)<br />
+・boxの大きさ: 17.62 Å以上<br />
+&nbsp; この値にならない場合は&quot;replicate&quot;でboxを大きくする<br />
+・ブックキーピングの球殻の厚さ(dr): 0.2 Å（固体）、0.5 Å（液体）<br />
+※ 値を変える場合、[総ステップ数 * 時間刻み幅]となるようにされていたりする<br />
+※ MDでは計算開始から数十psの計算結果は評価に使わない。ポテンシャルエネルギーなどで収束をチェック<br />
+※ 時間刻み幅（timestepはディフォルトで1.0 fsになっている。ディフォルトは妥当な値）。軽い原子ほど時間刻み幅は短くする。重い原子になるほど時間刻み幅を長くしても精度のよい計算が可能になる（振動周期が長くなるため）<br />
+※ NaClなどの溶融塩の計算では、適切なBMHポテンシャルを用いて、atom_style chargeとすれば、read_dataではbondsやangleなどの設定がなくても上手く計算できる<br />
+※ SiO2やAl2O3などのガラスの計算では、適切なBuckinghamポテンシャルを用いれば、read_dataにおいてbondsやangle, dihedrals, impropersなどの設定が0でも上手く計算できる<br />
+<br />
+[MD1] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+[MD2] 分子動力学計算の実践講習 -溶融塩とイオン液体-<br />
+&nbsp; http://amorphous.tf.chiba-u.jp/MS講習会/molten.html#org7303de4<br />
+[MD3] SCLS講習会‐SCLS計算機システムの実習‐分子動力学の基礎‐<br />
+&nbsp; https://www.r-ccs.riken.jp/jp/lecture/SCLS講習会‐SCLS計算機システムの実習‐分子動力学の基礎‐.html<br />
+[MD4] ノートパソコンで出来る原子レベルのシミュレーション入門講習会<br />
+&nbsp; http://m3.jsms.jp/course.html<br />
+------------------------------------------------------------------------------<br />
+■ 有機物でよく使われる設定（例えば、イオン液体など）<br />
+<br />
+◇ Lennard-Jonesでの入力ファイルの設定 [30]<br />
+&nbsp; (units real を設定の場合）<br />
+・atom_style full<br />
+&nbsp; read_dataで指定したファイルに記載されているbondやangleなどの情報を計算に用いる<br />
+・lj/cut/coul/long 12.0 12.0<br />
+&nbsp; 短距離相互作用にはLennard-Jones（LJ）ポテンシャル<br />
+&nbsp; 長距離相互作用のクーロン力はEwald法（またはPPPM法）で計算（dtを大きくとれるようになる）<br />
+&nbsp; LJポテンシャルを12.0[Angstroms]まで計算<br />
+&nbsp; クーロン力は12.0[Angstroms]まで直接計算した後、それ以外のところではEwald法（またはPPPM法）<br />
+・mix geometric tail yes<br />
+&nbsp; 異種原子間のパラメータを下記のように計算<br />
+&nbsp; -----<br />
+&nbsp; epsilon_ij = sqrt(epsilon_i * epsilon_j)<br />
+&nbsp; sigma_ij = sqrt(sigma_i * sigma_j)<br />
+&nbsp; -----<br />
+&nbsp; mix arithmetic にするとよく知られた&quot;ローレンツ・ベルテロ（Lorentz-Berthelot）則&quot;で計算される<br />
+・kspace_style ewald 1.0e-5<br />
+&nbsp; 1.0e-5 や 1.0e-6 がよく用いられる。Force（力）の精度を決める値で、この値が小さいほど精度が高くなる<br />
+&nbsp; kspace_style pppm 1.0e-5でも良いが構造によってはewald法より発散しやすい（多少ewald法より計算が早い程度なので最初は&quot;kspace_style ewald 1.0e-5&quot;で計算の後に&quot;kspace_style pppm 1.0e-5&quot;とするのがよい<br />
+・bond_style harmonic<br />
+&nbsp; 原子内のボンド間のポテンシャルを設定<br />
+&nbsp; harmonicは調和振動子ポテンシャル（最もよく使われる）<br />
+&nbsp; morseはMorseポテンシャル（次によく使われる）<br />
+・angle_style harmonic<br />
+&nbsp; 原子内の結合角ポテンシャルの設定<br />
+&nbsp; harmonicは調和振動子ポテンシャル（最もよく使われる）<br />
+・dihedral_style opls<br />
+&nbsp; 二面角ポテンシャルの設定<br />
+&nbsp; opls（オーピーエルエス）などがよく設定される<br />
+・improper_style cvff<br />
+&nbsp; cvffなどがよく設定される<br />
+&nbsp; ねじれ角<br />
+・fix 1 all shake 0.0001 20 0 b 1 6 10 12<br />
+&nbsp; accuracy tolerance of SHAKE solution: 0.0001<br />
+&nbsp; max # of iterations in each SHAKE solution: 20<br />
+&nbsp; print SHAKE statistics every this many timesteps (0 = never): 0<br />
+&nbsp; b values = one or more bond types: 1 4 7 12<br />
+※ この他、&quot;special_bonds lj/coul 0.0 0.0 0.5&quot;などが使われる<br />
+※ read_dataにおいてbondsやangle, dihedrals, impropersなどの設定が必要<br />
+&nbsp; イオン液体： E = E(vdW) + E(coulomb) + E(bnd) + E(angle) + E(dihedral)<br />
+&nbsp; 希ガス（Arなど）： E = E(vdW)<br />
+&nbsp; 溶融塩（NaClなど）： E = E(vdW) + E(coulomb)<br />
+&nbsp; として計算されることが多いことからわかる。<br />
+※ カーボンナノチューブでは REBOポテンシャルを用いれば、atom_style atomic でも座屈の計算などが可能<br />
+------------------------------------------------------------------------------<br />
+■ Lammps (keyword)<br />
+<br />
+◇ 基本的な設定<br />
+・timestep： 1ステップの時間<br />
+&nbsp; unit real -&gt; fs<br />
+&nbsp; &nbsp; [A, fs, Kcal/mol] unit<br />
+&nbsp; unit metal -&gt; ps<br />
+&nbsp; &nbsp; [A, ps, eV] unit<br />
+・thermo: MD実行中の情報の出力設定(毎回どのMDの計算回数で結果を出力するかを指定できる)<br />
+・thermo_style: customを記述すると、それ以降に出力したい物理量をユーザーが任意にしていできる<br />
+・fix (runで実行される系の制御で、nveやnvt, nptなどがある）<br />
+&nbsp; npt: 粒子数(n), 圧力(p), 温度(t)の3つが一定。周囲に水を配置して最適な単位胞を得る（ヒーティングや平衡化と呼ばれる操作）を行うのに使われる。狙いとしては圧力を一定にして水分子を隙間なく配置するために行われる。[4] 密度はnptで計算<br />
+&nbsp; nvt: 粒子数(n), 体積(v), 温度(t)の3つが一定。水の配置が必要ない系や平衡化の後の構造で用いられる<br />
+&nbsp; &nbsp; &nbsp; &nbsp;表面張力をMDでは見ることができる<br />
+&nbsp; nvp: 粒子数(n), 体積(v), 圧力(p)の3つが一定。ヒーティングや平衡化の後のnvtの後に行われる<br />
+&nbsp; nve: 粒子数(n), 体積(v), エネルギー(e)の3つが一定。<br />
+&nbsp; &nbsp; &nbsp; &nbsp;温度ムラを再現したいときや、スパッタ、化学反応のシミュレーションなどで用いられる<br />
+&nbsp; &nbsp; &nbsp; &nbsp;熱伝導率はnveで計算<br />
+・minimize: エネルギー最小化 (CG法＝conjugate gradient method = 共役勾配法）<br />
+・variable: 変数をユーザーが任意に指定できる<br />
+&nbsp; &quot;variable 変数名 equal 数値&quot;などとすることで${変数名}として利用できる。<br />
+・print: 画面に出力<br />
+※ NVTアンサンブルの場合、LAMMPSはNose-Hoover法を使用しているので温度緩和は100にすると良いとのこと。tchainは熱浴における振動制御のパラメータでNose-Hoover法の場合デフォルトは3。[30] or (https://lammps.sandia.gov/doc/fix_nh.html)<br />
+※ 圧力アンサンブルは、平均二乗変位などの物性値算出には不適切。一方で、ゼロ応力の格子サイズを求めるのには便利であるため用いられる<br />
+<br />
+◇ 一辺が4.05ÅのFCC構造を10x10x10倍した箱（box）を作成<br />
+-----<br />
+variable latparam equal 4.05<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc ${latparam}<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;whole block 0 10 0 10 0 10<br />
+create_box&nbsp;&nbsp; &nbsp;1 whole<br />
+-----<br />
+※ wholeという名称でboxを定義<br />
+※ 上記は一般的な設定の方法なので、格子定数の値や、拡大する倍率、fccをbccやhcpなどに変える程度の変更でよい<br />
+<br />
+◇ 原子の配置<br />
+-----<br />
+variable latparam equal 4.05<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;upper block INF INF INF INF INF INF units box&nbsp;<br />
+lattice &nbsp;&nbsp; &nbsp;fcc ${latparam} orient x 1 0 0 orient y 0 1 0 orient z 0 0 1<br />
+create_atoms&nbsp;&nbsp; &nbsp;1 region upper<br />
+-----<br />
+※ upperという名称で原子を配置する条件を設定<br />
+※ latticeでは、xを100, yを010, zを001方向に指定している<br />
+※ 上記は一般的な設定の方法なので、格子定数の値や、fccをbccやhcpなどに変える程度の変更でよい<br />
+<br />
+◇ 中心対称パラメータの計算結果をcsymに格納<br />
+-----<br />
+compute csym all centro/atom fcc<br />
+-----<br />
+<br />
+◇ 各原子のポテンシャルエネルギーを計算してperatomに格納<br />
+-----<br />
+compute peratom all pe/atom<br />
+-----<br />
+<br />
+◇ dumpでの出力設定（cfgはcustomと同じ）<br />
+c_変数名（computeで定義した変数名）<br />
+f_変数名（fixで定義した変数名）<br />
+<br />
+◇ dumpで出力する元素を他のソフトでで読めるようにする指定<br />
+-----<br />
+dump_modify &nbsp; &nbsp; 1 element Al<br />
+-----<br />
+<br />
+◇ x軸方向にせん断ひずみ速度 0.001 (1/time units)して原子をx方向に再マッピング<br />
+-----<br />
+fix 1 all deform 1 x erate 0.001 remap x<br />
+-----<br />
+<br />
+◇ 距離を箱（box）サイズの単位で定義<br />
+-----<br />
+units box<br />
+-----<br />
+<br />
+◇ セルサイズの変更<br />
+-----<br />
+fix 1 all deform 1 x xscale 0.5 y scale 0.5 z scale 0.5<br />
+-----<br />
+※ 溶融塩やイオン液体、ガラスなどは、初期の密度を2.0 g/cm^3にしてから、小さくしていくなどの方法が行われることもある<br />
+<br />
+◇ 動径分布関数（RDF）<br />
+-----<br />
+comm_modify cutoff 14<br />
+compute a all rdf 480 * * cutoff 12<br />
+-----<br />
+※ 12/480 = 0.025 刻み<br />
+※ 最初のcutoff &gt; 次のcutoff + skin という関係でないとエラーが出る<br />
+&nbsp; skin = ブックキーピングの球殻の厚さ(dr)<br />
+&nbsp; 実際には、&quot;最初のcutoff = 次のcutoff + 2&quot;としておけばよい<br />
+・A-A（同種原子）: Number density = (N-1)/V<br />
+・A-B（異種原子）: Number density = N/V<br />
+<br />
+◇ 続きの計算のための出力<br />
+-----<br />
+write_data *_eq.data<br />
+-----<br />
+◇ 続きの計算<br />
+-----<br />
+read_data *_eq.data<br />
+# velocity all create 273 12345<br />
+-----<br />
+※ velocity の前に#を付けて、*_eq.dataから速度を読み取る<br />
+※ velocityの最後に dist gaussian などと付けても初期速度を与える方法の違いなだけであるため、平衡に達してしまえば（その他の条件による計算精度の範囲内で）結果に違いはない。ディフォルトで計算される方も多い。<br />
+<br />
+◇ 領域を指定した計算条件の設定<br />
+-----<br />
+region &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;region_fix block INF INF INF INF 45.0 INF<br />
+region &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;region_add_press block INF INF INF INF INF 2.5<br />
+group &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; group_fix region region_fix<br />
+group &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; group_add_press region region_add_press<br />
+group &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; group_move subtract all group_fix<br />
+<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp;group_move create 298 12345<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fix_fix group_fix setforce 0.0 0.0 0.0<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fix_move group_move nvt temp 298.0 298.0 0.1<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fix_add_press group_add_press addforce 0.0 0.2 -0.1<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1000<br />
+<br />
+unfix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fix_add_press<br />
+<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4000<br />
+-----<br />
+※ regionではblockの記述の後にxlo xhi ylo yhi zlo zhiを定義する（最小と最大をx,y,zに対してそれぞれ指定）。INFは&quot;無限&quot;という意味だが、xloやylo, zloでINFを書き入れると&quot;-無限&quot;で定義される。<br />
+※ この手法にって各領域でアンサンブルを変えた計算などが行われたりするとのこと（私は未経験）<br />
+------------------------------------------------------------------------------<br />
+■ heat capasity at constant pressure<br />
+----------<br />
+heat capasity at constant pressure for water<br />
+(https://lammps.sandia.gov/threads/msg18757.html)<br />
+<br />
+Chris,<br />
+<br />
+You should probably read the prior literature on these methods, as there are lots of inherent pitfalls that you do not want to relearn. For example, I suspect you are using the wrong definition of p. I would use the specified<br />
+external pressure, not the instantaneous internal pressure. Also, there is an extensive literature demonstrating that NPT/NPH volume fluctuations do not reliably predict bulk modulus. This will also be an issue for Cp.<br />
+<br />
+A more robust method for obtaining Cv and Cp is to measure &lt;KE+PE&gt; and &lt;T&gt; in NPH and NPT simulations, and then calculate the slope of &lt;KE+PE&gt; versus &lt;T&gt;.<br />
+<br />
+Aidan<br />
+----------<br />
+(Re: [lammps-users] heat capasity at constant pressure for water )<br />
+Chris,<br />
+<br />
+We have computed Cp&#39;s for liquids using the method Aidan described. Take a<br />
+look at Jayaraman, Thompson, von Lilienfeld, Maginn, Ind. Eng. Chem. Res.,<br />
+2010, 49, 559-571<br />
+<br />
+Sai.<br />
+----------<br />
+※ KE = EKtot（運動エネルギー）、PE = EPtot（ポテンシャルエネルギー）で、KE+PE = EKtot+EPtot = Etot（全エネルギー）ではないかと思われる<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 講習会資料<br />
+&nbsp; http://md.jsms.jp/download/<br />
+[2] LAMMPSで構造最適化<br />
+&nbsp; https://justice-vsbr.hatenablog.com/entry/2018/08/02/101057<br />
+&nbsp; 色々と試して何が問題化を明らかにしてくださっているのでとても助かる<br />
+[3] 6.12. MD ? LAMMPS メニュー (Winmostar User Manual)<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V9/html/winmos/md/winmos_lammps.html<br />
+[4] 分子動力学計算を活用したインシリコ創薬<br />
+&nbsp; https://www.r-ccs.riken.jp/aicssite/wp-content/uploads/2016/05/20151202hirokawa.pdf<br />
+&nbsp; https://www.r-ccs.riken.jp/course/life_science2_2.4.html (動画)<br />
+&nbsp; https://www.youtube.com/watch?v=UBW1TxwfqhE (Youtube動画)<br />
+[5] LAMMPS入門の手引き 0:環境の設定<br />
+&nbsp; https://qiita.com/tkmtSo/items/34a0098cb967f2a9fdfe<br />
+[6] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+&nbsp; ・velocityコマンドは原子に強制的に初速を与えるコマンドです。はじめが0ケルビンだと全く動かないため、初速を適当に与える意味があります。<br />
+&nbsp; ・minimizeはrunコマンドと似ていますが、動力学計算を行うのではなく、よりエネルギーが低くなるように原子を動かすコマンドです。なので、minimizeが終わったときはエネルギーが(局所)安定点に達した構造が得られることが期待されます。つまり0ケルビンのときの構造です。デフォルトはCG法が使われています。<br />
+&nbsp; ・fix nvtコマンドは系にNVTアンサンブルを適用するコマンドです。つまり温度制御をかけます。後ろの3つの値は「MD開始時の熱浴の温度」「MD終了時の熱浴の温度」「熱浴の順応性」です。3つ目の値が少し直感的でない値ですが、曖昧に表現すると(人工的な)熱浴に対する慣性のようなパラメータです。おおよそtimestepで設定した値の100倍くらいにしておけば大丈夫です。(圧力制御の場合は1000倍程度)<br />
+[7] Input files: samples<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps.html<br />
+[8] LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+[9] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+[10] 長岡正隆ら「すぐできる分子シミュレーションビギナーズマニュアル」KS化学専門書<br />
+[11] Molecular Mechanics (MM) 計算（z軸方向のみの緩和）<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps2.html<br />
+&nbsp; LAMMPS/examples/USER/phonon/3-3D-FCC-Cu-EAM/<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/examples/USER/phonon/3-3D-FCC-Cu-EAM<br />
+[12] Examples (LAMMPS calculations)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/examples.html<br />
+[13] DynaPhoPy (Phonon anharmonic properties from Molecular Dynamics)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/index.html<br />
+&nbsp; https://pypi.org/project/dynaphopy/1.16.4/<br />
+[14] PhonTS<br />
+&nbsp; http://phonts.mse.ufl.edu/<br />
+[15] LAMMPS ? Installation&nbsp;<br />
+&nbsp; http://www.nanophysics.pl/MolecularDynamics/lammps-installation.pdf<br />
+[16] EAM potentials (Phonon Dispersion Curves)<br />
+&nbsp; https://sites.google.com/site/eampotentials/Al<br />
+[17] GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg53394.html<br />
+[18] 新規モンテカルロ計算プログラムの開発と各種触媒系への応用<br />
+&nbsp; http://www.aki.che.tohoku.ac.jp/prev/htm5/2b16petro.pdf<br />
+[19] 分子吸着による固体表面ナノ構造解析<br />
+&nbsp; https://www.scas.co.jp/scas-news/sn-back-issues/pdf/14/talk_14.pdf<br />
+[20] LAMMPS input for water (Avogadro)<br />
+&nbsp; https://avogadro.cc/docs/extensions/lammps-input-for-water/<br />
+[21] Understanding the adsorption process in ZIF-8 using high pressure crystallography and computational modelling<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[22] Adsorbate-induced lattice deformation in IRMOF-74 series<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/<br />
+[23] [lammps-users] GCMC gas adsorption<br />
+&nbsp; https://lammps.sandia.gov/threads/msg74437.html<br />
+[24] ASE<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/ase.html<br />
+[25] 分子シミュレーションスクール2018：シミュレーションの全体像・概論<br />
+&nbsp; http://www.mitsuhiromatsumoto.mech.kyoto-u.ac.jp/<br />
+[26] [lammps-users] Problems of temperature calculation for fix GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg58606.html<br />
+[27] LAMMPSの使い方<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/<br />
+[28] 原子間ポテンシャルの開発を支援するソフトウェア（kPot）<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/potenfit/<br />
+[29] 9.1. LAMMPS キーワード設定<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V7/calcmanual_jp.html<br />
+[30] 分子動力学計算（LAMMPS）<br />
+&nbsp; https://mochirixi.hatenadiary.com/archive/category/分子動力学計算%EF%BC%88LAMMPS%EF%BC%89<br />
+<br />
+各種講習会<br />
+[1] 分子動力学計算の実践講習 ?溶融塩とイオン液体?<br />
+&nbsp; http://amorphous.tf.chiba-u.jp/MS講習会/molten.html#org7303de4<br />
+[2] SCLS講習会‐SCLS計算機システムの実習‐分子動力学の基礎‐<br />
+&nbsp; https://www.r-ccs.riken.jp/jp/lecture/SCLS講習会‐SCLS計算機システムの実習‐分子動力学の基礎‐.html<br />
+[3] ノートパソコンで出来る原子レベルのシミュレーション入門講習会<br />
+&nbsp; http://m3.jsms.jp/course.html<br />
+------------------------------------------------------------------------------<br />
+■ Appendix -1- (plot)<br />
+<br />
+□ plot<br />
+(http://ryokbys.web.nitech.ac.jp/contents/pmd_usage/analysis.html)<br />
+<br />
+□ Particle tracking using IDL<br />
+(http://www.physics.emory.edu/faculty/weeks//idl/index.html)<br />
+------------------------------------------------------------------------------<br />
+□ VMD (ubunut 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)<br />
+・LINUX_64 OpenGL, CUDA, OptiX, OSPRay&nbsp;<br />
+0. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+1. tar xvf vmd-1.9.4a29.bin.LINUXAMD64-CUDA9-OptiX510-OSPRay170.opengl.tar.tar<br />
+2. cd vmd-1.9.4a29<br />
+3. ./configure<br />
+4. cd src<br />
+5. sudo make install<br />
+6. vmd<br />
+◇ (rlwrap: No match. case) (http://www.ks.uiuc.edu/Research/vmd/mailing_list/vmd-l/19158.html)<br />
+7. sudo gedit /usr/local/bin/vmd<br />
+-----before<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+&nbsp; &nbsp; if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+&nbsp; &nbsp; else&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+&nbsp; &nbsp; endif<br />
+&nbsp; endif<br />
+endif<br />
+-----<br />
+-----after<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+# &nbsp; &nbsp;if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+# &nbsp; &nbsp;else&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+# &nbsp; &nbsp;endif<br />
+# &nbsp;endif<br />
+endif<br />
+-----<br />
+8. vmd<br />
+※ 初めての場合、これから使用したいUsernameとPasswordを入力する<br />
+[VMD1] https://www.youtube.com/watch?v=ybI3R3BCLAE<br />
+[VMD2] https://mumeiyamibito.blogspot.com/2015/09/vmd.html<br />
+------------------------------------------------------------------------------<br />
+■ VMD (windows 10 (64 bit))<br />
+(https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)<br />
+・Windows OpenGL<br />
+0. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+1. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+2. vmd193win32nocuda.msi<br />
+3. Next &gt;<br />
+4. Next &gt;<br />
+5. Install<br />
+6. Finish<br />
+※ 初めての場合、これから使用したいUsernameとPasswordを入力する<br />
+------------------------------------------------------------------------------<br />
+■ VMD plugin<br />
+<br />
+・topotools-1.7-20170411.tar.gz<br />
+(VMD for LINUXAMD64, version 1.9.4a29 (Feburary 25, 2019))<br />
+(https://sites.google.com/site/akohlmey/software/topotools/topotools-1.7-20170411.tar.gz)(Windows 10)<br />
+(&quot;C:\Program Files (x86)\University of Illinois\VMD\plugins\noarch\tcl\topotools1.7&quot;)(Ubuntu 18.04)<br />
+(/usr/local/lib/vmd/plugins/noarch/tcl/topotools1.7)<br />
+<br />
+・vmd-lammpsplugin-20150530.tar.gz<br />
+(This codde is already available in VMD alpha test versions as of VMD 1.9.2s24.)<br />
+(&quot;C:\Program Files (x86)\University of Illinois\VMD\plugins\WIN32\molfile\lammpsplugin.so&quot;)(Windows 10)<br />
+(/usr/local/lib/vmd/plugins/LINUXAMD64/molfile/lammpsplugin.so) (Ubuntu 18.04)<br />
+(https://sites.google.com/site/akohlmey/software/lammps-plugin/vmd-lammpsplugin-20150530.tar.gz)<br />
+------------------------------------------------------------------------------<br />
+■ ImageJ (ubunut 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://imagej.nih.gov/ij/download.html)<br />
+・ImageJ bundled with Java 1.8.0_112&nbsp;<br />
+&nbsp; ij152-linux64-java8.zip<br />
+1. unzip ij152-linux64-java8.zip<br />
+2. cd ImageJ<br />
+3. ./ImageJ<br />
+[1] Image J / Fiji のダウンロード方法、インストール方法と使い方&nbsp;<br />
+&nbsp; http://scienceandtechnology.jp/archives/25990<br />
+<br />
+◇ Fiji<br />
+(https://imagej.net/Fiji/Downloads)<br />
+・ Download Fiji for your OS&nbsp;<br />
+&nbsp; 64-bit (Penguin mark)<br />
+&nbsp; fiji-linux64.zip<br />
+1. unzip fiji-linux64.zip<br />
+2. cd Fiji.app<br />
+3. ./ImageJ-linux64<br />
+------------------------------------------------------------------------------<br />
+■ ImageJ (windows 10 (64 bit))<br />
+(https://imagej.nih.gov/ij/download.html)<br />
+・ImageJ bundled with 64-bit Java 1.8.0_112<br />
+1. ij152-win-java8.zip を解凍<br />
+2. ImageJ.exe<br />
+[1] Image J / Fiji のダウンロード方法、インストール方法と使い方&nbsp;<br />
+&nbsp; http://scienceandtechnology.jp/archives/25990<br />
+<br />
+◇ Fiji<br />
+(https://imagej.net/Fiji/Downloads)<br />
+・ Download Fiji for your OS&nbsp;<br />
+&nbsp; 64-bit (Windows mark)<br />
+1. fiji-win64.zip を解凍<br />
+2. ImageJ-win64.exe<br />
+※ ImageJ-win64.exeをクリックして何かインストールしているが私は途中でそれをキャンセルで止めてしまった。止めなかった方がよかったかもしれない。<br />
+------------------------------------------------------------------------------<br />
+■ OVITO (windows 10 (64 bit))<br />
+(https://ovito.org/index.php/download)<br />
+・Download OVITO 2.9.0 (installer)<br />
+1. ovito-2.9.0-win64.exe<br />
+[1] 5. OVITOで原子構造の可視化<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/ovito.html<br />
+------------------------------------------------------------------------------<br />
+■ Atomeye (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))&nbsp;<br />
+<br />
+□ AtomEye<br />
+(https://github.com/jameskermode/AtomEye)<br />
+0. sudo apt-get install netcdf-bin libnetcdf-dev libncurses5-dev libncursesw5-dev<br />
+&nbsp; sudo apt install gfortran xterm libopenmpi-dev liblapack-dev libblas-dev libreadline-dev libgsl-dev libx11-dev libxext-dev libxpm-dev libpng-dev libjpeg-dev<br />
+1. unzip AtomEye-master.zip<br />
+2. cd AtomEye-master<br />
+3. make<br />
+4. cd A3<br />
+5. ./A<br />
+<br />
+※ AtomEyeは転位の構造を表示するのに適していると言われている<br />
+Lammpsの入力でcfg形式の出力をすれば良いらしい。<br />
+-----<br />
+dump d1 all cfg 10 hoge.*.cfg mass type xs ys zs v_hoge c_hoge<br />
+dump_modify d1 element Ni<br />
+-----<br />
+[L1] LAMMPSマニュアル使用編.pptx (http://md.jsms.jp/download/)<br />
+------------------------------------------------------------------------------<br />
+■ AtomEye (Usage) [1-3] (ubunut 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+1. $HOME/AtomEye-master/A3/A dump.tensile_0.cfg<br />
+・AtomEye<br />
+(※ AtomEyeでは原子が描画されている画面で以下のコマンドを主に入力する)<br />
+2. Alt+0<br />
+&nbsp; (activate centrosymmetric (c_sym) view)<br />
+3. 3 or 9 (change atom size)<br />
+4. Shift + h<br />
+&nbsp;5 or 10<br />
+5. Ctrl + PageUp or PageDown (lower limit)<br />
+&nbsp; Shift + PageUp or PageDown (higher limit)<br />
+6. Ctrl + t<br />
+&nbsp; &nbsp;floating auxiliary thresholds flag = OFF.<br />
+-----<br />
+a1. Ctrl + a<br />
+a2. Shift + a<br />
+-----<br />
+9. y &gt; y<br />
+・ImageJ<br />
+10. $HOME/ImageJ/ImageJ<br />
+11. File &gt; Import &gt; Image Sequence... &gt; 00000.jpg &gt; Open<br />
+12. File &gt; Save as &gt; QuickTime movie...<br />
+※ 描画のステップはDel（=Delete）で進み、Ins（=Insert）で戻る。kを押すと配位数で色分けされる。<br />
+<br />
+[1] Uniaxial Tension<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Tension<br />
+[2] AtomEye（分子可視化プログラム）の使い方について<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/~izumi/CMS/AtomEye_Jpn.pdf<br />
+[3] Atomeyeの使い方<br />
+&nbsp; https://www1.gifu-u.ac.jp/~ysr_labo/share/atomeye.htm<br />
+------------------------------------------------------------------------------<br />
+■ octav (ubunut 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+1. sudo apt install octave<br />
+2. octave<br />
+3. all [Next &gt;]<br />
+4. gedit $HOME/.octaverc<br />
+-----<br />
+graphics_toolkit(&#39;gnuplot&#39;);<br />
+-----<br />
+Or<br />
+4. graphics_toolkit(&#39;gnuplot&#39;);<br />
+[1] https://www.dogrow.net/octave/blog40/<br />
+------------------------------------------------------------------------------<br />
+■ Scilab (ubunut 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+1. sudo apt install scilab<br />
+2. scilab<br />
+<br />
+□ mfile2sci (underconstructing)<br />
+(https://help.scilab.org/docs/5.3.3/en_US/mfile2sci.html)<br />
+[1] MatlabプログラムをScilabに変換、再編集するに当たって&nbsp;<br />
+&nbsp; https://nolan00267justdoit.blogspot.com/2014/09/matlabscilab.html<br />
+------------------------------------------------------------------------------<br />
+■ Appendix -2- (make input file)<br />
+------------------------------------------------------------------------------<br />
+■ Packmol<br />
+(http://m3g.iqm.unicamp.br/packmol/home.shtml)<br />
+<br />
+□ Resistration<br />
+(http://m3g.iqm.unicamp.br/packmol/download.shtml)<br />
+Please fill the form below:<br />
+(If you have downloaded Packmol before, fill the E-mail field only.)&nbsp;<br />
+<br />
+□ Install (Windows 10 (64 bit))<br />
+・packmol.exe&nbsp;<br />
+1. packmol.exe をダウンロードするだけ<br />
+<br />
+◇ Usage (Windows 10 (64 bit))<br />
+1. packmol.exe<br />
+2. packmol.inp<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+・packmol.tar.gz&nbsp;<br />
+1. tar zxvf packmol.tar.gz<br />
+2. cd packmol<br />
+3. make<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit))<br />
+1. $HOME/packmol/packmol &lt; packmol.inp<br />
+<br />
+◇ Install (other method -1- &nbsp;(Ubuntu 18.04 LTS (64 bit)))<br />
+・packmol.tar.gz&nbsp;<br />
+1. tar zxvf packmol.tar.gz<br />
+2. cd packmol<br />
+3. ./configure<br />
+4. make<br />
+<br />
+◇ Install (other method -2- &nbsp;(Ubuntu 18.04 LTS (64 bit)))<br />
+・packmol.tar.gz&nbsp;<br />
+1. tar zxvf packmol.tar.gz<br />
+2. cd packmol<br />
+3. ./configure ifort<br />
+4. gedit Makefile<br />
+5. make<br />
+<br />
+◇ packmol.inp [P2]<br />
+1. gedit packmol.inp<br />
+-----<br />
+tolerance 2.0<br />
+filetype xyz<br />
+output system.xyz<br />
+<br />
+structure solvent.xyz<br />
+&nbsp; number 10000<br />
+&nbsp; inside box 0. 0. 0. 80. 80. 80.<br />
+end structure<br />
+-----<br />
+・tolerance は異なる分子の原子間の最小距離(LAMMPSのunitsによる）。常温常圧なら2.0で良い<br />
+・solvent.xyz は溶媒分子の座標ファイル名<br />
+・number は溶媒分子の数<br />
+・inside box は溶媒分子を詰める領域<br />
+<br />
+[P1] 溶媒分子構造作成ソフトウェアpackmolのインストール<br />
+&nbsp; http://leetmikeal.hatenablog.com/entry/20130206/1360132140<br />
+[P2] LAMMPS+Packmol+Moltemplate+OPLS-AAで溶液のMD<br />
+&nbsp; http://ja.akionux.net/wiki/index.php/LAMMPS%2BPackmol%2BMoltemplate%2BOPLS-AAで溶液のMD<br />
+------------------------------------------------------------------------------<br />
+■ Moltemplate<br />
+(http://moltemplate.org/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(http://www.moltemplate.org/download.html)<br />
+1. git clone https://github.com/jewettaij/moltemplate moltemplate<br />
+2. cd moltemplate<br />
+3. sudo gedit $HOME/.bashrc<br />
+-----<br />
+export PATH=&quot;$PATH:$HOME/moltemplate/moltemplate&quot;<br />
+export PATH=&quot;$PATH:$HOME/moltemplate/moltemplate/scripts&quot;<br />
+-----<br />
+4. bash<br />
+<br />
+◇ test (Ubuntu 18.04 LTS (64 bit))<br />
+1. cd $HOME/moltemplate/examples/all_atom/force_field_explicit_parameters/aluminum_crystal_strain/moltemplate_files<br />
+2. ls<br />
+&nbsp; (README.sh &nbsp;al_cell.lt &nbsp;system.lt)<br />
+3. moltemplate.sh system.lt<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(http://www.moltemplate.org/download.html)<br />
+1. tar zxvf moltemplate_2019-5-30.tar.gz<br />
+2. cd moltemplate_2019-5-30<br />
+3. sudo gedit $HOME/.bashrc<br />
+-----<br />
+export PATH=&quot;$PATH:$HOME/moltemplate_2019-5-30/moltemplate&quot;<br />
+export PATH=&quot;$PATH:$HOME/moltemplate_2019-5-30/moltemplate/scripts&quot;<br />
+-----<br />
+4. bash<br />
+<br />
+◇ test (Ubuntu 18.04 LTS (64 bit))<br />
+1. cd $HOME/moltemplate_2019-5-30/examples/all_atom/force_field_explicit_parameters/aluminum_crystal_strain/moltemplate_files<br />
+2. ls<br />
+&nbsp; (README.sh &nbsp;al_cell.lt &nbsp;system.lt)<br />
+3. moltemplate.sh system.lt<br />
+<br />
+□ Install (Windows 10 (64 bit)) (failed)<br />
+(https://github.com/jewettaij/moltemplate)<br />
+・moltemplate-master.zip<br />
+1. Clone or download &gt; Download ZIP<br />
+2. moltemplate-master.zip を解凍<br />
+&nbsp; (C:\Users\username に moltemplate-master をコピー&amp;ペースト)<br />
+3. Anaconda Prompt<br />
+4. cd C:\Users\username\moltemplate-master<br />
+5. pip install . --user<br />
+※ C:\Users\username\AppData\Roaming\Python\Python37\Scripts<br />
+<br />
+◇ test (Windows 10 (64 bit)) (failed)<br />
+1. cd C:\Users\username\moltemplate-master\examples\all_atom\force_field_explicit_parameters\aluminum_crystal_strain\moltemplate_files<br />
+2. bash<br />
+3. moltemplate.sh system.lt<br />
+※ bashのコマンドでlinuxに変更されるので、上記のlinux(ubuntu)が上手く設定されていれば動作する<br />
+<br />
+[M1] LAMMPS+Packmol+Moltemplate+OPLS-AAで溶液のMD<br />
+&nbsp; http://ja.akionux.net/wiki/index.php/LAMMPS%2BPackmol%2BMoltemplate%2BOPLS-AAで溶液のMD<br />
+------------------------------------------------------------------------------<br />
+■ peteboyd/lammps_interface<br />
+(https://github.com/peteboyd/lammps_interface)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://github.com/peteboyd/lammps_interface.git<br />
+2. cd lammps_interface<br />
+3. pip install -r requirements.txt<br />
+4. python setup.py install<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit))<br />
+1. cd $HOME/lammps_interface<br />
+2. cd test_struct<br />
+3. python $HOME/lammps_interface/lammps_interface.py IRMOF-1.cif<br />
+<br />
+※ python lammps_interface.py --help<br />
+※ Lammps data file creation: https://github.com/kbsezginel/lammps-data-file<br />
+------------------------------------------------------------------------------<br />
+◇ other converter<br />
+<br />
+・ch2lmp<br />
+・amber2lmp<br />
+・msi2lmp<br />
+・Pizza.py<br />
+<br />
+[C1] LAMMPS Basics<br />
+&nbsp; https://lammps.sandia.gov/workshops/Aug13/Plimpton/lammps_begin_Aug13.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Appendix -3-<br />
+------------------------------------------------------------------------------<br />
+□ Download a tarball (2019/05/14)<br />
+(https://lammps.sandia.gov/download.html)<br />
+・LAMMPS --- Stable version (12 Dec 2018)<br />
+&nbsp; Download Now<br />
+0. sudo apt install build-essential libopenmpi-dev<br />
+1. tar zxvf lammps-stable.tar.gz<br />
+2. cd lammps-12Dec18<br />
+3. cd src<br />
+4. make mpi<br />
+※ Makefileに色々と記載されている<br />
+<br />
+□ git [5] (2019/05/14)<br />
+0. sudo apt install build-essential libopenmpi-dev<br />
+&nbsp; sudo apt install git<br />
+1. git clone git://github.com/lammps/lammps.git&nbsp;<br />
+2. cd lammps<br />
+3. cd src<br />
+4. make mpi<br />
+<br />
+◇ install (option) [O2]<br />
+5. make package-status<br />
+-----<br />
+a1. make yes-meam<br />
+a2. make lib-meam args=&quot;-m serial&quot;&nbsp;<br />
+-----<br />
+b1. make yes-kim<br />
+b2. make lib-kim args=&quot;-b -a everything&quot;&nbsp;<br />
+-----<br />
+6. make mpi<br />
+※ make lib-meam args=&quot;-m mpi&quot; ではエラーが表示された<br />
+[O1] https://lammps.sandia.gov/doc/Build_extras.html#meam<br />
+[O2] https://sourceforge.net/p/lammps/mailman/message/36346093/<br />
+※ eam/alloyやmeam/cではエラーが出る。meamは動作。<br />
+[A1] Atomeyeをビルドする<br />
+&nbsp; https://qiita.com/tkmtSo/items/93656c75b60c6728f9eb<br />
+------------------------------------------------------------------------------<br />
+■ インストールのときに強制終了してしまい、インストールが中途半端で<br />
+Errors were encountered while processing:<br />
+&nbsp;libbotan-1.10-1<br />
+E: Sub-process /usr/bin/dpkg returned an error code (1)<br />
+のエラーが表示された。<br />
+・下記のコマンドでインストール状況を表示<br />
+&nbsp; dpkg -s libbotan-1.10-1<br />
+&nbsp;&nbsp;<br />
+&nbsp; reinstreq (壊れているので要再インストール）<br />
+&nbsp; half-installed (インストールが終了していない）<br />
+&nbsp; installed (インストールされている）<br />
+・下記で強制的に削除した<br />
+&nbsp; sudo dpkg -P --force-remove-reinstreq libbotan-1.10-1<br />
+・下記で強制的にインストールした。<br />
+&nbsp; sudo apt-get -f install &nbsp;libbotan-1.10-1<br />
+下のHPが参考になった。<br />
+[1] https://serverlog.jp/apt-get-dependence/<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

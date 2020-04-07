@@ -1,0 +1,471 @@
+<p sizcache="7" sizset="0">　ここでは、PCに&nbsp;<span style="color: rgb(0, 102, 204);">Scientific&nbsp;Linux</span>&nbsp;をインストールし、第一原理計算コードをセットアップするまでを解説する。 （64bitはOSをx86_64にして、intel compiler において、ia32 を intel64に し、ライブラリを64bitのタイプに指定することで可能になる）<br />
+------------------------------------------------------------------------------<br />
+Scientific&nbsp;6.1 i383 のインストール<br />
+&nbsp; 1) google で 「riken linux」と入力して検索すると、下記のHPが得られる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://ftp.riken.go.jp/Linux/">http://ftp.riken.go.jp/Linux/</a><br />
+&nbsp; 2)&nbsp;「scientific/」&rarr;「6.1/」&rarr;「i386/」&rarr;「iso]<br />
+&nbsp; 3) 「<a href="http://ftp.riken.go.jp/Linux/scientific/6.1/i386/iso/SL-61-i386-2011-07-27-Install-DVD.iso" sizcache="7" sizset="0"><span style="color: rgb(0, 102, 204);">SL-61-i386-2011-07-27-Install-DVD.iso</span></a>」をirvine1_3_0などでダウンロードする。</p>
+
+<p sizcache="5" sizset="0">&nbsp; 4) DVDなどにiso形式で焼いて、フォーマットしたPCにインストールする。</p>
+
+<p sizcache="5" sizset="0">&nbsp; 5) 今後使用するパスワードをなどを設定していけばインストールは完了する。<br />
+------------------------------------------------------------------------------</p>
+
+<p sizcache="5" sizset="0">Scientific&nbsp;Linux&nbsp; の終了と再起動<br />
+&nbsp; 1) 「System」&rarr;「Shut Down...」<br />
+&nbsp; 2) 「Shut Down」を選択すれば終了。「Restart」を選択すれば再起動される。<br />
+------------------------------------------------------------------------------<br />
+仮想マシン設定の編集<br />
+&nbsp; 1) 左欄からインストールしたLinux OSを選択する。<br />
+&nbsp; 2) 右下にある「仮想マシン設定の編集」を選択する。<br />
+&nbsp; 3) メモリを推奨最大メモリに設定する。<br />
+&nbsp; 4) プロセッサを選択し、プロセッサ コアの数を設定する。（Core 2 Quadであれば、2や4）を選択する。<br />
+&nbsp; 5) 設定が終われば 「OK」を押す。<br />
+------------------------------------------------------------------------------<br />
+仮想マシンの再生（Scientific&nbsp;Linux 6.1 i383 の起動）<br />
+&nbsp; 1) 左欄からインストールしたLinux OS（Scientific&nbsp;Linux 6.1 i383）を選択する。<br />
+&nbsp; 2) 右下にある「仮想マシンの再生」を選択する。<br />
+&nbsp; 3) 上記で起動する。<br />
+------------------------------------------------------------------------------<br />
+第一原理計算に必要なソフトのダウンロードⅠ（「Add/Remove Software」上）<br />
+&nbsp; 1) 「System」&rarr;「Administration」&rarr;「Add/Remove Software」<br />
+&nbsp; 2)&nbsp;左上にある検索の欄で探したいソフト名を入力する。（例えば、「libstdc」など）<br />
+&nbsp; 3) Querying が消えるまで待つ。<br />
+&nbsp; 4)&nbsp;右側にインストールするソフトの候補が現れるので、インストールしたいソフトにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 5) Authenticateの欄が出るので、「Password for root: 」にパスワードを入力し、「Authenticate」を押す。<br />
+&nbsp; 6) yum install&nbsp;emacs<br />
+&nbsp; 7) 以下、長くなるが、下記に代表的なインストールの例を示す。<br />
+<br />
+◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp;&nbsp;1) 検索で「gfortran」と入力して、「Compatibility Fortran 95 runtime library version 4.1.2」にチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 2) 検索で「gnuplot」と入力して、「Minimal version of program for plotting mathematical expressions and data」にチェックを入れて、「Apply」を押してインストールする。<br />
+<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; 1) 検索で「libstdc」と入力して、「Compatibility standard C++ libraries」にチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 2) 検索で「gnuplot」と入力して、「Minimal version of program for plotting mathematical expressions and data」にチェックを入れて、「Apply」を押してインストールする。<br />
+------------------------------------------------------------------------------<br />
+第一原理計算に必要なソフトのダウンロードⅡ（Compiler install）<br />
+<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; Intel Compiler<br />
+&nbsp; 1)&nbsp;google で 「Non-commercial Intel」と入力して検索すると、下記のHPが得られる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190">https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190</a>&nbsp;<br />
+&nbsp; 2) Accept&nbsp;を押して、必要事項を記入する。<br />
+&nbsp; 3)&nbsp;Product for 32-bit development にチェックを入れて、Download Now&nbsp;を押す。<br />
+&nbsp; 4)&nbsp;必要事項を記入したときのメールアドレスに添付されている ライセンスファイルをダウンロードして、「Places」&rarr;「Home folder」の中に置く。<br />
+&nbsp;&nbsp;5)&nbsp;「Applications」&rarr;「System Tools」&rarr;「Terminal」 でコマンドを入力できるようにする<br />
+&nbsp; 6) tar zxvf&nbsp;と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」&nbsp;へ入れる。その後に、Enterを押す。<br />
+&nbsp; 7) su と入力。（以後、Enterを押す と明記しない）<br />
+&nbsp; 8)&nbsp;emacs /etc/sysconfig/selinux<br />
+&nbsp;&nbsp;&nbsp; SELINUX=disabled と入力後、Save。<br />
+&nbsp; 9)&nbsp;emacs /etc/sysconfig/grub.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;selinux=0&nbsp;と入力後、Save。<br />
+&nbsp; 10) emacs /etc/sysconfig/lilo.conf<br />
+&nbsp;&nbsp;&nbsp; selinux=0&nbsp;と入力後、Save。<br />
+&nbsp; 11) 「System」&rarr;「Shut Down...」&rarr;「Restart」<br />
+&nbsp; 12)&nbsp;「Applications」&rarr;「System Tools」&rarr;「Terminal」&nbsp;<br />
+&nbsp;&nbsp;13)&nbsp;cd と入力後、「parallel_studio_xe_2011...」のファイルを左クリックしながら「Terminal」 へ入れる。（※ cd はカレントディレクトリ｛=フォルダ｝をどこにするかを指定するコマンド）<br />
+&nbsp; 14) ./install.sh<br />
+&nbsp; 15)&nbsp;「3. Install as current user to limit access to user level* 」を選択。<br />
+&nbsp; 16)&nbsp;「Press &quot;Enter&quot; key to continue or &quot;q&quot; to quit: 」でEnterを入力。<br />
+&nbsp; 17)&nbsp;「1. Skip prerequisites [default]&nbsp;」を選択。<br />
+&nbsp; 18) 「space」 を押し続け、最後に 「accept」と入力してEnterを押す。<br />
+&nbsp;&nbsp;19)&nbsp;「3. I want to activate either remotely, or by using a license file, or by using a<br />
+license manager」を選択。<br />
+&nbsp; 20)&nbsp;「2. Use a license file」 を選択。<br />
+&nbsp; 21)&nbsp;「Applications」&rarr;「System Tools」&rarr;「Terminal」 で新しく開いた「Terminal」の中に、ライセンスファイルを入れる。&#39; &#39;の中をコピーする。<br />
+&nbsp; 22)&nbsp;前の「Terminal」に戻って、ペーストし、Enter を押す。<br />
+&nbsp; 23)&nbsp;「Press &quot;Enter&quot; key to continue:」でEnterを押す。<br />
+&nbsp; 24)&nbsp;「1. Start installation Now」を選択。<br />
+&nbsp; 25)&nbsp;「Would you like to overwrite this directory? ( Yes/No ) [ Yes ] :」でEnterを押す。<br />
+&nbsp;&nbsp;26)&nbsp;「1. Skip prerequisites [default]」を選択。<br />
+&nbsp; 27)&nbsp;「Please type a selection or press &quot;Enter&quot; to accept default choice [q]:」でqを押す。<br />
+&nbsp;&nbsp;&nbsp; この後に表示されている。/home/...以後の情報をメモしておく。<br />
+&nbsp; 28) cd $home<br />
+&nbsp; 29) emaces .bashrc にて最後の行に下記を書き入れる（user_nameのところが人により異なる）。<br />
+&nbsp;&nbsp;&nbsp; export PATH=$PATH:/home/user_name/intel/vtune_amplifier_xe_2011<br />
+&nbsp;&nbsp;&nbsp; export PATH=$PATH:/home/user_name/intel/inspector_xe_2011<br />
+&nbsp;&nbsp;&nbsp; source /home/user_name/intel/bin/compilervars.sh ia32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;source /home/user_name/intel/bin/<br />
+&nbsp; 30) bash　にて変更を反映させる（再起動させてもよい）。<br />
+&nbsp; 31) ifort -v にてFortran　コンパイラの動作確認を兼ねてVersion情報を表示させる。<br />
+&nbsp; 32) icc -v にてC コンパイラの動作確認を兼ねてVersion情報を表示させる。<br />
+------------------------------------------------------------------------------<br />
+第一原理計算に必要なライブラリの設定Ⅰ（Parallel set up）（調査中）<br />
+&nbsp;&nbsp;◇&nbsp;gfortran の場合（業者様向け &amp; 学生様向け）&nbsp;&nbsp;<br />
+&nbsp; MPICH （※下記の方法ではmpif90などが作成されなかったので、MPICH2の説明をこの後に入れる）<br />
+&nbsp;&nbsp;1) googleで「mpich」と入力して検索する。下記のHPが得られる。<br />
+&nbsp;&nbsp;&nbsp; <a href="http://www.mcs.anl.gov/research/projects/mpich2/">http://www.mcs.anl.gov/research/projects/mpich2/</a><br />
+&nbsp;&nbsp;2) 「Downloads Page &gt;&gt;」に向かう。<br />
+&nbsp;&nbsp;3) 一番下にあるMPICH-1をクリックして、ダウンロードする。<br />
+&nbsp;&nbsp;4) tar zxvf と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」 へ入れる。その後に、Enterを押す。<br />
+&nbsp; 5) cd と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」 へ入れる。その後に、Enterを押す。<br />
+&nbsp; 6) ./configure -prefix=/usr/lib/mpich -opt=-O2 -c++=g++ -cc=gcc -fc=gfortran -f90=gfortran -f77=gfortran --with-arch=LINUX<br />
+&nbsp; 7) make<br />
+&nbsp; 8) su<br />
+&nbsp; 9) make install<br />
+&nbsp; 10)&nbsp;/usr/local/mpich/share/machines.LINUX にMPIで利用するマシン名の一覧を記入<br />
+&nbsp; 11) ホームフォルダでの .bashrc&nbsp;に下記を追加。<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/mpich/lib<br />
+&nbsp; 12) 各コンパイルでのコマンドは下記のようになる。<br />
+&nbsp;&nbsp;&nbsp; Fortran 77: /usr/local/mpich/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; Fortran 90: /usr/local/mpich/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; C : /usr/local/mpich/bin/mpicc<br />
+<br />
+&nbsp; MPICH2<br />
+&nbsp; 1)&nbsp;「System」&rarr;「Administration」&rarr;「Add/Remove Software」<br />
+&nbsp; 2) 左上にある検索の欄で「mpich2」と入力する。<br />
+&nbsp; 3) 右側にインストールするソフトの候補が現れるので、全にチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 4) hosts に「 マシン名 cpu=2 」と各行にマシンの数だけ記入する。<br />
+　5) 各コンパイルでのコマンドは下記のようになる。<br />
+&nbsp;&nbsp;&nbsp; Fortran 77: /usr/lib/mpich2/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; Fortran 90: /usr/lib/mpich2/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; C : /usr/lib/mpich2/bin/mpicc<br />
+&nbsp;&nbsp;&nbsp; C++ : /usr/lib/mpich2/bin/mpicxx<br />
+&nbsp; 6)&nbsp;実行は下記のようになる<br />
+&nbsp;&nbsp;&nbsp; mpirun -machinefile hosts -mca pls_rsh_agent rsh -np 2 abinit &lt;case.files&gt;&nbsp;case.log<br />
+<br />
+&nbsp; OpenMPI&nbsp;（インストール後は再起動すること！）<br />
+&nbsp; 1) 「System」&rarr;「Administration」&rarr;「Add/Remove Software」<br />
+&nbsp; 2) 左上にある検索の欄で「openmpi」と入力する。<br />
+&nbsp; 3)&nbsp;右側にインストールするソフトの候補が現れるので、インストールしたいソフトにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 4) hosts に「 マシン名 cpu=2 」と各行にマシンの数だけ記入する。<br />
+　5)&nbsp;各コンパイルでのコマンドは下記のようになる。<br />
+&nbsp;&nbsp;&nbsp; Fortran 77: /usr/lib/openmpi/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; Fortran 90: /usr/lib/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; C : /usr/lib/openmpi/bin/mpicc<br />
+&nbsp;&nbsp;&nbsp; C++ : /usr/lib/openmpi/bin/mpicxx<br />
+&nbsp; 6)&nbsp;実行は下記のようになる<br />
+&nbsp;&nbsp;&nbsp; mpirun -machinefile hosts -mca pls_rsh_agent rsh -np 2 abinit &lt;case.files&gt; case.log<br />
+<br />
+&nbsp; ◇ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; MPICH<br />
+&nbsp; 1) googleで「mpich」と入力して検索する。下記のHPが得られる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.mcs.anl.gov/research/projects/mpich2/">http://www.mcs.anl.gov/research/projects/mpich2/</a><br />
+&nbsp; 2) 「Downloads Page &gt;&gt;」に向かう。<br />
+&nbsp; 3) 一番下にあるMPICH-1をクリックして、ダウンロードする。<br />
+&nbsp; 4)&nbsp;tar zxvf と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」 へ入れる。その後に、Enterを押す。<br />
+&nbsp;&nbsp;5) cd&nbsp;と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」 へ入れる。その後に、Enterを押す。<br />
+&nbsp; 6)&nbsp;./configure -prefix=/usr/local/mpich -opt=-O2 -c++=icpc -cc=icc -fc=ifort -f90=ifort -f77=ifort --with-arch=LINUX<br />
+&nbsp; 7) make<br />
+&nbsp; 8) su<br />
+&nbsp; 9) make install<br />
+&nbsp; 10)&nbsp;/usr/local/mpich/share/machines.LINUX にMPIで利用するマシン名の一覧を記入<br />
+&nbsp; 11)&nbsp;ホームフォルダでの .bashrc に下記を追加。<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/mpich/lib<br />
+&nbsp;&nbsp;12)&nbsp;各コンパイルでのコマンドは下記のようになる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Fortran 77: /usr/local/mpich/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; Fortran 90: /usr/local/mpich/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; C&nbsp;: /usr/local/mpich/bin/mpicc<br />
+<br />
+&nbsp; OpenMPI （インストール後は再起動すること！）<br />
+&nbsp; 1)&nbsp;googleで「openmpi」と入力して検索する。下記のHPが得られる。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://www.open-mpi.org/software/ompi/v1.4/">http://www.open-mpi.org/software/ompi/v1.4/</a><br />
+&nbsp; 2)&nbsp;openmpi-1.4.3.tar.gz&nbsp;をダウンロードする。<br />
+&nbsp; 3) tar zxvf openmpi-1.4.3.tar.gz<br />
+&nbsp; 4) cd openmpi-1.4.3<br />
+&nbsp; 5)&nbsp;./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+&nbsp; 6) make<br />
+&nbsp; 7) su<br />
+&nbsp; 8) make all install<br />
+&nbsp;&nbsp;9)&nbsp;/usr/local/openmpi/etc/openmpi-default-hostfile にMPIで利用するマシン名の一覧を記入<br />
+&nbsp;&nbsp;10)&nbsp;ホームフォルダでの .bashrc に下記を追加。<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/openmpi/lib<br />
+&nbsp; 11) 各コンパイルでのコマンドは下記のようになる。<br />
+&nbsp;&nbsp;&nbsp; Fortran 77: /usr/local/openmpi/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; Fortran 90: /usr/local/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; C : /usr/local/openmpi/bin/mpicc<br />
+&nbsp;&nbsp;&nbsp; C++ : /usr/local/openmpi/bin/mpicxx<br />
+&nbsp; 12) 実行は下記のようになる<br />
+&nbsp;&nbsp;&nbsp; mpirun -mca pls_rsh_agent rsh -np 2 abinit &lt;case.files&gt; case.log<br />
+------------------------------------------------------------------------------<br />
+並列計算を実行する前に必要なrshの設定<br />
+&nbsp; 1) 「System」&rarr;「Administration」&rarr;「Add/Remove Software」<br />
+&nbsp; 2) 左上にある検索の欄で、「rsh-server」を入力して対応するソフトを探す。<br />
+&nbsp; 3) Querying が消えるまで待つ。<br />
+&nbsp; 4) 右側にインストールするソフトの候補が現れるので、インストールしたいrshと書かれたものにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; 5) rpm -qa rsh-server, rpm -qa xinted<br />
+&nbsp;&nbsp;&nbsp; rsh-server, eintedがインストールされていることを確認する<br />
+&nbsp; 6) su<br />
+&nbsp; 7) /sbin/chkconfig rsh on<br />
+&nbsp;&nbsp;&nbsp; ブート時に rsh を自動的に起動するように設定する<br />
+&nbsp; 8) /sbin/chkconfig rlogin on<br />
+&nbsp;&nbsp;&nbsp; ブート時にrloginを自動的に起動するように設定する<br />
+&nbsp; 9) /sbin/service xinted restart<br />
+&nbsp;&nbsp;&nbsp; ブート時にxinted を自動的に起動するように設定する<br />
+&nbsp; 10) ホームディレクトリに .rhosts ファイルへ通信するマシン全てと localhost.localdomain を記述<br />
+&nbsp;&nbsp;&nbsp; kwrite ~/.rhosts<br />
+&nbsp;&nbsp;&nbsp; localhost.localdomain<br />
+&nbsp;&nbsp;&nbsp;&nbsp;localhost<br />
+&nbsp;&nbsp;&nbsp; host1<br />
+&nbsp;&nbsp;&nbsp; host2<br />
+&nbsp; 11) .rhosts のパーミッションを600にする。chmod 600 ~/.rhosts<br />
+&nbsp; 12) rsh の動作確認<br />
+&nbsp;&nbsp;&nbsp; rsh localhost.localdomain hostname<br />
+&nbsp;&nbsp;&nbsp; rsh&nbsp;localhost hostname<br />
+参考HP : <a href="http://mase.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?CentOS5%A4%C7rsh%A4%F2%CD%AD%B8%FA%A4%CB%A4%B9%A4%EB">http://mase.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?CentOS5%A4%C7rsh%A4%F2%CD%AD%B8%FA%A4%CB%A4%B9%A4%EB</a><br />
+------------------------------------------------------------------------------</p>
+
+<p>並列計算を実行する前に必要な .mpd.conf の設定</p>
+
+<p>&nbsp; ホームフォルダでの設定　（PWscfで必要）</p>
+
+<p>&nbsp; 1)&nbsp;mpd&nbsp;&amp;<br />
+&nbsp;&nbsp;2) cd $HOME<br />
+&nbsp;&nbsp;3) touch .mpd.conf<br />
+&nbsp;&nbsp;4) chmod 600 .mpd.conf<br />
+&nbsp;&nbsp;5) emacs .mpd.conf で下記を書き入れる。*****はPCにより異なると思う。<br />
+&nbsp;&nbsp;&nbsp; MPD_SECRETWORD=*****<br />
+&nbsp;&nbsp;6) mpd &amp;</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp;&nbsp;ルートでの設定　（ABINTIで必要）</p>
+
+<p>&nbsp;&nbsp;1) su<br />
+&nbsp;&nbsp;2) cd&nbsp;/root<br />
+&nbsp;&nbsp;3) touch .mpd.conf<br />
+&nbsp;&nbsp;4) chmod 600 .mpd.conf<br />
+&nbsp;&nbsp;5) emacs .mpd.conf で下記を書き入れる。*****はPCにより異なると思う。<br />
+&nbsp;&nbsp;&nbsp; MPD_SECRETWORD=*****<br />
+&nbsp; 6) mpd &amp;<br />
+------------------------------------------------------------------------------</p>
+
+<p>第一原理計算に必要なライブラリの設定Ⅱ（Library set up）<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp;&nbsp;1) 「System」&rarr;「Administration」&rarr;「Add/Remove Software」<br />
+&nbsp;&nbsp;2) 検索で「blas」と入力して、出てきた項目全てにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp;&nbsp;3) 検索で「lapack」と入力して、出てきた項目全てにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp;&nbsp;4) 検索で「FFT」と入力して、出てきた項目全てにチェックを入れて、「Apply」を押してインストールする。<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; FFT: 左欄の「ライブラリの設定」を参照</p>
+
+<p>&nbsp;&nbsp;GotoBLAS:&nbsp;左欄の「ライブラリの設定」を参照<br />
+&nbsp; BLACS:&nbsp;左欄の「ライブラリの設定」を参照<br />
+&nbsp; ScaLapack:&nbsp;左欄の「ライブラリの設定」を参照<br />
+<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; FFT:&nbsp;左欄の「ライブラリの設定」を参照</p>
+
+<p>&nbsp;&nbsp;GotoBLAS:&nbsp;左欄の「ライブラリの設定」を参照<br />
+&nbsp; BLACS:&nbsp;左欄の「ライブラリの設定」を参照<br />
+&nbsp; ScaLapack: 左欄の「ライブラリの設定」を参照<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ PWscf<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化&nbsp;</p>
+
+<p>&nbsp;&nbsp;MPICH2 version 1.2.1<br />
+&nbsp; 1) tar zxvf expresso-4.3.2.tar.gz<br />
+&nbsp; 2) cd expresso-4.3.2<br />
+&nbsp; 3) ./configure MPIF90=mpif90 CXX=g++ CC=gcc FC=gfortran F77=gfortran F90=gfortran BLAS_LIBS=&quot;-L/usr/lib -lblas&quot;&nbsp;LAPACK_LIBS=&quot;-L/usr/lib -llapack&quot;&nbsp;FFT_LIBS=&quot;-L/usr/lib -lfftw3&quot;<br />
+&nbsp; 4) make all<br />
+&nbsp; 5)&nbsp;mpirun -machinefile /home/*/hosts -np 2 /home/*/espresso-4.3.2/bin/pw.x&nbsp;&lt;atom.in&gt; atom.out にて計算が成功する。<br />
+<br />
+&nbsp;&nbsp;◇ 並列化</p>
+
+<p>&nbsp; OpenMPI<br />
+&nbsp;&nbsp;1) tar zxvf expresso-4.3.2.tar.gz<br />
+&nbsp; 2) cd expresso-4.3.2<br />
+&nbsp;&nbsp;3) ./configure MPIF90=/usr/lib/openmpi/bin/mpif90 CXX=g++ CC=gcc FC=gfortran F77=gfortran F90=gfortran BLAS_LIBS=&quot;-L/usr/lib -lblas&quot; LAPACK_LIBS=&quot;-L/usr/lib -llapack&quot; FFT_LIBS=&quot;-L/usr/lib -lfftw3&quot;<br />
+&nbsp; 4) make all<br />
+&nbsp; 5) /usr/lib/openmpi/bin/mpirun -machinefile /home/*/hosts -np 2 /home/*/espresso-4.3.2/bin/pw.x &lt;atom.in&gt; atom.out&nbsp;<br />
+<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化&nbsp;</p>
+
+<p>&nbsp; OpenMP<br />
+&nbsp;&nbsp;1) tar zxvf expresso-4.3.2.tar.gz<br />
+&nbsp; 2) cd expresso-4.3.2<br />
+&nbsp; 3) ./configure CXX=g++ CC=gcc FC=ifort F77=ifort F90=ifort&nbsp; --enable-openmp --with-internal-blas --with-internal-lapack --with-internal-fftw --disable-parallel<br />
+&nbsp; 4) make all<br />
+&nbsp; 5)&nbsp;/home/*/espresso-4.3.2/bin/pw.x &lt;atom.in&gt; atom.out にて計算が成功する。<br />
+<br />
+&nbsp; ◇ 並列化&nbsp;</p>
+
+<p>&nbsp; OpenMPI<br />
+&nbsp; 1) tar zxvf&nbsp;expresso-4.3.2.tar.gz<br />
+&nbsp; 2) cd&nbsp;expresso-4.3.2<br />
+&nbsp; 3) ./configure MPIF90=/usr/local/openmpi/bin/mpif90 CXX=g++ CC=gcc FC=ifort F77=ifort F90=ifort --with-internal-blas --with-internal-lapack --with-internal-fftw<br />
+&nbsp; 4) make all<br />
+&nbsp; 5) /usr/local/openmpi/bin/mpirun -machinefile /home/*/hosts -np 2 /home/*/espresso-4.3.2/bin/pw.x &lt;atom.in&gt; atom.out<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ CPMD<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ ABINIT<br />
+&nbsp;&nbsp;◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化&nbsp;</p>
+
+<p>&nbsp;&nbsp;MPICH2<br />
+&nbsp;&nbsp;1) tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp;&nbsp;2) cd abinit-6.8.1<br />
+&nbsp;&nbsp;3) ./configure CC=gcc FC=mpif90 --enable-gw-cutoff --enable-gw-dpc --enable-gw-optimal --enable-gw-wrapper --enable-vdwxc --enable-mpi&nbsp; LDFLAGS=-L/usr/lib LIBS=&quot;-llapack -lblas -lfftw3&quot; --with-trio-flavor=&quot;none&quot;&nbsp;--with-dft-flavor=&quot;none&quot;<br />
+&nbsp;&nbsp;4) make multi multi_nproces=2<br />
+&nbsp; 5) make install<br />
+&nbsp; 6)&nbsp;mpirun -machinefile /home/*/hosts -np 2 abinit &lt;case.files&gt; case.log<br />
+&nbsp;<br />
+&nbsp;&nbsp;◇ 並列化</p>
+
+<p>&nbsp; OpenMPI<br />
+&nbsp;&nbsp;1) tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp; 2) cd abinit-6.8.1<br />
+&nbsp; 3) ./configure --enable-gw-cutoff --enable-gw-dpc --enable-gw-optimal --enable-gw-wrapper --enable-vdwxc --enable-mpi CC=icc FC=/usr/lib/openmpi/bin/mpif90 LDFLAGS=&quot;-L/usr/lib&quot; LIBS=&quot;-llapack -lblas&quot; --with-trio-flavor=&quot;none&quot; --with-trio-flavor=&quot;none&quot; --with-dft-flavor=&quot;none&quot;<br />
+&nbsp; 4) make multi multi_nproces=2<br />
+&nbsp; 5) make install<br />
+&nbsp; 6) /usr/lib/openmpi/bin/mpirun -machinefile /home/*/hosts -np 2 abinit &lt;case.files&gt; case.log<br />
+<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化　</p>
+
+<p>&nbsp;&nbsp;OpenMPI<br />
+&nbsp;&nbsp;1) tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp; 2) cd abinit-6.8.1<br />
+&nbsp; 3) ./configure --enable-gw-cutoff --enable-gw-dpc --enable-gw-optimal --enable-gw-wrapper --enable-vdwxc --enable-mpi CC=icc FC=/usr/local/openmpi/bin/mpif90 LDFLAGS=&quot;-L/home/*/intel/*/mkl/lib/ia32&quot; LIBS=&quot;-lmkl_intel -lmkl_sequential -lmkl_core -lpthread&quot;&nbsp;--with-trio-flavor=&quot;none&quot;&nbsp;--with-dft-flavor=&quot;none&quot;&nbsp;--prefix=/home/user_name/abinit-6.8.1<br />
+&nbsp; 4) make multi multi_nproces=2<br />
+&nbsp; 5) make install<br />
+&nbsp; 6) /usr/local/openmpi/bin/mpirun -machinefile /home/*/hosts -np 2 /home/*/abinit-6.8.1/bin/abinit &lt;case.files&gt; case.log<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ Yambo<br />
+&nbsp;&nbsp;◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ SPRKKR<br />
+&nbsp;&nbsp;◆ gfortran の場合（業者様向け &amp; 学生様向け）</p>
+
+<p>　◇ 並列化</p>
+
+<p>&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化</p>
+
+<p>------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ WIEN2k<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化&nbsp;（クラスターPCの場合）<br />
+&nbsp;&nbsp;1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) V gfortran + gotolib を選択<br />
+&nbsp; 7) gfortran, gcc を入力<br />
+&nbsp; 8) r を押して、-llapack_lapw -lblas_lapw -lblas -llapack</p>
+
+<p>&nbsp;&nbsp;&nbsp; l を押して、$(FOPT) -L../SRC_lib</p>
+
+<p>&nbsp; 9)&nbsp;shared&nbsp;Memory&nbsp;Architecture?&nbsp;(y/n):&nbsp;n</p>
+
+<p>&nbsp;&nbsp;10)&nbsp;&nbsp;Remote&nbsp;shell&nbsp;(defaults&nbsp;is&nbsp;ssh) =&nbsp;rsh<br />
+&nbsp; 11) ./userconfig_lapw&nbsp;<br />
+&nbsp; 12) bash<br />
+&nbsp; 13) w2web</p>
+
+<p>&nbsp;</p>
+
+<p>&nbsp; ◆ gfortran + Intel MKLの場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化&nbsp;</p>
+
+<p>&nbsp;&nbsp;OpenMPI<br />
+&nbsp;&nbsp;1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) V gfortran + gotolib を選択<br />
+&nbsp; 7) gfortran, gcc を入力</p>
+
+<p>&nbsp;&nbsp;8)&nbsp;O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;L&nbsp;&nbsp; Linker Flags: $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp; P&nbsp;&nbsp; Preprocessor flags&nbsp;&#39;-DParallel&#39;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-lmkl_intel -lmkl_lapack95 -lmkl_blas95 -lmkl_core -lmkl_sequential -lmkl_gf</p>
+
+<p>&nbsp; 9)&nbsp;shared&nbsp;Memory&nbsp;Architecture?&nbsp;(y/n):&nbsp;y</p>
+
+<p>&nbsp;10) Do you have MPI and Scalapack installed and......(y/n): y<br />
+&nbsp;&nbsp;&nbsp; Your compiler: /usr/lib/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP&nbsp; RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_core -lmkl_solver -lmkl_blacs_openmpi -L/usr/lib -lfftw_mpi -lfftw $(R_LIBS)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FP&nbsp; FPOPT(par.comp.options): -ffree-form -O2</p>
+
+<p>&nbsp;&nbsp;&nbsp;&nbsp; MP&nbsp; MPIRUN commando: mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+&nbsp; 11) ./userconfig_lapw&nbsp;<br />
+&nbsp; 12) bash<br />
+&nbsp; 13) w2web</p>
+
+<p>&nbsp;<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化</p>
+
+<p>&nbsp; OpenMP</p>
+
+<p sizcache="5" sizset="0">&nbsp; 1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) ヴァージョンに合わせてI, J, K, K1 を選択（ここでは12&nbsp;のIを選択してみる）<br />
+&nbsp; 7) ifort, icc を入力<br />
+&nbsp; 8)&nbsp;Current settings:<br />
+&nbsp;&nbsp;&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;&nbsp; L Linker Flags: $(FOPT) $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread</p>
+
+<p sizcache="7" sizset="1">&nbsp;&nbsp;&nbsp; P Preprocessor flags &#39;-DParallel&#39;<br />
+&nbsp;&nbsp;&nbsp; R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_intel_thread -lmkl_core -lpthread<br />
+&nbsp;&nbsp; 9) Shared Memory Architecture? (y/n): y<br />
+&nbsp; 10) Do you have MPI and Scalapack installed and......(y/n): n<br />
+&nbsp; 11) ./userconfig_lapw<br />
+&nbsp; 12) bash<br />
+&nbsp; 13) w2web<br />
+参考HP : <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx" sizcache="7" sizset="1"><span style="color: rgb(128, 0, 128);">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</span></a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf" sizcache="7" sizset="2"><span style="color: rgb(0, 102, 204);">http://www.ghfecher.de/Fecher_CompileIntel.pdf</span></a>&nbsp;</p>
+
+<p sizcache="5" sizset="0">&nbsp;</p>
+
+<p>&nbsp;&nbsp;◇ 並列化&nbsp;</p>
+
+<p>&nbsp; OpenMPI&nbsp;</p>
+
+<p>&nbsp; 1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) ヴァージョンに合わせてI, J, K, K1 を選択（ここでは 12 のIを選択する）<br />
+&nbsp; 7) ifort, icc を入力<br />
+&nbsp; 8) Current settings:<br />
+&nbsp;&nbsp;&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;&nbsp; L Linker Flags: $(FOPT) $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread</p>
+
+<p sizcache="5" sizset="0">&nbsp;&nbsp;&nbsp; P Preprocessor flags &#39;-DParallel&#39;<br />
+&nbsp;&nbsp;&nbsp; R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+&nbsp; 9) Shared Memory Architecture? (y/n): y<br />
+&nbsp; 10) Do you have MPI and Scalapack installed and......(y/n): y<br />
+&nbsp;&nbsp;&nbsp; Your compiler: /usr/local/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_core -lmkl_solver -lmkl_blacs_openmpi -L/usr/local/lib -lfftw_mpi -lfftw $(R_LIBS)</p>
+
+<p>&nbsp;&nbsp; FP FPOPT(par.comp.options): $(FOPT) -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback&nbsp;</p>
+
+<p>&nbsp; 11) ./userconfig_lapw&nbsp;<br />
+&nbsp; 12) bash<br />
+&nbsp; 13) w2web<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ exciting<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+------------------------------------------------------------------------------<br />
+第一原理計算のセットアップ CASINO<br />
+&nbsp; ◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+&nbsp; ◆ Intel Compiler をインストールする場合（学生様向け）<br />
+&nbsp; ◇ 並列化<br />
+------------------------------------------------------------------------------</p>

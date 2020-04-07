@@ -1,0 +1,957 @@
+&nbsp; BoltzTraPはボルツマン方程式に従って輸送係数を求めるプログラムである。そこでは緩和時間を入力ファイルに記述しない場合、エネルギーに依存せず一定であるとした緩和時間近似が用いられている。温度によるフェルミ準位の変化は電子状態密度分布に対してフェルミディラック分布関数や他の式を用いて予めユーザー側が求めておくことが望まれる。<br />
+※ 化学ポテンシャルやゼーベック係数が計算可能。緩和時間が実験的に分かれば、電気伝導度の予測も可能になる<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+・VASP: <a href="https://www.youtube.com/playlist?list=PLYoIKHKPkcsHlh9OWWSbuEUKXMS7TdpFi">https://www.youtube.com/playlist?list=PLYoIKHKPkcsHlh9OWWSbuEUKXMS7TdpFi</a>
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PLYoIKHKPkcsHlh9OWWSbuEUKXMS7TdpFi" width="560"></iframe></div>
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+------------------------------------------------------------------------------<br />
+■ Compiling<br />
+1. tar xvf BoltzTraP.tar.bz2<br />
+2. cd boltztrap-1.2.3/src<br />
+3. emacs Makefile<br />
+&nbsp;&nbsp; FC=ifort<br />
+&nbsp;&nbsp; FOPT = -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp; LDFLAGS = $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread<br />
+&nbsp;&nbsp; LIBS = -lmkl_lapack95_lp64&nbsp;-lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+4. make<br />
+<br />
+■&nbsp;SCF計算でのテクニック（WIEN2k）<br />
+1. 通常のk点でSCF計算を行う<br />
+2. [initialize_calc.]で &quot;x kgen&quot;のボタンを押して、k点数を2～3万点に増やす<br />
+3. Terminalを開く<br />
+4. cd 計算しているディレクトリ<br />
+5. run_lapw -i 1<br />
+spinを入れた計算をしている場合は、 runsp_lapw -i 1 とする。<br />
+<br />
+■&nbsp;計算方法<br />
+□&nbsp;&nbsp;WIEN2k<br />
+SCF計算では格子定数が6Å程度でk点が20000～30000点となるようにする。また、k点数は格子定数の長さに&rdquo;逆比例&rdquo;させる。<br />
+1) 計算させたい系の名前のファイルを作る。<br />
+2)&nbsp;新しく作ったそのファイルをカレントディレクトリにする。<br />
+3) WIEN2kからcase.energy, case.struct コピー&amp;ペーストする。<br />
+&nbsp; case.energy は case.energyup, case.energydn, case.energyso などの場合もある。<br />
+&nbsp; この他にcase.intrans が必要（README.pdfに詳細がある）。<br />
+&nbsp;&nbsp;case.intransはCoSb3のものをコピーするのもよい。その場合は下記のようにする。<br />
+&nbsp; A)&nbsp;EFは case.dos1 または case.output2（femiで検索すると良い）で書かれている値を入力。<br />
+&nbsp; B)&nbsp;電子数は case.in2 での NE (Number of electron)の値を入力。<br />
+　　output2やoutput2up, output2dnにも同じ値で Number of electronが書かれている。どれでも良い。<br />
+&nbsp; C) NOCALC を CALC にする。<br />
+4) $HOME/ boltztrap-1.2.3/src/x_trans BoltzTraP と入力。<br />
+&nbsp; スピンの場合は、x_trans BoltzTraP -up　や x_trans BoltzTraP -dn&nbsp;と入力）<br />
+※ CoSb3, Bi2Te3, Alについてはtestsに入力ファイルの例が記してある。ReferenceにあるCoSb3.trace や Bi2Te3.trace が良い。データを Efが同じところで比較してみると良い。大体似た結果が出ていればよい。<br />
+※ Fe2VAl を計算してみると、例えばWIEN2kでは、単位胞中に価電子帯の電子はXX個の設定になる。EFは9 eVとなる。しかし、実際の試料では、アーク炉での試料作成中にAlが0.3%程蒸発して無くなる可能性もある。そこで、Alが3価だからX電子程度が無くなったと考えてEFをシフトさせてみると、ゼーベック係数の傾向は実測値と比較的よく合うようになる（更に検証中）。<br />
+※ Fe2VAlの場合、交換相関項をハイブリッド汎関数のB1-CWにして、 Eg=0 eV にし、300Kでの抵抗の値をBoltzTraPの値で割って緩和時間を求め、改めて計算すると、実験の傾向と合うようになるかもしれない[S1]。mBJ[S2, S4]でもパラメーターが存在する。<br />
+※ WIEN2kでは交換相関項でmBJでの計算が可能[S2]、ただし、B1-CWではEg=0のバンド分散図が示されておらず、mBJ[S2]ではゼーベック係数が緩和時間を考慮して計算されていない。<br />
+※ 汎関数の傾向の違いなどを見るには文献[S3]が役に立つ。<br />
+[S1] I. Bilc and P. Ghosez, Phys. Rev. B 83 (2011) 205204.;<br />
+[S2] F. Tran and P. Blaha, Phys. Rev. Lett. 102 (2009) 226401.<br />
+[S3] D. Do et al., Phys. Rev. B 84 (2011) 125104.<br />
+[S4] M. Meinert, Phys. Rev. B 87 (2013) 045103.<br />
+<br />
+□ Abinit<br />
+Abinit では BoltzTraP用のファイルを出力する prtbltztrap がある。SCF計算を1st dataset とすると、続いて下記のように2nd datasetで多くのk点での計算を行わせると良い。<br />
+prtbltztrp 1 # boltztrap output<br />
+iscf2 -2<br />
+getden2 -1<br />
+kptopt2 1 # Opiton for the automatic generation of k points, taking into acount the symmetry.<br />
+nshiftk2 4<br />
+shiftk2 0.5 0.5 0.5 # These shifts will be the same for all grids<br />
+0.5 0.0 0.0<br />
+0.0 0.5 0.0<br />
+0.0 0.0 0.5<br />
+ngkpt2 100 100 100<br />
+tolwfr2 1.0d-12<br />
+これによって、case_BLZTRAP_GEOM と case.BLZTRAP_EIGENが生成される。<br />
+References<br />
+[AB1] <a href="http://forum.abinit.org/viewtopic.php?f=8&amp;t=906&amp;sid=25d39858ab44ed6878f8f2b34e975fad">[CORRECTED 6.6]&nbsp;BoltzTrap output - prtbltztrp variable</a>; <a href="http://forum.abinit.org/viewtopic.php?f=8&amp;t=906">http://forum.abinit.org/viewtopic.php?f=8&amp;t=906</a><br />
+<br />
+□ PWscf (PWscf の出力ファイルを pw2bgw.x を用いてBerkeleyGW に変換して計算する。BerkleyGWはUser accountで登録が必要になる）<br />
+botztrap-1.2.3のutilで、試験用のファイル Co4Sb12.nscf.out が容易されている。<br />
+1. ファイルに PWscf で出力された case.pw.out ファイルを準備する。<br />
+2. qe2boltz.py case.pw.out pw 1.0e7 0<br />
+Usage: C:\Users\\boltztrap-1.2.3\util\qe2boltz.py prefix format efermi nbnd_exclude [fn_pw [fn_energy]]<br />
+<br />
+※ qe2boltz.py を wordpad などで開いて解読すると下記のようになっている。下記のargv[5]とargv[6]はargv[2]でpwを指定した場合、特に入力しなくても良い。<br />
+qe2boltz.py argv[1] argv[2] argv[3] argv[4]&nbsp;argv[5] argv[6]<br />
+argv[1]: prefixで case.pw.out を入力する（ファイルは case.nscf.out として、prifix に case を指定すればよいだろう）<br />
+argv[2]: pw, bands or inteqp のいずれかを選択するために指定。通常 pw、BerkeleyGWでは inteqp を指定。<br />
+argv[3]: efermi (eV) に対応する。入力した値をプログラム中でrydberg で割って処理している。1.0e6を超える場合は、prefix で指定したファイルから読み込まれる。「the Fermi energy is」または「highest occupied, lowest unoccupied level (ev):&nbsp;」の行に書かれている値を用いる。後者の場合は (highest +lowest)/2/Ry としてプログラム中で処理される。<br />
+argv[4]: nband_excludeに対応する。0を指定すればよい。もし、計算時間を短くしたい場合は、バンドの番号を入力すると、低いエネルギーから入力したバンドの番号までが除かれる。<br />
+argv[5]: fname_pw または fn_pw で ディフォルトは prefix.nscf.out になっている。<br />
+argv[6]: fname_energy またはfn_energy<br />
+出力ファイルは、argv[1].intarns などとして出力される。<br />
+<br />
+※pythonプログラムの変更方法<br />
+下記の部分の値を変えれば出力がそれに対応するようになる。<br />
+&nbsp;&nbsp;&nbsp; deltae = 0.0005<br />
+&nbsp;&nbsp;&nbsp; ecut = 0.4<br />
+&nbsp;&nbsp;&nbsp; lpfac = 5<br />
+&nbsp;&nbsp;&nbsp; efcut = 0.15<br />
+&nbsp;&nbsp;&nbsp; tmax = 800.0<br />
+&nbsp;&nbsp;&nbsp; deltat = 50.0<br />
+&nbsp;&nbsp;&nbsp; ecut2 = -1.0<br />
+&nbsp;&nbsp;&nbsp; dosmethod = &#39;TETRA&#39;<br />
+<br />
+※ &tau;モデルへの書き換え方法（wordpadで行うと文字化けするので注意）（調査中）<br />
+f = open(fname_intrans, &#39;w&#39;)の前に下記を追加するとboltztrap-1.2.3のフォーマットに近づけられる？<br />
+&nbsp;&nbsp;&nbsp; f_intrans += &#39;32.0 2.0 &#39; + str(efermi) + &#39; 300&nbsp; # tau-model, tauref(lifetime (fs)), tauexp(scattering parameter &quot;r&quot;: 0 -&gt; acoustic phonons, 2 -&gt; ionized impurities), taurefen(Ry), taureftemp(K)\n&#39;<br />
+&nbsp;&nbsp;&nbsp; f_intrans += &#39;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #number of fixed dopings\n&#39;<br />
+&nbsp;&nbsp;&nbsp; f_intrans += &#39;1E20 -1E20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #fixed doping levels in cm3\n&#39;<br />
+[PB1] <a href="http://www.quantum-espresso.org/wp-content/uploads/2013/06/tutorial_gwl.pdf">http://www.quantum-espresso.org/wp-content/uploads/2013/06/tutorial_gwl.pdf</a>&nbsp;(GWL)<br />
+<br />
+□ VASP<br />
+util での vasp2boltz.txt を読んで vasp2boltz.py を動作させる。ASEの導入も必要。<br />
+■ boltztrap<br />
+-----<br />
+・python<br />
+1. yum install python (for CentOS)<br />
+1. sudo apt-get install python (for Ubuntu)<br />
+-----<br />
+・spglib-1.6.0 (for CentOS)<br />
+1.&nbsp; download: http://spglib.sourceforge.net/<br />
+2. tar zxvf spglib*<br />
+3. cd spg*<br />
+4. ./confiugre<br />
+5. make<br />
+6. su<br />
+7. input password<br />
+8. make install<br />
+-----<br />
+・spglib-1.6.0 (for Ubuntu)<br />
+1.&nbsp; download: http://spglib.sourceforge.net/<br />
+2. tar zxvf spglib*<br />
+3. cd spg*<br />
+4. ./configure<br />
+5. make<br />
+6. sudo make install<br />
+-----<br />
+・pyspglib-1.8.3.1 (for Ubuntu)<br />
+1.&nbsp; download: https://pypi.python.org/pypi/pyspglib<br />
+2. tar zxvf pyspglib*<br />
+3. cd spg*<br />
+4. sudo python setup.py install<br />
+-----<br />
+・ASE (for Ubuntu)<br />
+1. sudo apt-get install python-ase<br />
+-----<br />
+・case.py<br />
+1. make new case.py file<br />
+------------------<br />
+from ase import io<br />
+from ase.lattice.spacegroup import Spacegroup<br />
+import vasp2boltz<br />
+<br />
+ao = io.read(&#39;POSCAR&#39;)<br />
+# If you do not have spglib installed, you need to add the spacegroup no.<br />
+# e.g. sg = Spacegroup(216) for the &#39;F -4 3 m&#39; space group<br />
+# If you use the conventional cell rather than the primitive unit cell in your<br />
+# POSCAR file for e.g. I or F spacegroups, you need to add this information.<br />
+<br />
+# Example 1:<br />
+#sg = Spacegroup(1)<br />
+#ao.info = {&#39;spacegroup&#39;: sg}<br />
+<br />
+# Example 2. Here the unit cell in the POSCAR file is cubic (conventional):<br />
+#sg = Spacegroup(225)<br />
+#ao.info = {&#39;spacegroup&#39;: sg, &#39;unit_cell&#39;: &#39;conventional&#39;}<br />
+<br />
+# Read number of electrons from OUTCAR.<br />
+foundnelect = False<br />
+try:<br />
+&nbsp;&nbsp;&nbsp; for line in open(&#39;OUTCAR&#39;, &#39;r&#39;):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if &#39;NELECT&#39; in line:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nelect = float(line.split()[2])<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; foundnelect = True<br />
+except:<br />
+&nbsp;&nbsp;&nbsp; pass<br />
+if not foundnelect:<br />
+&nbsp;&nbsp;&nbsp; print &#39;Number of electrons not found. Please set the number manually in hte.intrans.&#39;<br />
+&nbsp;&nbsp;&nbsp; nelect = 1.0<br />
+<br />
+# The remaining part takes care of writing the files required by BoltzTraP.<br />
+bs = vasp2boltz.get_vasp_bandstructure()<br />
+vasp2boltz.write_bandstructure_boltztrap(bs)<br />
+vasp2boltz.write_structure_boltztrap(ao)<br />
+vasp2boltz.write_intrans_boltztrap(n_electrons = nelect)<br />
+------------------<br />
+2. put case.py and vasp2botz.py into files<br />
+3. python case.py<br />
+***************<br />
+None<br />
+get_kspace_operations(): atoms object has no space group information<br />
+-----<br />
+・boltztrap<br />
+1. mv energies.boltztrap case.energy<br />
+2. mv hte.intrans case.intrans<br />
+3. mv hte.struct case.struct<br />
+4. x_trans BoltzTraP<br />
+------<br />
+・plot<br />
+1. grep &#39;&nbsp; 300.0000&#39; &#39;~/boltztrap-1.2.5/tests/case/case.trace&#39; &gt; caseout.txt<br />
+2. gnuplot<br />
+3. DOS vs. eV<br />
+&nbsp;&nbsp;&nbsp; 1) plot &#39;~/boltztrap-1.2.5/tests/case/caseout.txt&#39; u ($1*13.602):4 w l<br />
+&nbsp;&nbsp;&nbsp; 2) set zeroaxis<br />
+&nbsp;&nbsp;&nbsp; 3) replot<br />
+4. seebeck coefficient (microV/K vs. eV)<br />
+&nbsp;&nbsp;&nbsp; 1) plot &#39;~/boltztrap-1.2.5/tests/case/caseout.txt&#39; u ($1*13.602):($5*1000000) w l<br />
+&nbsp;&nbsp;&nbsp; 2) set zeroaxis<br />
+&nbsp;&nbsp;&nbsp; 3) replot<br />
+5. conductivity/lifetime vs. eV<br />
+&nbsp;&nbsp;&nbsp; 1) plot &#39;~/boltztrap-1.2.5/tests/case/caseout.txt&#39; u ($1*13.602):6 w l<br />
+&nbsp;&nbsp;&nbsp; 2) set zeroaxis<br />
+&nbsp;&nbsp;&nbsp; 3) replot<br />
+I get same results for ZrCoSb comparing with <a href="http://www.phonon.t.u-tokyo.ac.jp/resource/yamamoto_b2012.pdf">http://www.phonon.t.u-tokyo.ac.jp/resource/yamamoto_b2012.pdf</a><br />
+動画：<a href="https://www.youtube.com/watch?v=OUauG1LM0QA">https://www.youtube.com/watch?v=OUauG1LM0QA</a><br />
+<a href="http://cms.mpi.univie.ac.at/vasp-forum/forum_viewtopic.php?4.9660"><font color="#0000ff">http://cms.mpi.univie.ac.at/vasp-forum/forum_viewtopic.php?4.9660</font></a>&nbsp;<br />
+<a href="http://www.phonon.t.u-tokyo.ac.jp/resource/yamamoto_b2012.pdf"><font color="#0000ff">http://www.phonon.t.u-tokyo.ac.jp/resource/yamamoto_b2012.pdf</font></a><br />
+https://sites.google.com/site/georgeyumnam/using-with-vasp<br />
+---------information----------<br />
+None is ktrafo. This case operate kp=enk[&#39;kpoint&#39;].<br />
+<br />
+Add &quot;print bandstructure[&#39;E_Fermi&#39;]&quot; at line 100 in vasp2boltz.py<br />
+vasp2boltz.py get fermi energy from OUTCAR,<br />
+vasp2boltz.py shift fermi energy and electron energy to zero.<br />
+I found that E_Fermi_zero is True at Line 141.<br />
+Line 142: e_up=e_up-bandstructure[&#39;E_Fermi&#39;]<br />
+<br />
+pyspglib case must show &#39;get_kspace_operations(): atoms object has no space group information&#39;<br />
+because&nbsp;vasp2boltz.py check atoms_info (spacegroup) at first.<br />
+<br />
+energy unit is Ry.<br />
+&nbsp;&nbsp;&nbsp; # output of bandstructure in a format which can be used by boltztrap code<br />
+&nbsp;&nbsp;&nbsp; # input: bandstrcuture as dictionary like in get_vasp_bandstructure<br />
+&nbsp;&nbsp;&nbsp; # default is unit conversion to Ry; if yscale is given this is taken as conversion factor<br />
+---------<br />
+<br />
+■ spin を考慮した計算<br />
+conductivity　or &sigma;&#39; = &sigma;/&nbsp;&tau;で平均しなければならない。文献[4]には下記のようにある。<br />
+S = ( L11(&uarr;) * S(&uarr;) + L11(&darr;) * S(&darr;) ) / ( L11(&uarr;） + L11(&darr;） )<br />
+where, S(&uarr;) and S(&darr;) are calculated using the spin up and　down band structure, respectively. In other words, the total<br />
+thermopower can be viewed as the average of spin up and down thermopowers weighted by the corresponding conductivity or &sigma;&#39; = &sigma;/&tau;.<br />
+we note that L11 is, in fact, the conductivity .<br />
+L11 = L11(&uarr;) + L11(&darr;)<br />
+where L&uarr; and L&darr; are computed using the spin up and down band structures, respectively. Direct coupling of the thermopower to magnetic field via an energy dependent normal magnetoresistance is not included.<br />
+<br />
+■&nbsp;スピントロニクスに関する研究について<br />
+1) &nbsp;他のオプションは、x_transを開けばわかる。スピントロニクスに関する研究を行うならば、-up や -dn のオプションを利用して輸送現象やゼーベック係数を検討してみるのも良いだろう。<br />
+2) 余裕があれば、他のcodeに対しても同様のプログラムを作成してみるとよい（例えば、TDDFTが利用可能なexcitingや開発中のPWscfなど）。<br />
+3) 電流 Je = J&uarr; + J&darr; （J&uarr; ：上向きスピンの電子の流れ。J&darr;：下向きのスピンのそれ)と、スピン流 Js = J&uarr;&nbsp;- J&darr; を様々な物質で比較検討すればよい。<br />
+4) 「スピンホール効果：電流を流すと垂直方向にスピン流れが生じる」「逆スピンホール効果：スピン流を流すと垂直方向に電流が生じる」「スピンゼーベック効果：温度差によりスピン圧が生じる。スピン依存電気化学ポテンシャルの差『&mu;&uarr;-&mu;&darr;』を計算すれば良い）。K. Uchida et al., Nature 455 (2008) 778.の論文を読んで検討してみるとよい」(磁性絶縁体でも検討してみられたい。加えて、日本物理学会誌,Vol 65, 2010. も参考にされるとよいだろう）<br />
+<br />
+■ 生成するキャリア数について<br />
+生成するホールと電子のキャリア数は同数であるため下記のような関係になる。<br />
+hole carrier concentration&nbsp;=&nbsp; electron carrier concentration<br />
+<br />
+■ Pisarenko type plot<br />
+Seebeck coefficient vs electron count としたグラフも役に立つかもしれない。<br />
+<br />
+■ 電気抵抗<br />
+&rho;(T) /&rho;(300 K)= a + b * T + exp(&Delta;E/T) [ER1]<br />
+&rho;(T) = &rho;<sub>0</sub> + &rho;<sub>1</sub>*ln(T) + &rho;2 * (T/&theta;<sub>D</sub>)<sup>n</sup> * &Sigma;&int;<sup>&theta;<sub>D</sub>/T</sup><sub>0</sub>&nbsp; x<sup>n</sup> * e<sup>-kx</sup> dx [ER2]<br />
+&nbsp; The first term &rho;<sub>0</sub> is the residual resistivity independent of temperature, the second term represents temperature dependent spin scattering, and the last term arises from the electron&ndash;phonon interaction. &theta;<sub>D </sub>is the Debye temperature.<br />
+&sigma;(T) = &sigma;<sub>０</sub> + &sigma;<sub>1</sub> * T<sup>1/2</sup> + &sigma;<sub>2</sub> * exp(-E<sub>G</sub>/2k<sub>B</sub>T) [ER3]<br />
+&rho;(T) = &rho;<sub>imp</sub> + a * T<sup>2</sup> + b * T<sup>5</sup> + c * T [ER4]<br />
+&nbsp; R<sub>imp</sub>は不純物によって決まる最低の電気抵抗で温度に依存しない。電子と電子の散乱がT<sup>2</sup>, フォノンによる電子の散乱がT<sup>5</sup>に比例する。<br />
+&rho;(T) = &rho;(0) + A *&nbsp;(T/&theta;<sub>D</sub>)<sup>n</sup> * &int;<sup>&theta;<sub>D</sub>/T</sup><sub>0</sub>&nbsp; x<sup>n</sup>&nbsp;/ [(e<sup>x</sup> - 1)(1- e<sup>-x</sup>)] dx [ER5]<br />
+&nbsp; &rho;(0) is the residual resistivity due to defect scattering, A is a constant that depends on the velocity of electrons at the Fermi surface, the Debye radius and the number density of electrons in the metal. n is an integer that depends upon the nature of interaction:<br />
+n=5 implies that the resistance is due to scattering of electrons by phonons (as it is for simple metals)<br />
+n=3 implies that the resistance is due to s-d electron scattering (as is the case for transition metals)<br />
+n=2 implies that the resistance is due to electron&ndash;electron interaction.<br />
+[ER1] A. Slebarski et al., J. Phys.: condens. Matter 18 (2006) 10319.<br />
+[ER2] M. Vasundhara and V. Srinivas, Phys. Rev. B 77 (2008) 224415.<br />
+[ER3]<br />
+[ER4] 電気抵抗<span dir="auto">, wikipedia (Japanese)</span><br />
+[ER5] <span dir="auto">Electrical resistivity and conductivity, wikipedia (English); </span><a href="http://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity">http://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity</a><br />
+[ER6] M. Vasundhara et al., J. Phys.: Condens. Matter 17 (2005) 6025.<br />
+[ER7] Heat transfer physics, wikpedia(English); <a href="http://en.wikipedia.org/wiki/Heat_transfer_physics">http://en.wikipedia.org/wiki/Heat_transfer_physics</a><br />
+------------------------------------------------------------------------------<br />
+<br />
+■ Theory<br />
+・&tau;-model[T4,T5]<br />
+the energy&ndash;power-dependent relaxation time: &tau;(E) = &tau;<sub>0</sub>*[(hk)<sup>2</sup>/2m<sup>*</sup>)]^(r-1/2) [T5]<br />
+k is the wave vector and m* the effective mass. r is the scattering parameter.<br />
+we estimated the Seebeck coefficients with various scattering parameters r as shown in Table I and found that r=2 was most suitable to explain the value of S at room temperature.<br />
+※ [T5]の論文では、scattering parameters r を変えたときのゼーベック係数の計算値 Srと実験値を比較し、r=2であると計算値が実験値に近い結果を与えることを報告している。最初の300 Kで比較し、後に300 K以下での温度変化でも上手く説明できることを示している。<br />
+<br />
+the relaxation time: &tau;(E) = &tau;<sub>0</sub>(T)*[E/(k<sub>B</sub>*T)]^(r-1/2) [T4]<br />
+The values of r are not negative, and do not exceed the value 4 for known scattering processes.Since the exponent r takes on the values r=3/2 (the 2D case) and r=2 (the 3D case) for acoustic-phonon scattering, the asymptotic high-temperature dependence of S resulting from the Ziman variational formalism (25) corresponds to the linear dependence following from the relaxation-time approximation. The same concerns the 3D case considered in Refs. 2 and 3. [T4]<br />
+※ [T4]の論文では、弾性散乱のみを考慮した緩和時間（Eq. 31）と the parabolic (electron m&gt;0) bandを考慮することで、上記の式を得ることができるとしている。<br />
+<br />
+・ BoltzTraP<br />
+&tau;(E) = [&tau;<sub>0</sub>/T]*[E/(k<sub>B</sub>*T)]^(r-1/2) &rarr; &tau;(E) = [&tau;<sub>0</sub>*(T<sub>0</sub>/T)]*[(E-E<sub>0</sub>)/(k<sub>B</sub>*T)]^(r-1/2)<br />
+&rarr;&tau;(E) = [&tau;<sub>0</sub>*(T<sub>0</sub>/T)]*[(E-E<sub>0</sub>)/(k<sub>B</sub>*T)]*exp(r-1/2) ? &rarr; &tau;(E) = [&tau;<sub>0</sub>*(T<sub>0</sub>/T)]*exp{(r-0.5d0)*log([(E-E<sub>0</sub>)/(k<sub>B</sub>*T)]}<br />
+&rarr;&tau;(E) = &tau;<sub>0</sub>*exp{(r-0.5d0)*log([(E-E<sub>0</sub>)/(k<sub>B</sub>*T)]*[T<sub>0</sub>/T])}<br />
+※ 上記のような感じで式が作られていると思われるが、私には色々と分からない。<br />
+<br />
+[T1] 竹内恒博, 日本金属学会誌第69巻第5 号(2005) 403-412 解説論文.; <a href="http://www.jim.or.jp/journal/j/pdf3/69/05/403.pdf">http://www.jim.or.jp/journal/j/pdf3/69/05/403.pdf</a>　<br />
+[T2] Georg K. H. Madsen, David J. Singh, arXiv:cond-mat/0602203v1, 2008; <a href="http://arxiv.org/pdf/cond-mat/0602203v1.pdf">http://arxiv.org/pdf/cond-mat/0602203v1.pdf</a>&nbsp;<br />
+[T3]&nbsp;Uichiro Mizutani, &quot;Introduction to the Electron Theory of Metals&quot;, (Cambridge University Press, 2001)<br />
+[T4] K. Durczewski and M. Ausloos, Phys. Rev. B 61 (2000) 5303.<br />
+[T5] T. Okuda, et al., Phys. Rev. B 63 (2001) 113104.<br />
+[T6] 寺崎一郎, Netsu Sokutei 31（4）164-171; <a href="http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf">http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf</a><br />
+[T7] <a href="http://kats.issp.u-tokyo.ac.jp/kats/semiconII/note4.pdf">http://kats.issp.u-tokyo.ac.jp/kats/semiconII/note4.pdf</a><br />
+[T8] <a href="http://www.phy.saitama-u.ac.jp/~saso/lectures/Lecture02.pdf">http://www.phy.saitama-u.ac.jp/~saso/lectures/Lecture02.pdf</a><br />
+<br />
+■ boltztrap<br />
+-------------------------------------------------------------------<br />
+□ 入出力ファイルの関係<br />
+計算時に入力するコマンド x_trans は *.def ファイルを作成する。<br />
+*.def ファイルはファイル読み込み番号が1になっている。<br />
+*.def はwriteやread文で読み込む番号との対応関係を記載している。<br />
+<br />
+5: case.intrans<br />
+&nbsp; 入力ファイル。<br />
+・ setgap = 0 でない場合に shiftgap (gapchange) の値でギャップが形成される。（温度によるギャップの値の変化を考慮したプログラムになっているかは筆者自身が分かっていない）<br />
+・ HISTOの次の行には&quot;tauref, tauexp, taurefen, tempexp, taureftemp&quot;が読まれる。未入力の場合は tauref=1.0, tauexp=0.0, taurefen=0.0, taureftemp=-1.0となる。<br />
+&nbsp; tauref: Reference lifetime (femtoseconds)<br />
+&nbsp; tauexp: Scattering parameter &quot;r&quot; for exponential dependency of lifetime on energy<br />
+&nbsp; Please, see PRB 63 113104 Okuda or PRB 61 5303 Durczewski for example<br />
+&nbsp; taurefen: Reference energy point for energy dependent lifetime (Ry)<br />
+&nbsp; taureftemp: Temperature for reference lifetime (K)<br />
+&nbsp; taureffact = 1.d0<br />
+&nbsp; もし、&nbsp;taureftemp &lt;= 1.0*10^-12ならば、taureffact = 1.d0 として計算される。<br />
+・ 上記のパラメーターはfermiintegrals.F90 で下記のように計算される。<br />
+&nbsp; if (taureftemp &gt; 1.d-12) taureffact = taureftemp/temp<br />
+&nbsp;&nbsp;if (abs(tauexp) &gt; 1.d-10) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! the argument is evaluated in atomic units Ha/Ha<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; temp is in Kelvin so temp*BOLTZMANN in Ha<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; tauref is reference value for lifeteime (femtoseconds)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; taurefen is reference energy (rydberg), e.g. Fermi level, at which tauref is calculated<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; taureftemp is reference temperature (Kelvin) at which tauref is given<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; taureffact = taureftemp/temp is unitless (see just above)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; tauexp is the scattering parameter (unitless)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp;&nbsp;&nbsp; 0 -&gt; acoustic phonons<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp;&nbsp;&nbsp; 2 -&gt; ionized impurities<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !&nbsp; ene is in Hartree<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; lifetime = (tauref/SECOND/1.e-15) * &amp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp; exp((tauexp-0.5d0) * &amp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; log((abs(ene-taurefen*RYDBERG)/(temp*BOLTZMANN) &amp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &amp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * taureffact)) )<br />
+&nbsp;&nbsp;end if<br />
+&nbsp; このようにして、温度とエネルギーに依存したlifetimeが計算される（何故logの部分をexpから出して前に置いて、論文の式の様にしていないのかは不明。数値計算での誤差を防ぐためであろうか？）。cond (the conductivity tensors: Eqs. 12 in [1])やnu&nbsp;(Eqs. 13 in [1]), kappa &nbsp;(the electronic part of the thermal conductivity: Eqs. 14 in [1]), sigxyz &nbsp;(Eqs. 15 in [1])&nbsp;に liftimeの影響が考慮される。当然ながらゼーベック係数にも影響を与える。<br />
+・ 更に次の行では&nbsp;0 よりも大きい数値が記述されている場合に、その次の行でドープ 量が読み取られる。単位は下記となる。<br />
+&nbsp; doping: Doping levels to be output for, in carriers / cm^3<br />
+-------------------------------------------------------------------<br />
+case.intrans (for Al)&nbsp; for BoltzTraP-1.2.2<br />
+WIEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Format of DOS&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+0 0 0 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # iskip (not presently used) idebug setgap shiftgap&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+0.49695 0.0005 0.4&nbsp;&nbsp; 9.&nbsp;&nbsp; # Fermilevel (Ry), energygrid, energy span around Fermilevel, number of electrons&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+CALC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # CALC (calculate expansion coeff), NOCALC read from file&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # lpfac, number of latt-points per k-point &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;<br />
+BOLTZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # run mode (only BOLTZ is supported)&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+.15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # (efcut) energy range of chemical potential&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+300. 10.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Tmax, temperature grid&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # energyrange of bands given individual DOS output sig_xxx and dos_xxx (xxx is band number)<br />
+HISTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #scheme to obtain DOS. HISTO/TETRA: histogram/thetrahedron[4] sampling<br />
+32.0 2.0 0.49695 300&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #&tau;-model. tauref(Reference lifetime (femtoseconds)), tauexp(scattering parameter &quot;r&quot;: 0 -&gt; acoustic phonons, 2 -&gt; ionized impurities), taurefen(Ry), taureftemp(K)<br />
+0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #number of fixed dopings<br />
+1E20 -1E20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#fixed doping levels in cm<sup>3</sup><br />
+-------------------------------------------------------------------<br />
+<br />
+6: case.outputtrans<br />
+&nbsp; 出力ファイル。case.intransからの計算条件なども表示される。<br />
+<br />
+20: case.struct<br />
+&nbsp; WIEN2kからの出力ファイル<br />
+<br />
+10: case.energy + so or updn<br />
+&nbsp; WIEN2kからの出力ファイル。<br />
+<br />
+48: case.engre<br />
+<br />
+49: case.transdos<br />
+&nbsp; dosの結果が格納される。iが0からnpointsまでデータが出力される（elの低いエネルギーから高いエネルギーまでに対応）。<br />
+&nbsp; 一行目が el&nbsp;でエネルギー(Ry)。二行目が dos1(i)&nbsp;で電子状態密度分布。三行目がdosint(i) で電子数の積算。<br />
+<br />
+50: case.sigxx<br />
+&nbsp; e1,dos_sigxy(1:3,1:3,i) を出力する。<br />
+&nbsp; sigma(i,j) * E(j)<br />
+<br />
+51: case.sigxxx<br />
+&nbsp; e1,dos_sigxyz(1:3,1:3,1:3,i) を出力する。<br />
+&nbsp; simga(i,j,k)*E(j)*B(k)<br />
+<br />
+21: case..trace<br />
+&nbsp; # Ef[Ry] T [K] N DOS(Ef) S s/t R_H kappa0 c chi の結果を出力する。<br />
+<br />
+22: case.condtens<br />
+<br />
+24: case.halltens<br />
+<br />
+※ 11 はdefの定義には無いが、存在すると taumodel が .TRUE. になる。サブルーチン generic_tau (genetic_lifetime.F90)とfite4がBoltzTraP.F90で呼ばれる。<br />
+file 11 の構成<br />
+1行目： タイトル<br />
+2行目： 読み取るk点数（&#39;Number of lifetime kpts in IBZ: &#39;,nkpt_lt）<br />
+3行目： 1回目は S, T, Z, neup (動的メモリ配置の大きさを決めるために、ファイルにある最大値が調べられてnumeに格納される)<br />
+&nbsp; 2回目では k(1,k), k(2,k), kz(3,k), neup で読み込まれる。<br />
+4行目： neup だけ&quot;life time&quot;（寿命）の値を読み込む（1回目 e1で、2回目にlifetime(ii, k)で読み込まれる。ここでは、iiがneupまで読み込まれる）。<br />
+※ 1回目の読み込みが終了すると、サブルーチン init_ltmod が呼ばれ、動的メモリが宣言されて、ZERO(0.0d0)に初期化する。2回目に正式にlifetimeのデータが読み込まれる。<br />
+※ File number 11 with k and e dependent lifetimes found&nbsp;であるため、k点とエネルギーでの lifetimeを読み込んだプログラムであると考えられる。<br />
+-------------------------------------------------------------------<br />
+□ BoltzTraP.F90<br />
+メインルーチン。プログラムの全体の流れを理解することにも役立つ。以下が大まかな流れ。<br />
+<br />
+USE reallocate: reallocate.F90 において module reallocate と宣言されている。<br />
+&nbsp; reallocate.F90 で定義されたデータを用いる。<br />
+USE defs: gmlib2.F90 において MODULE defs が宣言されている。<br />
+基本的な定数について引数の定義がなされている。<br />
+USE input: m_input.F90 において MODULE input と宣言されている。<br />
+&nbsp; intrans に記述されているデータの宣言に対応する。<br />
+&nbsp; #of electrons は nval に対応している。<br />
+USE bandstructure: m_bandstructure.F90 で MODULE bandstructure が宣言されている。<br />
+USE ltmod: generic_lifetime.F90 で MODULE ltmod が宣言されている。<br />
+USE lattice_points: gen_lattpoints.F90 で MODULE lattice_points が宣言されている。<br />
+<br />
+CALL gtfnam: extract the command-line argument<br />
+&nbsp; 入力ファイル名のチェックをしているように見える。<br />
+<br />
+BoltzTraP.def ファイルを開いて、中に書かれている番号とファイル名などを対応付ける。<br />
+上から順番にファイルを開いていき、入力ファイルが全て揃っているかをチェック。<br />
+エラーがあれば表示される。<br />
+入出力でのファイル番号はディフォルトで6がディスプレイであるが、<br />
+BoltzTraP.defから読み込むファイル(case.outputtrans)にwrite(6,*)での記述が書き込まれることになる。<br />
+<br />
+入力ファイル名で energyso がある場合は、spinorbit=ONEに設定する。（通常、spinorbit=TWO)<br />
+<br />
+CALL read_input: m_input.F90 で subroutine read_input が宣言されている。<br />
+<br />
+読み込むファイル形式を選択して、データを取得している。<br />
+<br />
+CALL add_inv:　<br />
+! Add center off symmetry for non-centrosymmetric lattices<br />
+<br />
+case.intrans&nbsp;で Run type:&nbsp;に CALCと記入した場合、modus1&nbsp;は CALC となっており、egap や nwave が計算される。<br />
+<br />
+CALL bandana:　case.intrans で Run type:&nbsp;に CALCと記入した場合に呼ばれる。<br />
+バンドギャップを広げる指定をした場合は、INT(nval/spinorbit)+1以上の番号のバンド(case.energyに書かれている)のエネルギー(Ry) を shiftgap (プログラム中はgapchange) だけ加算する。<br />
+icut1には計算する範囲で最も低いエネルギーのバンドの番号が格納される。<br />
+icut2には計算する範囲で最も高いエネルギーのバンドの番号が格納される。<br />
+<br />
+CALL fite4: case.intrans で Run type:&nbsp;に CALCと記入した場合に呼ばれる。<br />
+Interpolation scheme (PRB 38 p.2721)<br />
+The calculation of the expansion parameters, cR,i, are carried out in the subroutine FITE4.<br />
+<br />
+boltztrap-1.2.2ではtaumodel = .FALSE.なので CALL generic_tau などは計算されない。<br />
+※ （File number 11 with k and e dependent lifetimes found）とした計算も可能なように改良してみるのも良いだろう。<br />
+もし、taumodelが.TRUE.であるならば、fite4で lifetimeを考慮した計算がなされて結果がtaugreに格納される。<br />
+<br />
+run modeはBOLTZのみだけサポートされているので、modus2はBOLTZとなる。<br />
+ecut2(Range around Ef where bands are given individual output (Ry) ) &gt; ZERO(0.0d0)の場合に CALL bandana 呼ばれる。<br />
+<br />
+CALL dos: 電子状態密度分布（DOS）が計算されて、No.49-51に出力される。<br />
+<br />
+CALL fermiintegrals:&nbsp;&nbsp;<br />
+case.trace にある # Ef[Ry] T [K] N DOS(Ef) S s/t R_H kappa0 c chi　という文字を出力する。<br />
+各温度に対するその数値はサブルーチンであるfermiint_fix_ef_Tで出力される。<br />
+<br />
+&#39;TRANSPORT END BoltzTrap calculation&#39; と記述。<br />
+<br />
+END PROGRAM BoltzTrap<br />
+-------------------------------------------------------------------<br />
+■ 引数の意味<br />
+□ ecut: energy span around Fermilevel<br />
+&nbsp; 計算に考慮に入れるバンド（のエネルギー）範囲。論文[1]での式12-15におけるエネルギーの積分範囲。<br />
+&nbsp; icut1とicut2が決定される。icut1とicut2はcase.outputtransで Bands range: &#39;,icut1 ,&#39; - &#39;,icut2 として表示される。&#39;,icut1 ,&#39; - &#39;,icut2 に対応するエネルギーはその左のEnergy rangeに書かれている。<br />
+&nbsp; ※ バンド1本が1電子に対応する。あるエネルギー範囲にあるバンドの数が、そのエネルギー範囲にある電子数になる。<br />
+□ efcut: (efcut) energy range of chemical potential<br />
+&nbsp;&nbsp;化学ポテンシャル &mu;&nbsp;を変えて計算する範囲<br />
+&nbsp; range of &mu; in which the integrations should be performed<br />
+□ nval: number of&nbsp; electrons, nval = NE in case.in2_st1<br />
+□ bandana.F90: egap=emin(INT(nval/spinorbit)+1)-emax(INT(nval/spinorbit))<br />
+　バンドギャップを広げる場合(setgapが0以外)にnvalが用いられる。<br />
+□ fermiintegrals.F90: sumelec=nval-(icut1-1)*spinorbit-(sumelec*deltaef*volume)<br />
+□ deltaef: energy step　(step size), npoints = (ebmax-ebmin)/deltaef<br />
+&nbsp; 整数となる ceiling&nbsp;関数 を用いてnpoints = ceiling((ebmax-ebmin)/deltaef となるかチェックが入る。<br />
+□ sumelec: 正孔のキャリア数＝電子数(nvalの値) - (icut1までの電子数-1) *倍率（energysoを用いた場合1、それ以外2） - (フェルミディラック分布を掛けた電子密度分布をicut1からicut2まで合計*エネルギー刻み*体積)<br />
+&nbsp; ※ 電子のキャリア数 = &int;D(&epsilon;) * FD(&epsilon;) d&epsilon; から計算できる[6]。ここで、Dは電子状態密度分布、FDはフェルミディラック関数。&epsilon;はエネルギー。<br />
+□ phon_band.F90: nval=nband/TWO<br />
+※ spinorbit は energyso を用いた計算の場合（ONE=1.0d0）、それ以外の場合はTWO=2.0d0 となっている。<br />
+------------------------------------------------------------------------------<br />
+□ 開発者からのコメント（著者の2人のうち、ボスの方からのみ返信が頂けた）<br />
+・ The chemical potential does shift with temperature but is not directly printed. <span lang="EN-US" style="font-family: &quot;Arial&quot;,&quot;sans-serif&quot;; font-size: 10.5pt; mso-bidi-font-size: 11.0pt; mso-ascii-theme-font: minor-latin; mso-fareast-font-family: &quot;ＭＳ ゴシック&quot;; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-bidi-theme-font: minor-bidi; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">The program instead prints things as a function of T and energy. However from the variation of electron number with energy you can get the chemical potential i.e. as the energy that gives the desired electron count.<br />
+・ </span>Usually, I use a plotting script to get what I need. For example using the electron count rather than the energy to construct the x axis for a Pisarenko type plot. The program includes source, so you can change the formats to allow the desired number of digits.<br />
+以上の記述から、温度でフェルミ準位が大きく移動するような系の場合は、化学ポテンシャルと温度の組を選び出さなくてはならない。さらに、文献[5]では温度によるバンドギャップの変化を考慮することで、緩和時間近似を用いていても、Be2Te3において実験値と比較的というよりもかなり良い一致を示すことが分かる。<br />
+------------------------------------------------------------------------------<br />
+BoltzTraP を改良すべき点を挙げる<br />
+1. フォノンドラッグの項を入れる[C1]<br />
+2. 磁気での補正を入れる[C2-C4]<br />
+3. （スピン）エントロピーを考慮に入れる[C5] (NaxCoO2は既存のBoltzTraPでかなり一致するので必要ないかもしれない)<br />
+4. 温度による格子定数の変化を考慮に入れる<br />
+&nbsp; 格子定数はDebye lattice vibration model で計算できる。a<sub>L</sub>=K<sub>L</sub> * &gamma;<sub>L</sub> *　C<sub>L </sub>/ (3*V)<br />
+ここで C<sub>L</sub>は比熱、KLは等温圧縮率、&gamma;<sub>L</sub>はGruneissen定数。K<sub>L</sub>と&gamma;<sub>L</sub>は温度に依存しないと仮定。K<sub>L</sub> * &gamma;<sub>L </sub>/ (3*V) = a<sub>exp</sub> / C<sub>L</sub> = A を常温で計算する。常温以下の温度ではa<sub>L</sub>=A*C<sub>L</sub>(T)として計算する。C<sub>L</sub>(T)はリートベルトから得られたデバイ温度を用いてDebyeモデルで計算する。 デバイ温度は「Using Debye-Waller factors Bi ,i5Fe, Ti, or Sn, obtained from the fit, the Debye temperatures&nbsp;&theta;<sub>Di </sub>at T=300 K were calculated from the relation Bi(T) = (6h<sup>2</sup>T/k<sub>B</sub> * mi *&nbsp;&theta;<sub><font size="2">Di</font></sub><sup>2</sup> ) * [&phi;(&theta;<sub><font size="2">Di</font></sub>/T)+&theta;<sub><font size="2">Di</font></sub>/T], &phi;(&theta;<sub>Di</sub>/T) =&phi;(x)=(1/x)&int;<sub>0</sub> <sup>x</sup> (ydy/e<sup>y</sup>-1), where mi is the atomic mass. The value of the Debye temperature」から得られる。 [C6]<br />
+[C1] <a href="http://iroha.scitech.lib.keio.ac.jp:8080/sigma/bitstream/handle/10721/667/document.pdf?sequence=1">http://iroha.scitech.lib.keio.ac.jp:8080/sigma/bitstream/handle/10721/667/document.pdf?sequence=1</a><br />
+[C2] G. Sundaram et al., Phys. Rev. B 59 (1999) 14915.; <a href="http://prb.aps.org/pdf/PRB/v59/i23/p14915_1">http://prb.aps.org/pdf/PRB/v59/i23/p14915_1</a><br />
+[C3] Di Xiao et al., Phys. Rev. Lett. 97 (2006) 026603.; <a href="http://prl.aps.org/pdf/PRL/v97/i2/e026603">http://prl.aps.org/pdf/PRL/v97/i2/e026603</a><br />
+[C4] Y. Hasegawa et al., Jpn. J. Appl. Phys. <b>43</b> (2004) pp. 35-42.; <a href="http://jjap.jsap.jp/link?JJAP/43/35/">http://jjap.jsap.jp/link?JJAP/43/35/</a><br />
+[C5] 寺崎一郎、Netsu Sokutei 31 (4) 164-171.; <a href="http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf">http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf</a><br />
+[C6] A. Slebarshki et al., Phys. Rev. B 62 (2000) 3296.; <a href="http://prb.aps.org/abstract/PRB/v62/i5/p3296_1">http://prb.aps.org/abstract/PRB/v62/i5/p3296_1</a><br />
+------------------------------------------------------------------------------<br />
+■ case.energy<br />
+&nbsp; <font face="MS Gothic">At the top are the energy-parameters E_l for each atom for the <tt>APW-expansion of u_l(r,E_l) (first line) and for the LOs (second line). </tt></font><tt>Then comes the first k-point (0,0,0). It had a basis size of 219 and 44 eigenvalues (in Ry) follow. Then the next k-point, .... (P. Blaha)</tt><br />
+200.60479200.60479200.67530&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.60479 0.60479&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.00000<br />
+&nbsp;&nbsp; 0.60479&nbsp; 0.60479&nbsp; 0.67530999.00000997.00000 -3.44000997.00000999.00000999.00000999.00000999.00000999.00000<br />
+&nbsp; 0.000000000000E+00 0.000000000000E+00 0.000000000000E+00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp; 219 &nbsp;44&nbsp; 1.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; -3.42926916127842<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp; -3.42926916127841<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;・・・・・・<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;44&nbsp;&nbsp; 1.93420513481993<br />
+&nbsp; next k-point kx ky kz (basis size) (# of eigenvalues) (weight for this k point)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (# of eigenvalue)&nbsp;(eigenvalue)<br />
+------------------------------------------------------------------------------<br />
+理論値よりも実験値の方がゼーベック係数が大きい場合<br />
+1. 低温においては、フォノンの影響によるフォノンドラッグによってゼーベック係数が大きい結果が得られる。<br />
+2. エントロピー（磁性）の影響によりゼーベック係数が大きい結果が得られる。<br />
+3. 温度上昇に伴って格子定数が増大する場合。<br />
+[ES1] 竹内恒博, 日本金属学会誌第69巻第5 号(2005) 403-412 解説論文.; <a href="http://www.jim.or.jp/journal/j/pdf3/69/05/403.pdf">http://www.jim.or.jp/journal/j/pdf3/69/05/403.pdf</a>　<br />
+[ES2] Y. Wang et al., <em>Nature</em> <b>423</b>&nbsp;(2003) 425-428.; <a href="http://www.nature.com/nature/journal/v423/n6938/abs/nature01639.html">http://www.nature.com/nature/journal/v423/n6938/abs/nature01639.html</a><br />
+[ES3] I. Terasaki et al., Phys. Rev. B 65 (2002) 195106.; <a href="http://prb.aps.org/abstract/PRB/v65/i19/e195106">http://prb.aps.org/abstract/PRB/v65/i19/e195106</a><br />
+[ES4] 寺崎一郎, Netsu Sokutei 31（4）164-171; <a href="http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf">http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf</a><br />
+------------------------------------------------------------------------------<br />
+□ References<br />
+[1] Georg K. H. Madsen, David J. Singh, arXiv:cond-mat/0602203v1, 2008; <a href="http://arxiv.org/pdf/cond-mat/0602203v1.pdf">http://arxiv.org/pdf/cond-mat/0602203v1.pdf</a><br />
+[2] Lijun Zhang and D. J. Singh, Phys. Rev. B 80 (2009) 075117.<br />
+[3] D. J. Singh and I. I. Mazin, Phys. &nbsp;Rev. B 56 (1997) R1650.<br />
+[4] H. J. Xiang and D. J. Singh et al., Phys. Rev. B 76 (2007) 195111.<br />
+[5] <a href="http://books.google.co.jp/books?id=AoRHN_Ah5WkC&amp;pg=PA125&amp;lpg=PA125&amp;dq=boltztrap&amp;source=bl&amp;ots=uxqtKrEcmt&amp;sig=NkK-mmWCuQORnm9MrKuvKvRk2hM&amp;hl=ja&amp;sa=X&amp;ei=xsHvUYLDLsytkgWDu4CwCQ&amp;ved=0CFQQ6AEwBTgK#v=onepage&amp;q=boltztrap&amp;f=false">http://books.google.co.jp/books?id=AoRHN_Ah5WkC&amp;pg=PA125&amp;lpg=PA125&amp;dq=boltztrap&amp;source=bl&amp;ots=uxqtKrEcmt&amp;sig=NkK-mmWCuQORnm9MrKuvKvRk2hM&amp;hl=ja&amp;sa=X&amp;ei=xsHvUYLDLsytkgWDu4CwCQ&amp;ved=0CFQQ6AEwBTgK#v=onepage&amp;q=boltztrap&amp;f=false</a><br />
+[6] <span class="looklikelink authorname aqslistener">D. F. Zou</span><sup><font size="2">1</font></sup>, <span class="looklikelink authorname aqslistener">S. H. Xie</span><sup><font size="2">1</font></sup>, <span class="looklikelink authorname aqslistener">Y. Y. Liu</span><sup><font size="2">1</font></sup>, <span class="looklikelink authorname aqslistener">J. G. Lin</span><sup><font size="2">1</font></sup>, and <span class="looklikelink authorname aqslistener">J. Y. Li</span><sup><font size="2">2</font></sup> , J. Appl. Phys. <strong>113</strong>, 193705 (2013);　<a href="http://link.aip.org/link/doi/10.1063/1.4804939">http://dx.doi.org/10.1063/1.4804939</a> (<em>7 pages</em>); &quot;Electronic structure and thermoelectric properties of half-Heusler Zr05Hf05NiSn by first-principles calculations &quot;<br />
+[7] <a href="http://www.research.kobe-u.ac.jp/eng-nanoelectronics/Japanese/tsuchiya/suributuri/suributuri.pdf">http://www.research.kobe-u.ac.jp/eng-nanoelectronics/Japanese/tsuchiya/suributuri/suributuri.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ 開発中（温度によるフェルミ準位の移動を考慮してゼーベック係数のデータを抜き出すIgorマクロ）<br />
+金属や擬ギャップ系のみ（半導体や絶縁体はFD分布の数値が広いエネルギー範囲で小さいので計算方法を変える予定）<br />
+□&nbsp;使い方<br />
+1. case.output2またはdos1, dos1upファイルの中に書かれているFermi準位をコピーして、マクロのEfにペーストしてEnterを押す。<br />
+2. BoltzTraP から case.trace を取り出して、Igor に入れる。<br />
+3. change name を押すと名称を wave0 などからマクロで処理する名称に書き換わる。<br />
+4. Temperature [K] を指定すれば、S-&mu; relation ボタンで図が表示される。series は全ての温度に対して描画される。<br />
+□ Igor マクロ
+<p>#pragma rtGlobals=1&nbsp;&nbsp;// Use modern global access method.<br />
+// ver.1.00</p>
+
+<p>Macro seebeck_panel()<br />
+NewPanel/W=(0, 0, 180, 190)<br />
+SetDrawEnv fillfgc= (48896,65280,48896)<br />
+DrawRect 4,2,176,188</p>
+
+<p>Button button0 proc=ButtonProc_1<br />
+Button button0 title=&quot;change name&quot;,proc=ButtonProc_1<br />
+SetDrawEnv fsize= 14<br />
+Button button0 size={150,20}<br />
+Button button0 pos={15,3}</p>
+
+<p>SetVariable setvar0 proc=SetVarProc,limits={-inf,inf,0},fSize=14<br />
+SetVariable setvar0 value= _NUM:0<br />
+SetVariable setvar0 size={70,20}<br />
+SetVariable setvar0 pos={55,30}</p>
+
+<p>DrawText 25,45,&quot;Ef =&quot;<br />
+SetDrawEnv fsize= 14</p>
+
+<p>DrawText 130,45,&quot;Ry&quot;<br />
+SetDrawEnv fsize= 14</p>
+
+<p>PopupMenu popup0 proc=PopMenuProc<br />
+PopupMenu popup0 value=&quot;50;100;150;200;250;300;350;400;450;500;550;600;650;700;750;800;850;900;950;1000&quot;<br />
+PopupMenu popup0 fSize=14<br />
+PopupMenu popup0 pos={120,55}</p>
+
+<p>DrawText 15,70,&quot;Temperature [K]&quot;<br />
+SetDrawEnv fsize= 14</p>
+
+<p>Button button1 title=&quot;S - &mu; relation&quot;,proc=ButtonProc<br />
+SetDrawEnv fsize= 14<br />
+Button button1 size={100,30}<br />
+Button button1 pos={60,80}</p>
+
+<p>Button button2 title=&quot;series&quot;,proc=ButtonProc_2<br />
+SetDrawEnv fsize= 14<br />
+Button button2 size={150,20}<br />
+Button button2 pos={15,115}</p>
+
+<p>SetDrawEnv fsize= 14<br />
+DrawText 25,155,&quot;&mu; =&quot;</p>
+
+<p>SetVariable setvar1 proc=SetVarProc_1,limits={-inf,inf,0}<br />
+SetVariable setvar1 value= _NUM:0<br />
+SetVariable setvar1 size={50,15}<br />
+SetVariable setvar1 pos={60,140}</p>
+
+<p>Button button3 title=&quot;plot&quot;,proc=ButtonProc_3<br />
+Button button3 size={50,20}<br />
+Button button3 pos={115,138}</p>
+
+<p>Button button4 proc=ButtonProc_4<br />
+Button button4 title=&quot;series plot&quot;<br />
+Button button4 size={70,20}<br />
+Button button4 pos={55,165}<br />
+Button button4 fSize=14</p>
+
+<p>End</p>
+
+<p>// convert Ry to eV and change name<br />
+Function ButtonProc_1(ba) : ButtonControl<br />
+&nbsp;STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;// click code here<br />
+&nbsp;&nbsp;&nbsp;WAVE wave0, wave1, wave2, wave3, wave4, wave5, wave6, wave7, wave8, wave9<br />
+&nbsp;&nbsp;&nbsp;// rename<br />
+&nbsp;&nbsp;&nbsp;Rename wave0,Ef_Ry; Rename wave1,T_K; Rename wave2,N; Rename wave3,DOS_Ef<br />
+&nbsp;&nbsp;&nbsp;Rename wave4,Seebeck; Rename wave5,S_t; Rename wave6,R_H; Rename wave7,kappa0<br />
+&nbsp;&nbsp;&nbsp;Rename wave8,c; Rename wave9,chi<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>// read non_dope_EF<br />
+Function SetVarProc(sva) : SetVariableControl<br />
+&nbsp;STRUCT WMSetVariableAction &amp;sva</p>
+
+<p>&nbsp;switch( sva.eventCode )<br />
+&nbsp;&nbsp;case 1: // mouse up<br />
+&nbsp;&nbsp;case 2: // Enter key<br />
+&nbsp;&nbsp;case 3: // Live update<br />
+&nbsp;&nbsp;&nbsp;Variable dval = sva.dval<br />
+&nbsp;&nbsp;&nbsp;String sval = sva.sval<br />
+&nbsp;&nbsp;&nbsp;Variable/G Ef_non_dope<br />
+&nbsp;&nbsp;&nbsp;Variable Num_of_Wave<br />
+&nbsp;&nbsp;&nbsp;WAVE Ef_Ry<br />
+&nbsp;&nbsp;&nbsp;Num_of_Wave = DimSize(Ef_Ry,0)<br />
+&nbsp;&nbsp;&nbsp;Make/O/N=(Num_of_Wave) Ef_eV<br />
+&nbsp;&nbsp;&nbsp;Ef_non_dope = dval<br />
+&nbsp;&nbsp;&nbsp;Ef_eV = (Ef_Ry - Ef_non_dope)*13.602<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>// set extacting temperature<br />
+Function PopMenuProc(pa) : PopupMenuControl<br />
+&nbsp;STRUCT WMPopupAction &amp;pa</p>
+
+<p>&nbsp;switch( pa.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;Variable popNum = pa.popNum<br />
+&nbsp;&nbsp;&nbsp;String popStr = pa.popStr<br />
+&nbsp;&nbsp;&nbsp;Variable/G temp<br />
+&nbsp;&nbsp;&nbsp;temp = str2num (popStr)<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p><br />
+// run bottun<br />
+Function ButtonProc(ba) : ButtonControl<br />
+&nbsp;STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;// click code here<br />
+&nbsp;&nbsp;&nbsp;NVAR temp<br />
+&nbsp;&nbsp;&nbsp;print&nbsp; &quot;extract the&quot;, temp,&quot;K data from the case.trace&quot;<br />
+&nbsp;&nbsp;&nbsp;sub_extract(temp)<br />
+&nbsp;&nbsp;&nbsp;ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p><br />
+// main routine<br />
+Function sub_extract(temp_K)<br />
+&nbsp; Variable temp_K<br />
+&nbsp; WAVE Ef_eV, T_K, N, DOS_Ef, Seebeck, S_t, R_H, kappa0, c, chi<br />
+&nbsp;<br />
+&nbsp; Variable Num_of_Wave, i, j<br />
+&nbsp; Num_of_Wave = DimSize(T_K,0)<br />
+&nbsp; Make/N=(Num_of_Wave) Shifted_Ef_tempo, Seebeck_at_Shifted_Ef_tempo<br />
+&nbsp;<br />
+&nbsp; i = 0; j = 0<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if ( T_K[i] == temp_K )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Shifted_Ef_tempo[j] = Ef_eV[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seebeck_at_Shifted_Ef_tempo[j] = Seebeck[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; i = i +1<br />
+&nbsp; while ( i &lt; DimSize(T_K,0) )<br />
+&nbsp;<br />
+&nbsp; String name_of_wave<br />
+&nbsp; name_of_wave =&nbsp; &quot;Seebeck_at_&quot; + num2str(temp_K) + &quot;_K&quot;<br />
+&nbsp; Make/O/N=(j) Shifted_Ef, $name_of_wave<br />
+&nbsp; Wave Seebeck_at_Shifted_Ef = $name_of_wave</p>
+
+<p>&nbsp; Shifted_Ef = Shifted_Ef_tempo<br />
+&nbsp; Seebeck_at_Shifted_Ef = Seebeck_at_Shifted_Ef_tempo * 10^6<br />
+&nbsp;<br />
+&nbsp; Display&nbsp; Seebeck_at_Shifted_Ef vs Shifted_Ef<br />
+&nbsp;<br />
+&nbsp; //setting graph<br />
+&nbsp; ModifyGraph tick=2,mirror=1,fSize=14,standoff=0,font=&quot;Arial&quot;<br />
+&nbsp; Label left &quot;<a href="file://\\Z14\rSeebeck">\\Z14\rSeebeck</a> coefficients / <a href="file://\\F'Symbol'm\\F'Arial'V">\\F&#39;Symbol&#39;m\\F&#39;Arial&#39;V</a>必<a href="file://\\S-1">\\S-1</a>&quot;<br />
+&nbsp; ModifyGraph tick(bottom)=2,mirror(bottom)=1,fSize(bottom)=14,standoff(bottom)=0<br />
+&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp; Label bottom &quot;<a href="file://\\Z14\\F'Symbol'm\\F'Arial'">\\Z14\\F&#39;Symbol&#39;m\\F&#39;Arial&#39;</a> / eV&quot;<br />
+&nbsp; SetAxis bottom -2,2<br />
+&nbsp; ModifyGraph margin(left)=57<br />
+&nbsp; ModifyGraph margin(bottom)=43<br />
+&nbsp; ModifyGraph width=340.157,height=226.772<br />
+&nbsp; Legend/C/N=text0/F=0/B=1/A=MC/X=30.00/Y=40.00<br />
+&nbsp;<br />
+&nbsp; KillWaves Shifted_Ef_tempo, Seebeck_at_Shifted_Ef_tempo<br />
+&nbsp;<br />
+End</p>
+
+<p>// series<br />
+Function ButtonProc_2(ba) : ButtonControl<br />
+&nbsp;STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;// click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Variable temp_K<br />
+&nbsp;&nbsp;&nbsp;&nbsp; temp_K = 100<br />
+&nbsp;&nbsp;&nbsp;&nbsp; sub_extract(temp_K)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; for ( temp_K=200; temp_K&lt;=800; temp_K+=100)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sub2_extract(temp_K)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endfor<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_200_K)=(65280,21760,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_400_K)=(40960,65280,16384)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_500_K)=(0,52224,0)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_600_K)=(0,65280,65280)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_700_K)=(0,0,65280)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph rgb(Seebeck_at_800_K)=(29440,0,58880)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Legend/C/N=text0/F=0/B=1/A=MC/X=30.00/Y=25.00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>//second main<br />
+Function sub2_extract(temp_K)<br />
+&nbsp; Variable temp_K<br />
+&nbsp; WAVE Ef_eV, T_K, N, DOS_Ef, Seebeck, S_t, R_H, kappa0, c, chi<br />
+&nbsp;<br />
+&nbsp; Variable Num_of_Wave, i, j<br />
+&nbsp; Num_of_Wave = DimSize(T_K,0)<br />
+&nbsp; Make/N=(Num_of_Wave) Shifted_Ef_tempo, Seebeck_at_Shifted_Ef_tempo<br />
+&nbsp;<br />
+&nbsp; i = 0; j = 0<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if ( T_K[i] == temp_K )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Shifted_Ef_tempo[j] = Ef_eV[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seebeck_at_Shifted_Ef_tempo[j] = Seebeck[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; i = i +1<br />
+&nbsp; while ( i &lt; DimSize(T_K,0) )<br />
+&nbsp;<br />
+&nbsp; String name_of_wave<br />
+&nbsp; name_of_wave =&nbsp; &quot;Seebeck_at_&quot; + num2str(temp_K) + &quot;_K&quot;<br />
+&nbsp; Make/O/N=(j) Shifted_Ef, $name_of_wave<br />
+&nbsp; Wave Seebeck_at_Shifted_Ef = $name_of_wave</p>
+
+<p>&nbsp; Shifted_Ef = Shifted_Ef_tempo<br />
+&nbsp; Seebeck_at_Shifted_Ef = Seebeck_at_Shifted_Ef_tempo * 10^6<br />
+&nbsp;<br />
+&nbsp; AppendToGraph&nbsp; Seebeck_at_Shifted_Ef vs Shifted_Ef<br />
+&nbsp;<br />
+&nbsp; KillWaves Shifted_Ef_tempo, Seebeck_at_Shifted_Ef_tempo<br />
+End</p>
+
+<p>//<br />
+Function SetVarProc_1(sva) : SetVariableControl<br />
+&nbsp;STRUCT WMSetVariableAction &amp;sva</p>
+
+<p>&nbsp;switch( sva.eventCode )<br />
+&nbsp;&nbsp;case 1: // mouse up<br />
+&nbsp;&nbsp;case 2: // Enter key<br />
+&nbsp;&nbsp;case 3: // Live update<br />
+&nbsp;&nbsp;&nbsp;Variable dval = sva.dval<br />
+&nbsp;&nbsp;&nbsp;String sval = sva.sval<br />
+&nbsp;&nbsp;&nbsp;Variable/G mu =&nbsp; dval<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>// S - K plot<br />
+Function ButtonProc_3(ba) : ButtonControl<br />
+&nbsp;STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;// click code here<br />
+&nbsp;&nbsp;&nbsp;NVAR mu<br />
+&nbsp;&nbsp;&nbsp;sub3_extract(mu)<br />
+&nbsp;&nbsp;&nbsp;ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>//third main<br />
+Function sub3_extract(mu)<br />
+&nbsp; Variable mu<br />
+&nbsp; WAVE Ef_eV, T_K, N, DOS_Ef, Seebeck, S_t, R_H, kappa0, c, chi<br />
+&nbsp;<br />
+&nbsp; Variable Num_of_Wave, i, j, k, num_of_temp<br />
+&nbsp; Variable mu_low, mu_high<br />
+&nbsp; Num_of_Wave = DimSize(T_K,0)<br />
+&nbsp; Make/N=(Num_of_Wave) K_tempo, Seebeck_for_K_tempo<br />
+&nbsp;<br />
+&nbsp; i = 0; j = 0; k = 0<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if ( Ef_eV[i] &lt;= mu &amp;&amp; mu &lt;= Ef_eV[i+1] )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mu_low = Ef_eV[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mu_high = Ef_eV[i+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k = k + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while ( T_K[i-k] &lt; T_K[i-k+1] )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_of_temp = k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(k=0;k&lt;num_of_temp;k+=1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; K_tempo[k] = T_K[i+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seebeck_for_K_tempo[k] = (Seebeck[i+k+1] - Seebeck[i-num_of_temp+k+1]) * (mu - mu_low) / ( mu_high - mu_low ) +&nbsp; Seebeck[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //print&nbsp; T_K[i+k+1], T_K[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //print&nbsp; Seebeck[i+k+1], Seebeck[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endfor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; i = i +1<br />
+&nbsp; while ( i &lt; (DimSize(T_K,0) -1) )<br />
+&nbsp;<br />
+&nbsp; String name_of_wave<br />
+&nbsp; name_of_wave = &quot;Seebeck_at_&quot; + num2str(mu) + &quot;_eV&quot;<br />
+&nbsp; Make/O/N=(num_of_temp) temp_K, $name_of_wave<br />
+&nbsp; Wave Seebeck_for_K = $name_of_wave</p>
+
+<p>&nbsp; temp_K = K_tempo<br />
+&nbsp; Seebeck_for_K = Seebeck_for_K_tempo * 10^6<br />
+&nbsp;<br />
+&nbsp; Display&nbsp; Seebeck_for_K vs temp_K<br />
+&nbsp;<br />
+&nbsp; //setting graph<br />
+&nbsp; ModifyGraph mode=4,marker=19,msize=4<br />
+&nbsp; ModifyGraph tick=2,mirror=1,fSize=14,standoff=0,font=&quot;Arial&quot;<br />
+&nbsp; Label left &quot;<a href="file://\\Z14\rSeebeck">\\Z14\rSeebeck</a> coefficients / <a href="file://\\F'Symbol'm\\F'Arial'V">\\F&#39;Symbol&#39;m\\F&#39;Arial&#39;V</a>必<a href="file://\\S-1">\\S-1</a>&quot;<br />
+&nbsp; ModifyGraph tick(bottom)=2,mirror(bottom)=1,fSize(bottom)=14,standoff(bottom)=0<br />
+&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp; Label bottom &quot;<a href="file://\\Z14\\F'Arial'Temperature">\\Z14\\F&#39;Arial&#39;Temperature</a> / K&quot;<br />
+&nbsp; SetAxis bottom 50,800<br />
+&nbsp; ModifyGraph margin(left)=57<br />
+&nbsp; ModifyGraph margin(bottom)=43<br />
+&nbsp; ModifyGraph width=340.157,height=226.772<br />
+&nbsp; Legend/C/N=text0/F=0/B=1/A=MC/X=30.00/Y=40.00<br />
+&nbsp;<br />
+&nbsp; KillWaves K_tempo, Seebeck_for_K_tempo<br />
+&nbsp;<br />
+End</p>
+
+<p>Function ButtonProc_4(ba) : ButtonControl<br />
+&nbsp;STRUCT WMButtonAction &amp;ba</p>
+
+<p>&nbsp;switch( ba.eventCode )<br />
+&nbsp;&nbsp;case 2: // mouse up<br />
+&nbsp;&nbsp;&nbsp;// click code here<br />
+&nbsp;&nbsp;&nbsp;&nbsp; NVAR mu<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Variable mu_shift<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Display<br />
+&nbsp;&nbsp;&nbsp;&nbsp; for ( mu_shift=-0.15; mu_shift&lt;=0.151; mu_shift+=mu)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sub4_extract(mu_shift)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; endfor<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Legend/C/N=text0/F=0/B=1/A=MC/X=30.00/Y=25.00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ModifyGraph width=0,height=0<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;&nbsp;case -1: // control being killed<br />
+&nbsp;&nbsp;&nbsp;break<br />
+&nbsp;endswitch</p>
+
+<p>&nbsp;return 0<br />
+End</p>
+
+<p>//fourth main<br />
+Function sub4_extract(mu)<br />
+&nbsp; Variable mu<br />
+&nbsp; WAVE Ef_eV, T_K, N, DOS_Ef, Seebeck, S_t, R_H, kappa0, c, chi<br />
+&nbsp;<br />
+&nbsp; Variable Num_of_Wave, i, j, k, num_of_temp<br />
+&nbsp; Variable mu_low, mu_high<br />
+&nbsp; Num_of_Wave = DimSize(T_K,0)<br />
+&nbsp; Make/N=(Num_of_Wave) K_tempo, Seebeck_for_K_tempo<br />
+&nbsp;<br />
+&nbsp; i = 0; j = 0; k = 0<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if ( Ef_eV[i] &lt;= mu &amp;&amp; mu &lt;= Ef_eV[i+1] )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mu_low = Ef_eV[i]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mu_high = Ef_eV[i+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; k = k + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; while ( T_K[i-k] &lt; T_K[i-k+1] )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_of_temp = k<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; for(k=0;k&lt;num_of_temp;k+=1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; K_tempo[k] = T_K[i+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Seebeck_for_K_tempo[k] = (Seebeck[i+k+1] - Seebeck[i-num_of_temp+k+1]) * (mu - mu_low) / ( mu_high - mu_low ) +&nbsp; Seebeck[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //print&nbsp; T_K[i+k+1], T_K[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; //print&nbsp; Seebeck[i+k+1], Seebeck[i-num_of_temp+k+1]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endfor<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; break<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; i = i +1<br />
+&nbsp; while ( i &lt; (DimSize(T_K,0) -1) )<br />
+&nbsp;<br />
+&nbsp; String name_of_wave<br />
+&nbsp; name_of_wave = &quot;Seebeck_at_&quot; + num2str(mu) + &quot;_eV&quot;<br />
+&nbsp; Make/O/N=(num_of_temp) temp_K, $name_of_wave<br />
+&nbsp; Wave Seebeck_for_K = $name_of_wave</p>
+
+<p>&nbsp; temp_K = K_tempo<br />
+&nbsp; Seebeck_for_K = Seebeck_for_K_tempo * 10^6<br />
+&nbsp;<br />
+&nbsp; AppendToGraph&nbsp; Seebeck_for_K vs temp_K<br />
+&nbsp;<br />
+&nbsp; //setting graph<br />
+&nbsp; ModifyGraph mode=4,marker=19,msize=4<br />
+&nbsp; ModifyGraph tick=2,mirror=1,fSize=14,standoff=0,font=&quot;Arial&quot;<br />
+&nbsp; Label left &quot;<a href="file://\\Z14\rSeebeck">\\Z14\rSeebeck</a> coefficients / <a href="file://\\F'Symbol'm\\F'Arial'V">\\F&#39;Symbol&#39;m\\F&#39;Arial&#39;V</a>必<a href="file://\\S-1">\\S-1</a>&quot;<br />
+&nbsp; ModifyGraph tick(bottom)=2,mirror(bottom)=1,fSize(bottom)=14,standoff(bottom)=0<br />
+&nbsp; ModifyGraph font(bottom)=&quot;Arial&quot;<br />
+&nbsp; Label bottom &quot;<a href="file://\\Z14\\F'Arial'Temperature">\\Z14\\F&#39;Arial&#39;Temperature</a> / K&quot;<br />
+&nbsp; SetAxis bottom 0,2000<br />
+&nbsp; ModifyGraph margin(left)=57<br />
+&nbsp; ModifyGraph margin(bottom)=43<br />
+&nbsp; ModifyGraph width=340.157,height=226.772<br />
+&nbsp; Legend/C/N=text0/F=0/B=1/A=MC/X=30.00/Y=40.00<br />
+&nbsp;<br />
+&nbsp; KillWaves K_tempo, Seebeck_for_K_tempo<br />
+&nbsp;<br />
+End</p>
+<br />
+&nbsp;------------------------------------------------------------------------------

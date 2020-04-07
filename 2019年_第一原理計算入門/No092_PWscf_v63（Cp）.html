@@ -1,0 +1,195 @@
+<p>　下記の手順のようにすれば、PWscfを用いてプリミティブセルでフォノン（DFPT）を計算し、QHAの計算結果をまとめ直すことで、phonopyを用いて定圧比熱（specific heat at constant pressure: Cp）を計算できる<br />
+--------------------------------------------------------------------------------<br />
+■ お詫び<br />
+　私の事務用のPCではHDDが一部壊れており、最初のフォノン（左欄の「PWscf (Phonon by DFPT)」計算ができない。もう少し丁寧に分かり易く記述したり、動画を作成したり、自動計算するシェルスクリプトを構築できない。許して欲しい。<br />
+※ DFPTやQHAの計算手順はYoutubeに動画があるのでそれを参考にしてほしい。<br />
+--------------------------------------------------------------------------------<br />
+■ PWscf (DFPT + QHA) + phonopy（phonopy-qha）<br />
+<br />
+1. 構造最適化を行い、最適な格子定数を得る<br />
+2. 最適な格子定数から-5%, -4%, ... 4%, 5%と体積を変化させてエネルギーを得る<br />
+　体積とエネルギーを e-v.dat に記述する<br />
+3. PWscf で格子定数を上記と同様に変化させてフォノンの計算を行う<br />
+　左欄の「PWscf (Phonon&nbsp;by DFPT)」の方法でフォースのファイル*.fcを得る<br />
+4. *.fcを用いてQHA計算を行う<br />
+　左欄の「PWscf v.6.3 (QHA)の入力を参考にしてCpの計算に必要なデータを得る<br />
+5. 出力結果をthermal_properties.yamlの形式にあわせて書き換える<br />
+　(PWscf) E_internal:&nbsp;(phonopy) energy （= F + ST/1000） (kJ/mol)<br />
+　(PWscf) F_vibration: (phonopy)&nbsp;free energy (kJ/mol)<br />
+　(PWscf) Entropy: (phonopy) entropy (J/K/mol) （※ 単位に注意！）<br />
+　※ 下記の「■ PWscfとphonopyの入出力ファイルの関係」に対応関係を示す。<br />
+　※ 下記の「■ qha2yaml」を用いると便利。<br />
+6. phonopy-qha -s e-v.dat thermal_properties.yaml-{-{5..1},{0..5}}<br />
+&nbsp; この計算は、e-v.datとthermal_properties.yamlのデータさえあれば計算してくれる。そのため、e-v.datとthermal_properties.yamlはVASPでなくても、PWscfのQHA計算で同様のデータを準備すればよい。<br />
+<br />
+※ 擬ポテンシャル（PAWなど）は最適な体積から&plusmn;6%の範囲で高い精度になるように作られている。そのため、&plusmn;6%を越えないように注意。上記の手法であれば&plusmn;5%以内なので問題はない。<br />
+--------------------------------------------------------------------------------<br />
+■ PWscfとphonopyの入出力ファイルの関係<br />
+<br />
+◇ Si<br />
+1. cd $HOME/q-e-qe-6.3/QHA/Examples<br />
+2. cd Si<br />
+3. gedit Edit_Me<br />
+&nbsp; &quot;cat &gt; Temperature &lt;&lt;EOF&quot;の次の行を<br />
+　　10 2100 10<br />
+&nbsp; とするとphonopyのSi-QHAと同じ条件になる（※ 0 Kから計算させるようにすると0 KでNaNが出力されるため10 Kからスタートしている）。Cpだけを計算したい場合は、&quot;cat &gt;T_Debye.in &lt;&lt;EOF&quot;から最後までは削除してよい（または最初に#をつける）。<br />
+4. Run_Me<br />
+5. gedit Si.QHA.out<br />
+&nbsp;Zero vibraton energy&nbsp;<br />
+&nbsp;T (temperature, K), E_internal (Ry/cell), F_vibration (Ry/cell), Specific heat (Cv) (R) and Entropy (S) (R)<br />
+が出力ファイルcase.QHA.outから得られる。これらをthermal_properties.yamlの形式に書き換える。下のようにすればよい （1 Ry&nbsp;=&nbsp;13.6058 eV&nbsp;=&nbsp;1312.75 kJ/mol、R = 8.314 J/K/mol）。<br />
+※ ただし、下記の例は8原子の場合であり、Run_Meではプリミティブセルを用いた原子2個の計算なので、Run_Meの値を4倍すると下記と近い値（通常の単位胞（コンベンショナルセル））になる。<br />
+(e-v.datをプリミティブセルで準備しておけば、下記はプリミティブセルの出力のままで良いと思われる）<br />
+----------</p>
+
+<p># Thermal properties / unit cell (natom)</p>
+
+<p>unit:<br />
+&nbsp; temperature:&nbsp;&nbsp; K<br />
+&nbsp; free_energy:&nbsp;&nbsp; kJ/mol<br />
+&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; J/K/mol<br />
+&nbsp; heat_capacity: J/K/mol</p>
+
+<p>natom:&nbsp;&nbsp;&nbsp;&nbsp; （natom * 4）<br />
+num_modes: 192000 （不明）<br />
+num_integrated_modes: 192000 （不明）</p>
+
+<p>zero_point_energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Zero vibration energy = free_energy (0 K))<br />
+high_T_entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 665.4053108 （不明）</p>
+
+<p>thermal_properties:<br />
+- temperature:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000 （温度T（K）の値）<br />
+&nbsp; free_energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 46.6315169 （F_vibration * 1312.75 * 4&nbsp;）<br />
+&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000 (Entropy * 8.314 * 4)<br />
+&nbsp; heat_capacity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000 （Specific heat (Cv) * 8.314 * 4）<br />
+&nbsp; energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 46.6315169 （E_internal * 1312.75 * 4）</p>
+
+<p>- temperature:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10.0000000 （温度T（K）の値）<br />
+&nbsp; free_energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 46.6314476 （F_vibration * 1312.75 * 4 ）<br />
+&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0290465 (Entropy * 8.314 * 4)<br />
+&nbsp; heat_capacity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0906832 （Specific heat (Cv) * 8.314 * 4）<br />
+&nbsp; energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 46.6317381 （E_internal * 1312.75 * 4）<br />
+（省略）<br />
+- temperature:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2100.0000000 （温度T（K）の値）<br />
+&nbsp; free_energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -679.9808291 （F_vibration * 1312.75 * 4 ）<br />
+&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 524.3218411&nbsp; (Entropy * 8.314 * 4)<br />
+&nbsp; heat_capacity:&nbsp;&nbsp;&nbsp;&nbsp; 198.5760126 （Specific heat (Cv) * 8.314 * 4）<br />
+&nbsp; energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 421.0950371 （E_internal * 1312.75 * 4）<br />
+----------<br />
+　ここで、E_internal * 1312.75 * 4 = F_vibration * 1312.75 * 4 + Entropy * 8.314 * 4 * T(K)&nbsp;/ 1000 の関係がある。4倍しているのは、Run_Meでの計算がSiのプリミティブセルであるため、コンベンショナルな単位胞に戻すと4倍になるため（※ プリミティブセルでの原子数は2であり、コンベンショナルセルの原子数は8となることから、Run_Meでの計算結果を4倍している）。<br />
+　Zero vibration energy = free_energy (0 K）となる。温度 0 Kでは、Zero vibration energy = free_energy =&nbsp;E_internalである。<br />
+<br />
+◇ 入力ファイルの検証<br />
+※ num_modesやnum_integrated_modes:は 3*原子数にしても動いている。値を変えても結果は見た目では変わっていなかった。<br />
+※&nbsp;natom:を8から2に変えても結果は見た目では変わっていなかった。<br />
+※ zero_point_energy: 0 としても動作する。<br />
+※ high_T_entropy: 500 にしても動作する。<br />
+※ thermal_properties: より上の行を削っても動作した。<br />
+※ thermal_properties:を含めて上の部分を削ったらエラーが出力された。<br />
+※ これらの結果から、もしかしたら、high_T_entropy:より上はメモで、実際の計算には利用されていない可能性が高い。<br />
+--------------------------------------------------------------------------------<br />
+■ qha2yaml<br />
+（PWscf QHAの出力をphonopy形式に変換するC-シェルスクリプト）<br />
+　テキストファイルの名称を qha2yaml にして下記をコピー&amp;ペーストし、右クリックのプロパティのパーミッションでExecuteにチェックを入れれば、ダブルクリックするだけで変換してくれる。<br />
+　プリミティブセルからコンベンショナルセルにするなど、通常の結果を整数倍したい場合は、<br />
+　　qha2yaml -t 数値<br />
+と入力すればよい。（※ high_T_entropy:の値は、phonopyのSi-QHAの値のままにしてある。コメント欄なのでどのような数値でも結果に違いは無い）<br />
+----------<br />
+#! /bin/csh -f<br />
+<br />
+set InFILE = &quot;*.QHA.out&quot;<br />
+set OutFILE = &quot;thermal_properties.yaml&quot;<br />
+<br />
+if ($1 == &quot;-t&quot;) then<br />
+&nbsp; set times = $2<br />
+else<br />
+&nbsp; set times = 1<br />
+endif<br />
+<br />
+set Ezp = `awk -v t=$times &#39;NR==1 {print $5*1312.75*t}&#39; $InFILE`<br />
+set N&nbsp;&nbsp; = `awk -v t=$times &#39;NR==2 {print int($6/3)*t}&#39; $InFILE`<br />
+set N3&nbsp; = `awk -v t=$times &#39;NR==2 {print int($6)*t}&#39; $InFILE`<br />
+<br />
+cat &lt;&lt; EOF &gt; $OutFILE<br />
+# Thermal properties / unit cell (natom)<br />
+<br />
+unit:<br />
+&nbsp; temperature:&nbsp;&nbsp; K<br />
+&nbsp; free_energy:&nbsp;&nbsp; kJ/mol<br />
+&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; J/K/mol<br />
+&nbsp; heat_capacity: J/K/mol<br />
+<br />
+natom:&nbsp;&nbsp;&nbsp;&nbsp; ${N}<br />
+num_modes: ${N3}<br />
+num_integrated_modes: ${N3}<br />
+<br />
+zero_point_energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${Ezp}<br />
+high_T_entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 665.4053108<br />
+<br />
+thermal_properties:<br />
+EOF<br />
+<br />
+echo &quot;- temperature:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000&quot; &gt;&gt; $OutFILE<br />
+printf &quot;&nbsp; free_energy:&nbsp;&nbsp; %15.7f\n&quot; `echo &quot;${Ezp}&quot;` &gt;&gt; $OutFILE<br />
+echo &quot;&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000&quot; &gt;&gt; $OutFILE<br />
+echo &quot;&nbsp; heat_capacity:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000000&quot; &gt;&gt; $OutFILE<br />
+printf &quot;&nbsp; energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %15.7f\n&quot; `echo &quot;${Ezp}&quot;` &gt;&gt; $OutFILE<br />
+echo &quot;&quot; &gt;&gt; $OutFILE<br />
+<br />
+set COUNT=`wc -l $InFILE | awk &#39;{print $1;}&#39;`<br />
+@ i = 7<br />
+while ($i &lt;= $COUNT)<br />
+&nbsp; awk -v n=$i &#39;NR==n {printf &quot;- temperature:&nbsp;&nbsp; %15.7f\n&quot;,$1}&#39; $InFILE &gt;&gt; $OutFILE<br />
+&nbsp; awk -v n=$i -v t=$times &#39;NR==n {printf &quot;&nbsp; free_energy:&nbsp;&nbsp; %15.7f\n&quot;,$3*1312.75*t}&#39; $InFILE &gt;&gt; $OutFILE<br />
+&nbsp; awk -v n=$i -v t=$times &#39;NR==n {printf &quot;&nbsp; entropy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %15.7f\n&quot;,$5*8.314*t}&#39; $InFILE &gt;&gt; $OutFILE<br />
+&nbsp; awk -v n=$i -v t=$times &#39;NR==n {printf &quot;&nbsp; heat_capacity: %15.7f\n&quot;,$4*8.314*t}&#39; $InFILE &gt;&gt; $OutFILE<br />
+&nbsp; awk -v n=$i -v t=$times &#39;NR==n {printf &quot;&nbsp; energy:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %15.7f\n&quot;,$2*1312.75*t}&#39; $InFILE &gt;&gt; $OutFILE<br />
+&nbsp; echo &quot;&quot; &gt;&gt; $OutFILE<br />
+&nbsp; @ i++<br />
+end<br />
+----------<br />
+--------------------------------------------------------------------------------<br />
+■ F_QHA.f90<br />
+（PWscf のコードには下記のようにコメントが書き込まれている）<br />
+<br />
+! Given phonon DOS, calculates:<br />
+!<br />
+! F0&nbsp;&nbsp;&nbsp; - zero vibration energy, ZVE (Ry/cell)<br />
+! E_int - the internal energy&nbsp;&nbsp; (Ry/cell)<br />
+! F_vib - the phonon contribution to the free energy (Ry/cell) including the ZVE<br />
+! C_v&nbsp;&nbsp; - the heat capacity at a constant volume (in units of R, the universal gas constant)<br />
+! S&nbsp;&nbsp;&nbsp;&nbsp; - entropy (in units of R, the universal gas constant )<br />
+! u^2&nbsp;&nbsp; - mean square displacement, in Ang^2<br />
+!<br />
+! Parameters used<br />
+! T in K,<br />
+! F_vib in Ry/cell,<br />
+! C_v in R (the universal gas constant, so that C_v(\infty) \to 3NR)<br />
+!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; where N is the number of atoms considered,<br />
+! S in R<br />
+! Zero vibration energy in Ry/cell,<br />
+! phonon DOS has the norm of 3*N<br />
+!<br />
+! from R to J/(mol K) multiply C_v by 8.314<br />
+! from R to cal/(mol K) multiply C_v by 1.985&nbsp;&nbsp;<br />
+! from Web: R equal to 8.314 joules per Kelvin or 1.985 calories<br />
+!<br />
+! PHDOS.out - name of the phonon DOS file obtained by means of either matdyn.x<br />
+!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; applying dos=.true. option (then copy your phonon DOS file to PHDOS.out)<br />
+!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; or the program with projected phonon DOS.<br />
+!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+! Avoid using another DOS filename otherwise the program will try to read projected DOS.<br />
+!<br />
+! Output file is suitable for visualization using Gnuplot (www.gnuplot.info) or Xmgace (Xmgr).<br />
+!<br />
+! MSD calculations moved to MSD.f90<br />
+! Keep in mind: preliminary u^2 estimations are for simple metals or semiconductors (one atom type only!)<br />
+! If Theta_D is unknown, then set up Theta_D=0 or negatve, so that preliminary u^2 estimations are avoided.<br />
+! High temperature estimaton for u^2 is given at room temperature<br />
+<br />
+--------------------------------------------------------------------------------<br />
+■ References<br />
+[1] <a href="http://indico.ictp.it/event/7921/session/323/contribution/1273/material/0/0.pdf">http://indico.ictp.it/event/7921/session/323/contribution/1273/material/0/0.pdf</a><br />
+[2] <a href="https://github.com/mauropalumbo75/pyqha">https://github.com/mauropalumbo75/pyqha</a> （pyqhaでも体積膨張率などが計算できるかもしれない）<br />
+[3] <a href="https://github.com/dalcorso/thermo_pw">https://github.com/dalcorso/thermo_pw</a> (thermo_pwでも体積膨張率などが計算できるかもしれない）<br />
+--------------------------------------------------------------------------------</p>

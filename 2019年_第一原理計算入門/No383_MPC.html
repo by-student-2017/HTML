@@ -1,0 +1,226 @@
+MPC (https://icme.hpc.msstate.edu/mediawiki/index.php/MPC)<br />
+------------------------------------------------------------------------------<br />
+■ MPC (Windows 10 (64 bit))<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/MPC)<br />
+<br />
+□ Install (Windows 10 (64 bit))<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/File:MPCv4_Win7_MATLAB_R2016b_Installer_web.zip)<br />
+・MPCv4_Win7_MATLAB_R2016b_Installer_web.zip<br />
+1. MPCv4_Win7_MATLAB_R2016b_Installer_web.zip を解凍<br />
+2. MPCv4_Win7_MATLAB_R2016b_Installer_web.exe<br />
+3. All [Next(N)&gt;] &gt; [check] Create a shortcut to the desktop. &gt; All [Next(N)&gt;] &gt; [check] Yes &gt; [Install] &gt; [Finished]<br />
+<br />
+◇ Tutorial<br />
+・MEAM Parameter Calibration Installation and Introduction<br />
+&nbsp; https://www.youtube.com/watch?v=bipKWVFX01I<br />
+・MEAM Parameter Calibration Tool for Potential Optimization<br />
+&nbsp; https://www.youtube.com/watch?v=1YTUQm7xY60&amp;feature=youtu.be<br />
+・Fitting a MEAM potential with MPC<br />
+&nbsp; https://www.youtube.com/watch?v=4hgEv8C_KOw<br />
+<br />
+◇ Example Al<br />
+1. MPCv4 (on Desktop)<br />
+2. File &gt; Load MEAM library file &gt; C:\Program Files\MPCv4\application &gt; library.meam &gt; Open<br />
+3. LIBRARY &gt; 20)Al &gt; (Right-click &quot;20)Al&quot;) &gt; &quot;Add Al as MEAM element&quot;<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;Fix element(s) to 20)Al&quot;<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;secondary 1 ...&quot; &gt; BCC &gt; OK<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;secondary 2 ...&quot; &gt; HCP &gt; OK<br />
+4. File &gt; MEAM parameter file &gt; C:\Program Files\MPCv4\application&nbsp;<br />
+&nbsp; &gt; Al-example.parameter.meam &gt; Open<br />
+&nbsp; (&gt; EMPTY.parameter.meam &gt; Open)<br />
+5. LIBRARY (Right-click &quot;1:Al&quot;) &gt; [check] &quot;INDLUDE in DISPLAY plots&quot;<br />
+6. Plot &gt; Single elements... &gt; E1... &gt; [check] E1 vs. a1<br />
+&nbsp; Single elements... &gt; E2... &gt; [check] E2 vs. a2<br />
+&nbsp; Single elements... &gt; E3... &gt; [check] E3 vs. a3<br />
+7. Selected (under &quot;RUN LAMMPS&quot;)<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; LOAD calibration data for Al<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; Al-Calibration.txt &gt; Open<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E1 vs. a1 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_FCC &gt; Open<br />
+&nbsp;&nbsp;<br />
+&nbsp; LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E2 vs. a2 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_BCC &gt; Open<br />
+&nbsp;&nbsp;<br />
+&nbsp; LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E3 vs. a3 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_HCP &gt; Open<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; IMPORT calibration data for Al<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; VASPdata.mat &gt; Open<br />
+&nbsp; (Ctrl + Right-click)<br />
+&nbsp; &gt; FCC: E1 vs. a1 &gt; OK<br />
+&nbsp; &gt; BCC: E2 vs. a2 &gt; OK<br />
+&nbsp; &gt; HCP: E3 vs. a3 &gt; OK<br />
+&nbsp; &gt; OK<br />
+----------<br />
+9. PARAMETERS (Right-click &quot;1:Al&quot;)<br />
+&nbsp; &gt; [check] Curve:[E1,a1]<br />
+&nbsp; &gt; [check] Curve:[E2,a2]<br />
+&nbsp; &gt; [check] Curve:[E3,a3]<br />
+10. (Right-click &quot;alpha&quot; under LIBRARY) &gt; Add to calibration parameter list &gt; OK<br />
+11. Run &gt; OK<br />
+----------(repeat 10 and 11) e.g., (for library.meam = data for every 1 element)<br />
+12. (Right-click &quot;esub&quot; under LIBRARY) &gt; Add to calibration parameter list &gt; OK<br />
+13. Run &gt; OK<br />
+----------<br />
+----------(repeat 10 and 11) e.g., (for parameter.meam = data for every element-element)<br />
+12. (Right-click &quot;alpha&quot; under PARAMETRS) &gt; Add to calibration parameter list &gt; OK<br />
+13. Run &gt; OK<br />
+----------<br />
+14. scratch (on Desktop) &gt; Calibration_Run &gt; files &gt; local.library.meam (e.g., data for every 1 element)<br />
+&nbsp; scratch (on Desktop) &gt; Calibration_Run &gt; files &gt; local.parameter.meam (e.g., data for atom-atom)<br />
+<br />
+◇ run_vasp (underconstracting)<br />
+1. gedit run_vasp<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set cif_list = `ls *.cif`<br />
+foreach cif_name (${cif_list})<br />
+<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=$HOME/vasp.5.4.1/potpaw_PBE --vasp-cartesian-lattice-vectors --setup-all -f ${cif_folder_name}.cif<br />
+&nbsp; sed -i &#39;s/ISPIN = 2/ISPIN = 1/g&#39; INCAR<br />
+&nbsp; sed -i &#39;22,23d&#39; INCAR<br />
+&nbsp; echo -n &quot;&quot; &gt; ${cif_folder_name}-DFT<br />
+<br />
+&nbsp; set i = 1<br />
+&nbsp; while($i &lt;= $1)<br />
+&nbsp; &nbsp; set scale = `echo &quot;0.98 + 0.02/(($1+1)/2)*$i&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+&nbsp; &nbsp; rm -f -r ${cif_folder_name}_${scale}<br />
+&nbsp; &nbsp; mkdir ${cif_folder_name}_${scale}<br />
+&nbsp; &nbsp; cp INCAR ./${cif_folder_name}_${scale}/INCAR<br />
+&nbsp; &nbsp; cp KPOINTS ./${cif_folder_name}_${scale}/KPOINTS_backup<br />
+&nbsp; &nbsp; cp POTCAR ./${cif_folder_name}_${scale}/POTCAR<br />
+&nbsp; &nbsp; cp POSCAR ./${cif_folder_name}_${scale}/POSCAR<br />
+&nbsp; &nbsp; cd ./${cif_folder_name}_${scale}<br />
+<br />
+&nbsp; &nbsp; sed -i &quot;2 s/1.0/${scale}/g&quot; POSCAR<br />
+<br />
+&nbsp; &nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+<br />
+&nbsp; &nbsp; set TOTEN = `grep &quot;TOTEN&quot; OUTCAR | tail -1 | sed &#39;s/.*=//g&#39; | sed &#39;s/eV//g&#39;`<br />
+<br />
+&nbsp; &nbsp; set La = `awk -v scale=${scale} &#39;NR==3{printf &quot;%6.5f&quot;,($1^2+$2^2+$3^2)^(1/2)*scale}&#39; POSCAR`<br />
+<br />
+&nbsp; &nbsp; cd ..<br />
+&nbsp; &nbsp; echo &quot;${La} ${TOTEN}&quot; &gt;&gt; ${cif_folder_name}-DFT<br />
+<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+&nbsp; echo &quot;----------&quot;<br />
+&nbsp; echo ${cif_folder_name}-DFT<br />
+&nbsp; echo &quot;lattice constant a (Angstrom) | total energy (eV)&quot;<br />
+&nbsp; cat ${cif_folder_name}-DFT<br />
+end<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_vasp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_vasp)<br />
+3. chmod +x run_vasp<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_vasp 7<br />
+&nbsp; (e.g., sample 7 point (need odd))<br />
+<br />
+◇ run_pwscf (underconstracting)<br />
+0. mkdir PSLibrary<br />
+&nbsp; (set potential files, e.g., Al.pbe-n-kjpaw_psl.1.0.0.UPF, etc)<br />
+1. gedit run_pwscf<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set cif_list = `ls *.cif`<br />
+foreach cif_name (${cif_list})<br />
+<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; echo -n &quot;&quot; &gt; ${cif_folder_name}-DFT<br />
+<br />
+&nbsp; set i = 1<br />
+&nbsp; while($i &lt;= $1)<br />
+&nbsp; &nbsp; set scale = `echo &quot;0.98 + 0.02/(($1+1)/2)*$i&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+&nbsp; &nbsp; rm -f -r ${cif_folder_name}_${scale}<br />
+&nbsp; &nbsp; mkdir ${cif_folder_name}_${scale}<br />
+&nbsp; &nbsp; cd ./${cif_folder_name}_${scale}<br />
+&nbsp; &nbsp; cp ../${cif_name} ./<br />
+&nbsp; &nbsp; cif2cell -p pwscf --pwscf-pseudo-PSLibrary-libdr=$HOME/PSLibrary --pwscf-bin-dir=$HOME/q-e-qe-\*/bin --setup-all --k-resolution=0.48 --pwscf-spin=no --pwscf-run-type=scf -f ${cif_name}<br />
+&nbsp; &nbsp; cp ${cif_folder_name}.scf.in tmp.scf.in<br />
+<br />
+&nbsp; &nbsp; set A_line = `grep -n &quot;A =&quot; tmp.scf.in | sed -e &#39;s/:.*//g&#39;`<br />
+&nbsp; &nbsp; set A = `awk -v A_line=${A_line} &#39;NR==A_line{printf &quot;%9.5f&quot;,$3}&#39; tmp.scf.in`<br />
+&nbsp; &nbsp; awk -v A_line=${A_line} -v scale=${scale} &#39;{if(NR==A_line){printf &quot; &nbsp; A = %9.5f \n&quot;,$3*scale}else{printf &quot;%s \n&quot;,$0}}&#39; tmp.scf.in &gt; ${cif_folder_name}.scf.in<br />
+&nbsp; &nbsp; #set cell_param_line = `grep -n &quot;CELL_PARAMETERS&quot; tmp.scf.in | sed -e &#39;s/:.*//g&#39;`<br />
+&nbsp; &nbsp; #awk -v cpl=${cell_param_line} -v scale=${scale} &#39;{if(cpl&lt;NR &amp;&amp; NR&lt;cpl+4){printf &quot; %19.15f %19.15f %19.15f \n&quot;,$1*scale,$2*scale,$3*scale}else{printf &quot;%s \n&quot;,$0}}&#39; &gt; ${cif_folder_name}.scf.in<br />
+&nbsp; &nbsp; set LA = `echo &quot;${A}*${scale}*0.52918&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+<br />
+&nbsp; &nbsp; mpirun -np 2 $HOME/q-e-qe-*/bin/pw.x &lt; ${cif_folder_name}.scf.in | tee ${cif_folder_name}.scf.out<br />
+<br />
+&nbsp; &nbsp; set TOTEN_Ry = `grep &quot; &nbsp;total energy &nbsp;&quot; ${cif_folder_name}.scf.out | tail -1 | sed &#39;s/.*=//g&#39; | sed &#39;s/Ry//g&#39;`<br />
+&nbsp; &nbsp; set TOTEN = `echo &quot;${TOTEN_Ry}*13.6058&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+<br />
+&nbsp; &nbsp; cd ..<br />
+&nbsp; &nbsp; echo &quot;${LA} ${TOTEN}&quot; &gt;&gt; ${cif_folder_name}-DFT<br />
+<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+&nbsp; echo &quot;----------&quot;<br />
+&nbsp; echo ${cif_folder_name}-DFT<br />
+&nbsp; echo &quot;lattice constant A (Angstrom) | total energy (eV)&quot;<br />
+&nbsp; cat ${cif_folder_name}-DFT<br />
+end<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_pwscf<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_pwscf)<br />
+3. chmod +x run_pwscf<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_pwscf 7<br />
+&nbsp; (e.g., sample 7 point (need odd))<br />
+<br />
+※ MPC &gt; making MEAM potentials &gt; lammps&nbsp;<br />
+※ http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/example-meam.html<br />
+※ (1, 2, 3) is related with 1 = 1:A, 2 = 2:B, 3 = 3:C, etc<br />
+&nbsp; A, B, C, ... = element<br />
+&nbsp; e.g., &quot;A = Al, B = Ti, C = V&quot; =&gt; &quot;1 = 1:Al, 2 = 2:Ti, 3 = 3:V&quot;<br />
+------------------------------------------------------------------------------<br />
+■ Information<br />
+<br />
+x: lattice constant (Angstrom)<br />
+<br />
+y: total energy (eV)<br />
+<br />
+alat: lattice constant<br />
+&nbsp; &quot;alat&quot; which should have the effect of shifting the curve to the left and right<br />
+<br />
+esub: &quot;esub&quot; which should have the effect of shifting this curve up and down.&nbsp;<br />
+<br />
+alpha: &quot;alpha&quot; which should be proportional to your modulus&nbsp;<br />
+&nbsp; which will affect the curvature of this curve around the miniumum.<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 原子間ポテンシャルについて<br />
+&nbsp; http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf<br />
+[2] 解析的に求めたEAMポテンシャルの力の実装<br />
+[3] 固体系における原子間ポテンシャルパラメータ最適化ソフトウェアの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia/77/783/77_783_2026/_pdf/-char/ja<br />
+[4] 分子動力学法における原子間ポテンシャルパラメー タの最適化<br />
+[5] アモルファス金属に対する経験的原子間ポテンシャルの適用性評価&nbsp;<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/img/graduation-thesis/2006m_nikkuni.pdf<br />
+[6] CFDEMproject/LAMMPS<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/tools/eam_database<br />
+[7] NIST (Interatomic Potentials Repository)<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Pt/<br />
+[8] lammps / potentials / W_zhou.eam.alloy<br />
+&nbsp; https://github.com/lammps/lammps/blob/master/potentials/W_zhou.eam.alloy<br />
+[9] Zhou X. W., R. A. Johnson, and H. N. G. Wadley, Phys. Rev. B. 69, 144113 (2004)<br />
+[10] &nbsp;X. W. Zhou, H. N. G. Wadley, R. A. Johnson, D. J. Larson, N. Tabat, A. Cerezo, A. K. Petford-Long, G. D. W. Smith, P. H. Clifton, R. L. Martens, and T. F. Kelly, Acta Mater. 49, 4005 (2001).<br />
+[11] &nbsp;H. N. G. Wadley, X. Zhou, R. A. Johnson, and M. Neurock, Prog. Mater. Sci. 46, 329 (2001).<br />
+[12] [9.8. eam database tool] and [9.9. eam generate tool]<br />
+&nbsp; http://www.afs.enea.it/software/lammps/doc17/html/Section_tools.html<br />
+------------------------------------------------------------------------------<br />
+<br />
+&nbsp;

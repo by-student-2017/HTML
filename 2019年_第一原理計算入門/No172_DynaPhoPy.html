@@ -1,0 +1,449 @@
+DynaPhoPy (phonon calculation)&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ phonolammps (Phonon anharmonic properties from Molecular Dynamics)<br />
+(http://abelcarreras.github.io/DynaPhoPy/index.html)<br />
+(https://pypi.org/project/dynaphopy/1.16.4/)<br />
+(https://github.com/abelcarreras/DynaPhoPy) guitub<br />
+<br />
+□ Install (DynaPhoPy) (ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://github.com/abelcarreras/DynaPhoPy.git<br />
+2. cd DynaPhoPy<br />
+3. pip install -r requirements.txt --user<br />
+4. python setup.py install --user<br />
+&nbsp; (pip install dynaphopy --user)<br />
+※ ($HOME/.local/lib/python2.7/site-packages)<br />
+<br />
+□ Install (seekpath) (ubuntu 18.04 LTS (64 bit))<br />
+1. pip install seekpath<br />
+<br />
+□ Install (phonolammps) (ubuntu 18.04 LTS (64 bit))<br />
+(https://github.com/abelcarreras/phonolammps)<br />
+1. git clone https://github.com/abelcarreras/phonolammps.git<br />
+2. cd phonolammps<br />
+3. python setup.py install --user<br />
+4. pip install phonoLAMMPS --user<br />
+※ ($HOME/.local/lib/python2.7/site-packages)<br />
+<br />
+□ Install (lammps for python) (ubuntu 18.04 LTS (64 bit))<br />
+1. git clone git://github.com/lammps/lammps.git<br />
+2. cd ~/lammps/src<br />
+3. make package-status<br />
+4. make yes-MANYBODY yes-MOLECULE yes-KSPACE yes-USER-MISC yes-PYTHON<br />
+5. make serial mode=shlib LMP_INC=&quot;-DLAMMPS_EXCEPTIONS&quot;<br />
+&nbsp; (or make mpi mode=shlib LMP_INC=&quot;-DLAMMPS_EXCEPTIONS&quot;)<br />
+6. make install-python<br />
+◇ Test<br />
+1. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+2. python<br />
+&nbsp; import lammps<br />
+※ Using Python in LAMMPS<br />
+&nbsp; https://lammps.sandia.gov/workshops/Aug17/pdf/berger.pdf<br />
+&nbsp;&nbsp;<br />
+□ Install (lammps for DynaPhoPy) (ubuntu 18.04 LTS (64 bit))<br />
+1. git clone git://github.com/lammps/lammps.git<br />
+2. cd ~/lammps/src<br />
+3. make package-status<br />
+4. make yes-MANYBODY yes-MOLECULE yes-KSPACE yes-USER-MISC yes-PYTHON<br />
+5. make serial<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Lammps + DynaPhoPy<br />
+(ubuntu 18.04 LTS (64 bit))<br />
+<br />
+◇ Examples (LAMMPS calculations)<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+1. cd ~/phonolammps/examples/Si<br />
+2. phonolammps in.lammps --dim 2 2 2 -pa 0.0 0.5 0.5 0.5 0.0 0.5 0.5 0.5 0.0 -c POSCAR_unitcell -p<br />
+<br />
+◇ Examples (LAMMPS calculations)<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+1. cd ~/phonolammps/examples/GaN<br />
+2. phonolammps in.lammps -c POSCAR_unitcell --dim 2 2 2 -p<br />
+3. phonolammps in.lammps -c POSCAR_unitcell --dim 2 2 2 -p -t 800<br />
+<br />
+◇ Examples (LAMMPS calculation)<br />
+1. cd ~/DynaPhoPy/examples/GaN_lammps<br />
+2. dynaphopy input_gan -c_lammps data.gan --dim 3 3 3<br />
+3. $HOME/lammps/src/lmp_serial &lt; in.md_pos<br />
+4. dynaphopy input_gan gan_2000_test.lammpstrj -ts 0.001 -sdata -thm --normalize_dos -sfc renormalized_fc<br />
+<br />
+◇ Examples (LAMMPS calculation)<br />
+1. cd ~/DynaPhoPy/examples/GaN_lammps<br />
+2. dynaphopy input_gan -c_lammps data.gan --dim 3 3 3<br />
+3. $HOME/lammps/src/lmp_serial &lt; in.md_pos<br />
+4. dynaphopy input_gan gan_2000_test.lammpstrj -ts 0.001 -i<br />
+&nbsp; (dynaphopy input_gan gan_2000_test.lammpstrj -i)<br />
+<br />
+◇ Usage (GaN, 800K, Renormalized &nbsp;phonon dispersion)<br />
+1. gedit POSCAR<br />
+-----<br />
+Ga N<br />
+1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 3.1900000572 &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp;-1.5950000286 &nbsp; &nbsp; &nbsp; 2.762621076 &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; 5.1890001297<br />
+&nbsp; &nbsp;Ga &nbsp; &nbsp;N<br />
+&nbsp; &nbsp; 2 &nbsp; &nbsp;2<br />
+Direct<br />
+&nbsp; &nbsp; &nbsp;0.66666669 &nbsp; &nbsp; &nbsp; &nbsp; 0.33333334 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.33333331 &nbsp; &nbsp; &nbsp; &nbsp; 0.66666663 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.66666669 &nbsp; &nbsp; &nbsp; &nbsp; 0.33333334 &nbsp; &nbsp; &nbsp; &nbsp; 0.375000000<br />
+&nbsp; &nbsp; &nbsp;0.33333331 &nbsp; &nbsp; &nbsp; &nbsp; 0.66666663 &nbsp; &nbsp; &nbsp; &nbsp; 0.875000000<br />
+-----<br />
+&nbsp; (or 1. cif2cell --no-reduce -p vasp -f GaN.cif&quot;)<br />
+2. cp POSCAR POSCAR_unitcell<br />
+3. gedit input_file_str<br />
+-----<br />
+STRUCTURE FILE POSCAR<br />
+POSCAR_unitcell<br />
+-----<br />
+4. dynaphopy input_file_str --dim 1 1 1 -c_lammps data.gan111<br />
+5. gedit in.lammps<br />
+-----<br />
+units metal<br />
+boundary p p p<br />
+box tilt large<br />
+atom_style atomic<br />
+read_data data.gan111<br />
+pair_style tersoff<br />
+pair_coeff * * GaN.tersoff Ga N<br />
+neighbor 0.3 bin<br />
+-----<br />
+6. cp ~/lammps/potentials/GeN.tersoff ./<br />
+7. phonolammps in.lammps --dim 2 2 2 -c POSCAR_unitcell -p -t 800<br />
+<br />
+◇ Usage (FCC Si, 800K, Renormalized &nbsp;phonon dispersion, etc)<br />
+1. gedit POSCAR<br />
+-----<br />
+&nbsp;Si &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp;1.00000000000000 &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp;5.4365330000000000 &nbsp; &nbsp;0.0000000000000000 &nbsp; &nbsp;0.0000000000000000<br />
+&nbsp; &nbsp; &nbsp;0.0000000000000000 &nbsp; &nbsp;5.4365330000000000 &nbsp; &nbsp;0.0000000000000000<br />
+&nbsp; &nbsp; &nbsp;0.0000000000000000 &nbsp; &nbsp;0.0000000000000000 &nbsp; &nbsp;5.4365330000000000<br />
+&nbsp; &nbsp;Si<br />
+&nbsp; &nbsp; &nbsp;8<br />
+Direct<br />
+&nbsp; 0.8750000000000000 &nbsp;0.8750000000000000 &nbsp;0.8750000000000000<br />
+&nbsp; 0.8750000000000000 &nbsp;0.3750000000000000 &nbsp;0.3750000000000000<br />
+&nbsp; 0.3750000000000000 &nbsp;0.8750000000000000 &nbsp;0.3750000000000000<br />
+&nbsp; 0.3750000000000000 &nbsp;0.3750000000000000 &nbsp;0.8750000000000000<br />
+&nbsp; 0.1250000000000000 &nbsp;0.1250000000000000 &nbsp;0.1250000000000000<br />
+&nbsp; 0.1250000000000000 &nbsp;0.6250000000000000 &nbsp;0.6250000000000000<br />
+&nbsp; 0.6250000000000000 &nbsp;0.1250000000000000 &nbsp;0.6250000000000000<br />
+&nbsp; 0.6250000000000000 &nbsp;0.6250000000000000 &nbsp;0.1250000000000000<br />
+-----<br />
+&nbsp; (or 1. cif2cell --no-reduce -p vasp -f Si.cif&quot;)<br />
+2. cp POSCAR POSCAR_unitcell<br />
+3. gedit input_file_str<br />
+-----<br />
+STRUCTURE FILE POSCAR<br />
+POSCAR_unitcell<br />
+-----<br />
+4. dynaphopy input_file_str --dim 1 1 1 -c_lammps data.si111<br />
+5. gedit in.lammps<br />
+-----<br />
+units metal<br />
+boundary p p p<br />
+box tilt large<br />
+atom_style atomic<br />
+read_data data.si111<br />
+pair_style tersoff<br />
+pair_coeff * * SiCGe.tersoff Si(C)<br />
+neighbor 0.3 bin<br />
+-----<br />
+6. cp ~/lammps/potentials/SiCGe.tersoff ./<br />
+7. phonolammps in.lammps --dim 2 2 2 -c POSCAR_unitcell -t 800<br />
+&nbsp; (you can get FORCE_CONSTANTS)<br />
+8. dynaphopy input_file_str --dim 2 2 2 -c_lammps data.si222<br />
+9. gedit input_file<br />
+-----<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; metal &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #Use this units for DynaPhoPy<br />
+atom_style &nbsp; &nbsp; &nbsp;atomic<br />
+<br />
+boundary &nbsp; &nbsp; &nbsp; &nbsp;p p p &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #Periodical conditions<br />
+<br />
+read_data &nbsp; &nbsp; &nbsp; data.si222 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#Structure file<br />
+<br />
+pair_style &nbsp; &nbsp; &nbsp;tersoff<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * SiCGe.tersoff Si(C) &nbsp; &nbsp; #Empirical potential<br />
+<br />
+variable &nbsp; &nbsp; &nbsp; &nbsp;t equal 800 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #Define the temperature<br />
+<br />
+neighbor &nbsp; &nbsp; &nbsp; &nbsp;0.3 bin<br />
+neigh_modify &nbsp; &nbsp;delay 0<br />
+<br />
+timestep &nbsp; &nbsp; &nbsp; &nbsp;0.001 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #Define time step<br />
+<br />
+thermo_style &nbsp; &nbsp;custom step etotal temp vol press<br />
+thermo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2000<br />
+<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp;all create $t 3627941 dist gaussian mom yes<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp;all scale $t<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; int all nvt temp $t $t 0.5 &nbsp;#Canonical ensemble<br />
+<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dynaphopy all custom 1 trajectory.lammpstrj x y z<br />
+dump_modify &nbsp; &nbsp; dynaphopy sort id<br />
+#dump_modify &nbsp; &nbsp; dynaphopy format &quot;%16.10f %16.10f %16.10f&quot;<br />
+<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 20000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;#Number of timesteps<br />
+-----<br />
+&nbsp; (dynaphopy HP: &quot;thermo 10000&quot;, &quot;run 1000000&quot;)<br />
+10. $HOME/lammps/src/lmp_serial &lt; input_file<br />
+11. geidt input_dyna<br />
+-----<br />
+STRUCTURE FILE POSCAR<br />
+POSCAR_unitcell<br />
+<br />
+FORCE CONSTANTS<br />
+FORCE_CONSTANTS<br />
+<br />
+PRIMITIVE MATRIX<br />
+0.0 0.5 0.5<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+<br />
+SUPERCELL MATRIX PHONOPY<br />
+2 0 0<br />
+0 2 0<br />
+0 0 2<br />
+<br />
+BANDS<br />
+0.0, &nbsp; 0.0, &nbsp; 0.0 &nbsp; &nbsp; &nbsp; &nbsp; 0.5, &nbsp; 0.0, &nbsp;0.5<br />
+0.5, &nbsp; 0.0, &nbsp; 0.5 &nbsp; &nbsp; &nbsp; &nbsp; 0.625 &nbsp;0.25 &nbsp;0.625<br />
+0.375, 0.375, 0.75 &nbsp; &nbsp; &nbsp; &nbsp;0.0, &nbsp; 0.0, &nbsp;0.0<br />
+0.0, &nbsp; 0.0, &nbsp; 0.0 &nbsp; &nbsp; &nbsp; &nbsp; 0.5, &nbsp; 0.5, &nbsp;0.5<br />
+-----<br />
+12. dynaphopy input_dyna trajectory.lammpstrj -n 20000 -ts 0.001 -i<br />
+&nbsp; (dynaphopy HP: &quot;-n 50000&quot;)<br />
+◇ Renormalized &nbsp;phonon dispersion<br />
+13. 6<br />
+&nbsp; (Renormalized phonon dispersion)<br />
+14. 1<br />
+&nbsp; (Harmonic and renormalized phonon dispersion relations)<br />
+15. 0<br />
+&nbsp; (Return)<br />
+◇ Phonon DOS<br />
+13. 1<br />
+&nbsp; (Harmonic calculations)<br />
+14. 4<br />
+&nbsp; (Plot phonon density of states )<br />
+15. 0<br />
+&nbsp; (Return)<br />
+◇ Renormalized Phonon DOS (on Thermal properties)<br />
+13. 3<br />
+&nbsp; (Thermal properties)<br />
+14. 0<br />
+&nbsp; (Return)<br />
+◇ Renormalized Phonon DOS and Power spectrum and&nbsp;<br />
+13. 5<br />
+&nbsp; (Power spectrum)<br />
+14. 1<br />
+&nbsp; (Full power spectrum )<br />
+15. 0<br />
+&nbsp; (Return)<br />
+※ Before &quot;Return&quot;, close graph windows by &quot;x&quot; botton.<br />
+<br />
+※ $HOME/.local/bin<br />
+※ Finite temperature renormalized force constants&nbsp;<br />
+※ Renormalized calculation (Lammps or VASP(MD mode))<br />
+------------------------------------------------------------------------------<br />
+■ VASP + DynaPhoPy<br />
+(ubuntu 18.04 LTS (64 bit))<br />
+<br />
+◇ Examples (VASP calculations) (no check)<br />
+1. cd ~/DynaPhoPy/examples<br />
+2. Si_VASP<br />
+(2.5. cp ~/vasp.5.4.1/potpaw_PBE/Si/POTCAR ./)<br />
+3. gedit input_file<br />
+-----<br />
+STRUCTURE FILE POSCAR<br />
+POSCAR_unitcell<br />
+-----<br />
+3. dynaphopy input_file --dim 2 2 2 -c_poscar SPOSCAR<br />
+&nbsp; (dynaphopy POSCAR_unitcell --dim 2 2 2 -c_poscar SPOSCAR)<br />
+&nbsp; (phonopy -d --dim=&quot;2 2 2&quot; -c POSCAR_unitcell)<br />
+4. gedit run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk &#39;{printf(&quot;%03d&quot;,$1)}&#39;`<br />
+&nbsp; mkdir disp-${num}<br />
+&nbsp; cd disp-${num}<br />
+&nbsp; cp ../POSCAR-${num} ./POSCAR<br />
+&nbsp; cp ../INCAR ./<br />
+&nbsp; cp ../POTCAR ./<br />
+&nbsp; #cp ../KPOINTS ./<br />
+&nbsp; $1<br />
+&nbsp; cd ../<br />
+done<br />
+-----<br />
+5. chmod +x run<br />
+&nbsp; sed -i &#39;s/\r//g&#39; run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run)<br />
+6. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 1<br />
+&nbsp; (please, replace 1 to max * of POSCAR-*)<br />
+7. phonopy -f disp-001/vasprun.xml<br />
+&nbsp; (phonopy -f disp-{001..003}/vasprun.xml)<br />
+8. gedit input_file<br />
+-----<br />
+STRUCTURE FILE POSCAR<br />
+./POSCAR_unitcell<br />
+<br />
+FORCE SETS<br />
+./FORCE_SETS<br />
+<br />
+PRIMITIVE MATRIX<br />
+0.0 0.5 0.5<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+<br />
+SUPERCELL MATRIX PHONOPY<br />
+2 0 0<br />
+0 2 0<br />
+0 0 2<br />
+<br />
+BANDS<br />
+0.0, &nbsp; 0.0, &nbsp; 0.0 &nbsp; &nbsp; &nbsp; &nbsp; 0.5, &nbsp; 0.0, &nbsp;0.5<br />
+0.5, &nbsp; 0.0, &nbsp; 0.5 &nbsp; &nbsp; &nbsp; &nbsp; 0.625 &nbsp;0.25 &nbsp;0.625<br />
+0.375, 0.375, 0.75 &nbsp; &nbsp; &nbsp; &nbsp;0.0, &nbsp; 0.0, &nbsp;0.0<br />
+0.0, &nbsp; 0.0, &nbsp; 0.0 &nbsp; &nbsp; &nbsp; &nbsp; 0.5, &nbsp; 0.5, &nbsp;0.5<br />
+-----<br />
+9. cp disp-001/XDATCAR ./<br />
+10. dynaphopy input_file XDATCAR -n 20000 -ts 0.0007 -pw -q 0.5 0.5 0.5 -r 0 16<br />
+11. cp disp-001/OUTCAR ./<br />
+12. dynaphopy input_file OUTCAR -n 20000 -sw spectrum.dat -q 0.5 0.0 0.5<br />
+13. dynaphopy input_file XDATCAR -n 20000 -i -q 0.5 0.0 0.5<br />
+&nbsp; (dynaphopy input_file OUTCAR -n 20000 -i)<br />
+◇ Renormalized &nbsp;phonon dispersion<br />
+14. 6<br />
+&nbsp; (Renormalized phonon dispersion)<br />
+15. 1<br />
+&nbsp; (Harmonic and renormalized phonon dispersion relations)<br />
+16. 0<br />
+&nbsp; (Return)<br />
+◇ Phonon DOS<br />
+14. 1<br />
+&nbsp; (Harmonic calculations)<br />
+15. 4<br />
+&nbsp; (Plot phonon density of states )<br />
+16. 0<br />
+&nbsp; (Return)<br />
+◇ Renormalized Phonon DOS (on Thermal properties)<br />
+14. 3<br />
+&nbsp; (Thermal properties)<br />
+15. 0<br />
+&nbsp; (Return)<br />
+◇ Renormalized Phonon DOS and Power spectrum and&nbsp;<br />
+14. 5<br />
+&nbsp; (Power spectrum)<br />
+15. 1<br />
+&nbsp; (Full power spectrum )<br />
+16. 0<br />
+&nbsp; (Return)<br />
+※ Before &quot;Return&quot;, close graph windows by &quot;x&quot; botton.<br />
+<br />
+□ INCAR (example)<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; PREC = Normal &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Precision<br />
+&nbsp; &nbsp; IBRION = 0<br />
+&nbsp; &nbsp; &nbsp; ISYM = 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Disable symmetry&nbsp;<br />
+&nbsp; &nbsp; &nbsp;SMASS = 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Define Thermostat<br />
+&nbsp; &nbsp; MDALGO = 2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Nose Hoover thermostat<br />
+&nbsp; &nbsp; &nbsp;POTIM = 0.7 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Step length<br />
+&nbsp; &nbsp; &nbsp;TEBEG = 800 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Temperature<br />
+&nbsp; &nbsp; &nbsp; &nbsp;NSW = 200000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Number of time steps<br />
+&nbsp; &nbsp; NELMIN = 2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; NELM = 100 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp;ENCUT = 300<br />
+&nbsp; &nbsp; &nbsp;EDIFF = 1.000000e-06 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Energy precision<br />
+&nbsp; &nbsp; ISMEAR = 0<br />
+&nbsp; &nbsp; &nbsp;SIGMA = 0.01<br />
+&nbsp; &nbsp; &nbsp;IALGO = 38<br />
+&nbsp; &nbsp; &nbsp; &nbsp;GGA = PS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+&nbsp; &nbsp; &nbsp;LREAL = .TRUE.<br />
+&nbsp; &nbsp;ADDGRID = .TRUE.<br />
+&nbsp; &nbsp; &nbsp;LWAVE = .FALSE.<br />
+&nbsp; &nbsp; LCHARG = .FALSE.<br />
+-----<br />
+※ test case: e.g.,<br />
+&nbsp; TEBEG = 800 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Temperature<br />
+&nbsp; &nbsp; NSW = 20000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Number of time steps<br />
+&nbsp; ENCUT = 180 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Si<br />
+&nbsp; EDIFF = 1.000000e-05 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Energy precision<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 講習会資料<br />
+&nbsp; http://md.jsms.jp/download/<br />
+[2] LAMMPSで構造最適化<br />
+&nbsp; https://justice-vsbr.hatenablog.com/entry/2018/08/02/101057<br />
+&nbsp; 色々と試して何が問題化を明らかにしてくださっているのでとても助かる<br />
+[3] 6.12. MD ? LAMMPS メニュー (Winmostar User Manual)<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V9/html/winmos/md/winmos_lammps.html<br />
+[4] 分子動力学計算を活用したインシリコ創薬<br />
+&nbsp; https://www.r-ccs.riken.jp/aicssite/wp-content/uploads/2016/05/20151202hirokawa.pdf<br />
+&nbsp; https://www.r-ccs.riken.jp/course/life_science2_2.4.html (動画)<br />
+&nbsp; https://www.youtube.com/watch?v=UBW1TxwfqhE (Youtube動画)<br />
+[5] LAMMPS入門の手引き 0:環境の設定<br />
+&nbsp; https://qiita.com/tkmtSo/items/34a0098cb967f2a9fdfe<br />
+[6] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+&nbsp; ・velocityコマンドは原子に強制的に初速を与えるコマンドです。はじめが0ケルビンだと全く動かないため、初速を適当に与える意味があります。<br />
+&nbsp; ・minimizeはrunコマンドと似ていますが、動力学計算を行うのではなく、よりエネルギーが低くなるように原子を動かすコマンドです。なので、minimizeが終わったときはエネルギーが(局所)安定点に達した構造が得られることが期待されます。つまり0ケルビンのときの構造です。デフォルトはCG法が使われています。<br />
+&nbsp; ・fix nvtコマンドは系にNVTアンサンブルを適用するコマンドです。つまり温度制御をかけます。後ろの3つの値は「MD開始時の熱浴の温度」「MD終了時の熱浴の温度」「熱浴の順応性」です。3つ目の値が少し直感的でない値ですが、曖昧に表現すると(人工的な)熱浴に対する慣性のようなパラメータです。おおよそtimestepで設定した値の100倍くらいにしておけば大丈夫です。(圧力制御の場合は1000倍程度)<br />
+[7] Input files: samples<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps.html<br />
+[8] LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+[9] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+[10] 長岡正隆ら「すぐできる分子シミュレーションビギナーズマニュアル」KS化学専門書<br />
+[11] Molecular Mechanics (MM) 計算（z軸方向のみの緩和）<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps2.html<br />
+&nbsp; LAMMPS/examples/USER/phonon/3-3D-FCC-Cu-EAM/<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/examples/USER/phonon/3-3D-FCC-Cu-EAM<br />
+[12] Examples (LAMMPS calculations)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/examples.html<br />
+[13] DynaPhoPy (Phonon anharmonic properties from Molecular Dynamics)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/index.html<br />
+&nbsp; https://pypi.org/project/dynaphopy/1.16.4/<br />
+[14] PhonTS<br />
+&nbsp; http://phonts.mse.ufl.edu/<br />
+[15] LAMMPS ? Installation&nbsp;<br />
+&nbsp; http://www.nanophysics.pl/MolecularDynamics/lammps-installation.pdf<br />
+[16] EAM potentials (Phonon Dispersion Curves)<br />
+&nbsp; https://sites.google.com/site/eampotentials/Al<br />
+[17] GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg53394.html<br />
+[18] 新規モンテカルロ計算プログラムの開発と各種触媒系への応用<br />
+&nbsp; http://www.aki.che.tohoku.ac.jp/prev/htm5/2b16petro.pdf<br />
+[19] 分子吸着による固体表面ナノ構造解析<br />
+&nbsp; https://www.scas.co.jp/scas-news/sn-back-issues/pdf/14/talk_14.pdf<br />
+[20] LAMMPS input for water (Avogadro)<br />
+&nbsp; https://avogadro.cc/docs/extensions/lammps-input-for-water/<br />
+[21] Understanding the adsorption process in ZIF-8 using high pressure crystallography and computational modelling<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[22] Adsorbate-induced lattice deformation in IRMOF-74 series<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/<br />
+[23] [lammps-users] GCMC gas adsorption<br />
+&nbsp; https://lammps.sandia.gov/threads/msg74437.html<br />
+[24] ASE<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/ase.html<br />
+[25] 分子シミュレーションスクール2018：シミュレーションの全体像・概論<br />
+&nbsp; http://www.mitsuhiromatsumoto.mech.kyoto-u.ac.jp/<br />
+[26] [lammps-users] Problems of temperature calculation for fix GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg58606.html<br />
+[27] LAMMPSの使い方<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/<br />
+[28] 原子間ポテンシャルの開発を支援するソフトウェア（kPot）<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/potenfit/<br />
+[29] 9.1. LAMMPS キーワード設定<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V7/calcmanual_jp.html<br />
+[30] 分子動力学計算（LAMMPS）<br />
+&nbsp; https://mochirixi.hatenadiary.com/archive/category/分子動力学計算%EF%BC%88LAMMPS%EF%BC%89<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

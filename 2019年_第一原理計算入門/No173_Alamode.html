@@ -1,0 +1,1761 @@
+ALAMODE (phonon calculation) (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.1.0<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+・alamode-v.1.1.0.tar.gz<br />
+0. wget wget https://github.com/ttadano/alamode/archive/v.1.1.0.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.1.0.tar.gz<br />
+2. cd ~/alamode-v.1.1.0<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -qopenmp -std=c++11<br />
+INCLUDE = -I../include -I$(HOME)/include -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl -L$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+SPGLIB_ROOT = ${HOME}/spglib<br />
+INCLUDE = -I../include -I$(HOME)/include -I/usr/include/eigen3 -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -L$(SPGLIB_ROOT)/lib -Wl,--rpath=$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} -o $@ ${OBJS} ${LIBS} ${LDFLAGS}<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. gedit Makefile<br />
+-----before<br />
+# OSX (gcc)<br />
+CXX = g++-8<br />
+-----<br />
+-----after<br />
+# OSX (gcc)<br />
+#CXX = g++-8<br />
+<br />
+#gfortran compiler<br />
+CXX = mpicxx<br />
+-----<br />
+15. make -j<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.1.0/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----before<br />
+LAMMPS=/usr/local/bin/lmp<br />
+ALAMODE_ROOT=${HOME}/Work/alamode/<br />
+-----<br />
+-----after<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.1.0<br />
+-----<br />
+3. chmod +x run_all.sh<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.1.0/tools/plotband.py si222.bands<br />
+6. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222_10.kl&quot; usi 1:2 w lp<br />
+7. quit<br />
+8. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc kappa_boundary --size 1.0e+6 si222_10.result &gt; &nbsp;si222_boundary_1mm.kl<br />
+9. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222_10.kl&quot; usi 1:2 w lp, &quot;si222_boundary_1mm.kl&quot; usi 1:2 w lp<br />
+10. quit<br />
+11. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc tau --temp 300 si222_10.result &gt; tau300K_10.dat<br />
+12. gnuplot<br />
+&nbsp; set xrange [1:]<br />
+&nbsp; set logscale y<br />
+&nbsp; set xlabel &quot;Phonon frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Phonon lifetime (ps)&quot;<br />
+&nbsp; plot &quot;tau300K_10.dat&quot; using 3:4 w p<br />
+13. quit<br />
+14. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc cumulative --temp 300 --length 10000:5 si222_10.result &gt; cumulative_300K_10.dat<br />
+15. gnuplot<br />
+&nbsp; set logscale x<br />
+&nbsp; set xlabel &quot;L (nm)&quot;<br />
+&nbsp; set ylabel &quot;Cumulative kappa (W/mK)&quot;<br />
+&nbsp; plot &quot;cumulative_300K_10.dat&quot; using 1:2 w lp<br />
+16. quit<br />
+17. gedit si_RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+<br />
+&nbsp; EMIN = 0; EMAX = 550; DELTA_E = 1.0 # &lt;-- frequency range<br />
+/<br />
+<br />
+&amp;cell<br />
+10.203<br />
+&nbsp;0.0 0.5 0.5<br />
+&nbsp;0.5 0.0 0.5<br />
+&nbsp;0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp;2<br />
+&nbsp;10 10 10<br />
+/<br />
+<br />
+&amp;analysis<br />
+&nbsp;KAPPA_SPEC = 1 # compute spectrum of kappa<br />
+/<br />
+-----<br />
+18. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA2.log<br />
+19. awk &#39;{if ($1 == 300.0) print $0}&#39; si222.kl_spec &gt; si222_300K_10.kl_spec<br />
+20. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Spectrum of kappa (W/mK/cm^{-1})&quot;<br />
+&nbsp; plot &quot;si222_300K_10.kl_spec&quot; using 2:3 w l lt 2 lw 2<br />
+21. quit<br />
+<br />
+□ test (SCPH)&nbsp;<br />
+1. cd ~/alamode-v.1.1.0/example/PbTe<br />
+2. bunzip2 PbTe_anharm444.xml.bz2<br />
+3. ~/alamode-v.1.1.0/anphon/anphon scph.in &gt; scph.log<br />
+4. (remove &quot;Temperature [K],&quot; and &quot; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; &nbsp;&quot;, etc)<br />
+&nbsp; sed -i &#39;s/Temperature \[K\],//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 100.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 200.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 300.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 400.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 500.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 600.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 700.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 800.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 900.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp;1000.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+5. python ~/alamode-v.1.1.0/tools/plotband.py PbTe_scph4-4.scph_bands<br />
+<br />
+□ test (SCPH) (300 K only)<br />
+1. cd ~/alamode-v.1.1.0/example/PbTe<br />
+2. bunzip2 PbTe_anharm444.xml.bz2<br />
+3. ~/alamode-v.1.1.0/anphon/anphon scph.in &gt; scph.log<br />
+-----<br />
+4. cp scph.in scph_300K.in<br />
+5. gedit scph_300K.in<br />
+-----before<br />
+&nbsp;TMIN = 0; TMAX = 1000; DT = 100<br />
+-----<br />
+-----after<br />
+&nbsp;TMIN = 300; TMAX = 300; DT = 0<br />
+-----<br />
+6. ~/alamode-v.1.1.0/anphon/anphon scph_300K.in &gt; scph_300K.log<br />
+7. (remove &quot;Temperature [K],&quot; and &quot; &nbsp; &nbsp; 300.000000 &nbsp; &nbsp;&quot;)<br />
+&nbsp; sed -i &#39;s/Temperature \[K\],//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 300.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+8. python ~/alamode-v.1.1.0/tools/plotband.py PbTe_scph4-4.scph_bands<br />
+------------------------------------------------------------------------------<br />
+■ Example<br />
+<br />
+□ Si_LAMMPS<br />
+◇(1. Get displacement patterns by alm)<br />
+1. cd ~/alamode-v.1.1.0/example/Si_LAMMPS<br />
+2. cp ../Si/si_alm.in ./<br />
+3. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log1<br />
+◇(2. Calculate atomic forces for the displaced configurations)<br />
+4. python ~/alamode-v.1.1.0/tools/displace.py --LAMMPS=Si222.lammps --mag=0.01 --prefix harm &nbsp;si222.pattern_HARMONIC<br />
+5. cp si_alm.in si_alm2.in<br />
+◇(5. Estimate cubic IFCs for thermal conductivity)<br />
+6. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 20.406 # factor in Bohr unit<br />
+&nbsp; 1.0 0.0 0.0 # a1<br />
+&nbsp; 0.0 1.0 0.0 # a2<br />
+&nbsp; 0.0 0.0 1.0 # a3<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 20.406 # factor in Bohr unit<br />
+&nbsp; 1.0 0.0 0.0 # a1<br />
+&nbsp; 0.0 1.0 0.0 # a2<br />
+&nbsp; 0.0 0.0 1.0 # a3<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None 7.3<br />
+/<br />
+-----<br />
+7. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log<br />
+8. python ~/alamode-v.1.1.0/tools/displace.py --LAMMPS=Si222.lammps --mag=0.04 --prefix cubic si222_cubic.pattern_ANHARM3<br />
+9. gedit lammps_run.sh<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+cp harm1.lammps tmp.lammps<br />
+$HOME/lammps/src/lmp_serial &lt; in.sw &gt; log.lammps<br />
+cp XFSET XFSET.harm1<br />
+<br />
+for ((i=1;i&lt;=20;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk &#39;{printf(&quot;%02d&quot;,$1)}&#39;`<br />
+&nbsp; cp cubic${num}.lammps tmp.lammps<br />
+&nbsp; $HOME/lammps/src/lmp_serial &lt; in.sw &gt; log.lammps<br />
+&nbsp; cp XFSET XFSET.cubic${num}<br />
+done<br />
+-----<br />
+10. chmod +x lammps_run.sh<br />
+&nbsp; sed -i &#39;s/\r//g&#39; lammps_run.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place lammps_run.sh)<br />
+11. ./lammps_run.sh<br />
+12. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;optimize<br />
+&nbsp; DFSET = DFSET_cubic<br />
+&nbsp; FC2XML = si222.xml # Fix harmonic IFCs<br />
+/<br />
+-----<br />
+13. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log<br />
+14. python ~/alamode-v.1.1.0/tools/extract.py --LAMMPS=Si222.lammps XFSET.harm1 &gt; DFSET_harmonic<br />
+15. python ~/alamode-v.1.1.0/tools/extract.py --LAMMPS=Si222.lammps XFSET.cubic* &gt; DFSET_cubic<br />
+◇ (3. Estimate force constants by fitting)<br />
+16. gedit si_alm.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize &nbsp; # &lt;-- here<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+-----<br />
+17. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log2<br />
+◇(4. Calculate phonon dispersion and phonon DOS)<br />
+18. cp ../Si/si_phband.in ./<br />
+19. ~/alamode-v.1.1.0/anphon/anphon si_phband.in &gt; si_phband.log<br />
+20. python ~/alamode-v.1.1.0/tools/plotband.py si222.bands<br />
+&nbsp; (python ~/alamode-v.1.1.0/tools/plotband.py -h)<br />
+21. cp si_phband.in si_phdos.in<br />
+22. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 &nbsp;# KPMODE = 2: uniform mesh mode<br />
+&nbsp; 20 20 20<br />
+/<br />
+-----<br />
+23. ~/alamode-v.1.1.0/anphon/anphon si_phdos.in &gt; si_phdos.log<br />
+24. python ~/alamode-v.1.1.0/tools/plotdos.py --emax 600 --nokey si222.dos<br />
+◇ (6. Calculate thermal conductivity)<br />
+(24.5 cp si_phdos.in si_RTA.in)<br />
+25. gedit RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 10 10 10<br />
+/<br />
+-----<br />
+26. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA.log &amp;<br />
+<br />
+<br />
+□ Si (PWscf)<br />
+◇(1. Get displacement patterns by alm)<br />
+1. cd ~/alamode-v.1.1.0/example/Si<br />
+2. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log<br />
+◇(2. Calculate atomic forces for the displaced configurations)<br />
+3. cp ./reference/si222.pw.in ./<br />
+4. gedit si222.pw.in<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;pseudo_dir = &#39;/home/tadano/etc/pseudo/&#39;,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+ATOMIC_SPECIES<br />
+&nbsp; &nbsp;Si &nbsp; 28.0855 &nbsp;Si.pz-n-kjpaw_psl.0.1.UPF<br />
+&nbsp; &nbsp;<br />
+K_POINTS automatic<br />
+&nbsp;4 4 4 1 1 1<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;pseudo_dir = &#39;&#39;,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+ATOMIC_SPECIES<br />
+&nbsp; &nbsp;Si &nbsp; 28.0855 &nbsp;Si.pbe-n-kjpaw_psl.1.0.0.UPF<br />
+&nbsp; &nbsp;<br />
+K_POINTS automatic<br />
+&nbsp;2 2 2 1 1 1<br />
+-----<br />
+(Monkhorst-Pack: Odd includes Gamma, Even is not include Gamma. Recommend even k-point)<br />
+5. python ~/alamode-v.1.1.0/tools/displace.py --QE=si222.pw.in --mag=0.01 si222.pattern_HARMONIC<br />
+6. cp disp1.pw.in disp01.pw.in<br />
+&nbsp; cp disp2.pw.in disp02.pw.in<br />
+&nbsp; cp disp3.pw.in disp03.pw.in<br />
+&nbsp; cp disp4.pw.in disp04.pw.in<br />
+&nbsp; cp disp5.pw.in disp05.pw.in<br />
+&nbsp; cp disp6.pw.in disp06.pw.in<br />
+&nbsp; cp disp7.pw.in disp07.pw.in<br />
+&nbsp; cp disp8.pw.in disp08.pw.in<br />
+&nbsp; cp disp9.pw.in disp09.pw.in<br />
+7. gedit run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+# Assume we have 20 displaced configurations for QE [disp01.pw.in, ... , disp20.pw.in].<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk &#39;{printf(&quot;%02d&quot;,$1)}&#39;`<br />
+&nbsp; mkdir ${num}<br />
+&nbsp; cd ${num}<br />
+&nbsp; cp ../disp${num}.pw.in ./<br />
+&nbsp; cp ../*.UPF ./<br />
+&nbsp; $1/pw.x &lt; disp${num}.pw.in &gt; disp${num}.pw.out<br />
+&nbsp; cp disp${num}.pw.out ../<br />
+&nbsp; cd ../<br />
+done<br />
+-----<br />
+8. wget http://www.quantum-espresso.org/upf_files/Si.pbe-n-kjpaw_psl.1.0.0.UPF<br />
+9. chmod +x run<br />
+&nbsp; sed -i &#39;s/\r//g&#39; run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run)<br />
+10. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/q-e-qe-*/bin&quot; 1<br />
+&nbsp; (please, replace 1 to max * of disp*.pw.in)<br />
+11. python ~/alamode-v.1.1.0/tools/extract.py --QE=si222.pw.in *.pw.out &gt; DFSET_harmonic<br />
+◇(3. Estimate force constants by fitting)<br />
+12. gedit si_alm.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+-----<br />
+13. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log2<br />
+◇(4. Calculate phonon dispersion and phonon DOS)<br />
+14. gedit si_phband.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = si222.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 1 # KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+15. ~/alamode-v.1.1.0/anphon/anphon si_phband.in &gt; si_phband.log<br />
+16. python ~/alamode-v.1.1.0/tools/plotband.py si222.bands<br />
+17. cp si_phband.in si_phdos.in<br />
+18. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 # KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+19. ~/alamode-v.1.1.0/anphon/anphon si_phdos.in &gt; si_phdos.log<br />
+20. python ~/alamode-v.1.1.0/tools/plotdos.py --emax 550 --nokey si222.dos<br />
+◇(5. Estimate cubic IFCs for thermal conductivity)<br />
+21. cp si_alm.in si_alm2.in<br />
+22. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None 7.3<br />
+/<br />
+-----<br />
+23. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log<br />
+24. python ~/alamode-v.1.1.0/tools/displace.py --QE=si222.pw.in --mag=0.04 si222_cubic.pattern_ANHARM3<br />
+25. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/q-e-qe-*/bin&quot; 20<br />
+&nbsp; (please, replace 1 to max * of disp*.pw.in)<br />
+26. python ~/alamode-v.1.1.0/tools/extract.py --QE=si222.pw.in *.pw.out &gt; DFSET_cubic<br />
+27. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;optimize<br />
+&nbsp; DFSET = DFSET_cubic<br />
+&nbsp; FC2XML = si222.xml # Fix harmonic IFCs<br />
+/<br />
+-----<br />
+28. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log2<br />
+◇(6. Calculate thermal conductivity)<br />
+29. cp si_phdos.in si_RTA.in<br />
+30. gedit si_RTA.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = si222.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 10 10 10<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+31. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA.log &amp;<br />
+32. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222.kl&quot; usi 1:2 w lp<br />
+33. q<br />
+34. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc kappa_boundary --size 1.0e+6 si222.result &gt; si222_boundary_1mm.kl<br />
+◇(7. Analyze results)<br />
+(・Phonon lifetime)<br />
+35. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc tau --temp 300 si222.result &gt; tau300K_10.dat<br />
+36. gnuplot<br />
+&nbsp; set xrange [1:]<br />
+&nbsp; set logscale y<br />
+&nbsp; set xlabel &quot;Phonon frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Phonon lifetime (ps)&quot;<br />
+&nbsp; plot &quot;tau300K_10.dat&quot; using 3:4 w p<br />
+37. q<br />
+(・Cumulative thermal conductivity)<br />
+38. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc cumulative --temp 300 --length 10000:5 si222.result &gt; cumulative_300K_10.dat<br />
+39. gnuplot<br />
+&nbsp; set logscale x<br />
+&nbsp; set xlabel &quot;L (nm)&quot;<br />
+&nbsp; set ylabel &quot;Cumulative kappa (W/mK)&quot;<br />
+&nbsp; plot &quot;cumulative_300K_10.dat&quot; using 1:2 w lp<br />
+40. q<br />
+(・Thermal conductivity spectrum)<br />
+41. gedit si_RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+<br />
+&nbsp; EMIN = 0; EMAX = 550; DELTA_E = 1.0 # &lt;-- frequency range<br />
+/<br />
+<br />
+&amp;cell<br />
+10.203<br />
+&nbsp;0.0 0.5 0.5<br />
+&nbsp;0.5 0.0 0.5<br />
+&nbsp;0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp;2<br />
+&nbsp;10 10 10<br />
+/<br />
+<br />
+&amp;analysis<br />
+&nbsp;KAPPA_SPEC = 1 # compute spectrum of kappa<br />
+/<br />
+-----<br />
+42. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA2.log<br />
+43. awk &#39;{if ($1 == 300.0) print $0}&#39; si222.kl_spec &gt; si222_300K_10.kl_spec<br />
+44. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Spectrum of kappa (W/mK/cm^{-1})&quot;<br />
+&nbsp; plot &quot;si222_300K_10.kl_spec&quot; using 2:3 w l lt 2 lw 2<br />
+45. q<br />
+※ other methods (no check)<br />
+26.5. $ cat DFSET_harmonic DFSET_cubic &gt; DFSET_merged<br />
+12. gedit si_alm.in<br />
+-----<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_merged<br />
+/<br />
+-----<br />
+<br />
+<br />
+□ Si (VASP)<br />
+◇(1. Get displacement patterns by alm)<br />
+1. cd ~/alamode-v.1.1.0/example/Si<br />
+2. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log<br />
+◇(2. Calculate atomic forces for the displaced configurations)<br />
+3. gedit POSCAR<br />
+&nbsp; (sse below POSCAR (Si 2x2x2))<br />
+4. cp POSCAR POSCAR.orig<br />
+5. python ~/alamode-v.1.1.0/tools/displace.py --VASP=POSCAR.orig --mag=0.01 si222.pattern_HARMONIC<br />
+6. cp disp1.POSCAR disp01.POSCAR<br />
+&nbsp; cp disp2.POSCAR disp02.POSCAR<br />
+&nbsp; cp disp3.POSCAR disp03.POSCAR<br />
+&nbsp; cp disp4.POSCAR disp04.POSCAR<br />
+&nbsp; cp disp5.POSCAR disp05.POSCAR<br />
+&nbsp; cp disp6.POSCAR disp06.POSCAR<br />
+&nbsp; cp disp7.POSCAR disp07.POSCAR<br />
+&nbsp; cp disp8.POSCAR disp08.POSCAR<br />
+&nbsp; cp disp9.POSCAR disp09.POSCAR<br />
+7. gedit run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+# Assume we have 20 displaced configurations for QE [disp01.POSCAR, ... , disp20.POSCAR].<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk &#39;{printf(&quot;%02d&quot;,$1)}&#39;`<br />
+&nbsp; mkdir ${num}<br />
+&nbsp; cd ${num}<br />
+&nbsp; cp ../disp${num}.POSCAR ./POSCAR<br />
+&nbsp; cp ../INCAR ./<br />
+&nbsp; cp ../POTCAR ./<br />
+&nbsp; #cp ../KPOINTS ./<br />
+&nbsp; $1<br />
+&nbsp; cp vasprun.xml ../vasprun${num}.xml<br />
+&nbsp; cd ../<br />
+done<br />
+-----<br />
+8. cp ~/vasp.5.4.1/potpaw_PBE/Si/POTCAR ./<br />
+9. gedit INCAR<br />
+-----<br />
+&nbsp; &nbsp;PREC = Accurate<br />
+# &nbsp;ENCUT = 500<br />
+&nbsp;IBRION = -1<br />
+&nbsp; EDIFF = 1.0e-08<br />
+&nbsp; IALGO = 38<br />
+&nbsp;ISMEAR = 0; SIGMA = 0.1<br />
+&nbsp; LREAL = .FALSE.<br />
+&nbsp; LWAVE = .FALSE.<br />
+&nbsp;LCHARG = .FALSE.<br />
+-----<br />
+9. chmod +x run<br />
+&nbsp; sed -i &#39;s/\r//g&#39; run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run)<br />
+10. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 1<br />
+&nbsp; (please, replace 1 to max * of disp*.POSCAR)<br />
+11. python ~/alamode-v.1.1.0/tools/extract.py --VASP=POSCAR.orig vasprun*.xml &gt; DFSET_harmonic<br />
+◇(3. Estimate force constants by fitting)<br />
+11. gedit si_alm.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+-----<br />
+12. ~/alamode-v.1.1.0/alm/alm si_alm.in &gt; si_alm.log2<br />
+◇(4. Calculate phonon dispersion and phonon DOS)<br />
+13. gedit si_phband.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = si222.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 1 # KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+14. ~/alamode-v.1.1.0/anphon/anphon si_phband.in &gt; si_phband.log<br />
+15. python ~/alamode-v.1.1.0/tools/plotband.py si222.bands<br />
+16. cp si_phband.in si_phdos.in<br />
+17. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 # KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+18. ~/alamode-v.1.1.0/anphon/anphon si_phdos.in &gt; si_phdos.log<br />
+19. python ~/alamode-v.1.1.0/tools/plotdos.py --emax 550 --nokey si222.dos<br />
+◇(5. Estimate cubic IFCs for thermal conductivity)<br />
+20. cp si_alm.in si_alm2.in<br />
+21. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None 7.3<br />
+/<br />
+-----<br />
+22. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log<br />
+23. python ~/alamode-v.1.1.0/tools/displace.py --VASP=POSCAR.orig --mag=0.04 si222_cubic.pattern_ANHARM3<br />
+24. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 20<br />
+&nbsp; (please, replace 1 to max * of disp*.POSCAR)<br />
+25. python ~/alamode-v.1.1.0/tools/extract.py --VASP=POSCAR.orig vasprun*.xml &gt; DFSET_cubic<br />
+26. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;optimize<br />
+&nbsp; DFSET = DFSET_cubic<br />
+&nbsp; FC2XML = si222.xml # Fix harmonic IFCs<br />
+/<br />
+-----<br />
+27. ~/alamode-v.1.1.0/alm/alm si_alm2.in &gt; si_alm2.log2<br />
+◇(6. Calculate thermal conductivity)<br />
+28. cp si_phdos.in si_RTA.in<br />
+29. gedit si_RTA.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = si222.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD &nbsp; &nbsp;= 1<br />
+&nbsp; KD &nbsp; &nbsp; = Si<br />
+&nbsp; MASS &nbsp; = 28.0855<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 10 10 10<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 &nbsp;G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 &nbsp;L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+30. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA.log &amp;<br />
+31. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222.kl&quot; usi 1:2 w lp<br />
+32. q<br />
+33. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc kappa_boundary --size 1.0e+6 si222.result &gt; si222_boundary_1mm.kl<br />
+◇(7. Analyze results)<br />
+(・Phonon lifetime)<br />
+34. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc tau --temp 300 si222.result &gt; tau300K_10.dat<br />
+35. gnuplot<br />
+&nbsp; set xrange [1:]<br />
+&nbsp; set logscale y<br />
+&nbsp; set xlabel &quot;Phonon frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Phonon lifetime (ps)&quot;<br />
+&nbsp; plot &quot;tau300K_10.dat&quot; using 3:4 w p<br />
+36. q<br />
+(・Cumulative thermal conductivity)<br />
+37. python ~/alamode-v.1.1.0/tools/analyze_phonons.py --calc cumulative --temp 300 --length 10000:5 si222.result &gt; cumulative_300K_10.dat<br />
+38. gnuplot<br />
+&nbsp; set logscale x<br />
+&nbsp; set xlabel &quot;L (nm)&quot;<br />
+&nbsp; set ylabel &quot;Cumulative kappa (W/mK)&quot;<br />
+&nbsp; plot &quot;cumulative_300K_10.dat&quot; using 1:2 w lp<br />
+39. q<br />
+(・Thermal conductivity spectrum)<br />
+40. gedit si_RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+<br />
+&nbsp; EMIN = 0; EMAX = 550; DELTA_E = 1.0 # &lt;-- frequency range<br />
+<br />
+&nbsp; RESTART = 0<br />
+/<br />
+<br />
+&amp;cell<br />
+10.203<br />
+&nbsp;0.0 0.5 0.5<br />
+&nbsp;0.5 0.0 0.5<br />
+&nbsp;0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp;2<br />
+&nbsp;10 10 10<br />
+/<br />
+<br />
+&amp;analysis<br />
+&nbsp;KAPPA_SPEC = 1 # compute spectrum of kappa<br />
+/<br />
+-----<br />
+41. ~/alamode-v.1.1.0/anphon/anphon si_RTA.in &gt; si_RTA2.log<br />
+42. awk &#39;{if ($1 == 300.0) print $0}&#39; si222.kl_spec &gt; si222_300K_10.kl_spec<br />
+43. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Spectrum of kappa (W/mK/cm^{-1})&quot;<br />
+&nbsp; plot &quot;si222_300K_10.kl_spec&quot; using 2:3 w l lt 2 lw 2<br />
+44. q<br />
+※ other methods (no check)<br />
+25.5. cat DFSET_harmonic DFSET_cubic &gt; DFSET_merged<br />
+12. gedit si_alm.in<br />
+-----<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_merged<br />
+/<br />
+-----<br />
+<br />
+<br />
+□ POSCAR (Si 2x2x2)<br />
+-----<br />
+Si 2x2x2<br />
+1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp;10.9784470799 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;10.9784470799 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;10.9784470799<br />
+Si<br />
+64<br />
+Direct<br />
+0.0000000000000000 0.0000000000000000 0.0000000000000000<br />
+0.0000000000000000 0.0000000000000000 0.5000000000000000<br />
+0.0000000000000000 0.2500000000000000 0.2500000000000000<br />
+0.0000000000000000 0.2500000000000000 0.7500000000000000<br />
+0.0000000000000000 0.5000000000000000 0.0000000000000000<br />
+0.0000000000000000 0.5000000000000000 0.5000000000000000<br />
+0.0000000000000000 0.7500000000000000 0.2500000000000000<br />
+0.0000000000000000 0.7500000000000000 0.7500000000000000<br />
+0.1250000000000000 0.1250000000000000 0.1250000000000000<br />
+0.1250000000000000 0.1250000000000000 0.6250000000000000<br />
+0.1250000000000000 0.3750000000000000 0.3750000000000000<br />
+0.1250000000000000 0.3750000000000000 0.8750000000000000<br />
+0.1250000000000000 0.6250000000000000 0.1250000000000000<br />
+0.1250000000000000 0.6250000000000000 0.6250000000000000<br />
+0.1250000000000000 0.8750000000000000 0.3750000000000000<br />
+0.1250000000000000 0.8750000000000000 0.8750000000000000<br />
+0.2500000000000000 0.0000000000000000 0.2500000000000000<br />
+0.2500000000000000 0.0000000000000000 0.7500000000000000<br />
+0.2500000000000000 0.2500000000000000 0.0000000000000000<br />
+0.2500000000000000 0.2500000000000000 0.5000000000000000<br />
+0.2500000000000000 0.5000000000000000 0.2500000000000000<br />
+0.2500000000000000 0.5000000000000000 0.7500000000000000<br />
+0.2500000000000000 0.7500000000000000 0.0000000000000000<br />
+0.2500000000000000 0.7500000000000000 0.5000000000000000<br />
+0.3750000000000000 0.1250000000000000 0.3750000000000000<br />
+0.3750000000000000 0.1250000000000000 0.8750000000000000<br />
+0.3750000000000000 0.3750000000000000 0.1250000000000000<br />
+0.3750000000000000 0.3750000000000000 0.6250000000000000<br />
+0.3750000000000000 0.6250000000000000 0.3750000000000000<br />
+0.3750000000000000 0.6250000000000000 0.8750000000000000<br />
+0.3750000000000000 0.8750000000000000 0.1250000000000000<br />
+0.3750000000000000 0.8750000000000000 0.6250000000000000<br />
+0.5000000000000000 0.0000000000000000 0.0000000000000000<br />
+0.5000000000000000 0.0000000000000000 0.5000000000000000<br />
+0.5000000000000000 0.2500000000000000 0.2500000000000000<br />
+0.5000000000000000 0.2500000000000000 0.7500000000000000<br />
+0.5000000000000000 0.5000000000000000 0.0000000000000000<br />
+0.5000000000000000 0.5000000000000000 0.5000000000000000<br />
+0.5000000000000000 0.7500000000000000 0.2500000000000000<br />
+0.5000000000000000 0.7500000000000000 0.7500000000000000<br />
+0.6250000000000000 0.1250000000000000 0.1250000000000000<br />
+0.6250000000000000 0.1250000000000000 0.6250000000000000<br />
+0.6250000000000000 0.3750000000000000 0.3750000000000000<br />
+0.6250000000000000 0.3750000000000000 0.8750000000000000<br />
+0.6250000000000000 0.6250000000000000 0.1250000000000000<br />
+0.6250000000000000 0.6250000000000000 0.6250000000000000<br />
+0.6250000000000000 0.8750000000000000 0.3750000000000000<br />
+0.6250000000000000 0.8750000000000000 0.8750000000000000<br />
+0.7500000000000000 0.0000000000000000 0.2500000000000000<br />
+0.7500000000000000 0.0000000000000000 0.7500000000000000<br />
+0.7500000000000000 0.2500000000000000 0.0000000000000000<br />
+0.7500000000000000 0.2500000000000000 0.5000000000000000<br />
+0.7500000000000000 0.5000000000000000 0.2500000000000000<br />
+0.7500000000000000 0.5000000000000000 0.7500000000000000<br />
+0.7500000000000000 0.7500000000000000 0.0000000000000000<br />
+0.7500000000000000 0.7500000000000000 0.5000000000000000<br />
+0.8750000000000000 0.1250000000000000 0.3750000000000000<br />
+0.8750000000000000 0.1250000000000000 0.8750000000000000<br />
+0.8750000000000000 0.3750000000000000 0.1250000000000000<br />
+0.8750000000000000 0.3750000000000000 0.6250000000000000<br />
+0.8750000000000000 0.6250000000000000 0.3750000000000000<br />
+0.8750000000000000 0.6250000000000000 0.8750000000000000<br />
+0.8750000000000000 0.8750000000000000 0.1250000000000000<br />
+0.8750000000000000 0.8750000000000000 0.6250000000000000<br />
+-----<br />
+<br />
+□ PbTe (SCPH) (VASP) (underconstracting)<br />
+1. cd ~/alamode-v.1.1.0/example/PbTe<br />
+2. (calculate *.xml)<br />
+------------------<br />
+2.1. gedit PbTe_alm.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT &nbsp;= 64<br />
+&nbsp; NKD &nbsp;= 2<br />
+&nbsp; KD &nbsp; = Te Pb<br />
+/<br />
+<br />
+#&amp;fitting<br />
+# &nbsp;DFSET = DFSET_harmonic<br />
+#/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp;24.8145<br />
+&nbsp; 1.0 0.0 0.0<br />
+&nbsp; 0.0 1.0 0.0<br />
+&nbsp; 0.0 0.0 1.0<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Te-Te None<br />
+&nbsp; Te-Pb None<br />
+&nbsp; Pb-Pb None<br />
+/<br />
+<br />
+&amp;position<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;...<br />
+/<br />
+-----<br />
+2.2. ~/alamode-v.1.1.0/alm/alm PbTe_alm.in &gt; PbTe_alm.log1<br />
+2.3. python ~/alamode-v.1.1.0/tools/displace.py --VASP=POSCAR.orig --mag=0.01 PbTe222.pattern_HARMONIC<br />
+2.4. cp disp1.POSCAR disp01.POSCAR<br />
+&nbsp; cp disp2.POSCAR disp02.POSCAR<br />
+2.5. gedit run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+# Assume we have 20 displaced configurations for QE [disp01.POSCAR, ... , disp20.POSCAR].<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk &#39;{printf(&quot;%02d&quot;,$1)}&#39;`<br />
+&nbsp; mkdir ${num}<br />
+&nbsp; cd ${num}<br />
+&nbsp; cp ../disp${num}.POSCAR ./POSCAR<br />
+&nbsp; cp ../INCAR ./<br />
+&nbsp; cp ../POTCAR ./<br />
+&nbsp; #cp ../KPOINTS ./<br />
+&nbsp; $1<br />
+&nbsp; cp vasprun.xml ../vasprun${num}.xml<br />
+&nbsp; cd ../<br />
+done<br />
+-----<br />
+2.6. cp ~/vasp.5.4.1/potpaw_PBE/Te/POTCAR ./POTCAR_Te<br />
+&nbsp; cp ~/vasp.5.4.1/potpaw_PBE/Pb/POTCAR ./POTCAR_Pb<br />
+&nbsp; cat POTCAR_Te POTCAR_Pb &gt; POTCAR<br />
+2.7. gedit INCAR<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; PREC = Normal &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Precision<br />
+&nbsp; &nbsp; IBRION = 0<br />
+&nbsp; &nbsp; &nbsp; ISYM = 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Disable symmetry&nbsp;<br />
+&nbsp; &nbsp; &nbsp;SMASS = 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Define Thermostat<br />
+&nbsp; &nbsp; MDALGO = 2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Nose Hoover thermostat<br />
+&nbsp; &nbsp; &nbsp;POTIM = 0.7 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Step length<br />
+&nbsp; &nbsp; &nbsp;TEBEG = 300 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Temperature<br />
+&nbsp; &nbsp; &nbsp; &nbsp;NSW = 1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Number of time steps<br />
+&nbsp; &nbsp; NELMIN = 2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; NELM = 100 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp;#ENCUT = 300<br />
+&nbsp; &nbsp; &nbsp;EDIFF = 1.000000e-06 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Energy precision<br />
+&nbsp; &nbsp; ISMEAR = 0<br />
+&nbsp; &nbsp; &nbsp;SIGMA = 0.01<br />
+&nbsp; &nbsp; &nbsp;IALGO = 38<br />
+&nbsp; &nbsp; &nbsp; &nbsp;GGA = PS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+&nbsp; &nbsp; &nbsp;LREAL = .TRUE.<br />
+&nbsp; &nbsp;ADDGRID = .TRUE.<br />
+&nbsp; &nbsp; &nbsp;LWAVE = .FALSE.<br />
+&nbsp; &nbsp; LCHARG = .FALSE.<br />
+-----<br />
+2.8. chmod +x run<br />
+&nbsp; sed -i &#39;s/\r//g&#39; run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run)<br />
+2.9. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 2<br />
+&nbsp; (please, replace 1 to max * of disp*.POSCAR)<br />
+2.10. python ~/alamode-v.1.1.0/tools/extract.py --VASP=POSCAR.orig vasprun*.xml &gt; DFSET_harmonic<br />
+2.11. gedit PbTe_alm.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 2<br />
+&nbsp; KD = Pb Te<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 2<br />
+&nbsp; KD = Pb Te<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+-----<br />
+2.12. ~/alamode-v.1.1.0/alm/alm PbTe_alm.in &gt; PbTe_alm.log<br />
+2.13. cp PbTe222.xml PbTe_harm222.xml<br />
+2.14. cp PbTe_alm.in PbTe_alm2.in<br />
+2.15. gedit PbTe_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT &nbsp;= 64<br />
+&nbsp; NKD &nbsp;= 2<br />
+&nbsp; KD &nbsp; = Pb Te<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Pb-Pb None<br />
+&nbsp; Pb-Te None<br />
+&nbsp; Te-Te None<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT &nbsp;= 64<br />
+&nbsp; NKD &nbsp;= 2<br />
+&nbsp; KD &nbsp; = Pb Te<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Pb-Pb None 7.3<br />
+&nbsp; Pb-Te None 7.3<br />
+&nbsp; Te-Te None 7.3<br />
+/<br />
+-----<br />
+2.16. ~/alamode-v.1.1.0/alm/alm PbTe_alm2.in &gt; PbTe_alm2.log<br />
+2.17. python ~/alamode-v.1.1.0/tools/displace.py --VASP=POSCAR.origs --mag=0.04 PbTe222.pattern_ANHARM3<br />
+2.18. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; ???<br />
+&nbsp; (please, replace 1 to max * of disp*.POSCAR)<br />
+2.19. gedit PbTe_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 2<br />
+&nbsp; KD = Pb Te<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Pb-Pb None<br />
+&nbsp; Pb-Te None<br />
+&nbsp; Te-Te None<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 2<br />
+&nbsp; KD = Pb Te<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Pb-Pb None 7.3<br />
+&nbsp; Pb-Te None 7.3<br />
+&nbsp; Te-Te None 7.3<br />
+/<br />
+-----<br />
+2.20. python ~/alamode-v.1.1.0/tools/extract.py --VASP=POSCAR.orig vasprun*.xml &gt; DFSET_cubic<br />
+2.21. ~/alamode-v.1.1.0/alm/alm PbTe_alm2.in &gt; PbTe_alm2.log2<br />
+2.22. cp PbTe222_cubic.xml PbTe_anharm222.xml<br />
+------------------<br />
+3. cp scph.in scph_300K.in<br />
+4. gedit scph_300K.in<br />
+-----before<br />
+&nbsp;TMIN = 0; TMAX = 1000; DT = 100<br />
+-----<br />
+-----after<br />
+&nbsp;TMIN = 300; TMAX = 300; DT = 0<br />
+-----<br />
+5. ~/alamode-v.1.1.0/anphon/anphon scph_300K.in &gt; scph_300K.log<br />
+6. (remove &quot;Temperature [K],&quot; and &quot; &nbsp; &nbsp; 300.000000 &nbsp; &nbsp;&quot;)<br />
+&nbsp; sed -i &#39;s/Temperature \[K\],//g&#39; PbTe_scph4-4.scph_bands<br />
+&nbsp; sed -i &#39;s/ &nbsp; &nbsp; 300.000000 &nbsp; &nbsp;//g&#39; PbTe_scph4-4.scph_bands<br />
+7. python ~/alamode-v.1.1.0/tools/plotband.py PbTe_scph4-4.scph_bands<br />
+<br />
+□ PbTe (mp-19717)<br />
+space group: Fm-3m (225)<br />
+a=b=c: 6.56567 [Angstrom]<br />
+alpha=beta=gamma: 90.0 [degree]<br />
+Pb: 0.0 0.0 0.0<br />
+Te: 0.0 0.0 0.5<br />
+<br />
+◇ POSCAR (PbTe)<br />
+-----<br />
+Te4 Pb4<br />
+1.0<br />
+6.565674 0.000000 0.000000<br />
+0.000000 6.565674 0.000000<br />
+0.000000 0.000000 6.565674<br />
+Te Pb<br />
+4 4<br />
+direct<br />
+0.000000 0.000000 0.500000 Te<br />
+0.500000 0.000000 0.000000 Te<br />
+0.000000 0.500000 0.000000 Te<br />
+0.500000 0.500000 0.500000 Te<br />
+0.000000 0.000000 0.000000 Pb<br />
+0.500000 0.500000 0.000000 Pb<br />
+0.500000 0.000000 0.500000 Pb<br />
+0.000000 0.500000 0.500000 Pb<br />
+-----<br />
+<br />
+◇ POSCAR.orig (PbTe 2x2x2) (from VESTA)<br />
+-----<br />
+te4 pb4<br />
+1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp;13.1313476563 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;13.1313476563 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;13.1313476563<br />
+&nbsp; &nbsp;Te &nbsp; Pb<br />
+&nbsp; &nbsp;32 &nbsp; 32<br />
+Direct<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; -0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp; &nbsp; &nbsp;0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp; &nbsp; &nbsp;0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp; &nbsp; &nbsp;0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+-----<br />
+<br />
+◇ PbTe_alm.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = PbTe222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT &nbsp;= 64<br />
+&nbsp; NKD &nbsp;= 2<br />
+&nbsp; KD &nbsp; = Be Te<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp;24.8145<br />
+&nbsp; 1.0 0.0 0.0<br />
+&nbsp; 0.0 1.0 0.0<br />
+&nbsp; 0.0 0.0 1.0<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Be-Be None<br />
+&nbsp; Be-Te None<br />
+&nbsp; Te-Te None<br />
+/<br />
+<br />
+&amp;position<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;1 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp;-0.000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.250000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.000000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000<br />
+&nbsp;2 &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.750000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.500000000<br />
+/<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.0.2&nbsp;<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+・alamode-v.1.0.2.tar.gz<br />
+0. wget https://github.com/ttadano/alamode/archive/v.1.0.2.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.0.2.tar.gz<br />
+2. cd ~/alamode-v.1.0.2<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/bin/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. make<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.0.2/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.0.2<br />
+-----<br />
+3. chmod +x run_all.sh<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.0.2/tools/plotband.py si222.bands<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.0.1&nbsp;<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+・alamode-v.1.0.1.tar.gz<br />
+0. wget https://github.com/ttadano/alamode/archive/v.1.0.1.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.0.0.tar.gz<br />
+2. cd ~/alamode-v.1.0.1<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/bin/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. make<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.0.1/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.0.1<br />
+-----<br />
+3. chmod +x run_all.sh<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.0.1/tools/plotband.py si222.bands<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 講習会資料<br />
+&nbsp; http://md.jsms.jp/download/<br />
+&nbsp; https://ma.issp.u-tokyo.ac.jp/app-post/1901 (2019/May/17)<br />
+[2] LAMMPSで構造最適化<br />
+&nbsp; https://justice-vsbr.hatenablog.com/entry/2018/08/02/101057<br />
+&nbsp; 色々と試して何が問題化を明らかにしてくださっているのでとても助かる<br />
+[3] 6.12. MD ? LAMMPS メニュー (Winmostar User Manual)<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V9/html/winmos/md/winmos_lammps.html<br />
+[4] 分子動力学計算を活用したインシリコ創薬<br />
+&nbsp; https://www.r-ccs.riken.jp/aicssite/wp-content/uploads/2016/05/20151202hirokawa.pdf<br />
+&nbsp; https://www.r-ccs.riken.jp/course/life_science2_2.4.html (動画)<br />
+&nbsp; https://www.youtube.com/watch?v=UBW1TxwfqhE (Youtube動画)<br />
+[5] LAMMPS入門の手引き 0:環境の設定<br />
+&nbsp; https://qiita.com/tkmtSo/items/34a0098cb967f2a9fdfe<br />
+[6] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+&nbsp; ・velocityコマンドは原子に強制的に初速を与えるコマンドです。はじめが0ケルビンだと全く動かないため、初速を適当に与える意味があります。<br />
+&nbsp; ・minimizeはrunコマンドと似ていますが、動力学計算を行うのではなく、よりエネルギーが低くなるように原子を動かすコマンドです。なので、minimizeが終わったときはエネルギーが(局所)安定点に達した構造が得られることが期待されます。つまり0ケルビンのときの構造です。デフォルトはCG法が使われています。<br />
+&nbsp; ・fix nvtコマンドは系にNVTアンサンブルを適用するコマンドです。つまり温度制御をかけます。後ろの3つの値は「MD開始時の熱浴の温度」「MD終了時の熱浴の温度」「熱浴の順応性」です。3つ目の値が少し直感的でない値ですが、曖昧に表現すると(人工的な)熱浴に対する慣性のようなパラメータです。おおよそtimestepで設定した値の100倍くらいにしておけば大丈夫です。(圧力制御の場合は1000倍程度)<br />
+[7] Input files: samples<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps.html<br />
+[8] LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+[9] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+[10] 長岡正隆ら「すぐできる分子シミュレーションビギナーズマニュアル」KS化学専門書<br />
+[11] Molecular Mechanics (MM) 計算（z軸方向のみの緩和）<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps2.html<br />
+&nbsp; LAMMPS/examples/USER/phonon/3-3D-FCC-Cu-EAM/<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/examples/USER/phonon/3-3D-FCC-Cu-EAM<br />
+[12] Examples (LAMMPS calculations)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/examples.html<br />
+[13] DynaPhoPy (Phonon anharmonic properties from Molecular Dynamics)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/index.html<br />
+&nbsp; https://pypi.org/project/dynaphopy/1.16.4/<br />
+[14] PhonTS<br />
+&nbsp; http://phonts.mse.ufl.edu/<br />
+[15] LAMMPS ? Installation&nbsp;<br />
+&nbsp; http://www.nanophysics.pl/MolecularDynamics/lammps-installation.pdf<br />
+[16] EAM potentials (Phonon Dispersion Curves)<br />
+&nbsp; https://sites.google.com/site/eampotentials/Al<br />
+[17] GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg53394.html<br />
+[18] 新規モンテカルロ計算プログラムの開発と各種触媒系への応用<br />
+&nbsp; http://www.aki.che.tohoku.ac.jp/prev/htm5/2b16petro.pdf<br />
+[19] 分子吸着による固体表面ナノ構造解析<br />
+&nbsp; https://www.scas.co.jp/scas-news/sn-back-issues/pdf/14/talk_14.pdf<br />
+[20] LAMMPS input for water (Avogadro)<br />
+&nbsp; https://avogadro.cc/docs/extensions/lammps-input-for-water/<br />
+[21] Understanding the adsorption process in ZIF-8 using high pressure crystallography and computational modelling<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[22] Adsorbate-induced lattice deformation in IRMOF-74 series<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/<br />
+[23] [lammps-users] GCMC gas adsorption<br />
+&nbsp; https://lammps.sandia.gov/threads/msg74437.html<br />
+[24] ASE<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/ase.html<br />
+[25] 分子シミュレーションスクール2018：シミュレーションの全体像・概論<br />
+&nbsp; http://www.mitsuhiromatsumoto.mech.kyoto-u.ac.jp/<br />
+[26] [lammps-users] Problems of temperature calculation for fix GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg58606.html<br />
+[27] LAMMPSの使い方<br />
+&nbsp; http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/<br />
+[28] 原子間ポテンシャルの開発を支援するソフトウェア（kPot）<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/potenfit/<br />
+[29] 9.1. LAMMPS キーワード設定<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V7/calcmanual_jp.html<br />
+[30] 分子動力学計算（LAMMPS）<br />
+&nbsp; https://mochirixi.hatenadiary.com/archive/category/分子動力学計算%EF%BC%88LAMMPS%EF%BC%89<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

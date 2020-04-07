@@ -1,0 +1,967 @@
+分子動力学（MD）でのポテンシャル作成法<br />
+------------------------------------------------------------------------------<br />
+■ 各種のポテンシャル作成ソフト<br />
+<br />
+・MPC (Windows)<br />
+&nbsp; (https://icme.hpc.msstate.edu/mediawiki/index.php/MPC)<br />
+&nbsp; MEAM<br />
+・potfit<br />
+&nbsp; (https://www.potfit.net/wiki/doku.php)<br />
+&nbsp; EAM, ADP, etc<br />
+・atomicrex<br />
+&nbsp; (https://www.atomicrex.org/)<br />
+&nbsp; EAM<br />
+・DFTFIT<br />
+&nbsp; (https://github.com/costrouc/dftfit)<br />
+&nbsp; Buckingham + Coulomb + ZBL potential, etc<br />
+・QuickFF<br />
+&nbsp; (http://molmod.github.io/QuickFF/)<br />
+<br />
+・aenet (Atomic Energy Network)<br />
+&nbsp; http://ann.atomistic.net/<br />
+・libAtoms + QUIP<br />
+&nbsp;&nbsp;http://libatoms.github.io/QUIP/<br />
+&nbsp;&nbsp;http://www.libatoms.org/Home/Software<br />
+&nbsp;&nbsp;https://github.com/libAtoms/QUIP<br />
+&nbsp;&nbsp;QUIPforLAMMPS (https://github.com/libAtoms/QUIPforLAMMPS)<br />
+・DeePMD-kit<br />
+&nbsp; http://www.deepmd.org/<br />
+・PROPhet<br />
+&nbsp; https://biklooost.github.io/PROPhet/<br />
+<br />
+※ 上記以外にもポテンシャルの作成ソフトは存在する<br />
+※ 機械工学年鑑2019 -機械工学の最新動向- (https://www.jsme.or.jp/kikainenkan2019/chap05/)は非常に勉強になる。<br />
+------------------------------------------------------------------------------<br />
+■ MPC (Windows 10 (64 bit))<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/MPC)<br />
+<br />
+□ Install (Windows 10 (64 bit))<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/File:MPCv4_Win7_MATLAB_R2016b_Installer_web.zip)<br />
+・MPCv4_Win7_MATLAB_R2016b_Installer_web.zip<br />
+1. MPCv4_Win7_MATLAB_R2016b_Installer_web.zip を解凍<br />
+2. MPCv4_Win7_MATLAB_R2016b_Installer_web.exe<br />
+3. All [Next(N)&gt;] &gt; [check] Create a shortcut to the desktop. &gt; All [Next(N)&gt;] &gt; [check] Yes &gt; [Install] &gt; [Finished]<br />
+<br />
+◇ Tutorial<br />
+・MEAM Parameter Calibration Installation and Introduction<br />
+&nbsp; https://www.youtube.com/watch?v=bipKWVFX01I<br />
+・MEAM Parameter Calibration Tool for Potential Optimization<br />
+&nbsp; https://www.youtube.com/watch?v=1YTUQm7xY60&amp;feature=youtu.be<br />
+・Fitting a MEAM potential with MPC<br />
+&nbsp; https://www.youtube.com/watch?v=4hgEv8C_KOw<br />
+<br />
+◇ Example Al<br />
+1. MPCv4 (on Desktop)<br />
+2. File &gt; Load MEAM library file &gt; C:\Program Files\MPCv4\application &gt; library.meam &gt; Open<br />
+3. LIBRARY &gt; 20)Al &gt; (Right-click &quot;20)Al&quot;) &gt; &quot;Add Al as MEAM element&quot;<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;Fix element(s) to 20)Al&quot;<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;secondary 1 ...&quot; &gt; BCC &gt; OK<br />
+&nbsp; (Right-click &quot;20)Al&quot;) &gt; &quot;secondary 2 ...&quot; &gt; HCP &gt; OK<br />
+4. File &gt; MEAM parameter file &gt; C:\Program Files\MPCv4\application&nbsp;<br />
+&nbsp; &gt; Al-example.parameter.meam &gt; Open<br />
+&nbsp; (&gt; EMPTY.parameter.meam &gt; Open)<br />
+5. LIBRARY (Right-click &quot;1:Al&quot;) &gt; [check] &quot;INDLUDE in DISPLAY plots&quot;<br />
+6. Plot &gt; Single elements... &gt; E1... &gt; [check] E1 vs. a1<br />
+&nbsp; Single elements... &gt; E2... &gt; [check] E2 vs. a2<br />
+&nbsp; Single elements... &gt; E3... &gt; [check] E3 vs. a3<br />
+7. Selected (under &quot;RUN LAMMPS&quot;)<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; LOAD calibration data for Al<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; Al-Calibration.txt &gt; Open<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E1 vs. a1 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_FCC &gt; Open<br />
+&nbsp;&nbsp;<br />
+&nbsp; LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E2 vs. a2 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_BCC &gt; Open<br />
+&nbsp;&nbsp;<br />
+&nbsp; LIBRARY (Right-click &quot;1:Al&quot;) &gt; ENTER calibration data for Al<br />
+&nbsp; &gt; E3 vs. a3 &gt; OK<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; [All Files(*.*)] Al-DFT_HCP &gt; Open<br />
+----------<br />
+8. LIBRARY (Right-click &quot;1:Al&quot;) &gt; IMPORT calibration data for Al<br />
+&nbsp; &gt; C:\Program Files\MPCv4\application &gt; VASPdata.mat &gt; Open<br />
+&nbsp; (Ctrl + Right-click)<br />
+&nbsp; &gt; FCC: E1 vs. a1 &gt; OK<br />
+&nbsp; &gt; BCC: E2 vs. a2 &gt; OK<br />
+&nbsp; &gt; HCP: E3 vs. a3 &gt; OK<br />
+&nbsp; &gt; OK<br />
+----------<br />
+9. PARAMETERS (Right-click &quot;1:Al&quot;)<br />
+&nbsp; &gt; [check] Curve:[E1,a1]<br />
+&nbsp; &gt; [check] Curve:[E2,a2]<br />
+&nbsp; &gt; [check] Curve:[E3,a3]<br />
+10. (Right-click &quot;alpha&quot; under LIBRARY) &gt; Add to calibration parameter list &gt; OK<br />
+11. Run &gt; OK<br />
+----------(repeat 10 and 11) e.g., (for library.meam = data for every 1 element)<br />
+12. (Right-click &quot;esub&quot; under LIBRARY) &gt; Add to calibration parameter list &gt; OK<br />
+13. Run &gt; OK<br />
+----------<br />
+----------(repeat 10 and 11) e.g., (for parameter.meam = data for every element-element)<br />
+12. (Right-click &quot;alpha&quot; under PARAMETRS) &gt; Add to calibration parameter list &gt; OK<br />
+13. Run &gt; OK<br />
+----------<br />
+14. scratch (on Desktop) &gt; Calibration_Run &gt; files &gt; local.library.meam (e.g., data for every 1 element)<br />
+&nbsp; scratch (on Desktop) &gt; Calibration_Run &gt; files &gt; local.parameter.meam (e.g., data for atom-atom)<br />
+<br />
+※ MPC &gt; making MEAM potentials &gt; lammps&nbsp;<br />
+※ http://ryokbys.web.nitech.ac.jp/contents/lammps_usage/example-meam.html<br />
+※ (1, 2, 3) is related with 1 = 1:A, 2 = 2:B, 3 = 3:C, etc<br />
+&nbsp; A, B, C, ... = element<br />
+&nbsp; e.g., &quot;A = Al, B = Ti, C = V&quot; =&gt; &quot;1 = 1:Al, 2 = 2:Ti, 3 = 3:V&quot;<br />
+------------------------------------------------------------------------------<br />
+■ potfit (need &quot;intel MKL&quot;) (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(https://www.potfit.net/wiki/doku.php)<br />
+<br />
+□ Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+◇ registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+◇ unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+-----<br />
+2. bash<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(https://www.potfit.net/wiki/doku.php?id=download)<br />
+・potfit-20191008.tar.gz<br />
+0. wget https://www.potfit.net/download/potfit-20191008.tar.gz<br />
+1. tar zxvf potfit-20191008.tar.gz<br />
+2. cd potfit<br />
+3. ./waf --help<br />
+4. ./waf configure -i pair -m apot<br />
+5. ./waf build<br />
+※ other settings<br />
+・Stillinger-Weber potential + parallel calculation<br />
+&nbsp; ./waf configure -i stiweb -m apot --enable-mpi<br />
+・Tersoff potential + parallel calculation<br />
+&nbsp; ./waf configure -i tersoff -m apot --enable-mpi<br />
+・modified Tersoff potential + parallel calculation<br />
+&nbsp; ./waf configure -i tersoffmod -m apot --enable-mpi<br />
+・eam potential + parallel calculation<br />
+&nbsp; ./waf configure -i eam -m apot --enable-mpi<br />
+・two-band eam potential + parallel calculation<br />
+&nbsp; ./waf configure -i tbeam -m apot --enable-mpi<br />
+・meam potential + parallel calculation<br />
+&nbsp; ./waf configure -i meam -m apot --enable-mpi<br />
+・adp potential + parallel calculation<br />
+&nbsp; ./waf configure -i adp -m apot --enable-mpi<br />
+・stress option + parallel calculation<br />
+&nbsp; ./waf configure -i pair -m apot --enable-stress&nbsp;<br />
+・tabulated potential + parallel calculation<br />
+&nbsp; ./waf configure -i pair -m tab --enable-mpi<br />
+・kim potential<br />
+&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)<br />
+&nbsp; sudo add-apt-repository ppa:openkim/latest<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install libkim-api-dev openkim-models<br />
+&nbsp; ./waf configure -m kim<br />
+・kim potential + stress option<br />
+&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)<br />
+&nbsp; sudo add-apt-repository ppa:openkim/latest<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install libkim-api-dev openkim-models<br />
+&nbsp; ./waf configure -m kim --enable-stress&nbsp;<br />
+◇ envirnmental settings<br />
+6. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:$HOME/potfit/bin<br />
+-----<br />
+7. bash<br />
+<br />
+◇ Utilities (e.g., vasp2force, makeapot, potfit_setup, etc)<br />
+1. cd ~/potfit/util<br />
+2. ls<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:$HOME/potfit/util<br />
+-----<br />
+2. bash<br />
+<br />
+◇ Examples<br />
+0. cd ~/potfit/util/kim/kim_read_model_props<br />
+&nbsp; make<br />
+1. cd ~/potfit/examples/kim/ex_model_Ar_P_LJ<br />
+2. ~/potfit/bin/potfit_kim_mkl param_file<br />
+3. ~/potfit/util/kim/kim_read_model_props/kim_read_model_props ex_model_Ar_P_LJ<br />
+※ plase, see https://www.potfit.net/wiki/doku.php?id=utilities:kim_read_model_props<br />
+<br />
+◇ Examples (failed)<br />
+1. cd ~/potfit/examples/kim/Three_Body_Stillinger_Weber_Si__MO_405512056662_004<br />
+2. ~/potfit/bin/potfit_kim_mkl_stress param_file<br />
+<br />
+◇ Example (Configurations)<br />
+0. cd ~/potfit<br />
+&nbsp; wget https://www.potfit.net/wiki/lib/exe/fetch.php?media=example_al.tar.gz<br />
+&nbsp; mv fetch.php?media=example_al.tar.gz example_al.tar.gz<br />
+1. tar zxvf example_al.tar.gz<br />
+2. cd Example_Al<br />
+(2.1. list_config Al.config)<br />
+(2.2. force2poscar -n 2 Al.config)<br />
+(2.3. force2poscar -n 2 Al.config | tee POSCAR)<br />
+3. potfit_apot_pair_mkl Al.param<br />
+&nbsp; (~/potfit/bin/potfit_apot_pair_mkl Al.param)<br />
+4. plotapot Al.pot_end<br />
+<br />
+◇ Example (Potentials)<br />
+1. cd ~/potfit/examples<br />
+-----ADP potential<br />
+2. mkdir ADP<br />
+&nbsp; &nbsp;cd ADP<br />
+&nbsp; &nbsp;makeapot -g -i adp -f eopp_sc,csw2_sc,bjs,2*csw2_sc | tee Example_ADP_1<br />
+&nbsp; &nbsp;makeapot -g -n 2 -i adp -f 3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc | tee Example_ADP_2<br />
+&nbsp; &nbsp;cd ..<br />
+-----Tersoff potential<br />
+2. mkdir Tersoff<br />
+&nbsp; &nbsp;cd Tersoff<br />
+&nbsp; &nbsp;makeapot -n 1 -i tersoff | tee Example_Tersoff_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i tersoff | tee Example_Tersoff_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i tersoff | tee Example_Tersoff_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----Stillinger-Weber potential<br />
+2. mkdir SW<br />
+&nbsp; &nbsp;cd SW<br />
+&nbsp; &nbsp;makeapot -n 1 -i stiweb | tee Example_StiWeb_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i stiweb | tee Example_StiWeb_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i stiweb | tee Example_StiWeb_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----EAM potential<br />
+2. mkdir EAM<br />
+&nbsp; &nbsp;cd EAM<br />
+&nbsp; &nbsp;makeapot -n 1 -i eam -g -f morse_sc,csw2_sc,bjs | tee Example_EAM_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i eam -g -f 3*morse_sc,2*csw2_sc,2*bjs | tee Example_EAM_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i eam -f 6*morse,3*csw2,3*bjs | tee Example_EAM_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----MEAM potential<br />
+2. mkdir EAM<br />
+&nbsp; &nbsp;cd EAM<br />
+&nbsp; &nbsp;makeapot -i meam -f eopp_sc,csw2_sc,bjs,csw2_sc,parabola | tee Example_MEAM_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i meam -f 3*eopp_sc,2*csw2_sc,2*bjs,3*csw2_sc,2*parabola | tee Example_MEAM_2<br />
+&nbsp; &nbsp;cd ..<br />
+<br />
+◇ Example (Parameter files)<br />
+1. cd ~/potfit/examples<br />
+2. potfit_setup &gt; dummy.param<br />
+-----test<br />
+1. cd ~/potfit/examples<br />
+2. mkdir test_Al<br />
+3. cd test_Al<br />
+4. cp ~/potfit/Example_Al/Al.config ./<br />
+&nbsp; (touch Al.config)<br />
+5. cp ~/potfit/Example_Al/Al.pot ./<br />
+&nbsp; (touch Al.pot)<br />
+6. potfit_setup -c Al.config -p Al.pot -s Al | tee param_file<br />
+7. potfit_apot_pair_mkl param_file<br />
+(8. plotapot Al.pot_end)<br />
+<br />
+◇ Tutorial<br />
+0. cd ~/potfit<br />
+&nbsp; wget https://www.potfit.net/wiki/lib/exe/fetch.php?media=potfit_tutorial.tar.bz2<br />
+&nbsp; mv fetch.php?media=potfit_tutorial.tar.bz2 potfit_tutorial.tar.bz2<br />
+1. tar xvf potfit_tutorial.tar.bz2<br />
+2. cd potfit_tutorial<br />
+(2.5. force2poscar -n 2 sys_b.force | tee POSCAR)<br />
+3. makeapot -n 1 -g -i pair -f lj | tee lj.pot<br />
+4. potfit_setup -c sys_b.force -p lj.pot | tee lj.param<br />
+5. potfit_apot_pair_mkl lj.param<br />
+6. plotapot lj.pot_end<br />
+7. gnuplot<br />
+&nbsp; set xrange[1.5:6]<br />
+&nbsp; set yrange[-1.0:1.5]<br />
+&nbsp; plot &quot;dummy.plot&quot; w l<br />
+8. q<br />
+(VESTA &gt; POSCAR)<br />
+<br />
+◇ Usage (EAM potential)<br />
+1. cd ~/potfit<br />
+2. mkdir calc<br />
+&nbsp; cd calc<br />
+-----(VASP)<br />
+3. cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;$HOME/vasp.5.4.1/potpaw_PBE&quot; --vasp-cartesian-lattice-vectors --setup-all --no-reduce -f Al.cif<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; (ISPIN = 1 (in INCAR))<br />
+4. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 6 $HOME/vasp*/bin/vasp_std<br />
+-----(potfit)<br />
+5. vasp2force -f | tee Al.config<br />
+6. makeapot -n 1 -i eam -g -f morse_sc,csw2_sc,bjs | tee Al.pot<br />
+6. potfit_setup -c Al.config -p Al.pot -s Al | tee param_file<br />
+7. potfit_apot_eam_mkl param_file<br />
+(7.5. plotapot Al.pot_end)<br />
+-----(lammps)<br />
+8. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 4.15691<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al.lammps.EAM Al<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+9. lammps &lt; lammps_test.in<br />
+(It worked, but the &quot;eam / fs&quot; setting may be wrong. In that case, please forgive me.)<br />
+<br />
+※ VASP (OUTCAR) &gt; potfit &gt; making MEAM, Tersoff or OpenKIM potentials &gt; lammps<br />
+※ https://software.intel.com/en-us/mkl (from 2015/Aug/31))<br />
+&nbsp; Intel MKL は 2015年8月31日から無償で利用できるようになった。OpenBLASやNetlib, ACMLが利用できない場合は特に助かる。AMDのCPUの場合はOpenBLASの選択はいまだに外せない？<br />
+※ keyword &quot;write_lammps 1&quot; output &quot;pair&quot;, &quot;sw&quot;, &quot;tersoff&quot;, &quot;eam&quot; or &quot;adp&quot;<br />
+&nbsp; see http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf (Japanese)<br />
+[8] Potentials generated with potfit (https://www.potfit.net/wiki/doku.php?id=potentials:main) では準結晶のAl-Mn-PdやAl-Co-Niの例もあって驚く。準結晶に対してEAMで論文が出ているのは嬉しい。SiO2やAl2O3, MgOはdipoleで作られて検討されている。<br />
+------------------------------------------------------------------------------<br />
+■ atomicrex (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(https://www.atomicrex.org/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://gitlab.com/atomicrex/atomicrex.git<br />
+2. cd atomicrex<br />
+3. sudo apt-get install python-dev python-sphinx python-numpy libboost-dev libxml2-dev libnlopt-dev &nbsp;libmuparser-dev build-essential gfortran vim-common cmake<br />
+&nbsp; (python3 case: sudo apt-get install python3-dev python3-sphinx python3-numpy)<br />
+4. mkdir build<br />
+5. cd build<br />
+6. cmake ..<br />
+7. make<br />
+<br />
+◇ Usage<br />
+1. $HOME/atomicrex/build/atomicrex *.xml<br />
+<br />
+◇ *.xml (input file)<br />
+(e.g., $HOME/atomicrex/tests/potentials)<br />
+<br />
+◇ Examples (Al, EAM) (from VASP output)&nbsp;<br />
+1. cd $HOME/atomicrex/examples/fitting_EAM_potential<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+3. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 4.15691<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al.eam.fs Al<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+4. lammps &lt; lammps_test.in<br />
+<br />
+※ NLopt minimizer (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/fitting_NLopt_minimizer<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;26.981&#39; atomic-number=&#39;13&#39;&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+<br />
+※ Spa minimizer (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/fitting_Spa_minimizer&nbsp;<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;26.981&#39; atomic-number=&#39;13&#39;&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+<br />
+※ monte carlo sampling (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/monte_carlo_sampling<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;26.981&#39; atomic-number=&#39;13&#39;&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;eam id=&#39;Al&#39; species-a=&#39;*&#39; species-b=&#39;*&#39;&gt;<br />
+<br />
+&nbsp; &lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;eam id=&#39;Al&#39; species-a=&#39;*&#39; species-b=&#39;*&#39;&gt;<br />
+&nbsp; &lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&nbsp; &lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+(3. same method)<br />
+<br />
+◇ Examples (Cu, EAM)<br />
+1. cd $HOME/atomicrex/examples/potential_EAM<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Cu&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;63.546&#39; atomic-number=&#39;29&#39;&gt;Cu&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Cu.tersoff&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Cu.eam)<br />
+<br />
+◇ Examples (Si, MEAM)<br />
+1. cd $HOME/atomicrex/examples/potential_MEAM<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;28.085&#39; atomic-number=&#39;14&#39;&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-functions&gt;Si.meam&lt;/export-functions&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Si.meam.*.table, *=U,V,f,g,rho) (V=phi)<br />
+<br />
+◇ Examples (Si, SW)<br />
+1. cd $HOME/atomicrex/examples/potential_SW<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass=&#39;28.085&#39; atomic-number=&#39;14&#39;&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-functions&gt;Si.sw&lt;/export-functions&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Si.sw.*.table, *=F,V,f,g)<br />
+<br />
+◇ Cu (HCP, Lennard-Jones)<br />
+1. gedit cu_hcp_lj.xml<br />
+------<br />
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;<br />
+&lt;job&gt;<br />
+<br />
+&nbsp; &lt;!-- general settings --&gt;<br />
+&nbsp; &lt;name&gt;Testing top-level input parameters&lt;/name&gt;<br />
+&nbsp; &lt;verbosity&gt;maximum&lt;/verbosity&gt;<br />
+&nbsp; &lt;real-precision&gt;6&lt;/real-precision&gt;<br />
+&nbsp; &lt;tolerance-preset&gt;balanced&lt;/tolerance-preset&gt;<br />
+&nbsp; &lt;validate-potentials/&gt;<br />
+<br />
+&nbsp; &lt;!-- specify the different atom types (to be referred to in the blocks that follow) --&gt;<br />
+&nbsp; &lt;atom-types&gt;<br />
+&nbsp; &nbsp; &lt;species&gt;Cu&lt;/species&gt;<br />
+&nbsp; &nbsp; &lt;!--species mass=&#39;63.546&#39; atomic-number=&#39;29&#39;&gt;Cu&lt;/species--&gt;<br />
+&nbsp; &lt;/atom-types&gt;<br />
+&nbsp;&nbsp;<br />
+&nbsp; &lt;!-- specify optimization procedure --&gt;<br />
+&nbsp; &lt;!--fitting --&gt;<br />
+&nbsp; &lt;!--/fitting --&gt;<br />
+<br />
+&nbsp; &lt;!-- specify potential form and parameters --&gt;<br />
+&nbsp; &lt;potentials&gt;<br />
+&nbsp; &nbsp; &lt;lennard-jones id=&quot;Lennard-Jones&quot; species-a=&quot;*&quot; species-b=&quot;*&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;sigma&gt;2.5&lt;/sigma&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;epsilon&gt;0.5&lt;/epsilon&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;cutoff&gt;5.1&lt;/cutoff&gt;<br />
+&nbsp; &nbsp; &lt;/lennard-jones&gt;<br />
+&nbsp; &lt;/potentials&gt;<br />
+<br />
+&nbsp; &lt;!-- specify structures and associated properties --&gt;<br />
+&nbsp; &lt;structures&gt;<br />
+&nbsp; &nbsp; &lt;hcp-lattice id=&quot;HCP&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter&gt;2.5&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;ca-ratio&gt;2.5&lt;/ca-ratio&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;total-energy/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &nbsp; &lt;/hcp-lattice&gt;<br />
+&nbsp; &lt;/structures&gt;<br />
+<br />
+&lt;/job&gt;<br />
+------<br />
+2. $HOME/atomicrex/build/atomicrex cu_hcp_lj.xml<br />
+<br />
+※ VASP &gt; atomicrex &gt; making EAM or Tersoff potentials<br />
+※ EAM potentials need mass data.<br />
+------------------------------------------------------------------------------<br />
+■ DFTFIT (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit))) (failed)<br />
+&nbsp; Github: https://github.com/costrouc/dftfit<br />
+<br />
+□ Install<br />
+0. sudo python3 -m pip uninstall pip &amp;&amp; sudo apt install python3-pip --reinstall<br />
+&nbsp; sudo -H pip3 uninstall numpy mpi4py cython<br />
+&nbsp; sudo -H pip3 uninstall lammps-cython<br />
+&nbsp; sudo -H pip3 uninstall dftfit<br />
+1. sudo -H pip3 install numpy mpi4py cython<br />
+&nbsp; sudo pip3 install --upgrade numpy==1.16.0<br />
+2. sudo apt install build-essential libopenblas-dev libfftw3-dev libopenmpi-dev<br />
+3. wget https://github.com/lammps/lammps/archive/stable_7Aug2019.tar.gz<br />
+&nbsp; tar zxvf stable_7Aug2019.tar.gz<br />
+&nbsp; cd lammps-stable_7Aug2019/src<br />
+4. export LAMMPS_PACKAGES=&quot;asphere body class2 colloid compress coreshell dipole granular kspace manybody mc misc molecule opt peri qeq replica rigid shock snap srd user-reaxc&quot;<br />
+&nbsp; for pack in $LAMMPS_PACKAGES; do make &quot;yes-$pack&quot;; done<br />
+5. make mode=shlib mpi -j4 LMP_INC=&quot;-DLAMMPS_EXCEPTIONS -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64 -L/usr/lib/x86_64-linux-gnu -lgfortran&quot;<br />
+&nbsp; sudo cp liblammps_mpi.so /usr/local/lib/liblammps.so<br />
+&nbsp; sudo mkdir /usr/local/include/lammps/<br />
+&nbsp; sudo cp *.h /usr/local/include/lammps/<br />
+(5.5. ldd -r liblammps_mpi.so)<br />
+6. gedit ~/.config/lammps-site.cfg<br />
+-----<br />
+# multiple values can be included seperated by commas<br />
+[lammps]<br />
+lammps_include_dir = /usr/local/include/lammps/<br />
+lammps_library_dir = /usr/local/lib/<br />
+# true library filename is liblammps.so notice lib and .so are removed<br />
+lammps_library = lammps<br />
+<br />
+# use mpic++ -showme to list libraries and includes<br />
+[mpi]<br />
+mpi_include_dir = /usr/lib/x86_64-linux-gnu/openmpi/include<br />
+mpi_library_dir = /usr/lib/x86_64-linux-gnu/openmpi/lib<br />
+# no necissarily needed (default are mpi, mpi_cxx)<br />
+mpi_library &nbsp; &nbsp; = mpi, mpi_cxx<br />
+-----<br />
+7. sudo -H pip3 install lammps-cython<br />
+8. sudo -H pip3 install dftfit<br />
+<br />
+□ Simple MgO Example<br />
+0. git clone https://github.com/costrouc/dftfit.git<br />
+1. cd ~/dftfit/examples/mgo<br />
+2. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/local/lib<br />
+3. dftfit train -c configuration.yaml -p potential.yaml -t training.yaml<br />
+&nbsp; (or make)<br />
+<br />
+[D1] DFTFIT: Potential Generation for Molecular Dynamics Calculations&nbsp;<br />
+&nbsp; https://www.slideshare.net/ChristopherOstroucho/dftfit-potential-generation-for-molecular-dynamics-calculations<br />
+[D2] Installation<br />
+&nbsp; https://chrisostrouchov.com/lammps-cython/installation.html#pip<br />
+※ PWscf, VASP, Siesta<br />
+※ Tersoff, Stillinger-Weber, Gao-Weber, Vashishta, and COMB Potentials<br />
+※ Buckingham + Coulomb + ZBL potential (e.g., MgO)<br />
+※ Tutorial (Simple MgO Example): https://chrisostrouchov.com/dftfit/tutorial.html<br />
+------------------------------------------------------------------------------<br />
+■ QuickFF (Need Gaussain code ?) (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(http://molmod.github.io/QuickFF/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(http://molmod.github.io/QuickFF/ig.html#downloading-quickff)<br />
+・QuickFF-2.2.2.tar.gz (http://users.ugent.be/~lvduyfhu/QuickFF-2.2.2.tar.gz)<br />
+0. sudo apt install python-nose<br />
+&nbsp; sudo apt-get install python-numpy python-scipy python-h5py python-matplotlib python-nose<br />
+&nbsp; sudo apt-get install python-dev python-pip<br />
+1. pip install numpy Cython<br />
+&nbsp; pip install molmod<br />
+&nbsp; nosetests molmod<br />
+2. git clone https://github.com/molmod/yaff.git<br />
+&nbsp; cd yaff<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd $HOME<br />
+3. pip install scoop<br />
+4. mkdir quickff<br />
+&nbsp; cd quickff<br />
+&nbsp; (wget http://users.ugent.be/~lvduyfhu/QuickFF-2.2.2.tar.gz)<br />
+&nbsp; tar zxvf QuickFF-2.2.2.tar.gz<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd quickff/tests<br />
+&nbsp; nosetests<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(http://molmod.github.io/QuickFF/ig.html#downloading-quickff)<br />
+・QuickFF-2.2.2.tar.gz (http://users.ugent.be/~lvduyfhu/QuickFF-2.2.2.tar.gz)<br />
+0. sudo apt install python-nose<br />
+&nbsp; sudo apt-get install python-numpy python-scipy python-h5py python-matplotlib python-nose<br />
+&nbsp; sudo apt-get install python-dev python-pip<br />
+1. pip install numpy Cython<br />
+&nbsp; pip install molmod<br />
+&nbsp; nosetests molmod<br />
+2. git clone https://github.com/molmod/yaff.git<br />
+&nbsp; cd yaff<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd $HOME<br />
+3. pip install scoop<br />
+4. git clone git://github.com/molmod/QuickFF.git quickff<br />
+&nbsp; cd quickff<br />
+&nbsp; (git pull)<br />
+&nbsp; (sudo apt-get install gitk)<br />
+&nbsp; (gitk)<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd quickff/tests<br />
+&nbsp; nosetests<br />
+<br />
+※ Gaussian &gt; QuickFF &gt; making potentials<br />
+------------------------------------------------------------------------------<br />
+■ sGDML (http://quantum-machine.org/gdml/doc/)<br />
+&nbsp; Github: https://github.com/stefanch/sGDML<br />
+------------------------------------------------------------------------------<br />
+■ AFAK: http://cpc.cs.qub.ac.uk/summaries/AFAK_v1_0.html<br />
+[AF1] A. Khorshidi and A. A.Peterson, Comp. Phys. Comm. 207 (2016) 310-324.<br />
+------------------------------------------------------------------------------<br />
+■ Yaff (http://molmod.github.io/yaff/index.html)<br />
+&nbsp; Github: https://github.com/molmod/yaff<br />
+------------------------------------------------------------------------------<br />
+■ atsim.potentials (https://atsimpotentials.readthedocs.io/en/latest/index.html)<br />
+------------------------------------------------------------------------------<br />
+■ kpot<br />
+・HP上で配布していた時と状況が変わっているため、管理者の元に訪れて配布における注意点の説明を受ける必要がある<br />
+・[ポテンシャル作成を勉強する] または [研究に利用する]タイミング、kpotの管理者に相談をする必要がある<br />
+&nbsp; 上記2点を満たせる状況でkpotの管理者にメールをお送りすることが重要<br />
+------------------------------------------------------------------------------<br />
+■ 原子間ポテンシャルの再現性調査<br />
+<br />
+&nbsp; 候補となるポテンシャルが選択できたら、それらの物性の再現性の調査を行う。残念ながら、原子間ポテンシャルの完成度は高い状況にあるといえず、すべての物性値を再現するポテンシャルの開発は不可能であることがわかっている。したがって、ここで重要なことは、計算の目的を明確にして、計算の目的となる現象をポテンシャルが再現しているかという点を調査することである。ただし、目的の現象のみを再現できていればよいというわけではなく、凝集エネルギーや格子定数、弾性定数などのごく基本的な物性の再現も必要である。さもないと、構造が不安定になったり、合金などの2元系のポテンシャルへの拡張がしにくくなったりする。ただし、実績のあるポテンシャルのほとんどでは基本的な物性は再現されている。<br />
+&nbsp; 目的の現象に関してすでに実績があるポテンシャルを選定するのが理想的であるが、もし見つからなければ、いままでに提案されているポテンシャルでの再現性を調べる。<br />
+&nbsp; ここではどの程度まで定量的に再現できていればいかという点が問題になる。これは目的が現象の定量的な再現なのか定性的な再現なのかに依存するが、一般に、分子動力学は経験的なポテンシャルを使うため、定量的評価には向かないとされており、定量的な評価には電子状態計算を平行して用いる場合が多い。分子動力学は定性的なメカニズムの考察に用いられることが多く、たとえば、融点、拡散、結晶成長や材料強度の素過程の考察や、それぞれの現象に及ぼす不純物の影響を多種の不純物で試して比較することなどがよくある使い方の一例である。したがって、必ずしも定量的に現象を再現している必要はない。<br />
+　実際の適用においては、ポテンシャルの精度だけではなく、モデリングにおける時間スケール・空間スケールのギャップの問題があるため、ポテンシャルの精度だけに定量性を求めても仕方がないという考え方もある。<br />
+<br />
+[3] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+------------------------------------------------------------------------------<br />
+■ 原子間ポテンシャルの作成方法<br />
+<br />
+&nbsp; 目的とする現象に対して適切なポテンシャルが存在しない場合、ポテンシャルを自分で作成する、もしくは既存のポテンシャルを目的に合わせて改良する必要がある。<br />
+&nbsp; 2013年現在で、ポテンシャル関数の基本形状は（省略）おおよそ出そろっているが、個々の原子のパラメータ、とくに2元系、3原系のパラメータは整備されているとはいいがたい状況にある。したがって、計算にあたっては、原子間ポテンシャルの作成が必要となる状況はいまだに多くあるのが現状である。<br />
+・kPotでの原子間ポテンシャルの作成手順<br />
+-----<br />
+1. ポテンシャル関数形状の決定<br />
+&nbsp; 結合特性をよく記述できるような関数形状を選ぶ<br />
+2. 合わせ込む物性の選択と収集<br />
+&nbsp; standard fitting: ポテンシャルに十分なロバスト性をもたせる<br />
+&nbsp; optional fitting: 計算系に特有の物性を再現する<br />
+3. ポテンシャルパラメータの最適化<br />
+&nbsp; 遺伝的アルゴリズムを用いたパラメータの合わせ込み<br />
+&nbsp; 物性を再現できない or 多数のポテンシャルができてしまう場合は上記1（関数形状）や上記2（物性）に戻って再選択する<br />
+-----<br />
+・まずは既存のポテンシャル関数形状の中から結合特性をよく記述できるような関数形状を選ぶ。最初の時点では、EAMポテンシャルやターソフポテンシャルなどの標準的なものを選ぶとよい<br />
+・次に合わせ込む物性の選択と収集を行う。合わせ込む物性は二つに分類され、一つ目は凝集エネルギー、格子定数、弾性定数などの共通性のある標準的なデータ（standard fitting data）である。最安定構造を保証するためには、最安定構造だけではなく、ほかの結晶構造（たとえば、ダイマー、グラファイト、sc、ダイヤモンド、bcc、fcc構造など）も再現するようにポテンシャルパラメータを合わせ込む必要がある。最安定構造以外のデータは実験的には得ることが難しいので、通常は、電子状態計算の結果を用いる。二つ目は、たとえば融点や動径分布関数、フォノン分散曲線など、目的に応じて計算系に特有な物性（optional fitting data）である。解析的に求められない物性値の場合は、分子動力学計算を実際に行って算出する<br />
+・この2種のデータを再現するポテンシャルパラメータの合わせ込みを、遺伝的アルゴリズムを用いて行う。合わせ込みを行っても物性を再現できない場合は、ポテンシャル関数の選択に戻り、関数形状の再設定、改良などを行う。また、あまり関係のない物性値の再現性の優先度を下げることも検討する。逆に、物性を再現するポテンシャルパラメータが複数見つかる場合は、ポテンシャルパラメータに対して再現する物性値が少ないこを意味しているので、合わせ込む物性値を増やすことを検討する<br />
+・SiO2は結晶、非結晶（アモルファス）によらず幅広く利用されており、原子間ポテンシャルの開発例も多い。BKSポテンシャル、SWポテンシャル、ReaxFFポテンシャルなどが代表的である。ただし、これまで開発されたSiO2系のための原子間ポテンシャルは必ずしも簡易でさらなる元素系への拡張が容易とまではいえない。<br />
+<br />
+[3] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+------------------------------------------------------------------------------<br />
+■ レナード・ジョーンズ(LJ)パラメータの作成方法<br />
+<br />
+□ 新しい力場パラメータ作成に挑む前に<br />
+&nbsp; 力場バラメータを新しく作成する前に以下の3項目に関して確認が必要<br />
+1. 研究目的に応じてどの程度の精度のパラメータが必要かをよく調査する<br />
+2. 研究で用いるポテンシャルエネルギー関数が、同一の分子系に対して既に報告されているかどうか文献調査を行い、もし報告があれば研究目的と照らし合わせてその利用の可能性を十分に吟味する<br />
+3. いくつかの既存の汎用分子力場について検討し、これらを組み合わせてポテンシャルエネルギー関数のパラメータを決定できるかどうか確認する<br />
+&nbsp; これらの項目を考慮しても、それでも利用可能な力場パラメータを手にできない場合に初めて、力場パラメータを自分で作成する必要が出てきます。<br />
+<br />
+□ 力場パラメータの作成方法（レナード・ジョーンズ(LJ)パラメータの作成方法）<br />
+&nbsp; 力場パラメータを作成しなければならない場合、剛体モデルやフレキシブルモデルなどの分子モデルを定めた上で、経験的または非経験的に点電荷などのポテンシャルパラメータを決定します。<br />
+A. 経験的な方法<br />
+・経験的方法によるLJパラメータの決定手順<br />
+-----<br />
+A1. 研究目的に応じて注目する物理量を選択する<br />
+A2. 任意にLJパラメータを与えて分子動力学計算を実行する<br />
+A3. 分子動力学計算のトラジェクトリから注目物理量を計算し、実験値や量子化学計算の計算値などと比較する<br />
+A4. 上記のA3で満足するものができれば新しいLJパラメータとして採用する。不満足であればA2に戻って作業を続ける。<br />
+-----<br />
+・電荷はLJパラメータを決定する前に、量子化学計算などで用いてあらかじめ決定しておく<br />
+・水溶液系の分子動力学計算を実行するのに最適な水分子のLJパラメータを決定したい場合には、水の動径分布関数や配位数などを注目物理量として選ぶ<br />
+・注目物理量以外の物理量を議論する際には、その信頼性について十分に吟味する必要がある<br />
+B. 非経験的な方法<br />
+・非経験的方法によるLJパラメータの決定手順<br />
+-----<br />
+B1. 量子化学計算を用いて2つの分子の二体間ポテンシャル関数と各々の相対位置での電荷を求める<br />
+B2. 二体間ポテンシャル関数から各々の相対位置での電荷に基づいて得られたクーロンポテンシャルを差し引いてLJポテンシャルを求める<br />
+B3. LJパラメータをLJポテンシャル関数に基づいて最適化する<br />
+B4. 新しいLJパラメータとして採用する<br />
+-----<br />
+・非経験的方法では、量子化学計算の結果から得られる2分子間の結合エネルギーを用いる<br />
+・最初に、2つの分子各々について、量子化学計算を個別に実行して、マリケン電荷やESP電荷などを求める<br />
+・2つの分子がある相対配置をとって同時に存在している場合に、数十点から数百点の相対配置について量子化学計算を実行して、各々の相対位置での二体間結合エネルギー（= 全二体エネルギー - 個別の一体エネルギーの和）と電荷を求める。ただし、基底関数を用いた量子化学計算で二体間の結合エネルギーを求める際には、2つの分子を同時に取り扱って、これを1つの分子だけのときのエネルギーと比較するときに必然的に生じるBSSE（basis set superposition error）に対する補正が必要になります<br />
+・次に、各々の相対位置での電荷に基づいてクーロンポテンシャルエネルギーを求め、二体間結合エネルギーからクーロンポテンシャルエネルギーを差し引いて、残りの結合エネルギーLJ型ポテンシャル関数にフィットしてLJパラメータを最適化して決定する<br />
+・得られた力場パラメータは基底関数の選択や電子相関の評価の仕方によって大きく異なる可能性があります<br />
+・正確な力場パラメータを決定したとしても、今の非経験的な方法には凝集系としての多体分子間相互作用の寄与が一切ふくまれていないため、さらに正確な分子動力学計算を行うにはこれらの補正を取り入れる必要があります。そのためには、実験値との比較が不可欠となり、経験的な方法と同様に注目物理量の再現性が重要になります<br />
+<br />
+[4] 長岡正隆ら「すぐできる分子シミュレーションビギナーズマニュアル」KS化学専門書<br />
+------------------------------------------------------------------------------<br />
+■ ポテンシャルの特徴<br />
+<br />
+□ LJ (Lennard-Jones)<br />
+・物理吸着や希ガスの計算に用いられる<br />
+&nbsp; 化学吸着や反応となるとLJを超えたポテンシャル（下記）<br />
+<br />
+□ Tersoff<br />
+・The bond angle and coordination equations in the &ldquo;Tersoff&rdquo; potential are theoretically supported.<br />
+&nbsp; （&quot;Tersoff&quot;ポテンシャルでの結合角度や結合エネルギーの配位数の依存性（&radic;配位数）の式は理論的に支持される）<br />
+&nbsp; （&radic;配位数 は局所状態密度の二次モーメント近似より導かれる。FSやEAMにおいても類似の考え方）<br />
+・&quot;T3&quot; type is adjusted by elastic constant. This is better than &quot;T2&quot; type.<br />
+&nbsp; （&quot;T3&quot;タイプは弾性定数で合わせ込み。これは&quot;T2&quot;タイプより良い）<br />
+・&ldquo;Tersoff&rdquo; should be used for amorphous.<br />
+&nbsp; （アモルファスには&quot;Tersoff&quot;を用いるのがよい）<br />
+・炭素はブレーナーポテンシャルまたはその発展形であるREBO(airebo)ポテンシャルが良い<br />
+<br />
+□ EAM(イエム)<br />
+・埋め込み関数Fには現在（2019年）のところ理論的な支持はない<br />
+・パラメータ数は10-19個くらいのため、第一原理計算のデータとフィットさせるには10から100点程度が最低限の数となると思われるが、最近（2019年）は見たい現象より少し広い範囲で何万点という数でフィットさせることが流行り。私の個人的な意見としては、式を見ると原子種の2乗でパラメータ数が増えていくのでそれも考慮した方が良いと思う。<br />
+<br />
+□ MEAM（エムイエム）<br />
+・EAMに角度とスクリーニングの効果を入れた項を追加<br />
+&nbsp; スクリーニングは、概念的にはある原子とある原子の間にある原子の影響を入れたものを考えればよい<br />
+<br />
+□ GEAM<br />
+・混ぜ合わせの式には現在（2019年）のところ理論的な支持はない<br />
+<br />
+□ Amber Force Fileld<br />
+・ポテンシャルの記述が比較的簡単な代わりに、同一原子でも結合状態によってポテンシャルの記述をわけている<br />
+<br />
+□ 各種ポテンシャルのポテンシャル関数の数<br />
+&nbsp; ポテンシャル関数の数は、potfitのInteractionsに記載されている。例えば、EAMなら原子種数Nだと、ポテンシャル関数の数はN(N+5)/2となり、4元系の場合は18となる<br />
+<br />
+□ ポテンシャル関数の具体的な記述<br />
+・potfit &gt; Potential models &gt; Analytic potentials &gt; Analytic functions<br />
+&nbsp; (https://www.potfit.net/wiki/doku.php?id=models:analytic_functions)<br />
+・dftfit &gt; Docs ? Potentials<br />
+&nbsp; (https://chrisostrouchov.com/dftfit/potentials.html)<br />
+・atsim.potentials &gt; Docs ? Embedded Atom Method (EAM) Tabulation<br />
+&nbsp; (https://atsimpotentials.readthedocs.io/en/latest/potentials/eam_tabulation.html)<br />
+・kpot<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/potenfit/ (pdf)<br />
+<br />
+※ 結合距離：2体ポテンシャルの項<br />
+※ 結合角：3体ポテンシャルの項（ダイヤモンド構造など）<br />
+※ 2面角：4体ポテンシャルの項（ポリマー）<br />
+※ 第一原理計算の結果とのポテンシャルの合わせ込み（フィット）<br />
+&nbsp; 第一に弾性定数（フォノン）、エネルギー、幾何学構造、その他の物性値はこれらの次にフィットさせることが良く行われる。<br />
+※ 大まかな計算コスト<br />
+・古典MD: 計算コスト &prop; 粒子数N<br />
+・第一原理計算： 計算コスト &prop; 粒子数Nの3乗<br />
+&nbsp; (フォースやストレスはエネルギーの微分値であるため、実験値と10%程度の精度のよい計算をしたい場合は多めのk点数やカットオフ値が必要。弾性定数は2回微分であるためエラーがより大きい）<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 原子間ポテンシャルについて<br />
+&nbsp; http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf<br />
+[2] 解析的に求めたEAMポテンシャルの力の実装<br />
+[3] 固体系における原子間ポテンシャルパラメータ最適化ソフトウェアの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia/77/783/77_783_2026/_pdf/-char/ja<br />
+[4] 分子動力学法における原子間ポテンシャルパラメータの最適化<br />
+[5] アモルファス金属に対する経験的原子間ポテンシャルの適用性評価&nbsp;<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/img/graduation-thesis/2006m_nikkuni.pdf<br />
+[6] CFDEMproject/LAMMPS<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/tools/eam_database<br />
+[7] NIST (Interatomic Potentials Repository)<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Pt/<br />
+[8] lammps / potentials / W_zhou.eam.alloy<br />
+&nbsp; https://github.com/lammps/lammps/blob/master/potentials/W_zhou.eam.alloy<br />
+[9] Zhou X. W., R. A. Johnson, and H. N. G. Wadley, Phys. Rev. B. 69, 144113 (2004)<br />
+[10] &nbsp;X. W. Zhou, H. N. G. Wadley, R. A. Johnson, D. J. Larson, N. Tabat, A. Cerezo, A. K. Petford-Long, G. D. W. Smith, P. H. Clifton, R. L. Martens, and T. F. Kelly, Acta Mater. 49, 4005 (2001).<br />
+[11] &nbsp;H. N. G. Wadley, X. Zhou, R. A. Johnson, and M. Neurock, Prog. Mater. Sci. 46, 329 (2001).<br />
+[12] [9.8. eam database tool] and [9.9. eam generate tool]<br />
+&nbsp; http://www.afs.enea.it/software/lammps/doc17/html/Section_tools.html<br />
+[13] 日本材料学会分子動力学部門委員会<br />
+&nbsp; http://www.hpci-office.jp/materials/ws_material_161004_izumi.pdf<br />
+------------------------------------------------------------------------------<br />
+■ potentials<br />
+<br />
+[1] NIST Interatomic Potential<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/resources.html<br />
+[2] Database of Published Interatomic Potential Parameters<br />
+&nbsp; https://www.ucl.ac.uk/klmc/Potentials/<br />
+[3] EAM potentials<br />
+&nbsp; https://sites.google.com/site/eampotentials/Home<br />
+[4] JARVIS for Force-fields<br />
+&nbsp; https://www.ctcms.nist.gov/~knc6/periodic.html<br />
+[5] Embedded Atom Method (EAM) Tabulation<br />
+&nbsp; https://atsimpotentials.readthedocs.io/en/latest/potentials/eam_tabulation.html<br />
+[6] Carbon Potentials<br />
+&nbsp; http://www.carbonpotentials.org/potentials<br />
+[7] XMD - Molecular Dynamics for Metals and Ceramics&nbsp;<br />
+&nbsp; http://xmd.sourceforge.net/eam.html<br />
+[8] Potentials generated with potfit<br />
+&nbsp; https://www.potfit.net/wiki/doku.php?id=potentials:main<br />
+[9] Interatomic Potential Generation<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/Interatomic_Potential_Generation<br />
+[10] Potentials<br />
+&nbsp; https://norman.jiht.ru/wiki/index.php/Potentials<br />
+[11] Dr. Adri van Duin&nbsp;<br />
+&nbsp; https://www.engr.psu.edu/adri/<br />
+・単体および任意の組み合わせに適用可能なポテンシャルとしてGEAMがある。2001年と2004年のものがある。<br />
+[12] Welcome to the Knowledgebase of Interatomic Models! (OpenKIM)<br />
+&nbsp; https://openkim.org/<br />
+[13] potential_LAMMPS Reference Records<br />
+&nbsp; https://github.com/usnistgov/iprPy/tree/master/library/potential_LAMMPS<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[14] KIST Integrated Force Field Platform</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; http://kiff.vfab.org/<br />
+------------------------------------------------------------------------------</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">■ units and potential</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">□ units metal</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・Stillinger-Weber</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・Tersoff</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・EAM, FS</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・MEAM</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・REBO, AIREBO</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・COMB</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・EIM</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・adiabatic core/shell model</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・Streitz-Mintmire</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・vashishta</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">□ units real</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・OPLS</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・OPLS &amp; Amber (https://github.com/agiliopadua/ilff)</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・CHARMM(charmm22)</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・dreiding</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">・ReaxFF</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[UP1] C:\Program Files\LAMMPS 64-bit 18Jun2019\Examples</span><br />
+------------------------------------------------------------------------------<br />
+■ EAM<br />
+&nbsp; there are some C/Fortran programs in the &quot;tools&quot; directory of the LAMMPS source tree that construct EAM potential files as they are used by LAMMPS from published parameter information. &nbsp;have a look. might be helpful.<br />
+[E1] https://lammps.sandia.gov/threads/msg39604.html<br />
+[E2] 10. Auxiliary tools (Lammps)<br />
+&nbsp; https://lammps.sandia.gov/doc/Tools.html<br />
+------------------------------------------------------------------------------<br />
+■ ReaxFF<br />
+<br />
+1. Dr. Adri van Duin&nbsp;<br />
+&nbsp; https://www.engr.psu.edu/adri/<br />
+2. ReaxFF-distributions<br />
+3. All [No] &gt; Submit<br />
+&nbsp; ※ google翻訳しながら記入していけばよい<br />
+<br />
+※ Duin博士からe-mailで恐縮するほど丁寧な返事が来た。<br />
+-----google翻訳<br />
+XX先生<br />
+<br />
+&nbsp; ご依頼ありがとうございます。 Al、Mn、Si、さらに炭化水素についてもReaxFFパラメータセットがありますが、Al / MnおよびMn / Si合金についてはReaxFFパラメータはまだありません。 炭化水素に関する限り、Al / Mn / Si系との炭化水素反応をシミュレートしますか？<br />
+<br />
+宜しくお願いします。<br />
+-----<br />
+<br />
+[5] Dr. Adri van Duin&nbsp;<br />
+&nbsp; https://www.engr.psu.edu/adri/<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

@@ -1,0 +1,264 @@
+&nbsp; XAFSについての情報をまとめる<br />
+------------------------------------------------------------------------------<br />
+■ オススメの教科書<br />
+　日本XAFS研究会『XAFSの基礎と応用』講談社<br />
+　この教科書は素晴らしい。これがあればこのHPを立ち上げる必要はなかった。<br />
+------------------------------------------------------------------------------<br />
+■ XANESの原理の概略<br />
+<br />
+・ Fermi黄金率： よく成り立つ<br />
+・ 一光子吸収： 一回の事象で吸収されるX線光子は一光子。よく成り立つ。多光子遷移は通常無視する。<br />
+・ 双極子近似：X線の電場に沿った方向の双極子が誘起される遷移のみ許容。X線電場に直交する誘起双極子は励起されない。概ね成り立つ。<br />
+※ pre-edgeピークで電気四極子遷移が観測されるなど、なり立たないこともある。<br />
+　遷移確率はA*|&lt;&psi;<sub>f</sub>|W|&psi;<sub>i</sub>&gt;|<sup>2</sup>になる。ここでAは定数。&psi;<sub><font size="2">f</font></sub>は終状態の波動関数。&psi;<sub><font size="2">i</font></sub>は始状態の波動関数。<br />
+Wが光の波長が電子雲の広がりよりも十分に長いと仮定すれば、W=電気双極子項 + 磁気双極子項 + 電気四極子項 + ・・・となる。双極子近似はW=電気双極子項=E・(-e・r)とする近似である。ここでEは電場ベクトル、rは励起される電子の座標、eは電荷である。双極子近似 |&lt;&psi;<sub><font size="2">f</font></sub>|E・(-e・r)|&psi;<sub><font size="2">i</font></sub>&gt;|<sup><font size="2">2</font></sup>=E・&lt;&psi;<sub><font size="2">f</font></sub>|(-e・r)|&psi;<sub><font size="2">i</font></sub>&gt;|<sup><font size="2">2</font></sup>で確率が0になっても、電気四極子遷移では確率が0でない場合などがあることは覚えておきたい（下記に事例を示しているので見ておいてください）。&lt;&psi;<sub><font size="2">f</font></sub>|e・r|&psi;<sub><font size="2">i</font></sub>&gt;は双極子モーメントと呼ばれる。<br />
+一電子近似： ある（内殻）軌道の一電子が空準位へ遷移し、励起される電子以外の電子（spectator electron)の状態は変化しない。概ね成り立つ。<br />
+※ L（リガンド、例えば配位子の酸素の2p軌道）の電子の移動など、X線が入射して系にエネルギーが与えられるときに、励起される電子以外の電子（価電子帯にある電子）もエネルギーを受け取ってエネルギーの高い準位に移動する（電子が他の原子に移動する場合もある）ような場合は成り立たない（これを多電子効果や電子相関と呼ぶ。2電子励起はこれに入る）。<br />
+------------------------------------------------------------------------------<br />
+■ 選択則<br />
+<br />
+□&nbsp;双極子遷移での選択則<br />
+⊿l = &plusmn;1<br />
+⊿J = 0, &plusmn;1<br />
+以上のときに遷移が起こる。⊿J の計算例は下記のようになる。<br />
+2p<sub>1/2</sub> &rarr; 5d<sub>5/2</sub>：⊿J = 5/2 - 1/2 = 4/2 = 2のため遷移は禁制<br />
+2p<sub>1/2</sub> &rarr; 5d<sub>3/2</sub>：⊿J = 3/2 - 1/2 = 2/2 = 1のため遷移は許容<br />
+<br />
+□&nbsp;電気四極子遷移での選択則<br />
+⊿l = &plusmn;2<br />
+⊿J = 0, &plusmn;1, &plusmn;2<br />
+※ 詳細はwikipedia（選択律）などを参照すると良い。<br />
+<br />
+Referenes<br />
+[1] ⊿Jや⊿L =0 のときの選択則については、選択則（<a href="http://akrmys.com/PhCh2007/note/note05.pdf">http://akrmys.com/PhCh2007/note/note05.pdf</a>）<br />
+[2] 禁制でも遷移がある理由については、構造有機化学特論（<a href="https://www1.doshisha.ac.jp/~kkano/2011Str_Org_Chem.pdf">https://www1.doshisha.ac.jp/~kkano/2011Str_Org_Chem.pdf</a>）<br />
+------------------------------------------------------------------------------<br />
+■ 結晶構造による遷移確率<br />
+<br />
+□ 正八面体<br />
+・1s： A<sub>1g</sub>対称<br />
+・r (x,y,z)： T<sub>1u</sub>対称<br />
+・3d(z<sup><font size="2">2</font></sup>, x<sup><font size="2">2</font></sup>-y<sup><font size="2">2</font></sup>)： E<sub>g</sub>対称<br />
+・3d(xy, yz, zx)：T<sub>2g</sub>対称<br />
+r以外は全て偶関数であるため、&lt;3d|(e・r)|1s&gt;|=0となり双極子禁制である。<br />
+<br />
+□ 正四面体<br />
+・1s： A<sub><font size="2">1</font></sub>対称<br />
+・r (x,y,z)： T<sub><font size="2">2</font></sub>対称<br />
+・3d(z<sup><font size="2">2</font></sup>, x<sup><font size="2">2</font></sup>-y<sup><font size="2">2</font></sup>)： E対称<br />
+・3d(xy, yz, zx)： T<sub><font size="2">2</font></sub>対称<br />
+rと3d(xy,yz,zx)の対称性が同じT<sub>2</sub>で、積分は0にならない。<br />
+&lt;3d(z<sup><font size="2">2</font></sup>, x<sup><font size="2">2</font></sup>-y<sup><font size="2">2</font></sup>)|(e・r)|1s&gt;|=0<br />
+&lt;3d(xy, yz, zx) |(e・r)|1s&gt;|&ne;0<br />
+※ 同じ対称操作を掛け合わせると、必ず全対称A<sub>1</sub>が一つは現れる。<br />
+------------------------------------------------------------------------------<br />
+■ L<sub>2</sub>とL<sub>3</sub>の強度<br />
+<br />
+□ 2p&rarr;5d遷移強度（水素原子様波動関数で計算）<br />
+　h<sub><font size="2">3/2</font></sub>, h<sub><font size="2">5/2</font></sub>： d<sub><font size="2">3/2</font></sub>, d<sub><font size="2">5/2</font></sub>空孔数、 h<sub>3/2</sub>=4, h<sub>5/2</sub>=6<br />
+　A<sub>2</sub> &prop; |&lt;2p<sub>1/2</sub>|e・r|5d&gt;|<sup>2</sup>*(h<sub><font size="2">3/2 </font></sub>/ 3): L<sub><font size="2">2 </font></sub>WL（ホワイトライン）強度<br />
+　A<sub>3</sub> &prop; |&lt;2p<sub><font size="2">3/2</font></sub>|e・r|5d&gt;|<sup><font size="2">2</font></sup>*[(h<sub><font size="2">3/2 </font></sub>/ 15) + 6*(h<sub>5<font size="2">/2 </font></sub>/ 15)]: L<sub><font size="2">3 </font></sub>WL（ホワイトライン）強度<br />
+　エッジジャンプで規格化しない： 非偏光<br />
+　|&lt;2p<sub><font size="2">1/2</font></sub>|e・r|5d&gt;|<sup><font size="2">2 </font></sup>= |&lt;2p<sub><font size="2">3/2</font></sub>|e・r|5d&gt;|<sup><font size="2">2</font></sup><br />
+　h<sub><font size="2">5</font><font size="2">/2 </font></sub>/ h<sub><font size="2">3/2</font></sub>= (5/6) *(A<sub><font size="2">3</font></sub>/A<sub><font size="2">2</font></sub>) - 1/6、h<sub><font size="2">5</font><font size="2">/2 </font></sub>/ h<sub><font size="2">3/2</font></sub>=6/4 より、A<sub><font size="2">3</font></sub>/A<sub><font size="2">2</font></sub>=2となる。<br />
+　基底状態d<sup>n</sup>(n&ne;0)でもh<sub><font size="2">3/2</font></sub>, h<sub><font size="2">5/2</font></sub>は合うように定義され、この見かけの式は必ず成立する<br />
+・ L<sub><font size="2">3</font></sub>/L<sub><font size="2">2</font></sub> WL強度が2.0から外れる理由： 価電子(5d)のスピン軌道相互作用<br />
+・d空孔数：d<sup><font size="2">n</font></sup>(n&ne;0)で規格化しない L<sub><font size="2">3</font></sub>/L<sub><font size="2">2</font></sub> WL強度和に比例：非偏光・総和則<br />
+・h &equiv; h<sub><font size="2">3/2 </font></sub>+ h<sub><font size="2">5/2 </font></sub>&prop; A<sub><font size="2">3 </font></sub>+ A<sub><font size="2">2</font></sub><br />
+<br />
+□ L<sub>3</sub>:L<sub>2</sub>&ne;2:1の定性的理由： 選択則 &Delta;J=0, &plusmn;1<br />
+◇ 基底d<sup>0</sup>の場合<br />
+　2p<sub>3/2</sub> &rarr; 5d<sub>3/2</sub>, 5d<sub>5/2</sub><br />
+　2p<sub>1/2</sub> &rarr; 5d<sub>3/2</sub><br />
+　L<sub>2</sub>:L<sub>3</sub> = 1:2<br />
+◇ 基底d<sup>9</sup>(2D<sub>5/2</sub>)の場合<br />
+　2p<sub>3/2</sub> &rarr; 5d<sub>5/2</sub>のみ許容<br />
+　L<sub>2</sub> WL観測されず<br />
+　価電子LS結合大 &rarr; L<sub>2</sub>:L<sub>3</sub> &ne; 1:2<br />
+<br />
+□ 結晶場とスピン軌道相互作用の影響<br />
+・水素原子様波動関数で計算するとd軌道の空孔数はL<sub><font size="2">2 </font></sub>+ L<sub><font size="2">3</font></sub>に比例する結果となる。<br />
+・3d: 球対称イオン L<sub><font size="2">2</font></sub>/L<sub><font size="2">3</font></sub>&ne;1/2, 結晶場中 L<sub><font size="2">2</font></sub>/L<sub><font size="2">3</font></sub>≒1/2、LS結合 &lt; 結晶場<br />
+・4d: 3dと5dの中間となる。<br />
+・5d: 結晶場、LS結合をやや弱めるもののL<sub><font size="2">2</font></sub>/L<sub><font size="2">3</font></sub>&ne;1/2, LS結合&nbsp;&gt; 結晶場<br />
+※ 重元素になるとスピン軌道相互作用(LS結合)の影響が大きくなることによる。<br />
+------------------------------------------------------------------------------<br />
+■ 軽元素のX線吸収<br />
+<br />
+□ ダイヤモンドとグラファイト<br />
+・ グラファイト：1s&nbsp;&rarr; &pi;* 遷移が低いエネルギー(258 eV近傍)に現れる。<br />
+・ ダイヤモンド：1s&nbsp;&rarr; &sigma;* 遷移のみ現れる(290-310 eV近傍)。弱く1s -&gt; &pi;* 遷移が現れるのは表面のダングリングボンドのため（表面敏感な全電子収量法で測定すると見られる）。<br />
+<br />
+□ Cu(001)吸着O<sub>2</sub>分子のO K吸収端<br />
+・ &sigma;軌道//分子軸、X線電場E//分子軸で観測した場合<br />
+　斜入射(P偏光)で強い：分子軸は表面垂直、立って吸着<br />
+　直入射で強い：分子軸は表目平衡、寝て吸着<br />
+・ 1s&nbsp;&rarr; &sigma;* 遷移が物理吸着単層膜よりも化学吸着で低エネルギーになるのは、O-O結合が物理吸着では2重結合でE(&sigma;*)-E(&sigma;)が大きく、化学吸着では単結合的でE(&sigma;*)-E(&sigma;)が小さくなっており、物理吸着でのE(&sigma;*) &gt; 化学吸着でのE(&sigma;*)となっているため。1s&nbsp;&rarr; &sigma;* のエネルギー差は化学吸着の方が小さい。よって、化学吸着の方が&sigma;*のピークが低エネルギー側に出る。※ ケミカルシフトの可能性が低いのは、エネルギーの変化量が十数eVと大きいことから推測できる。<br />
+・ &sigma;* ピークの分裂：O<sub><font size="2">2</font></sub>分子では&sigma;*軌道が1種類しかないが、多層膜や単層物理吸着で分裂する。これは、O<sub>2</sub>分子は&pi;*軌道に不対電子2個を有する3重項基底状態（&pi;*軌道のスピンは&alpha;&alpha;、つまりupスピンの電子だけで占有している状態）であり、O1sの&alpha;, &beta;(downスピン）スピンが励起された場合、&pi;*軌道のスピンと4重項（O1s&alpha; &rarr; &sigma;*で、&pi;*は2つのupスピン、&sigma;*は1つのupスピン）と2重項（O1s&beta; &rarr; &sigma;*で、&pi;*は2つのupスピン、&sigma;*は1つのdownスピン）の2種類のカップリング（電子の配置）が生じ、両者のエネルギーが異なるために、&sigma;*ピークが分裂する。強度比は4重項:2重項の状態数の比となり2:1となる。<br />
+<br />
+□ Ni(111), Pd(111)吸着SO2分子のS K吸収端<br />
+・ 帰属<br />
+　低いエネルギー側の鋭いピーク：S1s &rarr; &pi;*<br />
+　高いエネルギー側の鋭いピーク；S1s &rarr; &pi;*<br />
+・ 配向：&sigma;軌道//分子面、E//分子面でS1s&rarr;&sigma;*観測<br />
+　Ni(111): 直入射で強い。分子面は表面平行<br />
+　Pd(111): 斜入射で強い。分子面は表面垂直<br />
+・ 距離<br />
+　Ni(111): S1s&rarr;&sigma;*、低いエネルギー、距離が伸びている<br />
+　Pd(111): 距離の伸びが小さい<br />
+<br />
+□ 正八面体 Co錯体のCo K吸収端<br />
+・ 正八面体錯体 1s&rarr;3d双極子禁制<br />
+・ 1s, 3d軌道は偶関数 &lt;3d|(e・r)|1s&gt;|=0<br />
+・ 観測される弱いプリエッジの吸収は少なくとも一部は電気四極子遷移<br />
+・ Co(Ⅱ)高いスピン：1s&rarr;3dt<sub>2g</sub>, 3de<sub>g</sub><br />
+　吸収が弱く、結晶場分裂も小さいので、1つのピークしか観測できない。<br />
+・ Co(Ⅲ)低いスピン：1s&rarr;3de<sub><font size="2">g</font></sub><br />
+　3dt2gは完全に選球されていて、1s&rarr;3de<sub><font size="2">g</font></sub>遷移のみが観測される。<br />
+<br />
+□ 各種Mn酸化物のMn K吸収端<br />
+・ Mn酸化物は価数が大きくなる毎に吸収端が高いエネルギー側にシフトする。<br />
+・ Mn酸化物の吸収端前のピークは1s &rarr; 3d遷移に帰属される。<br />
+・ MnO, Mn2O3, MnO2のMnは正八面体配位であり、双極子禁制となる。<br />
+・ KMnO4では正四面体配位であり、双極子許容となる。<br />
+<br />
+□ 平面D<sub>2h</sub>[CuCl<sub>4</sub>]<sup>2-</sup>錯体のCu K吸収端でのプリエッジーピーク（双極子禁制遷移の起源）<br />
+・ 単結晶方位角&Phi;方向偏光依存性測定<br />
+・ 90周期の強度変化<br />
+・ &Phi;=0, 90, 180度で極小<br />
+・ &Phi;=45, 135度で極大<br />
+・ 始状態で、d軌道はupスピンは全て埋っており、3dx<sup><font size="2">2</font></sup>-y<sup><font size="2">2 </font></sup>はdownスピンがなく空で、他のd軌道ではdownスピンでも埋っている。<br />
+以上の結果から、Cu1s&nbsp;&rarr; 3dx<sup><font size="2">2</font></sup>-y<sup><font size="2">2 </font></sup>で、全体の2/3が電気四極子遷移で、残りの1/3が振電相互作用による双極子遷移（※ 角度依存性がない部分が振電相互作用による双極子遷移）。<br />
+<br />
+□ K<sub>2</sub>Ni(CN)<sub>4</sub>・H<sub>2</sub>OのNi K吸収端<br />
+・ 1s &rarr; 3dx<sup>2</sup>-y<sup>2</sup>: 双極子禁制（3dは偶関数）<br />
+・ E//z 1s&rarr;4p&pi;: z方向に配位子がはいため4pz軌道が吸収端より大きく低エネルギー側に位置（平面構造に一般的）。<br />
+<br />
+□ 光誘起構造磁気転移<br />
+・ 昇温や光照射によって、スピンの配置が変わったり(Low spin{LS}やHigh spin{HS}の配置に変化)、他の原子から電子が移動したりすることで、価電子帯の電子配置が変化し、吸収ピークの位置が変化する。<br />
+・ Ferrimagnetic と Non-magneticで原子間距離が異なる場合、緩和の過程（励起後から幾つかの終状態に移行）により、Ferrimagnetic と Non-magneticのどちらになるかで得られる結果としての原子間距離が異なることになる。<br />
+<br />
+□ ランタノイドのL吸収<br />
+・ 3価のランタノイドのL<sub>3</sub>吸収では遷移金属のL<sub>3</sub>吸収と同様に2p&rarr;5d吸収が吸収端に現れる。さらに低エネルギー側に弱い吸収が見える。これは2p&rarr;4fとなる電気四極子遷移（⊿l=4-2=2で、⊿l=&plusmn;2を満たし、遷移が許容）である。<br />
+・ CeO<sub>2</sub>: Ce(Ⅳ) (4f)<sup><font size="2">0</font></sup>&rarr;(4f)<sup><font size="2">1</font></sup><br />
+・ Ce<sub>2</sub>(CO<sub>3</sub>)<sub>3</sub>: Ce(Ⅲ) (4f)<sup><font size="2">1</font></sup>&rarr;(4f)<sup><font size="2">2</font></sup><br />
+・ Yb<sub>2</sub>O<sub>3</sub>: Yb(Ⅲ) (4f)<sup>13</sup>&rarr;(4f)<sup>14</sup><br />
+------------------------------------------------------------------------------<br />
+■ EXAFSの理論式に関するコメント<br />
+<br />
+□ EXAFSの理論式<br />
+&chi;(k) = [N*S<font size="2"><sub>0</sub><sup>2</sup></font> / (k*R<sup>2</sup>)] * F(k) * exp[-&lambda;(k)/(2*R)] * exp(-2*C<sub>2</sub>*k<sup>2</sup>) * sin[2*k*R + &Phi;(k)]<br />
+　N: 配位数、R: 平均原子間距離<br />
+　C<sub>2</sub>: Debye-Waller因子、 C<sub>2</sub>=&lt;(r-R)<sup>2</sup>&gt;、上式から分かるようにC<sub><font size="2">2</font></sub>の値が大きければEXAFS振動強度は弱くなる。<br />
+　F(k): 散乱原子の散乱振幅<br />
+　&Phi;(k): 吸収原子・散乱原子の位相シフト<br />
+　S<font size="2"><sub>0</sub><sup>2</sup></font>: intrinsic loss factor （下記に詳細を記載）<br />
+　exp(-&lambda;(k)/(2*R)): extrinsic loss factor<br />
+　k=&radic;[2m(h<em>&nu;</em>-E<sub><font size="2">0</font></sub>)] / (h/2&pi;)<br />
+　&lambda;(k): 電子の平均自由行程<br />
+　h<em>&nu;</em>: X線光子エネルギー<br />
+　E<sub>0</sub>: 吸収端エネルギー<br />
+・ 球面波での散乱を仮定している。そのため、球の面積である4&pi;r<sup>2</sup>で波が広がるとして、R<sup><font size="2">2</font></sup>で割られている。expの部分は球面波が進むことに強度が弱くなる（減衰する）ことに対応。sinがあるので、いろいろなkが存在すると0に近づく。<br />
+・ 複数の原子がある場合には、各原子での和を取る。つまり、&chi;(k) = &Sigma;<sub>i</sub>(&nbsp;[N<sub>i</sub>*S<sub>i</sub><font size="2"><sub>0</sub><sup>2</sup></font> /・・・)とする。<br />
+　仮定：F(k), &Phi;(k), S<sub>0</sub><sup>2</sup>, &lambda;(k)は理論や標準試料の結果を用いる。散乱原子の分布はガウス関数。<br />
+※ ガウス分布でない系にガウス分布を仮定するとしばしば吸収端エネルギー E<sub>0</sub>が負の方向にずれ、平均原子間距離 Rが不自然に短くなる。<br />
+<br />
+□ 散乱振幅 F(k), &Phi;(k)<br />
+・ FEFFで計算する。一般的に行なわれ、高精度である。<br />
+・ FEFFでの散乱振幅は球面波展開を行なっているので距離に依存する。<br />
+・ FEFFで計算する構造は実際の系に近くする。（例えば、理論で原子間距離2Å、実際は3Åというオーダーではダメ）<br />
+<br />
+□ Loss因子 S<sub><font size="2">0</font></sub><sup>2</sup>, &lambda;(k)<br />
+・ S<sub><font size="2">0</font></sub><sup><font size="2">2</font></sup>はFEFFでは計算できない。<br />
+・ &lambda;(k)はFEFFで計算できるが精度が低い。<br />
+・ 配位数Nの絶対値に誤差を与える。<br />
+<br />
+□ Loss因子の物理的意味<br />
+・ S<sub><font size="2">0</font></sub><sup><font size="2">2</font></sup>：励起電子以外の電子にエネルギーが与えられない確率（※ 一電子近似にするために、多電子効果を除いた割合{つまり一電子近似の部分}をS<sub><font size="2">0</font></sub><sup><font size="2">2</font></sup>とする）。励起電子以外の電子にエネルギーが与えられる場合はkがさまざまな値を取る（多電子効果{終状態が数多く存在し、一電子近似では近似できない場合}により、吸収端エネルギーE<sub>0</sub>がズレる &gt; kも変わる）。色々なkをあわせると0に近づく。そのため、kがさまざまな値をとるとEXAFSへの寄与が過小評価（＝無視）されるようになる。通常 S<sub><font size="2">0</font></sub><sup><font size="2">2</font></sup>=0.7から0.9程度の値を用いる。<br />
+・ &lambda;(k)：電子が散乱されてもエネルギーを失わない確率。<br />
+<br />
+◇ FEFF [8]<br />
+　FEFFは第一原理計算法である（多重散乱を考慮する領域の半径r<sub>MS</sub>とSCF計算を行う半径r<sub>SCF</sub>が主たる入力変数となっている）が、散乱方程式を解く際のポテンシャルを球対称近似（マフィンティン近似）している。そのような近似が最密充填構造を有する構造には適切であるが、SiO<sub>2</sub>のような複雑な構造を有する物質には問題があることを示している。球対称近似を用いないフルポテンシャルの多重散乱計算も近年行われており、フルポテンシャル多重散乱理論であればSiO<sub>2</sub>のスペクトルも再現できることがわかっている。<br />
+------------------------------------------------------------------------------<br />
+■ EXAFS波の打ち消し<br />
+<br />
+・ 第2周期と第3周期の原子が混ざり合った系で距離が近いと、EXAFS波が打ち消しあって0に近くなってしまうこともある。第2周期の部分が見えにくくなる。<br />
+・ Zn周囲のS, N 4配位の場合： Zn-SとZn-NのEXAFSの位相がほぼ逆で打ち消しあう場合などが存在。<br />
+・ S, ClとN, Oが散乱原子として混在する場合は、高いS/N比の測定が必要。<br />
+------------------------------------------------------------------------------<br />
+■ 多重散乱の温度依存性<br />
+<br />
+・ 直線に並んでいる構造では、背面の原子からの散乱波の回りこみなどによる多重の散乱で、EXAFS振動が強くなる。<br />
+・ 温度が高まって、熱振動により原子の並びが直線からずれる（Focusing effectが弱まる）ようになると、EXAFS振動が弱くなる。この効果はDebye-Waller因子以上にEXAFS振動が弱くなることを覚えておきたい。<br />
+※ Focusing effect: 3原子系の多重散乱は直線配置で最も強調される（注意：分子でなくて結晶でも増強される。直線で原子が並んでいれば、それらの原子間距離が違っていても増強される。例えば、RbMnFe(CN)6など）。<br />
+------------------------------------------------------------------------------<br />
+■ Debyeモデル<br />
+<br />
+・ 音響フォノンのみ。音速cを等方的とする。<br />
+・ 等方的単原子格子（FCCまたはBCC）を仮定している。一般格子への適用は注意が必要。<br />
+・ 単一パラメーターで各配位のC<sub>2</sub>を計算できる。Cuの場合、デバイ温度 &theta;<sub>D</sub>=331 Kとして第1,3配位とも合致する。<br />
+・ C<sub>2</sub> = 2原子の平均二乗変位 + 原子対相関<br />
+※ 原子対相関は式の最初にマイナスが付く。C<sub><font size="2">2</font></sub> は物理的には（2原子の平均二乗変位AとA&#39;の原子が独立して振動）から原子対相関（AとA&#39;の原子が一緒の方向に動く） を引くのに対応する。<br />
+※ FEFFでデバイ温度を入力することになるが、変な結果になっているときには、解析者が値を入力して修正することが必要となる。<br />
+------------------------------------------------------------------------------<br />
+■ EXAFSの原子間距離<br />
+<br />
+□ EXAFS解析での非対称分布補正<br />
+　熱膨張：原子間ポテンシャルは短距離側で急峻、長距離側で緩やかなので、昇温で原子間距離が伸びる。<br />
+※ ガウス分布を仮定した解析では熱膨張は求められないことは覚えておきたい。<br />
+・4次までのcumulant補正を用いて熱膨張を求める<br />
+<br />
+□ 垂直方向の振動<br />
+・ 回折法（XRD）は平衡原子間距離Re<br />
+・ XAFSは平均原子間距離Rav。垂直方向での振動も加味して原子間距離が求められる。<br />
+　Rav = Re + &lt;U（垂直）<sup>2</sup>&gt;/(2*Re)<br />
+<br />
+□ 非調和ポテンシャル<br />
+・ Morseポテンシャ<br />
+　特徴：シュレーディンガー方程式の厳密解。cumulant係数の数値計算可能。<br />
+・ 4次多項式ポテンシャル<br />
+　特徴：cumulant係数、摂動展開法、解析的<br />
+------------------------------------------------------------------------------<br />
+■ 混晶 AB<sub><font size="2">x</font></sub>C<sub><font size="2">1-x</font></sub>の原子間距離とVegard則<br />
+<br />
+□ Vegard（ベガード則）: virtual crystal approximation<br />
+・ 混晶の格子定数は成分平均<br />
+・ a<sub>0</sub><sup>VCA</sup>(x) = x*a<sub>0</sub><sup>AB</sup> + (1-x)*a<sub>0</sub><sup>AC</sup><br />
+　ここで、a<font size="2"><sub>0</sub><sup>VCA</sup></font>(x) は混晶 AB<sub><font size="2">x</font></sub>C<sub><font size="2">1-x</font></sub>の格子定数、a<font size="2"><sub>0</sub><sup>AB</sup></font> は純物質ABの格子定数、a<font size="2"><sub>0</sub><sup>AC</sup></font> は純物質ACの格子定数。<br />
+<br />
+□ CuBr<sub>x</sub>Cl<sub>1-x</sub> (ZnS型構造）<br />
+・ Cu-Br間距離はVegard則による格子定数からの予測と大きく異なり、純物質CuBrの原子間距離に近い。<br />
+<br />
+□ RbBrvCl<sub><font size="2">1-x</font></sub> (NaCl型構造）<br />
+・ CuBr<sub><font size="2">x</font></sub>Cl<sub><font size="2">1-x</font></sub> と比べてRb-Br間距離はVegard則による格子定数からの予測に近づくが、まだVegard則の予測とは大きくことなる結果。<br />
+------------------------------------------------------------------------------<br />
+■ エラーバー（得られた動径分布関数から原子間距離の図をプロットするときに必要）<br />
+<br />
+□ rex2000: EXAFS カーブフィッティング 画面の右下にあるe.s.dを押す。e.s.dは共相関行列（共分散行列と思われる）の対角項の平方根。IXS勧告ではこれを誤差として良いとしている。固定（FIX）したパラメータだと表示されない（グレーで表示な）ので注意。使い方は最小二乗フィッティングの結果&plusmn;e.s.d。<br />
+<br />
+□ Athena&amp;Artemis:<br />
+&nbsp;上記のどちらについても10年前くらいから解析でのエラーバーが表示されるようになっているとのこと。<br />
+------------------------------------------------------------------------------<br />
+■ Liイオン電池の充放電過程<br />
+<br />
+正極遷移金属イオンの酸化数<br />
+・ XAFSによるin situ観測が容易<br />
+・ 吸収端エネルギーと酸化数はおおよそ線形の関係<br />
+------------------------------------------------------------------------------<br />
+■ 用語<br />
+・ ダングリングボンド： 結合の手がない部分（表面の原子などで見られる）。<br />
+・ バルク：表面ではなく試料の内部のこと。試料の内部と表面では結合や電子構造が異なるためにこの用語がある。<br />
+・ 直入射： 地面に水平に電場ベクトルが振動している。<br />
+・ P偏光, 斜入射： 地面に垂直に電場ベクトルが振動している。<br />
+・ RIXS（リックス）: 蛍光X線収量で結晶分光を用いて高分解能で測定する手法。<br />
+------------------------------------------------------------------------------<br />
+■ 参考文献&nbsp;<br />
+[1] 2009.10.22 XAFS講習会（入門実習偏）：<a href="http://pfwww.kek.jp/nitani/workshop/2009fall/experiment.pdf">http://pfwww.kek.jp/nitani/workshop/2009fall/experiment.pdf</a>&nbsp;(ここから提供されている他のスライドも見ると良い)<br />
+[2]&nbsp;XAFSデータ解析&amp;整理のための小枝ツール: <a href="http://www.geocities.co.jp/Technopolis-Jupiter/1272/">http://www.geocities.co.jp/Technopolis-Jupiter/1272/</a>&nbsp;<br />
+[3] XAFSの基礎理論：<a href="http://pfwww.kek.jp/nitani/workshop/2009fall/theory.pdf">http://pfwww.kek.jp/nitani/workshop/2009fall/theory.pdf</a><br />
+[4]&nbsp;有名な伊藤先生のHP: <a href="http://athenaandartemis.seesaa.net/index-3.html">http://athenaandartemis.seesaa.net/index-3.html</a>&nbsp;(XRDやリートベルト, MEM, WIEN2kでも有名です)<br />
+[5]&nbsp;シンクロトロン光利用者研究会 XAFSグループ講義資料<br />
+[6]&nbsp;wikipedia （電気双極子遷移）<br />
+[7]&nbsp;private communication<br />
+[8] 日本XAFS研究会『XAFSの基礎と応用』講談社<br />
+------------------------------------------------------------------------------

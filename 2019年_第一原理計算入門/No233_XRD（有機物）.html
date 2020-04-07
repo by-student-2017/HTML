@@ -1,0 +1,105 @@
+XRD (確認が取れていない項目が多いです。参考までに）<br />
+------------------------------------------------------------------------------<br />
+■ RIETAN-FP<br />
+(http://fujioizumi.verse.jp/download/download.html)<br />
+<br />
+□ Manual<br />
+・documents.zip<br />
+1. documents.zip を解凍<br />
+2. Readme_Win.pdf を読みながらその通りにすればよい<br />
+<br />
+□ Install<br />
+・Windows_versions_20170913.zip<br />
+1. Windows_versions_20170913.zip を解凍<br />
+2. マニュアルのdocumentsのReadme_Win.pdfの通りに行えばよい<br />
+<br />
+□ Usage (ポイント ※詳細は左欄の「リートベルト法」を参照してください)<br />
+1. RIETAN_VENUS_examples &gt; FapatiteJを参考に用いればよい<br />
+　（Jは日本語の意味）<br />
+2. VESTAでまず解析したい構造のcifを入れてRIETAN(*.ins)で保存する<br />
+　このデータを用いて FapatiteJ の中身をVESTAのものに書き換える。対象となる部分は以下<br />
+　・「&#39;O&#39; 12.0 &nbsp;&#39;P&#39; 3.0 &nbsp;&#39;Ca&#39; 5.0 &nbsp;&#39;F&#39; 1.0 /」<br />
+　・「&#39;O-&#39; &nbsp;&#39;P&#39; &nbsp;&#39;Ca2+&#39; &nbsp;&#39;F-&#39; /」<br />
+　・「VNS1 = &#39;A-176&#39;: (Vol.No. of Int.Tables: A or I)-(Space group No)-(Setting No).」<br />
+　・「HKLM1 = &#39;P 63/m &#39;: 回折指数hklと多重度mをHermann-Mauguinの記号から発生する.#1」<br />
+　・「HKLM1 = &#39;P 63/m*&#39;! Hermann-Mauguinの記号に基づく結晶構造データを標準化する.#2」<br />
+　・「CELLQ &nbsp;9.36903 &nbsp;9.36903 &nbsp;6.88384 &nbsp;90.0 &nbsp;90.0 &nbsp;120.0 &nbsp;0.0 &nbsp;1010000」<br />
+　・「O1/O- &nbsp;1.0 &nbsp;0.324174 &nbsp;0.485349 &nbsp;0.25 &nbsp;0.744733 &nbsp;01101」から<br />
+　&nbsp; 「F/F- &nbsp;1.0 &nbsp;0.0 &nbsp;0.0 &nbsp;0.25 &nbsp;1.42612 &nbsp;00001」まで<br />
+3. さらに以下の部分を書き換える<br />
+　・「NPRFN = 1」を「NPRFN = 2」に書き換える<br />
+　　（これが一番フィッティングが良い。よく使われる）<br />
+　・「PREF &nbsp;1.0 &nbsp;0.998462 &nbsp;0.0 &nbsp;0.0 &nbsp;0.0 &nbsp;0.0 &nbsp;010000」を「PREF &nbsp;1.0 &nbsp;1.0 &nbsp;0.0 &nbsp;0.0 &nbsp;0.0 &nbsp;0.0 &nbsp;000000」に書き換える<br />
+　　（選択配向なしの設定。これで解析が行えるのが一番良い）<br />
+　・「LQUART = 1」を「LQUART = 0」に書き換える<br />
+　・「NUPDT = 0: このファイル中の可変パラメーター (ID = 1, 2)は更新しない.<br />
+&nbsp; &nbsp; &nbsp; NUPDT = 1! 精密化終了後に, このファイル中の可変パラメーター (ID = 1, 2)を更新する.」を<br />
+&nbsp; &nbsp; 「NUPDT = 0! このファイル中の可変パラメーター (ID = 1, 2)は更新しない.<br />
+&nbsp; &nbsp; &nbsp; NUPDT = 1: 精密化終了後に, このファイル中の可変パラメーター (ID = 1, 2)を更新する.」に書き換える<br />
+　　（これを設定しないとRietveld解析が進まない）<br />
+<br />
+　　（下の3つのどれかが悪さをして動作しないため書き換えている）<br />
+　・「NCF = 0! チャージフリッピング・プログラムSuperflip用入力ファイルは出力しない.<br />
+&nbsp; &nbsp; &nbsp; NCF = 1: チャージフリッピング・プログラムSuperflip用入力ファイルを出力する.」を<br />
+&nbsp; &nbsp; 「NCF = 0: チャージフリッピング・プログラムSuperflip用入力ファイルは出力しない.<br />
+&nbsp; &nbsp; &nbsp; NCF = 1! チャージフリッピング・プログラムSuperflip用入力ファイルを出力する.」に書き換える<br />
+　・「NDA = 1」を「NDA = 0」に書き換える<br />
+　・「NMEM = 1」を「NMEM = 0」に書き換える<br />
+4. 強度データの*.intを準備して秀丸エディタでRIETANを押す（上手くいかなければ左欄の「リートベルト解析」もチェック &gt; Plot<br />
+<br />
+※「else if NPRFN = 1 or NPRFN = 2 then」の下にある一連のパラメータはコピー&amp;ペーストして行頭に#を付けて予備として保存しておくと良い。解析で上手くいかなくなったときにこのパラメータを何度か使うと良い。<br />
+※ Rietveldの解析が上手くいったら、左欄の[MEM解析]を参照していけばよい。チャージフリッピング法は扱いが難しいので解析結果は参考程度にしておけばよいでしょう。<br />
+------------------------------------------------------------------------------<br />
+■ 装置の設定 (SWIDTHはデータが2&theta;=20度から始まる場合を例として記載）<br />
+<br />
+□ Smartlab (Ge 111 入射モノクロメーター)<br />
+&nbsp; &nbsp;R12 = 0.0: K&alpha;特性X線の場合R12 = 強度(K&alpha;2)/強度(K&alpha;1), Cu K&beta;特性X線の場合R12 = 0.0.#1<br />
+&nbsp; &nbsp;CTHM1 = 0.7733: cos(2&alpha;)**2 (&alpha;: モノクロメーターのブラッグ角). モノクロなし: CTHM1 = 1.0.<br />
+&nbsp; &nbsp;# Ge(111) = 3.13570 Ang (d値) = 28.4317 deg (2&theta;の値 at XLMDN = 1.5401) = 0.7733 (CTHM1)<br />
+&nbsp; &nbsp;※ 2&alpha; = 2&theta;なので注意。他のモノクロメータも同様に計算する。<br />
+&nbsp; &nbsp;<br />
+&nbsp; &nbsp;DSANG = 0.6667: 最低角で照射幅がSWIDTHとなるような発散スリットの角度/゜<br />
+&nbsp; &nbsp;RGON = 300.0: ゴニオメーター半径/mm.<br />
+&nbsp; &nbsp;SWIDTH = 20.0: 試料の照射幅/mm.<br />
+&nbsp; &nbsp;※ 文献[1]を参考に設定する<br />
+<br />
+□ Smartlab (グラファイトモノクロメーター)<br />
+&nbsp; &nbsp;R12 = 0.0: K&alpha;特性X線の場合R12 = 強度(K&alpha;2)/強度(K&alpha;1), Cu K&beta;特性X線の場合R12 = 0.0.#1<br />
+&nbsp; &nbsp;CTHM1 = 0.7998: cos(2&alpha;)**2 (&alpha;: モノクロメーターのブラッグ角). モノクロなし: CTHM1 = 1.0.<br />
+&nbsp; &nbsp;<br />
+&nbsp; &nbsp;DSANG = 0.6667: 最低角で照射幅がSWIDTHとなるような発散スリットの角度/゜<br />
+&nbsp; &nbsp;RGON = 300.0: ゴニオメーター半径/mm.<br />
+&nbsp; &nbsp;SWIDTH = 20.0: 試料の照射幅/mm.<br />
+&nbsp; &nbsp;※ 文献[1]を参考に設定する<br />
+<br />
+□ D8 ADVANCE (ゴニオメーター半径: 280.0 mm, 発散スリット0.5, グラファイトモノクロメーターの場合)<br />
+&nbsp; &nbsp;R12 = 0.0: K&alpha;特性X線の場合R12 = 強度(K&alpha;2)/強度(K&alpha;1), Cu K&beta;特性X線の場合R12 = 0.0.#1<br />
+&nbsp; &nbsp;CTHM1 = 0.7998: cos(2&alpha;)**2 (&alpha;: モノクロメーターのブラッグ角). モノクロなし: CTHM1 = 1.0.<br />
+&nbsp; &nbsp;<br />
+&nbsp; &nbsp;DSANG = 0.5: 最低角で照射幅がSWIDTHとなるような発散スリットの角度/゜<br />
+&nbsp; &nbsp;RGON = 280.0: ゴニオメーター半径/mm.<br />
+&nbsp; &nbsp;SWIDTH = 14.08: 試料の照射幅/mm.<br />
+------------------------------------------------------------------------------<br />
+■ 大事なこと（文献[1,6]にも書かれている）<br />
+<br />
+　文献[1]に書かれていますが、擬似集中法（ブラッグ・ブレンターノ法）で2&theta;=20度以下を測定する場合は、スリット幅を調整してX線の照射幅がガラス試料板の試料幅（通常20 mm）を超えないようにしてください。20度から30度以下の角度でVESTAやRIETAN-FPの予測値に合わない場合はこの理由の可能性が高いです。<br />
+　論文で明らかに20度以下で理論値を下回るほどの弱い強度になったものを並べて比較しているものがあります。面方位や強度の単純な比較はできるでしょうが、これだとQualX2を使った定性分析も上手くいきません（当然、EXPO2014を使った直接法での解析やRietveld解析、MEMやチャージフリッピング法などの解析もできません）。ある分野では定量分析もされていませんが、このような状況では逆モンテカルロ法を使った分析でより詳細な構造を明らかにすることもできないでしょう。<br />
+　[20mmでの照射角度/スリット角度]^2で補正すると良いところまでいくが、2&theta;=&lt;10度以下で試料強度が強くなる。いま考えているのは平板試料は中心部分から外れるほどローランド円から外れるので単純な光束の比から強度がずれていくのではと考えている。これを補正しようとするとバックグラウンドと試料を分けて強度比を補正しなければならなくなる。単純に補正値を掛けてというわけにはいかないのでしっかりとスリットと試料照射幅を調整する方がよい。<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] SmartLab粉末回折計簡易マニュアル (広角集中法D/teX)&nbsp;<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pdfs/smartlab-manJ.pdf<br />
+[2] 粉末X線回折計のページ(2017/01/03 created) &dagger;<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?%CA%B4%CB%F6X%C0%FE%B2%F3%C0%DE%C1%F5%C3%D6<br />
+[3] 平行ビーム法を用いた 平行ビーム法を用いたX X線回折測定&nbsp;<br />
+&nbsp; https://www.nstec.nipponsteel.com/techrepo/zairyo_pdf/HRM-1303.pdf<br />
+[4] SmartLabシステムの紹介<br />
+&nbsp; http://bunseki.kyushu-u.ac.jp/bunseki/media/116.pdf<br />
+[5] 多機能粉末X線回折装置 （D8 ADVANCE） - SUCRA<br />
+[6] 粉末X線回折２（測定編）<br />
+&nbsp; https://mmnakayama.jimdo.com/study/粉末x線回折%EF%BC%92/<br />
+[7] シンクロトロン光を利用した粉末Ｘ線回折&nbsp;<br />
+&nbsp; http://www.crl.nitech.ac.jp/~ida/topics/2015/20150305oral_Ida.pdf<br />
+[8] 粉末＆バルクのX線回折(XRD)測定の基礎<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,101 @@
+Tinker (https://dasher.wustl.edu/tinker/)<br />
+FFE (Force Field Explorer) is a graphical user interface<br />
+------------------------------------------------------------------------------<br />
+■ Install (windows 10 (64 bit))<br />
+(https://dasher.wustl.edu/tinker/)<br />
+・Tinker-FFE Installer for Windows (ZIP, 275.3 Mb)<br />
+1. ffe-windows-8.6.1.exe<br />
+2. Force Filed Explorer<br />
+<br />
+※ FFEでTinkerまでインストールされているように見える<br />
+------------------------------------------------------------------------------<br />
+■ Install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://dasher.wustl.edu/tinker/)<br />
+・Tinker-FFE Installer for Linux (GZIP, 284.9 Mb)<br />
+0. sudo apt-get install openjdk-8-jre<br />
+&nbsp; sudo apt-get install libjava3d-java<br />
+1. gunzip ffe-linux-8.6.1.sh.gz<br />
+2. ./ffe-linux-8.6.1.sh<br />
+3. cd Tinker-FFE<br />
+4. cd ffe<br />
+5. ./&#39;Force Field Explorer&#39;<br />
+<br />
+※ Need: Java 8 (JRE 1.8), Java3D 1.6<br />
+※ 面倒な場合： $HOME/Tinker-FFE/ffe/&#39;Force Field Explorer&#39;<br />
+※ 下記のエラーが出るが画面は表示される<br />
+-----<br />
+libGL error: No matching fbConfigs or visuals found<br />
+libGL error: failed to load driver: swrast<br />
+libGL error: No matching fbConfigs or visuals found<br />
+libGL error: failed to load driver: swrast<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ Files (FFE)<br />
+・*.xyz<br />
+&nbsp; TINKER coordinate files&nbsp;<br />
+・*.int<br />
+&nbsp; TINKER coordinate files&nbsp;<br />
+・*.arc<br />
+&nbsp; archive files<br />
+・*.u<br />
+&nbsp; induced dipole files<br />
+・*.pdb<br />
+&nbsp; Protein Databank files<br />
+※ 文献[8]を見ると入力ファイルがどのように記述されているかがよくわかる<br />
+------------------------------------------------------------------------------<br />
+■ Usage (FFE)<br />
+<br />
+□ VESTAとOpenBableを用いた構造ファイルの作成<br />
+1. VESTA (remove symmetry -&gt; P1) &gt; cif<br />
+2. cif &gt; Openbabel &gt; txyz--tinker XYZ format<br />
+&nbsp; &gt; [check] Write atom types for the MM3 forcefield<br />
+&nbsp; &gt; Output file case.txyz<br />
+&nbsp; &gt; CONVERT<br />
+3. gedit *.key<br />
+4. ./&#39;Force Field Explorer&#39; &gt; Open &gt; txyz file&nbsp;<br />
+5. Display &gt; Ball &amp; Stick<br />
+6. Modeling Commands &gt; [Analyze] -&gt; [Minimize], etc &gt; GO<br />
+<br />
+□ output file<br />
+[Minimize]: *.xyz (output file)<br />
+[Newton]: *.xyz (output file)<br />
+[Optimize]: *.xyz (output file)<br />
+<br />
+□ ztc.key (underconstrcting)<br />
+-----<br />
+# Output Control<br />
+VERBOSE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+<br />
+# Force Field Selection<br />
+PARAMETERS &nbsp; &nbsp; &nbsp; &nbsp;../params/mm3<br />
+<br />
+# Crystal Lattice And Periodic Boundary<br />
+A-AXIS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;24.07 &nbsp;&nbsp;<br />
+B-AXIS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;24.07 &nbsp;&nbsp;<br />
+C-AXIS &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;24.07 &nbsp;&nbsp;<br />
+ALPHA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 90.00 &nbsp;&nbsp;<br />
+BETA &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;90.00 &nbsp;&nbsp;<br />
+-----<br />
+※ Angstrom unit<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+[1] TINKER - Software Tools for Molecular Design<br />
+&nbsp; https://mog-la.hatenadiary.org/entries/2006/08/30<br />
+[2] TINKER - Software Tools for Molecular Design<br />
+&nbsp; https://mog-la.hatenadiary.org/entries/2006/08/30<br />
+[3] AMOEBA advanced potential energies workshop<br />
+&nbsp; https://sites.google.com/site/amoebaworkshop/exercise-1<br />
+[4] 分子動力学計算を活用したインシリコ創薬<br />
+&nbsp; https://www.r-ccs.riken.jp/aicssite/wp-content/uploads/2016/05/20151202hirokawa.pdf<br />
+&nbsp; &uarr;私にはとても勉強になった。一度は読んでおきたい。<br />
+&nbsp; https://www.r-ccs.riken.jp/course/life_science2_2.4.html (動画)<br />
+&nbsp; https://www.youtube.com/watch?v=UBW1TxwfqhE (Youtube動画)<br />
+[5] TINKER explained&nbsp;<br />
+&nbsp; http://chembytes.wikidot.com/tinker-s-wiki<br />
+[6] Tinkergpu:Tinker-tut<br />
+&nbsp; https://biomol.bme.utexas.edu/tinkergpu/index.php/Tinkergpu:Tinker-tut<br />
+[7] NTChem ジョブ入力ファイルの準備方法 - 量子系分子科学研究チーム<br />
+&nbsp; http://molsc.riken.jp/ntchem2013_tutrial.pdf<br />
+[8] How to convert TINKER files<br />
+&nbsp; https://ccse.jaea.go.jp/ja/download/pimd/doc/manual/node134.html<br />
+------------------------------------------------------------------------------

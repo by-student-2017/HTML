@@ -1,0 +1,417 @@
+Lammps (https://lammps.sandia.gov/)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ 素晴らしい（オススメの）HP<br />
+<br />
+[1] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+[2] Molecular Mechanics (MM) 計算（z軸方向のみの緩和）<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps2.html<br />
+[8] LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+------------------------------------------------------------------------------<br />
+■ Install<br />
+<br />
+□ install (easy method) (2019/05/14)<br />
+1. sudo apt-get install lammps<br />
+2. which lammps<br />
+&nbsp; /usr/bin/lammps<br />
+<br />
+◇ Usage<br />
+1. mpirun -np 6 lammps &lt; case.in<br />
+&nbsp; ※ aireboやeam/alloyなどが動作する<br />
+&nbsp; ※ [LAMMPS tutorials](https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials)の動作も確認<br />
+<br />
+◇ remove (削除したい場合)<br />
+1. sudo apt-get remove lammps<br />
+------------------------------------------------------------------------------<br />
+■ gnuplot<br />
+<br />
+1. sudo apt install gnuplot<br />
+------------------------------------------------------------------------------<br />
+■ octave<br />
+<br />
+1. sudo apt install octave<br />
+2. octave<br />
+3. all [Next &gt;]<br />
+------------------------------------------------------------------------------<br />
+■ Scilab<br />
+<br />
+1. sudo apt install scilab<br />
+2. scilab<br />
+------------------------------------------------------------------------------<br />
+■ LAMMPS tutorial [8]<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials)<br />
+<br />
+<br />
+□ Potentials<br />
+[1] NIST Interatomic Potential<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/<br />
+[2] Carbon Potentials<br />
+&nbsp; http://www.carbonpotentials.org/potentials<br />
+<br />
+<br />
+□ LAMMPS Beginner Help 3 (Stress-Strain Plot) [8]<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Tension)<br />
+1. gedit in.tensile.txt<br />
+-----<br />
+# Input file for uniaxial tensile loading of single crystal aluminum<br />
+# Mark Tschopp, November 2010<br />
+<br />
+# ------------------------ INITIALIZATION ----------------------------<br />
+units &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+dimension&nbsp;&nbsp; &nbsp;3<br />
+boundary&nbsp;&nbsp; &nbsp;p&nbsp;&nbsp; &nbsp;p&nbsp;&nbsp; &nbsp;p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+variable latparam equal 4.05<br />
+<br />
+# ----------------------- ATOM DEFINITION ----------------------------<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc ${latparam}<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;whole block 0 10 0 10 0 10<br />
+create_box&nbsp;&nbsp; &nbsp;1 whole<br />
+lattice &nbsp;&nbsp; &nbsp;fcc ${latparam} orient x 1 0 0 orient y 0 1 0 orient z 0 0 1<br />
+create_atoms&nbsp;&nbsp; &nbsp;1 region whole<br />
+<br />
+# ------------------------ FORCE FIELDS ------------------------------<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/alloy<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al99.eam.alloy Al<br />
+<br />
+# ------------------------- SETTINGS ---------------------------------<br />
+compute csym all centro/atom fcc<br />
+compute peratom all pe/atom&nbsp;<br />
+<br />
+######################################<br />
+# EQUILIBRATION<br />
+reset_timestep&nbsp;&nbsp; &nbsp;0<br />
+timestep 0.001<br />
+velocity all create 300 12345 mom yes rot no<br />
+fix 1 all npt temp 300 300 1 iso 0 0 1 drag 1&nbsp;<br />
+<br />
+# Set thermo output<br />
+thermo 1000<br />
+thermo_style custom step lx ly lz press pxx pyy pzz pe temp<br />
+<br />
+# Run for at least 10 picosecond (assuming 1 fs timestep)<br />
+run 20000<br />
+unfix 1<br />
+<br />
+# Store final cell length for strain calculations<br />
+variable tmp equal &quot;lx&quot;<br />
+variable L0 equal ${tmp}<br />
+print &quot;Initial Length, L0: ${L0}&quot;<br />
+<br />
+######################################<br />
+# DEFORMATION<br />
+reset_timestep&nbsp;&nbsp; &nbsp;0<br />
+<br />
+fix&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;1 all npt temp 300 300 1 y 0 0 1 z 0 0 1 drag 1<br />
+variable srate equal 1.0e10<br />
+variable srate1 equal &quot;v_srate / 1.0e12&quot;<br />
+fix&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;2 all deform 1 x erate ${srate1} units box remap x<br />
+<br />
+# Output strain and stress info to file<br />
+# for units metal, pressure is in [bars] = 100 [kPa] = 1/10000 [GPa]<br />
+# p2, p3, p4 are in GPa<br />
+variable strain equal &quot;(lx - v_L0)/v_L0&quot;<br />
+variable p1 equal &quot;v_strain&quot;<br />
+variable p2 equal &quot;-pxx/10000&quot;<br />
+variable p3 equal &quot;-pyy/10000&quot;<br />
+variable p4 equal &quot;-pzz/10000&quot;<br />
+fix def1 all print 100 &quot;${p1} ${p2} ${p3} ${p4}&quot; file Al_SC_100.def1.txt screen no<br />
+<br />
+# Use cfg for AtomEye<br />
+dump &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;1 all cfg 250 dump.tensile_*.cfg mass type xs ys zs c_csym c_peratom fx fy fz<br />
+dump_modify 1 element Al<br />
+<br />
+# Display thermo<br />
+thermo &nbsp;&nbsp; &nbsp;1000<br />
+thermo_style&nbsp;&nbsp; &nbsp;custom step v_strain temp v_p2 v_p3 v_p4 ke pe press<br />
+<br />
+run&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;20000<br />
+<br />
+######################################<br />
+# SIMULATION DONE<br />
+print &quot;All done&quot;<br />
+-----<br />
+2. mpirun -np 6 lammps &lt; in.tensile.txt<br />
+3. gedit Al_SC_100.def1.txt<br />
+&nbsp; remove 1st line (&quot;# Fix print output for fix def1&quot;)<br />
+4. gedit file_name.m<br />
+-----<br />
+%% Analyze def1.txt files<br />
+% Plot the various responses<br />
+<br />
+d = dir(&#39;Al_SC_100.def1.txt&#39;);<br />
+for i = 1:length(d)<br />
+&nbsp; &nbsp; % Get data<br />
+&nbsp; &nbsp; fname = d(i).name;<br />
+&nbsp; &nbsp; A = importdata(fname);<br />
+&nbsp; &nbsp; strain = A(:,1);<br />
+&nbsp; &nbsp; stress = A(:,2:4);<br />
+<br />
+&nbsp; &nbsp; % Generate plot<br />
+&nbsp; &nbsp; plot(strain,stress(:,1),&#39;-or&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;r&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFaceColor&#39;,&#39;r&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; plot(strain,stress(:,2),&#39;-ob&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;b&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFaceColor&#39;,&#39;b&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; plot(strain,stress(:,3),&#39;-og&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;g&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFaceColor&#39;,&#39;g&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; axis square<br />
+&nbsp; &nbsp; ylim([0 10])<br />
+&nbsp; &nbsp; set(gca,&#39;LineWidth&#39;,2,&#39;FontSize&#39;,24,&#39;FontWeight&#39;,&#39;normal&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(get(gca,&#39;XLabel&#39;),&#39;String&#39;,&#39;Strain&#39;,&#39;FontSize&#39;,32,&#39;FontWeight&#39;,&#39;bold&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(get(gca,&#39;YLabel&#39;),&#39;String&#39;,&#39;Stress (GPa)&#39;,&#39;FontSize&#39;,32,&#39;FontWeight&#39;,&#39;bold&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(gcf,&#39;Position&#39;,[1 1 round(1000) round(1000)])<br />
+<br />
+&nbsp; &nbsp; % Export the figure to a png file<br />
+&nbsp; &nbsp; print -dpng &quot;plot.png&quot;;<br />
+&nbsp; &nbsp; close(1)<br />
+<br />
+&nbsp; &nbsp; end<br />
+-----<br />
+5. octave<br />
+6. graphics_toolkit(&#39;gnuplot&#39;);<br />
+7. file_name<br />
+8. display plot.png<br />
+&nbsp;or eog plot.png<br />
+&nbsp;or evince plot.eps<br />
+<br />
+◇ Scilab (very simple settings)<br />
+1. scilab<br />
+-----<br />
+A = fscanfMat(&#39;./Al_SC_100.def1.txt&#39;)<br />
+strain = A(:,1);<br />
+stress = A(:,2:4);<br />
+title(&quot;Stress-Strain Plot&quot;);<br />
+xlabel(&quot;Strain&quot;, &quot;fontsize&quot;, 2);<br />
+ylabel(&quot;Stress (GPa)&quot;, &quot;fontsize&quot;, 2);<br />
+plot(strain,stress)<br />
+-----<br />
+<br />
+◇ Gnuplot (very simple settings)<br />
+1. gnuplot<br />
+-----<br />
+set title &quot;Stress-Strain Plot&quot;<br />
+set yrange [0:10]<br />
+set xlabel &quot;Strain&quot;<br />
+set ylabel &quot;Stress (GPa)&quot;<br />
+plot &quot;Al_SC_100.def1.txt&quot; u 1:2 w l t &quot;x&quot;, &quot;Al_SC_100.def1.txt&quot; u 1:3 w l t &quot;y&quot;, &quot;Al_SC_100.def1.txt&quot; u 1:4 w l t &quot;z&quot;<br />
+-----<br />
+<br />
+<br />
+□ LAMMPS Beginner Help 4 (Stress-Strain Plot) [8]<br />
+(https://icme.hpc.msstate.edu/mediawiki/index.php/Uniaxial_Compression)<br />
+1. gedit in.comp.txt<br />
+-----<br />
+# Input file for uniaxial compressive loading of single crystal aluminum<br />
+# Mark Tschopp, November 2010<br />
+<br />
+# ------------------------ INITIALIZATION ----------------------------<br />
+units &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+dimension&nbsp;&nbsp; &nbsp;3<br />
+boundary&nbsp;&nbsp; &nbsp;p&nbsp;&nbsp; &nbsp;p&nbsp;&nbsp; &nbsp;p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+variable latparam equal 4.05<br />
+<br />
+# ----------------------- ATOM DEFINITION ----------------------------<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc ${latparam}<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;whole block 0 10 0 10 0 10<br />
+create_box&nbsp;&nbsp; &nbsp;1 whole<br />
+<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;upper block INF INF INF INF INF INF units box&nbsp;<br />
+lattice &nbsp;&nbsp; &nbsp;fcc ${latparam} orient x 1 0 0 orient y 0 1 0 orient z 0 0 1<br />
+create_atoms&nbsp;&nbsp; &nbsp;1 region upper<br />
+<br />
+# ------------------------ FORCE FIELDS ------------------------------<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/alloy<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al99.eam.alloy Al<br />
+<br />
+# ------------------------- SETTINGS ---------------------------------<br />
+compute csym all centro/atom fcc<br />
+compute peratom all pe/atom&nbsp;<br />
+<br />
+######################################<br />
+# EQUILIBRATION<br />
+reset_timestep&nbsp;&nbsp; &nbsp;0<br />
+timestep 0.001<br />
+velocity all create 300 12345 mom yes rot no<br />
+fix 1 all npt temp 300 300 1 iso 0 0 1 drag 1&nbsp;<br />
+<br />
+# Set thermo output<br />
+thermo 1000<br />
+thermo_style custom step lx ly lz press pxx pyy pzz pe temp<br />
+<br />
+# Run for at least 10 picosecond (assuming 1 fs timestep)<br />
+run 20000<br />
+unfix 1<br />
+<br />
+# Store final cell length for strain calculations<br />
+variable tmp equal &quot;lx&quot;<br />
+variable L0 equal ${tmp}<br />
+print &quot;Initial Length, L0: ${L0}&quot;<br />
+<br />
+######################################<br />
+# DEFORMATION<br />
+reset_timestep&nbsp;&nbsp; &nbsp;0<br />
+<br />
+fix&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;1 all npt temp 300 300 1 y 0 0 1 z 0 0 1 drag 1<br />
+variable srate equal 1.0e10<br />
+variable srate1 equal &quot;-v_srate / 1.0e12&quot;<br />
+fix&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;2 all deform 1 x erate ${srate1} units box remap x<br />
+<br />
+# Output strain and stress info to file<br />
+# for units metal, pressure is in [bars] = 100 [kPa] = 1/10000 [GPa]<br />
+# p2, p3, p4 are in GPa<br />
+variable strain equal &quot;(lx - v_L0)/v_L0&quot;<br />
+variable p1 equal &quot;v_strain&quot;<br />
+variable p2 equal &quot;-pxx/10000&quot;<br />
+variable p3 equal &quot;-pyy/10000&quot;<br />
+variable p4 equal &quot;-pzz/10000&quot;<br />
+fix def1 all print 100 &quot;${p1} ${p2} ${p3} ${p4}&quot; file Al_comp_100.def1.txt screen no<br />
+<br />
+# Use cfg for AtomEye<br />
+dump &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;1 all cfg 250 dump.comp_*.cfg mass type xs ys zs c_csym c_peratom fx fy fz<br />
+dump_modify &nbsp; &nbsp; 1 element Al<br />
+<br />
+# Display thermo<br />
+thermo &nbsp;&nbsp; &nbsp;1000<br />
+thermo_style&nbsp;&nbsp; &nbsp;custom step v_strain temp v_p2 v_p3 v_p4 ke pe press<br />
+<br />
+run&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;20000<br />
+<br />
+######################################<br />
+# SIMULATION DONE<br />
+print &quot;All done&quot;<br />
+-----<br />
+2. mpirun -np 6 lammps &lt; in.comp.txt<br />
+3. gedit Al_comp_100.def1.txt<br />
+&nbsp; remove 1st line (&quot;# Fix print output for fix def1&quot;)<br />
+4. gedit file_name.m<br />
+-----<br />
+% Analyze def1.txt files and plot the responses<br />
+<br />
+d = dir(&#39;Al_comp_100.def1.txt&#39;);<br />
+for i = 1:length(d)<br />
+&nbsp; &nbsp; fname = d(i).name;<br />
+&nbsp; &nbsp; A = importdata(fname);<br />
+&nbsp; &nbsp; strain = -A(:,1);<br />
+&nbsp; &nbsp; stress = -A(:,2:4);<br />
+&nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; plot(strain,stress(:,1),&#39;-or&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;r&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFaceColor&#39;,&#39;r&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; plot(strain,stress(:,2),&#39;-ob&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;b&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFaceColor&#39;,&#39;b&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; plot(strain,stress(:,3),&#39;-og&#39;,&#39;LineWidth&#39;,2,&#39;MarkerEdgeColor&#39;,&#39;g&#39;,...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &#39;MarkerFacecolor&#39;,&#39;g&#39;,&#39;MarkerSize&#39;,5),hold on<br />
+&nbsp; &nbsp; axis square<br />
+&nbsp; &nbsp; ylim([0 7])<br />
+&nbsp; &nbsp; xlim([0 0.2])<br />
+&nbsp; &nbsp; set(gca,&#39;LineWidth&#39;,2,&#39;FontSize&#39;,24,&#39;FontWeight&#39;,&#39;normal&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(get(gca,&#39;xlabel&#39;),&#39;String&#39;,&#39;Strain&#39;,&#39;FontSize&#39;,32,&#39;FontWeight&#39;,&#39;bold&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(get(gca,&#39;ylabel&#39;),&#39;String&#39;,&#39;Stress (GPa)&#39;,&#39;FontSize&#39;,32&#39;,&#39;FontWeight&#39;,&#39;bold&#39;,&#39;FontName&#39;,&#39;Times&#39;)<br />
+&nbsp; &nbsp; set(gcf,&#39;Position&#39;,[1 1 round(1000) round(1000)])<br />
+<br />
+&nbsp; &nbsp; % Export the figure to a png file<br />
+&nbsp; &nbsp; print -dpng &quot;plot.png&quot;;<br />
+end<br />
+-----<br />
+5. octave<br />
+6. graphics_toolkit(&#39;gnuplot&#39;);<br />
+7. file_name<br />
+8. display plot.png<br />
+&nbsp;or eog plot.png<br />
+&nbsp;or evince plot.eps<br />
+&nbsp;<br />
+◇ Scilab<br />
+1. scilab<br />
+-----<br />
+A = fscanfMat(&#39;./Al_comp_100.def1.txt&#39;);<br />
+strain = -A(:,1);<br />
+stress = -A(:,2:4);<br />
+title(&quot;Stress-Strain Plot&quot;);<br />
+xlabel(&quot;Strain&quot;, &quot;fontsize&quot;, 2);<br />
+ylabel(&quot;Stress (GPa)&quot;, &quot;fontsize&quot;, 2);<br />
+a=gca();<br />
+a.data_bounds(:,1)=[0;0.2];<br />
+a.data_bounds(:,2)=[0;7];<br />
+a.box=&quot;on&quot;;<br />
+a.sub_tics=[5,5];<br />
+plot(strain,stress);<br />
+legend([&#39;x&#39;;&#39;y&#39;;&#39;z&#39;], 3, with_box=%f,opt=&quot;ur&quot;, font_size=2);<br />
+xs2png(gcf(),&#39;plot.png&#39;);<br />
+-----<br />
+2. display plot.png<br />
+<br />
+◇ Gnuplot<br />
+1. gnuplot<br />
+-----<br />
+set title &quot;Stress-Strain Plot&quot;<br />
+set xlabel &quot;Strain&quot;<br />
+# set xlabel &quot;{/=30 {/Arial-Italic T} (K)}&quot;<br />
+set ylabel &quot;Stress (GPa)&quot;<br />
+# set ylabel &quot;{/=30 {/Symbol-Oblique r}_{/Arial-Italic c} ({/Symbol mW}cm)}&quot;<br />
+set mxtics 5<br />
+set mytics 5<br />
+set title font&quot;Arial,15&quot;<br />
+set xlabel font &quot;Arial,15&quot;<br />
+set ylabel font &quot;Arial,15&quot;<br />
+set tics font &quot;Arial,15&quot;<br />
+set key font&quot;Arial,15&quot;<br />
+set xrange [0:0.2]<br />
+set yrange [0:7]<br />
+plot &quot;Al_comp_100.def1.txt&quot; u ($1*-1):($2*-1) w l t &quot;x&quot;, &quot;Al_comp_100.def1.txt&quot; u ($1*-1):($3*-1) w l t &quot;y&quot;, &quot;Al_comp_100.def1.txt&quot; u ($1*-1):($4*-1) w l t &quot;z&quot;<br />
+<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 15<br />
+set output &quot;plot.eps&quot;<br />
+replot<br />
+-----<br />
+2. quit<br />
+3. evince plot.eps<br />
+<br />
+[1] 論文に使えるグラフを作る(その2)<br />
+&nbsp; http://www.ss.scphys.kyoto-u.ac.jp/person/yonezawa/contents/program/gnuplot/paper2.html<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 講習会資料<br />
+&nbsp; http://md.jsms.jp/download/<br />
+[2] LAMMPSで構造最適化<br />
+&nbsp; https://justice-vsbr.hatenablog.com/entry/2018/08/02/101057<br />
+&nbsp; 色々と試して何が問題化を明らかにしてくださっているのでとても助かる<br />
+[3] 6.12. MD ? LAMMPS メニュー (Winmostar User Manual)<br />
+&nbsp; https://winmostar.com/jp/manual_jp/V9/html/winmos/md/winmos_lammps.html<br />
+[4] 分子動力学計算を活用したインシリコ創薬<br />
+&nbsp; https://www.r-ccs.riken.jp/aicssite/wp-content/uploads/2016/05/20151202hirokawa.pdf<br />
+&nbsp; https://www.r-ccs.riken.jp/course/life_science2_2.4.html (動画)<br />
+&nbsp; https://www.youtube.com/watch?v=UBW1TxwfqhE (Youtube動画)<br />
+[5] LAMMPS入門の手引き 0:環境の設定<br />
+&nbsp; https://qiita.com/tkmtSo/items/34a0098cb967f2a9fdfe<br />
+[6] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+[7] Input files: samples<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps.html<br />
+[8] LAMMPS tutorial<br />
+&nbsp; https://icme.hpc.msstate.edu/mediawiki/index.php/LAMMPS_tutorials<br />
+[9] 泉聡志ら『実践分子動力学シミュレーション』森北出版<br />
+[10] 長岡正隆ら「すぐできる分子シミュレーションビギナーズマニュアル」KS化学専門書<br />
+[11] Molecular Mechanics (MM) 計算（z軸方向のみの緩和）<br />
+&nbsp; http://www.phonon.t.u-tokyo.ac.jp/people/~ohnishi/lammps2.html<br />
+&nbsp; LAMMPS/examples/USER/phonon/3-3D-FCC-Cu-EAM/<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/examples/USER/phonon/3-3D-FCC-Cu-EAM<br />
+[12] Examples (LAMMPS calculations)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/examples.html<br />
+[13] DynaPhoPy (Phonon anharmonic properties from Molecular Dynamics)<br />
+&nbsp; http://abelcarreras.github.io/DynaPhoPy/index.html<br />
+&nbsp; https://pypi.org/project/dynaphopy/1.16.4/<br />
+[14] PhonTS<br />
+&nbsp; http://phonts.mse.ufl.edu/<br />
+[15] LAMMPS ? Installation&nbsp;<br />
+&nbsp; http://www.nanophysics.pl/MolecularDynamics/lammps-installation.pdf<br />
+[16] EAM potentials (Phonon Dispersion Curves)<br />
+&nbsp; https://sites.google.com/site/eampotentials/Al<br />
+[17] LAMMPS入門の手引き 1:静的な計算<br />
+&nbsp; https://qiita.com/tkmtSo/items/e43220cd9bbb7634af34<br />
+[18] GCMC<br />
+&nbsp; https://lammps.sandia.gov/threads/msg53394.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

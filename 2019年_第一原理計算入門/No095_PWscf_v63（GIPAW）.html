@@ -1,0 +1,79 @@
+<p>　GIPAW (Gauge Including Projector Augmented Waves) calculation<br />
+--------------------------------------------------------------------------------<br />
+■ Installaton</p>
+
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/AFavvMk03nY" width="560"></iframe><br />
+1. get Source code (tar.gz)<br />
+&nbsp; <a href="https://github.com/dceresoli/qe-gipaw">https://github.com/dceresoli/qe-gipaw</a>&nbsp;<br />
+&nbsp;&nbsp;&nbsp; <a href="https://github.com/dceresoli/qe-gipaw/releases">https://github.com/dceresoli/qe-gipaw/releases</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QE-GIPAW for QE-6.3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Source code (tar.gz)<br />
+2. cd $HOME/q-e-qe-6.3<br />
+3. tar zxvf qe-gipaw-6.3.tar.gz<br />
+4. cd qe-gipaw-6.3 &nbsp;<br />
+5. configure --with-qe-source=../<br />
+6. make<br />
+<br />
+Reference<br />
+[1] QE5.1.1のインストールメモ : <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Quantum-ESPRESSO5.1.1%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Quantum-ESPRESSO5.1.1%A4%CE%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a><br />
+--------------------------------------------------------------------------------<br />
+■ Usage (examples)<br />
+<br />
+◇ benzene-USPP (NMR)</div>
+
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/-DvX6mlFD7s" width="560"></iframe><br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd qe-gipaw-6.3<br />
+3. cd examples<br />
+4. cd benzene-USPP<br />
+5. mpirun -np 4 $HOME/q-e-qe-6.3/bin/pw.x &lt; benzene-scf.in | tee benzene-scf.out<br />
+6. mpirun -np 4 $HOME/q-e-qe-6.3/qe-gipaw-6.3/bin/gipaw.x &lt; benzene-nmr.in | tee benzene-nmr.out<br />
+&nbsp; you can get benzene.nmr.magres<br />
+※ 上記の &lt; *.in | tee *.out は画面に表示しながら、*.outにも表示された記述を書き込む方法。 &lt; *.in &gt; *.out の方が当然ながら計算速度は速くなる。動画では、終了が分かり易くするために、&lt; *.in | tee *.out の方法を用いた。<br />
+※ 動画中では、計算後に出力ファイルが得られていることを分かり易くする為に、出力ファイルをゴミ箱に入れている。<br />
+<br />
+◇ H2O+ (ESR)<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd qe-gipaw-6.3<br />
+3. cd examples<br />
+4. cd H2O+<br />
+5. mpirun -np 4 $HOME/q-e-qe-6.3/bin/pw.x &lt; H2O+_scf.in &gt; H2O+_scf.out<br />
+6. mpirun -np 4 $HOME/q-e-qe-6.3/qe-gipaw-6.3/bin/gipaw.x &lt; H2O+_hyperfine.in &gt; H2O+_hyperfine.out<br />
+7. mpirun -np 4 $HOME/q-e-qe-6.3/qe-gipaw-6.3/bin/gipaw.x &lt; H2O+_g-tensor.in &gt; H2O+_g-tensor.out<br />
+--------------------------------------------------------------------------------<br />
+■ Feature<br />
+<br />
+&rsquo;f-sum&rsquo;: check the f-sum rule<br />
+&rsquo;nmr&rsquo;: compute the magnetic susceptibility and NMR chemical shifts<br />
+&rsquo;efg&rsquo;: compute the electric field gradients at the nuclei<br />
+&rsquo;g tensor&rsquo;: compute the EPR g-tensor<br />
+&rsquo;hyperfine&rsquo;: compute the hyperfine coupling<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;output file<br />
+<br />
+◇ benzene.nmr.magres<br />
+----------<br />
+&nbsp; units ms ppm<br />
+&nbsp; ms&nbsp;&nbsp; C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 31.6596&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp; -67.0634&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp; 168.7140<br />
+----------<br />
+この情報は、下記の*.outの[Total NMR chemical shifts in ppm]に対応している。<br />
+<br />
+◇ benzene-nmr.out<br />
+----------<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Total NMR chemical shifts in ppm: ---------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp; (adopting the Simpson convention for anisotropy and asymmetry)-----------<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp; Atom&nbsp; 1&nbsp; C&nbsp;&nbsp; pos: (&nbsp; 0.000000&nbsp; 0.107679&nbsp; 0.000000)&nbsp; Total sigma:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 44.44<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 31.6596&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -67.0634&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.0000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 168.7140<br />
+----------<br />
+　結果の解釈については、左欄の「Gaussian」でのNMRの記述を参照のこと。<br />
+--------------------------------------------------------------------------------<br />
+■ References<br />
+[1] <a href="http://www.tcm.phy.cam.ac.uk/~jry20/gipaw/">http://www.tcm.phy.cam.ac.uk/~jry20/gipaw/</a><br />
+[2] <a href="https://sites.google.com/site/cecamspectra2010/program">https://sites.google.com/site/cecamspectra2010/program</a><br />
+[3] <a href="http://rmngbp.cnrs-orleans.fr/pdf/gipaw2017/GIPAW_Tutorial_I.pdf">http://rmngbp.cnrs-orleans.fr/pdf/gipaw2017/GIPAW_Tutorial_I.pdf</a><br />
+[4] <a href="http://indico.ictp.it/event/a10125/session/19/contribution/11/material/0/0.pdf">http://indico.ictp.it/event/a10125/session/19/contribution/11/material/0/0.pdf</a><br />
+[5] <a href="http://rmngbp.cnrs-orleans.fr/pdf/gipaw2017/GIPAW_Tutorial_II.pdf">http://rmngbp.cnrs-orleans.fr/pdf/gipaw2017/GIPAW_Tutorial_II.pdf</a><br />
+--------------------------------------------------------------------------------</div>

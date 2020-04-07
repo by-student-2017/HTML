@@ -1,0 +1,286 @@
+pyGAPS (https://github.com/pauliacomi/pyGAPS)<br />
+------------------------------------------------------------------------------<br />
+Å° pyGAPS (Python 3 code) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† Install (easy method)<br />
+0. pip3 install --upgrade pip --user<br />
+1. pip3 install pygaps<br />
+&nbsp; (pip3 install pygaps --user)<br />
+<br />
+Å† Install (other method)<br />
+1. git clone https://github.com/pauliacomi/pyGAPS<br />
+2. pip3 install pyGAPS --user<br />
+<br />
+Å† jupyter<br />
+1. pip3 install jupyter --user<br />
+2. pip3 install &quot;ipython[notebook]&quot; --user<br />
+3. jupyter notebook<br />
+(Å¶ In my case, step 3 was failed)<br />
+<br />
+Å† example<br />
+(0. git clone https://github.com/pauliacomi/pyGAPS)<br />
+1. cd ~/pyGAPS/docs/examples<br />
+2. jupyter nbconvert --to script *.ipynb<br />
+Åû quickstart<br />
+3. python3 quickstart.py<br />
+<br />
+Å¶ How to get Kernels #16<br />
+(https://github.com/pauliacomi/pyGAPS/issues/16)<br />
+(DFT (or NLDFT/QSDFT/GCMC) kernels)<br />
+------------------------------------------------------------------------------<br />
+Å† Quickstart<br />
+(https://pygaps.readthedocs.io/en/master/examples/quickstart.html)<br />
+<br />
+Åû Creating an isotherm -1-<br />
+(0. git clone https://github.com/pauliacomi/pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart1.py<br />
+-----<br />
+import pygaps<br />
+<br />
+isotherm = pygaps.PointIsotherm(<br />
+&nbsp; &nbsp; pressure=[0.1, 0.2, 0.3, 0.4, 0.5, 0.4, 0.35, 0.25, 0.15, 0.05],<br />
+&nbsp; &nbsp; loading=[0.1, 0.2, 0.3, 0.4, 0.5, 0.45, 0.4, 0.3, 0.15, 0.05],<br />
+&nbsp; &nbsp; material= &#39;Carbon X1&#39;,<br />
+&nbsp; &nbsp; adsorbate = &#39;N2&#39;,<br />
+&nbsp; &nbsp; temperature = 77,<br />
+)<br />
+isotherm.plot()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart1.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart1.py)<br />
+3. python3 quickstart1.py<br />
+&nbsp; (python quickstart1.py)<br />
+<br />
+<br />
+Åû Creating an isotherm -2-<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart2.py<br />
+-----<br />
+import pygaps<br />
+import pandas<br />
+<br />
+data = pandas.DataFrame({<br />
+&nbsp; &nbsp; &#39;pressure&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.45, 0.35, 0.25, 0.15, 0.05],<br />
+&nbsp; &nbsp; &#39;loading&#39;: [0.1, 0.2, 0.3, 0.4, 0.5, 0.5, 0.4, 0.3, 0.15, 0.05],<br />
+&nbsp; &nbsp; &#39;isosteric_enthalpy (kJ/mol)&#39;: [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]<br />
+})<br />
+<br />
+isotherm = pygaps.PointIsotherm(<br />
+&nbsp; &nbsp; isotherm_data=data,<br />
+&nbsp; &nbsp; pressure_key=&#39;pressure&#39;,<br />
+&nbsp; &nbsp; loading_key=&#39;loading&#39;,<br />
+&nbsp; &nbsp; other_keys=[&#39;isosteric_enthalpy (kJ/mol)&#39;],<br />
+<br />
+&nbsp; &nbsp; material= &#39;Carbon X1&#39;,<br />
+&nbsp; &nbsp; adsorbate = &#39;N2&#39;,<br />
+&nbsp; &nbsp; temperature = 77,<br />
+<br />
+&nbsp; &nbsp; pressure_unit=&#39;bar&#39;,<br />
+&nbsp; &nbsp; pressure_mode=&#39;absolute&#39;,<br />
+&nbsp; &nbsp; loading_unit=&#39;mmol&#39;,<br />
+&nbsp; &nbsp; loading_basis=&#39;molar&#39;,<br />
+&nbsp; &nbsp; adsorbent_unit=&#39;g&#39;,<br />
+&nbsp; &nbsp; adsorbent_basis=&#39;mass&#39;,<br />
+<br />
+&nbsp; &nbsp; material_batch = &#39;Batch 1&#39;,<br />
+&nbsp; &nbsp; iso_type=&#39;characterisation&#39;<br />
+)<br />
+isotherm.plot()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart2.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart2.py)<br />
+3. python3 quickstart2.py<br />
+&nbsp; (python quickstart2.py)<br />
+<br />
+<br />
+Åû Creating an isotherm -3-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart3.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+isotherm.print_info()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart3.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart3.py)<br />
+3. python3 quickstart3.py<br />
+&nbsp; (python quickstart3.py)<br />
+<br />
+<br />
+Åû Isotherm analysis -1-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart4.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+result_dict = pygaps.t_plot(isotherm)<br />
+<br />
+#import pprint<br />
+#pprint.pprint(result_dict)<br />
+<br />
+import matplotlib.pyplot as plt<br />
+<br />
+result_dict = pygaps.area_BET(isotherm, verbose=True)<br />
+<br />
+plt.show()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart4.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart4.py)<br />
+3. python3 quickstart4.py<br />
+&nbsp; (python quickstart4.py)<br />
+<br />
+<br />
+Åû Isotherm analysis -2-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart5.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+result_dict = pygaps.t_plot(isotherm)<br />
+<br />
+import matplotlib.pyplot as plt<br />
+<br />
+result_dict = pygaps.psd_mesoporous(<br />
+&nbsp; &nbsp; isotherm,<br />
+&nbsp; &nbsp; psd_model=&#39;DH&#39;,<br />
+&nbsp; &nbsp; branch=&#39;des&#39;,<br />
+&nbsp; &nbsp; pore_geometry=&#39;cylinder&#39;,<br />
+&nbsp; &nbsp; thickness_model=&#39;Halsey&#39;,<br />
+&nbsp; &nbsp; verbose=True,<br />
+)<br />
+plt.show()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart5.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart5.py)<br />
+3. python3 quickstart5.py<br />
+&nbsp; (python quickstart5.py)<br />
+<br />
+<br />
+Åû Isotherm modelling -1-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart6.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+model_iso = pygaps.ModelIsotherm.from_pointisotherm(isotherm, model=&#39;BET&#39;, verbose=True)<br />
+<br />
+#model_iso.plot()<br />
+isotherm.plot()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart6.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart6.py)<br />
+3. python3 quickstart6.py<br />
+&nbsp; (python quickstart6.py)<br />
+<br />
+<br />
+Åû Isotherm modelling -2-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart7.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+model_iso = pygaps.ModelIsotherm.from_pointisotherm(isotherm, guess_model=&#39;all&#39;, verbose=True)<br />
+<br />
+model_iso.plot()<br />
+#isotherm.plot()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart7.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart7.py)<br />
+3. python3 quickstart7.py<br />
+&nbsp; (python quickstart7.py)<br />
+<br />
+<br />
+Åû Isotherm modelling -3-<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart8.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+model_iso = pygaps.ModelIsotherm.from_pointisotherm(isotherm, guess_model=&#39;all&#39;, verbose=True)<br />
+<br />
+# Prints isotherm parameters and model info<br />
+model_iso.print_info()<br />
+<br />
+# Returns the loading at 1 bar calculated with the model<br />
+model_iso.loading_at(1.0)<br />
+<br />
+# Returns the loading in the range 0-1 bar calculated with the model<br />
+pressure = [0.1,0.5,1]<br />
+model_iso.loading_at(pressure)<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart8.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart8.py)<br />
+3. python3 quickstart8.py<br />
+&nbsp; (python quickstart8.py)<br />
+<br />
+<br />
+Åû Plotting<br />
+(Please, change &quot;username&quot;)<br />
+(0. mkdir pyGAPS)<br />
+1. cd pyGAPS<br />
+2. gedit quickstart9.py<br />
+-----<br />
+import pygaps<br />
+<br />
+with open(r&#39;/home/username/pyGAPS/docs/examples/data/carbon_x1_n2.json&#39;) as f:<br />
+&nbsp; &nbsp; isotherm = pygaps.isotherm_from_json(f.read())<br />
+<br />
+model_iso = pygaps.ModelIsotherm.from_pointisotherm(isotherm, guess_model=&#39;all&#39;, verbose=True)<br />
+<br />
+import matplotlib.pyplot as plt<br />
+<br />
+pygaps.plot_iso([isotherm, model_iso], branch=&#39;ads&#39;)<br />
+<br />
+plt.show()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; quickstart9.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place quickstart9.py)<br />
+3. python3 quickstart9.py<br />
+&nbsp; (python quickstart9.py)<br />
+------------------------------------------------------------------------------<br />
+Å† References<br />
+<br />
+[1] Paul Iacomi, Philip L. Llewellyn, 2019. pyGAPS: A Python-Based Framework for Adsorption Isotherm Processing and Material Characterisation. https://doi.org/10.26434/chemrxiv.7970402.v1<br />
+------------------------------------------------------------------------------<br />
+&nbsp;
