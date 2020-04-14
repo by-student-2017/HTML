@@ -1,0 +1,53 @@
+　EPW (Electron-phonon Wannier) calculation<br />
+--------------------------------------------------------------------------------<br />
+※ 私のPC（2 core, 2 GB）では計算がスワップしてしまって事実上計算が不可能になっている。試行錯誤が可能なPCを購入しないと正確な情報を提供することができない。そのため、私はこのページに関する記述を放棄します。このページの項目について、より正確な情報をお持ち方は「お問合せ」に情報を頂ければ幸いです。<br />
+--------------------------------------------------------------------------------<br />
+■&nbsp;Installaton<br />
+<iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/TiHkgd2uFgM" width="560"></iframe><br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. make epw<br />
+<br />
+Reference<br />
+[1] EPW: <a href="http://epw.org.uk/Main/DownloadAndInstall">http://epw.org.uk/Main/DownloadAndInstall</a><br />
+--------------------------------------------------------------------------------<br />
+■ Usage (examples)<br />
+<br />
+◇ MgB2<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd EPW<br />
+3. cd examples<br />
+4. cd mgb2<br />
+5. cd phonons<br />
+6. mpirun -np&nbsp;2 $HOME/q-e-qe-6.3/bin/pw.x -npool&nbsp;2 &lt; scf.in<br />
+7. mpirun -np&nbsp;2 $HOME/q-e-qe-6.3/bin/ph.x -npool&nbsp;2 &lt; ph.in<br />
+8. python pp.py<br />
+9. cd ..<br />
+10. cd epw<br />
+11. mpirun -np&nbsp;2 $HOME/q-e-qe-6.3/bin/pw.x -npool&nbsp;2 &lt; scf.in<br />
+12. mpirun -np&nbsp;2 $HOME/q-e-qe-6.3/bin/pw.x -npool&nbsp;2 &lt; nscf.in<br />
+13. mpirun -np&nbsp;2 $HOME/q-e-qe-6.3/bin/epw.x -npool&nbsp;2 &lt; epw.in<br />
+※ 他の例も同様に行えばよい。私のPCでは上記6)で計算は走っているがなかなか終わらない。そして、クラッシュした。そのため、ph.inとepw.inにおいて、nq1=2, nq2=2, nq3=2 としたら、2 CPU, 2 GBでepwの途中まで動作した。恐らく私のPCではメモリ数が足らない（CPU数も時間短縮のために必要）。<br />
+<br />
+◇ Pb with SOC (spin orbit coupling)<br />
+1. cd $HOME/q-e-qe-6.3<br />
+2. cd EPW<br />
+3. cd examples<br />
+4. cd pb<br />
+5. cd wSOC<br />
+6. cd phonons<br />
+7. mpirun -np 4 $HOME/q-e-qe-6.3/bin/pw.x -npool 4 &lt; scf.in<br />
+8. mpirun -np 4 $HOME/q-e-qe-6.3/bin/ph.x -npool 4 &lt; ph.in<br />
+9. python pp.py<br />
+10. cd ..<br />
+11. cd epw<br />
+12. mpirun -np 4 $HOME/q-e-qe-6.3/bin/pw.x -npool 4 &lt; scf.in<br />
+13. mpirun -np 4 $HOME/q-e-qe-6.3/bin/pw.x -npool 4 &lt; nscf.in<br />
+14. mpirun -np 4 $HOME/q-e-qe-6.3/bin/epw.x -npool 4 &lt; epw.in<br />
+※&nbsp;Ziman resistivity formula で resistivity を計算できる。文献[2]に具体的な方法が記載されている。<br />
+※ 上記8) でクラッシュが起きた。私のPCスペックが悪くて生じているのか？<br />
+<br />
+Reference<br />
+[2] EPW: <a href="http://epw.org.uk/Documentation/Tutorial">http://epw.org.uk/Documentation/Tutorial</a><br />
+※ チュートリアルに動画も記載されている。私の方で動画はあまり必要ないと思うが、一応作成しておく。<br />
+--------------------------------------------------------------------------------<br />
+&nbsp;

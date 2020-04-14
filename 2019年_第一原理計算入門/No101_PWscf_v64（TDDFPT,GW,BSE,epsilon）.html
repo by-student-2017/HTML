@@ -1,0 +1,466 @@
+PWscf 6.4 (TDDFPT, GW, BSE)<br />
+--------------------------------------------------------------------------------<br />
+¡ PWscf (compiling)<br />
+<br />
+ PWscf (Install, gfortran)<br />
+0. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+&nbsp; wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install gnuplot<br />
+1. tar zxvf qe-6.4.1.tar.gz<br />
+2. cd q-e-qe-6.4.1<br />
+3. patch -p1 --merge &lt; backports-6.4.1.diff<br />
+4. ./configure<br />
+5. make pwall<br />
+<br />
+ Al or Si (TDDFPT)<br />
+6. make tddfpt<br />
+<br />
+ BN (PW -&gt; GW)<br />
+6. make pp<br />
+<br />
+ Si (simple BSE method)<br />
+6. make gwl<br />
+7. cd ~/q-e-qe-6.4.1/GWW/util<br />
+&nbsp; make<br />
+8. cd ~/q-e-qe-6.4.1/GWW/<br />
+&nbsp; make<br />
+¦ &quot;make gww&quot; is obsolete, use &quot;make gwl&quot; instead<br />
+<br />
+¦ Memo (User tools)<br />
+(https://www.quantum-espresso.org/resources/tools)<br />
+------------------------------------------------------------------------------<br />
+¡ Examples<br />
+<br />
+  infomation<br />
+1. cd ~/q-e-qe-6.4.1<br />
+2. grep -r dielectric */examples/*<br />
+<br />
+  Si (tddfpt)<br />
+1. cd ~/q-e-qe-6.4.1/TDDFPT/examples<br />
+2. cd example13<br />
+3. ./run_example<br />
+ plot<br />
+4. cd result<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Re(eps)&quot;<br />
+&nbsp; plot &quot;Si.plot_eps.dat&quot; u 1:4 w l t &quot;Si&quot;<br />
+6. q<br />
+7. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Im(eps)&quot;<br />
+&nbsp; plot &quot;Si.plot_eps.dat&quot; u 1:5 w l t &quot;Si&quot;<br />
+8. q<br />
+9. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Re(chi) (e^2*a_0^2/eV)&quot;<br />
+&nbsp; plot &quot;Si.plot_chi.dat&quot; u 2:3 w l t &quot;Si&quot;<br />
+10. q<br />
+11. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Im(chi) (e^2*a_0^2/eV)&quot;<br />
+&nbsp; plot &quot;Si.plot_chi.dat&quot; u 2:4 w l t &quot;Si&quot;<br />
+12. q<br />
+<br />
+  Al (tddfpt)<br />
+1. cd ~/q-e-qe-6.4.1/TDDFPT/examples<br />
+2. cd example14<br />
+3. ./run_example<br />
+ plot<br />
+4. cd result<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Re(eps)&quot;<br />
+&nbsp; plot &quot;Al.plot_eps.dat&quot; u 1:4 w l t &quot;Al&quot;<br />
+6. q<br />
+7. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Im(eps)&quot;<br />
+&nbsp; plot &quot;Al.plot_eps.dat&quot; u 1:5 w l t &quot;Al&quot;<br />
+8. q<br />
+9. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Re(chi) (e^2*a_0^2/eV)&quot;<br />
+&nbsp; plot &quot;Al.plot_chi.dat&quot; u 2:3 w l t &quot;Al&quot;<br />
+10. q<br />
+11. gnuplot<br />
+&nbsp; set xlabel &quot;omega (eV)&quot;<br />
+&nbsp; set ylabel &quot;Im(chi) (e^2*a_0^2/eV)&quot;<br />
+&nbsp; plot &quot;Al.plot_chi.dat&quot; u 2:4 w l t &quot;Al&quot;<br />
+12. q<br />
+<br />
+  BN (PW -&gt; GW)<br />
+1. cd ~/q-e-qe-6.4.1/PP/examples<br />
+2. cd pw2gw_example<br />
+3. ./run_example<br />
+ plot ver.1<br />
+4. cd results<br />
+5. evince bn.opt.pdf<br />
+ plot ver.2<br />
+4. cd results<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;photon energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;eps_2&quot;<br />
+&nbsp; plot &quot;epsX.dat&quot; w l t &quot;x&quot;<br />
+6. q<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;photon energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;eps_2&quot;<br />
+&nbsp; plot &quot;epsTOT.dat&quot; w l t &quot;average&quot;<br />
+6. q<br />
+¦ Please change X to Y, Z or TOT, etc.<br />
+¦ Maybe, spe_2 = Im(eps)<br />
+<br />
+  Si (simple BSE method) (no check)<br />
+0. cd ~/q-e-qe-6.4.1<br />
+&nbsp; gedit environment_variables<br />
+&nbsp; -----<br />
+&nbsp; PARA_PREFIX=&quot;mpirun -np 1&quot;<br />
+&nbsp; -----<br />
+1. cd ~/q-e-qe-6.4.1/GWW/examples<br />
+2. cd example05<br />
+3. ./run_example<br />
+ plot<br />
+4. cd results<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;Energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;Re(eps)&quot;<br />
+&nbsp; plot &quot;lanczos.eps1x.dat&quot; u 1:2 w l t &quot;Si&quot;<br />
+6. q<br />
+4. cd results<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;Energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;Im(eps)&quot;<br />
+&nbsp; plot &quot;lanczos.eps2x.dat&quot; u 1:2 w l t &quot;Si&quot;<br />
+6. q<br />
+¦ You can ignore the display below.<br />
+-----<br />
+cp: cannot stat &#39;/home/inukai/q-e-qe-6.4.1/tempdir/ab_coeff.dat&#39;: No such file or directory<br />
+cp: cannot stat &#39;/home/inukai/q-e-qe-6.4.1/tempdir/lanczos.eps*dat&#39;: No such file or directory<br />
+-----<br />
+If you are interested, do the following,<br />
+&nbsp; gedit run_example<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp;cp $TMP_DIR/ab_coeff.dat .<br />
+&nbsp; &nbsp; &nbsp;cp &nbsp;$TMP_DIR/lanczos.eps*dat .<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp;#cp $TMP_DIR/ab_coeff.dat .<br />
+&nbsp; &nbsp; &nbsp;#cp &nbsp;$TMP_DIR/lanczos.eps*dat .<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+¡ epsilon.x<br />
+i“dqŒn—U“dŠÖ”‚ªŒvZ‚Å‚«‚Ü‚·B’P‘Ì‚Å‚È‚¢ê‡AÀŒ±Œ‹‰Ê‚Æ”äŠr‚·‚é‚É‚ÍŠiqŒn—U“dŠÖ”‚ğ‰ÁZ‚·‚é•K—v‚ª‚ ‚è‚Ü‚·j<br />
+<br />
+  step1: scf calculation<br />
+0. wget&nbsp;https://www.quantum-espresso.org/upf_files/Si.pz-vbc.UPF<br />
+1. gedit case.scf.in<br />
+----------<br />
+&nbsp;&amp;control<br />
+&nbsp; &nbsp; calculation = &#39;scf&#39;<br />
+&nbsp; &nbsp; restart_mode=&#39;from_scratch&#39;,<br />
+&nbsp; &nbsp; prefix=&#39;case&#39;,<br />
+&nbsp; &nbsp; pseudo_dir = &#39;./&#39;,<br />
+&nbsp; &nbsp; outdir=&#39;./&#39;<br />
+&nbsp;/<br />
+&nbsp;&amp;system<br />
+&nbsp; &nbsp; ibrav= &nbsp;2, celldm(1) =10.20, nat= &nbsp;2, ntyp= 1,<br />
+&nbsp; &nbsp; ecutwfc =18.0,<br />
+&nbsp; &nbsp; nosym = .true.<br />
+&nbsp; &nbsp; nbnd = 12,<br />
+&nbsp;/<br />
+&nbsp;&amp;electrons<br />
+&nbsp; &nbsp; diagonalizatin = &#39;david&#39;<br />
+&nbsp; &nbsp; mixing_mode = &#39;plain&quot;<br />
+&nbsp; &nbsp; mixing_beta = 0.7<br />
+&nbsp; &nbsp; conv_thr = &nbsp;1.0d-8<br />
+&nbsp;/<br />
+ATOMIC_SPECIES<br />
+&nbsp;Si &nbsp;28.086 &nbsp;Si.pz-vbc.UPF<br />
+ATOMIC_POSITIONS alat<br />
+&nbsp;Si 0.00 0.00 0.00<br />
+&nbsp;Si 0.25 0.25 0.25<br />
+K_POINTS automatic<br />
+&nbsp; 4 4 4 1 1 1<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 ~/q-e-qe-6.4.1/bin/pw.x &lt;&nbsp;case.scf.in | tee case.scf.out<br />
+3. cp&nbsp;case.scf.in&nbsp;case.nscf.in<br />
+4. gedit case.nscf.in<br />
+----------(before)<br />
+&nbsp; &nbsp; calculation = &#39;scf&#39;<br />
+<br />
+K_POINTS automatic<br />
+&nbsp; 4 4 4 1 1 1<br />
+----------(after)<br />
+&nbsp; &nbsp; calculation = &#39;nscf&#39;<br />
+<br />
+K_POINTS automatic<br />
+&nbsp; 10 10 10 1 1 1<br />
+----------<br />
+5.&nbsp;export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 ~/q-e-qe-6.4.1/bin/pw.x &lt;&nbsp;case.nscf.in | tee case.nscf.out<br />
+----------<br />
+6. gedit case.nscf.out<br />
+&nbsp;highest occupied, lowest unoccupied level (ev): &nbsp; &nbsp; 6.1976 &nbsp; &nbsp;6.8653<br />
+&nbsp;Gap (Si) = 1.12 (exp) (‹@ŠBŠwK‚Å‚Ì—\‘ª’l‚ğ—p‚¢‚Ä‚à—Ç‚¢‚Æv‚¤j<br />
+&nbsp;shift =&nbsp;scissor operator = 1.12 -&nbsp; (6.1976 -&nbsp; 6.8653) =&nbsp;0.4523 [eV]<br />
+&nbsp;‚±‚Ì•â³‚ğs‚¤‚Æ“dqŒn—U“d—¦[&epsilon;<sup>ele</sup>(0)]‚Í•â³‚ª‚È‚¢‚Æ‚«‚æ‚è‚à1Š„‚Ù‚Ç’l‚ª‰ü‘P‚µ‚Ü‚·iŠT‚Ë0.2`0.8’ö“x‚Ì·‚Ü‚ÅÀŒ±’l‚É‹ß‚Ã‚­B0.2’ö“x‚Ì·‚ª‘½‚¢‚©HjB‚±‚Ì•â³‚ª‚È‚¢‚ÆÀŒ±’l‚æ‚è‘å‚«‚È’l‚É‚È‚è‚â‚·‚¢ŒXŒü‚ª‚ ‚éB<br />
+----------<br />
+&nbsp; ŠiqŒn—U“d—¦‚ÍŠT‚Ë“dqŒn—U“d—¦‚Ì2”{‚Ì’l‚ğ¦‚µA‘S—U“d—¦‚Ì–ñ2/3‚ğè‚ß‚éBŠiqŒn—U“d—¦‚Íƒ{ƒ‹ƒ“—LŒø“d‰×‚ğ—˜—p‚·‚éBƒ{ƒ‹ƒ“—LŒø“d‰×‚ÍƒxƒŠ[ˆÊ‘Š•ª‹É—˜_‚ğ—p‚¢‚ÄŒvZ‚³‚ê‚éB‚±‚¤‚¢‚Á‚½ŒvZ‚ÍAŒvZè–@‚ªƒpƒbƒP[ƒW‰»‚³‚ê‚Ä‚¢‚é–³”Å‚ÌPhase‚ÆUVSOR‚ğ—p‚¢‚ÄŒvZ‚µ‚½•û‚ªi©•ª‚ÅƒR[ƒh‚ğ‘‚­‚æ‚è’f‘Rj‘‚¢‚Å‚µ‚å‚¤B–³”Å‚ªg‚¦‚é‚Æãi‚ª”»’f‚·‚ê‚Î—L”Å‚àŒŸ“¢”ÍˆÍ‚É“ü‚é‚©‚Æ‚Ív‚¢‚Ü‚·B<br />
+----------<br />
+&nbsp; ‘S—U“d—¦ &epsilon;(0) = “dqŒn—U“d—¦ &epsilon;<sup>elec</sup>(0) + ŠiqŒn—U“d—¦ &epsilon;<sup>lat</sup>(0) ‚Å‚æ‚¯‚ê‚ÎA &epsilon;<sup>elec</sup>(0)‚Íepsilon.x‚©‚çA&epsilon;<sup>lat</sup>(0)‚Íph.x‚©‚ç“¾‚é‚±‚Æ‚ª‚Å‚«‚Ü‚·B•¶Œ£[5]‚ğ‚µ‚Ä‚İ‚é‚Æ—Ç‚¢‚Å‚µ‚å‚¤B•¶Œ£[6]‚ğQÆ‚µ‚Ä‘¼‚Ì’l‚É•ÏŠ·‚·‚éB<br />
+¦ •¶Œ£[7]‚Ì“®‰æ‚ğŒ©‚½‚Æ‚±‚ëAph.x‚ÌŒvZ‚Å‚Í&epsilon;(0)‚ªo—Í‚³‚ê‚Ä‚¢‚é‚æ‚¤‚ÉŒ©‚¦‚éB‰½ŒÌ‚È‚ç‚ÎSi‚Ì’P‘Ì‚Å‚Í&epsilon;<sup>lat</sup>=0‚Æ‚È‚é‚½‚ß‚Å‚ ‚éB<br />
+----------<br />
+<br />
+  step2: epsilon calculation<br />
+1. gedit case.eps.in<br />
+----------<br />
+&amp;inputpp<br />
+&nbsp; outdir=&#39;./&#39;<br />
+&nbsp; prefix=&#39;case&#39;<br />
+&nbsp; calculation=&#39;eps&#39;<br />
+/<br />
+&amp;energy_grid<br />
+&nbsp; smeartype=&#39;gauss&#39;<br />
+&nbsp; intersmear=0.136d0<br />
+&nbsp; intrasmear=0.0d0<br />
+&nbsp; wmax=30.0d0<br />
+&nbsp; wmin=0.0d0<br />
+&nbsp; nw=600<br />
+&nbsp; shift=0.4523<br />
+/<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 ~/q-e-qe-6.4.1/bin/epsilon.x &lt;&nbsp;case.eps.in | tee case.eps.out<br />
+<br />
+  step3: plot<br />
+1.&nbsp;gnuplot<br />
+&nbsp; set ylabel &quot;Dielectric Function&quot;<br />
+&nbsp; set xlabel &quot;Energy / eV&quot;<br />
+&nbsp;&nbsp;plot &quot;epsr_case.dat&quot; u 1:2 w l t &quot;Real part (Re)&quot;, &quot;epsi_case.dat&quot; u 1:2 w l&nbsp;t &quot;Imaginary part (Im)&quot;<br />
+2. q<br />
+&nbsp; ( set xrange [0:20] )<br />
+&nbsp; ( plot &quot;epsr_case.dat&quot; u 1:2 w l t &quot;Real part (Re), x&quot;, &quot;epsr_case.dat&quot; u 1:3 w l t &quot;Real part (Re), y&quot;, &quot;epsr_case.dat&quot; u 1:4 w l t &quot;Real part (Re), z&quot;, &quot;epsi_case.dat&quot; u 1:2 w l&nbsp;t &quot;Imaginary part (Im), x&quot;, &quot;epsi_case.dat&quot; u 1:3 w l&nbsp;t &quot;Imaginary part (Im), y&quot;, &quot;epsi_case.dat&quot; u 1:4 w l&nbsp;t &quot;Imaginary part (Im), z&quot; )<br />
+&nbsp; ( q )<br />
+3. gnuplot<br />
+&nbsp; set ylabel &quot;Intensity / arb.units&quot;<br />
+&nbsp; set xlabel &quot;Energy Loss / eV&quot;<br />
+&nbsp; plot &quot;eels_case.dat&quot; u 1:2 w l t &quot;x&quot;,&nbsp;&quot;eels_case.dat&quot; u 1:3 w l t &quot;y&quot;,&nbsp;&quot;eels_case.dat&quot; u 1:4 w l t &quot;z&quot;<br />
+4. q<br />
+5. gnuplot<br />
+&nbsp; set ylabel &quot;Intensity / arb.units&quot;<br />
+&nbsp; set xlabel &quot;Energy / eV&quot;<br />
+&nbsp; plot &quot;ieps_case.dat&quot; u 1:2 w l t &quot;x&quot;,&nbsp;&quot;ieps_case.dat&quot; u 1:3 w l t &quot;y&quot;,&nbsp;&quot;ieps_case.dat&quot; u 1:4 w l t &quot;z&quot;<br />
+6. q<br />
+<br />
+ [3]<br />
+Eepsr.dat: Real part of the response (Reflectivity (real part))<br />
+Eepsi.dat: Imaginary part of the response (this is absorption spectra in independent particle apprximation (IPA))<br />
+Eeels.dat: Electron energy loss spectrum<br />
+Eieps.dat: Response computed on the imaginary axis of frequency<br />
+<br />
+ [4]<br />
+&nbsp; Code epsilon.x calculates RPA (randum phase approximation) frequency-dependent complex dielectric function.<br />
+<br />
+  manual<br />
+1. cd ~/q-e-qe-6.4.1/PP/Doc<br />
+2. pdflatex eps_man.tex<br />
+3. evince eps_man.pdf<br />
+<br />
+1. Introduction<br />
+&nbsp;&nbsp;Epsilon.x is a post processing code of PW SCF . Starting from DFT eigenvalues and eigenvectors, epsilon.x provides the real and imaginary parts of the dielectric tensor or the joint density of states, it works both in serial and parallel mode, also pool parallelization is supported. Epsilon.x doesn&rsquo;t support the reduction of the k-points grid into the irreducible Brillouin zone, so the previous PW runs must be performed with a uniform k-points grid and all k-points weights must be equal to each other, i.e. in the k-points card the k-points coordinates must be given manually in crystal or alat or bohr, but not with the automatic option. Also the auto-symmetrization of k-points grid can produce a non uniform distribution of k-points weights, in order to avoid this PW&rsquo;s behavior the variable NOSYM must be set .TRUE. disabling autosymmetrization.<br />
+<br />
+2. Input file<br />
+&nbsp;&nbsp;When executed, epsilon.x reads an input file from standard input, this file contains two Fortran namelists (value associated to each variable is the default one):<br />
+----------<br />
+&amp;inputpp<br />
+&nbsp; outdir=&rsquo;./&rsquo;<br />
+&nbsp; prefix=&rsquo;pwscf&rsquo;<br />
+&nbsp; calculation=&rsquo;eps&rsquo;<br />
+/<br />
+&amp;energy_grid<br />
+&nbsp; smeartype=&rsquo;gauss&rsquo;<br />
+&nbsp; intersmear=0.136d0<br />
+&nbsp; intrasmear=0.0d0<br />
+&nbsp; wmax=30.0d0<br />
+&nbsp; wmin=0.0d0<br />
+&nbsp; nw=600<br />
+&nbsp; shift=0.0d0<br />
+/<br />
+----------<br />
+(‚±‚Ì—á‚Å‚ÍA—U“d—¦(eps)‚ÌÀ”‚Æ‹•”‚ğ0`30 eV‚Ì”ÍˆÍ‚Å600‚É•ªŠ„BƒVƒU[ƒYƒpƒ‰ƒ[ƒ^‚Æ‚È‚éshift‚Í0)<br />
+the first two characters are the location and name of the output files from the previous PW runs. calculation select the kind of calculation to be performed byepsilon.x, actually the following calculation are implemented:<br />
+----<br />
+Eeps<br />
+&nbsp;&nbsp;dielectric tensor calculation, in addition to the standard output the code produces the four files epsr.dat, epsi.dat, eels.dat and ieps.dat. The first two contain the real and imaginary parts of the dielectric tensor diagonal components &epsilon;<sub>1&alpha;,&alpha;</sub>(&omega;) e &epsilon;<sub>2&alpha;,&alpha;</sub>(&omega;), as a function of frequency (in eV). The third file contains the electron energy loss spectrum calculated from the diagonal elements of dielectric tensor and the last one contains the diagonal components of dielectric tensor calculated on the imaginary axis of frequency (via London transformation) &epsilon;<sub>&alpha;,&alpha;</sub>(i&omega;). If the PW calculations have been performed in collinear spin mode the previous files contain the sum of spin up and spin down contribution, other files with prefix u- or d- are created containing the same quantities for spin up or spin down separately.<br />
+Ejdos<br />
+&nbsp;&nbsp;joint density of state (JDOS) calculation. In addition to the standard output the code produces the file jdos.dat, containing the JDOS (in 1/eV) as a function of frequency (in eV). The JDOS is normalized to 1. If the PW calculations have been performed in collinear spin mode, jdos.dat contains separately the spin up and spin down JDOS.<br />
+Eoffdiag<br />
+&nbsp;&nbsp;calculation of diagonal and off-diagonal components of dielectric tensor. In addition to the standard output the code produces one file for each component of the dielectric tensor (i.e. epsxy.dat), each file contains real and imaginary part of the tensor component.<br />
+Eocc<br />
+&nbsp;&nbsp;calculation of occupation factors and its first derivative, results are written on occupations.dat. In metallic systems it is highly recommended to perform this calculation before anything else. Plotting this file it is easy to see if the chosen broadening parameter and k points number are enough to have a good sampling of the fermi surface.<br />
+-----<br />
+Esmeartype<br />
+&nbsp; smeartype select the kind of broadening for the plot of JDOS, it can be both gauss or lorentz for a Gaussian or Lorentzian broadening.<br />
+Eintersmear<br />
+&nbsp;&nbsp;intersmear is the broadening parameter (in eV) for the interband contribution, it will be the Gaussian or Lorentzian broadening parameter in the case of JDOS or the Drude-Lorentz broadening parameter for the dielectric tensor calculation.<br />
+Eintrasmear<br />
+&nbsp;&nbsp;intrasmear is the broadening parameter for the intraband, i.e. metal Drude like term (again in eV), the intraband contribution is calculated only if a Gaussian broadening or tetrahedron method it&rsquo;s been applied in PW calculations.&nbsp;<br />
+Ewmax<br />
+&nbsp; The desired functions will be calculated in a frequency interval [-wmax,wmax]&nbsp;<br />
+&nbsp;&nbsp;wmax is expected to be in eV.&nbsp;<br />
+&nbsp;&nbsp; ([wmin,wmax]‚ÌŒë‚è‚©H<br />
+Enw<br />
+&nbsp;&nbsp;nw is the number of points of the frequency mesh<br />
+Eshift<br />
+&nbsp;&nbsp;shift is the number of eV for an optional rigid shift of the imaginary part of the dielectric function.<br />
+-----(Reference:&nbsp;https://lists.quantum-espresso.org/pipermail/users/2010-May/016815.html)<br />
+&nbsp;&nbsp;the &quot;shift&quot; parameter is used in epsilon.x to shift the transition &nbsp;energies (computed as differences of eigenvalues, thus &quot;shift&quot; works as a &nbsp;scissor operator). Imposing a non-zero shift value basically changes the &nbsp;origin of the frequency axis in the spectra. If you do not have any special reason to use it (eg set empirically the &nbsp;DFT kohn-sham gap close to the experimental one, etc), &nbsp;just set it to zero (or leave it out of the namelist)<br />
+-----<br />
+<br />
+  infromation<br />
+----------<br />
+&epsilon;(&omega;) = &epsilon;<sup>elec</sup>(&omega;) + &epsilon;<sup>lat</sup>(&omega;) + &epsilon;<sup>disp</sup>(&omega;)<br />
+&epsilon;(&omega;) à &epsilon;<sup>elec</sup>(&omega;) + &epsilon;<sup>lat</sup>(&omega;): semi-conducter or Metal oxide case<br />
+<br />
+&epsilon;<sup>elec</sup>(&omega;) (&omega; &lt; 10 PHz): all materials<br />
+&nbsp;&nbsp;Polarization of the electronic state of matter caused by an electric field<br />
+&nbsp; 10 PHz:&nbsp;Vacuum ultraviolet region<br />
+&epsilon;<sup>lat</sup>(&omega;) (&omega; &lt; 10 THz):&nbsp;Compound liquid and solid<br />
+&nbsp;&nbsp;It is caused by a change in the arrangement of the atoms that make up the compound due to an electric field.<br />
+&epsilon;<sup>disp</sup>(&omega;) (&omega; &lt; 10 MHz ` 1 GHz):&nbsp;Molecular liquids and polymers with dipoles<br />
+&nbsp;&nbsp;Caused by the orientation of a molecule or polymer dipole with respect to the electric field<br />
+<br />
+&epsilon;(&omega;=0) = &epsilon;<sub>1</sub>(&omega;=0)<br />
+&epsilon;(&omega;&ne;0) = &epsilon;<sub>1</sub>(&omega;&ne;0) + i*&epsilon;<sub>2</sub>(&omega;&ne;0)<br />
+<br />
+static permittivity &epsilon;<sub>s</sub> = lim<sub>&omega;&rarr;0</sub> &epsilon;(&omega;)<br />
+Ref:&nbsp;https://en.wikipedia.org/wiki/Permittivity<br />
+<br />
+&epsilon;(&omega;) = &epsilon;<sub>&infin;</sub> + (&epsilon;<sub>s</sub> - &epsilon;<sub>&infin;</sub>)/(1-i&omega;&tau;)<br />
+Ref:&nbsp;https://en.wikipedia.org/wiki/Dielectric<br />
+<br />
+The dielectric tensor can be split in the ionic (&epsilon;<sub>0</sub>) and electronic (&epsilon;<sub>&infin;</sub>) contributions:<br />
+&nbsp; &epsilon;<sub>ij</sub> =&nbsp;&epsilon;<sub>ij</sub><sup>0</sup> +&nbsp;&epsilon;<sub>ij</sub><sup>&infin;</sup><br />
+The refractive index, n<br />
+&nbsp; n = (&epsilon;<sub>poly</sub><sup>&infin;</sup>)<sup>0.5</sup><br />
+where&nbsp;&epsilon;<sub>poly</sub><sup>&infin;</sup> is the average of the eigenvalues of electronic contribution to the dielectric tensor. It should be noted this equation for the refractive index assumes the material is non-magnetic.<br />
+Ref:&nbsp;https://wiki.materialsproject.org/Dielectric_calculations<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+¡ &epsilon;<sub>&infin;</sub><br />
+&nbsp; PW/examples/example10/PW/examples/example10/<br />
+------------------------------------------------------------------------------<br />
+¡ References<br />
+<br />
+[1] Notes on Quantum ESPRESSO<br />
+&nbsp; http://hawk.fisica.uminho.pt/ricardo-ribeiro/QEnotes.html<br />
+[2] ‘JˆÚ‹à‘®‰»‡•¨‚É‚¨‚¯‚é“àŠkXü•ªŒõ‚Ì‘½“dqŒn‘æˆêŒ´—ŒvZ‚Æ‚»‚Ì‰—p<br />
+&nbsp;&nbsp;http://support.spring8.or.jp/Doc_lecture/PDF_160128-29/2.ikeno_160128.pdf<br />
+[3]&nbsp;Time-Dependent Density Functional Perturbation Theory:&nbsp;<br />
+&nbsp;&nbsp;http://qe2019.ijs.si/talks/handson-day3-TDDFPT.pdf<br />
+[4] other tools<br />
+&nbsp;&nbsp;https://www.quantum-espresso.org/Doc/pp_user_guide/node12.html<br />
+[5]&nbsp;Phonons with Density-Functional Perturbation Theory&nbsp;<br />
+&nbsp;&nbsp;http://ermes.unt.edu/PhononsWithDFPT.pdf<br />
+&nbsp;&nbsp;http://www.fisica.uniud.it/~giannozz/QE-Tutorial/<br />
+[6] ŒõŠw’è”‚ÌŠÖŒW<br />
+&nbsp;&nbsp;http://akitsu.ee.ehime-u.ac.jp/lect/m/optlect1.pdf<br />
+&nbsp; •¡‘f‹üÜ—¦ m = n - i&kappa;<br />
+&nbsp; ‹üÜ—¦ n = ((&epsilon;<sub>r</sub>+(&epsilon;<sub>r</sub><sup>2</sup><sub>+</sub>&epsilon;<sub>i</sub><sup>2</sup>)<sup>0.5</sup>)/2)<sup>0.5&nbsp;</sup>= (&epsilon;<sub>r</sub>+&kappa;<sup>2</sup>)<sup>0.5</sup><br />
+&nbsp; ÁŠŒW” &kappa; = &epsilon;<sub>i</sub>/2n =&nbsp;((-&epsilon;<sub>r</sub>+(&epsilon;<sub>r</sub><sup>2</sup><sub>+</sub>&epsilon;<sub>i</sub><sup>2</sup>)<sup>0.5</sup>)/2)<sup>0.5</sup><br />
+&nbsp; ”½Ë—¦ R = ((n-1)<sup>2</sup>+&kappa;<sup>2</sup>)/((n+1)<sup>2</sup>+&kappa;<sup>2</sup>)<br />
+&nbsp; Œõ‹zûŒW” &alpha; = 4<span style="color: rgb(0, 0, 0); font-family: times new roman,times,serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&pi;</span>&kappa;/&lambda;<br />
+&nbsp; “§‰ß—¦ T = exp(-&alpha;x)<br />
+&nbsp; ‹zû—¦ k = 1 - T<br />
+&nbsp; ‹zû“x A = -log<sub>10</sub>(T)<br />
+&nbsp; ŒõŠw–§“x: &alpha;*log<sub>10</sub>(e)<br />
+&nbsp; ŒõŠw’è”‚Æ”½ËˆÊ‘Š‚ÌŠÖŒW: tan&theta; = -2&kappa;/(n<sup>2</sup> + k<sup>2</sup> + 1)<br />
+[7]&nbsp;Project: 4.1 (phonon) Si phonon gamma point | Quantum Espresso Tutorial 2019<br />
+&nbsp; https://www.youtube.com/watch?v=FTFSwm3lMOY<br />
+&nbsp; Šiq—U“d—¦‚Í‚±‚Ì“®‰æ‚ğŒ©‚ê‚Î‚æ‚¢B<br />
+[8] An introduction to density functional theory for experimentalists (Tutorial 4.1)<br />
+&nbsp;&nbsp;https://www.paradim.org/sites/default/files/2019-05/Phonon_Dispersion.pdf<br />
+&nbsp; (https://www.paradim.org/toolbox/theory/quantum_espresso/tutorials)<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[9]&nbsp;Developers&rsquo; Manual for PHonon (. 6.1)</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp;&nbsp;http://web.mit.edu/espresso_v6.1/i386_linux26/qe-6.1/PHonon/Doc/developer_man.pdf</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; General structure of ph.x </span>
+<table border="1" cellpadding="1" cellspacing="1" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; width: 500px; word-spacing: 0px;">
+	<tbody>
+		<tr>
+			<td style="width: 210px;">&nbsp;</td>
+			<td style="text-align: center; width: 89px;">frequency</td>
+			<td style="text-align: center; width: 79px;">q</td>
+			<td style="text-align: center; width: 111px;">perturbations</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">polarizability</td>
+			<td style="text-align: center; width: 89px;">iu</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">dielectric constant</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">zeu</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">electro optic coefficient</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">raman tensor</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">3 x 3</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">dynamical matrix</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">all q</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">zue</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">electron phonon interactions</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">all q</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> Ezeu = Born effective charges as derivative of the forces</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ezue = Born effective charges as derivative of the polarization</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">----------</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Efpol, if .TRUE. computes the frequency dependent polarizability</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Eepsil, if .TRUE. computes the dielectric constant</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ezeu, if .TRUE. computes eff. charges as induced forces</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Elraman, if .TRUE. computes the raman tensor</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Eelop, if .TRUE. computes the el-optical coefficient</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Etrans, if .TRUE. computes the dynamical matrix</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ezue, if .TRUE. computes eff. charges as induced polarization</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Eelph if .TRUE. computes the electron phonon coupling</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[10] F. Zheng et al., Phys. Rev. B 95 (2017) 035203.</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;‚‚“ ƒSƒVƒbƒN&quot;,&quot;‚‚“ ‚ƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS pro w3&quot;,osaka|“™•,osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;‚l‚r ƒSƒVƒbƒN&quot;,&quot;‚l‚r ‚oƒSƒVƒbƒN&quot;,&quot;ƒqƒ‰ƒMƒmŠpƒS Pro W3&quot;,Osaka|“™•,Osaka,•½¬ŠpƒSƒVƒbƒN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp;&nbsp;https://www.sas.upenn.edu/rappegroup/publications/Papers/Zheng17p035203.pdf</span><br />
+------------------------------------------------------------------------------<br />
+&nbsp;

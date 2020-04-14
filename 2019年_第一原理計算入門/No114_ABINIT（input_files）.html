@@ -1,0 +1,1878 @@
+--------------------------------------------------------------------------------<br />
+Å° k-point of input files for Abinit<br />
+<br />
+space group data ( from VESTA )<br />
+-----<br />
+Triclinic: 1, 2 (a, b, c, alpha, beta, gamma)<br />
+Monoclinic: 3-15 (a, b, c, 90, beta, 90)<br />
+Orthorhombic: 16-74 (a, b, c, 90, 90, 90)<br />
+Tetragonal: 75-142 (a, a, c, 90, 90, 90)<br />
+Trigonal: 143-145, 147, 149-154, 156-159, 162-165 (a, a, c, 90, 90, 120)<br />
+Rhombohedral: 146, 148, 155, 160-161, 166-167 (a, a, c, 90, 90, 120)<br />
+Hexagonal: 168-194 (a, a, c, 90, 90, 120)<br />
+Cubic: 195-230 (a, a, a, 90, 90, 90)<br />
+<br />
+A: 38-41<br />
+C: 5, 8, 9, 12, 15, 20, 21, 35-37, 63-68<br />
+R: 146, 148, 155, 160-161, 166-167<br />
+P: 1-4, 6, 7, 10, 11, 13, 14, 16-19, 25-34, 47-62, 75-78, 81, 83-86, 89-96, 99-106, 111-118, 123-138, 143-145, 147, 149-154, 156-159, 162-165, 168-194, 195, 198, 200, 201, 205, 207, 208, 212, 213, 215, 218, 221-224<br />
+F: 22, 42, 43, 69, 70, 196, 202, 203, 209, 210, 216, 219, 225-228<br />
+I: 23, 24, 44-46, 71-74, 79, &nbsp;80, 82, 87, 88, 97, 98, 107-110, 119-122, 139-142, 197, 199, 204, 206, 211, 214, 217, 220, 229, 230<br />
+<br />
+example ( from Crystal Studio Version 13 )<br />
+-----<br />
+spgroup 2, 4, 7, 9, 12, 14, 15, 23, 38, 58, 59, 60, 61, 62, 63, 64, 69, 74, 82, 113, 122, 130, 136, 139, 140, 141, 147, 156, 158, 160, 164, 166, 167, 205, 217, 218, 221, 229, 230<br />
+# Triclinic, Monoclinic, Orthorhombic, Tetragonal, Trigonal, Rhombohedral, and Cubic (no F type)&nbsp;case<br />
+&nbsp; kptopt 1<br />
+&nbsp;&nbsp;ngkpt 4 4 4<br />
+&nbsp;&nbsp;nshiftk 1<br />
+&nbsp;&nbsp;shiftk 0.5 0.5 0.5<br />
+-----<br />
+spgroup&nbsp;174, 176, 180, 182, 186, 192, 194<br />
+# Hexagonal case<br />
+&nbsp; kptopt 1<br />
+&nbsp;&nbsp;ngkpt 4 4 4<br />
+&nbsp;&nbsp;nshiftk 1<br />
+&nbsp;&nbsp;shiftk 0.0 0.0 0.5<br />
+-----<br />
+spgroup 216, 225, 227<br />
+# Cubic (F type)&nbsp;case<br />
+&nbsp; kptopt 1<br />
+&nbsp;&nbsp;ngkpt 4 4 4<br />
+&nbsp;&nbsp;nshiftk 4<br />
+&nbsp;&nbsp;shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+-----<br />
+--------------------------------------------------------------------------------<br />
+Å° q-point of input files for phonon<br />
+qpt:<br />
+#Complete set of symmetry-inequivalent qpt chosen to be commensurate<br />
+# with kpt mesh so that only one set of GS wave functions is needed.<br />
+#Generated automatically by running GS calculation with kptopt=1,<br />
+# nshift=0, shiftk=0 0 0 (to include gamma) and taking output kpt set<br />
+# file as qpt set. Set nstep=1 so only one iteration runs.<br />
+<br />
+FCC<br />
+#Definition of the k-point grid<br />
+&nbsp;&nbsp;&nbsp; ngkpt&nbsp;&nbsp; 4&nbsp; 4&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; nshiftk&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Use one copy of grid only (default)<br />
+&nbsp;&nbsp; shiftk&nbsp;&nbsp; 0.0 0.0 0.5&nbsp;&nbsp;&nbsp; # This gives the usual fcc Monkhorst-Pack grid<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt2&nbsp;&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt3&nbsp;&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt4&nbsp;&nbsp; 2.50000000E-01&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt5&nbsp;&nbsp; 5.00000000E-01&nbsp; 0.00000000E+00&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt6&nbsp;&nbsp; 2.50000000E-01&nbsp; 2.50000000E-01&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt7&nbsp;&nbsp; 5.00000000E-01&nbsp; 2.50000000E-01&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt8&nbsp; -2.50000000E-01&nbsp; 2.50000000E-01&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt9&nbsp;&nbsp; 5.00000000E-01&nbsp; 5.00000000E-01&nbsp; 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp; qpt10 -2.50000000E-01&nbsp; 5.00000000E-01&nbsp; 2.50000000E-01<br />
+<br />
+BCC (e.g. spgroup 229)<br />
+#k point grid<br />
+&nbsp;&nbsp;&nbsp; kptopt 3<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ngkpt 4 4 4<br />
+&nbsp;&nbsp; nshiftk 1<br />
+&nbsp;&nbsp;&nbsp; shiftk 0.5 0.5 0.5<br />
+#Datasets 4 and above: Finite-wave-vector phonon calculations for other q vectors&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt2 0.0 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt3 0.00000000E+00 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt4 2.50000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt5 5.00000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt6 2.50000000E-01 2.50000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt7 5.00000000E-01 2.50000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt8 5.00000000E-01 5.00000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt9 2.50000000E-01 2.50000000E-01 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt10 5.00000000E-01 2.50000000E-01 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt11 5.00000000E-01 5.00000000E-01 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt12 5.00000000E-01 5.00000000E-01 5.00000000E-01<br />
+<br />
+HCP<br />
+#k point grid<br />
+&nbsp;&nbsp;&nbsp; kptopt 3<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ngkpt 4 4 4<br />
+&nbsp;&nbsp; nshiftk 1<br />
+&nbsp;&nbsp;&nbsp; shiftk 0.0 0.0 0.5<br />
+#Datasets 4 and above: Finite-wave-vector phonon calculations for other q vectors&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt2 0.0 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt3 0.00000000E+00 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt4 2.50000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt5 5.00000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt6 2.50000000E-01 2.50000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt7 0.00000000E+00 0.00000000E+00 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt8 2.50000000E-01 0.00000000E+00 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt9 5.00000000E-01 0.00000000E+00 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt10 2.50000000E-01 2.50000000E-01 2.50000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt11 0.00000000E+00 0.00000000E+00 5.00000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt12 2.50000000E-01 0.00000000E+00 5.00000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt13 5.00000000E-01 0.00000000E+00 5.00000000E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt14 2.50000000E-01 2.50000000E-01 5.00000000E-01<br />
+--------------------------------------------------------------------------------<br />
+Å° input files for Abinit, Fe2VAl (225) case<br />
+References: Crystal Studio Version 13<br />
+# The internal logic of ABINIT prevents running of Cell Optimization Process together with the Response Function calculation of thermodynamic properties or phonon band structure or with the GW calculations, Plase run Cell Optimization process firest, and then use the optimized cell for the Response Function calculation of thermodynamic porperties or the phonon band structure or for the GW calculations.<br />
+--------------------------------------------------------------------------------<br />
+Å° Ground State, Total Energy + spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+toldfe 1.00e-010<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1 # (2: spin-orbit calculation)<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 1<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å° Ground State, Total Energy + Optimize Cell&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+toldfe 1.00e-010<br />
+# toldfe 1e-006<br />
+# tikdff 0.0001<br />
+# tolvrs 1e-012<br />
+# tolwfr 1e-016<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 2<br />
+<br />
+#Cell Optimization<br />
+<br />
+#Data Set 1<br />
+optcell1 0<br />
+ionmov1 2<br />
+getcell1 0<br />
+getxred1 0<br />
+ntime1 10<br />
+dilatmx1 1.05<br />
+ecutsm1 0.5<br />
+tolmxf1 5.00e-005<br />
+<br />
+#Data Set 2<br />
+optcell2 1<br />
+ionmov2 3<br />
+getcell2 0<br />
+getxred2 -1<br />
+ntime2 10<br />
+dilatmx2 1.05<br />
+ecutsm2 0.5<br />
+tolmxf2 5.00e-005<br />
+<br />
+#Common data for cell and coordinates<br />
+getcell 2<br />
+getxred 2<br />
+--------------------------------------------------------------------------------<br />
+Å° Cell Optimization, Lattice Parameters and Atom Positions&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 2<br />
+<br />
+#Cell Optimization<br />
+<br />
+#Data Set 1<br />
+optcell1 0<br />
+ionmov1 2<br />
+getcell1 0<br />
+getxred1 0<br />
+ntime1 10<br />
+dilatmx1 1.05<br />
+ecutsm1 0.5<br />
+tolmxf1 5.00e-005<br />
+toldff1 5.00e-006<br />
+<br />
+#Data Set 2<br />
+optcell2 1<br />
+ionmov2 3<br />
+getcell2 0<br />
+getxred2 -1<br />
+ntime2 10<br />
+dilatmx2 1.05<br />
+ecutsm2 0.5<br />
+tolmxf2 5.00e-005<br />
+toldff2 5.00e-006<br />
+<br />
+#Common data for cell and coordinates<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Band Strucutre Calculation&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 2<br />
+<br />
+#Band Structure<br />
+<br />
+#Data Set 1<br />
+prtden1 1<br />
+toldfe1 1.00e-008<br />
+<br />
+#Data Set 2<br />
+getden2 -1<br />
+iscf2 -2<br />
+tolwfr2 1.00e-022<br />
+enunit2 1<br />
+nband2 8<br />
+kptopt2 -9<br />
+ndivk2 10 12 6 4 1 7 8 6 12<br />
+kptbounds2 -0.25 0.25 0.25<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.25 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.375 0.375 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.25 0.25 0.25<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.25 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.375 0.375 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.0<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;GW Calculation of Band Gap&nbsp;for&nbsp;Semicondyctires and Insulators&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Number of Data Sets<br />
+ndtset 3<br />
+<br />
+#GW Band Gap<br />
+<br />
+#Data Set 1: ground state calculation and of the kss file<br />
+nbandkss1 -1<br />
+nband1 9<br />
+toldfe1 1.00e-008<br />
+istwfk1 *1<br />
+symmorphi1 0<br />
+<br />
+#Data Set 2: calculation of the screening (epsilon^-1 matrix for W)<br />
+optdriver2 3<br />
+getkss2 -1<br />
+nband2 100<br />
+ecutwfn2 4.0<br />
+ecuteps2 6.0<br />
+ppmfrq2 0.5<br />
+toldfe2 1.00e-008<br />
+istwfk2 *1<br />
+symmorphi2 0<br />
+<br />
+#Data Set 3: calculation of the Self-Energy matrix elements (GW corrections)<br />
+optdriver3 4<br />
+getkss3 -2<br />
+getscr3 -1<br />
+nband3 100<br />
+ecutwfn3 5.0<br />
+ecutsigx3 6.0<br />
+toldfe3 1.00e-008<br />
+nkptgw3 1<br />
+kptgw3 -0.125 0.0 0.0 #K Point for GW Calculation<br />
+bdgw3 4 5 # Band Range for GW Calculation, Start Band Number, End Band Number<br />
+istwfk3 *1<br />
+symmorphi3 0<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;GW Calculation of Band&nbsp;Width for conductors&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 3<br />
+<br />
+#GW Band Width<br />
+<br />
+#Data Set 1<br />
+kssform1 1<br />
+nbandkss1 30<br />
+nband1 8<br />
+istwfk1 *1<br />
+prtvol1 5<br />
+enunit1 1<br />
+toldfe1 1.00e-010<br />
+<br />
+#Data Set 2<br />
+optdriver2 3<br />
+gwcalctyp2 2<br />
+getkss2 -1<br />
+nband2 30<br />
+ecutwfn2 4.0<br />
+ecuteps2 6.0<br />
+nfreqim2 4<br />
+nfreqre2 10<br />
+freqremax2 1.0<br />
+istwfk2 *1<br />
+prtvol2 5<br />
+enunit2 1<br />
+toldfe2 1.00e-010<br />
+<br />
+#Data Set 3<br />
+optdriver3 4<br />
+gwcalctyp3 12<br />
+getkss3 -2<br />
+getscr3 -1<br />
+nband3 30<br />
+ecutwfn3 6.5<br />
+ecutsigx3 6.5<br />
+istwfk3 *1<br />
+prtvol3 5<br />
+enunit3 1<br />
+toldfe3 1.00e-010<br />
+nkptgw3 1<br />
+kptgw3 -0.125 0.0 0.0<br />
+bdgw3 4 5<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;GW Calculation of&nbsp;Photo emission Spectra (PBE)&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 3<br />
+<br />
+#GW Photo Emission Spectroscopy<br />
+<br />
+#Data Set 1<br />
+kssform1 1<br />
+nbandkss1 30<br />
+nband1 8<br />
+istwfk1 *1<br />
+prtvol1 5<br />
+enunit1 1<br />
+toldfe1 1.00e-010<br />
+<br />
+#Data Set 2<br />
+optdriver2 3<br />
+gwcalctyp2 2<br />
+getkss2 -1<br />
+nband2 30<br />
+ecutwfn2 4.0<br />
+ecuteps2 6.0<br />
+nfreqim2 4<br />
+nfreqre2 10<br />
+freqremax2 1.0<br />
+istwfk2 *1<br />
+prtvol2 5<br />
+enunit2 1<br />
+toldfe2 1.00e-010<br />
+<br />
+#Data Set 3<br />
+optdriver3 4<br />
+gwcalctyp3 12<br />
+getkss3 -2<br />
+getscr3 -1<br />
+nband3 30<br />
+ecutwfn3 6.5<br />
+ecutsigx3 6.5<br />
+nfreqsp3 200<br />
+freqspmax3 2.0<br />
+istwfk3 *1<br />
+prtvol3 5<br />
+enunit3 1<br />
+toldfe3 1.00e-010<br />
+nkptgw3 1<br />
+kptgw3 -0.125 0.0 0.0<br />
+bdgw3 4 5<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Spin Polarization and Magnetisation&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+toldfe 1.00e-010<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+&nbsp;ndtset 1<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;TDDFT Calculation of Electronic Excitation&nbsp;Energies + spin<br />
+# The TDDFT approach to electronic excitation energies in ABINIT is only valid for finite systems (atoms, molecules, clustrs). Actually, only one k-point can be used, and a &#39;box center&#39; must be defined, close to the center of gravity of the system.<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 0<br />
+nkpt 1<br />
+kpt 0 0 0<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac&nbsp; 2.00<br />
+diemix 0.5<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 2<br />
+<br />
+#Dataset 1: SCF Ground State<br />
+iscf1 5<br />
+prtden1 1<br />
+nband1 11<br />
+nbdbuf1 0<br />
+boxcenter1&nbsp;&nbsp;&nbsp;&nbsp; 2.721456009&nbsp;&nbsp;&nbsp;&nbsp; 0.907152003&nbsp;&nbsp;&nbsp;&nbsp; 0.907152003<br />
+tolwfr1 1.00e-016<br />
+<br />
+#Dataset 2: TDDFT<br />
+iscf2 -1<br />
+getden2 -1<br />
+getwfk2 -1<br />
+nband2 18<br />
+nbdbuf2 0<br />
+boxcenter2&nbsp;&nbsp;&nbsp;&nbsp; 2.721456009&nbsp;&nbsp;&nbsp;&nbsp; 0.907152003&nbsp;&nbsp;&nbsp;&nbsp; 0.907152003<br />
+tolwfr2 1.00e-012<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;BP + FD for Born Effective Charge,&nbsp;Dielectruc&nbsp;Constant with Clamped Ions&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ixc 3<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 11<br />
+<br />
+#Common Data<br />
+nband 11<br />
+nbdbuf 0<br />
+toldfe 1.00e-012<br />
+<br />
+jdtset 11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21 22 23 24 25<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 31 32 33 34 35<br />
+<br />
+berryopt11 -1<br />
+rfdir11 1 1 1<br />
+<br />
+&nbsp;berryopt21&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield21&nbsp;&nbsp; 0.0001&nbsp; 0.0001&nbsp; 0.0001&nbsp;&nbsp;&nbsp; getwfk21&nbsp; 11<br />
+&nbsp;berryopt22&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield22&nbsp;&nbsp; 0.0002&nbsp; 0.0002&nbsp; 0.0002&nbsp;&nbsp;&nbsp; getwfk22&nbsp; 21<br />
+&nbsp;berryopt23&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield23&nbsp;&nbsp; 0.0003&nbsp; 0.0003&nbsp; 0.0003&nbsp;&nbsp;&nbsp; getwfk23&nbsp; 22<br />
+&nbsp;berryopt24&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield24&nbsp;&nbsp; 0.0004&nbsp; 0.0004&nbsp; 0.0004&nbsp;&nbsp;&nbsp; getwfk24&nbsp; 23<br />
+&nbsp;berryopt25&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield25&nbsp;&nbsp; 0.0005&nbsp; 0.0005&nbsp; 0.0005&nbsp;&nbsp;&nbsp; getwfk25&nbsp; 24<br />
+<br />
+&nbsp;berryopt31&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield31&nbsp; -0.0001 -0.0001 -0.0001&nbsp;&nbsp;&nbsp; getwfk31&nbsp; 11<br />
+&nbsp;berryopt32&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield32&nbsp; -0.0002 -0.0002 -0.0002&nbsp;&nbsp;&nbsp; getwfk32&nbsp; 31<br />
+&nbsp;berryopt33&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield33&nbsp; -0.0003 -0.0003 -0.0003&nbsp;&nbsp;&nbsp; getwfk33&nbsp; 32<br />
+&nbsp;berryopt34&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield34&nbsp; -0.0004 -0.0004 -0.0004&nbsp;&nbsp;&nbsp; getwfk34&nbsp; 33<br />
+&nbsp;berryopt35&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield35&nbsp; -0.0005 -0.0005 -0.0005&nbsp;&nbsp;&nbsp; getwfk35&nbsp; 34<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;BP + FD for Born Effective Charge,&nbsp;Dielectruc Constant and Piezoelectric Constant with&nbsp;Rekaxed Ions + spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ixc 3<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 11<br />
+<br />
+#Common Data<br />
+nband 11<br />
+nbdbuf 0<br />
+toldfe 1.00e-012<br />
+<br />
+#Relaxation of atomic positions<br />
+optcell 0<br />
+ionmov 2<br />
+tolmxf 5.00e-005<br />
+ntime 10<br />
+<br />
+jdtset 11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21 22 23 24 25<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 31 32 33 34 35<br />
+<br />
+berryopt11 -1<br />
+rfdir11 1 1 1<br />
+<br />
+&nbsp;berryopt21&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield21&nbsp;&nbsp; 0.0001&nbsp; 0.0001&nbsp; 0.0001&nbsp;&nbsp;&nbsp; getwfk21&nbsp; 11<br />
+&nbsp;berryopt22&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield22&nbsp;&nbsp; 0.0002&nbsp; 0.0002&nbsp; 0.0002&nbsp;&nbsp;&nbsp; getwfk22&nbsp; 21<br />
+&nbsp;berryopt23&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield23&nbsp;&nbsp; 0.0003&nbsp; 0.0003&nbsp; 0.0003&nbsp;&nbsp;&nbsp; getwfk23&nbsp; 22<br />
+&nbsp;berryopt24&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield24&nbsp;&nbsp; 0.0004&nbsp; 0.0004&nbsp; 0.0004&nbsp;&nbsp;&nbsp; getwfk24&nbsp; 23<br />
+&nbsp;berryopt25&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield25&nbsp;&nbsp; 0.0005&nbsp; 0.0005&nbsp; 0.0005&nbsp;&nbsp;&nbsp; getwfk25&nbsp; 24<br />
+<br />
+&nbsp;berryopt31&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield31&nbsp; -0.0001 -0.0001 -0.0001&nbsp;&nbsp;&nbsp; getwfk31&nbsp; 11<br />
+&nbsp;berryopt32&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield32&nbsp; -0.0002 -0.0002 -0.0002&nbsp;&nbsp;&nbsp; getwfk32&nbsp; 31<br />
+&nbsp;berryopt33&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield33&nbsp; -0.0003 -0.0003 -0.0003&nbsp;&nbsp;&nbsp; getwfk33&nbsp; 32<br />
+&nbsp;berryopt34&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield34&nbsp; -0.0004 -0.0004 -0.0004&nbsp;&nbsp;&nbsp; getwfk34&nbsp; 33<br />
+&nbsp;berryopt35&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; efield35&nbsp; -0.0005 -0.0005 -0.0005&nbsp;&nbsp;&nbsp; getwfk35&nbsp; 34<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Response function (RF) Calculation for Born Effective Charge&nbsp;and Dielectric Constant + spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac 12.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 3<br />
+<br />
+#Dataset 1: Initial self-consistent run<br />
+iscf1 5<br />
+tolvrs1 1.00e-018<br />
+<br />
+#Dataset 2: Response Function calculation : d/dk<br />
+getwfk2 -1<br />
+iscf2 -3<br />
+kptopt2 2<br />
+nqpt2 1<br />
+qpt2 0 0 0<br />
+rfelfd2 2<br />
+rfdir2 1 0 0<br />
+tolwfr2 1.00e-022<br />
+<br />
+#Dataset 3: Response Function calculation : electric field perturbation and phonons<br />
+getddk3 -1<br />
+getwfk3 -2<br />
+iscf3 5<br />
+kptopt3 2<br />
+nqpt3 1<br />
+qpt3 0 0 0<br />
+rfphon3 1<br />
+rfatpol3 1 16<br />
+rfelfd3 3<br />
+rfdir3 1 1 1<br />
+tolvrs3 1.00e-014<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Response function (RF) Calculation for&nbsp;Interatomic Forces and Thermodynamic Properties&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 3<br />
+ngkpt 6 6 6<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac 12.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Other common parameters<br />
+nqpt 1<br />
+getwfk 1<br />
+rfphon 1<br />
+rfatpol 1 16<br />
+rfdir 1 1 1<br />
+tolvrs 1.00e-010<br />
+<br />
+#Dataset 1: Ground state self-consistency<br />
+getwfk1 0<br />
+kptopt1 1<br />
+nqpt1 0<br />
+rfphon1 0<br />
+tolvrs1 1.00e-018<br />
+<br />
+#Dataset 2: Response function calculation of d/dk wave function&nbsp;<br />
+iscf2 -3<br />
+kptopt2 2<br />
+rfphon2 0<br />
+rfelfd2 2<br />
+tolvrs2 0.0<br />
+tolwfr2 1.00e-022<br />
+<br />
+#Dataset 3: Response function calculation of Q=0 phonons and electric field pert&nbsp;<br />
+getddk3 -1<br />
+kptopt3 2<br />
+rfelfd3 3<br />
+<br />
+#Datasets 4 and above: Finite-wave-vector phonon calculations for other q vectors&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt2 0.0 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt3 0.00000000E+00 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt4 1.66666667E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt5 3.33333333E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt6 5.00000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt7 1.66666667E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt8 3.33333333E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt9 5.00000000E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt10 3.33333333E-01 3.33333333E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt11 5.00000000E-01 3.33333333E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt12 5.00000000E-01 5.00000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt13 1.66666667E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt14 3.33333333E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt15 5.00000000E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt16 3.33333333E-01 3.33333333E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt17 5.00000000E-01 3.33333333E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt18 5.00000000E-01 5.00000000E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt19 3.33333333E-01 3.33333333E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt20 5.00000000E-01 3.33333333E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt21 5.00000000E-01 5.00000000E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt22 5.00000000E-01 5.00000000E-01 5.00000000E-01<br />
+<br />
+#Number of Data Sets<br />
+ndtset 22<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Response function (RF) Calculation for&nbsp;Computation of Phonon Band Structures&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 3<br />
+ngkpt 6 6 6<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac 12.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0 0<br />
+<br />
+#Other common parameters<br />
+nqpt 1<br />
+getwfk 1<br />
+rfphon 1<br />
+rfatpol 1 16<br />
+rfdir 1 1 1<br />
+tolvrs 1.00e-010<br />
+<br />
+#Dataset 1: Ground state self-consistency<br />
+getwfk1 0<br />
+kptopt1 1<br />
+nqpt1 0<br />
+rfphon1 0<br />
+tolvrs1 1.00e-018<br />
+<br />
+#Dataset 2: Response function calculation of d/dk wave function&nbsp;<br />
+iscf2 -3<br />
+kptopt2 2<br />
+rfphon2 0<br />
+rfelfd2 2<br />
+tolvrs2 0.0<br />
+tolwfr2 1.00e-022<br />
+<br />
+#Dataset 3: Response function calculation of Q=0 phonons and electric field pert&nbsp;<br />
+getddk3 -1<br />
+kptopt3 2<br />
+rfelfd3 3<br />
+<br />
+#Datasets 4 and above: Finite-wave-vector phonon calculations for other q vectors&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt2 0.0 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt3 0.00000000E+00 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt4 1.66666667E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt5 3.33333333E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt6 5.00000000E-01 0.00000000E+00 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt7 1.66666667E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt8 3.33333333E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt9 5.00000000E-01 1.66666667E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt10 3.33333333E-01 3.33333333E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt11 5.00000000E-01 3.33333333E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt12 5.00000000E-01 5.00000000E-01 0.00000000E+00<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt13 1.66666667E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt14 3.33333333E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt15 5.00000000E-01 1.66666667E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt16 3.33333333E-01 3.33333333E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt17 5.00000000E-01 3.33333333E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt18 5.00000000E-01 5.00000000E-01 1.66666667E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt19 3.33333333E-01 3.33333333E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt20 5.00000000E-01 3.33333333E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt21 5.00000000E-01 5.00000000E-01 3.33333333E-01<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; qpt22 5.00000000E-01 5.00000000E-01 5.00000000E-01<br />
+<br />
+#Number of Data Sets<br />
+ndtset 22<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Optic Calculation&nbsp;+ spin<br />
+# Frequencry Rnge(1 Ha = 27.2111 eV)<br />
+# Max Frequency 1, Frequency Step 0.01<br />
+# Linear Optical Dielectric Tensor(x=1, y=2, z=3), Number of Components 3, Components 11, 33, 23<br />
+# Non-Linear Optical Susceptivility(x=1, y=2, z=3), Number of Components 2, Components 123, 222<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 3<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+tolwfr 1.00e-020<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 6<br />
+<br />
+#Dataset 1: SC run with kpoints in the IBZ<br />
+iscf1 3<br />
+kptopt1 1<br />
+nband1 4<br />
+nstep1 25<br />
+nbdbuf1 0<br />
+prtden1 1<br />
+getden1 0<br />
+getwfk1 0<br />
+<br />
+#Dataset 2: NSC run with large number of bands, and points in the IBZ<br />
+iscf2 -2<br />
+kptopt2 1<br />
+nband2 30<br />
+nstep2 25<br />
+getden2 -1<br />
+getwfk2 -1<br />
+<br />
+#Dataset 3: NSC run with large number of bands, and points in the the full BZ<br />
+iscf3 -2<br />
+kptopt3 3<br />
+nband3 30<br />
+nstep3 25<br />
+getden3 -2<br />
+getwfk3 -1<br />
+<br />
+#Dataset 4: ddk response function along axis 1<br />
+iscf4 -3<br />
+kptopt4 3<br />
+nband4 30<br />
+nstep4 1<br />
+nline4 0<br />
+nqpt4 1<br />
+qpt4 0 0 0<br />
+rfdir4 1 0 0<br />
+rfelfd4 2<br />
+getwfk4 -1<br />
+<br />
+#Dataset 5: ddk response function along axis 2<br />
+iscf5 -3<br />
+kptopt5 3<br />
+nband5 30<br />
+nstep5 1<br />
+nline5 0<br />
+nqpt5 1<br />
+qpt5 0 0 0<br />
+rfdir5 0 1 0<br />
+rfelfd5 2<br />
+getwfk5 -2<br />
+<br />
+#Dataset 6: ddk response function along axis 3<br />
+iscf6 -3<br />
+kptopt6 3<br />
+nband6 30<br />
+nstep6 1<br />
+nline6 0<br />
+nqpt6 1<br />
+qpt6 0 0 0<br />
+rfdir6 0 0 1<br />
+rfelfd6 2<br />
+getwfk6 -3<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Elastic Study, Elastic&nbsp;Constant and/or&nbsp;Piezoelectricic Constant&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac 12.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 3<br />
+<br />
+#Dataset 1: Initial self-consistent run<br />
+iscf1 5<br />
+tolvrs1 1.00e-018<br />
+<br />
+#Dataset 2: Calculate the ddk wf&#39;s - needed for piezoelectric tensor and Born effective charges in dataset 3<br />
+getwfk2 -1<br />
+iscf2 -3<br />
+kptopt2 2<br />
+nqpt2 1<br />
+qpt2 0 0 0<br />
+rfelfd2 2<br />
+rfdir2 1 1 1<br />
+tolwfr2 1.00e-020<br />
+<br />
+#Dataset 3: Response-function calculations for all needed perturbations<br />
+getddk3 -1<br />
+getwfk3 -2<br />
+iscf3 5<br />
+kptopt3 2<br />
+nqpt3 1<br />
+qpt3 0 0 0<br />
+rfphon3 1<br />
+rfatpol3 1 16<br />
+rfstrs3 3<br />
+rfdir3 1 1 1<br />
+tolvrs3 1.00e-014<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Elastic Study, Elastic&nbsp;Constant and/or&nbsp;Piezoelectricic Constant&nbsp;+ optimize cell + spin[<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+diemac 12.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 5<br />
+<br />
+#Cell Optimization<br />
+<br />
+#Data Set 1<br />
+optcell1 0<br />
+ionmov1 2<br />
+getcell1 0<br />
+getxred1 0<br />
+ntime1 10<br />
+dilatmx1 1.05<br />
+ecutsm1 0.5<br />
+tolmxf1 5.00e-005<br />
+toldff1 5.00e-006<br />
+<br />
+#Data Set 2<br />
+optcell2 1<br />
+ionmov2 3<br />
+getcell2 0<br />
+getxred2 -1<br />
+ntime2 10<br />
+dilatmx2 1.05<br />
+ecutsm2 0.5<br />
+tolmxf2 5.00e-005<br />
+toldff2 5.00e-006<br />
+<br />
+#Common data for cell and coordinates<br />
+getcell 2<br />
+getxred 2<br />
+<br />
+#Dataset 3: Initial self-consistent run<br />
+iscf3 5<br />
+tolvrs3 1.00e-018<br />
+<br />
+#Dataset 4: Calculate the ddk wf&#39;s - needed for piezoelectric tensor and Born effective charges in dataset 3<br />
+getwfk4 -1<br />
+iscf4 -3<br />
+kptopt4 2<br />
+nqpt4 1<br />
+qpt4 0 0 0<br />
+rfelfd4 2<br />
+rfdir4 1 1 1<br />
+tolwfr4 1.00e-020<br />
+<br />
+#Dataset 5: Response-function calculations for all needed perturbations<br />
+getddk5 -1<br />
+getwfk5 -2<br />
+iscf5 5<br />
+kptopt5 2<br />
+nqpt5 1<br />
+qpt5 0 0 0<br />
+rfphon5 1<br />
+rfatpol5 1 16<br />
+rfstrs5 3<br />
+rfdir5 1 1 1<br />
+tolvrs5 1.00e-014<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Elastic Study for Metals&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 4<br />
+<br />
+#Dataset 1: Initial self-consistent run<br />
+iscf1 5<br />
+tolvrs1 1.00e-018<br />
+<br />
+#Dataset 2: Additional iteration to print density<br />
+getwfk2 -1<br />
+prtden2 1<br />
+tolvrs2 1.00e-018<br />
+<br />
+#Dataset 3: Converge unoccupied wave functions<br />
+getden3 -1<br />
+getwfk3 -1<br />
+tolwfr3 5.00e-019<br />
+<br />
+#Dataset 4: Response-function calculations for all needed perturbations<br />
+getwfk4 -1<br />
+kptopt4 2<br />
+nqpt4 1<br />
+qpt4 0 0 0<br />
+rfdir4 1 1 1<br />
+rfstrs4 3<br />
+tolvrs4 1.00e-014<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Elastic Study for Metals&nbsp;+ optimize cell + spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0400000<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ecut&nbsp; 8.00<br />
+nstep 50<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 6<br />
+<br />
+#Cell Optimization<br />
+<br />
+#Data Set 1<br />
+optcell1 0<br />
+ionmov1 2<br />
+getcell1 0<br />
+getxred1 0<br />
+ntime1 10<br />
+dilatmx1 1.05<br />
+ecutsm1 0.5<br />
+tolmxf1 5.00e-005<br />
+toldff1 5.00e-006<br />
+<br />
+#Data Set 2<br />
+optcell2 1<br />
+ionmov2 3<br />
+getcell2 0<br />
+getxred2 -1<br />
+ntime2 10<br />
+dilatmx2 1.05<br />
+ecutsm2 0.5<br />
+tolmxf2 5.00e-005<br />
+toldff2 5.00e-006<br />
+<br />
+#Common data for cell and coordinates<br />
+getcell 2<br />
+getxred 2<br />
+<br />
+#Dataset 3: Initial self-consistent run<br />
+iscf3 5<br />
+tolvrs3 1.00e-018<br />
+<br />
+#Dataset 4: Additional iteration to print density<br />
+getwfk4 -1<br />
+prtden4 1<br />
+tolvrs4 1.00e-018<br />
+<br />
+#Dataset 5: Converge unoccupied wave functions<br />
+getden5 -1<br />
+getwfk5 -1<br />
+tolwfr5 5.00e-019<br />
+<br />
+#Dataset 6: Response-function calculations for all needed perturbations<br />
+getwfk6 -1<br />
+kptopt6 2<br />
+nqpt6 1<br />
+qpt6 0 0 0<br />
+rfdir6 1 1 1<br />
+rfstrs6 3<br />
+tolvrs6 1.00e-014<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;DFPT for Static Non-Linear Properties&nbsp;+ spin<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ixc 3<br />
+ecut&nbsp; 8.00<br />
+nstep 100<br />
+diemac&nbsp; 3.00<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0&nbsp;<br />
+<br />
+#Number of Data Sets<br />
+ndtset 4<br />
+<br />
+#Dataset 1: scf calculation: GS WF in the IBZ<br />
+kptopt1 1<br />
+prtden1 1<br />
+toldfe1 1.00e-012<br />
+<br />
+#Dataset 2: non scf calculation: GS WF in the whole BZ with time reversal symmetry<br />
+kptopt2 2<br />
+iscf2 -2<br />
+getden2 -1<br />
+getwfk2 -1<br />
+tolwfr2 1.00e-022<br />
+nband2 4<br />
+<br />
+#Dataset 3: ddk on the MP grid of k-points<br />
+kptopt3 2<br />
+rfdir3 1 1 1<br />
+rfelfd3 2<br />
+getwfk3 -1<br />
+tolwfr3 1.00e-022<br />
+nband3 4<br />
+<br />
+#Dataset 4: strain response<br />
+kptopt4 2<br />
+rfdir4 1 1 1<br />
+rfstrs4 3<br />
+getwfk4 -2<br />
+getddk4 -1<br />
+toldfe4 1.00e-012<br />
+nband4 4<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;DFPT for Static Non-Linear Properties&nbsp;+ Optimize Cell<br />
+# ixc = 2, 3, 4, 5, 6, 20, 21 or 22 are not allowed when nsppol = 2 for spin polarization! Plase select a different ixc.<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 1<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.0 0.0 0.5<br />
+<br />
+#Bands and occupation<br />
+<br />
+#Self consistent cycles<br />
+iscf 5<br />
+ixc 3<br />
+ecut&nbsp; 8.00<br />
+nstep 100<br />
+diemac&nbsp; 3.00<br />
+<br />
+#Number of Data Sets<br />
+ndtset 6<br />
+<br />
+#Cell Optimization<br />
+<br />
+#Data Set 1<br />
+optcell1 0<br />
+ionmov1 2<br />
+getcell1 0<br />
+getxred1 0<br />
+ntime1 10<br />
+dilatmx1 1.05<br />
+ecutsm1 0.5<br />
+tolmxf1 5.00e-005<br />
+toldff1 5.00e-006<br />
+<br />
+#Data Set 2<br />
+optcell2 1<br />
+ionmov2 3<br />
+getcell2 0<br />
+getxred2 -1<br />
+ntime2 10<br />
+dilatmx2 1.05<br />
+ecutsm2 0.5<br />
+tolmxf2 5.00e-005<br />
+toldff2 5.00e-006<br />
+<br />
+#Common data for cell and coordinates<br />
+getcell 2<br />
+getxred 2<br />
+<br />
+#Dataset 3: scf calculation: GS WF in the IBZ<br />
+kptopt3 1<br />
+prtden3 1<br />
+toldfe3 1.00e-012<br />
+<br />
+#Dataset 4: non scf calculation: GS WF in the whole BZ with time reversal symmetry<br />
+kptopt4 2<br />
+iscf4 -2<br />
+getden4 -1<br />
+getwfk4 -1<br />
+tolwfr4 1.00e-022<br />
+nband4 4<br />
+<br />
+#Dataset 5: ddk on the MP grid of k-points<br />
+kptopt5 2<br />
+rfdir5 1 1 1<br />
+rfelfd5 2<br />
+getwfk5 -1<br />
+tolwfr5 1.00e-022<br />
+nband5 4<br />
+<br />
+#Dataset 6: strain response<br />
+kptopt6 2<br />
+rfdir6 1 1 1<br />
+rfstrs6 3<br />
+getwfk6 -2<br />
+getddk6 -1<br />
+toldfe6 1.00e-012<br />
+nband6 4<br />
+<br />
+--------------------------------------------------------------------------------<br />
+Å°&nbsp;Conductivity Calculation, Norm Conservi&nbsp;+ spin<br />
+# Omega Range for Conductivity Calculation (1 Ha = 27.211 eV)<br />
+# Max Omega, Omega Step<br />
+# Conductivity calculation with norm conserving pseudopotential in ABINIT is not stable, the results might not be correct. It is not recommended to do any significant calculaton with this method.<br />
+<br />
+acell&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403&nbsp;&nbsp;&nbsp;&nbsp; 10.88582403<br />
+angdeg&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000&nbsp;&nbsp;&nbsp;&nbsp; 90.00000000<br />
+spgroup 225<br />
+brvltt 3<br />
+spgaxor 1<br />
+spgorig 1<br />
+chkprim 0<br />
+natom 16<br />
+natrd 3<br />
+ntypat 3<br />
+znucl 26 23 13<br />
+typat 1 2 3<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0.500000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000<br />
+#k point grid<br />
+kptopt 0<br />
+nkpt 1<br />
+kpt 0.0 0.0 0.0<br />
+<br />
+#Bands and occupation<br />
+occopt 4<br />
+tsmear 0.0002000<br />
+<br />
+#Self consistent cycles<br />
+iscf 7<br />
+ecut&nbsp; 8.00<br />
+nstep 30<br />
+<br />
+#Spin Polarization and Magnetisation<br />
+nsppol 2<br />
+nspden 2<br />
+nspinor 1<br />
+spinat 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;0 0 0<br />
+<br />
+#Number of Data Sets<br />
+ndtset 5<br />
+<br />
+#Common Data for Conductivity Calculation<br />
+enunit 2<br />
+prtvol 1<br />
+nband 20<br />
+wtk 1.0<br />
+kptnrm 1.0<br />
+<br />
+#Dataset 1: SCF ground state run<br />
+iscf1 3<br />
+nqpt1 0<br />
+prtden1 1<br />
+toldfe1 1.00e-010<br />
+<br />
+#Dataset 2: NSC run<br />
+iscf2 -2<br />
+nqpt2 0<br />
+getden2 -1<br />
+getwfk2 -1<br />
+tolwfr2 1.00e-022<br />
+<br />
+#Dataset 3: ddk response function<br />
+iscf3 -3<br />
+nqpt3 1<br />
+qpt3 0.0 0.0 0.0<br />
+rfdir3 1 0 0<br />
+rfelfd3 2<br />
+getwfk3 -1<br />
+tolwfr3 1.00e-022<br />
+<br />
+#Dataset 4: ddk response function<br />
+iscf4 -3<br />
+nqpt4 1<br />
+qpt4 0.0 0.0 0.0<br />
+rfdir4 0 1 0<br />
+rfelfd4 2<br />
+getwfk4 -2<br />
+tolwfr4 1.00e-022<br />
+<br />
+#Dataset 5: ddk response function<br />
+iscf5 -3<br />
+nqpt5 1<br />
+qpt5 0.0 0.0 0.0<br />
+rfdir5 0 0 1<br />
+rfelfd5 2<br />
+getwfk5 -3<br />
+tolwfr5 1.00e-022<br />
+<br />
+--------------------------------------------------------------------------------

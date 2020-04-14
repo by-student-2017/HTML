@@ -1,0 +1,204 @@
+QSTEM (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ QSTEM (Ubuntu 18.04 LTS (64 bit))&nbsp;<br />
+fit tem image (test version)<br />
+<br />
+□ Usage (case is any file name) (lammps data case)<br />
+1. ./lmp2tem_qsc case -kv 80 -lab6<br />
+&nbsp; (80 mean 80 kV)<br />
+&nbsp; e.g.,&nbsp;<br />
+&nbsp; ・ 200 kV, LaB6: ./lmp_data2cfg_qsc case -kv 200 -lab6<br />
+&nbsp; ・ &nbsp;80 kV, LaB6: ./lmp_data2cfg_qsc case -kv &nbsp;80 -lab6<br />
+&nbsp; ・ 200 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -fe -autoz<br />
+&nbsp; ・ &nbsp;80 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -fe<br />
+&nbsp; ・ 200 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -arm -autoz<br />
+&nbsp; ・ &nbsp;80 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -arm<br />
+&nbsp; ・ &nbsp;30 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;30 -arm<br />
+2. python fit_tem.py<br />
+3. python plot_tem.py<br />
+<br />
+□ Usage (case is any file name) (cif file case)<br />
+0. case.cif &gt; VESTA &gt; (P1 symmetry) &gt; case.cif<br />
+1. ./cif2cfg_qsc case 80<br />
+&nbsp; (80 mean 80 kV)<br />
+&nbsp; e.g.,&nbsp;<br />
+&nbsp; ・ 200 kV, LaB6: ./cif2cfg_qsc case 200 -lab6<br />
+&nbsp; ・ &nbsp;80 kV, LaB6: ./cif2cfg_qsc case &nbsp;80 -lab6<br />
+&nbsp; ・ 200 kV, FE &nbsp;: ./cif2cfg_qsc case 200 -fe -autoz<br />
+&nbsp; ・ &nbsp;80 kV, FE &nbsp;: ./cif2cfg_qsc case &nbsp;80 -fe<br />
+&nbsp; ・ 200 kV, Correct-Cc &nbsp;: ./cif2cfg_qsc case 200 -arm -autoz<br />
+&nbsp; ・ &nbsp;80 kV, Correct-Cc &nbsp;: ./cif2cfg_qsc case &nbsp;80 -arm<br />
+&nbsp; ・ &nbsp;30 kV, Correct-Cc &nbsp;: ./cif2cfg_qsc case &nbsp;30 -arm<br />
+2. python fit_tem.py<br />
+3. python plot_tem.py<br />
+<br />
+□ fit_tem.py<br />
+1. gedit fit_tem.py<br />
+-----<br />
+from PIL import Image<br />
+import numpy as np<br />
+import struct<br />
+import random<br />
+import commands<br />
+<br />
+old_value = 9.9e23<br />
+<br />
+file_name = &quot;tmp.cfg&quot;<br />
+im = np.array(Image.open(&quot;MSC30_10nm_256pi.png&quot;).convert(&#39;L&#39;),&#39;f&#39;)<br />
+commands.getoutput(&quot;cp &quot;+file_name+&quot; tmp.cfg&quot;)<br />
+<br />
+def dif2sum(new_data,old_data):<br />
+&nbsp; return np.sum((new_data - old_data)**2)<br />
+<br />
+for i in range(50000):<br />
+&nbsp; commands.getoutput(&quot;cp tmp.cfg case.cfg&quot;)<br />
+&nbsp; n_ran = random.randrange(1,23040)<br />
+&nbsp; x_ran = random.uniform(-0.05,0.05)<br />
+&nbsp; y_ran = random.uniform(-0.05,0.05)<br />
+&nbsp; z_ran = random.uniform(-0.05,0.05)<br />
+&nbsp; e_ran = random.uniform(0.0,1.0)<br />
+&nbsp; #<br />
+&nbsp; n_ran = n_ran + 15<br />
+&nbsp; if (n_ran &gt; (15+4608)):<br />
+&nbsp; &nbsp; n_ran = n_ran + 2<br />
+&nbsp; #<br />
+&nbsp; print &quot;----- replace parameter in cfg file -----&quot;<br />
+&nbsp; print str(n_ran)<br />
+&nbsp; char_old = &nbsp;commands.getoutput(&quot;sed -n &quot;+str(n_ran)+&quot;p case.cfg&quot;)<br />
+&nbsp; print char_old<br />
+&nbsp; #<br />
+&nbsp; new_x_char = commands.getoutput(&quot;awk &#39;NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($1+&quot;+str(x_ran)+&quot;-int($1+&quot;+str(x_ran)+&quot;))}&#39; case.cfg&quot;)<br />
+&nbsp; if (float(new_x_char) &lt; 0):<br />
+&nbsp; &nbsp; new_x = float(new_x_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_x = float(new_x_char)<br />
+&nbsp; new_y_char = commands.getoutput(&quot;awk &#39;NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($2+&quot;+str(y_ran)+&quot;-int($2+&quot;+str(y_ran)+&quot;))}&#39; case.cfg&quot;)<br />
+&nbsp; if (float(new_y_char) &lt; 0):<br />
+&nbsp; &nbsp; new_y = float(new_y_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_y = float(new_y_char)<br />
+&nbsp; new_z_char = commands.getoutput(&quot;awk &#39;NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($3+&quot;+str(z_ran)+&quot;-int($3+&quot;+str(z_ran)+&quot;))}&#39; case.cfg&quot;)<br />
+&nbsp; if (float(new_z_char) &lt; 0):<br />
+&nbsp; &nbsp; new_z = float(new_z_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_z = float(new_z_char)<br />
+&nbsp; #<br />
+&nbsp; char_new = commands.getoutput(&quot;awk &#39;NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f %12.6f %12.6f %12.6f %12.6f \\n\&quot;, &quot;+str(new_x)+&quot;, &quot;+str(new_y)+&quot;, &quot;+str(new_z)+&quot;, $4, $5}&#39; case.cfg&quot;)<br />
+&nbsp; print char_new<br />
+&nbsp; #<br />
+&nbsp; replace = commands.getoutput(&quot;sed -i -e &#39;s/&quot;+str(char_old)+&quot;/&quot;+str(char_new)+&quot;/g&#39; case.cfg&quot;)<br />
+&nbsp; #print replace<br />
+&nbsp; print &quot;----- qstem calculation -----&quot;<br />
+&nbsp; run = commands.getoutput(&quot;$HOME/QSTEM/bin/stem3 tem.qsc&quot;)<br />
+&nbsp; #print run<br />
+&nbsp; copy = commands.getoutput(&quot;cp -f ./case/case_Proj.img case.img&quot;)<br />
+&nbsp; #print copy<br />
+&nbsp; # ----------------------------------------------------<br />
+&nbsp; print &quot;----- comparing calc image and exp -----&quot;<br />
+&nbsp; fid = open(&quot;case.img&quot;,&quot;rb&quot;)<br />
+&nbsp; # int data<br />
+&nbsp; header_size = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;header size: &quot;, header_size[0]<br />
+&nbsp; #<br />
+&nbsp; paramSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;parameter size: &quot;, paramSize[0]<br />
+&nbsp; #<br />
+&nbsp; commentSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;comment size: &quot;, commentSize[0]<br />
+&nbsp; #<br />
+&nbsp; Nx = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;Nx: number of pixels in x-direction, &quot;, Nx[0]<br />
+&nbsp; #<br />
+&nbsp; Ny = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;Ny: number of pixels in y-direction, &quot;, Ny[0]<br />
+&nbsp; #<br />
+&nbsp; complexFlag = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;Flag: complex(1) or real(0): &quot;, complexFlag[0]<br />
+&nbsp; #<br />
+&nbsp; dataSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;Data size (byte unit): &quot;, dataSize[0]<br />
+&nbsp; #<br />
+&nbsp; version = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; print &quot;version: &quot;,version[0]<br />
+&nbsp; #<br />
+&nbsp; # double data<br />
+&nbsp; t = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; print &quot;sample thickness or defocus: &quot;, t[0]<br />
+&nbsp; #<br />
+&nbsp; dx = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; print &quot;dx: pixel size along x-direction, &quot;, dx[0], &quot; [Angstrom]&quot;<br />
+&nbsp; #<br />
+&nbsp; dy = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; print &quot;dy: pixel size along y-direction, &quot;, dy[0], &quot; [Angstrom]&quot;<br />
+&nbsp; #<br />
+&nbsp; # other data<br />
+&nbsp; for i in range(0,paramSize[0]):<br />
+&nbsp; &nbsp; auxilliary_data = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; &nbsp; print auxilliary_data[0]<br />
+&nbsp; #<br />
+&nbsp; comment = []<br />
+&nbsp; for i in xrange(0,commentSize[0]):<br />
+&nbsp; &nbsp; comment.append(struct.unpack(&quot;c&quot;,fid.read(1))[0])<br />
+&nbsp; print &quot;comment&quot;<br />
+&nbsp; print comment<br />
+&nbsp; #<br />
+&nbsp; # image data<br />
+&nbsp; #fod = open(&quot;case.raw&quot;,&quot;wb&quot;)<br />
+&nbsp; actual_data = [[0 for i in range(Nx[0])] for j in range(Ny[0])]<br />
+&nbsp; for i in xrange(0,Nx[0]):<br />
+&nbsp; &nbsp; for j in xrange(0,Ny[0]):<br />
+&nbsp; &nbsp; &nbsp; actual_data[i][j] = struct.unpack(&quot;f&quot;,fid.read(dataSize[0]))[0]<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; #data = fid.read(dataSize[0])<br />
+&nbsp; &nbsp; &nbsp; #fod.write(data)<br />
+&nbsp; #<br />
+&nbsp; data = np.array(actual_data,dtype=&quot;float32&quot;)<br />
+&nbsp; #print data.dtype<br />
+&nbsp; #print data.ndim<br />
+&nbsp; #print data.shape<br />
+&nbsp; #<br />
+&nbsp; #-----matplotlib-----<br />
+&nbsp; #plt.imshow(data)<br />
+&nbsp; #plt.show()<br />
+&nbsp; #<br />
+&nbsp; #-----PIL-----<br />
+&nbsp; new_data = (255 - ((data - np.min(data)) / (np.max(data) - np.min(data))) * 255).astype(np.uint8)<br />
+&nbsp; pil_img = Image.fromarray(new_data)<br />
+&nbsp; #pil_img.show()<br />
+&nbsp; #new_pil_img = pil_img.convert(&quot;L&quot;)<br />
+&nbsp; #new_pil_img.show()<br />
+&nbsp; #new_pil_img.save(&quot;case.png&quot;)<br />
+&nbsp; #<br />
+&nbsp; fid.close()<br />
+&nbsp; #fod.close()<br />
+&nbsp; # ----------------------------------------------------<br />
+&nbsp; #<br />
+&nbsp; new_value = dif2sum(new_data,im)<br />
+&nbsp; if (new_value &lt; old_value):<br />
+&nbsp; &nbsp; commands.getoutput(&quot;cp case.cfg tmp.cfg&quot;)<br />
+&nbsp; &nbsp; old_value = new_value<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; fit_tem.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place fit_tem.py)<br />
+3. chmod +x fit_tem.py<br />
+4. python fit_tem.py<br />
+5. python plot_tem.py<br />
+※ e.g.,&nbsp;<br />
+&nbsp; tmp.cfg, 80 kV<br />
+&nbsp; exp file: MSC30_10nm_256pi.png<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] cif2pos.sh<br />
+&nbsp; http://home.ustc.edu.cn/~lipai/scripts/vasp_scripts/bash_cif2pos.html<br />
+[2] cif2vasp<br />
+&nbsp; https://github.com/danmichaelo/cif2vasp<br />
+[3] cif2pos.py<br />
+&nbsp; https://code.google.com/archive/p/abinitotools/downloads<br />
+[4] Chemistry tools tutorials/scripts<br />
+&nbsp; https://kbsezginel.github.io/chem-tools-tutorials/openbabel<br />
+[5] NumPyで画像処理<br />
+&nbsp; http://www.mwsoft.jp/programming/computer_vision_with_python/1_3_numpy.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

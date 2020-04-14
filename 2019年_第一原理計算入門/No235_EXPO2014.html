@@ -1,0 +1,156 @@
+EXPO (http://www.ba.ic.cnr.it/softwareic/expo/)<br />
+------------------------------------------------------------------------------<br />
+■ Install<br />
+<br />
+・expo-221118-x64_install.exe<br />
+1. expo-221118-x64_install.exe<br />
+2. [check] I accept the agreement &gt; [Next&gt;]<br />
+3. [check] Create a desktop icon for expo &gt; [Next&gt;] &gt; [Install] &gt; [Finish]<br />
+(C:\Users\username\share\expo\examples)<br />
+<br />
+※ &quot;MULTAN is not god&quot; (1975年時点で&quot;yes&quot;）<br />
+　EXPO2014の様子を見るとまだ&quot;yes&quot;ですね。水素の位置の判定はまだ難しく、CとNを取り違えていることもあります（価数やBVS, ECoN, マーデルングエネルギーなどから補正してくれないのかな？ その手順もtutorialで容易に見つけられないので残念ではある）。<br />
+------------------------------------------------------------------------------<br />
+■ Tutorial<br />
+<br />
+□ Tutorial -1-<br />
+(http://www.ba.ic.cnr.it/softwareic/expo/tutorials/)<br />
+1. EXPO2014<br />
+2. File &gt; Load Examples &gt; cime.exp &gt; Go<br />
+&nbsp; (File &gt; Load Examples &gt; cime.exp &gt; Edit &gt; x(close) &gt; Go)<br />
+3. [Next &gt;] (on the top right side)<br />
+4. [Next &gt;] (on the top right side) &gt; OK<br />
+&nbsp; &nbsp;(automatic peak search procedure)<br />
+5. Cell content: (C10H16N6S)4 &gt; OK<br />
+6. [Next &gt;] (on the top right side)<br />
+&nbsp; (see background)<br />
+7. [Next &gt;] (on the top right side)<br />
+&nbsp; (search space group)<br />
+8. [Next &gt;] (on the top right side)<br />
+&nbsp; [P 1 21/a] &gt; OK<br />
+&nbsp; (Input file cime1.exp with new ...) OK<br />
+9. All [Next &gt;] (on the top right side)<br />
+&nbsp; (wait for a long time, you can get &quot;end&quot;)<br />
+10. File &gt; Export Structure &gt; [(*.cif)] &gt; OK<br />
+※ 「炭素または窒素原子種の割り当てにおけるいくつかの誤りは、JAVメニューからのグラフィックオプション &#39;Modify&#39;を使うことによって容易に認識され、修正されることができます」と書かれているがそう簡単ではない気がする<br />
+※ *.expにXRDのデータのファイル名とX線の波数が記載されている場合<br />
+・cime.exp<br />
+-----<br />
+%structure cime<br />
+%job cimetidine (C10H16N6S) -- Synchrotron data<br />
+%initialize<br />
+%data<br />
+pattern cime.dat<br />
+wavelength 1.52904<br />
+synchrotron<br />
+%ntreor<br />
+%continue<br />
+-----<br />
+<br />
+□ Tutorial -2-<br />
+(http://www.ba.ic.cnr.it/softwareic/expo/tutorials/)<br />
+1. EXPO2014<br />
+2. File &gt; Load Examples &gt; merca.exp &gt; Go<br />
+&nbsp; (File &gt; Load Examples &gt; merca.exp &gt; Edit &gt; x(close) &gt; Go)<br />
+3. All [Next &gt;] (on the top right side)<br />
+&nbsp; (wait for a long time, you can get &quot;end&quot;)<br />
+4. Solve &gt; Explore Trials<br />
+5. [check] Select all new trials &gt; Go<br />
+&nbsp; (10 runs)<br />
+6. Quit<br />
+※ *.expにXRDのデータのファイル名とX線の波数だけでなく、cellやspace group, contentが記載されている場合<br />
+・merca.exp<br />
+------<br />
+%Structure merca<br />
+%Job 2-Mercaptobenzoic acid (C7 H6 O2 S)<br />
+%Data<br />
+Cell &nbsp; &nbsp; &nbsp; 7.885 &nbsp;5.976 &nbsp; 14.949 &nbsp;90.0 &nbsp;100.48 &nbsp;90<br />
+SpaceGroup p 21/c<br />
+Content &nbsp; (C7 H6 O2 S)4<br />
+Pattern &nbsp; &nbsp;merca.xy<br />
+Wavelength 1.54056<br />
+%continue<br />
+------<br />
+<br />
+□ Tutorial -3-<br />
+(http://www.ba.ic.cnr.it/softwareic/expo/tutorials/)<br />
+1. EXPO2014<br />
+2. File &gt; Load Examples &gt; paracetamol.exp &gt; Go<br />
+&nbsp; (File &gt; Load Examples &gt; paracetamol.exp &gt; Edit &gt; x(close) &gt; Go)<br />
+3. Execute<br />
+4. Solutions<br />
+5. Quit<br />
+※ *.expにcontentの記載がない場合<br />
+・paracetamol.exp<br />
+------<br />
+%Structure paracetamol<br />
+%Initialize<br />
+%Job Paracetamol (C8H9NO2)<br />
+%Data<br />
+&nbsp; &nbsp;Cell &nbsp;7.100 &nbsp;9.380 &nbsp;11.708 &nbsp;90.0 &nbsp;97.42 &nbsp;90.0<br />
+&nbsp; &nbsp;SpaceGroup p 21/n<br />
+&nbsp; &nbsp;Pattern &nbsp; paracetamol.xy<br />
+&nbsp; &nbsp;Wavelength 1.54056<br />
+%fragment paracetamol.mol<br />
+%sannel<br />
+------<br />
+※ Z値（組成比）が不明な場合や占有率が明確でない場合はContentの記載のないこの方法（simulated annealing法）を選択すればよいように思う<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+1. Expo2014<br />
+2. File &gt; Import Diffraction Pattern &gt; XRDのデータ<br />
+&nbsp; (K&alpha;2をカットしていない場合は [check] Use wavelength2) &gt; OK<br />
+3. File &gt; Import Structure &gt; *.cif &gt; OK<br />
+4. Solve &gt; Simulated Annealing<br />
+5. Execute<br />
+<br />
+※ QualX2で用いたXRDのデータと表示された候補のcifを入力に入れればよい<br />
+※ 上記3の手順がなくてもCellやSpace Groupを指定すれば動くような気がするのだが、私が試したところでは上手くいかなかった。理由は不明。<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Software Ic (Institute of Crystallography - CNR - Bari)<br />
+&nbsp; http://www.ba.ic.cnr.it/softwareic/<br />
+[2] EXPO2014使ってみた - Kanza-wiki<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?EXPO2014%BB%C8%A4%C3%A4%C6%A4%DF%A4%BF<br />
+[3] EXPO2013使用方法 - Kanza-wiki<br />
+&nbsp; https://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?EXPO2013%BB%C8%CD%D1%CA%FD%CB%A1<br />
+[4] Structure Solution from Powder Data-I: direct methods<br />
+&nbsp; https://www.iucr.org/__data/assets/pdf_file/0005/132098/14-Corrado_Cuoci-Structure-Solution-Powder-I-Direct-Methods.pdf<br />
+[5] Tutorials and Lectures<br />
+&nbsp; http://www.ba.ic.cnr.it/softwareic/expo/tutorials-and-lectures/<br />
+[6] PatViewの使い方<br />
+&nbsp; http://mukiken.eng.niigata-u.ac.jp/chemsoft/x-raysoft/PatViewHelp.html#EXPOの実行<br />
+・基本的には[continue]と[OK]をし続ける<br />
+・1つの解だけではなく10個くらいの解を出すこと<br />
+・R因子が10%台の解が1つでも見つかれば構造が解けた可能性が高い<br />
+[7] 桜井敏雄, 日本結晶学会誌, 解説, 28巻, ４号-６号<br />
+&nbsp; https://doi.org/10.5940/jcrsj.28.281 (-1-）<br />
+&nbsp; https://doi.org/10.5940/jcrsj.28.327 (-2-)<br />
+&nbsp; https://doi.org/10.5940/jcrsj.28.387 (-3-)<br />
+・電子密度というのは必ず正でなければなりません。<br />
+・この式（tangent関係式）を実際に使うためには右辺に既知の項を使うわけですが、原点および左右像の指定のための数個の指数と、不等式で決まる幾つかの指数が最初に判っています。しかしそれだけで解けるような構造はよほど簡単なもの以外には無いのです。<br />
+・1960年代のはじめに直接法の理論の骨組みがすでに出来上がっていたのに、簡単な不等式をのぞいてはほとんど使われなくなったのが不思議なくらいです。非常に難しい理論を組み立てる人と、実験室で構造を解く仕事をしている実際的な人との橋渡しをする人が必要だったのです。この役割をはたしたのがイサベル・カール夫人です。<br />
+・初期位相の数をうんと増やすと、その最初の位相の値がでたらめでもかなり高い頻度で成果が得られるというものです。古崎さんは位相を乱数で与えてこれにモンテカルロ法と名をつけたので、日本ではその呼び名が使われています。ウールフソンのプログラムはYZARC（逆から読むとcrazy）と呼ばれています。（省略）正しい初期値によるシグナルが悪い初期値によるノイズより大きい時に正解が得られるといってもよいでしょう。<br />
+・一般的な制限としては原子の数があります。200以上の独立な原子を含む構造が解けた例はありますが、普通には60位から上になると自動的とは言えないようです。それから原子間ベクトルの重なりの多い場合や、重原子法で偽の対称性が出てくるような場合も少し難しくなります。<br />
+・パターソンで解きにくいものは直接法でも解きにくい。例えば、ベンゼン環がたくさん集まった平面分子などでは分子内の原子間ベクトルの重なりが非常に多くなって解きにくくなります。また重原子が特別な位置にあると軽原子もその対称に従ってゴーストが出る場合もあります。<br />
+・もし原子数が50以下位でとけないとすれば、それは特別な場合だから、一般的な処方というのはありません。しかし一応整理してみましょう。<br />
+1. 格子定数、空間群、その他測定の基本的な部分に間違いがないか？<br />
+2. 空間群に多様性がないか？ もしあればそれぞれの空間群について試してみる<br />
+3. Eを求める時の温度因子を変えてみる。特に特別大きなEのなかに高角側の弱いFによるものがあれば温度因子を小さくする<br />
+4. プログラムの中で標準値で与えられているパラメータを変化させてみる。これはプログラムによって違うのでそれぞれのプログラムのマニュアルを読んでください。パラメータの値については経験的なことがかなり多いので実用的な立場だけからいえば直接法の理論を勉強する必要はまったくありません。<br />
+・タンパク質の構造解析の標準的な方法は重原子同形置換法ですが、この時の重原子の位置を決めるのに直接法が使われた例があります。また&Sigma;2関係式を使って低分解能のデータから高分解能の構造を求めようとする試みもあります。&Sigma;2式は位相だけでなくEそのものを決めることの出来る関係なのです。従って低分解能のデータしか取れない時でもベクトルの和を測定範囲外にとればそこのEが推定できることになるのです。これはタンパク質だけでなく電子顕微鏡の低分解能の写真から高分解能の像を得るための試みなどにも使われています。<br />
+・彼らは夕べの星のかなたへ舵を向け、自分自身の夢に挑みかかった。こう見えるものの後ろに隠れている。こうある物の姿をつかもうと。<br />
+[8] 進化した粉末結晶構造解析ツール<br />
+&nbsp; https://www.jstage.jst.go.jp/article/jcrsj/56/5/56_307/_pdf<br />
+・多くの有機化合物では、粉末回折データの空間分解能は、d値で1.5Å（&lambda;=Cu K&alpha;1で2&theta;≒60度）程度であり、原子位置を原子サイズレベルで特定できるだけの情報がない。その分解能の低さゆえ、回折強度データのフーリエ合成によって得られる電子密度ピークは、それぞれの周辺にフーリエ変換の打ち切り効果によるリップルが存在する。このリップルが隣接した電子密度ピークの位置や強度に誤差を与える。RBM（Resolution Bias Modification）はこの誤差を補正するものである。<br />
+・最新のEXPO2014では、ディフォルトで直接法で得られた電子密度マップの補正をRBMによって行うようになっている。分子量300～400程度の有機化合物であれば、直接法+RBMに要する時間は20秒程度もしくはそれ以下である。<br />
+・有機化合物の場合、結合を作る原子同士の距離はおよそ1.0～2.0Åの範囲内にある。仮に、フーリエ合成によって得られた22つの電子密度ピーク位置の距離が2.5Åだったとすると、これらの2つの原子は結合を作らず、2つの原子を橋渡しするように、中間にもう1つ別の原子が存在することが予想される。<br />
+・粉末結晶構造解析の初期構造決定のステップで特に有機化合物を解析する場合に最もよく用いられる手法は「実空間法」である。実空間法とは、測定データと同じ回折パターンが得られるように、単位格子（正しくは非対称単位）中で分子の位置、向き、ねじれ角を、大域最適化アルゴリズムを用いて探索する方法である。<br />
+・7%以下（R値）が論文として報告されている結果の7割以上を占める。<br />
+・観測されるピークの数が少なければ無理に高分解能の光学系を使用する必要はない。<br />
+・格子の長い有機化合物ならば、低角側にピークが密集するため、指数付けのためにピーク分解能を良くする必要がある一方、高角側でピークはほとんど観測されなくなるため、集光ビーム光学系（CB）が推奨される。<br />
+・格子の短い無機化合物ならば、低角側のピーク本数は少ないため、さほどピーク分解能を必要としない代わりに、高角側までピークが観測されるため、平行ビーム光学系（PB）が推奨される。<br />
+・一般に、材料物性は温度や湿度によって変化することが多く、その原因は結晶構造の変化であることが多い。<br />
+------------------------------------------------------------------------------

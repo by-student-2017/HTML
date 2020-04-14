@@ -1,0 +1,707 @@
+　聞いたことをメモしてまとめ直したもの。幾つか聞き間違いがあるかもしれない。<br />
+※ 光化学に関しては、[佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版]を読んでおくと良い。<br />
+------------------------------------------------------------------------------<br />
+■ 過渡吸収（Transient Absorption: TA）分光法<br />
+　対象物質の光誘起によって生成する短寿命活性種の吸収変化を高速測定する時間分解分光法<br />
+◇ 原理<br />
+　試料にパルス励起光（ポンプ光）を照射して活性種を生成させる。ここでの活性種とは、化学や生物分野の言葉では、励起状態、ラジカル、イオン、光反応中間体など、また物理分野では、励起子、電子、正孔などに対応する。これらは固有の吸収波長を有するため、別の光（プローブ光）を使った光吸収測定により、活性種の同定、生成量の定量、そして寿命計算を行うことができる。サブナノ秒が可能ならば項間交差の観測も可能。<br />
+※ 通常ナノ秒と称される装置ではサブマイクロ領域から、ピコ秒であればサブナノ秒領域以上の遅い領域を観測可能。通常、装置名称の秒単位よりも単位が上でサブが付いた領域から測定可能となる。<br />
+------------------------------------------------------------------------------<br />
+■ 観測時間領域（概略）<br />
+・ポンプ（PP）法 &lt; 1 ns｜1 ns &lt; リプト（RIPT）法 &lt; 10 ns｜10 ns &lt; 連続（CW）法<br />
+・PP法では、1-10 nsの時間領域において、個別のパルスレーザーをそれぞれポンプ光、プローブ光として用いて遅延時間を電気的に制御する場合、2つのピコ・フェムト秒レーザーを使うために高価であったり、またプローブ波長が限定的であったりと、いずれも汎用性・拡張性に欠ける<br />
+・CW法では、検出器の応答速度で計測速度限界が決まるため、検出装置の感度を考慮すると実際上は10ナノ秒程度が限度となり、それよりも遅い時間領域での計測に限られる<br />
+<br />
+□ パルス（PP）法<br />
+　ポンプ光、プローブ光ともにパルス光を用いる方法<br />
+・パルスレーザーの時間幅が時間時間分解能を決める<br />
+・フェムト秒・ピコ秒領域の超高速現象の測定に用いられることが多い<br />
+・通常、光学素子を機械的に移動させてポンプ光とプローブ光の光路差を変化させることによって遅延時間を制御するため、レーザーの指向性などの問題で１ナノ秒（光路差30 cm）を超える時間領域の測定が難しい<br />
+<br />
+□ リプト（RIPT）法：パルストレインをプローブ光として用いる方法<br />
+・ポンプ光のパルス幅(FWHM)が25 psのとき、時間分解能は80 ps<br />
+・ポンプ光のパルス幅(FWHM)が350 psのとき、時間分解能は400 ps<br />
+<br />
+□ 連続光（CW）法（歴史的にはフラッシュフォトリシス法とも呼ばれてきた）<br />
+　プローブ光としてキセノンランプなどの連続光を用いる方法<br />
+・活性種の生成と消滅にようる連続プローブ光の時間変化を高速検出器で実時間計測する<br />
+・典型的なCW法の時間分解能は10 ns<br />
+<br />
+□ ストリークカメラを用いた方法<br />
+・装置が極めて高価であり、時間域、波長域ともに限定的で、感度も高いとはいえないため、適用範囲が非常に狭い<br />
+------------------------------------------------------------------------------<br />
+■ RIPTの装置構成<br />
+・ポンプ光源：発振繰り返し周波数1 kHzのパッシブQスイッチ型マイクロチップレーザー（T<sub>pump </sub>= 350p s）<br />
+　マイクロチップレーザーは、内部トリガに対するジッタ（信号Aが信号Bを誘発する場合の信号Aと信号B の時間差の揺らぎ）がマイクロ秒オーダーと極めて大きいために繰り返し周波数の安定度が低い<br />
+・プローブ光源：発振繰り返し周波数20 MHzのピコ秒域のパルス幅をもつスーパーコンティニューム光（白色レーザー光）（T<sub>probe </sub>= 50 - 100 ps, 波長に依存）<br />
+・検出器：アンプ付きフォトダイオード（10 - 90%立ち上がり時間10ナノ秒）（分光器で単色化させたプローブ光）<br />
+・検出器：高速検出器（PINフォトダイオード）（ポンプとプローブ光の遅延時間計測）<br />
+・オシロスコープ：検出器の信号の計測と記録<br />
+※ プローブ光源にピコ秒パルスダイオードレーザーを用いれば、測定波長は固定されるものの、上記の構成よりもかなり安価に測定系を構築することができる<br />
+<br />
+※ フラーレンC<sub>60</sub>：光励起により1重項励起状態（S<sub>1</sub>）となり、約1ナノ秒の時定数ですばやく3重項励起状態(T<sub>1</sub>)へ項間交差を起こすことが知られている。T<sub><font size="2">1</font></sub>は最終的にマイクロ秒領域の時定数で再び基底状態に戻る。<br />
+※ S<sub><font size="2">1</font></sub>の減衰速度について、蛍光寿命の計測で評価を行うことも可能ではあるが、フラーレン類の発光は近赤外領域にあるため計測が簡単ではない。<br />
+------------------------------------------------------------------------------<br />
+■ 近赤外対応ナノ秒時間分解分光測定装置 TSP-2000<br />
+・溶液用 10 mm 角セル（石英セル）：約5万円<br />
+　ホットラボやガラス加工室がある場合は腕の良い技官の方が居る場合がある。その方に相談してみるのも良い<br />
+・800 nmでプローブ光源が切り替わる<br />
+　Xeランプ（300 - 800 nm）｜ハロゲンタングステンランプ（800 - 1600 nm）<br />
+・液体窒素を用いて-80℃まで可能（ほぼ結露無い）<br />
+　温度を下げたときは凍結しない試料、温度を上げたときは気化しない試料が測定対象となる<br />
+　水などは氷になったときに膨張してセルを壊す可能性がある。管理者と相談すること！<br />
+・スイッチを入れてから光源が定常状態に達するまでに約0.5 - 1時間は待つことが必要<br />
+・YAGレーザーのパルス幅（FWHM）は約5 ns。10 Hz = 0.1 s間隔<br />
+　1064 nmの2倍波である532 nm（緑）と3倍波である355 nm（紫外）<br />
+・通常はプローブ光に対する検出器の測定波長を指定して横軸を波長にした強度分布の時間変化が得られる（横軸の点数を増やそうとすると測定に時間がかかることになる）。一方、オプションとしてマルチチャンネルアナライザーを用いると短時間に横軸を波長にした強度分布の時間変化が得られる<br />
+・紫外-可視：光電子増倍管またはSiフォトダイオード<br />
+・近赤外：InGaAsフォトダイオード<br />
+<br />
+□ 選択可能な測定<br />
+・過渡吸収スペクトル<br />
+・時間分解発光スペクトル（プローブ光源はOFF）<br />
+・1重項酸素（※ フィルターを用いて1267 nm近傍に測定範囲を限定）<br />
+<br />
+□&nbsp;測定でのポイント<br />
+・発光：レーザーの出力を弱くする<br />
+・過渡：レーザーの出力を強くする<br />
+・1重項酸素：レーザーの出力を弱くする<br />
+　※ 1重項酸素を発生させるためにローズベンガルやメチレンブルーのような色素が用いられる。これらの色素分子の三重項状態は、一重項酸素と三重項酸素とのエネルギー差とほぼ等しい励起エネルギーを持っている。そこでこれらの色素を光励起し、交換交差により三重項状態に移行させる。この三重項状態の色素が三重項酸素と衝突すると電子とエネルギーの交換が起こり、色素が基底状態に戻ると同時に、三重項酸素が一重項酸素に移行する（参考：wikipedia）。<br />
+<br />
+□ 測定試料<br />
+・時間分解能を10倍したスケールで見れる試料が測定対象となる<br />
+　例えば、時間分解能10 nsであれば、100 nsスケールで変化が見れる試料が測定対象となる<br />
+・固体サンプルは過渡吸収は無理と思った方が良い（固体の減衰は弱い。管理者に相談）。基本は溶液で測定。<br />
+　固体の場合はNMR試料管やESR試料管に入れてフィルム化したものをセルに入れるなどする方法が考えられる<br />
+・固体の発光は強い<br />
+・りん光　－＞　もっと光る試料は寿命が短い<br />
+・電荷分離：光らない。文献等で調べておくこと<br />
+・光るかどうかは量子収率を調べる<br />
+・発光が弱くても寿命が長いものがある<br />
+・測定しながら測定範囲を変えるのは時間がかかる。<br />
+　蛍光はまだ良い。過渡吸収は濃度や周波数などの調整が大変。先に測定したデータが無いと吸収は発光の強度が飽和する範囲や検出する波長を指定するのに時間がかかってしまう。事前に他の測定法（UV-visやモル収率など）でデータを集めておくことが大切<br />
+※ 吸収過程：10<sup>-15 </sup>s程度、蛍光過程：10<sup>-12</sup> - 10<sup>-6 </sup>s程度、りん光過程：10<sup>-6</sup>&nbsp;- 10 s程度<br />
+※ りん光は一重項と三重項間の禁制遷移のため長い寿命を持つ。その他の、光の放射を伴わない無放射遷移は、分子の振動運動などを通して緩和する現象である。<br />
+※ 蛍光の測定定数をk<sub>f</sub>, 無放射速度定数をk<sub>nr</sub>とすると、蛍光寿命&tau;は以下のように表せる。<br />
+　&tau; = 1/(k<sub>f</sub> + k<sub>nr</sub>)<br />
+また、蛍光の量子収量Qは以下のように表せる。<br />
+　Q = k<sub>f</sub> / (k<sub>f</sub> + k<sub>nr</sub>)<br />
+Q = 1のときk<sub>nr </sub>= 0で吸引した光はすべて光となって放射される。<br />
+<br />
+□ その他の測定テクニック<br />
+・問題な範囲で検出器のレスポンスは速く設定する（検出器のレスポンスを速くするとノイズが増える。一方、レスポンスを遅くすると時間変化のスペクトルがなまりすぎて嘘のデータになる）。<br />
+・データポイントは1000 - 10000が普通。通常は1000で良い<br />
+・ソフト上では4成分まで分析できるが、通常は1から2成分<br />
+・スペクトルの平均は、オシロスコープとPCで行う方法がある。オシロスコープの方が短時間で平均できる<br />
+・Absorvanceが過渡吸収、Intensityは蛍光の測定に対応する<br />
+・スタートは短い、エンドは長い波長を選択<br />
+<br />
+□ 重要事項<br />
+・蛍光では感度（強度）を変えるためにつまみを回して電圧を変更する。<br />
+　通常、0.3から0.7 kVの範囲で調整（この範囲では線形的な変化を示すため）。試料が濃い場合は小さいkVにする。0.7でも測定が上手くいかないときは、試料が薄い、シャッターの問題、装置故障などの原因が考えられる。変更後は変更前に戻すこと。※ 過渡吸収のときは変更しない！<br />
+・オシロスコープは最適化された設定にしているので触らない、操作しないこと！<br />
+　PC上の設定でオシロスコープの設定も連動する。<br />
+・トグルスイッチ（レバー）は全部下向きにする（メンテナンス用）。<br />
+　上下どちらになっていても壊れることは無いが、シャッターなどを開閉する目的のものであるため、レーザーが来ていないなどのトラブルを防ぐためにも、トグルスイッチ（レバー）は全部下向きにする<br />
+・レーザーの強度変更などをした場合には使用前に戻すことが大切<br />
+・測定前に縦軸は入力が必要。ただし、データに影響は無い。測定後の画面でダブルクリックすると自動スケールされる。<br />
+表示範囲も数値をクリックすることで変更可能。<br />
+・分解能の変更のために分光器のスリット幅を変える場合には、入力と出口の両方を変える（管理者と行うこと！）<br />
+・起動時のエラー表示は気にしなくてよい（管理者と相談）<br />
+・PCがフリーズしたら、PCを再起動（普通のPCと同じでよい）<br />
+・しばらくレーザーを使用していないと休眠モードになる。対処は、ストップを押した後、スタートを押す<br />
+・カチカチと音が鳴っていなければレーザーは出ていないとのこと（&larr;これは間違っていたら危険なので管理者や企業の人に確認すること）<br />
+・レーザーの出力（パワー）の変更は2つある（基本的に出力は固定にする）<br />
+　1. メーターの値を変更する<br />
+　　通常は200。数値が大きい方がパワーが弱くなる（増幅の時間間隔を入力しているため）。数値は、上のボタンが減少、下のボタンが増加する。<br />
+　2. レーザーの上側にあるレバーを動かす<br />
+　　弱める場合は奥に、強める場合は手前に持っていく（管理者に相談）<br />
+------------------------------------------------------------------------------<br />
+■ 固体材料（他の大学の自作の装置）<br />
+・粉末にして水やエタノールを加えて超音波洗浄機にかけて懸濁液にした後、それをマイクロピペットでCaF<sub><font size="2">2</font></sub>（フッ化カルシウム）の上に垂らして乾燥させたものを用いればよい。さらに雰囲気を変えられるようにCaF<sub><font size="2">2</font></sub>（フッ化カルシウム）の窓をつけた大きな試料ホルダーを用いる（こうすれば粉末が飛び散って光学系に影響を与えることもない）。<br />
+下記はあまり記憶が正しくないため正確性に欠けるが参考になるだろうか？<br />
+・引っ付きにくい場合は100℃で乾燥させたりする。<br />
+・通常の光学セルの上部分を改良して、テフロンパッキン付きのスクリューふたで密閉できる構造を用いればよい。光触媒の出し入れが可能で、ガスを取り出すポートがあり、光を照射できる平らなガラス面がついている容器であればよい。<br />
+------------------------------------------------------------------------------<br />
+■ 光化学反応用ランプの種類と発光波長
+<table border="1" cellpadding="1" cellspacing="1" style="width: 379.25px;">
+	<tbody>
+		<tr>
+			<td style="width: 119.45px; text-align: center;">種類</td>
+			<td style="width: 250.25px; text-align: center;">主な発光波長</td>
+		</tr>
+		<tr>
+			<td style="width: 119.45px; text-align: center;">低圧水銀ランプ</td>
+			<td style="width: 250.25px; text-align: center;">185, 254 nm</td>
+		</tr>
+		<tr>
+			<td style="width: 119.45px; text-align: center;">高圧水銀ランプ</td>
+			<td style="width: 250.25px; text-align: center;">254, 313, 365, 436, 546, 578 nm</td>
+		</tr>
+		<tr>
+			<td style="width: 119.45px; text-align: center;">超高圧水銀ランプ</td>
+			<td style="width: 250.25px; text-align: center;">主に300 nm以上</td>
+		</tr>
+		<tr>
+			<td style="width: 119.45px; text-align: center;">キセノンランプ</td>
+			<td style="width: 250.25px; text-align: center;">200 nm以上の連続光</td>
+		</tr>
+	</tbody>
+</table>
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+------------------------------------------------------------------------------<br />
+■ パルス光源と検出器<br />
+・発光寿命測定に用いられる主なパルス光源
+<table border="1" cellpadding="1" cellspacing="1" style="width: 550.45px;">
+	<tbody>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">光源の種類</td>
+			<td style="width: 104.34px; text-align: center;">パルス幅</td>
+			<td style="width: 149.14px; text-align: center;">波長（倍波発生による高調波を含む）</td>
+			<td style="width: 115.14px; text-align: center;">繰り返し速度</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">水素放電管</td>
+			<td style="width: 104.34px; text-align: center;">1 - 数 ns</td>
+			<td style="width: 149.14px; text-align: center;">近紫外 - 可視</td>
+			<td style="width: 115.14px; text-align: center;">数 kHz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">Xeフラッシュランプ</td>
+			<td style="width: 104.34px; text-align: center;">1 ns - 数 &mu;s</td>
+			<td style="width: 149.14px; text-align: center;">近紫外 - 可視</td>
+			<td style="width: 115.14px; text-align: center;">0.1 - 数 kHz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">窒素レーザー</td>
+			<td style="width: 104.34px; text-align: center;">300 ps - 数 ns</td>
+			<td style="width: 149.14px; text-align: center;">337 nm</td>
+			<td style="width: 115.14px; text-align: center;">- 200 Hz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">Nd-YAG レーザー<br />
+			（Qスイッチ動作）</td>
+			<td style="width: 104.34px; text-align: center;">数 ns - 15 ns&nbsp;</td>
+			<td style="width: 149.14px; text-align: center;">1064 nm<br />
+			(532, 266 nm)</td>
+			<td style="width: 115.14px; text-align: center;">- 20 Hz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">Nd-YAGレーザー<br />
+			（モード同期動作）</td>
+			<td style="width: 104.34px; text-align: center;">100 fs - 20 ps</td>
+			<td style="width: 149.14px; text-align: center;">1064 nm<br />
+			(532, 266 nm)</td>
+			<td style="width: 115.14px; text-align: center;">- 30 Hz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">パルス半導体レーザー</td>
+			<td style="width: 104.34px; text-align: center;">数 ps - 数 ns</td>
+			<td style="width: 149.14px; text-align: center;">近赤外 - 近紫外</td>
+			<td style="width: 115.14px; text-align: center;">- 数 kHz</td>
+		</tr>
+		<tr>
+			<td style="width: 166.65px; text-align: center;">Ti: sapphire レーザー</td>
+			<td style="width: 104.34px; text-align: center;">100 fs - 数 ps</td>
+			<td style="width: 149.14px; text-align: center;">653 - 1150 nm<br />
+			(800, 400, 266 nm)</td>
+			<td style="width: 115.14px; text-align: center;">数 kHz - 数 MHz</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+・発光寿命測定に用いられる主な検出器
+<table border="1" cellpadding="1" cellspacing="1" style="width: 550.45px;">
+	<tbody>
+		<tr>
+			<td style="width: 139.05px; text-align: center;">光源の種類</td>
+			<td style="width: 95.65px; text-align: center;">応答速度</td>
+			<td style="width: 111.85px; text-align: center;">波長</td>
+			<td style="width: 186.14px; text-align: center;">特徴</td>
+		</tr>
+		<tr>
+			<td style="width: 139.05px; text-align: center;">光電子増倍管（PMT）</td>
+			<td style="width: 95.65px; text-align: center;">1 ns - 数 ns</td>
+			<td style="width: 111.85px; text-align: center;">近紫外 - 可視</td>
+			<td style="width: 186.14px; text-align: center;">光電面により感度特性は大きく変化する。電極構造により応答時間も様々</td>
+		</tr>
+		<tr>
+			<td style="width: 139.05px; text-align: center;">フォトダイオード</td>
+			<td style="width: 95.65px; text-align: center;">数 ps - 数 ns</td>
+			<td style="width: 111.85px; text-align: center;">近紫外 - 近赤外</td>
+			<td style="width: 186.14px; text-align: center;">アバランシェ型は増倍能が高く、応答速度も速い</td>
+		</tr>
+		<tr>
+			<td style="width: 139.05px; text-align: center;">マイクロチャネルプレート</td>
+			<td style="width: 95.65px; text-align: center;">20 ps</td>
+			<td style="width: 111.85px; text-align: center;">近紫外 - 可視</td>
+			<td style="width: 186.14px; text-align: center;">PMTよりも高速、応答時間の分散も小さい</td>
+		</tr>
+		<tr>
+			<td style="width: 139.05px; text-align: center;">ストリークカメラ</td>
+			<td style="width: 95.65px; text-align: center;">20 ps</td>
+			<td style="width: 111.85px; text-align: center;">近紫外 - 可視</td>
+			<td style="width: 186.14px; text-align: center;">波長方向の分解能もある</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+　紫外光および可視光の検出器としては、光電子増倍管（PM）もしくはフォトダイオードアレイが用いられる。フォトダイオードアレイ検出器を用いると、短時間で広い波長領域のスペクトルを測定できる利点がある。また、近赤外光領域を測定する場合には、光電子増倍管の代わりにPbS検出器が用いられる。<br />
+<br />
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+------------------------------------------------------------------------------<br />
+■ 発光量子収率測定用の標準物質<br />
+（Horiba Jobvin Yvon, Fluorescence Application Notes &quot;Recording fluorescence quantium yield&quot;より抜粋）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 556.85px;">
+	<tbody>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">標準物質</td>
+			<td style="width: 99.86px; text-align: center;">媒体</td>
+			<td style="width: 42.13px; text-align: center;">発光量子収率</td>
+			<td style="width: 74.94px; text-align: center;">発光領域/<br />
+			nm</td>
+			<td style="width: 195.94px; text-align: center;">文献</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Cresyl violet</td>
+			<td style="width: 99.86px; text-align: center;">Methanol</td>
+			<td style="width: 42.13px; text-align: center;">0.54</td>
+			<td style="width: 74.94px; text-align: center;">600 - 650</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem, 83 (1979) 696.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Rhodamine 101</td>
+			<td style="width: 99.86px; text-align: center;">Ethanol + 0.01%HCl</td>
+			<td style="width: 42.13px; text-align: center;">1.00</td>
+			<td style="width: 74.94px; text-align: center;">600 - 650</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem, 84 (1980) 1871.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Quinie sulfate</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub>2</sub>SO<sub>4</sub></td>
+			<td style="width: 42.13px; text-align: center;">0.54</td>
+			<td style="width: 74.94px; text-align: center;">400 - 600</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;65 (1961) 229.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Fluorescein</td>
+			<td style="width: 99.86px; text-align: center;">0.1M NaOH</td>
+			<td style="width: 42.13px; text-align: center;">0.79</td>
+			<td style="width: 74.94px; text-align: center;">500 - 600</td>
+			<td style="width: 195.94px; text-align: center;">J. Am. Chem. Soc, (1945) 1099.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Norharmane</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub><font size="2">2</font></sub>SO<sub><font size="2">4</font></sub></td>
+			<td style="width: 42.13px; text-align: center;">0.58</td>
+			<td style="width: 74.94px; text-align: center;">400 - 550</td>
+			<td style="width: 195.94px; text-align: center;">J. Lumin., 51 (1992) 269-74.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Harmane</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub><font size="2">2</font></sub>SO<sub><font size="2">4</font></sub></td>
+			<td style="width: 42.13px; text-align: center;">0.83</td>
+			<td style="width: 74.94px; text-align: center;">400 - 550</td>
+			<td style="width: 195.94px; text-align: center;">J. Lumin., 51 (1992) 269-74.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Harmane</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub><font size="2">2</font></sub>SO<sub><font size="2">4</font></sub></td>
+			<td style="width: 42.13px; text-align: center;">0.45</td>
+			<td style="width: 74.94px; text-align: center;">400 - 550</td>
+			<td style="width: 195.94px; text-align: center;">J. Lumin., 51 (1992) 269-74.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">2-Methylharmane</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub><font size="2">2</font></sub>SO<sub><font size="2">4</font></sub></td>
+			<td style="width: 42.13px; text-align: center;">0.45</td>
+			<td style="width: 74.94px; text-align: center;">400 - 550</td>
+			<td style="width: 195.94px; text-align: center;">J. Lumin., 51 (1992) 269-74.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Chlorophyll A</td>
+			<td style="width: 99.86px; text-align: center;">Ether</td>
+			<td style="width: 42.13px; text-align: center;">0.32</td>
+			<td style="width: 74.94px; text-align: center;">600 - 750</td>
+			<td style="width: 195.94px; text-align: center;">Trans. Faraday Soc., 53 (1957) 646-55.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Zinc phothalocyanine</td>
+			<td style="width: 99.86px; text-align: center;">1% Pyridine in toluene</td>
+			<td style="width: 42.13px; text-align: center;">0.30</td>
+			<td style="width: 74.94px; text-align: center;">660 - 750</td>
+			<td style="width: 195.94px; text-align: center;">J. Chem. Phys., 55 (1971) 4131.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Benzene</td>
+			<td style="width: 99.86px; text-align: center;">Cyclohexane</td>
+			<td style="width: 42.13px; text-align: center;">0.05</td>
+			<td style="width: 74.94px; text-align: center;">270 - 300</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;72 (1968) 325.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Tryptophan</td>
+			<td style="width: 99.86px; text-align: center;">Water, pH 7.2, 25C</td>
+			<td style="width: 42.13px; text-align: center;">0.14</td>
+			<td style="width: 74.94px; text-align: center;">300 - 380</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;74 (1970) 4480.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">2-Aminopyridine</td>
+			<td style="width: 99.86px; text-align: center;">0.1M H<sub><font size="2">2</font></sub>SO<sub><font size="2">4</font></sub></td>
+			<td style="width: 42.13px; text-align: center;">0.60</td>
+			<td style="width: 74.94px; text-align: center;">315 - 480</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;72 (1968) 2680.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">Anthracene</td>
+			<td style="width: 99.86px; text-align: center;">Ethanol</td>
+			<td style="width: 42.13px; text-align: center;">0.27</td>
+			<td style="width: 74.94px; text-align: center;">360 - 480</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;65 (1961) 229.</td>
+		</tr>
+		<tr>
+			<td style="width: 129.86px; text-align: center;">9,10-diphenyl anthracene</td>
+			<td style="width: 99.86px; text-align: center;">Cyclohexane</td>
+			<td style="width: 42.13px; text-align: center;">0.90</td>
+			<td style="width: 74.94px; text-align: center;">400 - 500</td>
+			<td style="width: 195.94px; text-align: center;">J. Phys. Chem,&nbsp;87 (1983) 83.</td>
+		</tr>
+	</tbody>
+</table>
+・発光量子収率の決定には、標準物質との発光強度を比較する相対法がよく用いられる。<br />
+　&Phi;<sub>u</sub> = &Phi;<sub>s</sub>*(K<sub>s</sub>/K<sub>u</sub>)*(I<sub>s</sub>/I<sub>u</sub>)*(n<sub>u</sub><sup>2</sup>/n<sub>s</sub><sup>2</sup>)*(A<sub>u</sub>/A<sub>s</sub>)<br />
+&Phi;<sub>u</sub>, &Phi;<sub>s</sub>は未知試料と標準試料の発光量子収率。K, I, Aはそれぞれ吸光度、励起光強度、Eq(&lambda;)やEq(&nu;)表示の発光スペクトルの全面積を表す。nは屈折率である。標準物質（主な発光量子収率測定用の標準物質は上の表に記載）は、励起波長や発光波長領域、測定溶媒が未知試料とできるだけ近いものを選択する。<br />
+・固体薄膜試料の発光量子収率を決定する場合には、発光強度が強い角度依存性があるので、強度の測定に誤差が入り易い。このような場合には、内部に拡散材をコートした積分球を用いる。積分球の小さなポートから励起光を入れ、内部にある試料を励起する。発光は内部で散乱を繰り返すことで角度分布が均一となる。入力ポートに対して90度の角度に配置された検出器で強度やスペクトルを測定する。量子収率の決定にはde Melloらの方法（J. C. de Mello et al., Adv, Mater., 9 (1997) 230.）が用いられる。<br />
+<img height="335" src="data:image/png;base64,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" style="width: 401px; height: 268px;" width="503" /><br />
+・リン光は酸素によって消失されるので、あらかじめ試料溶液に20分程度、窒素やアルゴンガスを通気したり、真空凍結-解凍を繰り返すことで酸素を除いてから測定を行なう。<br />
+・有機化合物のリン光は、室温では観測することが難しいので通常低温で観測を行なう。この場合、リン光は蛍光の長波長側に現われるので、蛍光が強い場合には正確なスペクトルの観測が困難である。短寿命の蛍光を除いて長寿命のりん光だけを観測するために、チョッパーや回転セクタを用いる装置が付いた蛍光計が市販されている。<br />
+・金属錯体の発光は、室温でも強いりん光が観測され、蛍光は観測されないことが多い。また金属錯体ではリン光の寿命が短いことも多く、チョッパーなどを使ったリン光測定装置を使うと短寿命のリン光は観測できないこともあるので注意する。<br />
+<br />
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+------------------------------------------------------------------------------<br />
+■ 溶媒の短波長側透過限界<br />
+　水を対照として1 cmセルで測定したときの吸光度が1.0である波長
+<table border="1" cellpadding="1" cellspacing="1" style="width: 319.85px;">
+	<tbody>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">溶媒</td>
+			<td style="width: 115.85px; text-align: center;">波長限界 / nm</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">水</td>
+			<td style="width: 115.85px; text-align: center;">200</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">アセトニトリル</td>
+			<td style="width: 115.85px; text-align: center;">210</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">ヘキサン</td>
+			<td style="width: 115.85px; text-align: center;">210</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">メタノール</td>
+			<td style="width: 115.85px; text-align: center;">210</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">ジエチルエーテル</td>
+			<td style="width: 115.85px; text-align: center;">220</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">ジクロロメタン</td>
+			<td style="width: 115.85px; text-align: center;">233</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">N,N-ジメトルホルムアミド</td>
+			<td style="width: 115.85px; text-align: center;">270</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">トルエン</td>
+			<td style="width: 115.85px; text-align: center;">285</td>
+		</tr>
+		<tr>
+			<td style="width: 195.05px; text-align: center;">アセトン</td>
+			<td style="width: 115.85px; text-align: center;">330</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+------------------------------------------------------------------------------<br />
+◆ 吸収から蛍光までのプロセス<br />
+基底状態<br />
+｜<br />
++&larr; 光子が入射<br />
+&darr;<br />
+高次の励起状態<br />
+（光子が入射して基底状態から高次の励起状態になるまで；吸収 ～10<sup><font size="2">-15</font></sup> s）<br />
+｜<br />
++&rarr; 一部が分子内緩和で熱エネルギーへ<br />
+&darr;<br />
+最低次の励起状態<br />
+（高次の励起状態から最低次の励起状態になるまで；分子内緩和 ～10<sup><font size="2">-11</font></sup> s）<br />
+｜<br />
++&rarr; 蛍光<br />
++&rarr; または無輻射遷移・分子内緩和で熱エネルギーへ<br />
++&rarr; または項間交差で三重状態へ<br />
+&darr;<br />
+基底状態<br />
+（最低次の励起状態から基底状態になるまで；発光 ～10<sup><font size="2">-9</font></sup> s、または無輻射遷移など）<br />
+<br />
+御橋廣眞「蛍光分光とイメージングの手法」学会出版センター<br />
+------------------------------------------------------------------------------<br />
+◆ 無輻射遷移<br />
+　励起状態が基底状態に緩和する経路には、輻射遷移の他に、発光を伴わない無輻射遷移がある。この無輻射遷移で放出されるエネルギーは、分子の振動エネルギーを経て、溶媒や格子などの媒体の振動並進エネルギーに変わる。これが熱である。物質が光を吸収するとその温度が上がるのは、このような過程を経て光エネルギーが熱エネルギーに変わるためである。<br />
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;時間スケール<br />
+・アト秒（10<sup>-18</sup>秒）：電子の運動<br />
+・フェムト秒（10<sup>-15</sup>秒）：分子の振動<br />
+　水のような分子は10<sup>-14</sup>秒ぐらいで1回振動する<br />
+・フェムト秒から十ピコ秒：溶液らしい性質が現われる時間スケール<br />
+　温度が下がると運動時間スケールは100ピコ秒程度から数百ナノ秒まで一気に遅くなる<br />
+　ATPを合成するという化学反応のダイナミクス自体はフェムト秒の振動がきっかけになる<br />
+・100ナノ秒：水素結合の組み替え運動（-40℃くらいまで凍らない過冷却状態）<br />
+　分子内や分子間の振動は温度にあまり依存しないが、クラスタリングや水素結合の組み替えは温度に依存する<br />
+　単純な系でも、温度を変えると運動の空間スケールや時間スケールが変わり、特異な熱力学的な性質が生まれることがある<br />
+・マイクロ秒：酵素反応における酵素の構造変化<br />
+・ミリ秒から秒：タンパク質の動き（メカニカルな運動）<br />
+　タンパク質やDNAのような高分子は、基本的に長さに依存して、どんどん遅い時間スケールで運動するようになる。おそらく、タンパク質が高分子であるという特性が遅さに影響を与えているのでしょう<br />
+　単純な系でも、温度を変えると運動の空間スケールや時間スケールが変わり、特異な熱力学的な性質が生まれることがある<br />
+<br />
+日本化学会『巨大分子系の計算化学』化学同人<br />
+------------------------------------------------------------------------------<br />
+■ 金属錯体の光化学<br />
+※ ここでは、時間分解赤外分光だけでなく、光化学として知っておくべき事項をまとめておく。XPS（やUPS）やXAFS利用者も知っておくとよいことが幾つかある。<br />
+<br />
+◆ 光<br />
+　可視光は波長が400 nmから700 nmの光であり、波長の短い方から、我々の目では青、緑、黄、赤に見える。400 nmより波長の短い光を紫外線（紫外光）、770 nmより長波長のものを赤外線（赤外光）と呼ぶ。<br />
+　炭素-炭素結合の結合エネルギーは350 kJ/mol程度であるが、300 nmの光は、これに対応するエネルギーを持つ。通常、光化学反応に利用されるのは200から900 nmの光である。<br />
+<br />
+◆ 分子による光吸収<br />
+　分子は、光を吸収する前（基底状態と呼ぶ）と後（励起状態）で何が変化するであろうか。高名な光化学者N. J. Turro博士は、「励起状態の分子は、基底状態分子の電子的な異性体である」と述べている。通常の分子による光の吸収は、1 fs（フェムト秒：10<sup>-15</sup>秒）程度の時間で起こる。一方、最も早い分子振動（C-HやO-H等）でも10 fs以上かかり、C-C結合等の振動はそれより数桁遅い。結合の開裂はそれと同じか、それよりさらに遅い現象なので、光吸収の前と直後では、分子の構造、すなわち結合距離や結合角は変化せず、結合の組み替えも起こり得ない。ただ、分子軌道間で電子の遷移が起こるだけである。光が吸収あれることにより、電子はある軌道から、エネルギーのより高い空軌道へとジャンプする（この時、電子スピンの反転は起こらない）。このように励起直後の分子は、電子的遷移のために基底状態の分子より大きなエネルギーを有しているが、その幾何学的構造は変化していない。このような分子を、Franck-Condon状態にあるという。<br />
+　Franck-Condon状態の分子は、分子振動等により結合距離や角度の変化を起こしたり（振動緩和）、周辺の分子へ熱エネルギーを渡すことにより準安定な励起状態（同じスピン多重度の最低励起状態）へと変化していく（内部変換、internal conversion）。遷移金属の場合は、電子のスピンの反転（項間交差, intersystem crossing）も高速で起こる。これらの変化は、固体や溶液状態のような凝縮系では特に高速で、ps（ピコ秒: 10<sup>-12</sup>秒）程度で終了してしまうため、固体結晶や溶液状態の錯体の発光現象や化学反応は、最も安定な励起状態（最低励起状態）から起こる場合がほとんどである（Kasha則）。<br />
+　分子による光の吸収は、光化学で扱う諸現象を開始する重要な素過程である。光吸収現象に関係した重要な3つの基本的法則がある。これらの法則は、基本的で、よく考えるとあたりまえのことを述べているのだが、これらを意識せずに実験を行ったために、解釈が困難になってしまった研究発表を時たま見かけるので、これから光化学の研究を始められる方は心にとどめておかれたい。<br />
+<br />
+※ Kasha則：ほとんどの分子において、光反応や発光は、最低励起状態S<sub>1</sub>あるいはT<sub>1</sub>から起こることが知られている。S<sub><font size="2">2</font></sub>などの励起状態から、発光や光反応が起こることは稀である。高い励起状態（S<sub><font size="2">n</font></sub>）からの発光が観測されないのは、高い励起状態間のエネルギー差が小さいため、内部転換が極めて短い時間に起きるためである。したがって、物質が吸収する波長域であれば、通常、どの波長の光を吸収したかに関わらず、いつも同じ蛍光スペクトルやりん光スペクトルが観測される。<br />
+　項間交差やリン光などのスピン多重度が変化する過程では、スピン角運度量に関する保存則が破れる必要があるので、このような現象の起こる確率（遷移確率）は一般に小さい。物質が光を吸収する際にも、基底状態と異なるスピン多重度の電子状態への光励起は起こりにくい。例えば、基底状態が1重項のとき、S<sub><font size="2">0</font></sub>&rarr;T<sub><font size="2">n </font></sub>吸収帯は弱くてほとんど観測されない。これらをスピン禁制遷移という。これに対し、S<sub><font size="2">0</font></sub>&rarr;S<sub><font size="2">n </font></sub>のように、同じスピン多重度間の遷移をスピン許容遷移という。有機化合物のように、スピン角運動量が良い近似で保存量であるとき、スピン多重度が異なる励起状態は別々の励起種として振る舞い、Kasha則はそれぞれのスピン多重度の励起状態について成り立つ。しかし、スピン禁制遷移は、重い原子の存在によって著しく促進される。例えば、有機分子がBrやIなどの重原子を含むと、スピン角運動量と軌道角運動量との結合が起きやすくなり、項間交差やリン光などが起こり易くなる。このように異なるスピン多重度間の遷移が分子内の重原子によって増大することを内部重原子効果という。またスピン禁制遷移が溶媒など他の分子の重原子によっても促進されることがあり、これを外部重原子効果という。遷移金属錯体のように強いスピン軌道結合が働く系では、スピン角運動量はもはや保存量ではなくなり、異なるスピン角運動量の励起状態が容易に&rdquo;混ざり合う&rdquo;。ただし、遷移金属錯体が光吸収した場合も、Kasha則にしたがって、単一の最低励起状態に速やかに緩和して、そこから発光や光反応が起こることに変わりはない。<br />
+　<br />
+◆ 光化学第1法則（Grotthus-draper原理）<br />
+「物質によって吸収された光だけが光反応を引き起こす」<br />
+　典型的な例を挙げて説明しよう。水素分子と塩素分子の混合気体に、青色の光もしくは紫外光を照射すると塩化水素が生成するが、赤色光を照射しても反応は進行しない。この反応は、塩素分子が青色や紫外光を吸収し塩素ラジカルが生成することにより進行する。しかし、塩素分子は赤色光を吸収できないため、赤色光では反応が進まないのである。<br />
+　この法則から、光反応の実験を行う上で、反応の対象となる物質がどの波長の光を吸収するかを知ることが重要であることがわかる。そのためには、まず反応基質の紫外可視吸収スペクトルを測定しておく必要がある。基質に光を効率よく吸収させるために、その吸収に合った光源と、光を吸収しない溶媒および容器を選択しなければならない。<br />
+　また、この法則から、光化学反応と熱反応の間に際立った違いがあることが分かる。すなわち、光反応では照射する光の波長を上手く選択することで、反応系中に複数存在する化学種のうち、ある特定のものだけを選択的に活性化できる可能性がある。加熱による基質へのエネルギーの供給では、反応系中のすべての分子がエネルギーを受け取ることになるのと対照的である。<br />
+　実際の光反応では、励起状態の化学種の反応により生成する中間体が後続反応を引き起こすことも多く、その場合、反応系中の他の分子も反応に関与することになるが、光反応を活用すれば、少なくとも開始反応を選択的にある分子に限定して起こさせることが可能である。<br />
+<br />
+◆ 光化学第2法則（Stark-Einsteinの原理）<br />
+「（レーザー光のような高密度ではない）&quot;通常の（光源を用いた）&quot;光反応では、1個の原子や分子は、1度に1個の光子しか吸収しない」（理由は以下）<br />
+　光は波としての性質を持っていると同時に粒子としても扱うことができる。アボガドロ数(Na）個の光子を「1アインシュタイン」と呼び「1 einstein」と表記する。光子1個の持つエネルギーは、振動数（&nu;）にプランク定数（h: 6.626*10<sup>-34 </sup>Js）を掛けることにより得られるので、1 einsteinの光子の持つエネルギーはNa*h*&nu;である。<br />
+　以上のことが分かっていると、光化学第2法則が理解できる。「&quot;通常の&quot;光反応」の意味は、レーザー光のように高密度の光を発生する光源を用いるのではなく、光反応の実験を行うときに良く用いられる高圧水銀灯やキセノンランプ等の定常光光源を用いた光反応ということである。この場合、比較的強度が強く単色光としてよく用いられる高圧水銀灯（300 Wか500 Wのものが一般的である）から発する366 nmの光でも10<sup>-8</sup> einstein cm<sup>-2</sup> s<sup>-1</sup> (6*10<sup>15</sup>個 cm<sup><font size="2">-2</font></sup> s<sup><font size="2">-1</font></sup>）程度である。<br />
+　典型的な金属錯体分子として[Ru(bpy)<sub>3</sub>]<sup>2+</sup> (bpy = 2,2&#39;-bipyridine）を考えてみよう。この分子の形状を直径1 nmの球と近似したとき、この分子が最初に光子を吸収した後、どのくらいの時間で次の光子が同じ分子に到達するかを概算する。この錯体の断面積は7.9*10<sup>-15</sup> cm<sup><font size="2">-2</font></sup>であるから、1秒間にこの分子を通過する光子の個数は7.9x10<sup>-15</sup>&nbsp;cm<sup><font size="2">-2</font></sup> * 6*10<sup>15</sup>個&nbsp;cm<sup><font size="2">-2</font></sup> = 47個となる。したがって、21 m秒後に次の光子が分子に到達することになる。<br />
+　金属錯体の光励起状態の寿命は、室温溶液中でも比較的長いものが多い。[Ru(bpy)<sub><font size="2">3</font></sub>]<sup><font size="2">2+</font></sup>の場合かなり長いが、それでも1 &mu;s(10<sup>-6</sup> s）程度である。したがって、光励起された分子は、次の光子が到着する前に基底状態に戻って（もしくは生成物に変化して）しまい、励起分子が再度光子を吸収する可能性はほとんどない。<br />
+<br />
+◆ 量子収率<br />
+　光反応や発光の効率を表す大事な指標、すなわち、量子収率&phi;が次のように定義される。<br />
+　&phi; = N<sub>pr</sub> / N<sub>ab</sub><br />
+ここで、N<sub>ab</sub>は基質によって吸収された光子数、N<sub>pr</sub>は光反応により減少した基質の分子数もしくは生成物の分子数、発光の光子数等である。<br />
+　例として、二酸化炭素を還元する光触媒の効率を調べることを考える。光触媒が4 einsteinの光を吸収したときに、0.1 molの二酸化炭素がメタノールに還元されたとしよう。この時の光触媒反応の量子収率は0.025 (2.5%)と求めることができる。<br />
+<br />
+◆ 励起状態にある分子の挙動<br />
+　光を吸収することにより生成した励起状態分子がどのような挙動を示すか、下にまとめる。<br />
+・発光（emission）: 蛍光（fluorescence）とリン光（phosphorescence）に分類される<br />
+・無放射失活（non-radiative decay）: 発光することなく、周辺に熱を放出して基底状態に戻る<br />
+・励起分子自体の反応、すなわち、励起分子自身が構造変化する。反応速度は、<br />
+励起分子の濃度に比例する（一次反応）<br />
+・励起分子が他の基底状態の分子と反応する。この場合、反応速度は、励起分子の濃度と、それと反応する反応基質濃度のいずれにも比例する（二次反応）<br />
+　光化学反応は、異なる生成物へと変化する反応であるが、元の基底状態に戻る過程である発光（放射過程とも呼ばれる）や無放射失活と絶えず競争的に起こるというのが、熱反応とのもう一つの大きな違いである。特に二次反応の場合、光化学反応が効率よく進行するためには、励起状態の寿命が、反応基質と有効な衝突を起こすに足るだけ長くなければならない。室温溶液中では、多くの分子の光励起状態寿命はpsからms程度であり、寿命の長いものと短いものでは大きくことなるため、これが、光反応の効率や速度を決定的に支配する要因の一つとなる。<br />
+<br />
+◆ 有機分子の励起状態の概略<br />
+　光を吸収することによって、分子の占有軌道にいた電子は、よりエネルギー準位の高い非占有軌道に励起される。この電子遷移に係わる軌道の種類によって励起状態は分類される。この遷移の種類によって励起状態の性質や反応性が大きく異なる。有機分子の代表的な励起状態である&sigma;-&sigma;*励起状態、<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態およびn-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態について概説する。<br />
+・&sigma;-&sigma;*励起状態<br />
+　結合性の&sigma;軌道から反結合性の&sigma;*軌道へ電子が遷移した状態である。したがって、この励起状態の特徴は、結合エネルギーが低下もしくは消失し、&sigma;軌道の結合距離が伸びて、しばしば結合の開裂が起こることである。有機化合物の場合、この遷移には大きなエネルギーが必要で、吸収波長は、真空紫外部の100から200 nmに存在する。一方、金属-金属結合を有する錯体では、その結合の&sigma;-&sigma;*励起はエネルギーが小さく、対応する吸収が可視部に観測されることもある。<br />
+・<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態<br />
+　不飽和結合（通常の有機化合物においては二重結合または三重結合）を有する分子で観測される。有機分子はもちろん、金属錯体でも、配位子に不飽和結合が存在する場合、<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態が存在する。この励起状態に対応した吸収は、エチレンの場合190 nmに観測されるが、共役が存在すると吸収は長波長側にシフトする。例えば、ベンゼンの場合、最も長波長側の<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*吸収帯は、250 nm付近に観測される。結合性の<span style="font-family: times new roman,times,serif;">&pi;</span>軌道から反結合性の<span style="font-family: times new roman,times,serif;">&pi;</span>*軌道へ電子が遷移するので、<span style="font-family: times new roman,times,serif;">&pi;</span>結合が弱まり、この場合も励起状態で結合長が伸びる。<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態を経由する代表的な化学反応は、スチルベンのシス-トランス異性化である。スチルベンを溶液中で光照射すると、シス体、トランス体いずれから始めても異性化が速やかに進行する。しかし、ある程度光照射を続けると、シス体とトランス体の比率は6:4とほぼ一定になり、それ以上光照射を続けてもこの割合は変化しない。（省略、この説明については文献を参照のこと）<br />
+・n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態<br />
+　ヘテロ原子のように非共有電子対を持つ原子が不飽和結合に含まれている場合、n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態が存在する。その代表的な化合物がカルボニル化合物である。カルボニル化合物の励起状態に係わる軌道エネルギーの相対的な位置を見ると、n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態は、&sigma;-&sigma;*励起状態や<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態と比べてエネルギー的に低く、したがって、それに対する吸収は、最も長波長側に観測される場合が多い。<br />
+　ベンゾフェノンの場合、n-<span style="font-family: times new roman,times,serif;">&pi;</span>*吸収帯と<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*吸収帯は、それぞれ340 nmと260 nmに観測される。n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態の分子における電子分布は、基底状態と大きく異なる。すなわち、酸素分子に局在化していたn軌道の電子が励起されることにより、炭素と酸素両原子上にある反結合性軌道に分布する。この状態は、オキシラジカルと類似した電子配置であり、反応性もよく似ている。実際、n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態の代表的な反応として、水素引き抜き反応を挙げることができる。ベンゾフェノンを溶解したイソプロピルアルコールに光照射することにより、ベンズピナコールが生成する反応は古くから知られており、またよく研究された有機光化学反応の代表例である。<br />
+<br />
+カルボニル化合物の光励起に係わる軌道（エネルギーレベル図）<br />
+E<br />
+&uarr;<br />
+| &sigma;* -----<br />
+|&nbsp;<span style="font-family: times new roman,times,serif;">&pi;</span>* -----<br />
+|<br />
+|&nbsp;n -&uarr;&darr;-<br />
+| <span style="font-family: times new roman,times,serif;">&pi;</span>&nbsp;-&uarr;&darr;-<br />
+| &sigma; -&uarr;&darr;-<br />
+<br />
+◆ 光学遷移のメカニズム<br />
+　原子や分子には様々な励起状態があるが、それらすべてが基底状態との間で光学的な遷移（光吸収や発光）を起こすわけではない。高い吸光係数を持つ許容遷移もあれば、逆にほとんど吸収として観測できない禁制遷移もある。このような光学的な遷移確率の違いを理解するために、光学遷移のメカニズムについて考えてみよう。<br />
+　原子の中の電子は、原子核に引き付けられて運動している。電磁波である光の電場は、10<sup>14</sup> - 10<sup>15</sup> Hzという高い振動数で交替しているが、分子の大きさは光の波長&lambda;の1/1000程度しかないので、光が通過するとき、分子や原子には、瞬間瞬間に均一が電場が働いていると考えてもよい。<br />
+（省略）<br />
+　x軸方向の偏光は、s軌道とpx軌道間の吸収・発光を引き起こすが、s &larr;&rarr; py遷移やs &larr;&rarr; pz遷移は起こらない。このことは、x軸方向の電子分極が、py軌道やpz軌道との混成では表せないことを考えれば、容易に理解できよう。端的にいえば、x軸方向の偏光の吸収・発光が起きるためには、yz面に節面が1つ（あるいは奇数個）増減するような電子遷移が伴わなければならない。同様にy軸方向の偏光についてはxz節面、z軸方向の偏光についてはxy節面が奇数個増減することが必要である。どの方向にも節面の増減がない電子遷移、例えばs&rarr;s遷移、p&rarr;p遷移、d&rarr;d遷移などは、どのような偏光とも関与しないので、発光・輻射についての禁制遷移となる。このような原子についての許容遷移における節面数の増減は、角運動量保存則と関係している。s&rarr;px遷移では、光吸収に伴い軌道角運動量が1増加することになるが、これは光のスピン角運動量1を受け取ることによる。逆に、p&rarr;s遷移では軌道角運動量が1減少し、光子のスピン角運動量に変わる。s&rarr;s遷移、p&rarr;p遷移、d&rarr;d遷移などでは軌道角運動量に変化がないので、光子の吸収、放出は起こらない。原子と光子を合わせた系での<br />
+角運動量保存則が成り立たないためである。<br />
+<br />
+◆ 吸光係数と輻射速度の式<br />
+　単に光学遷移の起こりやすさだけを議論する際には、遷移双極子モーメントよりも、振動子強度（f）と呼ばれる無次元の量がよく用いられる。これは、吸収・発光に関わる光の周波数で調和振動している一個の電子による振動電気双極子モーメント（&mu;<sub>0</sub>）を考え、これと遷移双極子モーメント（&mu;<sub>mn</sub>）の大きさとの比を表したものである。<br />
+　f = |&mu;<sub>mn</sub>|<sup>2</sup>/|&mu;<sub>0</sub>|<sup>2</sup><br />
+　&mu;0 = (3*h*e<sup>2</sup>)/(8*<span style="font-family: times new roman,times,serif;">&pi;</span><sup><font size="2">2</font></sup>*m*v*)<br />
+許容遷移のfの最大値は1から2程度である。fが非常に小さいときは、遷移確率が小さな禁制遷移である。吸光係数と振動子強度との間には次のような関係があり、<br />
+　f = 4.32*10<sup>-9</sup>*&int;&epsilon;(&nu;) d&nu;<br />
+1つの電子遷移についての吸収スペクトルを面積積分したものが振動子強度に比例する。例えば、吸光係数が10<sup>4</sup> M<sup>-1</sup> cm<sup>-1</sup>程度の吸収は振動子強度0.1程度に対応する。また、次の式で示すように振動子強度が大きいほど輻射速度が大きくなる。<br />
+　k<sub>r</sub> = (&nu;<sub>em</sub><sup>2</sup>*n<sup>2</sup>)*f/1.5<br />
+ここで&nu;<sub>em</sub>は発光の波数（cm<sup>-1</sup>）であり、nは媒体の屈折率である。振動子強度が0.1程度のとき、可視光の輻射速度は約10<sup>8</sup> s<sup>-1</sup>である。<br />
+・自然寿命&tau;（これは輻射速度k<sub><font size="2">r</font></sub>の逆数である）[2]<br />
+　遷移確率が高くなればなるほど、励起状態の放射寿命は短くなる。（省略）寿命が秒のオーダーの場合は次のように近似できる。<br />
+　　&tau; =&nbsp;1/k<sub><font size="2">r</font></sub>&nbsp;&nbsp;≒ 1/(10<sup><font size="2">4</font></sup>*&epsilon;<sub><font size="2">max</font></sub>)<br />
+　吸収帯の強さは単純に&epsilon;<sub><font size="2">max</font></sub>の大小で判断され、通常、次のように分類される。<br />
+　　&epsilon; =&lt; 10、 禁制<br />
+　　10 &lt; &epsilon; &lt; 1000、 若干許容<br />
+　　1000 &lt; &epsilon; &lt; 100,000、 許容<br />
+　　&epsilon; &gt;= 100,000 大いに許容
+<p><br />
+◆ 選択則<br />
+1.「異なるスピン多重度を持つ状態間の光遷移は禁制である」<br />
+・双極子モーメント演算子はスピン関数には作用しないため。選択則&Delta;S=0に対応。<br />
+・1重項状態と3重項状態との間の遷移双極子モーメント積分は0である。これをスピン禁制という。ただし、重元素を含む分子の場合には、重元素によるスピン軌道相互作用の影響が大きくなり、スピン角運動量と軌道角運動量が結合して見掛け上スピン多重度が変化する遷移での遷移確率が無視できなくなるくらい大きくなる。<br />
+2.「同時に2つ以上の電子遷移を起こさなければならない光学遷移は禁制である」<br />
+・例えば下記のような遷移は2つの電子が同時に遷移しなければならないので禁制である。<br />
+　d<sup>2</sup>電子配置での<sup>3</sup>T<sub>1</sub>&rarr;<sup>3</sup>A<sub>2</sub><br />
+　d<sup>6</sup>電子配置での<sup>1</sup>A<sub>1</sub>&rarr;<sup>1</sup>T<sub>2</sub><br />
+　d<sup>8</sup>電子配置での<sup>3</sup>A<sub>2</sub>&rarr;<sup>3</sup>T<sub>1</sub><br />
+・ルビーのR線は<sup>2</sup>E<sub>g</sub>&rarr;<sup>4</sup>A<sub>1g</sub>の遷移であるので、2電子遷移による禁制とスピン禁制の2重禁制となっているので、遷移確率が非常に低い。<br />
+3.「双極子モーメント演算子と2つの電子状態関数（あるいは2つの電子軌道関数）の属する既約表現の直積が全対称表現を含んでいなければならない」<br />
+・これは、遷移双極子モーメント[&mu;<sub>mn</sub>=&int;{&Psi;<sub>m</sub>(e*r)&Psi;<sub>n</sub>}dr]（ここでは簡単のために&Sigma;<sub>i</sub>e*r<sub>i</sub>をe*rにしている）の被積分関数[&Psi;<sub><font size="2">m</font></sub>(e*r)&Psi;<sub><font size="2">n</font></sub>]に対して、いずれかの対称操作（例えば座標反転や反射）を行ったときに関数の符号が反転してしまうとすれば、それ（被積分関数[&Psi;<sub><font size="2">m</font></sub>(e*r)&Psi;<sub><font size="2">n</font></sub>]）を全空間に渡って積分した結果が0となってしまうからである<br />
+・全対称であるA<sub>g</sub>の指標はすべて+1である<br />
+・双極子モーメント演算子&mu;(x), &mu;(y), &mu;(z)の既約表現は、それぞれx,y,z軸方向の並進と同じであるので、B<sub>3u</sub>, B<sub>2u</sub>, B<sub>1u</sub>に属することになる（この部分は誤っていたら済まない。テキストには点群D<sub>2h</sub>に属する分子を例にして説明されている）<br />
+・同じ既約表現の積には必ず全対称表現が含まれるので、上記のことは次のように言い換えることができる。<br />
+　「2つの電子状態関数の属する既約表現の直積が遷移双極子モーメント&mu;(x), &mu;(y), &mu;(z)のいずれかの既約表現と一致すれば、その成分の遷移双極子モーメント積分は0でない可能性がある。<br />
+[1] 構造有機化学特論（<a href="https://www1.doshisha.ac.jp/~kkano/2011Str_Org_Chem.pdf"><font color="#0066cc">https://www1.doshisha.ac.jp/~kkano/2011Str_Org_Chem.pdf</font></a>）</p>
+
+<p>※ 簡単な場合には節面数からも群論と同じ診断ができる（入射する光の電場と垂直な節面が1つ増減するような場合に許容遷移）。<br />
+※ ラポルテ則<br />
+　特に対称中心を持つ分子の場合には、関数の偶奇性（パリティ）に注目すれば、簡便に禁制遷移か否かを判断することができる。この方法、すなわち、ラポルテ則について説明する。パリティは(x,y,z)&rarr;(-x,-y,-z)という座標の反転に対して関数の符号が変わらないものを偶、変わるものを奇とする（例えば、奇関数であるy=xをx=-&infin;から&infin;までの範囲で積分することを想像すればよい）。したがって、遷移双極子モーメントでの積分が値を持つためには、被積分関数が偶関数でなければならない。ところが双極子モーメント演算子は奇関数なので、「許容遷移であるためには、遷移前後の電子波動関数のパリティが異なっていなければならない」ことになる（ラポルテ則）。したがって、1s&rarr;2sなどのs&rarr;s遷移やp&rarr;p遷移、d&rarr;d遷移、f&rarr;f遷移は、すべて偶&rarr;偶あるいは奇&rarr;奇の遷移であるので禁制であることがわかる。これに対し、s&rarr;p遷移（偶&rarr;奇）、p&rarr;d遷移、f&rarr;d遷移（奇&rarr;偶）などは許容遷移であるので、遷移確率が大きく、原子の場合には振動子強度が1に近い。<br />
+　八面体錯体では対称中心があるので、d軌道を含む分子軌道はすべて偶関数である。したがって、偶から偶へのd&rarr;d遷移は禁制である。同様に平面四角形錯体においてもd&rarr;d遷移は禁制である。これに対して、四面体錯体のd&rarr;d遷移はこれらよりも高い遷移確率を示す。八面体錯体のd&rarr;d遷移の吸光係数は5から100 M<sup><font size="2">-1</font></sup> cm<sup><font size="2">-1</font></sup>であるのに対し、四面体錯体では500から5000 M<sup><font size="2">-1</font></sup> cm<sup><font size="2">-1</font></sup>と非常に大きい。四面体錯体は対称中心を持っていないので、d軌道とp軌道、あるいは配位子のp軌道とが混合した分子軌道を形成する。そのため四面体錯体のd&rarr;d遷移には、d&rarr;p遷移などの許容な電子遷移が寄与するようになる。なお、八面体錯体のd&rarr;d遷移の吸光係数が禁制遷移にもいかかわらず0にならないのは、電子状態が非対称振動モードと結合することにより、中心対称性が崩れた電子状態がわずかに混合するためである。</p>
+
+<p><br />
+◆ 双極子モーメント積分の大きさ<br />
+　許容遷移であっても、遷移双極子モーメントが大きなものもあれば小さなものもある。この遷移双極子モーメントの大きさは、電子遷移に関係する軌道間の重なりの程度や空間的な重なり方に依存している。<br />
+　ベンゾフェノンやピリジンでは、紫外領域に強い<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移が現れ、長波長側に弱いn-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移が見られる。一般に<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移は大きな吸収係数を持っている（10<sup>4</sup> - 10<sup>5</sup> M<sup><font size="2">-1</font></sup> cm<sup><font size="2">-1</font></sup>）が、これは遷移に関係する<span style="font-family: times new roman,times,serif;">&pi;</span>軌道と<span style="font-family: times new roman,times,serif;">&pi;</span>*軌道の重なりが大きいためである。これに対しカルボニルのn-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移は、主に酸素のp<sub>y</sub>&rarr;p<sub>x</sub>軌道の遷移である。これはパリティ禁制であるのでn-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移の吸光係数は小さい。しかし、同じn-<span style="font-family: times new roman,times,serif;">&pi;</span>*遷移でも、ピリジンの場合には、N原子のsp<sup>2</sup>混成軌道からp軌道への遷移であるため、禁制遷移であるp軌道間の遷移に、許容遷移である2s&rarr;2p軌道が混ざり、この許容遷移の遷移双極子モーメントが吸光係数に反映される。<br />
+　双極子モーメント演算子は（&mu;=&Sigma;<sub>i</sub>e*r<sub>i</sub>）は電子間距離の関数であるので、一次元共役（※共役は「きょうやく」と読む）系での電子遷移の遷移双極子モーメントの大きさは共役長に依存する。（省略、シアニン色素の例を見ると、）二重結合の長さが増加すると共に、ピーク波長が長波長側にシフトし、吸光係数も増加することがわかる。<br />
+<br />
+◆ 吸収帯の強度と輻射速度との関係<br />
+　吸光係数と輻射速度はどちらも振動子強度fと関係している。このことから、ある最低励起状態への吸光係数と、発光の自然寿命&tau;（これは輻射速度の逆数である）との間には、次のような関係が導ける。これをStrickler-Bergの関係式という。<br />
+　k<sub>r</sub> = &tau;<sup>-1</sup> = 2.880 * 10<sup>-9</sup> * n<sup>2</sup> * &lt;&nu;<sub>max</sub><sup>-3</sup>&gt;<sub>av</sub><sup>-1</sup> * (g<sub>l</sub>/g<sub>u</sub>) * &int;&epsilon;(&nu;) dln(&nu;)<br />
+ここで、nは媒体の屈折率、g<sub><font size="2">l</font></sub>, g<sub><font size="2">u</font></sub>はそれぞれ基底状態と励起状態の電子的多重度、&nu;は波数（cm<sup>-1</sup>）である。この式は、輻射速度が吸収スペクトルの面積積分に比例し、発光エネルギー（h*&nu;）の3乗に逆比例することを示している。<br />
+（省略）ローダミンBについて自然寿命を概算してみよう。吸収スペクトルは17.8*10<sup>3</sup> cm<sup>-1</sup>から21*10<sup>3</sup> cm<sup>-1</sup>の波数領域にあり、極大吸収係数は72*10<sup>3</sup> M<sup>-1</sup>cm<sup>-1</sup>である。ln（&nu;）に対して描いた吸収スペクトルを三角形と見なして面積を計算すると、(72*10<sup><font size="2">3</font></sup> M<sup><font size="2">-1</font></sup>cm<sup><font size="2">-1</font></sup>)*(ln(21*10<sup><font size="2">3</font></sup> cm<sup><font size="2">-1</font></sup>) - ln(17.8*10<sup><font size="2">3</font></sup> cm<sup><font size="2">-1</font></sup>))/2=5.95*10<sup><font size="2">3</font></sup> M<sup><font size="2">-1</font></sup>cm<sup><font size="2">-1</font></sup>となる。発光スペクトルはシャープであり、極大波数が17.5*10<sup>3</sup> cm<sup>-1</sup>であるので、&lt;&nu;<font size="2"><sub>max</sub><sup>-3</sup></font>&gt;<font size="2"><sub>av</sub><sup>-1</sup></font>は(17.5*10<sup>3</sup>)<sup>3</sup>=5.3*10<sup>12</sup> cm<sup>-3</sup>と近似できる。これらの数値を式に入れ、エタノールの屈折率n=1.36を使うと、自然寿命は5.95 nsとなり、実測値6.01 nmに近い値が得られる。発光スペクトルがブロードな場合には、平均的な発光エネルギーを次式で計算する必要がある。<br />
+　&lt;&nu;<font size="2"><sub>max</sub><sup>-3</sup></font>&gt;<font size="2"><sub>av</sub><sup>-1</sup></font> = &int;I(&nu;)d&nu;/&int;&nu;<sup>-3</sup>*I(&nu;)d&nu;<br />
+実測のスペクトルを使って、上式から計算した自然寿命と、量子収率と寿命から得られた実験値を比較すると、ほぼ10%以内の誤差で一致している。（省略）<br />
+　N-メチルアクリジニウム塩の場合、少し誤差が大きいのは、最低励起状態への電子遷移の近くに別の電子遷移があるために、面積積分に誤差を生んだためだろう。<br />
+　発光は必ず最低励起状態から起きる現象であるので、ある励起状態への吸光係数が大きければ、そこからの自発的な発光速度も大きく、自然寿命は短くなる。吸光係数が大きいのに、発光の自然寿命がStrickler-Bergの関係式から予想される値よりも長い場合には、強い吸収の長波長側に禁制遷移が隠れているということも考えられる。金属錯体についてもこのような関係は定性的に当てはまる。最長波長端の吸収（これは形式的にS-T吸収と呼ばれることがある）が強く現れる場合には、リン光の輻射速度が大きく、自然寿命が短い。<br />
+※ 各種の結果は[S. J. Strickler and R. A. Berg, J. Chem. Phys., 37 (1962) 814-822.]に書かれている。<br />
+<br />
+◆ リン光<br />
+　リン光の輻射過程はスピン禁制であるので、蛍光に比べて振動子強度が10<sup>-3</sup>から10<sup>-9</sup>と非常に小さい。したがって、有機物のリン光輻射速度は、無輻射失活速度よりも著しく小さいので発光量子収率が極めて小さく、リン光を室温で観測するのは一般に困難である。しかし、極低温などで分子の熱振動を抑えて無輻射失活速度をかなり遅くすると、多くの有機物でリン光が観測できる。<br />
+　ベンゾフェノンなどのカルボニル化合物では、3重項n-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態から数ミリ秒の寿命の強いリン光が観測される。スピン禁制であるリン光が観測されるのは、酸素原子のスピン軌道結合により1重項<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*励起状態が3重項n-<span style="font-family: times new roman,times,serif;">&pi;</span>*状態に混合するためである。<br />
+　ルテニウム（Ⅱ）、白金（Ⅱ）、レニウム（Ⅰ）、イリジウム（Ⅲ）などの遷移金属イオンのポリピリジン錯体などは、3重項性の高い励起状態から室温でも強い発光を生じる。これは重い元素の強いスピン軌道結合によって、1重項状態と3重項状態とが大きく混合するためである。（省略）1重項状態と3重項状態間の項間交差速度は、これら状態間のスピン軌道結合の大きさに依存する。スピン軌道結合では、電子スピンの才差運動による磁気モーメントベクトルと、円電流による磁場ベクトルの内積が重要となるため、ベクトルの方向が重要である。そのため、1重項状態から3重項状態における3つのスピン副順位（Tx, Ty, Tz）への項間交差にもい、スピン軌道結合の異方性が反映される。<br />
+（省略、摂動論での説明で重要）<br />
+<br />
+◆ スペクトルの振動構造<br />
+（省略、重要な記述が多々ある）<br />
+　分子が光子を吸収したり光子を放出したりするのは非常に短い時間内（10^-16s程度）に起こるので、その間に核の位置や運動状態はほとんど変化しない。これをFranck-Condon原理という。このような電子遷移を垂直遷移というが、その遷移確率は遷移前後の電子波動関数だけでなく、2つの状態での核の運動状態にも依存する。もし初めの状態で核が止まっていたら、核が激しく動いているような励起状態に遷移する確率は低いのである。<br />
+（省略、重要な記述が多々ある）<br />
+Franck-Condon因子は、基底状態と励起状態の振動量子数と核変位の大きさで決まり、遷移前後での2つの状態での核の運動状態がどの程度似通っているかを表している。<br />
+（省略）<br />
+　極小点は平衡構造に対応し、そこからどのような核位置の変化が起こってもポテンシャルエネルギーは増加する。基底状態と励起状態の結合距離の違いが大きいほど、エネルギー曲線の極小点のずれが大きくなる。<br />
+（省略）<br />
+　光を吸収した分子は、高い振動量子数を持つ励起状態になっても、溶媒等に過剰のエネルギーを渡し、すばやく励起状態の最低振動状態になる。そのために発光は、励起状態の振動量子数n=0の準位から起こり、基底状態の様々な振動状態（m=0,1,2,...）へと垂直遷移する。このとき、振動励起状態（m&gt;=1）へ遷移すると、励起される振動エネルギー分だけ光子エネルギーが減少するので、0-0遷移より低エネルギー側に振動構造が現れる。基底状態と励起状態とで、結合の力の定数に大きな差がないとすれば、n=0とm=0,1,2,...との重なり積分は、吸収遷移の場合のm=0とn=0,1,2,...との重なり積分と同じになるので、両者の振動構造は鏡像的に現れるのである。<br />
+　分子が平衡構造付近で微小振動しているときは、分子振動を調和振動として近似できる。さらに、基底状態と励起状態で振動数が変化しないと仮定すると、振動量子数0&rarr;mに対応する発光過程のFranck-Condon因子は、基底状態と励起状態との平衡位置のずれ&Delta;Q（基準振動座標Qは無次元とする）の関数として、次式で与えられる。<br />
+　|&lt;&Chi;<sub>m</sub>|&Chi;<sub>0</sub>&gt;|<sup>2</sup> = exp(-S)*S<sup>m</sup>/m!, S=&Delta;Q<sup>2</sup>/2<br />
+基準振動座標における変位の関数であるSをHuang-Rhysパラメーター（S因子）という。（省略）S=0の場合には振動構造は現れず、いわゆる0-0遷移のみが現れる。振動波動関数は互いに直交しているので、核変位がなければ振動量子数が異なる振動波動関数間の重なり積分は0となるためである。核変位が大きくなると直交性が失われるため振動構造が見られるようになり、振動構造の0-0遷移からS番目のピークがほぼ最大となる。核変位が大きくなるとS因子が大きくなり、数多くの振動構造が現れる。この場合、振動構造の包絡線は正規分布曲線に近くなる。<br />
+<br />
+◆ 再配列エネルギー<br />
+　溶液中では、スペクトルのブロードニングのために振動構造が見えなくなり、吸収や発光スペクトルが1つの山として観測されることも多い。このような場合、吸収と発光スペクトルの極大エネルギーの差をストークスシフトと呼ぶ。<br />
+　ストークスシフトは、振動構造と共に、電子遷移に伴っておこる分子構造および溶媒和状態の変化を定量的に示す重要な量である。<br />
+　（省略、基底状態と励起状態のポテンシャルエネルギー曲線｛横軸は、分子の振動モードに沿ったズレや溶媒の分極の大きさ｝を見ると）垂直遷移によって生じる、基底状態の核位置を保ったままの状態をFranck-Condon状態という。　<br />
+　Franck-Condon状態は、ポテンシャル曲線の匂配に沿って速やかに構造変化を起こす（振動緩和）。同時に、分子の周りの溶媒は配向を変え、新しい溶媒和状態に緩和する。このような過程で、これらの熱浴に放出されるエネルギー&lambda;<sub>e</sub>を再配列エネルギーという。吸収と同様に発光過程においても、励起状態の構造を保ったままのFranck-Condon状態が、基底状態の安定構造あるいは熱平衡の溶媒和状態に緩和する過程で、再配列エネルギー&lambda;<sub>g</sub>を放出する。<br />
+　ストークスシフトは（省略）、吸収過程と発光過程の再配列エネルギーの和（=&lambda;<sub>e</sub>+&lambda;<sub>g</sub>）とほぼ等しい。再配列エネルギーは、分子内振動に起因する成分と溶媒和に起因する成分（溶媒再配列エネルギー）にわけることができる。分子内振動についての再配列エネルギーはS因子と次式のような関係がある。<br />
+　&lambda;<sub>vib</sub> = (1/2)*h*&nu;*(&Delta;Q)^2 = S*h*&nu;<br />
+ここで、&nu;は分子内振動の振動数である。<br />
+<br />
+◆ 励起状態の寿命<br />
+　光吸収によって生じる電子励起状態は、高いエネルギーを持っているので、エネルギーを失って基底状態に失活するか、光化学反応を起こして生成物に変化する。励起状態が1分子的な反応で消滅するとき、減衰定数（kd）の逆数を励起状態の寿命（&tau;=kd^-1）という。励起状態の寿命は様々な要因に支配される。<br />
+　発光量子収率が1に近い物質の場合、励起状態の寿命は、輻射遷移の起こりやすさで決まる。Strickler-Bergの関係式から、最低励起状態の吸収係数が大きいほど、輻射速度が大きくなり、その結果として励起寿命が短くなることが予想できる。これに対し、発光量子収率が1よりも小さい場合、もし光化学反応を起こさないのであれば、励起状態の寿命は無輻射遷移で決まる。無輻射遷移過程には、異なる電子スピン状態へ遷移する項間交差や同じ電子スピン状態間で起こる内部変換がある。項間交差はスピン禁制であるので、有機化合物では一般にそれほど大きな速度では起こらない。<br />
+　例外的なものに、カルボニル基を持つベンゾフェノンがある。この化合物では、最低励起1重項状態のn-<span style="font-family: times new roman,times,serif;">&pi;</span>*はわずか数10ピコ秒しか寿命がない。酸素原子はそれほど重い原子ではないが、酸素の異なる2つのp軌道が関与する3重項&pi;-&pi;*状態と1重項n-<span style="font-family: times new roman,times,serif;">&pi;</span>*状態とがエネルギー的に近接しているために、酸素のスピン軌道結合によって1n-<span style="font-family: times new roman,times,serif;">&pi;</span>* &rarr; 3<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>*の項間交差が極めて速やかに起こる。これは、1つの原子に属するp軌道間の1電子遷移を伴う項間交差の場合には、軌道角運動量と電子スピン角運動量との結合が起き易いためだる（El-Sayed則）。<br />
+　最低励起状態からの無輻射失活には、励起状態から基底状態へ直接遷移する過程と、少し高いエネルギー準位の短寿命励起状態を経由して失活する過程がある。低温では前者が支配的であるが、温度が高くなると後者の寄与が増えることがある。<br />
+　例えば、ルテニウム（Ⅱ）ポリピリジン錯体のMLCT励起状態は、低温では基底状態へ直接無輻射遷移するが、温度が高くなると、エネルギー的に高いd<span style="font-family: times new roman,times,serif;">&pi;</span>-d&sigma;状態に熱分布して速やかに失活することが知られている。励起状態から基底状態への無輻射遷移には、2つの極限的な状況が考えられる。<br />
+（省略）励起状態からの発光が強く観測されるような場合には、ポテンシャルエネルギー曲線の関係は、励起状態の極小点付近が基底状態のポテンシャルエネルギー曲線の中央付近に位置している。無輻射遷移過程においても、輻射遷移と同じように電子状態の変化が起きる瞬間には核はほとんど動かないので、その遷移速度もFranck-Condon因子に比例する。輻射遷移の場合と異なるのは、励起状態と等エネルギーにある基底状態の振動状態とのFranck-Condon因子であるという点である。可視域に発光を示す励起状態の0-0遷移エネルギーは20*10^3 cm^-1程度であるので、基底状態の振動準位の中で励起状態の波動関数と重なるのは、振動量子数がm=10よりも大きなものとなる。このように大きな振動量子数の波動関数の振幅は、ポテンシャルエネルギー曲線付近に偏っており、中央付近ではほとんど振幅を持たない。したがって、励起状態と基底状態との振動波動関数の重なり積分、すなわちFranck-Condon因子は極めて小さくなる。このようなポテンシャルエネルギー曲線の関係をweak couplingという。また、励起状態の振動波動関数と最も大きな重なり積分をもつ振動モードは、励起状態が基底状態へ無輻射遷移する際に放出されるエネルギーを受け取るので、アクセプティングモードと呼ばれている。<br />
+　weak couplingの場合には、0-0遷移エネルギーE0（これをエネルギーギャップ&Delta;Eともいう）が増加するとともに、無輻射遷移速度k<sub>nr</sub>が指数的に減少する。この関係はJortnerらによって定式化されており、エネルギーギャップ則として知られている。<br />
+　ln(k<sub>nr</sub>) = C - (&gamma;/(h*&nu;<sub>M</sub>))*&Delta;E<sub>0</sub>, &gamma; = ln(E<sub>0</sub>/&lambda;<sub>vib</sub>) - 1<br />
+&nu;<sub>M</sub>はアクセプティングモードの振動数であり、&lambda;vibはそのモードにおける振動の再配列エネルギーである。Cは分子に固有の定数である。式[&lambda;<sub>vib</sub> = (1/2)*h*&nu;*(&Delta;Q)^2 = S*h*&nu;]に示したように&lambda;<sub>vib</sub>はポテンシャルエネルギー曲線の変位&Delta;Qの二乗に比例、あるいはS因子に比例する。式[ln(k<sub>nr</sub>) = C - (&gamma;/(h*&nu;<sub>M</sub>))*&Delta;E<sub>0</sub>, &gamma; = ln(E<sub>0</sub>/&lambda;<sub>vib</sub>) - 1]は、発光極大の波数&nu;に対して無輻射速度k<sub>nr</sub>の対数をプロットするとほぼ直線関係が得られ、その傾きはアクセプティングモードの振動数が高いほど、また構造変化が大きい（&lambda;<sub>vib</sub>が大きい）ほど小さくなることを示している。<br />
+　一方、励起状態が基底状態に対して大きく構造変化すると、励起状態のポテンシャルエネルギー曲線における極小点が基底状態のポテンシャルエネルギー曲線近傍に位置するようになる。エネルギー曲線の近傍付近には振動波動関数の大きな振幅があるので、励起状態の振動基底状態の波動関数と基底状態の波動関数とは大きな重なりを持つ。このような状況では、励起状態は、生成するとすぐさま基底状態へ遷移するので励起状態の寿命は極めて短くなる。生成するとすぐさま基底状態へ遷移するので励起状態の寿命は極めて短くなる。このような状況をstrong couplingという。<br />
+　weak couplingの場合に見られるエネルギーギャップ則の例として、2,2&#39;-ピリジン（bpy）あるいは1,10-フェナンスロリン（phen）を配位子としてもつ一連のオスミウム（Ⅱ）錯体のMLCT状態についての解析を例として挙げる。無輻射速度の対数値を発光の極大エネルギーに対してプロットすると、両者は広いエネルギー範囲に渡って良好な直線関係が見られ、無輻射速度がエネルギーギャップ則に従っている（E. M. Kober et al., J. Phys. Chem., 90 (1986) 3722-3744.）。<br />
+<br />
+◆ 0-0遷移エネルギーの決定法（振動構造のフランクコンドン解析）<br />
+　発光スペクトルの形状には、0-0遷移エネルギーや励起状態の構造など、様々な情報が含まれている。しかし、固体中や溶液中の発光スペクトルは通常ブロードであるので、線幅の中に埋もれたこれらの情報を得ることは難しい。<br />
+　励起状態の酸化還元電位を計算するのに必要な0-0遷移エネルギーは、発光スペクトルと吸収スペクトルの鏡像関係を使って決定できる。規格化した波数表記のスペクトルの交わる光のエネルギーが0-0エネルギーである。厳密には吸収確率が振動数&nu;に比例するのに対し、発光確率は&nu;<sup>3</sup>に比例するので、発光スペクトルに予め1/&nu;<sup>2</sup>を掛けてから規格化する方がよい。<br />
+　スピン軌道結合が大きい金属錯体では蛍光が観測されず、発光はスピン禁制のリン光であることが多い。このような場合、リン光スペクトルは、最も長波長に現れるスピン禁制のS-T吸収スペクトルとの間に鏡像関係があることに注意する。しかし実際には、この微弱吸収は、複数の吸収帯が重なっていたり、スピン許容の強い吸収に埋もれてしまって、最低励起状態への単一遷移についてのスペクトルの形を知ることが困難であり、鏡像関係から0-0遷移エネルギーを決定することは多くの場合難しい。このような理由から、金属錯体についての0-0遷移エネルギーを正確に決定するために、発光スペクトルのフランクコンドン解析がしばしば用いられる。<br />
+　フランクコンドン解析は、適当な振電結合モデルを使ってスペクトル形状をシミュレーションして、実測のスペクトルを最も再現できるパラメータを決定する方法である。最も単純なモデルでは励起状態と基底状態を荒い断熱近似で表現する。電子遷移と強く結合する分子内振動を1個か2個の調和振動子で近似し、ポテンシャル曲線が励起状態で少しずれることによって現れるスペクトルの振動構造をFranck-Condon因子から計算する。<br />
+（省略）<br />
+この式を用いてRu(Ⅱ）錯体の77 Kでの発光スペクトルをフィッティングすることにより、0-0遷移エネルギーや各振動座標に沿った励起状態のずれの程度を表すS因子が決定できる。<br />
+　bpy類似の配位子を持つ金属錯体のMLCT発光やLC発光には、1300 - 1400 cm<sup>-1</sup>のC-C伸縮振動がスペクトルに現れることが多い。これはbpy骨格の呼吸モードやピリジン間のC-C伸縮モードに対応する。<br />
+　フランクコンドン解析によって、正確な0-0遷移エネルギーや無輻射失活過程についてのFranck-Condon因子についての情報を得ることができる。フランクコンドン解析には、このモデルの他に、励起状態の振動励起に伴うホットバンドを考慮したものもある。<br />
+<br />
+[1] 佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+[2] M. Hesseら『有機化学のためのスペクトル解析法』化学同人<br />
+------------------------------------------------------------------------------<br />
+■ 過渡測定<br />
+　写真機のフラッシュのように瞬間的に強い光を発する光源を照射し、一時的に生成した励起分子や中間体からの発光もしくは吸収の経時変化を観測する測定を過渡測定と呼ぶ。過渡測定では、励起状態の分子種やラジカルなどの不安定分子種の生成過程や消滅過程が直接時間情報として観測される。具体的には、例えば励起一重項あるいは三重項状態におけるエネルギー移動・電子移動・エキシマー形成・エキシプレックス形成・水素引き抜き・溶媒和などの光物性・光化学過程の速度に関する知見を与える。<br />
+<br />
+□ 発光寿命測定<br />
+　過渡測定には、大きく分類すると、過渡的に生成した分子種からの蛍光やりん光を観測する発光寿命（あるいは時間分解発光）測定と、吸光度の時間変化を測定する過渡吸収測定がある。発光寿命測定では、励起一重項状態からの蛍光もしくは励起三重項状態からのりん光を測定する。有機分子に関する蛍光波長と寿命、りん光寿命や三重項エネルギー準位に関するデータは文献（S.L.Murov et al.(ed.), Handbook of Photochemistry (2nd ed.),Marcel Dekker (1993)）にまとめられている。<br />
+　蛍光やりん光の寿命は、その物質固有の発光・失活過程の速度定数に依存するとともに、周囲の媒質や消光剤として働く分子の影響を強く受ける。消光剤がない場合の発光強度I<sub>f0</sub>と消光剤（濃度[Q]）存在下の発光強度I<sub>f</sub>の割合I<sub>f0</sub>/I<sub>f</sub>を消光剤濃度に対してプロット（Stern-Volmerプロット）すると、その傾きは消光反応の測定定数k<sub>q</sub>と消光剤がない場合の発光寿命&tau;<sub>0</sub>の積で表される。<br />
+　I<sub>f0</sub>/I<sub>f</sub> = 1 + k<sub>q</sub> * &tau;<sub>0</sub> * [Q]<br />
+したがって、消光剤がない場合も含めて何種類かの濃度における発光強度と&tau;<sub>0</sub>を測定することによって、k<sub>q</sub>を求めることができる。ただし、Stern-Volmerプロットから反応速度を求める場合には、発光分光と消光剤が基底状態で相互作用していないことが前提であるので、吸収スペクトルを測定してその強度と形が消光剤の影響を受けていないことを確認する必要がある。<br />
+　蛍光寿命測定は、りん光に比べて感度が高く、また寿命が短いために酸素の影響を受けにくく脱気などの操作を必要としないので、過渡分光測定のうち最も広く用いられている。励起光源としては、Xeフラッシュランプ・窒素（色素）レーザー・Nd-YAGレーザー・Tiサファイアレーザー・パルス半導体レーザーなどが用いられており、それらの中から目的に応じた励起波長および時間分解能が得られるものを選べばよい。<br />
+　発光の検出には、光電子増倍管（PM）・マイクロチャンネルプレート（MCP）・アバランジェフォトダイオード（APD）などが用いられる。超薄膜や単一分子など発光が微弱な試料の寿命測定には、しきい値以下の暗電流をカットしながら光子をひとつずつカウントするフォトンカウンティングと呼ばれる方法が用いられる。フォトンカウンティングを行う場合、同時に複数個の光子が同じ検出器に入っても１個としか検出されないため、常に１個以下の光子しか同時に検出器に入らない（フォトンカウンティング条件を満たす）ような発光強度に調整する必要がある。（省略）蛍光寿命曲線I<sub>f</sub>(t)を励起パルスの波形でデコンボリューションして、２成分の指数関数でフィッティングして得られた寿命および係数を示したりする。<br />
+　I<sub>f</sub>(t) = A<sub>1</sub>*exp(-t/&tau;<sub>1</sub>) + A<sub>2</sub>*exp(-t/&tau;<sub>2</sub>)<br />
+<br />
+□ 過渡吸収測定<br />
+　発光寿命測定では励起状態からの発光を観測するのに対して、過渡吸収測定では、励起状態や反応中間体の吸収の経時変化を観測する。具体的には、試料の吸収が無視でき過渡種の吸収が顕著にああ割れる波長域のモニター光を励起パルスと同時に照射し、励起パルス照射に伴うモニター光の透過光強度の変化を測定する。モニター光には、十分時間幅の長いパルスもしくは定常光を用い、通常白色光に小型の分光器を組み合わせることで望みの波長を得ている。検出される透過光の時間変化は、ちょうど発光寿命曲線を上下に反転した形状となる。<br />
+　結果の解析は、寿命曲線と同様に、励起パルスでデコンボリューションし指数関数などでフィッティングすればよい。励起パルスとモニター光が試料に当たる位置を正確に合わせる必要があるなど、発光測定よりも経験や技術を要する。またゼロバックグラウンド測定ではないため、発光測定ほど高感度ではない。しかし、発光しない分子種でも測定でき、また溶媒の影響を受けにくいといった利点があるため、特に光化学の分野では必要不可欠な手法となっている。<br />
+<br />
+[1] 野瀬卓平ら『若手研究者のための有機・高分子測定ラボガイド』講談社サイエンティフィック<br />
+------------------------------------------------------------------------------<br />
+■ 時間分解赤外分光法<br />
+　測定に用いる試料は、適当な溶媒の均一溶液とし、溶存酸素による消光の影響を避けるためにアルゴン置換や真空凍結脱気などを行った上で、石英製の1 cm角セルに密封して測定することが多い。発光（寿命）挙動は、下に示す要因の影響を受けるので、これらを考慮したサンプル調製・測定が必要になる。<br />
+・溶媒<br />
+　溶媒は、安定で試料と反応しない、適当な特性（誘電率など）を持つ、溶解性が高い、使用できる波長範囲が広い、等の条件が必要となる。発光性の不純物は測定に大きな影響を与えるので、分光測定用に精製する必要がある。発光分析用や分光測定用として市販されている溶媒ならば使用できる波長領域、残留する不純物や水分等に注意して、そのまま利用できる。THF等のエーテル系やクロロホルムなどのハロゲン系の溶媒は、開封後に時間が経過すると過酸化物やハロゲンが生成するので注意が必要である。使用する錯体や波長領域によっては、安定剤として配合された物質が影響する場合がある。溶液中の分子間の衝突や回転緩和を制限する等の目的で、ガラス状の溶媒を用いることがある。常温測定ではメチルメタクリレート等の透明なプラスチックが、低温ではガラス状に固化する溶媒（ガラスマトリックス、3-メチルペンタン、2-メチルテトラヒドロフラン、EPA（エーテル、イソペンタン、エタノール）混合溶媒等）が用いられる。<br />
+・温度<br />
+　無放射遷移速度は、高温で増大することが多い。低温では溶媒の粘度が増加し、分子間衝突が少なくなる効果もあるので、発光強度は増大し寿命が伸びる。ただし、溶解度の減少による析出や微結晶生成に注意が必要である。<br />
+・吸収強度・再吸収<br />
+　励起波長における吸光度が高くなると、試料セルの入射面近傍で励起光がほとんど吸収され、中央部まで励起光が届かないため、観測される発光強度が減少する。定常光による発光スペクトル測定の場合とは異なり、ある程度吸収度が高い場合でも、集光光学系が見えている領域にある試料が励起されていれば、寿命測定は可能であるが、励起波長における吸光度が1を超えるような場合には、測定が困難になる場合が多い。このような場合には、三角セルや前面照射等を利用して、光学的配置を変えることで対応する。また、基底状態の吸収帯に近い波長で発光を観測する場合には、基底状態の錯体による発光の再吸収により発光強度が見かけ上減少する場合がある。<br />
+・自己消光（T-T消失）<br />
+　レーザーなど比較的強い励起光を用いた場合や、励起状態の寿命が長い場合には、励起状態分子の濃度が高くなり、励起状態同士の2分子的な衝突による失活が起こる場合がある。この現象は、3重項励起状態の場合に多くみられ、T-T消失（T-T annihilation）と呼ばれる。T-T消失（下の式）は二次の過程であるため、実験上は発光減衰の初期の速い失活として観測される。<br />
+　[<sup>3</sup>A<sup>*</sup>] + [<sup><font size="2">3</font></sup>A<sup><font size="2">*</font></sup>] &rarr; [<sup><font size="2">3</font></sup>A<sup><font size="2">*</font></sup>] +[A]<br />
+・不純物<br />
+　錯体や溶媒に含まれる不純物は、通常の発光スペクトル測定の場合と同様に、励起光の吸収（内部フィルター効果）や試料と異なる発光等により測定の障害となる。不純物についても、発光強度は吸収光量と発光量子収率の積に比例するため、不純物の発光量子収率が高く、錯体の発光収率が小さい場合には、微量の不純物でも影響を無視できない。また、酸素（溶存酸素）や比較的低い励起エネルギーを持つ物質、常磁性物質などは、エネルギー移動や電子移動消失などにより錯体の励起状態を消失し、見かけ上発光寿命を短くする。<br />
+・光反応・光退色<br />
+　比較的強い励起光を用いた測定では、光反応による錯体の劣化（光退色）が無視できない場合がある。チェックのために、測定前後に寿命や（発光・吸収）スペクトルを測定し変化がないことを確認するべきである。励起光を弱めたり、測定時間を大幅に短縮しても、反応生成物の影響が無視できない場合には、試料溶液を循環させながら測定するなどの工夫が必要となる。<br />
+・溶存酸素<br />
+　酸素は、励起エネルギーが低く、常磁性で、酸化力も強いので、錯体の励起状態を効率よく失活させてしまう。溶媒によっては、常温大気圧下でも1 mM程度の酸素の溶解度（水の場合0.3 mM, ヘキサン 3 mM, メタノール 2.9 mM）を持つため、ナノ秒以上の長寿命の測定では影響が無視できなくなる。液体試料では、気密にできる試料セルを用い、アルゴンや窒素ガスを通気して置換するか、融解凍結法による脱気を行う必要がある。<br />
+・感度補正<br />
+　発光寿命には直接の影響はないが、時間分解スペクトルの測定では、定常光の発光スペクトルの場合と同様、測定システムの波長による感度補正が必要である。<br />
+・偏光<br />
+　固体やガラス・マトリックス、吸着状態など、分子配置が固定されている試料、高分子やタンパク溶液などの拡散や分子回転等が制限される巨大分子溶液等では、偏光特性に注意が必要である。レーザー光は、特に偏光子を用いなくても特定の方向に偏光している場合が多い。また、分光器などは、ある程度の偏光特性を持っているのが普通である。分子配向が固定された試料では、偏光成分による特性（寿命）の違いが平均化されず、特定の偏光成分の影響が寿命等の見積もりに影響することがある。このような場合、偏光解消板を光路に挿入したり、試料をマジックアングル（54.7&deg;）に配置するなどの対策が必要となる。<br />
+・試料の不均一<br />
+　固体状態の試料では、個々の錯体のミクロ環境の不均一性が問題になる場合がある。吸着や結晶中での配向、溶媒和の程度等の差により、寿命が多成分として観測される場合がある。また、固体試料では、攪拌等の操作ができないため、光退色の影響が現れやすいので注意が必要である。<br />
+<br />
+佐々木陽一ら『錯体化学会選書2 金属錯体の光化学』三共出版<br />
+-----------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[TA1] 応用物理 第86巻 第9号 p.775 (2017)<br />
+[TA2] <a href="http://hamalab.com/current/bunseki.html">http://hamalab.com/current/bunseki.html</a><br />
+[TR3] 飯田隆「イラストで見る化学実験の基礎知識」丸善株式会社<br />
+[TR4] <a href="http://nsg-zaidan.or.jp/presentation/2015/pdf/1yamakata.pdf">http://nsg-zaidan.or.jp/presentation/2015/pdf/1yamakata.pdf</a><br />
+------------------------------------------------------------------------------</p>

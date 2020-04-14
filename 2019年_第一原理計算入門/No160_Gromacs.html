@@ -1,0 +1,720 @@
+Gromacs (http://www.gromacs.org/)<br />
+------------------------------------------------------------------------------<br />
+■ Install (ubuntu 18.04 LTS on windows 10 (64 bit))<br />
+<br />
+□ Gromacs (+OpenMPI) [7]<br />
+(http://manual.gromacs.org/documentation/)<br />
+0. sudo apt-get install gcc<br />
+&nbsp; sudo apt-get install build-essential<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libfftw3-dev<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+1. download: (http://ftp.gromacs.org/pub/gromacs/gromacs-2019.2.tar.gz)<br />
+2. tar xfz gromacs-2019.2.tar.gz<br />
+3. cd gromacs-2019.2<br />
+4. mkdir build<br />
+5. cd build<br />
+6. cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON -DGMX_MPI=on -DGMX_BUILD_MDRUN_ONLY=on<br />
+7. make<br />
+8. make check<br />
+9. sudo make install<br />
+10. source /usr/local/gromacs/bin/gmx-completion-mdrun_mpi.bash<br />
+11. /usr/local/gromacs/bin/mdrun_mpi -h<br />
+&nbsp; (mpirun -np 4 /usr/local/gromacs/bin/mdrun_mpi -h)<br />
+<br />
+□ Gromacs [7]<br />
+(http://manual.gromacs.org/documentation/)<br />
+0. sudo apt-get install gcc<br />
+&nbsp; sudo apt-get install build-essential<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libfftw3-dev<br />
+1. download: (http://ftp.gromacs.org/pub/gromacs/gromacs-2019.2.tar.gz)<br />
+2. tar xfz gromacs-2019.2.tar.gz<br />
+3. cd gromacs-2019.2<br />
+4. mkdir build<br />
+5. cd build<br />
+6. cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON<br />
+7. make<br />
+8. make check<br />
+9. sudo make install<br />
+10. source /usr/local/gromacs/bin/gmx-completion-mdrun_mpi.bash<br />
+11. /usr/local/gromacs/bin/mdrun_mpi -h<br />
+<br />
+□ Gromacs on ubuntu 18.04 LTS (other method)<br />
+0. sudo apt-get install gcc<br />
+&nbsp; sudo apt-get install build-essential<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libfftw3-dev<br />
+1. sudo apt install gromacs<br />
+&nbsp; (/usr/bin/gmx -h)<br />
+<br />
+□ Gromacs (+OpenMPI) on ubuntu 18.04 LTS (other method)<br />
+0. sudo apt-get install gcc<br />
+&nbsp; sudo apt-get install build-essential<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libfftw3-dev<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+1. sudo apt install gromacs-openmpi<br />
+&nbsp; (mpirun -np 4 /usr/bin/mdrun_mpi -h)<br />
+<br />
+◇ Usage [U1-4] (underconstrcting)<br />
+1. *.cif, etc &gt; openbabel &gt; *.mol2<br />
+2. *.mol2 &gt; topolbuild &gt; *.gro, *.itp, *.top, topol.top<br />
+3. *.gro &gt; genbox &gt; *.gro<br />
+4. *.gro, topol.top, grompp.mdp &gt; grompp &gt; *.tpr<br />
+5. *.tpr &gt; mdrun &gt; *.gro<br />
+◇ Usage [U1-4] (underconstrcting)<br />
+1. pdb2gmx<br />
+2. gmx editconf -f *.gro<br />
+3. genbox<br />
+4. gedit *.mdp<br />
+5. gmx grompp -f *.mdp -c *.gro -p *.top -o *.tpr -n *.ndx<br />
+6. genion<br />
+-----<br />
+7. gedit *.mdp<br />
+8. gmx grompp -f *.mdp -c *.gro -p *.top -o *.tpr<br />
+9. gmx mdrun -v -deffnm * -v<br />
+-----<br />
+xmgrace *.xvg<br />
+vmd *.gro *.trr<br />
+(gmx trjconv -s *.tpr -f *.xtc -o *.xtc -pbc mol)<br />
+[U1] https://bio-info.biz/article/ato_gromacs_basic_usage.html<br />
+[U2] http://www.ag.kagawa-u.ac.jp/charlesy/memo/conformational-search/<br />
+[U3] http://nuushi.hatenablog.com/entry/2017/07/08/021803<br />
+[U4] https://staff.aist.go.jp/makoto-yoneya/MDforKOUBUNSHI/<br />
+------------------------------------------------------------------------------<br />
+■ MD (ZIF-8)<br />
+<br />
+□ ZIF-8 (ZIF-8_TEMPO_Ngas_template)<br />
+0. sudo apt install gromacs<br />
+&nbsp; pip install --user MDAnalysis[analysis] MDAnalysisTests<br />
+&nbsp; git clone https://github.com/a-anik/zif-8_md.git<br />
+&nbsp; pytest --disable-pytest-warnings --pyargs MDAnalysisTests<br />
+1. cd zif-8_md<br />
+2. cd ZIF-8_TEMPO_Ngas_template<br />
+3. gedit gas.mk<br />
+&nbsp; CO2 -&gt; N2<br />
+4. export gmx=/usr/local/gromacs/bin/mdrun_mpi<br />
+&nbsp; (or export gmx=/usr/bin/gmx)<br />
+5. make all<br />
+<br />
+◇ Simulation steps (ZIF-8_TEMPO_Ngas_template)<br />
+A. Random insertion of guest molecules (1st: TEMPO, 2nd: Gas) into ZIF-8<br />
+&nbsp; N2_centered.pdb<br />
+&nbsp; CO2_centered.pdb<br />
+&nbsp; TEMPO-vsLP_centered.pdb &nbsp;positions.dat &nbsp;start_conf.gro &nbsp;topol.top.tmpl<br />
+&nbsp; ・Makefile (※ gas.mk:NMOL = 16, gas.mk:GAS = CO2)<br />
+&nbsp; A1. cat topol.top.tmpl | sed -e &#39;s/@NMOL/16/g; s/@GAS/CO2/g&#39; &gt; topol.top<br />
+&nbsp; (output: topol.top)<br />
+&nbsp; A2. gmx insert-molecules -f start_conf.gro -ci TEMPO-vsLP_centered.pdb -ip positions.dat -o 1_zif_with_tempo.gro -seed 2 -nmol 1 -try 1000 -scale 1.1 -rot xyz 2&gt;&amp;1 | tee insert_tempo.log<br />
+&nbsp; (output: 1_zif_with_tempo.gro, insert_tempo.log)<br />
+&nbsp; A3. gmx insert-molecules -f 1_zif_with_tempo.gro -ci CO2_centered.pdb -o confout.gro -seed 1993 -nmol 16 -try 1000 -scale 1.0 -rot xyz 2&gt;&amp;1 | tee insert_gas.log<br />
+&nbsp; (output: confout.gro, insert_gas.log)<br />
+&nbsp; A4. (printf &#39;!2\n 4\n name 6 GAS\n q\n&#39; | gmx make_ndx -f confout.gro -o index_energrps.ndx)<br />
+&nbsp; &nbsp; printf &#39;!2\n 4\n name 6 GAS\n q\n&#39;<br />
+&nbsp; &nbsp; gmx make_ndx -f confout.gro -o index_energrps.ndx<br />
+&nbsp; &nbsp; !2<br />
+&nbsp; &nbsp; 4<br />
+&nbsp; &nbsp; name 6 GAS<br />
+&nbsp; &nbsp; q<br />
+&nbsp; (output: index_energrps.ndx)<br />
+B. Energy minimization<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;topol.top<br />
+&nbsp; ・Makefile<br />
+&nbsp; B1. gmx grompp<br />
+&nbsp; (input: &nbsp;conf.gro &nbsp;grompp.mdp &nbsp;topol.top)<br />
+&nbsp; (output: mdout.mdp, topol.tpr)<br />
+&nbsp; B2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; (input: topol.tpr)<br />
+&nbsp; (output: confout.gro, ener.edr, md.log, traj.trr)<br />
+C. Equilibration: 1 ns, NVT, 300 K<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;index_energrps.ndx &nbsp;topol.top<br />
+&nbsp; ・Makefile ((change) grompp.mdp:nsteps = 10000 &nbsp; ; 0.01 ns)<br />
+&nbsp; C1. gmx grompp -maxwarn 1 -n index_energrps.ndx | tee gmx_grompp.log<br />
+&nbsp; (input: conf.gro &nbsp;grompp.mdp &nbsp;index_energrps.ndx &nbsp;topol.top)<br />
+&nbsp; (output: mdout.mdp, topol.tpr, gmx_grompp.log)<br />
+&nbsp; C2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; (output (maybe): &nbsp;confout.gro, ener.edr, md.log, state.cpt, traj_comp.xtc)<br />
+D. Production run: 100 ns, 300 K, NVT (only ZIF-8 atoms are coupled to the thermal bath)<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;index_energrps.ndx &nbsp;topol.top<br />
+&nbsp; ・Makefile ((change) grompp.mdp:nsteps = 10000 ; 0.01 ns)<br />
+&nbsp; D1. gmx grompp -maxwarn 2 -n index_energrps.ndx 2&gt;&amp;1 | tee gmx_grompp.log<br />
+&nbsp; D2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; D3. echo 3 | gmx trjconv -f traj.trr -s -o traj_vel_tempo.trr<br />
+&nbsp; D4. echo 0 | gmx trjconv -f traj_comp.xtc -dt 10 -o traj_dt10.xtc -s -pbc res<br />
+&nbsp; D5. echo 0 | gmx trjconv -f traj_comp.xtc -o traj_last2ns.xtc -b 98000 -s -pbc res<br />
+&nbsp; D6. gmx filter -f traj_comp.xtc -s -ol traj_filter_tmp.xtc -nf 200<br />
+&nbsp; &nbsp; echo 0 | gmx trjconv -f traj_filter_tmp.xtc -o traj_filter_lowpass200.xtc -s -pbc res<br />
+&nbsp; &nbsp; rm -f traj_filter_tmp.xtc<br />
+&nbsp; D7. echo 0 | gmx trjconv -f confout.gro -o resout.gro -s -pbc res<br />
+&nbsp; D8. test -s traj_vel_tempo.trr &amp;&amp; rm -f traj.trr<br />
+&nbsp; &nbsp; gzip traj_vel_tempo.trr<br />
+※ ls -lで -&gt; のある部分がファイルがリンクされていることを示している。前の段階で計算したファイルがどのように関連付けされているかを理解しながらこれらの操作を理解すればファイルの理解は進むだろう。[grep 探したい情報 *]のコマンドも便利なので積極的に活用しよう。<br />
+※ N2ガスでの計算にするには、README.rstに記載されているようにgas.mkでGASのCO2をN2にすればよい。NMOLはモル数を変更するのに使う。上記のようにコマンドでの入力の場合はCO2とNMOLの16の部分を書き換える。<br />
+<br />
+<br />
+□ ZIF-8 (ZIF-8_TEMPO_03co2)<br />
+0. sudo apt install gromacs<br />
+&nbsp; pip install --user MDAnalysis[analysis] MDAnalysisTests<br />
+&nbsp; git clone https://github.com/a-anik/zif-8_md.git<br />
+&nbsp; pytest --disable-pytest-warnings --pyargs MDAnalysisTests<br />
+1. cd zif-8_md<br />
+2. cd ZIF-8_TEMPO_03co2<br />
+3. gedit gas.mk<br />
+4. export gmx=/usr/local/gromacs/bin/mdrun_mpi<br />
+&nbsp; (or export gmx=/usr/bin/gmx)<br />
+5. make all<br />
+<br />
+◇ Simulation steps (ZIF-8_TEMPO_03co2)<br />
+A. Insertion of guest molecules into ZIF-8<br />
+&nbsp; CO2_centered.pdb<br />
+&nbsp; N2_centered.pdb<br />
+&nbsp; TEMPO-vsLP_centered.pdb &nbsp;positions.dat &nbsp;start_conf.gro &nbsp;topol.top.tmpl<br />
+&nbsp; ・Makefile (※ gas.mk:NMOL = 24, gas.mk:GAS = CO2)<br />
+&nbsp; A1. cat topol.top.tmpl | sed -e &#39;s/@NMOL/24/g; s/@GAS/CO2/g&#39; &gt; topol.top<br />
+&nbsp; (output: topol.top)<br />
+&nbsp; A2. gmx insert-molecules -f start_conf.gro -ci TEMPO-vsLP_centered.pdb -ip positions.dat -o 1_zif_with_tempo.gro -seed 2 -nmol 1 -try 1000 -scale 1.1 -rot xyz 2&gt;&amp;1 | tee insert_tempo.log<br />
+&nbsp; (output: 1_zif_with_tempo.gro, insert_tempo.log)<br />
+&nbsp; A3. gmx insert-molecules -f 1_zif_with_tempo.gro -ci CO2_centered.pdb -o confout.gro -seed 1993 -nmol 24 -try 1000 -scale 1.0 -rot xyz 2&gt;&amp;1 | tee insert_gas.log<br />
+&nbsp; (output: confout.gro, insert_gas.log)<br />
+&nbsp; A4. (printf &#39;!2\n 4\n name 6 GAS\n q\n&#39; | gmx make_ndx -f confout.gro -o index_energrps.ndx)<br />
+&nbsp; &nbsp; printf &#39;!2\n 4\n name 6 GAS\n q\n&#39;<br />
+&nbsp; &nbsp; gmx make_ndx -f confout.gro -o index_energrps.ndx<br />
+&nbsp; &nbsp; !2<br />
+&nbsp; &nbsp; 4<br />
+&nbsp; &nbsp; name 6 GAS<br />
+&nbsp; &nbsp; q<br />
+&nbsp; &nbsp; ※ (printf &#39;!2\n 4\n name 6 GAS\n q\n&#39;)<br />
+&nbsp; (output: index_energrps.ndx)<br />
+B. Energy minimization<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;topol.top<br />
+&nbsp; ・Makefile &nbsp;<br />
+&nbsp; B1. gmx grompp<br />
+&nbsp; (output: mdout.mdp, topol.tpr)<br />
+&nbsp; B2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; (output: confout.gro, ener.edr, md.log, traj.trr)<br />
+C. Equilibration : 1 ns, 300 K, NVT<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;index_energrps.ndx &nbsp;topol.top<br />
+&nbsp; ・Makefile ((change) grompp.mdp:nsteps = 10000 &nbsp; ; 0.01 ns)<br />
+&nbsp; C1. gmx grompp -maxwarn 1 -n index_energrps.ndx | tee gmx_grompp.log<br />
+&nbsp; (output: mdout.mdp, topol.tpr, gmx_grompp.log)<br />
+&nbsp; C2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; (output: confout.gro, ener.edr, md.log, state.cpt, state_prev.cpt, traj_comp.xtc)<br />
+D. Production run : 100 ns, 300 K, NVT (only ZIF-8 atoms are coupled to the thermal bath)<br />
+&nbsp; conf.gro &nbsp;grompp.mdp &nbsp;index_energrps.ndx &nbsp;topol.top<br />
+&nbsp; ・Makefile ((change) grompp.mdp:nsteps = 10000 &nbsp; ; 0.01 ns)<br />
+&nbsp; D1. gmx grompp -maxwarn 2 -n index_energrps.ndx 2&gt;&amp;1 | tee gmx_grompp.log<br />
+&nbsp; (output: mdout.mdp, topol.tpr, gmx_grompp.log)<br />
+&nbsp; D2. gmx mdrun -nice 5 -v -c confout.gro<br />
+&nbsp; (output: confout.gro, ener.edr, md.log, state.cpt, traj.trr, traj_comp.xtc)<br />
+&nbsp; D3. echo 3 | gmx trjconv -f traj.trr -s -o traj_vel_tempo.trr<br />
+&nbsp; D4. echo 0 | gmx trjconv -f traj_comp.xtc -dt 10 -o traj_dt10.xtc -s -pbc res<br />
+&nbsp; D5. echo 0 | gmx trjconv -f traj_comp.xtc -o traj_last2ns.xtc -b 98000 -s -pbc res<br />
+&nbsp; D6. gmx filter -f traj_comp.xtc -s -ol traj_filter_tmp.xtc -nf 200<br />
+&nbsp; &nbsp; &nbsp; echo 0 | gmx trjconv -f traj_filter_tmp.xtc -o traj_filter_lowpass200.xtc -s -pbc res<br />
+&nbsp; &nbsp; &nbsp; rm -f traj_filter_tmp.xtc<br />
+&nbsp; D7. echo 0 | gmx trjconv -f confout.gro -o resout.gro -s -pbc res<br />
+&nbsp; D8. test -s traj_vel_tempo.trr &amp;&amp; rm -f traj.trr<br />
+&nbsp; &nbsp; &nbsp; gzip traj_vel_tempo.trr<br />
+・Additional analysis steps<br />
+E. Calculation of Rotational autocorrelation funcions (for TEMPO molecule)<br />
+&nbsp; Makefile &nbsp;grompp.mdp &nbsp;tempo.pdb &nbsp;topol.top &nbsp;traj.xtc<br />
+F. Calculation of Spatial distribution functions (CO2, TEMPO atoms)<br />
+&nbsp; Makefile &nbsp;README.rst &nbsp;confout.gro &nbsp;topol.tpr &nbsp;traj.xtc &nbsp;traj.xtc.orig<br />
+G. Calculation of Distance distribution functions, counting number of CO2 molecules in central cage.<br />
+&nbsp; Makefile &nbsp;topol.tpr &nbsp;traj.xtc &nbsp;traj.xtc.orig<br />
+<br />
+[G1] a-anik/zif-8_md (gromacs)<br />
+&nbsp; https://github.com/a-anik/zif-8_md<br />
+<br />
+<br />
+◇ command [CO1]<br />
+・gmx insert molecules [-f [&lt;.gro/.g96/...&gt;]] [-ci [&lt;.gro/.g96/...&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[-ip [&lt;.dat&gt;]] [-o [&lt;.gro/.g96/...&gt;]] [-nice ]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[-box ] [-nmol ] [-try ] [-seed ]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[-radius ] [-scale ] [-dr ] [-rot ]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[-[no]allpair]<br />
+・gmx make_ndx [-f [&lt;.gro/.g96/...&gt;]] [-n [&lt;.ndx&gt; [...]]] [-o [&lt;.ndx&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;[-nice ] [-natoms ] [-[no]twin]<br />
+・gmx mdrun [-s [&lt;.tpr/.tpb/...&gt;]] [-o [&lt;.trr/.cpt/...&gt;]] [-x [&lt;.xtc/.tng&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-cpi [&lt;.cpt&gt;]] [-cpo [&lt;.cpt&gt;]] [-c [&lt;.gro/.g96/...&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-e [&lt;.edr&gt;]] [-g [&lt;.log&gt;]] [-dhdl [&lt;.xvg&gt;]] [-field [&lt;.xvg&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-table [&lt;.xvg&gt;]] [-tabletf [&lt;.xvg&gt;]] [-tablep [&lt;.xvg&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-tableb [&lt;.xvg&gt;]] [-rerun [&lt;.xtc/.trr/...&gt;]] [-tpi [&lt;.xvg&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-tpid [&lt;.xvg&gt;]] [-ei [&lt;.edi&gt;]] [-eo [&lt;.xvg&gt;]] [-devout [&lt;.xvg&gt;]]<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [-runav [&lt;.xvg&gt;]] [-px [&lt;.<br />
+・2&gt;&amp;1 (linux command)<br />
+&nbsp; combine &quot;stderr&quot; and &quot;stdout&quot; into the &quot;stdout.&quot;<br />
+・| tee *.log<br />
+&nbsp; show *.log file<br />
+・\n<br />
+&nbsp; line break (改行)<br />
+・ls -l<br />
+&nbsp; -&gt; (symbolic link)<br />
+&nbsp; see. top &gt; all<br />
+[CO1] http://manual.gromacs.org/archive/5.0/programs/gmx-insert-molecules.html<br />
+[CO2] http://manual.gromacs.org/archive/5.0.4/programs/gmx-make_ndx.html<br />
+[CO3] http://manual.gromacs.org/archive/5.0.4/programs/gmx-mdrun.html<br />
+------------------------------------------------------------------------------<br />
+■ VMD (ubuntu 18.04 LTS on windows 10 (64 bit))<br />
+(https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)<br />
+・LINUX_64 OpenGL, CUDA, OptiX, OSPRay&nbsp;<br />
+0. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+1. tar xvf vmd-1.9.4a29.bin.LINUXAMD64-CUDA9-OptiX510-OSPRay170.opengl.tar.tar<br />
+2. cd vmd-1.9.4a29<br />
+3. ./configure<br />
+4. cd src<br />
+5. sudo make install<br />
+6. vmd<br />
+<br />
+◇ (rlwrap: No match. case) (http://www.ks.uiuc.edu/Research/vmd/mailing_list/vmd-l/19158.html)<br />
+7. sudo gedit /usr/local/bin/vmd<br />
+-----before<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+&nbsp; &nbsp; if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+&nbsp; &nbsp; else&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+&nbsp; &nbsp; endif<br />
+&nbsp; endif<br />
+endif<br />
+-----<br />
+-----after<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+# &nbsp; &nbsp;if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+# &nbsp; &nbsp;else&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+# &nbsp; &nbsp;endif<br />
+# &nbsp;endif<br />
+endif<br />
+-----<br />
+8. vmd<br />
+※ 初めての場合、これから使用したいUsernameとPasswordを入力する<br />
+[VMD1] https://www.youtube.com/watch?v=ybI3R3BCLAE<br />
+[VMD2] https://mumeiyamibito.blogspot.com/2015/09/vmd.html<br />
+<br />
+□ charmm-gui(http://www.charmm-gui.org/)<br />
+&gt; Input Generator &gt; 「Membrane Builder」, 「Martini Maker」, etc &gt; download.tgz<br />
+[CHARMMGUI1] http://nuushi.hatenablog.com/entry/2017/07/08/021803<br />
+[CHARMMGUI2] http://www.ag.kagawa-u.ac.jp/charlesy/2016/10/27/膜タンパク質のモデリング-charmm-gui-amber-lipid14-force-field/<br />
+------------------------------------------------------------------------------<br />
+■ VMD (windows 10 (64 bit))<br />
+(https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)<br />
+<br />
+・Windows OpenGL<br />
+0. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+1. vmd193win32nocuda.msi<br />
+2. Next &gt;<br />
+3. Next &gt;<br />
+4. Install<br />
+5. Finish<br />
+※ 初めての場合、これから使用したいUsernameとPasswordを入力する<br />
+------------------------------------------------------------------------------<br />
+■ converter (mmCif to pdb) [C1, P1]<br />
+<br />
+□ Jmol<br />
+1. sudo apt install jmol<br />
+<br />
+□ Rasmol<br />
+1. sudo apt install rasmol<br />
+<br />
+□ PyMOL (open-source version)(pdbset) (Ubuntu 18.04 LTS (64 bit) [P1]<br />
+◇ Install<br />
+(https://github.com/schrodinger/pymol-open-source)<br />
+0. sudo apt install libglm-dev<br />
+&nbsp; sudo apt install libpng-dev<br />
+&nbsp; sudo apt install libglu1-mesa-dev mesa-common-dev freeglut3 freeglut3-dev<br />
+&nbsp; sudo apt install libglfw3-dev libxmu-dev libxi-dev libglu1-mesa&nbsp;<br />
+&nbsp; sudo apt install mesa-common-dev&nbsp;<br />
+&nbsp; sudo apt install libgl1-mesa-glx libgl1-mesa-dev<br />
+&nbsp; sudo apt-get install libx11-dev xorg-dev&nbsp;<br />
+&nbsp; sudo apt install libglfw3 libglfw3-dev<br />
+&nbsp; sudo apt install libglew-dev<br />
+1. git clone https://github.com/schrodinger/pymol-open-source.git<br />
+2. cd ~/pymol-open-source<br />
+3. python setup.py install --prefix=~/pymol-open-source<br />
+<br />
+◇ Usage<br />
+1. ~/pymol-open-source/bin/pymol<br />
+[P1] https://github.com/schrodinger/pymol-open-source/blob/master/INSTALL<br />
+<br />
+[C1] https://mmcif.pdbj.org/docs/software-resources.html<br />
+------------------------------------------------------------------------------<br />
+■ gro2lam&nbsp;<br />
+<br />
+◇ Install<br />
+1. wget https://raw.githubusercontent.com/hernanchavezthielemann/utils/master/grotolam/G2L_installer &amp;&amp; bash G2L_installer<br />
+<br />
+◇ Run<br />
+1. $HOME/GRO2LAM-*/run<br />
+<br />
+[C1] H. C. Thielemann et al., JMolModel(2019)25: 147&nbsp;<br />
+&nbsp; https://github.com/hernanchavezthielemann/GRO2LAM<br />
+------------------------------------------------------------------------------<br />
+■ GromPy (GCMC code) (ubuntu 18.04 LTS on windows 10 (64 bit))<br />
+(https://github.com/GromPy/GromPy)<br />
+<br />
+□ Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt list --upgradable<br />
+&nbsp; sudo apt install gcc build-essential<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install python-scipy<br />
+&nbsp; (pyenv global 2.7.15)<br />
+&nbsp; (pip install scipy)<br />
+1. git clone https://github.com/GromPy/GromPy.git<br />
+2. cd GromPy<br />
+&nbsp; cd gromacs<br />
+&nbsp; cd gromacs-4.0.5_HYBRID<br />
+3. ./configure --prefix=$PWD --enable-shared CFLAGS=&quot;-O2 -fPIC&quot; --with-gsl<br />
+4. make<br />
+5. make install<br />
+6. gedit gen_libmdrun0.sh<br />
+-----<br />
+#! /bin/bash<br />
+<br />
+KERNELDIR=$PWD/src/kernel<br />
+LIBMDRUNDIR=$KERNELDIR/libmdrun0<br />
+LIBGROMACSDIR=$PWD/lib<br />
+<br />
+if [ ! -e $LIBMDRUNDIR ]; then<br />
+&nbsp; mkdir $LIBMDRUNDIR<br />
+fi<br />
+<br />
+# in libmdrun0/ (na compilen, extracting objects from peviously compiled dlls):<br />
+cd $KERNELDIR<br />
+cp compute_io.o glaasje.o gctio.o ionize.o do_gct.o repl_ex.o xutils.o md.o mdrun.o genalg.o $LIBMDRUNDIR<br />
+cd $LIBMDRUNDIR<br />
+cp $LIBGROMACSDIR/libgmx.a ./<br />
+cp $LIBGROMACSDIR/libmd.a ./<br />
+ar -x libmd.a<br />
+ar -x libgmx.a<br />
+gcc -shared -Wl,-soname,mdrun.so.5 -o mdrun.so.5.0.0 *.o -lnsl -lfftw3f -lm<br />
+ln -sf mdrun.so.5.0.0 mdrun.so.5<br />
+ln -sf mdrun.so.5 mdrun.so<br />
+<br />
+exit<br />
+-----<br />
+7. ./gen_libmdrun0.sh<br />
+&nbsp; (or ./gen_libmdrun1.sh (must be modified above method))<br />
+<br />
+□ Test<br />
+1. cd ~/GromPy/TestMuVT<br />
+2. gedit run_eos.sh<br />
+-----<br />
+#! /bin/bash<br />
+<br />
+InputParFile=&quot;start.dat&quot;<br />
+MuList=`grep -v \# $InputParFile | awk &#39;{print $3}&#39; | sort -n`<br />
+TprDir=$PWD&quot;/tpr&quot;<br />
+PyLogFile=&quot;py.log&quot;<br />
+NMin=0<br />
+NMax=426<br />
+GCMCMol=&quot;W&quot;<br />
+<br />
+for i in $MuList<br />
+do<br />
+&nbsp; Mu=$i<br />
+&nbsp; NStart=`grep &quot;mu&quot;$i $InputParFile| awk &#39;{print $2}&#39;`<br />
+&nbsp; echo &quot;Performing MuVT simulation @ Mu=$Mu ...&quot;<br />
+&nbsp; mkdir &quot;mu$i&quot;<br />
+&nbsp; cd &quot;mu$i&quot;<br />
+&nbsp; time python $HOME/GromPy/testHybrid.py $TprDir $Mu $NStart $GCMCMol $NMin $NMax 2&gt; /dev/null &gt; $PyLogFile<br />
+&nbsp; gzip -f md.log<br />
+&nbsp; gzip -f py.log<br />
+&nbsp; echo<br />
+&nbsp; cd ../<br />
+done<br />
+<br />
+exit<br />
+-----<br />
+3. ./run_eos.sh<br />
+<br />
+※ WSLのubuntu 18.04 LTSをアンインストールして入れ直したら下記でコンパイルが最後までできた<br />
+&nbsp; ./configure --prefix=$PWD --enable-shared CFLAGS=&quot;-O2 -fPIC&quot; --with-gsl<br />
+※ python --version<br />
+※ python3 --version<br />
+&nbsp; Python 3.6.7<br />
+<br />
+□ Tutorial<br />
+1. cd $HOME/GromPy/GcmcTutorial<br />
+&nbsp; cp -r $HOME/GromPy/gromacs/gromacs-4.0.5_HYBRID/bin $HOME/GromPy/bin<br />
+&nbsp; cp -r $HOME/GromPy/gromacs/gromacs-4.0.5_HYBRID/lib $HOME/GromPy/lib<br />
+&nbsp; cp $HOME/GromPy/gromacs/gromacs-4.0.5_HYBRID/src/kernel/libmdrun0/mdrun.so $HOME/GromPy/lib/mdrun.so<br />
+&nbsp; cp $HOME/GromPy/lib/libmd.so $HOME/GromPy/lib/libmd_grompy.so<br />
+&nbsp; cp $HOME/GromPy/lib/libgmx.so $HOME/GromPy/lib/libgmx_grompy.so<br />
+&nbsp; cp $HOME/GromPy/lib/mdrun.so $HOME/GromPy/lib/libmdrun_grompy.so<br />
+&nbsp; export GMXINSTALLDIR=$HOME/GromPy<br />
+&nbsp; source ./SourceGromPyEnv.sh $GMXINSTALLDIR<br />
+&nbsp; export &nbsp;LIBCPATH=/lib/x86_64-linux-gnu/libc.so.6<br />
+(2. Calculation of the Lennard-Jones equation of state)<br />
+2. cd GcmcLj<br />
+3. mkdir mdeq<br />
+4. cd mdeq<br />
+5. $GMXINSTALLDIR/bin/grompp -f ../mdp/mdeq.mdp -c ../initstructure/water.gro -p ../top/W400.top<br />
+6. $GMXINSTALLDIR/bin/mdrun<br />
+7. cd ..<br />
+8. mkdir mdprod<br />
+9. cd mdprod<br />
+10. $GMXINSTALLDIR/bin/grompp -f ../mdp/mdprod.mdp -c ../mdeq/confout.gro -p ../top/W400.top -maxwarn 1<br />
+11. $GMXINSTALLDIR/bin/mdrun<br />
+(2.5. Calculation of the Lennard-Jones equation of state)<br />
+12. cd ../gro<br />
+13. ln -sf ../mdprod/confout.gro ./W400.gro<br />
+14. ./GenerateStartingStructures.sh 1 450 W400.gro<br />
+&nbsp; (gedit GenerateStartingStructures.sh<br />
+&nbsp; &nbsp;$HOME/GromPy/bin/editconf -f tmp.gro -o W$N.gro)<br />
+15. cd ../top<br />
+16. ./GenerateTopologies.sh 1 450 W400.top<br />
+17. cd ../tpr<br />
+18. ./GenerateTprs.sh 1 450<br />
+&nbsp; (gedit GenerateTprs.sh<br />
+&nbsp; &nbsp;$HOME/GromPy/bin/grompp -f ../mdp/gcmc.mdp -c ../gro/$GroFile -p ../top/$BaseName.top -o $BaseName.tpr -maxwarn)<br />
+19. cd ../<br />
+20. ./RunEos.sh<br />
+&nbsp; &nbsp;(gedit RunEos.sh<br />
+&nbsp; &nbsp;#GMXINSTALLDIR=&quot;../../gromacs/gromacs-4.0.7/gromacs-4.0.7-git/install/&quot;<br />
+&nbsp; &nbsp;#cd $GMXINSTALLDIR<br />
+&nbsp; &nbsp;#GMXINSTALLDIR=$PWD<br />
+&nbsp; &nbsp;#cd -<br />
+&nbsp; &nbsp;#source ../SourceGromPyEnv.sh $GMXINSTALLDIR<br />
+&nbsp; &nbsp;)<br />
+(3. Analysis)<br />
+21. ./DoBlockAveraging.sh<br />
+(*** buffer overflow detected ***: python terminated)<br />
+<br />
+※ (failed) ./configure --prefix=$PWD --enable-shared --with-gsl CFLAGS=&quot;-O2 -lgslcblas&quot;<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] GROMACSと連携ソフトウエアによる分子動力学計算<br />
+&nbsp; https://staff.aist.go.jp/makoto-yoneya/MDforKOUBUNSHI/<br />
+[2] Gromacsの使用方法全般<br />
+&nbsp; https://bio-info.biz/article/ato_gromacs_basic_usage.html<br />
+[3] archlinux (GROMACS)<br />
+&nbsp; https://wiki.archlinux.jp/index.php/GROMACS<br />
+[4] Gromacsをとりあえず使ってみる<br />
+&nbsp; http://nuushi.hatenablog.com/entry/2017/07/08/021803<br />
+[5] Install<br />
+&nbsp; http://manual.gromacs.org/documentation/current/install-guide/index.html<br />
+[6] GUI<br />
+&nbsp; http://www.gromacs.org/WIKI-import/GUI<br />
+[7] Gromacsのインストールとパフォーマンスの検証 on Docker and CentOS 7<br />
+&nbsp; https://qiita.com/hnishi/items/aef88a29c9f609efa4cb<br />
+[8] Tutorial: Using GromPy in GCMC mode<br />
+&nbsp; https://github.com/GromPy/GromPy/wiki/Tutorial:-Using-GromPy-in-GCMC-mode<br />
+[9] Supporting Information for Determination of Ionic Hydration Free Energies with Grand Canonical Monte Carlo/Molecular Dynamics Simulations in Explicit Water&nbsp;<br />
+&nbsp; https://pubs.acs.org/doi/suppl/10.1021/acs.jctc.8b00604/suppl_file/ct8b00604_si_001.pdf<br />
+[10] R. Pool et al., JournalofComputationalChemistry2012,33,1207?1214<br />
+&nbsp; https://www.mpibpc.mpg.de/9486644/Pool_2012_LCompChem_33_1207-1214.pdf<br />
+------------------------------------------------------------------------------<br />
+■ GromPy (GCMC code) (ubuntu 18.04 LTS on windows 10 (64 bit)) (failed)<br />
+(https://github.com/GromPy/GromPy/wiki/Tutorial:-Using-GromPy-in-GCMC-mode)<br />
+<br />
+□ Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt list --upgradable<br />
+&nbsp; sudo apt install gcc build-essential<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt-get install autoconf<br />
+&nbsp; sudo apt-get install libtool<br />
+&nbsp; sudo apt-get install libtool-bin<br />
+1. git clone https://github.com/GromPy/GromPy.git<br />
+2. cd GromPy<br />
+&nbsp; cd gromacs<br />
+&nbsp; cd gromacs-4.0.7<br />
+&nbsp; tar -xzf gromacs-4.0.7-git.tar.gz<br />
+3. cd gromacs-4.0.7-git<br />
+&nbsp; patch -p1 &lt; ../grompy_4.0.7_patch.diff<br />
+&nbsp; ./bootstrap<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/Makefile.in ./Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/Makefile.in ./src/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/Makefile.in ./src/gmxlib/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/gmx_blas/Makefile.in ./src/gmxlib/gmx_blas/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/gmx_lapack/Makefile.in ./src/gmxlib/gmx_lapack/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/Makefile.in ./src/gmxlib/nonbonded/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel/Makefile.in ./src/gmxlib/nonbonded/nb_kernel/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ia32_3dnow/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ia32_3dnow/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ia32_sse/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ia32_sse/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ia32_sse2/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ia32_sse2/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_x86_64_sse/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_x86_64_sse/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_x86_64_sse2/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_x86_64_sse2/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ppc_altivec/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ppc_altivec/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ia64_single/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ia64_single/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_ia64_double/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_ia64_double/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/gmxlib/nonbonded/nb_kernel_bluegene/Makefile.in ./src/gmxlib/nonbonded/nb_kernel_bluegene/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/include/Makefile.in ./include/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/include/types/Makefile.in ./include/types/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/mdlib/Makefile.in ./src/mdlib/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/kernel/Makefile.in ./src/kernel/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/tools/Makefile.in ./src/tools/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/ngmx/Makefile.in ./src/ngmx/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/src/contrib/Makefile.in ./src/contrib/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/scripts/Makefile.in ./scripts/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/admin/Makefile.in ./admin/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/Makefile.in ./share/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/Makefile.in ./share/tutor/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/gmxdemo/Makefile.in ./share/tutor/gmxdemo/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/nmr1/Makefile.in ./share/tutor/nmr1/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/nmr2/Makefile.in ./share/tutor/nmr2/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/water/Makefile.in ./share/tutor/water/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/mixed/Makefile.in ./share/tutor/mixed/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/methanol/Makefile.in ./share/tutor/methanol/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/tutor/speptide/Makefile.in ./share/tutor/speptide/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/template/Makefile.in ./share/template/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/top/Makefile.in ./share/top/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/html/Makefile.in ./share/html/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/html/images/Makefile.in ./share/html/images/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/share/html/online/Makefile.in ./share/html/online/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/man/Makefile.in ./man/Makefile.in<br />
+&nbsp; cp ../../gromacs-4.0.5_HYBRID/man/man1/Makefile.in ./man/man1/Makefile.in<br />
+&nbsp; ./configure --enable-shared --enable-grompy --prefix=$PWD/install CFLAGS=&quot;-O2 -fPIC&quot;<br />
+&nbsp; make<br />
+&nbsp; make install<br />
+&nbsp; GMXINSTALLDIR=$PWD/install<br />
+<br />
+□ Tutorial<br />
+1. cd ../../../GcmcTutorial<br />
+&nbsp; source $GMXINSTALLDIR/bin/GMXRC<br />
+&nbsp; source ./SourceGromPyEnv.sh $GMXINSTALLDIR<br />
+------------------------------------------------------------------------------<br />
+□ pyenv (+virtualenv) (ubuntu 18.04 LTS on windows 10 (64 bit)) (failed)<br />
+<br />
+◇ Install (pyenv &amp; virtualenv)<br />
+&nbsp; git clone https://github.com/yyuu/pyenv.git ~/.pyenv<br />
+&nbsp; git clone https://github.com/yyuu/pyenv-virtualenv.git ~/.pyenv/plugins/pyenv-virtualenv<br />
+&nbsp; echo &#39;export PYENV_ROOT=$HOME/.pyenv<br />
+&nbsp; export PATH=$PYENV_ROOT/bin:$PATH<br />
+&nbsp; eval &quot;$(pyenv init -)&quot;<br />
+&nbsp; eval &quot;$(pyenv virtualenv-init -)&quot;&#39; &gt;&gt; ~/.bash_profile<br />
+※ 文字の表示が白だけになってしまったので下記のようにした。<br />
+echo &#39;<br />
+# pyenv<br />
+export PYENV_ROOT=$HOME/.pyenv<br />
+export PATH=$PYENV_ROOT/bin:$PATH<br />
+eval &quot;$(pyenv init -)&quot;<br />
+eval &quot;$(pyenv virtualenv-init -)&quot;&#39; &gt;&gt; ~/.bashrc<br />
+<br />
+◇ Setting (pyenv) (failed)<br />
+0. sudo apt-get install zlib1g-dev<br />
+&nbsp; pyenv install --list<br />
+1. pyenv install 2.7.12<br />
+2. pyenv install 3.6.7<br />
+<br />
+◇ Usage (pyenv)<br />
+1. pyenv global 2.7.12<br />
+&nbsp; (pyenv local 2.7.12)<br />
+2. pip install (module name)<br />
+<br />
+[py1] https://github.com/KodairaTomonori/Qiita/blob/master/shell/construct_pyenv.sh<br />
+[py2] https://qiita.com/Kodaira_/items/feadfef9add468e3a85b<br />
+[py3] https://qiita.com/mogom625/items/b1b673f530a05ec6b423<br />
+[py4] https://www.qoosky.io/techs/0cf33bd9ac<br />
+[py5] https://qiita.com/yossyA/items/f22e2eea5401b6a8260f<br />
+------------------------------------------------------------------------------<br />
+□ PyMOL 2.3 (open-source version)(Ubuntu 18.04 LTS (64 bit) (failed)<br />
+<br />
+◇ Install<br />
+1. sudo apt install freeglut3-dev python2.7-dev python3.6-dev libxml2-dev gcc tcl8.6-dev tk8.6-dev python3-tk libmsgpack-dev libpng-dev libglew2.0 libfreetype6-dev libglm-dev libglew-dev python-pyqt5.qtopengl<br />
+2. sudo apt update<br />
+&nbsp; sudo apt install python3-pip<br />
+&nbsp; sudo pip3 install --upgrade pip<br />
+&nbsp; sudo pip3 install sip pyqt5 pmw<br />
+&nbsp; sudo pip3 install msgpack-python<br />
+3. sudo apt install ninja-build cmake<br />
+&nbsp; wget https://github.com/rcsb/mmtf-cpp/archive/v1.0.0.tar.gz<br />
+&nbsp; tar zxvf v1.0.0.tar.gz<br />
+&nbsp; cd mmtf-cpp-1.0.0<br />
+&nbsp; mkdir build ; cd build<br />
+&nbsp; cmake -G Ninja ..<br />
+&nbsp; sudo ninja install<br />
+&nbsp; cd ~<br />
+4. wget https://github.com/schrodinger/pymol-open-source/archive/v2.3.0.tar.gz<br />
+&nbsp; tar zxvf v2.3.0.tar.gz<br />
+&nbsp; cd pymol-open-source-2.3.0<br />
+5. python setup.py build install --prefix=~/pymol/2.3 --glut --use-msgpackc=c++11<br />
+&nbsp; (retry: rm -rf build)<br />
+◇ Usage<br />
+1. ~/pymol/2.3/bin/pymol<br />
+※ https://qiita.com/Ag_smith/items/58e917710c4eddab46ee<br />
+※ 私の場合、python --versionとするとPython 2.7.15rc1と表示されるので上手くいかないのだろう。<br />
+<br />
+□ PyMOL (open-source) (Ubuntu 18.04 LTS (64 bit) (failed)<br />
+(https://sourceforge.net/projects/pymol/)<br />
+1. tar xvf pymol-v2.1.0.tar.bz2<br />
+2. cd ~/pymol<br />
+3. python setup.py install --prefix=~/pymol<br />
+◇ Usage<br />
+1. ~/pymol/bin/pymol<br />
+<br />
+□ Mercury (Ubuntu 18.04 LTS (64 bit)) (failed)<br />
+(https://www.ccdc.cam.ac.uk/solutions/csd-system/components/mercury/)<br />
+・Download Mercury<br />
+&nbsp; Mercury (incoporating enCIFer)<br />
+&nbsp; Mercury 4.1.3 Linux 64-bit &gt; Download<br />
+&nbsp; (click) [Agree &amp; Download]<br />
+1. chmod +x mercurystandalone-4.1.3-linux-x64-installer.run<br />
+2. sudo ./mercurystandalone-4.1.3-linux-x64-installer.run<br />
+3. All [Next&gt;] &gt; [Finish]<br />
+4. /opt/Mercury/bin/mercury<br />
+<br />
+□ cif2pdb (Ubuntu 18.04 LTS (64 bit) (failed)<br />
+(http://www.iucr.org/resources/cif/software/cif2pdb)<br />
+・compressed shell archive (ciftbx.shar.Z)<br />
+1. mkdir base<br />
+&nbsp; cd base<br />
+&nbsp; wget http://www.iucr.org/__data/iucr/cif/software/ciftbx/ciftbx.shar.Z<br />
+&nbsp; uncompress ciftbx.shar.Z<br />
+&nbsp; sh ciftbx.shar<br />
+&nbsp; cd ciftbx.src<br />
+&nbsp; make all FC=gfortran<br />
+&nbsp; make test&nbsp;<br />
+・compressed shell archive (cif2pdb.shar.Z)<br />
+2. cd ~/base<br />
+&nbsp; mkdir cif2pdb_1.0.2<br />
+&nbsp; cd cif2pdb_1.0.2<br />
+&nbsp; wget http://www.iucr.org/__data/iucr/cif/software/ciftbx/cif2pdb.shar.Z<br />
+&nbsp; uncompress cif2pdb.shar.Z<br />
+&nbsp; sh cif2pdb.shar<br />
+<br />
+□ CIFTr (Ubuntu 18.04 LTS (64 bit) (failed)<br />
+(http://sw-tools.pdb.org/apps/CIFTr/index.html)<br />
+・ciftr-v2.053-prod-src.tar.gz<br />
+0. wget https://sw-tools.rcsb.org/apps/CIFTr/ciftr-v2.053-prod-src.tar.gz<br />
+1. zcat ciftr-v2.053-prod-src.tar.gz | tar -xf -&nbsp;<br />
+2. cd ciftr-v2.053-prod-src<br />
+3. RCSBROOT=/home/username/ciftr-vv2.053; export RCSBROOT<br />
+&nbsp; PATH=&quot;$RCSBROOT/bin:&quot;$PATH; export PATH<br />
+4. cd ciftr-v*<br />
+4. make<br />
+5. make binary<br />
+6. ./test.sh<br />
+<br />
+□ PDBx/mmCIF (Ubuntu 18.04 LTS (64 bit) (failed)<br />
+(http://mmcif.wwpdb.org/docs/faqs/pdbx-mmcif-faq-general.html)<br />
+・PDB Exchange Dictionary (PDBx/mmCIF) Version 5.0 supporting the data files in the current PDB archive<br />
+&nbsp; Dictionary Text (gz)<br />
+0. sudo apt install cvs<br />
+&nbsp; wget http://mmcif.wwpdb.org/dictionaries/ascii/mmcif_pdbx_v50.dic.gz<br />
+1. gunzip mmcif_pdbx_v50.dic.gz<br />
+2. mmcif_pdbx_v50.dic<br />
+<br />
+[C1] http://mmcif.wwpdb.org/docs/software-resources.html<br />
+------------------------------------------------------------------------------

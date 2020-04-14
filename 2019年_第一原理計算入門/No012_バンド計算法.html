@@ -1,0 +1,252 @@
+<p>　以下には、セットアップが容易で入力ファイルの作成が容易なバンド計算コードから解説を進めていく。<br />
+------------------------------------------------------------------------------<br />
+■ Windows OSの場合<br />
+<br />
+--------------------------------------------------------<br />
+□ Phase : <a href="http://www.ciss.iis.u-tokyo.ac.jp/dl/">http://www.ciss.iis.u-tokyo.ac.jp/dl/</a>　<br />
+Phase_v900.tar.gzを解凍するとwbinの中に実行ファイルがある。<br />
+マニュアルはdocとtoolsにある。<br />
+CISSPHASE-Viewer_v320_win.zipを解凍し、マニュアルに従えば良い。<br />
+VESTAでcifファイルを作成して読み取ればかなり楽な作業になる。<br />
+VESTA : <a href="http://www.geocities.jp/kmo_mma/crystal/jp/vesta.html">http://www.geocities.jp/kmo_mma/crystal/jp/vesta.html</a>&nbsp;<br />
+<br />
+--------------------------------------------------------<br />
+□ ABINIT : <a href="http://www.abinit.org/downloads/source-packages/abinit-1">http://www.abinit.org/downloads/source-packages/abinit-1</a>　<br />
+1)&nbsp;ABINITコードのダウンロード<br />
+&nbsp; 最新版はWindows OSが64bitタイプであることが必要。<br />
+&nbsp; （最新版　ABINIT 6.6.2 が配布されている。2011/4/5 : 編集中）<br />
+&nbsp;&nbsp; 32bit type は下記から入手可能（OSX Macintosh用もある）<br />
+&nbsp; <a href="http://www.etsf.eu/resources/software/etsf_software_repository">http://www.etsf.eu/resources/software/etsf_software_repository</a><br />
+&nbsp; <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=889">http://forum.abinit.org/viewtopic.php?f=2&amp;t=889</a>　（並列計算）<br />
+2) 環境変数の設定<br />
+&nbsp; windows 7（上記のファイルをCドライブに解凍した場合）<br />
+&nbsp; コントロールパネル &rarr; システムとセキュリティ &rarr; システム &rarr;<br />
+&nbsp; &rarr; システムの詳細設定 &rarr; 環境変数（N） &rarr; PATH で編集 &rarr;<br />
+&nbsp; &rarr; ;C:\abinit-6.4.3_prescottSSE3\abinit-6.4.3\bin を最後に追加する<br />
+&nbsp; （\は円マークにして下さい）<br />
+&nbsp; windows XPなどでも似たように環境変数が設定できる。<br />
+3) 入力ファイルの設定<br />
+&nbsp; abinit-6.4.3 &rarr; share &rarr; abinit &rarr; tutorial &rarr; Inputを参考にすればよい。<br />
+&nbsp; 擬ポテンシャルは下記にある<br />
+&nbsp; abinit-6.4.3 &rarr; share &rarr; abinit &rarr;&nbsp;Psps_for_tests &rarr; HGH<br />
+&nbsp; （注：Inputフォルダで計算を行いたい場合は、<br />
+&nbsp; ../t11.in&nbsp; を　t11.in　に、<br />
+&nbsp; ../../../Psps_for_tests/01h.pspgh&nbsp;を<br />
+&nbsp; ../../Psps_for_tests/01h.pspgh<br />
+&nbsp; に変えることが必要。../は上のフォルダを参照するという意味）<br />
+4) 計算の実行は下記のようになる<br />
+&nbsp; abinit &lt; input.files&gt; output.log<br />
+&nbsp; 並列計算の場合 (4の部分は並列計算したいCPUの数を入力する）<br />
+&nbsp; mpiexec -np 4 abinit &lt; input.files &gt; output.log<br />
+&nbsp; ヴァージョンの古いものは下記が参考になる<br />
+&nbsp; <a href="http://www.fml.t.u-tokyo.ac.jp/MD_WS/For_student/abinit_install.pdf">http://www.fml.t.u-tokyo.ac.jp/MD_WS/For_student/abinit_install.pdf</a>&nbsp;<br />
+&nbsp; GUIには、Vine toolkit(無料）やMAPS(有料)がある。<br />
+&nbsp; Vien toolkit : <a href="http://vinetoolkit.org/">http://vinetoolkit.org/</a><br />
+&nbsp; (導入に必要なソフトが多くあるため、windowsでは初学者にあまり勧められない)<br />
+&nbsp; その他のGUI<br />
+&nbsp;&nbsp;<a href="http://gnu.ethz.ch/debian/abinit/abinit-5.3.4/doc/users/FAQ.html#GUI">http://gnu.ethz.ch/debian/abinit/abinit-5.3.4/doc/users/FAQ.html#GUI</a><br />
+MAPS : <a href="http://www.scienomics.com/Products/quantum_simulation/abinit/index.php">http://www.scienomics.com/Products/quantum_simulation/abinit/index.php</a>　<br />
+<br />
+使い方はABINITのHP以外にも下記のHPを参照しておくとよい。<br />
+<a href="http://www17.atpages.jp/~tsukagoshi/pukiwiki/index.php?%C2%E8%B0%EC%B8%B6%CD%FD%B7%D7%BB%BB%A5%B3%A1%BC%A5%C9#a02e55fe">http://www17.atpages.jp/~tsukagoshi/pukiwiki/index.php?%C2%E8%B0%EC%B8%B6%CD%FD%B7%D7%BB%BB%A5%B3%A1%BC%A5%C9#a02e55fe</a><br />
+バンド構造の描写には AbinitBandStructureMaker.py を探してみると良いだろう。<br />
+<br />
+--------------------------------------------------------<br />
+□ TOMBO : <a href="http://www-lab.imr.edu/~marcel/tombo/tombo.html">http://www-lab.imr.edu/~marcel/tombo/tombo.html</a><br />
+&nbsp; (編集中)　<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Linux OSの場合 (再コンパイルする場合は、make clean を入力する）<br />
+<a href="http://www.etsf.eu/resources/software/etsf_software_repository">http://www.etsf.eu/resources/software/etsf_software_repository</a>　から用いているPCのCPUが一緒であれば、binaryやrpm, dbe形式のデータを手に入れてより容易に第一原理計算コードをインストールすることができる。（以下はCentOS 5.5 32bitを用いた結果）<br />
+--------------------------------------------------------<br />
+□ PWscf : <a href="http://www.quantum-espresso.org/">http://www.quantum-espresso.org/</a>　<br />
+セットアップは容易。PWguiというGUIもある。<br />
+マニュアルに従って設定すればよい。下記に成功した例を示します。<br />
+cd espresso-4.2<br />
+./configure<br />
+make all<br />
+（＊ xspectra.xを得たい場合はmake xspectra とmake all 後に入力する。　）<br />
+<br />
+--------------------------------------------------------<br />
+□ ABCAP : <a href="http://www.ciss.iis.u-tokyo.ac.jp/dl/">http://www.ciss.iis.u-tokyo.ac.jp/dl/</a>　<br />
+&nbsp; 電気伝導度の計算が可能なプログラムは東京理科大学理工学部物理学科の浜田教授に御願すると頂ける。結晶構造が空間群P1以外の物質は、TSPACEのHPにあるgenerator.tableを参考にして入力ファイルを作成して下さい。<br />
+TSPACE : <a href="http://www.cmp.sanken.osaka-u.ac.jp/~yanase/">http://www.cmp.sanken.osaka-u.ac.jp/~yanase/</a><br />
+このコードの特徴として、非占有準位のバンドをズラすことができる。また、FLAPW法であることも覚えておきたい。<br />
+gfortran の場合では、<br />
+FC = gfortran<br />
+FO = &#39;-static&#39;　<br />
+という簡素なオプションでも十分に動作する。<br />
+Intel Fortran Compilerでオプションを調べたい場合は、<br />
+&nbsp; ifort -help &gt; namual.txt<br />
+とすれば詳細が分かる。慣れてきたら使用しているPCに最適なオプションを設定すればよい。<br />
+<br />
+--------------------------------------------------------<br />
+□ Phase : <a href="http://www.ciss.iis.u-tokyo.ac.jp/dl/">http://www.ciss.iis.u-tokyo.ac.jp/dl/</a>　<br />
+&nbsp; 結晶構造が空間群P1以外の物質は、TSPACEのHPにあるgenerator.tableを参考にして入力ファイルを作成して下さい。CISSPHASE-Viewerが利用可能なので、VESTAを用いてcifファイルを作ると良い。スーパーセルの作成で、空間群の設定に迷ったらP1とするとよい。（初心者はSuppoted&nbsp; FFT librariesで0) Builte-in FFT subroutinesを選択するとよい）<br />
+TSPACE : <a href="http://www.cmp.sanken.osaka-u.ac.jp/~yanase/">http://www.cmp.sanken.osaka-u.ac.jp/~yanase/</a><br />
+VESTA : <a href="http://www.geocities.jp/kmo_mma/crystal/jp/vesta.html">http://www.geocities.jp/kmo_mma/crystal/jp/vesta.html</a><br />
+<br />
+--------------------------------------------------------<br />
+□ WIEN2k : <a href="http://www.wien2k.at/">http://www.wien2k.at/</a>　<br />
+&nbsp; Versionによって計算できる系があるので、幾つかのversionを選択できるようにしておくと良い。set upは左の欄のWIEN2kで解説している。WIEN2k_9.1（またはそれ以前）とWIEN2k_12の二つを準備しておくと良いだろう。<br />
+<br />
+--------------------------------------------------------<br />
+□ exciting : <a href="http://exciting-code.org/exciting-web">http://exciting-code.org/exciting-web</a>　<br />
+tar xvf exciting.helium.2010.12.17.gz<br />
+cd exciting<br />
+make<br />
+Intel Fortran Compiler 11.1.072では成功。gfortranでの方法を調査中。<br />
+<br />
+--------------------------------------------------------<br />
+□ OpenMX :&nbsp;<a href="http://www.openmx-square.org/">http://www.openmx-square.org/</a>　<br />
+C言語でプログラムが作られているので、上記までのFortranベースのコードとは少し異なる。（FFTW2またはFFTW3のインストールが必要だが難しくない）<br />
+&nbsp; tar zxvf openmx3.5.tar.gz<br />
+&nbsp; cd openmx3.5<br />
+&nbsp; cd source<br />
+&nbsp; source の makefile を下記の例のように書き換える。<br />
+&nbsp; Intel C++ Compilerの場合<br />
+&nbsp;&nbsp;&nbsp; CC = icc -O3 -Dnompi -Dnoomp -I/usr/local/include -I/home/centos5/intel/Compiler/11.1/075/mkl/include<br />
+&nbsp; LIB = -L/usr/local/lib -lfftw3 -L/opt/intel/Compiler/11.1/075/mkl/lib/32 -lmkl_intel -lmkl_sequential -lmkl_core -lpthread -L/usr/lib -lpthread -i-static<br />
+&nbsp; make install<br />
+<br />
+--------------------------------------------------------<br />
+□ AkaiKKR : <a href="http://kkr.phys.sci.osaka-u.ac.jp/jp/">http://kkr.phys.sci.osaka-u.ac.jp/jp/</a>　<br />
+&nbsp; マニュアルが非常に良く出来ているので、これらを読んでおくと他の計算コードの理解にも役立つ。<br />
+<br />
+--------------------------------------------------------<br />
+□ siesta : <a href="http://www.icmab.es/siesta/index.php">http://www.icmab.es/siesta/index.php</a>&nbsp;<br />
+アフィニティサイエンス :<br />
+<a href="http://www.affinity-science.com/siesta/installation.html">http://www.affinity-science.com/siesta/installation.html</a><br />
+使用方法 : <a href="http://www.affinity-science.com/siesta/quickstart.html">http://www.affinity-science.com/siesta/quickstart.html</a>&nbsp;<br />
+siesta-2.0.2 (下記の方法で駄目な場合は、BLAS &amp; LAPACKを入れて下さい）<br />
+tar zxvf siesta-2.0.2.tgz<br />
+cd siesta-2.0.2<br />
+cd Src<br />
+gfortranでは下記になる。　　　<br />
+./configure FC=gfortran<br />
+make<br />
+Intel Fortran Compilerでは下記になる。<br />
+./configure FC=ifort<br />
+make<br />
+<br />
+--------------------------------------------------------<br />
+□ Yambo : <a href="http://www.yambo-code.org/">http://www.yambo-code.org/</a>&nbsp;<br />
+（利用にはABINIT or PWscfの結果が必要）<br />
+Intel Fortran Compilerでは下記になる。<br />
+&nbsp; tar zxvf yambo-3.2.1-r.448.tar.gz<br />
+&nbsp; cd yambo-3.2.1-r.448<br />
+&nbsp; --with-iotk=&#39;/home/centos5/PWscf/espresso-4.2.1/iotk&#39; --with-p2y=4.0<br />
+&nbsp; make yambo interfaces ypp<br />
+参考HP : <a href="http://nitrogen14.blog51.fc2.com/blog-entry-45.html">http://nitrogen14.blog51.fc2.com/blog-entry-45.html</a><br />
+<br />
+--------------------------------------------------------<br />
+上記まではIntel Fortran&nbsp;CompilerとそのMKLがインストール出来ているとセットアップが容易に行える第一原理計算コードである。&nbsp; BLASとLAPACK及びMPIなどを導入すると下記のセットアップが容易になる。<br />
+<br />
+□ BigDFT : <a href="http://inac.cea.fr/L_Sim/BigDFT/">http://inac.cea.fr/L_Sim/BigDFT/</a>&nbsp;<br />
+(1.5.1はコンパイルが途中で止まった。1.4.0をお勧めしたい）<br />
+tar zxvf bigdft-1.4.0.tar.gz<br />
+cd bigdft-1.4.0<br />
+gfortranの場合　（gfortran でBLAS, LAPACKをコンパイルすることが必要)<br />
+&nbsp; ./configure<br />
+&nbsp; make<br />
+&nbsp; make install<br />
+Intel Fortran Compilerの場合<br />
+&nbsp; ./configure FC=ifort --with-ext-linalg=&quot;-lmkl_intel -lmkl_sequential -lmkl_core -lpthread&quot; --with-ext-linalg-path=&quot;-L/opt/intel/Compiler/11.1/069/mkl/lib/32&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;make<br />
+&nbsp;&nbsp;&nbsp; make install<br />
+srcの中に実行ファイルが出来ていれば成功である。<br />
+<br />
+--------------------------------------------------------<br />
+□ FLEUR : <a href="http://www.flapw.de/fleur_features.shtml">http://www.flapw.de/fleur_features.shtml</a><br />
+&nbsp;&nbsp;&nbsp; (andLinux ）<br />
+&nbsp; wannier90 :&nbsp;<a href="http://wannier.org/index.html">http://wannier.org/index.html</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tar zxvf wannier<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cd wannier*&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Intel&nbsp;fotrtran&nbsp;の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp ./config/make.sys.ifort ./make.sys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make.sys を開き、対応するパスを記入する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIBDIR =&nbsp;/opt/intel/Compiler/11.1/069/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIBS =&nbsp;-L$(LIBDIR)&nbsp; -lmkl_intel -lmkl_sequential -lmkl_core -lpthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; gfortran の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cp ./confi/make.sys.gfort ./make.sys<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make.sys を開き、使いたいライブラリの#を除く。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; よく分からない場合は、NETLIB&nbsp;LAPACK and BLAS&nbsp;で<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #LIBDIRと#LIBSの#を削除してSAVE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;make doc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make test<br />
+<br />
+&nbsp;&nbsp;&nbsp; FLEUR :&nbsp;<a href="http://www.flapw.de/pm/index.php?n=Main.HomePage">http://www.flapw.de/pm/index.php?n=Main.HomePage</a>&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;tar zxvf v26b.tgz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd v26b<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Imakefile で、#define の後の部分を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /usr/local/intel/mkl/current/lib/32 を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/opt/intel/Compiler/11.1/064/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/usr/local/intel/fc/current/lib&nbsp;を書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;/opt/intel/Compiler/11.1/064/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 最初のFFLAGS を #FFLAGS にする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LD_LIBRARY_PATH にある -lmkl を下記に書き換える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -lmkl_intel -lmkl_sequential -lmkl_core<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Imakefile で、欲しい計算方法を#define の後の部分で書き加える<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #define apw (APW+lo法、場合によってはLAPWよりも50%速くなる)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #define soc (spin-orbit coupling 計算を可能にする)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;などなど<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; imake<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; make fleur.x inpgen.x<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;再度コンパイルする場合は、make rmall の後に imake<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;書き換えは下記の通り<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;#FFLAGS= -cm -W0 -g -r8 -assume byterecl<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/intel/Compiler/11.1/064/mkl/lib/32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LDFLAGS= -L/opt/intel/Compiler/11.1/064/mkl/lib/32 -lmkl_intel -lmkl_sequential -lmkl_core -lguide -lpthread -i_dynamic \<br />
+-Wl,-rpath=/opt/intel/Compiler/11.1/064/mkl/lib/32 -Wl,-rpath=/opt/intel/Compiler/11.1/064/lib<br />
+<br />
+&nbsp;&nbsp;&nbsp; References : <a href="http://nitrogen14.blog51.fc2.com/blog-entry-66.html">http://nitrogen14.blog51.fc2.com/blog-entry-66.html</a><br />
+<br />
+--------------------------------------------------------<br />
+□ GPAW : https://wiki.fysik.dtu.dk/gpaw/　（再調査中）<br />
+（CentOSなどでは yum install を使用した方法も上記HPに解説されている。そちらの方が楽かもしれない。余裕があれば試してみるのがよい）<br />
+http://www.csc.fi/english/csc/courses/archive/gpaw-2008-01<br />
+pythonによって書かれているので、NumPy及びpython-devが必要になる。<br />
+<br />
+NumPy : <a href="http://www.scipy.org/Download">http://www.scipy.org/Download</a> 　<br />
+tar zxvf numpy-1.6.0.b1.tar.gz<br />
+cd numpy-1.6.0b1<br />
+python setup.py build<br />
+python setup.py install<br />
+以上でNumPyをセットアップしたら下記を行います。<br />
+<br />
+ASEのインストール<br />
+<a href="https://wiki.fysik.dtu.dk/ase/">https://wiki.fysik.dtu.dk/ase/</a><br />
+tar zxvf python-ase-3.5.0.2101.tar.gz<br />
+cd python-ase-3.5.0.2101<br />
+python setup.py install<br />
+<br />
+Atomic PAW Setupsの設定<br />
+<a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html#setups">https://wiki.fysik.dtu.dk/gpaw/setups/setups.html#setups</a> &nbsp;<br />
+tar zxvf gpaw-setups-0.8.7929.tar.gz<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;cd gpaw-setups-0.8.7929<br />
+&nbsp;&nbsp;&nbsp;&nbsp; gunzip *.gz<br />
+.bashrcに下記を書き込みます。<br />
+export GPAW_SETUP_PATH=${HOME}/gpaw-setups-0.8.7929<br />
+${HOME}はgpaw-setups-0.8.7929.tar.gzを解凍したディレクトリ<br />
+<br />
+GPAWのインストール (調査中）<br />
+tar zxvf gpaw-0.8.0.7895.tar.gz<br />
+cd gpaw-0.8.0.7895<br />
+python setup.py install<br />
+参考HP : <a href="http://www.cybernet.co.jp/quantumwise/example/tips/tips-10.html">http://www.cybernet.co.jp/quantumwise/example/tips/tips-10.html</a><br />
+<br />
+--------------------------------------------------------<br />
+□ ABINIT : <a href="http://www.abinit.org/downloads/source-packages/abinit-1">http://www.abinit.org/downloads/source-packages/abinit-1</a><br />
+<br />
+--------------------------------------------------------<br />
+□ EXC : <a href="http://theory.polytechnique.fr/codes/exc/">http://theory.polytechnique.fr/codes/exc/</a><br />
+（利用にはABINITの結果が必要）<br />
+<br />
+--------------------------------------------------------<br />
+□ CASTEP :&nbsp;（著者が利用できないので取り扱わない）<br />
+利用方法: <a href="http://www.aki.che.tohoku.ac.jp/~miyatani/ryosi.html">http://www.aki.che.tohoku.ac.jp/~miyatani/ryosi.html</a><br />
+<br />
+------------------------------------------------------------------------------</p>

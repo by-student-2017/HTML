@@ -1,0 +1,122 @@
+QualX2 (http://www.ba.ic.cnr.it/softwareic/qualx/)<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1-3]<br />
+<br />
+・QualX2<br />
+&nbsp; 粉末X線回折パターンの定性分析用ソフト<br />
+&nbsp; http://www.ba.ic.cnr.it/softwareic/qualx/<br />
+<br />
+・POW_COD<br />
+&nbsp; 粉末X線回折データベース<br />
+&nbsp; http://www.ba.ic.cnr.it/softwareic/qualx/search-match/database/<br />
+<br />
+[1] QualX2（粉末X線回折パターンの定性分析用ソフト）<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?QualX2<br />
+[2] COD_POW（粉末X線回折データベース）<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?COD_POW%A4%CB%A4%C4%A4%A4%A4%C6<br />
+[3] Software Ic (Institute of Crystallography - CNR - Bari)<br />
+&nbsp; http://www.ba.ic.cnr.it/softwareic/<br />
+※ イタリアの結晶学研究所: Sir, EXPO2014, QualX2, Quanto, SunBIM, RootProf, OChemdb<br />
+------------------------------------------------------------------------------<br />
+■ QualX2 (Windows 10 (64 bit))<br />
+(http://www.ba.ic.cnr.it/softwareic/qualx/)<br />
+<br />
+□ Install (+ Registration)<br />
+(http://www.ba.ic.cnr.it/softwareic/qualx/i)<br />
+1. Register now for free<br />
+&nbsp; Public research institution? [check] Yes<br />
+&nbsp; Terms &amp; Conditions [check]<br />
+&nbsp; REGISTER<br />
+&nbsp; ※ 必要事項を記入していけばよい。非営利の機関や大学では無料で利用可能<br />
+2. QualX2<br />
+3. download here the latest version&nbsp;<br />
+4. QualX2 2.24 64 bit version (22.11.2018)&nbsp;<br />
+&nbsp; WINDOWS 64 BIT<br />
+5. QualX2-221118_install64.exe<br />
+&nbsp; (詳細情報 &gt; 実行 &gt; はい)<br />
+6. All [Next&gt;] &gt; [Install] &gt; [Finish]<br />
+◇ POW_COD<br />
+3. POW_COD&nbsp;<br />
+4. PowCod 1901<br />
+&nbsp; POW_COD SQLITE3 DATABASE(FULL)<br />
+5. cod1901.zip を解凍<br />
+※ COD (+AMCSD)<br />
+<br />
+□ database setting<br />
+1. QualX<br />
+2. Search &gt; Database Indexation<br />
+3. New &gt; POW_COD database file (e.g. C:\cod1901\cod1901.sq) &gt; Open<br />
+4. (click) column (e.g. COD-1901)<br />
+5. Select POW_COD_0<br />
+6. Close<br />
+<br />
+□ Usage<br />
+1. QualX<br />
+2. File &gt; Import diffraction data &gt; examples &gt; example1.dat &gt; Open<br />
+3. OK (Set wavelength radiation)<br />
+4. Search &gt; Search-Match<br />
+5. (click) column (e.g B6 La) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (click) column (e.g Si) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (click) column (e.g Al2 O3) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (In my case, B6 La 11.5%, Si 31.7%, Al2 O3 56.9%)<br />
+----------<br />
+◇ SPring-8, Poton factory, AichiSR, etc<br />
+3. select wavelength<br />
+&nbsp; User Defined<br />
+&nbsp; Lambda: (input wavelength [Å])<br />
+&nbsp; OK<br />
+----------<br />
+◇ Normal XRD [D8 ADVANCE(Bruker), SmartLab (Rigaku), etc]<br />
+3. select wavelength<br />
+&nbsp; Cu<br />
+&nbsp; (Lambda: 1.540560 [Å])<br />
+&nbsp; OK<br />
+----------<br />
+<br />
+□ Usage (Restraints mode)<br />
+1. QualX<br />
+2. File &gt; Import diffraction data &gt; examples &gt; example1.dat &gt; Open<br />
+3. OK (Set wavelength radiation)<br />
+4. Search &gt; Restraints<br />
+&nbsp; Or<br />
+&nbsp; Search with restraints<br />
+5. (click) column (e.g B6 La) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (click) column (e.g Si) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (click) column (e.g Al2 O3) &gt; [Accept selected phase](check mark on the right-hand side)&nbsp;<br />
+&nbsp; (In my case, B6 La 11.5%, Si 31.7%, Al2 O3 56.9%)<br />
+6. (copy) CARD &gt; COD (http://www.crystallography.net/cod/search.html)&nbsp;<br />
+&nbsp; &gt; Search by COD ID: [(past (CARD)] &gt; search &gt; CIF<br />
+<br />
+□ XRD input data<br />
+◇ type 1<br />
+&nbsp; 2theta intensity<br />
+◇ type 2<br />
+&nbsp; 1st line: start(2theta) step(2theta) end(2theta)<br />
+&nbsp; 2nd or later: intensity<br />
+(※ C:\Program Files\QualX\examples<br />
+&nbsp; CPD2.dat, MIXT_5.dat, example1.dat)<br />
+<br />
+□ asc2dat<br />
+(http://www.misasa.okayama-u.ac.jp/~masami/asc2dat.zip)<br />
+&nbsp; *.asc &gt; asc2dat.exe &gt; *.dat<br />
+<br />
+□ 2&theta; Zero Correction<br />
+(http://www.ba.ic.cnr.it/softwareic/qualx/data-reduction/2&theta;-zero-correction/)<br />
+※ 上手く動作しないときはこれを試してみると良いとのこと<br />
+<br />
+※ [academic and non-profit research institutions]と非営利の機関も利用できるのでありがたい。<br />
+※ バックグラウンドやピークサーチは自動で行われる。データの質が悪くてノイズをピークと誤ってしまうような場合は、peak searchでピークの閾値を変えて対処できる<br />
+※ Restrain: 元素の制限<br />
+※ 複数の相が検出された場合は各相も計算される<br />
+※ card number = ID (COD)<br />
+※ POW_CODのアドレスの中に日本語フォントがあると上手く動作しない（私の場合）<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] QualX2（粉末X線回折パターンの定性分析用ソフト）<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?QualX2<br />
+[2] COD_POW（粉末X線回折データベース）<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?COD_POW%A4%CB%A4%C4%A4%A4%A4%C6<br />
+[3] Crystallography Open Database<br />
+&nbsp; http://www.crystallography.net/cod/search.html<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,167 @@
+pyGAPS (DFT fit) (https://github.com/pauliacomi/pyGAPS)<br />
+(DFT method, N2 gas, 77 K, Carbon slit model)<br />
+------------------------------------------------------------------------------<br />
+Å° pyGAPS (Python 3 code) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† Install (easy method)<br />
+0. pip3 install --upgrade pip --user<br />
+1. pip3 install pygaps<br />
+&nbsp; (pip3 install pygaps --user)<br />
+<br />
+Å† Install (other method)<br />
+1. git clone https://github.com/pauliacomi/pyGAPS<br />
+2. pip3 install pyGAPS --user<br />
+<br />
+Å† jupyter<br />
+1. pip3 install jupyter --user<br />
+2. pip3 install &quot;ipython[notebook]&quot; --user<br />
+3. jupyter notebook<br />
+(Å¶ In my case, step 3 was failed)<br />
+<br />
+Å† test<br />
+(0. git clone https://github.com/pauliacomi/pyGAPS)<br />
+1. cd ~/pyGAPS/docs/examples<br />
+2. jupyter nbconvert --to script *.ipynb<br />
+Åû quickstart<br />
+3. python3 quickstart.py<br />
+<br />
+Å¶ How to get Kernels #16<br />
+(https://github.com/pauliacomi/pyGAPS/issues/16)<br />
+(DFT (or NLDFT/QSDFT/GCMC) kernels)<br />
+<br />
+Paul Iacomi, Philip L. Llewellyn, 2019. pyGAPS: A Python-Based Framework for Adsorption Isotherm Processing and Material Characterisation. https://doi.org/10.26434/chemrxiv.7970402.v1<br />
+------------------------------------------------------------------------------<br />
+Å† DFT pore size distribution -1-<br />
+(https://pygaps.readthedocs.io/en/master/examples/psd.html#DFT-pore-size-distribution)<br />
+(Please, change &quot;username&quot;)<br />
+1. gedit dft_ps_dist.py<br />
+-----<br />
+import os<br />
+import matplotlib.pyplot as plt<br />
+import pygaps<br />
+<br />
+json_path = os.path.join(os.getcwd(), &#39;/home/username/pyGAPS/docs/examples/data&#39;)<br />
+<br />
+# Get the nitrogen data at 77 kelvin<br />
+isotherms_n2_77k_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;characterisation&#39;), &#39;.json&#39;)<br />
+isotherms_n2_77k = []<br />
+for filepath in isotherms_n2_77k_paths:<br />
+&nbsp; &nbsp; with open(filepath, &#39;r&#39;) as text_file:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; isotherms_n2_77k.append(pygaps.isotherm_from_json(text_file.read()))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_n2_77k), &#39;isotherms with nitrogen at 77K&#39;)<br />
+<br />
+# Get the combined isotherm-calorimetry data<br />
+isotherms_calorimetry_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;calorimetry&#39;), &#39;.json&#39;)<br />
+isotherms_calorimetry = []<br />
+for filepath in isotherms_calorimetry_paths:<br />
+&nbsp; &nbsp; isotherms_calorimetry.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_calorimetry), &#39;room temperature calorimetry isotherms&#39;)<br />
+<br />
+# Get the isotherms for IAST calculations<br />
+isotherms_iast_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;iast&#39;), &#39;.json&#39;)<br />
+isotherms_iast = []<br />
+for filepath in isotherms_iast_paths:<br />
+&nbsp; &nbsp; isotherms_iast.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_iast), &#39;isotherms for IAST calculation&#39;)<br />
+<br />
+# Get the isotherms for isosteric enthalpy calculations<br />
+isotherms_isosteric_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;isosteric&#39;), &#39;.json&#39;)<br />
+isotherms_isosteric = []<br />
+for filepath in isotherms_isosteric_paths:<br />
+&nbsp; &nbsp; isotherms_isosteric.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_isosteric), &#39;isotherms for isosteric enthalpy calculation&#39;)<br />
+<br />
+isotherm = next(i for i in isotherms_n2_77k if i.material==&#39;Takeda 5A&#39;)<br />
+result_dict_dft = pygaps.psd_dft(<br />
+&nbsp; &nbsp; isotherm,<br />
+&nbsp; &nbsp; kernel=&#39;DFT-N2-77K-carbon-slit&#39;,<br />
+&nbsp; &nbsp; verbose=True)<br />
+<br />
+plt.show()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; dft_ps_dist.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place dft_ps_dist.py)<br />
+3. python3 dft_ps_dist.py<br />
+&nbsp; (python dft_ps_dist.py)<br />
+<br />
+<br />
+Å† DFT pore size distribution -2- (plus spline fitting results)<br />
+(Please, change &quot;username&quot;)<br />
+1. gedit dft_ps_dist_plus_spline_fit.py<br />
+-----<br />
+import os<br />
+import matplotlib.pyplot as plt<br />
+import pygaps<br />
+<br />
+json_path = os.path.join(os.getcwd(), &#39;/home/username/pyGAPS/docs/examples/data&#39;)<br />
+<br />
+# Get the nitrogen data at 77 kelvin<br />
+isotherms_n2_77k_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;characterisation&#39;), &#39;.json&#39;)<br />
+isotherms_n2_77k = []<br />
+for filepath in isotherms_n2_77k_paths:<br />
+&nbsp; &nbsp; with open(filepath, &#39;r&#39;) as text_file:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; isotherms_n2_77k.append(pygaps.isotherm_from_json(text_file.read()))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_n2_77k), &#39;isotherms with nitrogen at 77K&#39;)<br />
+<br />
+# Get the combined isotherm-calorimetry data<br />
+isotherms_calorimetry_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;calorimetry&#39;), &#39;.json&#39;)<br />
+isotherms_calorimetry = []<br />
+for filepath in isotherms_calorimetry_paths:<br />
+&nbsp; &nbsp; isotherms_calorimetry.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_calorimetry), &#39;room temperature calorimetry isotherms&#39;)<br />
+<br />
+# Get the isotherms for IAST calculations<br />
+isotherms_iast_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;iast&#39;), &#39;.json&#39;)<br />
+isotherms_iast = []<br />
+for filepath in isotherms_iast_paths:<br />
+&nbsp; &nbsp; isotherms_iast.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_iast), &#39;isotherms for IAST calculation&#39;)<br />
+<br />
+# Get the isotherms for isosteric enthalpy calculations<br />
+isotherms_isosteric_paths = pygaps.util_get_file_paths(<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; os.path.join(json_path, &#39;isosteric&#39;), &#39;.json&#39;)<br />
+isotherms_isosteric = []<br />
+for filepath in isotherms_isosteric_paths:<br />
+&nbsp; &nbsp; isotherms_isosteric.append(pygaps.isotherm_from_jsonf(filepath))<br />
+<br />
+print(&#39;Selected&#39;, len(isotherms_isosteric), &#39;isotherms for isosteric enthalpy calculation&#39;)<br />
+<br />
+isotherm = next(i for i in isotherms_n2_77k if i.material==&#39;Takeda 5A&#39;)<br />
+result_dict_dft = pygaps.psd_dft(<br />
+&nbsp; &nbsp; isotherm,<br />
+&nbsp; &nbsp; kernel=&#39;DFT-N2-77K-carbon-slit&#39;,<br />
+&nbsp; &nbsp; verbose=True)<br />
+<br />
+isotherm = next(i for i in isotherms_n2_77k if i.material==&#39;Takeda 5A&#39;)<br />
+result_dict_dft = pygaps.psd_dft(<br />
+&nbsp; &nbsp; isotherm,<br />
+&nbsp; &nbsp; bspline_order=5,<br />
+&nbsp; &nbsp; verbose=True)<br />
+<br />
+plt.show()<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; dft_ps_dist_plus_spline_fit.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place dft_ps_dist_plus_spline_fit.py)<br />
+3. python3 dft_ps_dist_plus_spline_fit.py<br />
+&nbsp; (python dft_ps_dist_plus_spline_fit.py)<br />
+------------------------------------------------------------------------------<br />
+Å† References<br />
+<br />
+[1] Paul Iacomi, Philip L. Llewellyn, 2019. pyGAPS: A Python-Based Framework for Adsorption Isotherm Processing and Material Characterisation. https://doi.org/10.26434/chemrxiv.7970402.v1<br />
+------------------------------------------------------------------------------

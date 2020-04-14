@@ -1,0 +1,208 @@
+Lammps (Zeolite, GCMC) (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ peteboyd/lammps_interface<br />
+(https://github.com/peteboyd/lammps_interface)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://github.com/peteboyd/lammps_interface.git<br />
+2. cd lammps_interface<br />
+3. pip install -r requirements.txt<br />
+4. sudo python setup.py install<br />
+<br />
+◇ Test (Ubuntu 18.04 LTS (64 bit))<br />
+1. cd $HOME/lammps_interface<br />
+2. cd test_struct<br />
+3. python $HOME/lammps_interface/lammps_interface.py IRMOF-1.cif<br />
+&nbsp; (data.IRMOF-1, in.IRMOF-1)<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit))<br />
+・python $HOME/lammps_interface/lammps_interface.py -ff UFF4MOF IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --minimize IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --minimize --randomize-velocities --nvt --temperature 298.0 IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --minimize --randomize-velocities --nvt --temperature 298.0 --npt --pressure 700.0 IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --minimize --randomize-velocities --nvt --temperature 298.0 --npt --pressure 700.0 --max-deviation 0.01 --iter-count 10 --production-steps 200000 --equilibration-steps 200000 IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py -ff Dreiding --h-bonding IRMOF-1.cif<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit))<br />
+・python $HOME/lammps_interface/lammps_interface.py --nvt --insert-molecule TIP4P_Water --molecule-ff TIP4P IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --nvt --insert-molecule TIP5P_Water --molecule-ff TIP5P IRMOF-1.cif<br />
+・python $HOME/lammps_interface/lammps_interface.py --nvt --insert-molecule TIP5P_Water --molecule-ff TIP5P --deposit 1 IRMOF-1.cif<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit))<br />
+・python $HOME/lammps_interface/lammps_interface.py --minimize --randomize-velocities --nvt --temperature 423.0 --max-deviation 0.01 --iter-count 10 --production-steps 200000 --equilibration-steps 200000 --insert-molecule TIP5P_Water --molecule-ff TIP5P --deposit 1 IRMOF-1.cif<br />
+<br />
+◇ Usage (Ubuntu 18.04 LTS (64 bit)) (failed)<br />
+1. python $HOME/lammps_interface/lammps_interface.py --minimize --randomize-velocities --nvt --temperature 423.0 --max-deviation 0.01 --iter-count 10 --production-steps 200000 --equilibration-steps 200000 --insert-molecule TIP5P_Water --molecule-ff TIP5P --deposit 1 IRMOF-1.cif<br />
+2. gedit in.IRMOF-1<br />
+-----after &quot;read_data &nbsp; &nbsp; &nbsp; data.IRMOF-1&quot; line<br />
+pair_coeff &nbsp;* * lj/cut 1.0 1.0 2.5<br />
+kspace_style ewald/disp 1.0e-3<br />
+kspace_modify gewald/disp 0.27<br />
+-----<br />
+3. ~/lammps/src/lmp_serial -in in.IRMOF-1<br />
+<br />
+◇ other options<br />
+&nbsp;--force_field or -ff<br />
+&nbsp; &#39;BTW_FF&#39;, &#39;Dreiding&#39;, &#39;UFF&#39;, &#39;UFF4MOF&#39;, and &#39;Dubbeldam&#39;<br />
+<br />
+&nbsp;-o, --outputcif<br />
+&nbsp;-p, --outputpdb<br />
+&nbsp;-or, --outputraspa<br />
+&nbsp;<br />
+&nbsp;--fix-metal<br />
+※ python $HOME/lammps_interface/lammps_interface.py --help<br />
+<br />
+◇ Install (lammps)<br />
+1. git clone git://github.com/lammps/lammps.git&nbsp;<br />
+2. cd ~/lammps/src<br />
+3. make package-status<br />
+4. make yes-MANYBODY yes-MOLECULE yes-KSPACE yes-USER-MISC<br />
+5. make serial<br />
+&nbsp; (or make mpi)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] National Center for Biotechnology Information, U.S. National Library of Medicine<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/?term=zeolite+lammps<br />
+[2] P. G. Boyd et al., J Phys Chem Lett. 2017 Jan 19; 8(2): 357?363.<br />
+&nbsp; DOI: 10.1021/acs.jpclett.6b02532.<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5253710/<br />
+&nbsp; Archived file containing LAMMPS inputs for IRMOF-1, IRMOF-10, HKUST-1, and UIO-66 for all of the force fields studied in this work. (ZIP) (http://pubs.acs.org/doi/suppl/10.1021/acs.jpclett.6b02532/suppl_file/jz6b02532_si_002.zip)<br />
+[3] S. Jawahery et al., Nat Commun. 2017; 8: 13945.&nbsp;<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/<br />
+&nbsp; LAMMPS simulation script to reproduce the argon-induced deformation of IRMOF-74-V.<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/bin/ncomms13945-s4.txt<br />
+&nbsp; LAMMPS simulation script to reproduce the argon-induced deformation of IRMOF-74-V.<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5228029/bin/ncomms13945-s5.txt<br />
+[4] M. S. Moosavi et al., ACS Cent Sci. 2018 Jul 25; 4(7): 832?839.<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6062841/<br />
+&nbsp; Improving the Mechanical Stability of Metal-Organic Frameworks Using Chemical Caryatids&nbsp;<br />
+&nbsp; https://archive.materialscloud.org/2018.0004/v1<br />
+[5] H. Frentrup et al., Membranes (Basel). 2015 Mar; 5(1): 99?119.&nbsp;<br />
+&nbsp; Click here for additional data file.<br />
+&nbsp; https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4384093/bin/membranes-05-00099-s001.zip<br />
+[6] S. H. Jamali et al., J Chem Theory Comput. 2018 May 8; 14(5): 2667?2677.&nbsp;<br />
+&nbsp; https://pubs.acs.org/doi/abs/10.1021/acs.jctc.8b00170<br />
+<br />
+[7] Re: [lammps-users] [EXTERNAL] Ask for example of fix gcmc<br />
+&nbsp; https://lammps.sandia.gov/threads/msg53394.html<br />
+[8] lammps input script for Faujasite with MZHB<br />
+&nbsp; https://lammps.sandia.gov/threads/msg64395.html<br />
+[9] [lammps-users] GCMC gas adsorption<br />
+&nbsp; https://lammps.sandia.gov/threads/msg74437.html<br />
+[10] a-anik/zif-8_md (gromacs)<br />
+&nbsp; https://github.com/a-anik/zif-8_md<br />
+[11] kbsezginel/lammps-data-file/tests/<br />
+&nbsp; https://github.com/kbsezginel/lammps-data-file/tree/master/tests<br />
+<br />
+※ Generating carbon schwarzites via zeolite-templating&nbsp;<br />
+&nbsp; https://archive.materialscloud.org/2018.0013/v1<br />
+&nbsp; https://osf.io/ufegc/<br />
+&nbsp;&nbsp;<br />
+※ Framework-Type Determination for Zeolite Structures in the Inorganic Crystal Structure Database<br />
+&nbsp; https://www.nist.gov/sites/default/files/documents/srd/jpcrd392010033102.pdf<br />
+<br />
+◇ cif data<br />
+[C1] Database of Zeolite Structures<br />
+&nbsp; http://asia.iza-structure.org/IZA-SC/search_fw.html<br />
+&nbsp; http://asia.iza-structure.org/IZA-SC/ftc_table.php &gt; CIF<br />
+[C2] cryos/avogadro/crystals/zeolites/<br />
+&nbsp; https://github.com/cryos/avogadro/tree/master/crystals/zeolites (FAU)<br />
+[C3] WMD-group/Crystal_structures/MOFs/<br />
+&nbsp; https://github.com/WMD-group/Crystal_structures/tree/master/MOFs<br />
+[C4] S-Y. Zhang et al., J. Am. Chem. Soc.2015, 137, 49, 15406-15409.<br />
+&nbsp; https://pubs.acs.org/doi/abs/10.1021/jacs.5b11150 (CMOF-5)<br />
+[C5] numat/RASPA2/structures/mofs/cif/<br />
+&nbsp; https://github.com/numat/RASPA2/tree/master/structures/mofs/cif (MOF-177)<br />
+[C6] Paper b912997a<br />
+&nbsp; http://www.rsc.org/suppdata/CE/b9/b912997a/<br />
+[C7] 結晶学共通データ・フォーマット CIF について<br />
+&nbsp; http://www.sasj.jp/JSA/CONTENTS/vol.19_3/Vol.19%20No.3/Vol19-No3-177-Matsushita.pdf<br />
+<br />
+◇ Other hydrocarbon (cif)<br />
+・Buckminsterfullerene (AMCSD)<br />
+&nbsp; http://rruff.geo.arizona.edu/AMS/minerals/Buckminsterfullerene<br />
+・Buckminsterfullerene (COD, 9011580)<br />
+&nbsp; http://www.crystallography.net/cod/9011580.html<br />
+<br />
+◇ Other hydrocarbon<br />
+・End-capped CNT, C3386, etc<br />
+&nbsp; https://www.tcichemicals.com/pdf/F2031E.pdf<br />
+&nbsp; https://www.tcichemicals.com/eshop/ja/jp/category_index/12963/ (Japanese)<br />
+&nbsp; (C6H3Cl2)5-Corannulene -&gt; End-capped CNT<br />
+&nbsp; http://scripts.iucr.org/cgi-bin/paper?S0567740876012430 (corannulene, 4020269)<br />
+&nbsp; https://www.nature.com/articles/nchem.1704<br />
+・L. T. Scott et al., J. Am. Chem. Soc.2012, 134, 1, 107-110.<br />
+&nbsp; https://pubs.acs.org/doi/10.1021/ja209461g (End-capped CNT: cif file, https://pubs.acs.org/doi/suppl/10.1021/ja209461g/suppl_file/ja209461g_si_003.cif)<br />
+・B. Liu et al., Nano Lett.2015, 15, 1, 586-595.<br />
+&nbsp; https://pubs.acs.org/doi/full/10.1021/nl504066f ((5,5) CNT end-cap (C50H10))<br />
+<br />
+◇ Rietveld (Li-FAU with Li-LTA)<br />
+&nbsp; http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/rietan/angle_dispersive/Lecture_Ceramics.pdf<br />
+&nbsp; http://www.ccp14.ac.uk/ccp/web-mirrors/rietan/fujioizumi/recent_research/hamon/Hamon.pdf<br />
+------------------------------------------------------------------------------<br />
+■ 水素貯蔵材料<br />
+<br />
+◇ 炭素系材料<br />
+　Dillonらにより、単層カーボンナノチューブ（SWNT）が10 wt.%の水素を室温で吸蔵できるとの報告が出されて以来、4 wt.%の吸蔵量を超える論文があいついで発表された。そのため、ナノチューブ等の水素吸着材としての期待が膨らんだ。しかし、吸蔵概念の混乱、試料の純度、水素吸蔵量の測定法の誤りのために、未だに明確な結論が得られていない。ただし、最近では、グラファイトのメカノケミカル効果による場合を除けば、室温での吸着量が5 wt.%を超える報告はなくなってきている。一方、77 Kでは10 wt.%程度の吸着が可能なことは確かである。<br />
+<br />
+◇ 一般炭素材の細孔構造と分子ポテンシャル構造<br />
+　原子的構造に欠陥が生じ、それらが連結すると細孔になる。sp2系では高温での水蒸気との反応によって、炭素原子をCOとしてガス化できる。このガス化反応がユニットの共役2重結合系に生じ、スリット様細孔が生ずる。このために細孔のあるカーボンブラックや活性炭の細孔はスリット形状に近い。スリット型細孔の場合には平行細孔壁間の有効距離が、円筒型細孔の場合には直径が、細孔径wと定義されている。IUPACではwによって、細孔を(マクロ孔、メソ孔、ミクロ孔の)3種類に分けている。<br />
+　マクロ孔： w &gt; 50 nm<br />
+　メソ孔： 2 nm &lt; w &lt; 50 nm<br />
+　(ナノ孔： w &lt; 5 nm)<br />
+　ミクロ孔： w &lt; 2 nm<br />
+　(慣例： スーパーミクロ孔： 0.7 &lt; w &lt; 2 nm) [R2]<br />
+　(慣例： ウルトラミクロ孔： w &lt; 0.7 nm)<br />
+　ミクロ孔については、DFTによる細孔径分布の評価法にも未だ問題があり、余分なピークが出てしまう。一方、超臨界メタン吸着のGCMCシミュレーション結果をフィッティングして得られた細孔分布では、均一な細孔径分布が認められる。<br />
+　sp2系の炭素材では6角網面構造が平面性を保証しているが、5員環と7員環構造があると凸面と凹面を導入できる。細孔の存在によって、単位重量当たりの表面積が増大し、かつコンポジットを形成するときの安定性を支配するからである。ミクロ孔の多い特別な活性炭では表面積が3000 m2/gを超すものもある。一枚の無限大の大きさのグラフェンシートが、裏と表の両面を考慮すると、2630 m2/gの表面積を与えることから、3000 m2/gという表面積は実に大きな値である。活性炭のナノスケールのグラファイト様結晶子はグラフェンではないのに、大きな表面積を与える理由は、結晶子のエッジ部分が表面に寄与できるからである。普通の活性炭は1 nm以下のミクロ孔を多数有している。また、分子篩（ふるい）炭素やカーボンブラックでは、外部に分子的な意味でアクセスできない閉孔を持っていることがある。しかも、試料を取り巻く物理化学環境におうじて、閉孔が開孔として振る舞うことがある。このような細孔を潜在孔と呼ぶ。潜在孔は水素吸着には有効である可能性がある。<br />
+　sp2系の炭素材料には、表面官能基がある。表面官能基は酸性表面酸化物（カルボキシル基、フェノール性水酸基、カルボン酸無水物、ラクトンなど）、中性表面酸化物（カルボニル基など）、塩基性表面酸化物（クロメン、ピロン構造など）に大別される。sp3およびsp系での表面官能基に関する研究は進んでいない。表面官能基に由来する表面化学構造あるいは細孔壁化学構造は細孔構造と切り離せないので、有機化学反応を利用した細孔壁の化学修飾によって、炭素材料の界面化学機能を制御できる可能性が高い。<br />
+　2枚のグラファイトからなるスリット型の細孔中にある分子のポテンシャルエネルギーは、分散力を求引相互作用とするLennard-Jones(LJ)対ポテンシャルを基に導かれるSteeleの10-4-3ポテンシャル&Phi;(z)で与えられる。<br />
+　&Phi;(z) = 2*&pi;*&epsilon;sf*&rho;c*&sigma;sf*&Delta;[(2/5)*(&sigma;sf/z)^10 - (&sigma;sf/z)^4 - &sigma;sf^4/{3*&Delta;*(z+0.61*&Delta;^3)}]<br />
+ここで、&epsilon;sfと&sigma;sfは、気体分子と炭素原子に対するLJパラメータ（&epsilon;ff, &sigma;ff）および（&epsilon;ss, &sigma;ss）を用いて、&epsilon;sf=&radic;(&epsilon;ff*&epsilon;ss)および&sigma;sf=(&sigma;ff+&sigma;ss)/2と近似して求められる。zは表面からの垂直距離、&Delta;はグラファイト層間距離（=0.335 nm）、&rho;cは炭素原子密度（=114 nm^-3）である。グラファイト表面原子間距離をHとすると、グラファイトスリット中の一方のグラファイト面からzの距離にある分子とスリット細孔との相互作用ポテンシャル&Phi;p(z)は次式で与えられる。<br />
+　&Phi;p(z) = &Phi;sf(z) + &Phi;sf(H-z)<br />
+表面原子間のスリット幅Hは、吸着測定で得られる実効細孔径wよりも大きく、古典水素の場合には、w = H - 0.245 (nm) (&epsilon;ff/k = 36.7 K, &sigma;ff = 0.2958 nm)である。グラファイトスリット細孔と1中心の古典水素分子間の相互作用ポテンシャルの細孔径依存性を見ると、細孔径が小さくなるほど、相互作用ポテンシャルの井戸が深くなる。しかし、窒素分子では、細孔径がw = 0.5 nmのとき、ポテンシャル井戸の深さが-2200 Kにもなるのに、水素では-913 Kに過ぎない。これが室温において、水素が細孔性炭素に多量には物理吸着しづらい理由である。<br />
+<br />
+◇ ナノチューブ類の細孔構造と分子ポテンシャル構造<br />
+　カーボンナノチューブについては独特の構造表示法としてキラリティベクトルC(m,n)が用いられている。このキラリティ（m,n）指標でチューブ直径（細孔径）も決まってくる。細孔の構造は構造規則性があればX線回折から、活性炭のように構造が不規則であれば77 Kでの窒素吸着から細孔構造を決定する。SWNTではチューブ直径の膨張・収縮の振動であるブリージングモード（BRM）がラマンスペクトルに見られ、RBMバンドの波数はチューブ直径の逆数に比例する。このためRBMを調べるとSWNTのチューブ径の分布を決定できる。チューブ部分は6員環から成っているが、チューブのキャップ部分には5員環が含まれる。幾何学的要請によってキャップの形態と5員環数が関連づけられる。5員環の多いキャップ部分はチューブ部位よりも不安定であり、酸化処理を行うと優先的にキャップが取り除かれる傾向にある。最近ではチューブ径が揃った2層カーボンナノチューブ（DWNT）が得られるようになり、2層に由来するRBMバンドも測定されている。カーボンナノチューブの壁面は中性であるために、チューブ間に分散力が作用して、バンドルを形成している。従ってSWNTは数十から数百本集まり、粒子間力が有利になる対称性のバンドル構造をとる（もっとも2004年後半にはバンドルを形成していな高純度のSWNTが創製された）。このバンドルは規則的なヘキサゴナル構造を有しているので、その三角格子由来のX線回折が観測される。実際のバンドルを形成しているSWNTのチューブ直径に分布があるために、この回折パターンはブロードである。<br />
+　（省略）Ni-Co触媒を用いてレーザーアブレーション法により作られるSWNTを酸素酸化処理するとキャップが開き、表面積が2倍以上に増大する。<br />
+<br />
+◇ 水素吸着にみる量子効果<br />
+　（省略）分子量が大きいと量子効果の影響が少なくなる。<br />
+<br />
+◇ BET法 [R2]<br />
+・スーパーミクロ孔ではBET法は大きい場合で表面積を50%も過大評価してしまう。一方、ウルトラミクロ孔の場合にはBET法は表面積を過小評価する。このように、ミクロ孔性固体での表面積の決定にはBET法は適さない。信頼できる平均細孔径と表面積の実験的決定法は、高分解能&alpha;s-プロットを用いる方法である。<br />
+<br />
+◇ 吸着 [R2]<br />
+・サイズの異なる分子吸着などから分子篩（ふるい）カーボンの細孔はウルトラミクロ孔であり、w &lt; 0.6 nmのものが多いとみられている。w &lt; 0.6 nmであると分子ポテンシャル場は著しく強いので、N2気体を室温でも相当吸着する。<br />
+・303 KでのN2吸着等温線を測定し、GCMCシミュレーションからの計算等温線と比較すれば分子篩（ふるい）カーボンの細孔径を厳密に決定できるであろう。ただし、GCMCシミュレーションの吸着量を実測値と比較するためには、試料のウルトラミクロ孔の細孔容積が必要である。そのため水蒸気がウルトラミクロ孔にも吸着される性質を利用してウルトラミクロ孔容積を決めている。このようにして、GCMCシミュレーション等温線と実測等温線の比較をして重なる時の細孔径をウルトラミクロ孔部分の細孔径とする。さらに、完全球形のArを用いた実験も併用すると信頼性の高いw値が得られる。<br />
+<br />
+[R1] 秋葉悦男「水素エネルギー技術の展開」シーエムシー出版<br />
+[R2] 金子克美「分子吸着による固体表面ナノ構造解析」SCAS NEWS 2001-Ⅱ (Vol. 14)<br />
+&nbsp; https://www.scas.co.jp/scas-news/sn-back-issues/pdf/14/talk_14.pdf<br />
+------------------------------------------------------------------------------<br />
+■ 水素の貯蔵<br />
+<br />
+◇ 炭素系材料による水素の物理吸着量<br />
+　最近の信頼性の高い実験データと、計算化学による結果を総合すると、吸着系材料で室温における水素の物理吸着量（表面過剰量）を増加させるには、表面積と細孔容積が大きいこと、それに細孔径が絵季節（&lt; 2nm）であることが求められる。（省略）もし、適切な細孔径をもち、かつ表面積とミクロ孔容積がさらに大きいミクロ多孔性炭素を合成できれば、水素吸着量はさらに増加するものと期待できる。<br />
+・ゼオライト鋳型<br />
+　細孔入り口径： 0.74 nm<br />
+　細孔内部径： 1.3 nm<br />
+・ゼオライト鋳型炭素(ZTC)<br />
+　細孔径： 1.2 nms<br />
+　計算によれば、30℃において水素吸着に最適な細孔径は30 MPa以下では 0.65 nm, 50 MPaでは 2.13 nmであるため、ZTCの細孔径（1.2 nm）は30から50 MPaおける水素吸着に適していると考えられる。<br />
+<br />
+[R2] 水素エネルギー協会「水素の事典」朝倉書店<br />
+------------------------------------------------------------------------------<br />
+■ Pizza.py (https://pizza.sandia.gov/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit)) (failed)<br />
+・pizza-1Oct06.tar.gz<br />
+(https://sourceforge.net/projects/pizza-py/)<br />
+0. sudo apt-get install python-imaging-tk<br />
+&nbsp; sudo apt-get install python3-pil.imagetk<br />
+&nbsp; sudo apt-get install tk-dev<br />
+&nbsp; sudo apt-get install python-opengl<br />
+1. tar zxvf pizza-1Oct06.tar.gz<br />
+2. python -i ~/pizza-1Oct06/src/pizza.py<br />
+------------------------------------------------------------------------------

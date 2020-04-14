@@ -1,0 +1,706 @@
+PDFgui (https://www.diffpy.org/)<br />
+------------------------------------------------------------------------------<br />
+■ 解析の手順<br />
+<br />
+・ X-ray powder diffraction data -&gt; PDFgetX3 (old version PDFgetX or PDFgetX2) -&gt; PDFgui<br />
+・ Neutron -&gt; PDFgetN3 (old version PDFgetN) -&gt; PDFgui<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト<br />
+<br />
+□ データの前処理ソフト<br />
+・ PDFgetX3 and PDFgetN3 (https://www.diffpy.org/products/pdfgetx.html)<br />
+・ PDFgetN (http://pdfgetn.sourceforge.net/)<br />
+・ Gudrun (https://www.isis.stfc.ac.uk/Pages/Gudrun.aspx)<br />
+<br />
+□ 代表的な解析ソフト<br />
+・PDFgui (https://www.diffpy.org/)<br />
+&nbsp; Small Models: Least Squares Refinement [1]<br />
+&nbsp; &lt; 1000 atoms [2]<br />
+・RMCProfile (http://www.rmcprofile.org/Main_Page)<br />
+&nbsp; Large Model: Reverse Monte Carlo [1]<br />
+&nbsp; 600 - 20000 atoms [3]<br />
+・DISCUS (http://tproffen.github.io/DiffuseCode/)<br />
+・EPSR (https://www.isis.stfc.ac.uk/Pages/Empirical-Potential-Structure-Refinement.aspx)<br />
+・PDFFIT (https://web.pa.msu.edu/cmp/billinge-group/programs/discus/pdffit.html)<br />
+・TOPAS Academic (http://www.topas-academic.net/)<br />
+※ 総合サイト (http://www.ccp14.ac.uk/solution/high_q_pdf/index.html)<br />
+------------------------------------------------------------------------------<br />
+■ データ取得<br />
+<br />
+□ X-ray<br />
+・ BL14B1 at SPring-8 in Japan [4]<br />
+<br />
+□ Neutron<br />
+・ NOVA (BL21) at J-PARC in Japan [4]<br />
+・ NPDF at LANSCE in USA [4]<br />
+------------------------------------------------------------------------------<br />
+■ Install (Anaconda Prompt on Windows 10 (64 bit))<br />
+<br />
+□ PDFgui [5]<br />
+1. Anadonda (https://www.anaconda.com/distribution/)<br />
+&nbsp; &nbsp;Python 3.7 version<br />
+2. Anaconda3-2019.03-Windows-x86_64.exe<br />
+&nbsp; &nbsp;（ディフォルトの設定でよい）<br />
+3. Anaconda Prompt (start menu)<br />
+4. conda create --name=py27 python=2.7<br />
+&nbsp;y<br />
+5. activate py27<br />
+6. conda config --add channels diffpy<br />
+7. conda install diffpy.pdfgui<br />
+&nbsp;y<br />
+8. conda update --channel=diffpy diffpy.pdfgui<br />
+&nbsp;y<br />
+9. pdfgui<br />
+<br />
+□ PyMOL<br />
+1. conda install -c schrodinger pymol<br />
+2. PDFgui &gt; Edit &gt; Preferences<br />
+3. Structure viewer executable [C:\Users\inukai\Anaconda3\PyMOLWin.exe]<br />
+4. Structure format [pdb]<br />
+5. Skip Activation<br />
+<br />
+□ VESTA<br />
+1. VESTAのHPからダウンロードして解凍&nbsp;<br />
+&nbsp; (解凍して[C:\Program Files]にコピー&amp;ペースト）<br />
+2. PDFgui &gt; Edit &gt; Preferences<br />
+3. Structure viewer executable &nbsp;[C:\Program Files\VESTA-win64\VESTA.exe]<br />
+4. Structure format [cif]<br />
+5. Eidt &gt; Edit DATA &gt; Structure parameters &gt; Atomic displacement parameter Anisotropic:U &gt; Isotropic* U<br />
+&nbsp; 上記の設定でUやbetaを記載することが必要<br />
+6. Objects &gt; Proterties &gt; Atoms... &gt; Show as displacement ellipsoids &gt; Show printipal ellipses &gt; OK<br />
+<br />
+□ PDFgetX3 and PDFgetN3 (diffpy.pdfgetx-2.0.0.egg) [6]&nbsp;<br />
+1. python -m easy_install C:\Users\inukai\Downloads\diffpy.pdfgetx-2.0.0.egg<br />
+2. pdfgetx3 -h<br />
+3. pdfgetn3 -h<br />
+4. cd C:\Users\inukai\Anaconda3\Lib\site-packages\jupyter_core\tests\dotipython\profile_default<br />
+5. ipython_config.py<br />
+&nbsp; ---------before<br />
+&nbsp; # A list of dotted module names of IPython extensions to load.<br />
+&nbsp; # c.InteractiveShellApp.extensions = []<br />
+&nbsp; ---------<br />
+&nbsp; # A list of dotted module names of IPython extensions to load.<br />
+&nbsp; # c.InteractiveShellApp.extensions = [&#39;diffpy.pdfgetx.ipy_magics&#39;]<br />
+&nbsp; ---------<br />
+※ PDFgetX3とPDFgetN3は理化学研究所では[free Academic]のダウンロードを許可された。<br />
+※ 理研のビームライン BL45XU-SAX (https://beamline.harima.riken.jp/bl45xu/)<br />
+&nbsp; FIT2D （2次元データを1次元でデータに）&gt; PDFgetx (一次元データをPDFに) &gt; PDFgui（PDFの解析）？<br />
+※ 理研BLの場合はFIT2Dで2次元データを1次元データにしてから pdfgetx3 ファイル名とすればよい？<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+□ pdfgetx（PDFgetX3 and PDFgetN3) [7]<br />
+1. pdfgetx3 ni300mesh_300k_nor_1-5.chi<br />
+&nbsp;#はコメントでデータだけがあればよいようにみえる。<br />
+&nbsp;試料のデータ、空でのデータ、パラメータのデータの3つが必要。<br />
+2. plotdata ni300mesh_300k_nor_1-5.gr<br />
+3. exit()<br />
+4. pdfgetx3 --verbose=info ni300mesh_300k_nor_1-5.chi --force=yes<br />
+5. pdfgetx3 -c ni300mesh_300k_nor_1-5.gr --plot=fq,gr<br />
+&nbsp;-cを取らないと動かない。この機能は必要ないので大丈夫だと思う。<br />
+6. pdfgetx3 --plot=fq,gr ni300mesh_300k_nor_1-5.chi<br />
+7. tuneconfig()<br />
+8. pdfgetx3 -i ni300mesh_300k_nor_1-5.chi<br />
+※ PDFguiX2は多くのデータと情報が出力されているが、PDFguiX3ではrとGとその周辺の情報のみになっている。これでもPDFguiは動作した。<br />
+<br />
+□ PDFgui [8]<br />
+1. PDFgui(py27)<br />
+2. right click &gt; New Fit<br />
+3. right click &gt; Insert phase<br />
+&nbsp; change name New Phase -&gt; Ni.stru<br />
+4. input Phase Configuraation<br />
+5. right click on elem<br />
+&nbsp; u11-u33 0.003 -&gt; 0.0025<br />
+6. right click on element &gt; Expand space group<br />
+7. right click on Fit 1 &gt; Insert Data Set...<br />
+8. Load a data set form file. &gt; Open<br />
+9. Ni-xray.gr from pdfgui-tutorial<br />
+----------<br />
+9.5 X [step] at Plot control on left side<br />
+&nbsp; [step] -&gt; [r]<br />
+&nbsp; Y [Gcalc] -&gt; [Gobs]&nbsp;<br />
+&nbsp; plot<br />
+----------<br />
+10. Ni-xray.gr<br />
+11.&nbsp;<br />
+&nbsp; Fit Range 0.5 -&gt; 1.7 Ang to avoid noise and artifacts<br />
+&nbsp; Qdamp 0.08 (dependent equipment)<br />
+12. Constraints on top<br />
+&nbsp; Sacle Factor [@1]<br />
+&nbsp; Qdamp [@2]<br />
+&nbsp; @ = same parameter<br />
+&nbsp; right click &gt; symmetry constrain...<br />
+13. Ni.stru<br />
+14. Phase constrains<br />
+&nbsp; a [@3] b [@3] c [@3]<br />
+&nbsp; u11-u33 [@4]<br />
+15. Fit 1<br />
+16. Apply parameter on right bottom<br />
+17. Run (&ldquo;gear&rdquo; icon on the tool bar)<br />
+18. Results<br />
+&nbsp; right click on Refined &gt; Copy Refiend To initial<br />
+19. Plot PDF or Structure on top panel<br />
+&nbsp; Plot Control on left side<br />
+&nbsp; select X [r] and Y [Gcalc] and [Gobs]<br />
+20. View on top panel &gt; Show journal<br />
+※ Data [.fgr]<br />
+&nbsp; r G(r) dr dG(r) diff<br />
+&nbsp;&nbsp;<br />
+□ Calculating PDF from a structure (X-ray)<br />
+9. Insert calculation<br />
+&nbsp; X-ray<br />
+&nbsp; Range 0.01 &nbsp;to 20.0<br />
+&nbsp; Qdamp 0.08 &nbsp;Qmax 40.0<br />
+10. Run (&ldquo;gear&rdquo; icon on the tool bar)<br />
+<br />
+□ Calculating PDF from a structure (Neutron)<br />
+9. Insert calculation<br />
+&nbsp; Neutron<br />
+&nbsp; Range 0.01 &nbsp;to 50.0<br />
+&nbsp; Qdamp 0.08 &nbsp;Qmax 25.0<br />
+10. Run (&ldquo;gear&rdquo; icon on the tool bar)<br />
+<br />
+※ PDFguiについては文献[8]をそのまま読んだり、google翻訳で日本語に訳して試していけば良い<br />
+※ [■ References]の文献[2]でも試してみるとよい<br />
+※ [■ References]の文献[9]では炭素の六員環など関する解釈の方法が分かりやすく記載されている<br />
+※ *.cifでは上手く読み取れなかったので、*.xyzにして、メモ帳などで空白をTabに変換してExcelで読み取って格子定数で原子位置を割り算して、またメモ帳でTabから空白にしてPDFguiにxyz形式で読み込ませた。しかし、格子定数aだけ変更できなくなったので、Save projectで保存し、一度PDFguiを閉じてからOpen Projectで読み込むと格子定数aが変更できた<br />
+※ フィットの評価となるRwはResultsに記載されている<br />
+※ Parametersで少しずつFixedのチェックを外しながら計算する。計算毎にRefinedをクリックして、右クリック、&ldquo;Copy Refined to Initial&rdquo;でフィットした値を初期値に設定する。実際の解析では、Niなどでまず解析して、QdampとQbroadを得ておいて、他の材料の測定の初期値に用いたりする。詳細は[■ References]の文献[2]を読むと良い<br />
+------------------------------------------------------------------------------<br />
+■ Variables [1,2]<br />
+<br />
+◇ For nanoparticles<br />
+・spdiameter (Å単位)<br />
+&nbsp; 粒子径による強度の減衰<br />
+・stepcut (Å単位)<br />
+&nbsp; PDFがゼロに切り捨てられるr値<br />
+<br />
+◇ Data set parameters<br />
+・Qmax (Å<sup>-1</sup>単位)<br />
+&nbsp; 実験パラメータ<br />
+&nbsp; フーリエ変換ステップで使用される有限データ範囲<br />
+・Qdamp (Å<sup>-1</sup>単位)<br />
+&nbsp; Qの分解能が限られていることによるPDFのガウス分布の減衰<br />
+&nbsp; B(r) = exp{-(r*Q<sub>damp</sub>)<sup>2</sup>/2}<br />
+・Qbroad (Å<sup>-1</sup>単位)<br />
+&nbsp; 高いQ値でのノイズの増加によるPDFピークの広がり<br />
+&nbsp; (significant for wide r-ranges)<br />
+<br />
+◇ Refined Parameters:<br />
+・dscale<br />
+&nbsp; スケールファクター<br />
+・pscale<br />
+&nbsp; 位相のスケールファクター<br />
+&nbsp; dscaleと相関しているので同時に使用するのは注意<br />
+・lat, x(n), y(n), z(n)<br />
+&nbsp; 結晶格子とサイトnの位置（x,y,z）<br />
+・occ(n)<br />
+&nbsp; サイトnの占有率<br />
+・uij(n) (Å<sup>2</sup>単位)<br />
+&nbsp; 原子nの異方的変位テンソルの要素<br />
+<br />
+◇ Peak width parameters<br />
+・delta1 (Å単位)<br />
+&nbsp; (1/r)でのピークの先鋭化<br />
+&nbsp; high temperature case<br />
+・delta2 (Å<sup>2</sup>単位)<br />
+&nbsp; (1/r<sup>2</sup>)でのピークの先鋭化<br />
+&nbsp; low temperature case<br />
+・sratio (ディフォルト: 1)<br />
+&nbsp; 結合原子のシグマ比。結合原子の相関運動(correlated motion)を説明するPDFピーク幅の減少係数<br />
+・rcut (Å単位)<br />
+&nbsp; sratioでの鋭化係数を適用するための半径カットオフ<br />
+<br />
+[1] 5.3 List of PDFfit2 variables<br />
+&nbsp; https://www.diffpy.org/doc/pdfgui/index.html<br />
+[2] NOMAD Modeling of the PDF: Hands-on PDFgui Exercises<br />
+&nbsp; https://neutrons.ornl.gov/sites/default/files/PDF_hands_on_examples_NOMAD.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Fundamental information<br />
+<br />
+・動径分布関数（Radial Distribution Function, RDF): R(r) [1]<br />
+&nbsp; R(r) dr : 半径rで厚さdrの球殻にある対を組む原子の数<br />
+<br />
+・RDF (radial distribution function) [6]<br />
+&nbsp; R(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r<sup>2</sup>*&rho;<sub>0</sub>*g(r)&nbsp;<br />
+<br />
+・二体分布関数: g(r) [1]<br />
+&nbsp; g(r) = R(r)/(4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r<sup>2</sup>*&rho;<sub>0</sub>)<br />
+&nbsp; &rho;<sub>0</sub>: 原子数密度<br />
+&nbsp; 距離rの位置に原子がいる確率<br />
+<br />
+・原子対相関関数PDF: G(r) [1]<br />
+&nbsp; G(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*&rho;<sub>0</sub>*[g(r)-1]<br />
+&nbsp; 結晶性物質を扱う人はG(r)を解析に用いることが多い<br />
+<br />
+・2体相関分布関数（Pair-Distribution Function, PDF) [4]<br />
+&nbsp; G(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*&rho;<sub>0</sub>*[g(r)-1]<br />
+&nbsp; g(r)と同じ名前であるので間違えないよう注意が必要<br />
+<br />
+・二体分布関数(atomic Pair Distribution Function, PDF) [1,2]<br />
+&nbsp; G(r) = (2/<span style="font-family: times new roman,times,serif;">&pi;</span>)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ<br />
+<br />
+・Atomic PDF [3]<br />
+&nbsp; G(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*[&rho;(r)-&rho;<sub>0</sub>]<br />
+&nbsp; &rho;0: average density<br />
+<br />
+・Atomic form factors [3]<br />
+&nbsp; Calculating a PDF from an atomistic model<br />
+&nbsp; G(r) = &Sigma;<sub>ij</sub>{[b<sub>i</sub>*b<sub>j</sub>/&lt;b&gt;<sup>2</sup>]*&delta;(r-r<sub>ij</sub>)}-4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*&rho;<sub>0</sub><br />
+&nbsp; Z for x-rays, b for neutrons<br />
+&nbsp; &rho;<sub>0</sub>: average density<br />
+<br />
+・Modeling nanoscale morphology in real space [3]<br />
+&nbsp; G(r) = (2/<span style="font-family: times new roman,times,serif;">&pi;</span>)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*[&rho;(r)-&rho;<sub>0</sub>*&gamma;<sub>0</sub>(r)]<br />
+&nbsp; &gamma;<sub>0</sub>(r): particle shape function<br />
+<br />
+・Reduced PDF = total correction function t(r) [6]<br />
+&nbsp; t(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*&rho;<sub>0</sub>*g(r)<br />
+<br />
+・differential correlation function d(r) [6]<br />
+&nbsp; d(r) = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*r*&rho;<sub>0</sub>*[g(r) - 1]<br />
+<br />
+・reduced density: &rho;(r) [6]<br />
+&nbsp; &rho;(r) =&rho;<sub>0</sub>*g(r)<br />
+<br />
+◇ Mathematical basis of the PDF [1,4]<br />
+&nbsp; 解析に十分なデータを取るには大きなQが必要(例えば Q &gt; 20 ～ 30 Å<sup>-1</sup>)<br />
+&nbsp; 短波長（大きなエネルギー）の中性子やX線を用いる<br />
+&nbsp; 例： Q ～ 30 Å<sup>-1</sup> -&gt; &lambda; ～ 0.4 Å -&gt; E ～ 31 keV<br />
+&nbsp; Qmax= 30 ～ 50 Å<sup>-1</sup> (X-ray Synchrotron )<br />
+&nbsp; Qmax= 10 ～ 23 Å<sup>-1</sup> (electrons)<br />
+<br />
+◇ Synchrotron X-rays [5]<br />
+・f: proportional to Z (atomic number)<br />
+&nbsp; poor sensitivity to light elements<br />
+&nbsp; f: decreases with Q = 4*<span style="font-family: times new roman,times,serif;">&pi;</span>*sin(&theta;)/&lambda;<br />
+・sample amount ～ 100 mg<br />
+・acquisition time<br />
+&nbsp; ～ 5 hours for point detector<br />
+&nbsp; ～ 10 secounds for area detector<br />
+&nbsp; ～ 0.1 secounds a-Si area detector<br />
+<br />
+◇ Neutrons [5]<br />
+・b: flucuates with Z<br />
+&nbsp; sensitive to light elements<br />
+&nbsp; b: constant with Q<br />
+・sample amount ～ 5 - 10 g<br />
+・acquisition time<br />
+&nbsp; ～ 2 - 5 hours, possibly longer<br />
+&nbsp; (much faster at the latest neutron souces, e.g. Oak Ridge Laboratory, Tennessee)<br />
+<br />
+[1] X線中性子PDF解析による結晶性物質の局所構造解析 [2]<br />
+&nbsp; http://pfwww.kek.jp/pf-seminar/AOT1/presenfiles/kodama.pdf<br />
+[2] 焼き入れ速度が V Ti Zr の 水素吸蔵特性に与える影響<br />
+&nbsp; https://www.jim.or.jp/journal/j/pdf3/79/03/131.pdf<br />
+[3] Atomic Pair Distribution Function (PDF) Analysis<br />
+&nbsp; https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf<br />
+[4] 結晶PDF（Pair Distribution Function）解析で観る短配位中距離構造の世界<br />
+&nbsp; http://www.jssrr.jp/journal/pdf/28/p117.pdf<br />
+[5] Analysis of Local Structure by Atomic Pair Distribution Function<br />
+&nbsp; http://www.fhi-berlin.mpg.de/acnew/department/pages/teaching/pages/teaching__wintersemester__2016_2017/elena_willinger__analysis_of_local_structure_by_atomic_pair_distribution_function__170203.pdf<br />
+[6] Radial Distribution Function from Electron Diffraction Patterns<br />
+&nbsp; http://www.globalsino.com/EM/page1426.html<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX (Windows 10 (64 bit))<br />
+<br />
+□ Yorick: https://dhmunro.github.io/yorick-doc/downloads.html<br />
+&gt; https://sourceforge.net/projects/yorick/<br />
+&nbsp; yorick-2.1.05-win32.exe<br />
+&nbsp; [管理者として実行]でインストールする。ディフォルトのままでよい。<br />
+&nbsp; C:\Program Files (x86)\yorick-2.1.05\bin\yorick.exe で動作する。<br />
+<br />
+□ Install<br />
+(PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/)<br />
+&nbsp; pdfgetx1.1.tar.gz<br />
+&nbsp; 解凍して C:\Program Files (x86) にコピー&amp;ペースト<br />
+&nbsp; マニュアルに記載されている Actual_PATH を C:\Program Files (x86)\PDFgetX とする。<br />
+1. pdfgetx_custom.i<br />
+-----before<br />
+&nbsp; &nbsp;#include &quot;~/PDFgetX/pdfgetx.i&quot;<br />
+&nbsp; &nbsp;#include &quot;~/PDFgetX/pdfgetxdistribution.i&quot;<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp;#include &quot;C:/Program Files (x86)/PDFgetX/pdfgetx.i&quot;<br />
+&nbsp; &nbsp;#include &quot;C:/Program Files (x86)/PDFgetX/pdfgetxdistribution.i&quot;<br />
+-----<br />
+2. pdfgetx_custom.i をコピー&amp;ペーストして custom.i として C:\Program Files (x86)\yorick-2.1.05\bin に入れる。<br />
+3. pdfgetxdistribution.i<br />
+-----before<br />
+asf_file=&quot;~/PDFgetX/ASF.DAT&quot;<br />
+periodic_table=&quot;~/PDFgetX/PERIODIC_TABLE.DAT&quot;<br />
+mabscoeff_file =&quot;~/PDFgetX/MASS_ABS_COEFF.DAT&quot;<br />
+<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;lpr -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+-----after<br />
+asf_file=&quot;C:/Program Files (x86)/PDFgetX/ASF.DAT&quot;<br />
+periodic_table=&quot;C:/Program Files (x86)/PDFgetX/PERIODIC_TABLE.DAT&quot;<br />
+mabscoeff_file =&quot;C:/Program Files (x86)/PDFgetX/MASS_ABS_COEFF.DAT&quot;<br />
+<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;print -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+4. C:\Program Files (x86)\yorick-2.1.05\bin\yorick.exe<br />
+5. pdfgetx<br />
+<br />
+◇ (これは必要ない)スタート画面で表示されるYorickを使いたい場合<br />
+&nbsp; MFC71.DLLが見つからないと表示される。<br />
+&nbsp; ImageMagickやMSの再配布パッケージを試してみたが失敗。<br />
+&nbsp; http://rabbitlove.way-nifty.com/diary/2014/02/mfc71dll-3096.html のHPの通りに行った。<br />
+&nbsp; 7.10.6041.0 &nbsp;1.01 MB &nbsp;0.47 MB &nbsp;U.S. English &nbsp;MFCDLL Shared Library - Retail Version をダウンロードし、mfc71.zip を解凍して、MFC71.DLLを小文字のmfc71.dllにしてC:\Windows\System32にコピー&amp;ペースト。<br />
+&nbsp; msvcr71.dll がないと表示されるのでVector（https://www.vector.co.jp/soft/win95/util/se435079.html）からダウンロード<br />
+&nbsp; 一応、mfc71.zip などのファイルはAVGで[選択した項目をスキャン]したがウィルスは検出されていない。<br />
+&nbsp; MFC71.DLLとmsvcr71.dllを C:\Program Files (x86)\yorick-2.1.05\binmfc コピー&amp;ペースト。<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetN (Windows 10 (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetN: https://sourceforge.net/projects/pdfgetn/files/)<br />
+&nbsp; PDFgetN-1.6.7-win32.exe<br />
+&nbsp; [管理者として実行]でインストールする。<br />
+&nbsp; C:\Program Files (x86)\PDFgetN とする。他はディフォルトのまま。<br />
+&nbsp; ディスクトップに作成されるPDFgetNをクリックすれば動作する。<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX2 (Windows 10 (64 bit))<br />
+<br />
+□ PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/<br />
+&nbsp; pdfgetx2-1.0-050123-win.exe<br />
+&nbsp; [管理者として実行]でインストールする。途中で止まるときはCtrl+Alt+Delでタスクマネージャーを動かすとよい。<br />
+&nbsp; custmizedにして、 C:\Program Files (x86)\PDFgetX2 とする。他はディフォルトのまま。<br />
+&nbsp;&nbsp;<br />
+□ IDL Virtual Machine (インストールが必要)<br />
+・ HARRIS<br />
+(HARRIS: https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine)<br />
+上記の本家で登録して最新版をインストールするか、過去に配布されていた古いフリーのものを用いる。<br />
+・ NASA<br />
+(Gridview: https://denali.gsfc.nasa.gov/gridview/)<br />
+&nbsp; idl_linux.x86.tar.gz<br />
+&nbsp; idl60vmosx.tar.gz<br />
+&nbsp; idl63winx86_32.exe<br />
+・ The University of Chicago<br />
+(GSE_shell wiki: https://sites.google.com/site/gseshellwiki/idl-download-and-installation<br />
+&gt; IDL64.zip: http://cars9.uchicago.edu/surfacewiki/IDLDownload?action=AttachFile&amp;do=view&amp;target=IDL64.zip)<br />
+&nbsp; IDL64.zip<br />
+1. https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine#howtodl<br />
+&nbsp; 一番下にresisterがある。<br />
+&nbsp; Subscribe to company and product related emails:* は No にした。<br />
+2. メールが来る。<br />
+&nbsp; 確認用のアドレスをクリック。ここで登録した情報を入力しても動かない。<br />
+&nbsp; You are not currently authorized to login to this site. と表示されている場合はまだ相手側に承認されていない。<br />
+&nbsp; 3. HPに戻り人の顔を部分をクリックすると[My account]が得られる。<br />
+&nbsp; ※ NASAとChicagoのものはダウンロードは問題がありそうなので行わない。本家のHARRISからの返信を待つ。<br />
+&nbsp; ※ 本家からメールは直ぐに届いたが、メールに記載のURLをクリックしてAccount Loginで<br />
+必要事項を記入したが[You are not currently authorized to login to this site.]と表示される。<br />
+3. 登録した次の日に Account Login で入れた。最初のメール以降のメールは特に来ていない。<br />
+&nbsp; &nbsp;人のマークをクリックして、 My Account をクリックして左にあるDownload Page &gt; をクリック。<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Microsoft Windows (7,8,10) 64-bi<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Native x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Unix x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Linux x86_64 64-bit<br />
+&nbsp; I Agreeをクリック。ソ連はよくてキューバがダメっていうのは残念ではある。両国の関係が改善する日を心待ちにしている。<br />
+4. IDL_ENVI53SP1win64.exe をクリック<br />
+&nbsp; IDLのVMしか私は興味がないのでENVIのチェックを外す。後はディフォルトのまま。<br />
+&nbsp; lisenseは[いいえ]にした。<br />
+5. ディストップにあるPDFgetX2をクリック<br />
+※ PDFgetX2を32 bitの意味であるx86においているが、上記の手順で 64 bit OS上でも動いている。<br />
+<br />
+□ Usage<br />
+1. PDFgetX2<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/)<br />
+&nbsp; pdfgetx1.1.tar.gz<br />
+1. sudo apt-get install yorick<br />
+2. unzip pdfgetx1.1.tar.gz<br />
+3. cd PDFgetX<br />
+4. cp pdfgetx_custom.i custom.i<br />
+5. cd $HOME<br />
+6. mkdir Yorick<br />
+7. cp PDFgetX/custom.i Yorick/custom.i<br />
+8. cd PDFgetX<br />
+※ もしPDFgetXの場所を変えたら、マニュアルの通りに Actual_PATH の部分を書き換える。<br />
+<br />
+□ Usage<br />
+1. yorick<br />
+2. pdfgetx<br />
+<br />
+□ manual<br />
+1. evince pdfxman.pdf<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX2 (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ IDL Virtual Machine (インストールが必要)<br />
+・ HARRIS<br />
+(HARRIS: https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine)<br />
+上記の本家で登録して最新版をインストールするか、過去に配布されていた古いフリーのものを用いる。<br />
+・ NASA<br />
+(Gridview: https://denali.gsfc.nasa.gov/gridview/)<br />
+&nbsp; idl_linux.x86.tar.gz<br />
+&nbsp; idl60vmosx.tar.gz<br />
+&nbsp; idl63winx86_32.exe<br />
+・ The University of Chicago<br />
+(GSE_shell wiki: https://sites.google.com/site/gseshellwiki/idl-download-and-installation<br />
+&gt; IDL64.zip: http://cars9.uchicago.edu/surfacewiki/IDLDownload?action=AttachFile&amp;do=view&amp;target=IDL64.zip)<br />
+&nbsp; IDL64.zip<br />
+1. https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine#howtodl<br />
+&nbsp; 一番下にresisterがある。<br />
+&nbsp; Subscribe to company and product related emails:* は No にした。<br />
+2. メールが来る。<br />
+&nbsp; 確認用のアドレスをクリック。ここで登録した情報を入力しても動かない。<br />
+&nbsp; You are not currently authorized to login to this site. と表示されている場合はまだ相手側に承認されていない。<br />
+3. HPに戻り人の顔を部分をクリックすると[My account]が得られる。<br />
+&nbsp; ※ NASAとChicagoのものはダウンロードは問題がありそうなので行わない。本家のHARRISからの返信を待つ。<br />
+&nbsp; ※ 本家からメールは直ぐに届いたが、メールに記載のURLをクリックしてAccount Loginで<br />
+必要事項を記入したが[You are not currently authorized to login to this site.]と表示される。<br />
+4. 登録した次の日に Account Login で入れた。最初のメール以降のメールは特に来ていない。<br />
+&nbsp; &nbsp;人のマークをクリックして、 My Account をクリックして左にあるDownload Page &gt; をクリック。<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Linux x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Microsoft Windows (7,8,10) 64-bi<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Native x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Unix x86_64 64-bit<br />
+&nbsp; I Agreeをクリック。ソ連はよくてキューバがダメっていうのは残念ではある。両国の関係が改善する日を心待ちにしている。<br />
+5. mkdir IDL<br />
+6. cd IDL<br />
+7. tar zxvf idl85envi53sp1linux.x86_64.tar.gz<br />
+8. sudo ./install.sh<br />
+&nbsp; [space] key<br />
+&nbsp; Do you accept all of the terms of the preceding license agreement? (y/n): &nbsp;y<br />
+&nbsp; /usr/local/exelis<br />
+&nbsp; IDL? (y/n): y<br />
+&nbsp; ENVI? (y/n): n<br />
+&nbsp; IDL Help files? (y/n): n<br />
+&nbsp; DICOM Network Services? (y/n): n<br />
+&nbsp; Install the above configuration? (y/n): y<br />
+&nbsp; Do you want to create the symbolic links in /usr/local/bin? (y/n): y<br />
+&nbsp; Do you want to run the License Wizard? (y/n): n<br />
+9. wget http://mirrors.edge.kernel.org/ubuntu/pool/main/libx/libxp/libxp6_1.0.2-1ubuntu1_amd64.deb<br />
+&nbsp; sudo dpkg --install libxp6_1.0.2-1ubuntu1_amd64.deb&nbsp;<br />
+&nbsp; (IBM Support: https://www-01.ibm.com/support/docview.wss?uid=swg21984532)<br />
+<br />
+□ Install<br />
+(PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/)<br />
+&nbsp; pdfgetx2-1.0-050315.tar.gz<br />
+1. tar zxvf pdfgetx2-1.0-050315.tar.gz<br />
+2. cd distribution<br />
+3. sudo ./install.sh<br />
+&nbsp; Do you ACCEPT the above statement? (Y/N) y<br />
+&nbsp; Use different directories? (Y/N) n<br />
+4. pdfgetx2<br />
+※ 流石はIBM supportである。上記の手順でIDL VMがubuntu 18.04 LTS (64 bit) (Windows Subsystem for Linux. Windows 10)で動作した（Subsystemの利用の場合はXLaunchの起動も忘れないように）。<br />
+◇ other methods<br />
+&nbsp; pdfgetx2-1.0-050315-linux.sh<br />
+1. sudo ./pdfgetx2-1.0-050315-linux.sh<br />
+&nbsp; Do you ACCEPT the above statement? (Y/N) y<br />
+&nbsp; Use different directories? (Y/N) n<br />
+<br />
+□ Usage<br />
+1. PDFgetX2<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetN (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetN: https://sourceforge.net/projects/pdfgetn/files/)<br />
+&nbsp; PDFgetN-1.6.7.tar.gz<br />
+1. sudo apt-get install perl<br />
+&nbsp; sudo apt-get install perl-tk<br />
+2. tar zxvf PDFgetN-1.6.7.tar.gz<br />
+3. cd PDFgetN<br />
+4. sudo perl install.pm<br />
+<br />
+□ Usage<br />
+1. pdfgetn<br />
+<br />
+□ manual<br />
+1. evince ./manual/getn_man.pdf<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Neutron PDF for Local Structure Studies (https://neutrons.ornl.gov/sites/default/files/PDF_intro_talk_ORNL.pdf)<br />
+[2] NOMAD Modeling of the PDF: Hands-on PDFgui Exercises: (https://neutrons.ornl.gov/sites/default/files/PDF_hands_on_examples_NOMAD.pdf)<br />
+&nbsp; PDFguiでの解析の手順を示している。PDFguiのTutorialを試した後に復習として見てみると良いだろう。金属クラスターの解析の理解についても役立つ。<br />
+[3] Atomic Pair Distribution Function (PDF) Analysis (https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf)<br />
+[4] X線中性子PDF解析による結晶性物質の局所構造解析 (http://pfwww.kek.jp/pf-seminar/AOT1/presenfiles/kodama.pdf)<br />
+[5] PDFgui Installation (https://www.diffpy.org/products/pdfgui.html)<br />
+[6] diffpy.pdfgetx 2.0.0 Installation (https://www.diffpy.org/doc/pdfgetx/2.0.0/install.html#software-requirements)<br />
+[7] diffpy.pdfgetx 2.0.0 Tutorial (https://www.diffpy.org/doc/pdfgetx/2.0.0/tutorial.html)<br />
+[8] PDFgui user guide (https://www.diffpy.org/doc/pdfgui/index.html)<br />
+[9] Analysis of Local Structure by Atomic Pair Distribution Function (http://www.fhi-berlin.mpg.de/acnew/department/pages/teaching/pages/teaching__wintersemester__2016_2017/elena_willinger__analysis_of_local_structure_by_atomic_pair_distribution_function__170203.pdf)<br />
+[10] 二体分布関数法を用いた水素貯蔵材料の局所構造解析と水素化特性の理解 (http://www.hess.jp/Search/data/37-04-007.pdf)<br />
+「フィッテイングに用いるPDFguiプログラム中のQbroadと呼ばれるパラメータが距離在依存性のピークブロードニングに相当する」[C. L. Farrow et al., &quot;PDFgui user guid&quot; (2009)]と書かれている。V基合金では「10サイクル目試料の転位密度は10^11~10^12 cm^-2のオーダーにあると見積られる」「PDFで観察される距離依存性ブロードニングは高密度の転位によって起こるものであると考えられる」<br />
+[11] 結晶PDF解析の最前線 (https://www.jstage.jst.go.jp/article/hamon1991/18/4/18_4_203/_pdf/-char/ja)<br />
+&nbsp; 「ナノ粒子の動径分布関数,ひいては対相関関数はバルクの場合と比べ,rの増大とともに強度が減衰することになる」理由が分かりやすく書かれている。<br />
+------------------------------------------------------------------------------<br />
+■ Memo<br />
+<br />
+□ pdfgetx.pdf (User&#39;s Manual)<br />
+----------<br />
+&nbsp; PDFgetX is a program to be used to obtain the atomic Pair Distribution Function (PDF) from a measured X-ray powder diffraction data.&nbsp;<br />
+&nbsp; (PDFgetXは、測定されたX線粉末回折データから原子対分布関数（PDF）を取得するために使用されるプログラムです。)<br />
+----------<br />
+&nbsp;&nbsp;A useful characteristic of PDF method is that it gives both local and average structure information because both Bragg peaks and diffuse scattering are used in the analysis. And from the PDF peak width, it&rsquo;s possible to obtain the information about bond-length distribution (static, thermal) [4] and correlated atomic thermal motion [5]. By contrast, an analysis of the Bragg scattered intensities alone, by a Rietveld type analysis for instance, yields the average crystal structure only and the extended x-ray absorption fine structure(EXAFS) gives nearest-neighbor and next nearest-neighbor distance information. PDF analysis method has long been used to characterize glasses, liquids and amorphous materials.&nbsp;<br />
+&nbsp; (PDFメソッドの有用な特徴は、分析でブラッグピークと拡散散乱の両方が使用されるため、局所構造情報と平均構造情報の両方が得られることです。 PDFのピーク幅から、結合長分布（静的、熱）[4]および相関する原子熱運動[5]に関する情報を取得できます。 対照的に、例えばリートベルト型分析によるブラッグ散乱強度のみの分析では、平均結晶構造のみが得られ、拡張X線吸収微細構造（EXAFS）は、最近傍および次の最近傍距離情報を提供します。 PDF分析法は、ガラス、液体、アモルファス材料の特性評価に長い間使用されてきました。)<br />
+----------<br />
+&nbsp;&nbsp;Absorption effect becomes larger as Q increases.&nbsp;<br />
+&nbsp; (Qが大きくなると、吸収効果が大きくなります。)<br />
+----------<br />
+&nbsp;&nbsp;modified Compton using the Ruland function<br />
+&nbsp; (Ruland関数を使用した修正コンプトン)<br />
+----------<br />
+&nbsp;&nbsp;The ripples around sharp peaks are known as the termination ripple. It is caused by the limited Q value in Sine Fourier transform. And the noise peaks near to r=0 are caused by noises in the data.<br />
+&nbsp; (鋭いピークの周りのリップルは、終端リップルとして知られています。 これは、サインフーリエ変換のQ値が制限されていることが原因です。 また、r = 0に近いノイズピークは、データ内のノイズが原因です。)<br />
+----------<br />
+Multiple Scattering Correction<br />
+<br />
+&nbsp; We&rsquo;ll consider here only the double scattering process since it represents the major part of the multiple scattering.<br />
+&nbsp; (我々は二重散乱プロセスのみを検討します。それが多重散乱の主要部分を表しているからです。)<br />
+<br />
+&nbsp; The multiple scattering depends on absorption coefficient and geometry. In transmission geometry it becomes larger as Q increases. In reflection geometry, however, it increases up to maximum point and decrease a little bit after that. We can see that smaller the absorption coefficient, smaller double scattering ratio, in both cases [15].<br />
+&nbsp; (多重散乱は、吸収係数と配置に依存します。 透過の配置では、Qが増加するにつれて大きくなります。 ただし、反射の配置では、最大点まで増加し、その後少し減少します。 どちらの場合も、吸収係数が小さく、二重散乱比が小さいことがわかります[15]。)<br />
+----------<br />
+Polarization Correction<br />
+※ 偏光していれば補正は必要ない。しかし、放射光でも実際には100%偏光しておらず、5%程度の偏光補正が必要になる。<br />
+----------<br />
+Absorption Correction<br />
+<br />
+(A) Flat plate reflection geometry<br />
+&nbsp;&nbsp;In reflection geometry, if the absorption coefficient is large enough (&micro;t &ge; 4), there&rsquo;s almost no angle dependence of absorption factor.<br />
+<br />
+(B) Flat plate transmission geometry<br />
+&nbsp;&nbsp;&nbsp;In transmission geometry, however, when absorption coefficient is around 1, the angle dependence is minimal.<br />
+※ 吸収補正は、反射法（通常のXRD）の場合は&micro;t &ge; 4となるときどの角度でもほぼ1となり補正無しと変わらない。透過法（キャピラリーガラスを用いた方法）の場合は&mu;tが1に近い場合に角度依存性が最小となる。<br />
+----------<br />
+Compton Scattering Correction<br />
+&nbsp;&nbsp;Compton scattering correction is very important and difficult in X-ray diffraction data analysis. Fig. (5.4) shows elastic and Compton scattering. We can see that Compton scattering becomes much larger than coherent scattering in high Q. So even the small error in Compton correction causes big error in determining coherent scattering. Therefore it&rsquo;s better to discriminate Compton scattering from elastic scattering than to correct it theoretically. Compton scattering can be removed experimentally, particularly at large scattering angles, using an analyzer crystal in the diffracted beam, or using a solid state detector with a very narrow energy widow setup. When the Compton scattering is not discriminated, we have to use theoretical Compton profiles to apply correction. In this case we have to take into account the &lsquo;Breit-Dirac&rsquo; recoil factor, R [16]. Formerly, R was usually set equal to unity, which is still an acceptable approximation for elements of high atomic number. For light elements and for present-day high-precision diffractometric measurement, however, it is essential that R be numerically evaluated if the maximum amount of information inherent in the experimental data is to be extracted. According to Ergun [16], the following Eq. (5.10) should be applied when the number of photons per unit area per unit time is measured, as with counters.<br />
+&nbsp; (コンプトン散乱補正は、X線回折データ分析において非常に重要かつ困難です。図（5.4）は弾性散乱とコンプトン散乱を示しています。コンプトン散乱は、高いQのコヒーレント散乱よりもはるかに大きくなることがわかります。したがって、コンプトン補正の小さな誤差でも、コヒーレント散乱の決定に大きな誤差が生じます。したがって、理論的に修正するよりも、コンプトン散乱と弾性散乱を区別する方が適切です。コンプトン散乱は、特に大きな散乱角では、回折ビームにアナライザー結晶を使用するか、非常に狭いエネルギーウィンドウ設定の固体検出器を使用して、実験的に除去できます。コンプトン散乱が識別されない場合、補正を適用するために理論的なコンプトンプロファイルを使用する必要があります。この場合、Breit-Dirac反跳係数 R [16]を考慮する必要があります。以前は、Rは通常、1に等しく設定されていました。これは、原子番号の大きい元素に対して許容できる近似です。ただし、軽元素および今日の高精度な回折測定では、実験データに固有の最大量の情報を抽出する場合、Rを数値的に評価することが不可欠です。 Ergun [16]によると、次の式（5.10）は、カウンターのように、単位時間あたりの単位面積あたりの光子数を測定するときに適用する必要があります。)<br />
+<br />
+&nbsp;&nbsp;Even when the Compton scattering in high Q is discriminated, the data still contains Compton in mid-low Q region. In order to remove the Compton in mid-low Q region, we use the method suggested by Ruland [19]. In this method, the Compton intensity in the data is smoothly attenuated with increasing Q as is shown in Fig. 3.4(c).<br />
+&nbsp; (高いQでのコンプトン散乱が識別される場合でも、データには中から低のQの領域のコンプトンが含まれています。中から低のQの領域のコンプトンを削除するには、Ruland [19]によって提案された方法を使用します。この方法では、図3.4（c）に示すように、データのコンプトン強度はQの増加とともに滑らかに減衰します。)<br />
+----------<br />
+Normalization<br />
+&nbsp;&nbsp;The measured x-ray intensity is arbitrary value. The intensity should be normalized properly to get physical meaning. To determine normalization constant, N, we use high Q part of data.<br />
+&nbsp; (測定されたX線強度は任意の値です。 物理的な意味を得るには、強度を適切に正規化する必要があります。 正規化定数Nを決定するために、データの高Q部分を使用します。)<br />
+----------<br />
+Laue Scattering Correction<br />
+&nbsp;&nbsp;Laue term is defined as &lt;f<sup>2</sup>&gt; &minus; &lt;f&gt;<sup>2</sup>. The Laue scattering occurs when there is no short-range order and the atoms are distributed randomly and it decreases monotonically with increasing scattering angle [12].<br />
+&nbsp; (ラウエ項は&lt;f<sup>2</sup>&gt; &minus; &lt;f&gt;<sup>2</sup>として定義されます。 ラウエ散乱は、短距離秩序がなく、原子がランダムに分布している場合に発生し、散乱角の増加とともに単調に減少します[12]。)<br />
+----------<br />
+※ 上記を読むと、PDFgetXでの補正は基本的にはYesで良いようだ。ただし、多重散乱と吸収の補正で&mu;tの値が使われているため&mu;tの値は可能な限り正確に求めておく必要がある。反射法の配置で&mu;t&gt;4として吸収の補正を省いても、多重散乱の補正は必要になる（とはいえ、マニュアルの図にあるとおり反射法でのI<sub>2</sub>/I<sub>1</sub>の値は小さい。『Underneath the Bragg&nbsp; Peak』えでは「X線の場合、強度に対する多重散乱の寄与は反射では非常に小さい」と書かれている）。<br />
+<br />
+□&nbsp; Underneath the Bragg Peaks: Structural Analysis of Complex Materials<br />
+----------<br />
+Polarization correction<br />
+&nbsp; Here f is the polarization rate of the incident radiation in the direction perpendicular to the scattering plane. If the radiation is unpolarized, f=0 and A=1; if it is fully plane polarized perpendicular to the scattering plane f=1 and A=0. In this case there is no angle dependence to the scattered intensity due to polarization effects and therefore no polarization correction. In a real synchrotron experiment the beam is not 100% plane polarized and A will take a small value in the vicinity of 5%.<br />
+&nbsp; (ここで、fは散乱面に垂直な方向の入射放射の偏光率です。 放射が偏光されていない場合、f = 0およびA = 1。 散乱面f = 1およびA = 0に対して垂直に完全に平面偏光されている場合。 この場合、偏光効果による散乱強度への角度依存性はなく、したがって偏光補正はありません。 実際のシンクロトロン実験では、ビームは100％平面偏光ではなく、Aは5％付近で小さな値を取ります。)<br />
+----------<br />
+&nbsp;&nbsp;Any imperfection in the corrections procedure will affect the outcome.<br />
+&nbsp; There are two pieces of good news in this regard. First, most of the corrections are pretty well understood and can be reliably estimated. The second piece of good news is that the structural information in the PDF is fairly robust with respect to analysis errors. The reason is that most data-corrections give rise to data-modulations that are much more slowly varying with Q than the experimental signal itself. The net result of this is that imperfections in the data correction procedure have a large effect on the very low-r region of the PDF since long wavelength features in S(Q) give rise to sharp features in G(r) at low-r. This is the region below the nearest-neighbor distance where there is no physical infromation about the structure. Whilst accurate data-corrections are clearly important, the physical information in the PDF is somewhat robust to imperfect corrections.<br />
+&nbsp; (補正手順に欠陥があると結果に影響します。この点に関して、良い知らせが2つあります。 まず、ほとんどの補正は非常によく理解されており、確実に推定できます。 良いニュースの2番目の部分は、PDFの構造情報が分析エラーに関してかなり堅牢であることです。 その理由は、ほとんどのデータ補正により、実験信号自体よりもQの変化がはるかに遅いデータ変調が生じるためです。 この最終結果は、S（Q）の長波長の特徴が低いrでG（r）の鋭い特徴を生じさせるため、データ補正手順の不完全性がPDFの非常に低いr領域に大きな影響を与えることです。これは、構造に関する物理的な情報がない最近傍距離より下の領域です。 正確なデータ補正は明らかに重要ですが、PDFの物理情報は不完全な補正に対してある程度堅牢です。)<br />
+<br />
+&nbsp; Having said this, spurious information from this low-r portion of the PDF can propagate into the physical region of the data and one should be guarded against over-interpreting small, individual, features, especially in the low-r region of the PDF.<br />
+&nbsp; (とはいえ、PDFのこの低いrの部分からの偽の情報は、データの物理領域に伝播する可能性があり、特にPDFの低いrの領域では、小さな個々の機能を過剰に解釈しないように注意する必要があります。)<br />
+<br />
+&nbsp; In contrast to other local structural techniques such as XAFS, the quality of the dose not diminish with increasing r. By fitting models over a range of r to get the structural information it is unlikely that experimental artifacts will be wrongly interpreted.<br />
+&nbsp; (XAFSなどの他の局所構造技術とは対照的に、線量の質はrの増加に伴って低下しません。 rの範囲にわたってモデルを適合させて構造情報を取得することにより、実験的なアーチファクトが誤って解釈される可能性は低くなります。)<br />
+----------<br />
+・elastic&nbsp;<br />
+&nbsp;&nbsp;In an elastic scattering event there is no exchange of energy between the scattering particle and the system it is scattering off (the sample).&nbsp;<br />
+・inelastic<br />
+&nbsp;&nbsp;in an inelastic scatering event there is an exchange of energy.<br />
+・coherent<br />
+&nbsp; If there are two scattered waves of amplitude &Psi;<sub>1</sub> and &Psi;<sub>2</sub>,&nbsp;<br />
+&nbsp;&nbsp;I = |&Psi;<sub>1</sub> + &Psi;<sub>2</sub>|<sup>2</sup><br />
+・incoherent<br />
+&nbsp;&nbsp;In the case of incoherent scattering there is no definite phase relationship between the waves, they do not interfere, and the resulting intensity is simply the sum of the intensities of the individual waves themselves,<br />
+&nbsp;&nbsp;I = |&Psi;<sub>1</sub>|<sup>2</sup> + |&Psi;<sub>2</sub>|<sup>2</sup><br />
+----------<br />
+・Scattering
+<table border="1" cellpadding="1" cellspacing="1" style="width: 518px;">
+	<tbody>
+		<tr>
+			<td style="width: 72px;">&nbsp;</td>
+			<td style="width: 203px; text-align: center;">coherent</td>
+			<td style="width: 228px; text-align: center;">incoherent</td>
+		</tr>
+		<tr>
+			<td style="width: 72px; text-align: center;">elastic</td>
+			<td style="width: 203px; text-align: center;">Bragg&nbsp;scattering</td>
+			<td style="width: 228px; text-align: center;">Laue monotonic&nbsp;scattering<br />
+			(The incoherent cross-section of the nuclear scattering)</td>
+		</tr>
+		<tr>
+			<td style="width: 72px; text-align: center;">inelastic</td>
+			<td style="width: 203px; text-align: center;">Thermal diffuse&nbsp;scattering</td>
+			<td style="width: 228px; text-align: center;">Comption&nbsp;scattering</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp;&nbsp;There are many different scattering process that occur in materials, but all scattering processes can be categorized as being coherent or incoherent and elastic or inelastic. To illustrate this, we mention some types of scattering and categorize them. We will discuss this more below in the Sections 5.3.7 and 5.3.8. Bragg scattering is elastic and coherent. Laue monotonic diffuse scattering (coming from the mixture or different cheminal species in a sample) is elastic and incoherent. The incoherent cross-section of the nuclear scattering, coming from the different isotopes and spin-states of nuclei in a sample, is elastic and incoherent (in some sense it is the same as Laue monotonic scatering). Thermal diffuse scattering is inelastic and cherent. Comption scatering is inelastic and incoherent. Neutron (and X-ray) scattering from phonons and magnons is inelastic and coherent (actually the same origin as thermal diffuse scattering). All the coherent scattering, elastic (e.g. Bragg) and inelastic (e.g. TDS), becomes incoherent at high enough values of Q due to Debye-Waller effect. We will use these concepts more below.<br />
+----------<br />
+Thus, for every measured point to contribute equally to the Fourier transform we need to approximately satisfy the condition M(Q<sub>i</sub>) &prop; Q<sub>i</sub><sup>2</sup>/&lt;f<sup>2</sup>(Q<sub>i</sub>)&gt;. For very high-Q experiments this is a demanding criterion. &lt;f<sup>2</sup>(Q)&gt; falls smoothly from a value of Z<sup>2</sup> at Q=0 to a value of order unity at very high-Q. For a Q of 40 Å<sup>-1</sup> the counting time at high-Q could be as much as 5 orders of magnitude higher than at low-Q !<br />
+&nbsp; The calculus of variations method (Thijsse, 1984) results in the less demanding criterion of M(Q<sub>i</sub>) &prop; Q<sub>i</sub>/&lt;f(Q<sub>i</sub>)&gt;, but still the monitor counts at Q～40Å<sup>-1</sup> should be 2-3 orders of magnitude higher than at Q～1Å<sup>-1</sup>. If these criteria are not adhered to a perfectly valid G(r) is still obtained but not with optimal statistics. Also, information in S(Q) about small atomic displacements is strongest at high-Q (its intensity scales approximately like Q<sup>2</sup>&delta;r<sup>2</sup>) so it is important to collect the high-Q data with good statistics.<br />
+----------<br />
+&nbsp;&nbsp;As can be seen in figure 5.4, in the case of X-rays the multiple scattering contribution to the inteisity is very small in reflection but can be significant in transmission geometry, especially at high scattering angles. Calculation of the X-ray mutiple scattering intensity is considerably simplified when only purely &#39;elastic&#39; scattering is collected (the Compton scattering is discriminated away) since only completely elastic multiple scattering events need to be considered.<br />
+&nbsp; (図5.4に見られるように、X線の場合、強度に対する多重散乱の寄与は反射では非常に小さいですが、特に高い散乱角では、透過の配置では重要になる可能性があります。 完全に弾性的な多重散乱イベントのみを考慮する必要があるため、純粋に「弾性」散乱のみが収集される場合（コンプトン散乱は区別されます）、X線多重散乱強度の計算は大幅に簡素化されます。)<br />
+----------<br />
+<br />
+※ 弾性散乱、コンプトン散乱（非弾性散乱）、蛍光<br />
+※&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51); font-family: &quot;メイリオ&quot;,Meiryo,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">W.Ruland, Acta Cryst.,14 (1961)&nbsp;1180.<br />
+&nbsp;&nbsp;http://journals.iucr.org/q/issues/1961/11/00/a03306/a03306.pdf</span><br />
+※&nbsp;コンプトン散乱における始状態は基底状態と考えてよい。また、理論計算により、基底状態の電子状態、波動関数、電子の運動量密度n(p)を求めることができる。従って、測定されたコンプトンプロファイルを理論計算と比較検討することで、基底状態の電子状態を考察することできる。 (wikipediaより）<br />
+※&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(34, 34, 34); font-family: sans-serif; font-size: 15.13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">物質中の電子は静止しておらず、ドップラー効果により、コンプトン散乱には電子の運動量が反映されることによる。1929年には金属 Be のコンプトン散乱の測定から</span><sup class="reference" id="cite_ref-FOOTNOTEDuMond1929_12-0" style="color: rgb(34, 34, 34); font-family: sans-serif; font-size: 12.53px; font-style: normal; font-variant: normal; font-weight: normal; letter-spacing: normal; line-height: 1em; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: nowrap; word-spacing: 0px;"><a href="https://ja.wikipedia.org/wiki/%E3%82%B3%E3%83%B3%E3%83%97%E3%83%88%E3%83%B3%E5%8A%B9%E6%9E%9C#cite_note-FOOTNOTEDuMond1929-12" style="background-attachment: scroll; background-clip: border-box; background-color: transparent; background-image: none; background-origin: padding-box; background-position-x: 0%; background-position-y: 0%; background-repeat: repeat; background-size: auto; color: rgb(6, 69, 173); text-decoration: none; white-space: nowrap;">[12]</a></sup><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(34, 34, 34); font-family: sans-serif; font-size: 15.13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">，物質中の電子の運動量分布はフェルミ・ディラック統計に従うことが示されている。 インパルス近似が成り立つ条件下で，コンプトン散乱 X 線のエネルギー分布から始状態の電子運動量分布が得られる。コンプトン散乱X線のエネルギースペクトルから求めた物質中の電子運動量分布を、コンプトンプロファイルとよぶ。</span> (wikipediaより）<br />
+------------------------------------------------------------------------------<br />
+■ Install (failed)<br />
+<br />
+□ PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/<br />
+&nbsp; Please download current version of PDFgetX&nbsp;<br />
+&nbsp; 失敗<br />
+<br />
+□ PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/<br />
+&nbsp; pdfgetx2-1.0-050315-win.exe &nbsp;<br />
+&nbsp; PDFgetX2はインストールできなかった。<br />
+&nbsp; Linux版でテストしてみる。pdfgetx2-1.0-050315-linux.shをubuntu 18.04 LTS動作<br />
+&nbsp; sudo ./pdfgetx2-1.0-050315-linux.sh<br />
+&nbsp; Enter<br />
+&nbsp; Space<br />
+&nbsp; Y (Do you ACCEPt the above statement?)<br />
+&nbsp; N (Use different directories)<br />
+&nbsp;&nbsp;<br />
+&nbsp; http://docs.astro.columbia.edu/files/idl/6.4/<br />
+&nbsp; idl_linux.x86_64.tar.gz&nbsp;<br />
+&nbsp; 失敗<br />
+&nbsp;&nbsp;<br />
+&nbsp; I2py<br />
+&nbsp;&nbsp;<br />
+□ IDL関係<br />
+&nbsp; Fawlty Language (http://www.flxpert.hu/fl/)<br />
+&nbsp;&nbsp;<br />
+&nbsp; Scipy<br />
+&nbsp; import scipy.io as sio<br />
+&nbsp; filename = &#39;pdfgetx2.sav&#39;<br />
+&nbsp; df = sio.readsav(filename)<br />
+&nbsp; 失敗<br />
+&nbsp;&nbsp;<br />
+&nbsp; IDLSave (http://astrofrog.github.io/idlsave/)<br />
+&nbsp; IDLSave-1.0.0.tar.gz<br />
+&nbsp; cd IDLSave-1.0.0/idlsave<br />
+&nbsp; gedit idlsave.py<br />
+&nbsp; -----Line 32<br />
+&nbsp; import gzip<br />
+&nbsp; -----Line 776<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # rec_string = zlib.decompress(f.read(nextrec-pos))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rec_string = gzip.open(f.read(nextrec-pos))<br />
+&nbsp; -----<br />
+&nbsp; cd IDLSave-1.0.0<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd distribution<br />
+&nbsp; python<br />
+&nbsp; import idlsave<br />
+&nbsp; s = idlsave.read(&#39;pdfgetx2.sav&#39;)<br />
+&nbsp; 失敗<br />
+------------------------------------------------------------------------------<br />
+<br />
+&nbsp;

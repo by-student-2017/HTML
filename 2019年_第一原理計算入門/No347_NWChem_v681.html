@@ -1,0 +1,333 @@
+NWChem 6.8.1 (http://www.nwchem-sw.org/index.php/Main_Page)<br />
+------------------------------------------------------------------------------<br />
+■ NWChem 6.8.1 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+□ Install (gfortran + OpenBLAS + OpenMPI + python 2.7) [3]<br />
+(https://github.com/nwchemgit/nwchem/releases/tag/6.8.1-release)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/nwchemgit/nwchem/archive/6.8.1-release.tar.gz<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install python-dev tcsh make&nbsp;<br />
+1. tar zxvf 6.8.1-release.tar.gz<br />
+2. cd nwchem-6.8.1-release<br />
+3. export NWCHEM_TOP=$HOME/nwchem-6.8.1-release<br />
+&nbsp; export USE_MPI=y<br />
+&nbsp; export NWCHEM_TARGET=LINUX64<br />
+&nbsp; export USE_PYTHONCONFIG=y<br />
+&nbsp; export PYTHONVERSION=2.7<br />
+&nbsp; export PYTHONHOME=/usr<br />
+&nbsp; export FFLAGS=&quot;-m64 -I/usr/lib/x86_64-linux-gnu/openmpi/include&quot;<br />
+&nbsp; export BLAS_SIZE=4<br />
+&nbsp; export USE_64TO32=y<br />
+&nbsp; export BLASOPT=&quot;-lopenblas -lpthread -lrt&quot;<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib<br />
+4. cd $NWCHEM_TOP/src<br />
+5. make nwchem_config NWCHEM_MODULES=&quot;all python&quot;<br />
+6. make 64_to_32<br />
+7. make<br />
+&nbsp; (make FC=/usr/bin/mpif90 CC=/usr/bin/mpicc &gt;&amp; make.log)<br />
+&nbsp; (make FC=mpif90 CC=mpicc &gt;&amp; make.log)<br />
+&nbsp; ($NWCHEM_TOP/bin/LINUX64/)<br />
+<br />
+□ examples (QMD, 3carbo_dft.nw)<br />
+(0. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib )<br />
+1. cd ~/nwchem-6.8.1-release/examples<br />
+2. cd qmd<br />
+3. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $NWCHEM_TOP/bin/LINUX64/nwchem 3carbo_dft.nw | tee 3carbo_dft.out<br />
+※ Total times &nbsp;cpu: &nbsp; &nbsp; &nbsp;522.7s &nbsp; &nbsp; wall: &nbsp; &nbsp; &nbsp;530.3s<br />
+※ cat /proc/cpuinfo<br />
+&nbsp; model name &nbsp; &nbsp; &nbsp;: Intel(R) Core(TM) i5-8500 CPU @ 3.00GHz<br />
+<br />
+□ ATLAS [3] (no check)<br />
+sudo apt-get install libatlas-base-dev liblapack-dev libblas-dev<br />
+export BLASOPT=&quot;-L/usr/local/ATLAS -llapack -lf77blas -latlas&quot;<br />
+<br />
+※ NWChem&#39;s Performance is degraded by not setting BLASOPT<br />
+Please consider using ATLAS, GotoBLAS2, OpenBLAS, Intel MKL,<br />
+<br />
+※ &quot;make clean&quot; may not work as expected. In my case, it worked fine after removing &quot;nwchem-6.8.1-release&quot; and starting over. (e.g., 0. rm -f -r nwchem-6.8.1-release)<br />
+<br />
+※ MKLの例は帰る前にジョブを流した。このOpenBLASの例では昼間に多少別の作業をしながらなので、2%程度の差はあまり気にしなくても良いと思う。この程度の差であれば目的の計算が安定に動作するインストールを選択するのが良いだろう。<br />
+------------------------------------------------------------------------------<br />
+□ Install (gfortran + OpenBLAS + Scalapack + OpenMPI + python 2.7) [3]<br />
+(https://github.com/nwchemgit/nwchem/releases/tag/6.8.1-release)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/nwchemgit/nwchem/archive/6.8.1-release.tar.gz<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi2.0<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install python-dev tcsh make&nbsp;<br />
+1. tar zxvf 6.8.1-release.tar.gz<br />
+2. cd nwchem-6.8.1-release<br />
+3. export NWCHEM_TOP=$HOME/nwchem-6.8.1-release<br />
+&nbsp; export USE_MPI=y<br />
+&nbsp; export NWCHEM_TARGET=LINUX64<br />
+&nbsp; export USE_PYTHONCONFIG=y<br />
+&nbsp; export PYTHONVERSION=2.7<br />
+&nbsp; export PYTHONHOME=/usr<br />
+&nbsp; export FFLAGS=&quot;-m64 -I/usr/lib/x86_64-linux-gnu/openmpi/include&quot;<br />
+&nbsp; export BLAS_SIZE=4<br />
+&nbsp; export USE_64TO32=y<br />
+&nbsp; export BLASOPT=&quot;-lopenblas -lpthread -lrt&quot;<br />
+&nbsp; export SCALAPACK_SIZE=4<br />
+&nbsp; export USE_SCALAPACK=y<br />
+&nbsp; export SCALAPACK=&quot;-L/usr/lib/x86_64-linux-gnu -lscalapack-openmpi&quot;<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib<br />
+4. cd $NWCHEM_TOP/src<br />
+5. make nwchem_config NWCHEM_MODULES=&quot;all python&quot;<br />
+6. make 64_to_32<br />
+7. make<br />
+&nbsp; (make FC=/usr/bin/mpif90 CC=/usr/bin/mpicc &gt;&amp; make.log)<br />
+&nbsp; (make FC=mpif90 CC=mpicc &gt;&amp; make.log)<br />
+&nbsp; ($NWCHEM_TOP/bin/LINUX64/)<br />
+<br />
+□ examples (QMD, 3carbo_dft.nw)<br />
+(0. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib )<br />
+1. cd ~/nwchem-6.8.1-release/examples<br />
+2. cd qmd<br />
+3. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $NWCHEM_TOP/bin/LINUX64/nwchem 3carbo_dft.nw | tee 3carbo_dft.out<br />
+※ Total times &nbsp;cpu: &nbsp; &nbsp; &nbsp;534.2s &nbsp; &nbsp; wall: &nbsp; &nbsp; &nbsp;551.4s<br />
+※ cat /proc/cpuinfo<br />
+&nbsp; model name &nbsp; &nbsp; &nbsp;: Intel(R) Core(TM) i5-8500 CPU @ 3.00GHz<br />
+<br />
+※ &quot;make clean&quot; may not work as expected. In my case, it worked fine after removing &quot;nwchem-6.8.1-release&quot; and starting over. (e.g., 0. rm -f -r nwchem-6.8.1-release)<br />
+<br />
+※ MKLの例は帰る前にジョブを流した。このOpenBLASの例では昼間に別の作業をしながらなので、4%程度の差はあまり気にしなくても良いと思う。この程度の差であれば目的の計算が安定に動作するインストールを選択するのが良いだろう。<br />
+------------------------------------------------------------------------------<br />
+□ Install (gfortran + MKL + OpenMPI + OpenMP + python 2.7) [3]<br />
+(https://github.com/nwchemgit/nwchem/releases/tag/6.8.1-release)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/nwchemgit/nwchem/archive/6.8.1-release.tar.gz<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install python-dev tcsh make&nbsp;<br />
+1. tar zxvf 6.8.1-release.tar.gz<br />
+2. cd nwchem-6.8.1-release<br />
+3. export NWCHEM_TOP=$HOME/nwchem-6.8.1-release<br />
+&nbsp; export NWCHEM_TARGET=LINUX64<br />
+&nbsp; export USE_MPI=y<br />
+&nbsp; export USE_PYTHONCONFIG=y<br />
+&nbsp; export PYTHONVERSION=2.7<br />
+&nbsp; export PYTHONHOME=/usr<br />
+&nbsp; export FFLAGS=&quot;-m64 -I${MKLROOT}/include -I/usr/lib/x86_64-linux-gnu/openmpi/include&quot;<br />
+&nbsp; export USE_64TO32=y<br />
+&nbsp; export BLAS_SIZE=4<br />
+&nbsp; export BLASOPT=&quot;-Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_gf_lp64.a ${MKLROOT}/lib/intel64/libmkl_gnu_thread.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_blacs_openmpi_lp64.a -Wl,--end-group -lgomp -lpthread -lm -ldl&quot;<br />
+&nbsp; export SCALAPACK_SIZE=4<br />
+&nbsp; export USE_SCALAPACK=y<br />
+&nbsp; export SCALAPACK=&quot;${MKLROOT}/lib/intel64/libmkl_scalapack_lp64.a&quot;<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib<br />
+4. cd $NWCHEM_TOP/src<br />
+5. make nwchem_config NWCHEM_MODULES=&quot;all python&quot;<br />
+6. make 64_to_32<br />
+7. make<br />
+&nbsp; (make FC=/usr/bin/mpif90 CC=/usr/bin/mpicc &gt;&amp; make.log)<br />
+&nbsp; (make FC=mpif90 CC=mpicc &gt;&amp; make.log)<br />
+&nbsp; ($NWCHEM_TOP/bin/LINUX64/)<br />
+<br />
+□ examples (QMD, 3carbo_dft.nw)&nbsp;<br />
+(0. export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu:/usr/lib/x86_64-linux-gnu/openmpi/lib )<br />
+1. cd ~/nwchem-6.8.1-release/examples<br />
+2. cd qmd<br />
+3. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $NWCHEM_TOP/bin/LINUX64/nwchem 3carbo_dft.nw | tee 3carbo_dft.out<br />
+※ Total times &nbsp;cpu: &nbsp; &nbsp; &nbsp;511.8s &nbsp; &nbsp; wall: &nbsp; &nbsp; &nbsp;543.3s<br />
+※ cat /proc/cpuinfo<br />
+&nbsp; model name &nbsp; &nbsp; &nbsp;: Intel(R) Core(TM) i5-8500 CPU @ 3.00GHz<br />
+<br />
+※ Intel Math Kernel Library Link Line Advisor<br />
+&nbsp; https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/<br />
+※ https://pc-chem.info/blog/478 (OpenMPIのエラー対策)<br />
+※ Note: Since &quot;OpenMPI&quot; of &quot;CP2k&quot; may be set, &quot;NWChem&quot; should be compiled first.<br />
+<br />
+※ &quot;make clean&quot; may not work as expected. In my case, it worked fine after removing &quot;nwchem-6.8.1-release&quot; and starting over. (e.g., 0. rm -f -r nwchem-6.8.1-release)<br />
+------------------------------------------------------------------------------<br />
+□ GUI<br />
+(https://github.com/nwchemgit/nwchem/wiki/Software-supporting-NWChem)<br />
+<br />
+・Avogadro (http://avogadro.cc/)<br />
+・MoCalc2012 (https://sourceforge.net/projects/mocalc2012/)<br />
+・ECCE (https://ecce.emsl.pnl.gov/)<br />
+&nbsp; (https://github.com/FriendsofECCE/ECCE/releases)<br />
+・Ascalaph Designer (http://www.biomolecular-modeling.com/Ascalaph/)<br />
+&nbsp; (https://sourceforge.net/projects/asc-designer/)<br />
+・Chemcraft (http://www.chemcraftprog.com/)<br />
+------------------------------------------------------------------------------<br />
+□ Manaul (no check)<br />
+0. sudo apt install texlive-lang-cjk xdvik-ja evince<br />
+&nbsp; sudo apt install texlive-fonts-recommended texlive-fonts-extra<br />
+1. cd nwchem-6.8.1-release<br />
+2. doc<br />
+3. make<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] NWChem 6.8.1のWSLへのインストール<br />
+&nbsp; https://pc-chem.info/blog/535<br />
+[2] NWChemをコンパイルして動かす<br />
+&nbsp; http://kivantium.hateblo.jp/entry/2019/04/15/183436<br />
+[3] Compiling NWChem - NWChem<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Compiling_NWChem<br />
+[4] Compile NWChem with Intel 2017 (MPI + MKL)<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Special:AWCforum/st/id2370/Compile_NWChem_with_Intel_2017_%28....html<br />
+[5] NWChem-6.8 for LX<br />
+&nbsp; https://ccportal.ims.ac.jp/node/2039<br />
+[6] Linux Cluster<br />
+&nbsp; https://linuxcluster.wordpress.com/2018/10/12/compiling-with-nwchem-6-8-with-intel-mpi-2018u3/<br />
+[7] NWChem入門してみた<br />
+&nbsp; https://ameblo.jp/r-you-1/entry-12038956905.html<br />
+[8] NWChem Tutorial<br />
+&nbsp; https://wiki.alcf.anl.gov/images/b/bc/NWChem_tutorial.pdf<br />
+[9] Tutorial Slides<br />
+&nbsp; https://github.com/nwchemgit/nwchem/wiki/Tutorial-Slides<br />
+[10] Tutorial Athens2018<br />
+&nbsp; https://github.com/nwchemgit/nwchem/wiki/Tutorial-Athens2018<br />
+[11] Introduction To NWChem<br />
+&nbsp; https://www.msi.umn.edu/sites/default/files/IntroNWChem.pdf<br />
+[12] 2012 NWChem Workshop, June 8-9<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/schedule.php<br />
+&nbsp; ------------------------------<br />
+・Basic Introduction of Computational Chemistry<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/1_Basic_Introduction_of_Computational_Chemistry.pdf<br />
+・Basic introduction of NWChem software &nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/2_NWChem_Intro.pdf<br />
+&nbsp; http://institute.loni.org/NWChem2012/documents/2_NWChem_Intro.pdf<br />
+・NWChem: Hartree-Fock, Density Functional Theory, Time-Dependent Density Functional Theory&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/3_NWChem_DFT_TDDFT.PDF<br />
+・NWChem: Coupled Cluster Method &nbsp;(Tensor Contraction Engine)&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/4_NWChem_CC_TCE.pptx.pdf<br />
+・Relativity, Spectroscopy and the EMSL Basis Set Library&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/5_NWChem_Relativity_Spectroscopy_BSE.PDF<br />
+・NWChem: Molecular Dynamics and QM/MM&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012//6_NWChem_MD_QMMM.PDF<br />
+&nbsp; http://institute.loni.org/NWChem2012/documents/6_NWChem_MD_QMMM.pdf<br />
+&nbsp; http://scc.acad.bg/ncsa/articles/library/Library2016_Supercomputers-at-Work/NWChem_6.6/NWChem_MD_QMMM.pdf<br />
+・NWChem: Planewave Density Functional Theory&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/7_NWChem_NWPW.PDF<br />
+・Critical Discussion of Recent NWChem Articles&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/8_critical_discussion.pdf<br />
+・Parallelization and benchmark<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/9_parallelization_benchmarks.pdf<br />
+&nbsp; ------------------------------<br />
+・Example I: Total energy, geometry optimization, and frequency calculation of Benzene within B3LYP using the DFT module.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/dft-session1.pdf<br />
+・Transition-State Searching with NWChem. Example: dielsalder.nw<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/dielsalder.pdf<br />
+・Example I: Total energy of Benzene within Hartree-Fock approximation.<br />
+&nbsp; Example II: Structural optimization of benzene within the Hartree-Fock approximation.&nbsp;<br />
+&nbsp; Example III: Frequency calculation of benzene within the Hartree-Fock approximation.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/hf-session1.pdf<br />
+・Example I: MP2 calculations for Benzene.<br />
+&nbsp; Example II: Structural optimization of benzene within the MP2 approximation.<br />
+&nbsp; Example III: Frequency calculation of benzene within the MP2 approximation.<br />
+&nbsp; Example IV: Comparisons between three different MP2 programs in NWChem.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/mp2-session.pdf<br />
+・Example I: Total energy of Benzene within MP2 approximation.<br />
+&nbsp; Example II: Structural optimization of benzene within the Hartree-Fock approximation.<br />
+&nbsp; Example III: Frequency calculation of benzene within the Hartree-Fock approximation.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/mp2-session1.pdf<br />
+・Example I: Coupled-cluster calculations for the water molecule.<br />
+&nbsp; Example II: Coupled-cluster calculations for the methyl radical.<br />
+&nbsp; Example III: Coupled-cluster calculations of the excitation energies of the water molecule.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/tce-session.pdf<br />
+・Example: Thermodynamics.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/thermo-session.pdf<br />
+&nbsp; ------------------------------<br />
+[14] Quantum Chemistry Workshop (Advanced) 2014<br />
+&nbsp; Excitation Energies and Excited State Densities&nbsp;<br />
+&nbsp; http://www.training.prace-ri.eu/uploads/tx_pracetmo/QCAdv.pdf<br />
+[15] Quantum Chemistry Workshop (Advanced) 2015<br />
+&nbsp; Excitation Energies and Excited State Densitie<br />
+&nbsp; http://www.training.prace-ri.eu/uploads/tx_pracetmo/excitationEnergies.pdf<br />
+[16] Quantum Chemistry Workshop (Advanced) 2016<br />
+&nbsp; Excitation Energies and Excited State Densities<br />
+&nbsp; https://events.prace-ri.eu/event/455/attachments/369/543/QC-workshop-advanced.pdf<br />
+[17] Quantum Chemistry Workshop (Advanced) 2017<br />
+&nbsp; Excitation Energies and Excited State Densitie<br />
+&nbsp; https://events.prace-ri.eu/event/560/attachments/491/706/QC-workshop-advanced.pdf<br />
+[18] CIS, TDHF, TDDFT&nbsp;<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Release61:Excited-State_Calculations<br />
+[19] Electronic Structure Calculations in Quantum Chemistry<br />
+&nbsp; http://www.hpc.lsu.edu/training/weekly-materials/2011%20Fall/ElecStruc-2011-11-16.pdf<br />
+[20] NWChem: Parameter Sweep and Pre/Post-processing<br />
+&nbsp; https://balsam.readthedocs.io/en/latest/tutorial/nwchem.html<br />
+[21] NWChem 6.5 &nbsp;Installation Best Practices&nbsp;<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWChem_6.5InstallationBestPractices.pdf<br />
+[22] NWChem Performance Benchmark and Profiling<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWchem_Analysis_Intel_x5670.pdf<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWchem_Analysis_Intel.pdf<br />
+[23] QM/MM分子動力学法による生体機能解析<br />
+&nbsp; https://www2.ccs.tsukuba.ac.jp/workshop/sympo-080424/file/tateno.pdf<br />
+[24] Generator of AIM Wavefunction files NWCHEM [WFN / WFX]<br />
+&nbsp; https://sites.google.com/site/alvarovazquezmayagoitia/goals/codes/nwchem-notes/generator-of-aim-wavefunction-files-nwchem<br />
+[25] Computational Chemistry Software<br />
+&nbsp; http://timn.ho.ua/ccs/<br />
+------------------------------------------------------------------------------<br />
+□ Install (easy method) (failed)<br />
+1. sudo apt install nwchem-data<br />
+2. sudo apt install nwchem<br />
+<br />
+□ Usage<br />
+1. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 /usr/bin/nwchem *.nw | tee *.out<br />
+&nbsp; or<br />
+&nbsp; export OMP_NUM_THREADS=1<br />
+&nbsp; /usr/bin/nwchem *.nw | tee *.out<br />
+<br />
+□ examples (QMD, 3carbo_dft.nw) (failed)<br />
+0. export OMP_NUM_THREADS=1<br />
+1. cd ~/nwchem-6.8.1-release/examples<br />
+2. cd qmd<br />
+3. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 /usr/bin/nwchem *.nw | tee *.out<br />
+------------------------------------------------------------------------------<br />
+□ Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+◇ registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+◇ unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+#<br />
+# libm (-lm) link<br />
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu<br />
+-----<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

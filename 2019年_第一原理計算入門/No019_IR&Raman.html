@@ -1,0 +1,281 @@
+<p>　ここでは、分子軌道法及びバンド計算法によるRaman分光の結果の得方をまとめる。<br />
+------------------------------------------------------------------------------<br />
+■ 分子軌道法<br />
+------------------------------------------------------------------------------<br />
+□ GAMESSの利用<br />
+参考文献<br />
+・ 『すぐできる 量子化学計算ビギナーズマニュアル 』<br />
+・ 『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から実験値との比較まで 』（NMRの計算に関する記述がある）<br />
+・ 使用方法は上記の文献を参考にすれば良いが、Raman分光の計算をする方法については詳細に解説さていない。そのため、本解説では、特にWinmostarを用いたRaman分光の計算方法を解説する。<br />
+<br />
+□ WinmostarによるRaman分光の結果の得方（Winmostarがアカデミックフリーではなくなったので注意）<br />
+1) RUNTYP=OPTIMIZEで計算<br />
+2) RUNTYP=HESSIANで計算<br />
+3) case.pun（case=ファイル名）にある$HESS ～ $ENDまでをコピーして、Winmostar の右欄のDebug の下の空欄にペースト<br />
+4) $STARTでHESSをREADにする<br />
+5) RUNTYP=RAMANで計算<br />
+(Fireflyは並列計算が可能であり、条件にもよるが計算速度が数倍度速くなる。Fireflyを利用可能にして計算することも試されたい）<br />
+<br />
+□ FacioによるRaman分光の結果の得方<br />
+計算方法は下記のHPに記載されている。<br />
+（下記のまとめは、参考文献　<a href="http://egfinal.jp/another/gamess.html">http://egfinal.jp/another/gamess.html</a> より作成）<br />
+「 振動解析：File&gt;Load new gamess output for optimized geometry&rarr;$CONTROLのRUNTYPをHessianに変更して計算。<br />
+　Raman：Hessian演算後、File&gt;Load New GAMESS&gt;Get HESS grout from gamess punchでHessian演算の結果を読み取り&rarr;RUNTYPをRAMANに変更して計算」<br />
+<br />
+□ 高精度な計算<br />
+以上の計算結果では、スケールファクターを用いて比較する方法があるが、より精度の高い計算方法が『すぐできる 量子化学計算ビギナーズマニュアル 』で解説されている。以下にその方法を記す。(Winmostarでの方法を調査中)<br />
+1) 構造最適化計算（OPTIMIZEで計算）<br />
+2)&nbsp;振動解析（HESSIANで計算）<br />
+3) RUNTYPE=VSCF&nbsp;とする<br />
+4)&nbsp;$VSCF NGRID=12 PETYP=DIRECT&nbsp;$END<br />
+&nbsp; または、PETYP=QFF<br />
+5)&nbsp;case.pun で得られる$HESS ～ $ENDを貼り付け<br />
+※ PETYP=DIRECTはポテンシャルエネルギーを全てのグリッドで計算する高精度な方法。時間負荷が非常に大きい。計算負荷はNGRID で指定した値の2乗に比例して計算負荷が増加数する。デフォルト値（16）より下げることがお勧め。<br />
+※ PETYP=QFFは4次テイラー展開のポテンシャル関数を作って振動状態計算を行う方法。計算精度はDIRECTよりも落ちるが、計算速度が約10倍早くなる可能性がある。計算負荷はNGRIDにほぼ影響されない。。デフォルト値（16）のままでよい。<br />
+※ 非調和振動数計算の結果はアウトプットファイルの一番最後に記載される。<br />
+<br />
+◇ 赤外分光法における量子化学計算<br />
+　計算結果では、実測のスペクトルよりもわずかに高波数の値が得られている。実験値とのわずかな波数のずれを補正する数字はscaling factorという。<br />
+　補正後の振動数 = 振動数の計算値 * scaling factor<br />
+このscaling factorは計算法と基底関数の組み合わせによって異なる。<br />
+----------<br />
+・代表的な近似解法と基底関数でのscaling factor<br />
+P. Scot and L. Radon, J. Phys. Chem., 100, (1996) 16502.</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 389.92px;">
+	<tbody>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">近似解法と基底関数</td>
+			<td style="width: 102.13px; text-align: center;">scaling facotr</td>
+			<td style="width: 109.92px; text-align: center;">rms<sub>ov</sub> / cm<sup>-1</sup> *</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">HF / 6-31G(d)</td>
+			<td style="width: 102.13px; text-align: center;">0.8953</td>
+			<td style="width: 109.92px; text-align: center;">50</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">MP2-fc / 6-31G(d)</td>
+			<td style="width: 102.13px; text-align: center;">0.9434</td>
+			<td style="width: 109.92px; text-align: center;">63</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">MP2-fc / 6-31G(d,p)</td>
+			<td style="width: 102.13px; text-align: center;">0.9370</td>
+			<td style="width: 109.92px; text-align: center;">61</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">MP2-fc / 6-311G(df,p)</td>
+			<td style="width: 102.13px; text-align: center;">0.9496</td>
+			<td style="width: 109.92px; text-align: center;">60</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">QCISD-fc / 6-31G(d)</td>
+			<td style="width: 102.13px; text-align: center;">0.9537</td>
+			<td style="width: 109.92px; text-align: center;">37</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">BLYP / 6-31G(d)</td>
+			<td style="width: 102.13px; text-align: center;">0.9945</td>
+			<td style="width: 109.92px; text-align: center;">45</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">B3LYP / 6-31G(d)</td>
+			<td style="width: 102.13px; text-align: center;">0.9614</td>
+			<td style="width: 109.92px; text-align: center;">34</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">AM1</td>
+			<td style="width: 102.13px; text-align: center;">0.9532</td>
+			<td style="width: 109.92px; text-align: center;">126</td>
+		</tr>
+		<tr>
+			<td style="width: 164.33px; text-align: center;">PM3</td>
+			<td style="width: 102.13px; text-align: center;">0.9761</td>
+			<td style="width: 109.92px; text-align: center;">159</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>*波数残差の二乗平均平方根誤差<br />
+----------<br />
+　振動数の実験値と計算値の比は、常に一定ではなく、振動モードの波数が高いほど、計算値は実験値より大きく見積もられていることが分かる。吉田らはこの傾きを補正する方法として、振動数に比例した次のようなscaling factorを用いるwavenumber linear scaling (WLS)法を提案している。<br />
+　補正後の振動数 = 振動数の計算値 * (1.0087 - 0.0000163 * 振動数の計算値）<br />
+このようなscaling 補正が必要となるのは、調和振動子近似が分子軌道法の計算法による誤差に加えて、分子振動の非調和性を無視しているので当然である。それでも約5%程度で一致することは驚くべきことといえる。<br />
+<br />
+◇ 赤外分光法における量子化学計算<br />
+　赤井らはGaussian03を用いて酢酸の非調和性を考慮した振動数計算（B3LYP / 6-31++G(d,p)）を行い、赤外・近赤外スペクトルと比較している。（省略）調和振動数計算の値は、OH伸縮振動やCH伸縮振動の基本音の振動数でも実験値と100 cm<sup>-1</sup>以上の差が生じている。倍音ではその倍以上の差となる。この調和振動数計算の結果でもWLS補正を行なうことで、実験値とある程度の比較ができるが、非調和振動数計算の値はscaling補正がなくとも実験値を誤差50 cm<sup><font size="2">-1</font></sup>以内で再現している。<br />
+　観測された近赤外ピークを振動数のみによって帰属するには熟練が必要とされるが、理論に基づいて予測された振動数は、観測された近赤外ピークの帰属に有効である。特に濃度変化や温度変化によるスペクトルの変化を分子構造と関連させて解析する際にはとても有効である。<br />
+（省略）<br />
+　振動数と吸収強度を実験結果と比較すると、計算コストの低いDFT計算でも、基底関数を選ぶことで、実験値をよく再現することがわかる。<br />
+　CCSD(T)計算を用いた高精度計算の結果は、実験値ときわめて良い一致を示している。これらの計算結果は、1%以内で実験結果を再現しておりscaling補正を必要としない。<br />
+　赤外・近赤外スペクトルは置換基の違いや分子構造の違いによって変化する。これは分子振動ポテンシャルと電気双極子モーメント関数もそれらの違いにともなって変化するからである。アルコール類のOH伸縮振動や炭化水素のCH伸縮振動について、local modelによる振動ポテンシャルおよび電気双極子モーメント関数と分子構造の関係が薮下と高橋らによって研究されている[H. Takahashi and S. Yabushita, J. Phys. Chem. A, 117 (2013) 5491]。構造変化ではなく、会合体形成や溶媒和などの分子間相互作用によっても分子振動の吸収ピークの振動数や吸収強度は変化する。例えば、水素結合形成による伸縮振動の基本音の大きな低波数シフトと吸収強度の大きな増加はよく知られている。しかし、スペクトルの変化から、分子会合体形成やその構造および分子間相互作用を予測するにはかなりの経験が必要である。量子化学計算では、<br />
+分子間相互作用によるスペクトルの変化も予測することができる。<br />
+（省略）より大きな誘電率をもつ溶媒中では、吸収ピークは低波数側に観測され、吸収強度も増大することを示しており、実験結果の傾向を再現している。<br />
+（省略）量子化学計算は、分子間相互作用による吸収ピークの変化の理論的な解析も可能とする。特に、水素結合と溶媒効果は、基本音では似たような変化を示すことがある。その際に、第一倍音などの高次倍音を含めて解析することで分子間相互作用の本質を見分ける助けとなる。<br />
+　近赤外スペクトルを量子化学計算によって解析するには、非調和性を含む分子振動解析が必要であり、調和振動のみに基づく分子振動解析に比べ、計算コストは高い。振動数に加えて倍音や結合音の吸収強度を得るには、計算コストはさらに増大する。ベンゼン程度の分子でも、非調和性を考慮したすべての分子振動の振動数と吸収強度を計算することは、現時点（2015年）では簡単ではない。（省略）<br />
+　近赤外分光法は、量子化学計算を用いた解析によって、定量性にとどまらず、分子論的解釈がより一層深まることは確かであり、加えて、吸収強度を含めたスペクトルの解析によって、他の分析法では困難な解析の道が拓かれると期待される。<br />
+　ただし、量子化学計算の計算結果は、仮説に基づく数多くの近似を含んでいる。それゆえ、その計算結果は得られた実験結果の原因の可能性を絞るが、真実を与えるかどうかは定かではないことを、常に心にとどめておく必要がある。<br />
+<br />
+尾崎幸洋『近赤外分光法』講談社<br />
+------------------------------------------------------------------------------<br />
+<br />
+■ バンド計算法<br />
+------------------------------------------------------------------------------<br />
+PWscf<br />
+<br />
+□&nbsp;Youtube<br />
+[1] <a href="https://www.youtube.com/watch?v=WMDw4t_Dmd0">https://www.youtube.com/watch?v=WMDw4t_Dmd0</a>&nbsp;<br />
+[2] <a href="https://www.youtube.com/watch?v=K9QkWwpT15U">https://www.youtube.com/watch?v=K9QkWwpT15U</a>&nbsp;<br />
+<br />
+□&nbsp;Free energy calculation (Quasi Harmonic Approximation (QHA) )<br />
+# nu(i) = frequencies (cm^{-1}), dos(i) in states/cm^{-1}<br />
+<br />
+◇ stand alone (after Example02 or others calculation) [1]<br />
+1. cd ~/qe-6.0/Examples/PHonon/example02/results<br />
+&nbsp;example02 or others<br />
+2. gedit qha.in<br />
+-----<br />
+fqha.phdos<br />
+fqha.out<br />
+0<br />
+250<br />
+500<br />
+750<br />
+1000<br />
+-----<br />
+3. cp case.phdos fqha.phdos<br />
+4. ~/qe-6.0/bin/fqha.x &lt; qha.in &gt; qha.out<br />
+5. gedit gnuplot1.tmp<br />
+-----<br />
+set encoding iso_8859_15<br />
+set terminal postscript enhanced solid color &quot;Helvetica&quot; 20<br />
+set output &quot;qha.ps&quot;<br />
+#<br />
+#set key off<br />
+set xrange [0:]<br />
+set xlabel &quot;Temperature (K)&quot;<br />
+set ylabel &quot;Energy (Ry)&quot;<br />
+plot &#39;fqha.out&#39; u 1:2 w l lw 3 t &#39;Free Energy&#39;<br />
+-----<br />
+6. gnuplot gnuplot1.tmp<br />
+----------<br />
+ABINI： かなり難しい。<br />
+CPMD： 試していない。<br />
+VASP + Phonopy： 小さい単位胞の系なら私は計算に成功（左欄のVASPを参照）。<br />
+WIEN2k + Phonpy： 小さい単位胞の系なら私は計算に成功（左欄のWIEN2kを参照）。<br />
+------------------------------------------------------------------------------<br />
+<br />
+■ RISEの利用<br />
+------------------------------------------------------------------------------<br />
+精度が高いRaman散乱の計算コード<br />
+------------------------------------------------------------------------------<br />
+<br />
+■ Raman分光法 ([8,11]を見ると良いだろう）<br />
+------------------------------------------------------------------------------<br />
+□ 赤外分光とラマン分光の比較<br />
+・赤外（IR）<br />
+特徴：官能基（C=O, C-H など）、側鎖、汎用性<br />
+空間分解能：10 &mu;m<br />
+問題点：水蒸気吸収、試料の形状によってピークの位置やスペクトルの形状が変化する<br />
+試料：有機物一般、組成・同定<br />
+※ FT-IRについては、島津のFT-IR TALK LETTER（<a href="http://www.an.shimadzu.co.jp/ftir/support/lib/ftirtalk/ftirtalk.htm">http://www.an.shimadzu.co.jp/ftir/support/lib/ftirtalk/ftirtalk.htm</a>）を参照するのもよい。<br />
+<br />
+・ラマン（Raman）<br />
+特徴：骨格振動（C=Cなど）、選択性、断面測定、低波長領域側の測定が容易（最新のであれば10cm-1から測定可能）<br />
+空間分解能：0.5&mu;m<br />
+問題点：蛍光によるBG（対策：試料厚さを薄くしたり、波長を長くしたりする）、標準データの不足<br />
+試料：無機化合物（単純立法格子で単位胞に1原子のものを除く{3*1-3=0で理論的に観測できない}）、配向・結晶化度<br />
+<br />
+□ Raman スペクトルから得られる情報[1,2]<br />
+・ ピークの強度：物質の濃度（検量線を作ることで比較が可能？ ただし、スペクトルがサチらないこと）、対称正、面方位、結晶性<br />
+・ ピークの位置：化学結合、組成、結晶子サイズ、応力（特にピーク位置のシフト）、バンドギャップ<br />
+・ ピーク位置のシフト：応力（cm-1が大きくなると圧縮）<br />
+・ ピークの半値幅：結晶性（ピークの幅が狭くなると結晶性が良い）、結晶子サイズ、応力の不均一性<br />
+・ ピークの本数：対称性が（結晶の場合、最大で[3N-3]本現れる。それよりも少ないときは縮退している）<br />
+<br />
+□ 蛍光やリン光の対策<br />
+・ 電子と正孔は、それが再結合するまでに試料内を移動するために、広い範囲で蛍光が生じる。一方、ラマンは広がらない。このことを利用して、試料を薄くすることで、蛍光によるBGの増加を抑制することができる。<br />
+・蛍光は待てばBGが小さくなる。しかし、リン光は待ってもBGが減らないことを覚えておく必要がある。<br />
+・絞の径を小さくする。（大抵の場合は信号の強度が大きく落ちる前くらいの径にするが、蛍光がある場合は私は分からない）<br />
+・レーザーの侵入深さは、レーザーの波長の約1/10程度になる。<br />
+・一般的なサンプルは、共鳴などの影響を除けば、レーザーの波長を変えても、ピーク位置や形状は変化しないといわれている。しかし、その例外としてDLCが有名。<br />
+・ レーザーのパワー（波長）を変えるとRamanがシフトするのは熱の影響のため<br />
+・ 粒径が大きいと &Gamma;点におけるRamanシフトくらいになる（理論計算の結果と比較する場合には&Gamma;点、そして他の点を探す）<br />
+※ 低いcm-1からのBGはレイリー散乱によるものなので、よいフィルターを用いることが必要となる。<br />
+<br />
+□ 装置（ほとんどのRamanは顕微ラマン）<br />
+・ レーザー：昔はガスレーザー（高価で大型で水冷が必要で長持ちしなかった）、現在は半導体レーザー（長持ちで安価）。<br />
+&nbsp; 波長（強度は異なるが幾つかの波長の光が得られる）<br />
+&nbsp; Ar レーザー： 514.5, 488.0, 472.7, 465.8 などが選択できる<br />
+&nbsp; Kr レーザー： 647.1<br />
+&nbsp; He-Neレーザー： 632.8<br />
+・ 分光器：主流はシングルかトリプル分光器<br />
+&nbsp; シングル：エッジやノッジフィルターを用いることで 30 cm-1からの測定が可能。古いものだと200cm-1から測定可能。<br />
+&nbsp; トリプル：現在 10cm-1から測定可能。<br />
+&nbsp; 昔は分光器にはプリズムを用いていた。現在は回折格子。<br />
+・ 検出器：昔はフォトマル、現在はCCD検出器<br />
+<br />
+□&nbsp;マッピング[2,3]<br />
+　顕微でのマッピングで異物検査や高い性能を示す含有物の粒度分布などを分析できたりする。<br />
+　食品で使用された例としては、カスタードやシュークリームなどで脂肪分の大きさと含有量をプロの料理人とほぼ同じになるようにしたものや、茹でる前と後での処理の違いによるうどんの状態を評価するなどが挙げられる。<br />
+　有機ELや医薬品でも使われている。<br />
+<br />
+□ ラマン散乱の選択則[4,5,8,13]<br />
+　双極子モーメント&nbsp;&mu; = a * E = [ a<sub>0</sub> + (&part;a / &part;Q )&nbsp;* Q + &hellip;&hellip; ] * E&nbsp;<br />
+ここで、&nbsp;aは分極率、Qは原子核の変位である。Q = Q<sub>0</sub> * cos(2&pi;vt), E=E0*cos(2&pi;v<sub>0</sub>t)とすると、<br />
+　&mu; = a * E = [ a<sub>0</sub> + (&part;a / &part;Q )&nbsp;* Q + &hellip;&hellip; ] * E&nbsp;= a<sub>0</sub>*E<sub>0</sub>*cos(2&pi;v<sub>0</sub>t) + (&part;a / &part;Q ) * Q<sub>0</sub> * E<sub>0</sub> * cos(2&pi;vt) * cos（2&pi;v<sub>0</sub>t）<br />
+= &nbsp;a<sub>0</sub>*E<sub>0</sub>*cos(2&pi;v<sub>0</sub>t) +(1/2)* (&part;a / &part;Q ) * Q<sub>0</sub> * E<sub>0</sub> * [ cos(2&pi;{v+v}t) * cos（2&pi;{v<sub>0</sub>-v}t）]<br />
+となる。v<sub>0</sub>-vがストークス光（Raman分光のスペクトルに使われる）、v<sub>0</sub>+vがアンチストークス光である。<br />
+・ Q<sub>0</sub>やE<sub>0</sub>がゼロでないことは明白であるので、(&part;a / &part;Q ) &ne; 0 でラマン散乱が起きることが分かる。一方、双極子モーメント（&mu;= a * E）の微分が0であるとIRは不活性となる。<br />
+・ Raman散乱が生ずるためには、分子が振動変位を起こしたときに分子の分極率が変化することが必要になる。一方、赤外吸収では分子が振動変位を起こしたときに分子の双極子モーメントが変化することが必要となる。<br />
+<br />
+□ 倍音<br />
+　原子間距離が短くなると、原子どうしの反発が強くなり急にエネルギーが大きくなる。下記の式であらわせられる。<br />
+　V = a2*Q2 + a3*Q3 + a4*Q4 + &hellip;&hellip;<br />
+Q3 + Q4 の項は、非調和項と呼ばれる。<br />
+　T + V = (1/2)*( {dQ/dr}^2 + {k/&mu;}*Q^2)&nbsp;=&nbsp;E<br />
+上記の式にQ3まで入れると、下記のようになる。<br />
+　Ev = hcve*(v+1/2) - hcvx(v+1/2)^2<br />
+ここから下記のように、間隔が狭くなることが分かる。<br />
+v=0&rarr;1: hcv(1-2x)<br />
+v=0&rarr;2: 2hcv(1-2x)<br />
+v=0&rarr;3: 3hcv(1-3x)<br />
+一方、倍音の間隔が実験的に分かると、a2やa3を実験的に求めることができる。<br />
+※ 共鳴時には倍音も強度が増加する。<br />
+<br />
+□ ボルツマン分布則<br />
+アンチストークス線の強度 / ストークス線の強度　= exp (-hcv/kT)<br />
+・ 室温でhcv/kT≒1となるのは約200cm-1である。<br />
+<br />
+□ 交互禁制律（principle of mutual exclusion）<br />
+分子に対称の中心（center of symmetry）があると常に、ラマン活性のものは赤外不活性であり、赤外活性のものはラマン不活性になっている。<br />
+<br />
+□ SERS（サースと呼ばれる）<br />
+機構は下記の2つが考えられる。<br />
+1. 表面プラズモンやポラリトンの励起により入射光と散乱光の電場が増大（物理的機構）<br />
+・微粒子のAg &gt; Au &gt; Cu で強度が強くなるが、1-2秒程度で測定できなければAgではなく、酸化しにくいAuがよく使われる。共鳴が起こる距離は200 nm以内まで。薄膜のAgやAuやCuではSERSが起こらないので注意が必要。<br />
+2. 金属と吸着種間の電荷移動によって生じた電子状態を中間状態とする共鳴ラマン散乱（化学的機構）<br />
+・金属依存性がなければ化学的。<br />
+<br />
+□ DLC<br />
+散乱断面積は G：D = 100：1 ？<br />
+・Gは縮む運動<br />
+・Dは六員環ではあるが周囲がないために原子位置が伸びる方向への運動。<br />
+<br />
+□ 有機物であれば、Gaussian や GAMESSなどで計算して、だいたいの傾向や振動の同定をする。横軸はズレるが傾向があっていれば良いだろう。ピークの順番などが似ていれば振動の帰属もできるだろう。<br />
+<br />
+[1] <a href="http://www.nanophoton.jp/raman/about.html">http://www.nanophoton.jp/raman/about.html</a><br />
+[2] <a href="http://www.mst.or.jp/method/eachmethod/a0010.html">http://www.mst.or.jp/method/eachmethod/a0010.html</a><br />
+[3] <a href="http://www.toray-research.co.jp/menu/jishou/jis_011.html">http://www.toray-research.co.jp/menu/jishou/jis_011.html</a><br />
+[4] <a href="http://www.rs.kagu.tus.ac.jp/yajilab/siryou_IRandRaman.pdf">http://www.rs.kagu.tus.ac.jp/yajilab/siryou_IRandRaman.pdf</a><br />
+[5] <a href="http://www.appi.keio.ac.jp/Itoh_group/coursework/pdf/01KAST.pdf">http://www.appi.keio.ac.jp/Itoh_group/coursework/pdf/01KAST.pdf</a><br />
+[6] <a href="http://panasonic.co.jp/ptj/pew/581j/pdfs/581_07.pdf">http://panasonic.co.jp/ptj/pew/581j/pdfs/581_07.pdf</a><br />
+[7] <a href="http://www.scas.co.jp/analysis/pdf/tn024.pdf">http://www.scas.co.jp/analysis/pdf/tn024.pdf</a><br />
+[8] <a href="http://home.sato-gallery.com/education/el/hosoku_hikari06.pdf">http://home.sato-gallery.com/education/el/hosoku_hikari06.pdf</a><br />
+[9] <a href="https://www.jstage.jst.go.jp/article/tanso1949/2007/228/2007_228_174/_pdf">https://www.jstage.jst.go.jp/article/tanso1949/2007/228/2007_228_174/_pdf</a><br />
+[10] <a href="http://www.an.shimadzu.co.jp/ftir/support/lib/ftirtalk/talk/18.htm">http://www.an.shimadzu.co.jp/ftir/support/lib/ftirtalk/talk/18.htm</a><br />
+[11] <a href="http://books.google.co.jp/books?id=6pwmySf1qYMC&amp;pg=PA16&amp;lpg=PA16&amp;dq=%E3%83%A9%E3%83%9E%E3%83%B3+%E5%88%86%E5%85%89%E6%B3%95&amp;source=bl&amp;ots=bRmdxkFR88&amp;sig=ZaCfcko-jhteynQkaAj_O3E3zmc&amp;hl=ja&amp;sa=X&amp;ei=ZHzTUfTHJ4SmlAXYroGwAQ&amp;ved=0CD8Q6AEwBTgy">http://books.google.co.jp/books?id=6pwmySf1qYMC&amp;pg=PA16&amp;lpg=PA16&amp;dq=%E3%83%A9%E3%83%9E%E3%83%B3+%E5%88%86%E5%85%89%E6%B3%95&amp;source=bl&amp;ots=bRmdxkFR88&amp;sig=ZaCfcko-jhteynQkaAj_O3E3zmc&amp;hl=ja&amp;sa=X&amp;ei=ZHzTUfTHJ4SmlAXYroGwAQ&amp;ved=0CD8Q6AEwBTgy</a><br />
+[12] <a href="http://www.chem.chuo-u.ac.jp/~element/PDFs/OrgChem4/OrgChem4-02.pdf">http://www.chem.chuo-u.ac.jp/~element/PDFs/OrgChem4/OrgChem4-02.pdf</a>&nbsp;<br />
+[13] 北川禎三、A. T. TU、&rdquo;ラマン分光学入門&rdquo;、化学同人<br />
+------------------------------------------------------------------------------</p>

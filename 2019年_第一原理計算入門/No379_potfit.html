@@ -1,0 +1,894 @@
+potfit (https://www.potfit.net/wiki/doku.php)<br />
+------------------------------------------------------------------------------<br />
+■ potfit (need &quot;intel MKL&quot;) (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(https://www.potfit.net/wiki/doku.php)<br />
+<br />
+□ Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+◇ registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+◇ unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+-----<br />
+2. bash<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+(https://www.potfit.net/wiki/doku.php?id=download)<br />
+・potfit-20191008.tar.gz<br />
+0. wget https://www.potfit.net/download/potfit-20191008.tar.gz<br />
+1. tar zxvf potfit-20191008.tar.gz<br />
+2. cd potfit<br />
+3. ./waf --help<br />
+4. ./waf configure -i pair -m apot<br />
+5. ./waf build<br />
+※ other settings<br />
+・Stillinger-Weber potential<br />
+&nbsp; ./waf configure -i stiweb -m apot<br />
+・Tersoff potential<br />
+&nbsp; ./waf configure -i tersoff -m apot<br />
+・modified Tersoff potential<br />
+&nbsp; ./waf configure -i tersoffmod -m apot<br />
+・eam potential<br />
+&nbsp; ./waf configure -i eam -m apot<br />
+・eam potential + MPI<br />
+&nbsp; ./waf configure -i eam -m apot --enable-mpi<br />
+&nbsp; (potfit_apot_eam_mkl_mpi)<br />
+・eam potential + MPI + stress<br />
+&nbsp; ./waf configure -i eam -m apot --enable-mpi --enable-stress<br />
+&nbsp; (potfit_apot_eam_mkl_mpi_stress)<br />
+・eam potential + stress<br />
+&nbsp; ./waf configure -i eam -m apot --enable-stress<br />
+・two-band eam potential<br />
+&nbsp; ./waf configure -i tbeam -m apot<br />
+・meam potential<br />
+&nbsp; ./waf configure -i meam -m apot<br />
+・adp potential<br />
+&nbsp; ./waf configure -i adp -m apot<br />
+・adp potential + MPI<br />
+&nbsp; ./waf configure -i adp -m apot --enable-mpi<br />
+&nbsp; (potfit_apot_adp_mkl_mpi)<br />
+・adp potential + MPI + stress<br />
+&nbsp; ./waf configure -i adp -m apot --enable-mpi --enable-stress<br />
+&nbsp; (potfit_apot_adp_mkl_mpi_stress)<br />
+・adp potential + stress<br />
+&nbsp; ./waf configure -i adp -m apot --enable-stress<br />
+・stress option<br />
+&nbsp; ./waf configure -i pair -m apot --enable-stress&nbsp;<br />
+・tabulated potential<br />
+&nbsp; ./waf configure -i pair -m tab<br />
+・kim potential<br />
+&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)<br />
+&nbsp; sudo add-apt-repository ppa:openkim/latest<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install libkim-api-dev openkim-models<br />
+&nbsp; ./waf configure -m kim<br />
+・kim potential + stress option<br />
+&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)<br />
+&nbsp; sudo add-apt-repository ppa:openkim/latest<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt-get install libkim-api-dev openkim-models<br />
+&nbsp; ./waf configure -m kim --enable-stress&nbsp;<br />
+◇ envirnmental settings<br />
+6. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:$HOME/potfit/bin<br />
+-----<br />
+7. bash<br />
+<br />
+◇ Utilities (e.g., vasp2force, makeapot, potfit_setup, etc)<br />
+1. cd ~/potfit/util<br />
+2. ls<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:$HOME/potfit/util<br />
+-----<br />
+2. bash<br />
+<br />
+◇ Examples<br />
+0. cd ~/potfit/util/kim/kim_read_model_props<br />
+&nbsp; make<br />
+1. cd ~/potfit/examples/kim/ex_model_Ar_P_LJ<br />
+2. ~/potfit/bin/potfit_kim_mkl param_file<br />
+3. ~/potfit/util/kim/kim_read_model_props/kim_read_model_props ex_model_Ar_P_LJ<br />
+※ plase, see https://www.potfit.net/wiki/doku.php?id=utilities:kim_read_model_props<br />
+<br />
+◇ Examples (failed)<br />
+1. cd ~/potfit/examples/kim/Three_Body_Stillinger_Weber_Si__MO_405512056662_004<br />
+2. ~/potfit/bin/potfit_kim_mkl_stress param_file<br />
+<br />
+◇ Example (Configurations)<br />
+0. cd ~/potfit<br />
+&nbsp; wget https://www.potfit.net/wiki/lib/exe/fetch.php?media=example_al.tar.gz<br />
+&nbsp; mv fetch.php?media=example_al.tar.gz example_al.tar.gz<br />
+1. tar zxvf example_al.tar.gz<br />
+2. cd Example_Al<br />
+(2.1. list_config Al.config)<br />
+(2.2. force2poscar -n 2 Al.config)<br />
+(2.3. force2poscar -n 2 Al.config | tee POSCAR)<br />
+3. potfit_apot_pair_mkl Al.param<br />
+&nbsp; (~/potfit/bin/potfit_apot_pair_mkl Al.param)<br />
+4. plotapot Al.pot_end<br />
+<br />
+◇ Example (Potentials)<br />
+1. cd ~/potfit/examples<br />
+-----ADP potential<br />
+2. mkdir ADP<br />
+&nbsp; &nbsp;cd ADP<br />
+&nbsp; &nbsp;makeapot -g -i adp -f eopp_sc,csw2_sc,bjs,2*csw2_sc | tee Example_ADP_1<br />
+&nbsp; &nbsp;makeapot -g -n 2 -i adp -f 3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc | tee Example_ADP_2<br />
+&nbsp; &nbsp;cd ..<br />
+-----Tersoff potential<br />
+2. mkdir Tersoff<br />
+&nbsp; &nbsp;cd Tersoff<br />
+&nbsp; &nbsp;makeapot -n 1 -i tersoff | tee Example_Tersoff_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i tersoff | tee Example_Tersoff_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i tersoff | tee Example_Tersoff_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----Stillinger-Weber potential<br />
+2. mkdir SW<br />
+&nbsp; &nbsp;cd SW<br />
+&nbsp; &nbsp;makeapot -n 1 -i stiweb | tee Example_StiWeb_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i stiweb | tee Example_StiWeb_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i stiweb | tee Example_StiWeb_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----EAM potential<br />
+2. mkdir EAM<br />
+&nbsp; &nbsp;cd EAM<br />
+&nbsp; &nbsp;makeapot -n 1 -i eam -g -f morse_sc,csw2_sc,bjs | tee Example_EAM_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i eam -g -f 3*morse_sc,2*csw2_sc,2*bjs | tee Example_EAM_2<br />
+&nbsp; &nbsp;makeapot -n 3 -i eam -f 6*morse,3*csw2,3*bjs | tee Example_EAM_3<br />
+&nbsp; &nbsp;cd ..<br />
+-----MEAM potential<br />
+2. mkdir EAM<br />
+&nbsp; &nbsp;cd EAM<br />
+&nbsp; &nbsp;makeapot -i meam -f eopp_sc,csw2_sc,bjs,csw2_sc,parabola | tee Example_MEAM_1<br />
+&nbsp; &nbsp;makeapot -n 2 -i meam -f 3*eopp_sc,2*csw2_sc,2*bjs,3*csw2_sc,2*parabola | tee Example_MEAM_2<br />
+&nbsp; &nbsp;cd ..<br />
+<br />
+◇ Example (Parameter files)<br />
+1. cd ~/potfit/examples<br />
+2. potfit_setup &gt; dummy.param<br />
+-----test<br />
+1. cd ~/potfit/examples<br />
+2. mkdir test_Al<br />
+3. cd test_Al<br />
+4. cp ~/potfit/Example_Al/Al.config ./<br />
+&nbsp; (touch Al.config)<br />
+5. cp ~/potfit/Example_Al/Al.pot ./<br />
+&nbsp; (touch Al.pot)<br />
+6. potfit_setup -c Al.config -p Al.pot -s Al | tee param_file<br />
+7. potfit_apot_pair_mkl param_file<br />
+(8. plotapot Al.pot_end)<br />
+<br />
+◇ Tutorial<br />
+0. cd ~/potfit<br />
+&nbsp; wget https://www.potfit.net/wiki/lib/exe/fetch.php?media=potfit_tutorial.tar.bz2<br />
+&nbsp; mv fetch.php?media=potfit_tutorial.tar.bz2 potfit_tutorial.tar.bz2<br />
+1. tar xvf potfit_tutorial.tar.bz2<br />
+2. cd potfit_tutorial<br />
+(2.5. force2poscar -n 2 sys_b.force | tee POSCAR)<br />
+3. makeapot -n 1 -g -i pair -f lj | tee lj.pot<br />
+4. potfit_setup -c sys_b.force -p lj.pot | tee lj.param<br />
+5. potfit_apot_pair_mkl lj.param<br />
+6. plotapot lj.pot_end<br />
+7. gnuplot<br />
+&nbsp; set xrange[1.5:6]<br />
+&nbsp; set yrange[-1.0:1.5]<br />
+&nbsp; plot &quot;dummy.plot&quot; w l<br />
+8. q<br />
+(VESTA &gt; POSCAR)<br />
+<br />
+◇ Usage (EAM potential, e.g., Al)<br />
+1. cd ~/potfit<br />
+2. mkdir calc<br />
+&nbsp; cd calc<br />
+-----(VASP)<br />
+3. cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;$HOME/vasp.5.4.1/potpaw_PBE&quot; --vasp-cartesian-lattice-vectors --setup-all --no-reduce -f Al.cif<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; (ISPIN = 1 (in INCAR))<br />
+4. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+-----(potfit)<br />
+5. vasp2force -f | tee Al.config<br />
+6. makeapot -n 1 -i eam -g -f morse_sc,csw2_sc,bjs | tee Al.pot<br />
+6. potfit_setup -c Al.config -p Al.pot -s Al | tee param_file<br />
+7. potfit_apot_eam_mkl param_file<br />
+(7.5. plotapot Al.pot_end)<br />
+-----(lammps)<br />
+8. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 4.15691<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al.lammps.EAM Al<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+9. lammps &lt; lammps_test.in<br />
+(It worked, but the &quot;eam / fs&quot; setting may be wrong. In that case, please forgive me.)<br />
+<br />
+◇ Usage (Example, ADP potential, e.g., MgH2)<br />
+1. cd ~/potfit<br />
+2. mkdir calc<br />
+&nbsp; cd calc<br />
+&nbsp; mkdir MgH2<br />
+&nbsp; cd MgH2<br />
+-----(VASP)<br />
+3. cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;$HOME/vasp.5.4.1/potpaw_PBE&quot; --vasp-cartesian-lattice-vectors --setup-all --no-reduce -f alpha-MgH2.cif<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; (ISPIN = 1 (in INCAR))<br />
+4. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+5. vasp2force -f | tee alpha-MgH2.config<br />
+<br />
+6. cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;$HOME/vasp.5.4.1/potpaw_PBE&quot; --vasp-cartesian-lattice-vectors --setup-all --no-reduce -f gamma-MgH2.cif<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; (ISPIN = 1 (in INCAR))<br />
+7. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+8. vasp2force -f | tee gamma-MgH2.config<br />
+<br />
+9. cp alpha-MgH2.config MgH2.config<br />
+&nbsp; cat gamma-MgH2.config &gt;&gt; MgH2.config<br />
+-----(potfit)<br />
+10. makeapot -g -n 2 -i adp -f 3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc | tee MgH2.pot<br />
+11. potfit_setup -c MgH2.config -p MgH2.pot -s MgH2 | tee param_file<br />
+12. potfit_apot_adp_mkl param_file<br />
+(you can get MgH2.lammps.ADP)<br />
+※ とりあえずは動作して結果が得られたが、これで正しいかはまだ確証が得られていない。<br />
+※ https://www.ctcms.nist.gov/potentials/system/H/#H-Mg<br />
+&nbsp;alpha-MgH2(P4_2/mnm, 136): https://materialsproject.org/materials/mp-23710/<br />
+&nbsp;gamma-MgH2(Pbcn, 60): https://materialsproject.org/materials/mp-23711/<br />
+<br />
+◇ correct_config<br />
+1. gedit correct_config<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set filename = $1<br />
+cp ${filename}.config tmp.config<br />
+cp ${filename}.config ${filename}_origin.config<br />
+#<br />
+set C_Line_list = `awk &#39;{if($1==&quot;#C&quot;){print NR}}&#39; tmp.config`<br />
+#<br />
+set old_len = 1<br />
+foreach C_Line (${C_Line_list})<br />
+&nbsp; echo &quot;#C Line: &quot;${C_Line}<br />
+&nbsp; set new_len = `awk -v cl=${C_Line} &#39;{if(NR==cl){print length($0)}}&#39; tmp.config`<br />
+&nbsp; if ($new_len &gt; $old_len) then<br />
+&nbsp; &nbsp; @ old_len = $new_len<br />
+&nbsp; &nbsp; set ref_C_Line = ${C_Line}<br />
+&nbsp; endif<br />
+end<br />
+set ref_c = `awk -v rcl=${ref_C_Line} &#39;{if(NR==rcl){print $0}}&#39; tmp.config`<br />
+echo &quot;Setting #C data: &quot;${ref_c}<br />
+set end_line_plus2 = `awk &#39;END{print NR+2}&#39; tmp.config`<br />
+set new_C_Line_list = `echo &quot;${C_Line_list} ${end_line_plus2}&quot;`<br />
+#<br />
+cp tmp.config new_tmp.config<br />
+set count = 1<br />
+set nex_count = 2<br />
+foreach C_Line (${C_Line_list})<br />
+&nbsp; set new_c = `awk -v cl=${C_Line} &#39;{if(NR==cl){print $0}}&#39; tmp.config`<br />
+&nbsp; echo &quot;--------------------&quot;<br />
+&nbsp; echo &quot;Line: &quot;$C_Line<br />
+&nbsp; if (&quot;$new_c&quot; != &quot;$ref_c&quot;) then<br />
+&nbsp; &nbsp; set num_position = `awk -v cl=${C_Line} &#39;{if(NR==cl-1){printf &quot;%d&quot;,$2}}&#39; tmp.config`<br />
+&nbsp; &nbsp; echo &quot;number of position: &quot;${num_position}<br />
+&nbsp; &nbsp; set i = -1<br />
+&nbsp; &nbsp; foreach ref_element ($ref_c)<br />
+&nbsp; &nbsp; &nbsp; set j = -1<br />
+&nbsp; &nbsp; &nbsp; foreach element ($new_c)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if (&quot;$ref_element&quot; == &quot;$element&quot; &amp;&amp; &quot;$ref_element&quot; != &quot;#C&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; echo $element&quot;: old: &quot;$j&quot;, new: &quot;$i<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ next_count = $count + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v np=${num_position} -v el=$new_C_Line_list[$next_count] -v nj=$j -v ni=$i &#39;{if((el-2-np)&lt;NR &amp;&amp; NR &lt;=(el-2) &amp;&amp; $1==nj){printf &quot;Newnum%-d &nbsp;%11.5f %11.5f %11.5f &nbsp;%11.5f %11.5f %11.5f\n&quot;,ni,$2,$3,$4,$5,$6,$7}else{print $0}}&#39; tmp.config &gt; new_tmp.config<br />
+&nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cp new_tmp.config tmp.config<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @ j = $j + 1<br />
+&nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; endif<br />
+&nbsp; @ count = $count + 1<br />
+end<br />
+#<br />
+foreach C_Line (${C_Line_list})<br />
+&nbsp; awk -v cl=${C_Line} -v refc=&quot;${ref_c}&quot; &#39;{if(NR==cl){printf &quot;%s\n&quot;,refc}else{print $0}}&#39; tmp.config &gt; new_tmp.config<br />
+&nbsp; cp new_tmp.config tmp.config<br />
+end<br />
+#<br />
+sed -i &quot;s/Newnum//g&quot; tmp.config<br />
+mv tmp.config ${filename}.config<br />
+#<br />
+rm -f -r new_tmp.config<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; correct_config<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place correct_config)<br />
+3. chmod +x correct_config<br />
+4. cp correct_config ~/potfit/util<br />
+5. correct_config Mg_H<br />
+&nbsp; (e.g., Mg_H.config)<br />
+<br />
+◇ run_vasp_potfit<br />
+1. gedit run_vasp_potfit<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set num_core_vasp = 4<br />
+set num_core_potfit = 1<br />
+<br />
+set filename = $1<br />
+touch ${filename}.config<br />
+<br />
+rm -f -r ${filename}.config<br />
+rm -f -r ${filename}.pot<br />
+rm -f -r param_file<br />
+<br />
+set cif_list = `ls *.cif`<br />
+foreach cif_name (${cif_list})<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; mkdir ${cif_folder_name}<br />
+&nbsp; cp ${cif_name} ./${cif_folder_name}/${cif_name}<br />
+&nbsp; cd ./${cif_folder_name}<br />
+<br />
+&nbsp; cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=$HOME/vasp.5.4.1/potpaw_PBE --vasp-cartesian-lattice-vectors --setup-all -f ${cif_folder_name}.cif --vasp-spin=no<br />
+<br />
+&nbsp; mv KPOINTS KPOINTS_backup<br />
+&nbsp; #sed -i &#39;s/ISPIN = 2/ISPIN = 1/g&#39; INCAR # cif2cell-1.2.39<br />
+&nbsp; #sed -i &#39;22,23d&#39; INCAR # cif2cell-1.2.39<br />
+<br />
+&nbsp; mpirun -np ${num_core_vasp} $HOME/vasp*/bin/vasp_std<br />
+<br />
+&nbsp; vasp2force -f | tee ${cif_folder_name}.config<br />
+&nbsp; cp ${cif_folder_name}.config ../${cif_folder_name}.config<br />
+<br />
+&nbsp; cd ..<br />
+&nbsp; cat ${cif_folder_name}.config &gt;&gt; ${filename}.config<br />
+end<br />
+<br />
+if (&quot;$2&quot; == &quot;1&quot;) then<br />
+&nbsp; if (&quot;$3&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i eam -f &quot;morse_sc,csw2_sc,bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;$3&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i adp -f &quot;eopp_sc,csw2_sc,bjs,2*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;$2&quot; == &quot;2&quot;) then<br />
+&nbsp; if (&quot;$3&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i eam -f &quot;3*morse_sc,2*csw2_sc,2*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;$3&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i adp -f &quot;3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;$2&quot; == &quot;3&quot;) then<br />
+&nbsp; if (&quot;$3&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i eam -f &quot;6*morse,3*csw2,3*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;$3&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i adp -f &quot;6*eopp_sc,3*csw2_sc,3*bjs,12*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;$3&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+endif<br />
+<br />
+potfit_setup -c ${filename}.config -p ${filename}.pot -s ${filename} | tee param_file<br />
+$HOME/potfit/util/correct_config ${filename}<br />
+if (&quot;${num_core_potfit}&quot; == &quot;1&quot;) then<br />
+&nbsp; potfit_apot_$3_mkl_stress param_file<br />
+else<br />
+&nbsp; mpirun -np ${num_core_potfit} potfit_apot_$3_mkl_mpi_stress param_file<br />
+endif<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_vasp_potfit<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_vasp_potfit)<br />
+3. chmod +x run_vasp_potfit<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_vasp_potfit Mg_H 2 eam<br />
+&nbsp; (e.g., Mg_H, 2 element, EAM potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit Mg_H 2 adp<br />
+&nbsp; (e.g., Mg_H, 2 element, ADP potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit Mg_Ni_H 3 eam<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, EAM potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit Mg_Ni_H 3 adp<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, ADP potential)<br />
+&nbsp;&nbsp;<br />
+※ Mg-H system<br />
+・D.E. Smirnova et al., Computational Materials Science, 154, 295-302. DOI: 10.1016/j.commatsci.2018.07.051.<br />
+-----<br />
+A^3 = Angstrom^3<br />
+<br />
+configurations with attributed forces<br />
+hcp Mg, &nbsp; &nbsp;21 type, &nbsp; &nbsp;180 atoms, weight 1-6, &nbsp;300-900 &nbsp;K, 14.3-22.8 A^3<br />
+bcc Mg, &nbsp; &nbsp; 5 type, &nbsp; &nbsp;128 atoms, weight &nbsp; 1, &nbsp;300-600 &nbsp;K, 12.0-22.3 A^3<br />
+liquid Mg, &nbsp;9 type, &nbsp; &nbsp;128 atoms, weight &nbsp; 1, 1000-2800 K, 14.9-21.4 A^3<br />
+Mg + H &nbsp; , &nbsp;3 type, 108+Ha atoms, weight &nbsp; 1, &nbsp;400-800 &nbsp;K, 17.5-18.0 A^3<br />
+alpha-MgH2, 4 type, &nbsp; &nbsp;216 atoms, weight &nbsp; 1, &nbsp;400-800 &nbsp;K, 29.4-31.0 A^3<br />
+gamma-MgH2, 1 type, &nbsp; &nbsp;216 atoms, weight &nbsp; 1, &nbsp; &nbsp; &nbsp;500 &nbsp;K, &nbsp; &nbsp; &nbsp;29.6 A^3<br />
+pure H, &nbsp; &nbsp; 2 type, &nbsp; &nbsp; 64 atoms, weight &nbsp; 1, &nbsp; &nbsp; 1000 &nbsp;K, 20.0-25.0 A^3<br />
+<br />
+configurations without attributed forces<br />
+hcp Mg, &nbsp; &nbsp; 1 type, &nbsp; &nbsp; 96 atoms, weight &nbsp;15, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.80 A^3<br />
+fcc Mg, &nbsp; &nbsp; 1 type, &nbsp; &nbsp;108 atoms, weight &nbsp;35, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.90 A^3<br />
+hcp Mg, &nbsp; &nbsp; 3 type, &nbsp; &nbsp; 96 atoms, weight &nbsp; 1, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.85 A^3<br />
+-----<br />
+e.g., rewrite &quot;#W&quot; value on *.config, then &quot;potfit_apot_adp_mkl param_file&quot;<br />
+<br />
+◇ cif data (material project)<br />
+-----<br />
+Mg2NiH4: https://materialsproject.org/materials/mp-697331/ (Formation Energy / Atom: -0.326 eV)<br />
+MgNiH3: https://materialsproject.org/materials/mp-1017629/ (Formation Energy / Atom: -0.244 eV)<br />
+MgNiH: https://www.materialsproject.org/materials/mp-1008881/ (Formation Energy / Atom: -0.239 eV)<br />
+-----<br />
+Mg2Ni: https://materialsproject.org/materials/mp-2137/ (Formation Energy / Atom: -0.171 eV)<br />
+MgH2(P4_2/mnm,136): https://materialsproject.org/materials/mp-23710/<br />
+MgH2(Pbcn,60): https://materialsproject.org/materials/mp-23711/<br />
+-----<br />
+Ni: https://materialsproject.org/materials/mp-23/<br />
+Mg(R-3m,166): https://materialsproject.org/materials/mp-1094122/<br />
+Mg(P6_3/mmc,194): https://materialsproject.org/materials/mp-153/<br />
+Mg(Im-3m,229): https://materialsproject.org/materials/mp-110/<br />
+-----<br />
+※ データ数が足りないなど問題があると下記のような情報が表示される。<br />
+[WARNING] F does not depend on the 1. parameter (a) of the 13. potential.<br />
+[WARNING] Fit impossible!<br />
+Precision not reached!<br />
+<br />
+※ 構成元素のデータが全部ないとエラーがでる。3元系に2元系のデータを入れると私の場合はエラーが表示された。<br />
+※ config ファイルの#Cが全てマッチしていれば動作する。そのため、上記で*.configを修正する correct_config のスクリプトを作成した。<br />
+e.g.,<br />
+----------(bad case)<br />
+#N 2 1<br />
+#C Mg<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;2.77346966 &nbsp; -1.60126346 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.20252691 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;5.12669080<br />
+#W 1.000000<br />
+#E -1.5255162600<br />
+#S -0.02988381 -0.02988381 -0.01388368 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+0 &nbsp; &nbsp; 0.92449 &nbsp; &nbsp; 1.60126 &nbsp; &nbsp; 1.28167 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+0 &nbsp; &nbsp; 1.84898 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 3.84502 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+#N 6 1<br />
+#C H Mg<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.01572000<br />
+#W 1.000000<br />
+#E -2.9312585467<br />
+#S -0.02212861 -0.02212861 -0.0231338 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+0 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; -0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp;0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+0 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 1.50786 &nbsp; -0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp;0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+----------<br />
+----------(bad case)<br />
+#N 2 1<br />
+#C Mg H<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;2.77346966 &nbsp; -1.60126346 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.20252691 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;5.12669080<br />
+#W 1.000000<br />
+#E -1.5255162600<br />
+#S -0.02988381 -0.02988381 -0.01388368 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+0 &nbsp; &nbsp; 0.92449 &nbsp; &nbsp; 1.60126 &nbsp; &nbsp; 1.28167 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+0 &nbsp; &nbsp; 1.84898 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 3.84502 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+#N 6 1<br />
+#C H Mg<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.01572000<br />
+#W 1.000000<br />
+#E -2.9312585467<br />
+#S -0.02212861 -0.02212861 -0.0231338 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+0 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; -0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp;0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+0 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 1.50786 &nbsp; -0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp;0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+----------<br />
+----------(good case)<br />
+#N 2 1<br />
+#C H Mg<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;2.77346966 &nbsp; -1.60126346 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.20252691 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;5.12669080<br />
+#W 1.000000<br />
+#E -1.5255162600<br />
+#S -0.02988381 -0.02988381 -0.01388368 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+1 &nbsp; &nbsp; 0.92449 &nbsp; &nbsp; 1.60126 &nbsp; &nbsp; 1.28167 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+1 &nbsp; &nbsp; 1.84898 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 3.84502 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+#N 6 1<br />
+#C H Mg<br />
+## force file generated from file ./OUTCAR config 1<br />
+#X &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000<br />
+#Y &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;4.51189000 &nbsp; &nbsp;0.00000000<br />
+#Z &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;0.00000000 &nbsp; &nbsp;3.01572000<br />
+#W 1.000000<br />
+#E -2.9312585467<br />
+#S -0.02212861 -0.02212861 -0.0231338 &nbsp; &nbsp; &nbsp; -0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+#F<br />
+0 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; 0.88397 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; -0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; 3.62792 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp;0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-0<br />
+0 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 1.50786 &nbsp; -0.007831 &nbsp; &nbsp;0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+0 &nbsp; &nbsp; 1.37198 &nbsp; &nbsp; 3.13991 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp;0.007831 &nbsp; -0.007831 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 1.50786 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+1 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; 2.25595 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+----------<br />
+<br />
+◇ run_vasp_potfit_m<br />
+1. gedit run_vasp_potfit_m<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set num_core_vasp = 4<br />
+set num_core_potfit = $4 # less than number of data in config<br />
+<br />
+set filename = $1<br />
+set total_num_elements = $2<br />
+set potential_type = $3<br />
+set max_num_move = $4<br />
+set x = $5<br />
+set cif2cell_other_option = $6<br />
+<br />
+echo -n &quot;&quot; &gt; ${filename}.config<br />
+echo -n &quot;&quot; &gt; ${filename}.pot<br />
+echo -n &quot;&quot; &gt; param_file<br />
+<br />
+set cif_list = `ls *.cif`<br />
+foreach cif_name (${cif_list})<br />
+<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=$HOME/vasp.5.4.1/potpaw_PBE --vasp-cartesian-lattice-vectors --setup-all -f ${cif_folder_name}.cif --supercell=&quot;[$x,$x,$x]&quot; --vasp-spin=no ${cif2cell_other_option}<br />
+&nbsp; #sed -i &#39;s/ISPIN = 2/ISPIN = 1/g&#39; INCAR # cif2cell-1.2.39<br />
+&nbsp; #sed -i &#39;22,23d&#39; INCAR # cif2cell-1.2.39<br />
+<br />
+&nbsp; set i = 1<br />
+&nbsp; while($i &lt;= ${max_num_move})<br />
+&nbsp; &nbsp; set scale = `echo &quot;0.98 + 0.02/((${max_num_move}+1)/2)*$i&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+&nbsp; &nbsp; foreach vector (a b c)<br />
+&nbsp; &nbsp; &nbsp; rm -f -r ${cif_folder_name}_${vector}${scale}<br />
+&nbsp; &nbsp; &nbsp; mkdir ${cif_folder_name}_${vector}${scale}<br />
+&nbsp; &nbsp; &nbsp; cp ${cif_name} ./${cif_folder_name}_${vector}${scale}/${cif_name}<br />
+&nbsp; &nbsp; &nbsp; cd ./${cif_folder_name}_${vector}${scale}<br />
+<br />
+&nbsp; &nbsp; &nbsp; cp ../INCAR &nbsp; INCAR<br />
+&nbsp; &nbsp; &nbsp; cp ../KPOINTS KPOINTS_backup<br />
+&nbsp; &nbsp; &nbsp; cp ../POTCAR &nbsp;POTCAR<br />
+&nbsp; &nbsp; &nbsp; cp ../POSCAR &nbsp;POSCAR_tmp<br />
+<br />
+&nbsp; &nbsp; &nbsp; if (&quot;${vector}&quot; == &quot;a&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==3){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; else if (&quot;${vector}&quot; == &quot;b&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==4){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; else if (&quot;${vector}&quot; == &quot;c&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==5){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+&nbsp; &nbsp; &nbsp; mpirun -np ${num_core_vasp} $HOME/vasp*/bin/vasp_std<br />
+<br />
+&nbsp; &nbsp; &nbsp; vasp2force -f | tee ${cif_folder_name}_${vector}${scale}.config<br />
+&nbsp; &nbsp; &nbsp; cat ${cif_folder_name}_${vector}${scale}.config &gt;&gt; ../${filename}.config<br />
+<br />
+&nbsp; &nbsp; &nbsp; cd ..<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+end<br />
+<br />
+if (&quot;${total_num_elements}&quot; == &quot;1&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i eam -f &quot;morse_sc,csw2_sc,bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i adp -f &quot;eopp_sc,csw2_sc,bjs,2*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;${total_num_elements}&quot; == &quot;2&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i eam -f &quot;3*morse_sc,2*csw2_sc,2*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i adp -f &quot;3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;${total_num_elements}&quot; == &quot;3&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i eam -f &quot;6*morse,3*csw2,3*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i adp -f &quot;6*eopp_sc,3*csw2_sc,3*bjs,12*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+endif<br />
+<br />
+potfit_setup -c ${filename}.config -p ${filename}.pot -s ${filename} | tee param_file<br />
+$HOME/potfit/util/correct_config ${filename}<br />
+if (&quot;${num_core_potfit}&quot; == &quot;1&quot;) then<br />
+&nbsp; potfit_apot_${potential_type}_mkl_stress param_file<br />
+else<br />
+&nbsp; mpirun -np ${num_core_potfit} potfit_apot_${potential_type}_mkl_mpi_stress param_file<br />
+endif<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_vasp_potfit_m<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_vasp_potfit_m)<br />
+3. chmod +x run_vasp_potfit_m<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_vasp_potfit_m Al 1 eam 1 3 --no-reduce<br />
+&nbsp; (e.g., Al, 1 element, EAM potential, 1 point, supercell 3x3x3, --no-reduce)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Al 1 eam 5 3 --no-reduce<br />
+&nbsp; (e.g., Al, 1 element, EAM potential, 5 point, supercell 3x3x3, --no-reduce)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Mg_H 2 eam 3 2<br />
+&nbsp; (e.g., Mg_H, 2 element, EAM potential, 3 point, supercell 2x2x2)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Mg_H 2 adp 3 2<br />
+&nbsp; (e.g., Mg_H, 2 element, ADP potential, 3 point, supercell 2x2x2)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Mg_Ni_H 3 eam 5 1<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, EAM potential, 5 point, supercell 1x1x1)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Mg_Ni_H 3 adp 3 1<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, ADP potential, 7 point, supercell 1x1x1)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_potfit_m Mg_Ni_H 3 adp 1 2<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, ADP potential, 1 point, supercell 2x2x2)<br />
+<br />
+<br />
+◇ run_vasp_md_potfit_m<br />
+1. gedit run_vasp_md_potfit_m<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set num_core_vasp = 4<br />
+set ncore_vasp = `echo ${num_core_vasp} | awk &#39;{printf &quot;%d&quot;,sqrt($0)}&#39;`<br />
+set num_core_potfit = $4 # less than number of data in config<br />
+<br />
+set filename = $1<br />
+set total_num_elements = $2<br />
+set potential_type = $3<br />
+set max_num_move = $4<br />
+set x = $5<br />
+set temperature_K = $6<br />
+set kpoint_flag = $7<br />
+<br />
+echo -n &quot;&quot; &gt; ${filename}.config<br />
+echo -n &quot;&quot; &gt; ${filename}.pot<br />
+echo -n &quot;&quot; &gt; param_file<br />
+<br />
+cat &lt;&lt; EOF &gt; INCAR_MD<br />
+ISMEAR = 0<br />
+IBRION = 0<br />
+MDALGO = 2<br />
+ISIF = 2<br />
+SMASS = 1.0<br />
+SIGMA = 0.1<br />
+LREAL = Auto<br />
+ALGO = VeryFast<br />
+PREC = Low<br />
+ISYM = 0<br />
+TEBEG = ${temperature_K}<br />
+NSW = 50<br />
+POTIM = 3.0<br />
+NCORE = ${ncore_vasp}<br />
+EOF<br />
+<br />
+cat &lt;&lt; EOF &gt; KPOINTS_1k<br />
+K-Points<br />
+&nbsp;0<br />
+Gamma<br />
+&nbsp;1 1 1<br />
+&nbsp;0 0 0<br />
+EOF<br />
+<br />
+set cif_list = `ls *.cif`<br />
+foreach cif_name (${cif_list})<br />
+<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=$HOME/vasp.5.4.1/potpaw_PBE --vasp-cartesian-lattice-vectors --setup-all -f ${cif_folder_name}.cif --no-reduce --supercell=&quot;[$x,$x,$x]&quot;<br />
+<br />
+&nbsp; set i = 1<br />
+&nbsp; while($i &lt;= ${max_num_move})<br />
+&nbsp; &nbsp; set scale = `echo &quot;0.98 + 0.02/((${max_num_move}+1)/2)*$i&quot; | bc -l | awk &#39;{printf &quot;%5.3f&quot;,$0}&#39;`<br />
+&nbsp; &nbsp; foreach vector (a b c)<br />
+&nbsp; &nbsp; &nbsp; rm -f -r ${cif_folder_name}_${vector}${scale}<br />
+&nbsp; &nbsp; &nbsp; mkdir ${cif_folder_name}_${vector}${scale}<br />
+&nbsp; &nbsp; &nbsp; cp ${cif_name} ./${cif_folder_name}_${vector}${scale}/${cif_name}<br />
+&nbsp; &nbsp; &nbsp; cd ./${cif_folder_name}_${vector}${scale}<br />
+<br />
+&nbsp; &nbsp; &nbsp; cp ../INCAR_MD INCAR<br />
+&nbsp; &nbsp; &nbsp; if (${kpoint_flag} == 1) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cp ../KPOINTS_1k &nbsp;KPOINTS<br />
+&nbsp; &nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cp ../KPOINTS &nbsp;KPOINTS_backup<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; cp ../POTCAR &nbsp; POTCAR<br />
+&nbsp; &nbsp; &nbsp; cp ../POSCAR &nbsp; POSCAR_tmp<br />
+<br />
+&nbsp; &nbsp; &nbsp; if (&quot;${vector}&quot; == &quot;a&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==3){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; else if (&quot;${vector}&quot; == &quot;b&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==4){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; else if (&quot;${vector}&quot; == &quot;c&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; awk -v scale=${scale} &#39;{if(NR==5){printf &quot; %19.15f %19.15f %19.15f \n&quot;, $1*scale, $2*scale, $3*scale}else{printf &quot;%s \n&quot;, $0}}&#39; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+&nbsp; &nbsp; &nbsp; mpirun -np ${num_core_vasp} $HOME/vasp*/bin/vasp_std<br />
+<br />
+&nbsp; &nbsp; &nbsp; vasp2force -f | tee ${cif_folder_name}_${vector}${scale}.config<br />
+&nbsp; &nbsp; &nbsp; cat ${cif_folder_name}_${vector}${scale}.config &gt;&gt; ../${filename}.config<br />
+<br />
+&nbsp; &nbsp; &nbsp; cd ..<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+end<br />
+<br />
+if (&quot;${total_num_elements}&quot; == &quot;1&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i eam -f &quot;morse_sc,csw2_sc,bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 1 -i adp -f &quot;eopp_sc,csw2_sc,bjs,2*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 1 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;${total_num_elements}&quot; == &quot;2&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i eam -f &quot;3*morse_sc,2*csw2_sc,2*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 2 -i adp -f &quot;3*eopp_sc,2*csw2_sc,2*bjs,6*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 2 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+else if (&quot;${total_num_elements}&quot; == &quot;3&quot;) then<br />
+&nbsp; if (&quot;${potential_type}&quot; == &quot;eam&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i eam -f &quot;6*morse,3*csw2,3*bjs&quot; | tee ${filename}.pot<br />
+&nbsp; else if (&quot;${potential_type}&quot; == &quot;adp&quot;) then<br />
+&nbsp; &nbsp; makeapot -g -n 3 -i adp -f &quot;6*eopp_sc,3*csw2_sc,3*bjs,12*csw2_sc&quot; | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;stiweb&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i stiweb | tee ${filename}.pot<br />
+&nbsp; #else if (&quot;${potential_type}&quot; == &quot;tersoff&quot;) then<br />
+&nbsp; # &nbsp;makeapot -g -n 3 -i tersoff | tee ${filename}.pot<br />
+&nbsp; endif<br />
+endif<br />
+<br />
+potfit_setup -c ${filename}.config -p ${filename}.pot -s ${filename} | tee param_file<br />
+$HOME/potfit/util/correct_config ${filename}<br />
+if (&quot;${num_core_potfit}&quot; == &quot;1&quot;) then<br />
+&nbsp; potfit_apot_${potential_type}_mkl_stress param_file<br />
+else<br />
+&nbsp; mpirun -np ${num_core_potfit} potfit_apot_${potential_type}_mkl_mpi_stress param_file<br />
+endif<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_vasp_md_potfit_m<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_vasp_md_potfit_m)<br />
+3. chmod +x run_vasp_md_potfit_m<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_vasp_md_potfit_m Al 1 eam 1 3 298 1<br />
+&nbsp; (e.g., Al, 1 element, EAM potential, 1 point, supercell 3x3x3, 298 K, 1 kpoint)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_md_potfit_m Al 1 eam 3 3 298 1<br />
+&nbsp; (e.g., Al, 1 element, EAM potential, 3 point, supercell 3x3x3, 298 K, 1 kpoint)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_md_potfit_m Mg_H 2 eam 1 1 298<br />
+&nbsp; (e.g., Mg_H, 2 element, EAM potential, 1 point, supercell 1x1x1, 298 K)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_md_potfit_m Mg_H 2 adp 1 1 298<br />
+&nbsp; (e.g., Mg_H, 2 element, ADP potential, 1 point, supercell 1x1x1, 298 K)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_md_potfit_m Mg_Ni_H 3 eam 3 1 298<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, EAM potential, 3 point, supercell 1x1x1, 298 K)<br />
+&nbsp; or<br />
+&nbsp; ./run_vasp_md_potfit_m Mg_Ni_H 3 adp 3 1 298<br />
+&nbsp; (e.g., Mg_Ni_H, 3 element, ADP potential, 3 point, supercell 1x1x1, 298 K)<br />
+&nbsp; (この条件ではフィットができないとは表示されなかった）<br />
+<br />
+※ VASP (OUTCAR) &gt; potfit &gt; making MEAM, Tersoff or OpenKIM potentials &gt; lammps<br />
+※ https://software.intel.com/en-us/mkl (from 2015/Aug/31))<br />
+&nbsp; Intel MKL は 2015年8月31日から無償で利用できるようになった。OpenBLASやNetlib, ACMLが利用できない場合は特に助かる。AMDのCPUの場合はOpenBLASの選択はいまだに外せない？<br />
+※ keyword &quot;write_lammps 1&quot; output &quot;pair&quot;, &quot;sw&quot;, &quot;tersoff&quot;, &quot;eam&quot; or &quot;adp&quot;<br />
+&nbsp; see http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf (Japanese)<br />
+[8] Potentials generated with potfit (https://www.potfit.net/wiki/doku.php?id=potentials:main) では準結晶のAl-Mn-PdやAl-Co-Niの例もあって驚く。準結晶に対してEAMで論文が出ているのは嬉しい。SiO2やAl2O3, MgOはdipoleで作られて検討されている。<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 原子間ポテンシャルについて<br />
+&nbsp; http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf<br />
+[2] 解析的に求めたEAMポテンシャルの力の実装<br />
+[3] 固体系における原子間ポテンシャルパラメータ最適化ソフトウェアの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia/77/783/77_783_2026/_pdf/-char/ja<br />
+[4] 分子動力学法における原子間ポテンシャルパラメー タの最適化<br />
+[5] アモルファス金属に対する経験的原子間ポテンシャルの適用性評価&nbsp;<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/img/graduation-thesis/2006m_nikkuni.pdf<br />
+[6] CFDEMproject/LAMMPS<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/tools/eam_database<br />
+[7] NIST (Interatomic Potentials Repository)<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Pt/<br />
+[8] lammps / potentials / W_zhou.eam.alloy<br />
+&nbsp; https://github.com/lammps/lammps/blob/master/potentials/W_zhou.eam.alloy<br />
+[9] Zhou X. W., R. A. Johnson, and H. N. G. Wadley, Phys. Rev. B. 69, 144113 (2004)<br />
+[10] &nbsp;X. W. Zhou, H. N. G. Wadley, R. A. Johnson, D. J. Larson, N. Tabat, A. Cerezo, A. K. Petford-Long, G. D. W. Smith, P. H. Clifton, R. L. Martens, and T. F. Kelly, Acta Mater. 49, 4005 (2001).<br />
+[11] &nbsp;H. N. G. Wadley, X. Zhou, R. A. Johnson, and M. Neurock, Prog. Mater. Sci. 46, 329 (2001).<br />
+[12] [9.8. eam database tool] and [9.9. eam generate tool]<br />
+&nbsp; http://www.afs.enea.it/software/lammps/doc17/html/Section_tools.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

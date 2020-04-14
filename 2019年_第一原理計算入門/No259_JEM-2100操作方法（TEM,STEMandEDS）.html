@@ -1,0 +1,401 @@
+------------------------------------------------------------------------------<br />
+■ 動画（全てクリエイティブコモンにしています）<br />
+・Youtube動画： <a href="https://www.youtube.com/playlist?list=PLYoIKHKPkcsF5loA-jsmIOKDlZ8HonFKG">https://www.youtube.com/playlist?list=PLYoIKHKPkcsF5loA-jsmIOKDlZ8HonFKG</a>
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PLYoIKHKPkcsF5loA-jsmIOKDlZ8HonFKG" width="560"></iframe></div>
+・動画リスト： <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+・関連動画： <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+--------------------------------------------------------------------------------<br />
+■ TEM (JEM-2100)<br />
+<br />
+◆ 開始～昇圧<br />
+1. 真空の確認（3x10<sup><font size="2">-5</font></sup> Pa以下）<br />
+　（イオンポンプに付いているゲージを見る。150 L/Sなので青色の目盛りを見る）<br />
+2. 窒素バルブを開ける<br />
+3. ログノートに記入<br />
+4. 液体窒素を入れる<br />
+　1) ビューウインドウにカバーが付いているか確認（鉛ガラス面の保護のため）<br />
+　2)&nbsp;前回使用時のベイク（bake）が終わっているかをPCで確認し、ヒーターを取り外す<br />
+　3) 0.5 L 程度液体窒素を入れて冷やし、落ち着いたら追加で 1L 程度入れる（漏斗を使用すること！）<br />
+　4) 液体窒素を入れてから 8 h 以上TEMを使用する場合は 8 h 経過前に液体窒素を補充する<br />
+5. HT昇圧<br />
+　1) High Voltage Control 上の HT で Down/Up の右にある HT を 80 kVにする<br />
+　　（昨日120kV以上で使用していた場合は、120kVにする）<br />
+　2) HT の ON を押す<br />
+　3) Auto HT でTagert と Step, Time Step を設定<br />
+　　◆ 昇圧のデータ 1<br />
+　　a. HT 80 kV に設定<br />
+　　b. 80 kV ～ 120 kV, 1 kV / Step,&nbsp;6 sec にしてStartを押す（約5 min）<br />
+　　c. 120 kV ～ 160 kV,&nbsp;0.5 kV / Step,&nbsp;6 sec にしてStartを押す（約10 min）<br />
+　　c. 5分待つ<br />
+　　d. 160 kV ～ 180 kV,&nbsp;0.1 kV / Step,&nbsp;6 sec にしてStartを押す（約20 min）<br />
+　　e. 180 kV ～ 200 kV,&nbsp;0.1 kV / Step,&nbsp;10 sec にしてStartを押す（約30 min）<br />
+　　◆ 昇圧のデータ2<br />
+　　120 kV:&nbsp; 61 ～ 62 &mu;A<br />
+　　140 kV:&nbsp; 71 ～ 72 &mu;A<br />
+　　160 kV:&nbsp; 81 ～&nbsp;82 &mu;A<br />
+　　180 kV:&nbsp; 91 ～&nbsp;92 &mu;A<br />
+　　200 kV: 101 ～&nbsp;102 &mu;A<br />
+　　◆ 昇圧のデータ&nbsp;3 （昨日120kV以上で使用していた場合）<br />
+　　a. HT 120 kV に設定<br />
+　　b. 120 kV ～ 160 kV, 1 kV / Step, 10 sec にしてStartを押す（約10 min）<br />
+　　c. 5分待つ<br />
+　　d. 160 kV ～ 200 kV, 0.1 kV / Step, 5 sec にしてStartを押す（約34 min）<br />
+　4) Start で昇圧が開始される<br />
+　5) 昇圧したら、Beam Current が範囲内にあるか確認<br />
+　　※もし、Beam Current が範囲を超えていたら 10 ～ 20 kV 程度 HT を下げる（降圧は 1 kV/Step で 6 time/Step)。そして、Beam Current が安定するまで待つ。それでもダメな場合は管理者に相談する。<br />
+　6) 200 kV まで段階的に昇圧させる（上記の昇圧のデータを参照）<br />
+　※ 前日に 200 kV まで上げて使用している場合は 120 kV からHTをON。それ以外はもっと低い80 kV からONする。<br />
+　※ 3x10<sup><font size="2">-5</font></sup> Paを超えている場合は管理者に報告。ベークすることになる。<br />
+<br />
+◆ EDS (ミニカップ)<br />
+1. POWERスイッチををONする<br />
+2. EVACのスイッチをSTARTにする &gt; ONランプが点灯（TMPが始動する）<br />
+　※10分以内に電磁弁が開く<br />
+3. タイマーにより約70分後にFILLのREADYランプが点灯（TMPは動作状態を保つ）<br />
+　液体窒素を入れる<br />
+　※ TEMPのMIDランプが点灯してから約10分後位にTMP停止し電磁弁が閉じる<br />
+4. 約1時間後にBIASのREADYランプが点灯<br />
+5. BIASのスイッチをONに倒す &gt; ONランプが点灯（DPP（PC側）でBIASがかけられるようになる）<br />
+<br />
+◆ Sample ホルダー挿入<br />
+1. Sample の取り付け（手袋、ピンセットを使用する。ブロアーでゴミを吹き飛ばす）<br />
+2. Filament を OFF<br />
+3. Stage Neutral を押し、Sample を原点へ戻す<br />
+4. ステージを Single Tilt Holder にする<br />
+5. 試料ホルダーを真っ直ぐ入れる．3回音がしてから、AirからPumpにする<br />
+6. 緑色<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">のランプが点灯したら手を離し，</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">5</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">分待つ．</span><br />
+7. 真空に引き込まれないように手（親指で支える）で支えながら回転させて入れる<br />
+　（時計回り 30&deg;&rarr; 入れる（5mm程度の長さ） &rarr; 時計回り 60&deg;&rarr; 入れる）<br />
+　※ 真空ゲージと Status の値を見ながら、慎重かつ適度なスピードで入れる。<br />
+8. 最後まで入れたら音がする。15分待つ。<br />
+9. ログノートに記入
+<p style="margin: 0cm 0cm 0pt;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">上記の</span><span lang="EN-US"><font face="Century">5</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">と</span><span lang="EN-US"><font face="Century">6</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">は下記のようにできるが、安全のために上記の手法にする。</span></p>
+
+<p style="margin: 0cm 0cm 0pt;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">※　</span><span lang="EN-US"><font face="Century">5. Sample</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">を真っ直ぐ入れる．</span><span lang="EN-US"><font face="Century">2</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">回音がしてから、さらに安全のために</span><span lang="EN-US"><font face="Century">3</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">分待つ。</span><span lang="EN-US"><font face="Century">Air</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">から</span><span lang="EN-US"><font face="Century">Pump</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">にする（</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">[</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">トン、ティン、シュー！</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">]</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">と全ての音が鳴って真空が引いている音がしたら手を放して良い。試料</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">ホルダーを保持するのは、試料ホルダーが回転して真空が悪いままになるのを防ぐため）．</span></p>
+
+<p style="margin: 0cm 0cm 0pt;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">※　</span><span lang="EN-US"><font face="Century">6. </font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">緑色のランプが点灯するのを確認する。</span><span lang="EN-US"><font face="Century">5</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">分待つ．（</span><span lang="EN-US"><font face="Century">Air</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">から</span><span lang="EN-US"><font face="Century">Pump</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">にした後、合計約</span><span lang="EN-US"><font face="Century">10</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">分待つことになる）<br />
+※　</span><span lang="EN-US"><font face="Century">Air</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">から</span><span lang="EN-US"><font face="Century">Pump</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">にした後、VACのspecimenのピラニ真空計の電流値が254&mu;A近辺から40&mu;A近辺になると緑色のランプが点灯する。緑色が点灯していないときは管理者に相談する。具体的な手順としては、イオンゲージの真空を確認し、真空度が悪くなっていないのを確認する　＞　</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">落ち着くために１-2分待つ　＞　</span><span lang="EN-US"><font face="Century">PumpからAirにする　＞　</font></span><font face="ＭＳ 明朝">１-2分待つ　＞　上記の５の手順を行う。</font><br />
+<br />
+◆ 照準系軸合わせ<br />
+1. Filament を ON<br />
+2. ログノートに記入<br />
+3. STD Focus を押す<br />
+　※ 光が見えない時は Low Mag にして Sample の位置へ移動 &rarr; Mag2 にする<br />
+　※ それでも見えない場合は、メッシュがビームを邪魔している可能性があるのでトラックボールを動かして試料位置を変える。そして「MAG/CAM L」を回して倍率をさらに低くする。<br />
+　※ 上記でも上手くいかない場合は、CL絞りの値をメモし、他のコンディションもメモして、担当教員と管理者に報告する。<br />
+　※ STD Focus を押すとフォーカス電圧が基準に戻る。電圧値は、Status &gt; Lens voltageで確認できる。ちなみにStatusの隣にあるVACを押すと排気とバルブの図が示されるValve Statusが表示される。<br />
+4. Image WOBB X と Y を押す<br />
+　（右操作盤の上段、左から３と４番目のボタン）<br />
+5. △と▽でZ軸の高さを調整して、像の変化を小さくする<br />
+　（右操作盤の上段、左から１と２番目のボタン）<br />
+6. Image WOBB X と Y を消す<br />
+7. BRIGHTNESS を回しても像が変化しなくなっていることを確認する<br />
+　（時計回り｛右側に回して｝でビームが拡大する方向で用いる）<br />
+　（左操作盤中央の下の方にあるつまみ）<br />
+※ ビームが見えない場合は、メッシュがビームを邪魔している可能性があるのでトラックボールを動かして試料位置を変える．CL絞りの値をメモし、他のコンディションもメモして、担当教員と管理者に報告する．<br />
+※ BRIGHTNESSなどのつまみのすぐ横にあるCRSを押すと16倍のピッチで変化するようになる．<br />
+※LOW MAGは対物ミニレンズを使用し、8k以上の倍率でMAG1とMAG2は対物レンズを用いる。そのため、LOW MAGと&rdquo;MAG1とMAG2&rdquo;とではビームの収束状況が変わるのが実感できる。<br />
+※Image WOBB Xは集束レンズ偏向コイルのX電流に搖動電流が重畳され、電子ビームの傾斜角度が周期的に変動する。TEM像の焦点が合っていれば像の位置は一定になる。ずれていれば像がX方向に振動する。Yも同様でY方向に振動する。<br />
+<br />
+◆ CL（集束レンズ）絞りのセンタリング<br />
+1. BRIGHTNESS でビーム径を最小にする<br />
+　（ビーム径を最小にするときは試料から離れるようにする。収束したビームを試料に当たると微小放電が起こることがあり、トラブル原因となる）<br />
+2. SHIFT X と Y を用いてビームを小蛍光板の中心に合わせる<br />
+　（左操作盤の中央右端のSHIFTがX, 右操作盤の中央左端にあるSHIFTがY）<br />
+3. BRIGHTNESS でビーム径を広げ、中心から同心円状にビームが広がるように、CL(集束レンズ)絞りのつまみ(一番上にある)を回して調整する（<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">蛍光版の円とほぼ同じ大きさのビームにしておくと調整しやすい</span>）<br />
+※ 一番上はCL（コンデンサレンズ＝収束レンズ）、（まっすぐ下に降りて）二番目は対物、対物のさらに下の右側にあるのが制限視野<br />
+※ CLは手前のつまみを左に限界まで回した後に右２回半、側面にあるつまみを左に限界まで回した後に右１回転と少しでビームが中心に来る。装置により詳細は異なるので、ビームの中心が得られる条件を明らかにしておくこと！<br />
+<br />
+◆ ビームのセンタリング<br />
+1. Mag2 を押し、40 k 倍にする。<br />
+2. BRIGHTNESS でビーム径を小さくする<br />
+（ビーム径を最小にするときは試料から離れるようにする。収束したビームを試料に当たると微小放電が起こることがあり、トラブル原因となる）<br />
+3. &alpha; SELECTOR&nbsp;と SPOT SIZE を回し、Spot1 - &alpha;3にする<br />
+　（左操作盤の下段の左から１と２番目のつまみ）<br />
+4. GUN を押す（Maintenance &rarr; Alignment &rarr; GUN)<br />
+5. SHIFT X と Y で中心にし、DEF/STIG で輝度を最大にする<br />
+　（DEF/STIG は1回だけでよい）<br />
+　（DEF/STIGは左操作盤の下段右端、右操作盤の下段左端にある）<br />
+6. Spot5 - &alpha;3 にし、CLAを押す<br />
+　（Maintenance &rarr; Alignment &rarr; CLA)<br />
+7. SHIFT X と Y で中心に合わせる<br />
+8. ビームが中心から逃げなくなるまで 上記の3 ～ 7の動作を繰り返す<br />
+※ビームが楕円の場合は、COND STIGを押して、DEF/STIG x,yで真円にする。そして、ビームのセンタリングの1.から始める。<br />
+※SHIFT Xは集束レンズ偏向コイルの電流を変え、電子線をX方向に移動させる。Gunのときは、電子銃第1偏向コイルのX電流を変える。Yも同様、Y方向に移動。<br />
+※Maintenance &rarr; Alignment &rarr;Gun：SHIFTでGun shift, DEF/STIGでGun titleが割り当てられる。<br />
+（ちなみに、Maintenance &rarr; Alignment &rarr;CLではSHIFTでBeam shift, DEF/STIGでBeam titleが割り当てられる）<br />
+※CLA：SHIFTで集束レンズ第1偏向コイル調節機能, DEF/STIGで集束レンズ第2偏向コイル調節機能が割り当てられる。<br />
+※ちなみに、COND STIGは集束レンズ非点補正コイルの電流が可変でき、電子ビームの形状を補正するときに使用する。<br />
+<br />
+◆ 電圧中心の調整<br />
+1. 120 kV 程度で走査し、Sample やカーボンフィルムの接点を中心に持ってくる<br />
+2. HT WOBB と BRIGHT TILT を押す<br />
+　（HT WOBBは右操作盤の上段中央{左から5つ目、F1の左}）<br />
+　（BRIGHT TILTは左操作盤の中段右端のボタン）<br />
+3. DEF/STIG で同心円状に像が変化するように調整<br />
+※ 電圧軸があっているのがBRIGHT TILTでの中心位置。電圧中心を合わせて、試料に対して電子線がまっすぐ入るようにしている。<br />
+※上記でどうしても上手くいかない場合は、HT WOBB と BRIGHT TILT を押して、Shift x,yで像が同心円状に広がるようにし、DEF/STIGでビームが円になるようにする（蛍光板の円を参考にするとよい）。<br />
+※HT WOBBは周期的な搖動電圧が電子銃の加速電圧に重畳され、電子線のエネルギーに疑似的な変動が発生し、結像系レンズの光軸の電圧中心軸合わせに用いられる。<br />
+※BRIGHT TILT は集束レンズ偏向コイルの電流が可変でき、通常の明視野像を観察する際の電子線の光軸合わせに使用される。<br />
+<br />
+◆ 非点補正（OL非点補正）<br />
+1. カーボン部分を探す<br />
+2. <span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">一番右のモニタ</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">で</span>iTEM2067 <span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">（または</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">iTEM</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">）</span>を起動<br />
+　（TEMで使っていたのとは別のもう一つのモニタ）<br />
+3. イメージ &rarr; 入力チャンネルの切り替えで Search を選択<br />
+4. カーボン部分に Focus を合わせる<br />
+5. 小蛍光板にビームをのせたままで、Cur Dens: 20 pA/cm<sup><font size="2">2</font></sup> 程度になる様に BRIGHTNESS を変える（ Exp Time が 2 sec 以上になる）<br />
+6. ビューウィンドウにカバーをし、F1 を押して蛍光板から CCD にする<br />
+7. 中央に<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">あるビデオカメラのアイコンを押して画面を表示する</span><br />
+8. OBJSTIG を押し、DEF/STIG で FFT像が真円になるようにする<br />
+　（FINE を回して像を変化させると、変化が分かりやすい。円が同じ程度で消えていくようになるとよい）<br />
+9. 非晶質補正は 300 k &rarr; 600 k &rarr; 800 k 倍と進めていくとやりやすい<br />
+※ ビームが傾いているときは、Bright titleを押してshift x,yで中心にすると上手くいくことがある。shift x,yでも同様のことができるのでBright titleを押すかどうかはどちらでもよい。<br />
+※ CCDでの画面で、FFTのパターンが見えず、砂嵐のような画面の場合（豆粒のようなアモルファスカーボンの像が見えない）は、その部分はアモルファスカーボンが破けた真空の部分の可能性がある。他の場所に移動して、アモルファスカーボンがある場所で非点補正を行う。<br />
+<br />
+◆ 画像取り込み<br />
+1. 撮りたい場所、倍率にする<br />
+2. BRIGHTNESS を回し、20 pA/cm<sup><font size="2">2</font></sup> 程度になるように調整<br />
+3. ビューウィンドウにカバーをし、F1 を押して CCD にする<br />
+4. 撮りたい場所に移動、FINE で Focus を合わせる<br />
+5. 中央にあるビデオカメラのアイコンを押して画像を取得する<br />
+6. 露光時間を<span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">500 ms</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">または</span>1000 ms にする<br />
+7. フィルム(カメラマークの横がスナップショット)<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">のアイコンを押して画像を取得する．</span></p>
+
+<p style="margin: 0cm 0cm 0pt;">8. ビットマップと tiff ファイルで保存する<br />
+9. ビデオの停止を確認する<br />
+10. F1 を押し、CCDを解除。カバーを外して1に戻る。<br />
+※左回しがアンダーフォーカスになる。<br />
+※iTEMでＸＸが白くなるとbmp形式などで顕微鏡側の情報が残らない。薄い黄色の時は情報が残る。<br />
+<br />
+◆ STEM (EDS)<br />
+1.&nbsp;蛍光板にする．<br />
+2.&nbsp;Valve Statusを［-］を押して小さくする．<br />
+3.&nbsp;一番左のPC画面（Controller for JEM-2100/HR）&gt; Dialogue &gt; ASID Control (ASID Control Panelが開く) &gt; ASID ModeでASIDにチェックをいれる．<br />
+4.&nbsp;JEOL_SimpleImageViewerを押す（Image Controlが開く）&gt; Scan Control &gt; Spotを選択．<br />
+5.&nbsp;ASID Control Panel &gt; Camera Length［＜］［＞］を押す、CamLengthを150cmにする．<br />
+6.&nbsp;CL絞りを０番にしてほとんど絞りの無い状態にし、Focusを回して全体を見やすくしてTEMの像を撮った試料を探し、試料位置に移動する．<br />
+7.&nbsp;Focusを回してロンチグラム（Focusを回したときに結像して再度また結像したときの中間の像）が見えるようにする．<br />
+8.&nbsp;ASID Control Panel &gt; Camera Length［＜］［＞］を押して、CamLengthを20cmにする．<br />
+9.&nbsp;CL絞りを1番（一番大きい白丸）にして絞り位置を調整し、OL絞りを2番にして絞り位置を調整する．<br />
+10.&nbsp;右下にある検出器を奥に回してから本体内に入れる．<br />
+11.&nbsp;ASID Control Panel &gt; Image SelectでのSTEI-BFにチェックを入れる．<br />
+12.&nbsp;倍率を200k倍程度にする（TEMで30k倍程度と同等）．<br />
+（STEM: 2M = TEM: 300kが限界）<br />
+13.&nbsp;Image Control &gt; Scan Control &gt; Scanにし、［＞］を押して、１を選択する．<br />
+14.&nbsp;ASID Control Panel でSpot Sizeの［＜］［＞］を押して、Spot A3にする．<br />
+15.&nbsp;ASID Control Panel でBrightnessとContrastで像が見えるようにする（STEPや▲、▼で調整できる）<br />
+右側中央下にあるData Informationでピークが中央にあるようにBrightnessとContrastを調整するとよい．<br />
+（※Brightnessは最大の2/3程度まで高くするとコンタミが出たり、試料が壊れたり、微小放電を起こしやすくなるので半分以下が望ましい．試してみたが、Brightnessの違いでEDSの結果に大きな変化はなかった）<br />
+16.&nbsp;Focusを回して像がもっとも綺麗になるようにする．<br />
+17.&nbsp;遠く離れた他の試料を位置を探すには、Image SelectでNoneにして、ASID ModeでTEMにチェックをいれて、TEMモードに戻した方が良い．検出器も元に戻す（※ASID ModeでTEMにすれば自動でImage SelectでNoneになるが安全のために上記のようにする）<br />
+<br />
+◆ EDS<br />
+1.&nbsp;STEM像が撮れるようにする．<br />
+2.&nbsp;BIASのスイッチをONにする．<br />
+3.&nbsp;中央のPCを立ち上げる．<br />
+4.&nbsp;デスクトップにある20131029 200kV.regをクリック．<br />
+5.&nbsp;Analyzer Managerをクリック．<br />
+6.&nbsp;STEM像を取得している状態にして、検出器を移動させるためのボタンを２から３秒長押して検出器を本体に近づける．<br />
+7.&nbsp;Analysis stationをクリック．<br />
+8.&nbsp;Specを押して蛍光Ｘ線の図を表示 ＞ 右クリックでAuto Identificationを押して検出された元素を調べ、含有していない可能性の高い元素をクリックして除く ＞ Mapを押して元素マップを得る．（必要なデータを得たらStop ＞ immediate ＞ File &gt; exportで保存する）<br />
+9.&nbsp;Imageを押して画像を取得する ＞ seqを押し、point およびboxを選択して画面中で分析したい箇所を指定する ＞ quantitative analysisにチェックをいれて測定を開始する ＞ 保存する（プリントスクリーンでも保存しておく）<br />
+10.&nbsp;遠く離れた他の試料位置を調べる場合はAnalyzer Managerを閉じ、検出器を移動させるためのボタンを２から３秒長押しして検出器を遠ざけ、STEMやTEMにしてから新し試料位置を探すとよい。<br />
+<br />
+◆ EDS終了手順（ミニカップ）<br />
+1. BIASをOFF、DPPの電源もOFF<br />
+2. TMPコントローラーのBIASのスイッチをOFFに倒す　＞　ONランプが消灯<br />
+3. EVACのスイッチをSTOP側に倒す　＞　ONランプが消灯<br />
+4. POWERスイッチをOFF<br />
+5.&nbsp;STEMも終了させる<br />
+<br />
+◆ 終了手順<br />
+1. F1 で CCD から　蛍光版にする<br />
+2. 対物レンズとアパチャーをはずす（一番大きい●の位置にする）<br />
+3. Mag2 を押し、倍率を 40 k にする<br />
+4. Filament を OFF にする<br />
+5. Stage Neutral を押し、Sample を中心に戻す<br />
+6. 真空ゲージと Status の値に注意しつつゆっくりサンプルホルダーを抜く<br />
+　（引く &rarr; 反時計 60 &deg;&rarr; 引く（5mm程度の長さ） &rarr; 反時計 30 &deg;ここでストップ）<br />
+　（引きながら回さないこと！　引く、その位置を保持、回すはそれぞれ別々に行うこと！）</p>
+
+<p>7. 2回音がした後、さらに安全のために10秒待つ。そして、PUMP&rarr;Airにする（「カン！」と音が鳴る）</p>
+
+<p>　（サンプルを掌で握り、親指を曲げて本体に当てて、親指をゆっくりと伸ばして押し出しながらサンプルホルダーを引き抜く）<br />
+　※ 最初に試料ホルダーを引くときに「プシュ」（１つ目）、反時計方向に回転60度、引き（5ミリくらい）、反時計方向に回転30度、「プッ、プシュ―、トン！」（２つ目）となる。</p>
+
+<p>8. 30 秒待つ<br />
+9. サンプルホルダーを取り出す（再度測定する場合はサンプルホルダー挿入手順へ）<br />
+10. HV降圧 （200 kV &rarr; 160 kV, 1 kV / Step, 6 times/step)<br />
+　160 kV になったら、HT OFF を押す。80 kV にする。<br />
+11. 液体窒素注入口にヒーターをセットする<br />
+12. Maintenance &rarr; ACD &amp; Bake &rarr; ACD Heater を ON （完了すると自動で OFF になる）<br />
+13. 窒素のバルブを閉める<br />
+※ 本体のPCはそのままにしておく<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">．外に出ている</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">EDX</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">と</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">CCD</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">の</span><span lang="EN-US" style="font-family: &quot;Century&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">PC</span><font face="ＭＳ 明朝"><span lang="JA" style="font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-bidi-theme-font: minor-bidi; mso-bidi-font-size: 11.0pt; mso-ansi-language: EN-US; mso-fareast-language: JA; mso-bidi-language: AR-SA;">はシャットダウンする。</span></font><br />
+<br />
+◆ 電子回折<br />
+1. Mag モード（Spot1 - &alpha;3)での軸合わせを完了させる<br />
+2. Sample へ焦点を合わせる<br />
+　（SHIFT と焦点絞りで合わせる）<br />
+3. BRIGHTNESS でビームを広くする（ビーと音が鳴るまで右に回す）<br />
+4. 制限視野絞りで範囲を限定し、位置合わせをする<br />
+5. BRIGHTNESS で PAT にする<br />
+6. SA DIFF を押す<br />
+7. MAG/CAM L で 20 cm へ（CCDの面積が1cmX1cm程度のため）。<br />
+8. PLA を押し、DEF X, Y でビームを中心に持ってくる<br />
+9. DIFF Focus で透過スポットを最小にする<br />
+10. 中心のスポットを針で隠す<br />
+11. BRIGHTNESS を最小にする<br />
+12. F1 を押し、蛍光板から CCD へ<br />
+13. カメラ3を押し、スナップショット3 を押し、直ぐに蛍光板に戻す<br />
+14. Mag を押し、TEMに戻る<br />
+※ photoでマルチエクスポージョンを選ぶと重ね焼きができる。<br />
+※&nbsp;PLA：投影レンズ偏向コイルの電流が可変でき、回折スポットや透過像を移動するときに使用する。<br />
+<br />
+◆ 暗視野像<br />
+1. Mag モード（Spot1 - &alpha;3)での軸合わせを完了させる<br />
+2. MAG2<br />
+3. SA絞りを外しているか確認する。<br />
+4. SA DIFFを押す。<br />
+5. DIFF:80cmにする。<br />
+6. PLAを押して、DEF/SIGでビームを中心に。<br />
+7. Maintanace＞Alinment＞IL STIG （DEF/SIG 補正ができる）で楕円を真円にする。<br />
+8. DIFF Focusで回折を小さくする。BRIGHTNESSでスポットを小さくする。<br />
+9. Dark tilt（Bright tiltの左側のボタン）を押して、DEF/SIGで欲しい回折を中心にする。<br />
+※Dark tiltは電圧軸を調整することでビームを傾斜させて、スポットの位置を変えている。<br />
+※Dark tiltのときは高い倍率はできない。（十万から数万倍）<br />
+10. 対物絞りで範囲を狭める。<br />
+11. Dark tiltとBright tiltのボタンを押して両者を切り替えてもビームが絞りで制限された中にあるようにする。<br />
+12. MAG2にする（SA DIFFのボタンの光が消えていることを確認する）<br />
+13. SHIFT x,yでビームを中心にする。<br />
+14. Dark tiltを押すと暗視野像<br />
+15. Bright tiltを押すと明視野像<br />
+16. 20pA/cm^2にする（CCDの面積が1cmX1cm程度のため）。<br />
+17. F1で蛍光板を上げてCCDにする。<br />
+18. Dark tiltも中心に戻す。<br />
+19. 対物絞りを抜く。<br />
+20. CLも１番（一番大きいものに）か2番に元に戻す<br />
+21. ビームを中心に持ってくる。<br />
+22. CL絞りの位置もビームが中心になるようにする<br />
+※暗視野法で所望の回折スポットのみによる像を得たいときは<br />
+① DIFFモードにし、対物レンズ絞りもしくはハイコントラスト絞りを入れ、DIFF FOCUSつまみで絞りの影が鮮明になるようにする。<br />
+② BRIGHTNESSつまみで回折スポットが最も小さくなるようにする。<br />
+これらの操作により電子線は平行ビームに近くなるので小さな対物レンズ絞りを用いることができるので像は鮮明になる。<br />
+<br />
+◆ STEM<br />
+1. Mag モード（Spot1 - &alpha;3)での軸合わせを完了させる<br />
+2. BRIGHTNESSでビームを最小にする。<br />
+3. CL絞り（一番上）で2番を入れる。<br />
+4. BRIGHTNESSゆっくり回してビームを広げた状態でCL絞りの微動つまみを動かしてビームを中心にする。<br />
+　（ビームを大きくしたときに同心円状に広がるようにする）<br />
+5. BRIGHTNESSでビームを小さくする。<br />
+6. STEM用のソフトを起動<br />
+7. ファイルの隣のダイアログのASIDコントロールを開き、ASIDへ。<br />
+8. Image control &gt; 3か4にしてスポットを押す。Scanが止まる。<br />
+9. ASID control &gt; Alignment<br />
+10. STD Focusを押す。<br />
+11. BRIGHTNESSでビームを広げる。<br />
+12. スポットサイズ 5は高分解能。ビームが一番絞れている条件。<br />
+（スポットサイズ1にすればビームの絞りが緩くなる）<br />
+13. Focusを回すとカウスティックが見える。<br />
+14. Bright tiltで中心に合わせる。<br />
+15. STD FOCUSを押す。<br />
+16. BRIGHTNESSでビームを小さくする。<br />
+17. Shiftで中心に持っていく。<br />
+18. MAGを押す。<br />
+19. CL絞りの微動つまみでビームを蛍光板の中心にする。<br />
+20. 対物絞りを3番に。<br />
+21. ビームを中心に。<br />
+22. STEM用の検出器を時計回りにして入れる（右側にあるのが明視野用、左側にあるのが暗視野用）。<br />
+23. 蛍光版にカーバーをする。<br />
+24. Image control &gt; Scan<br />
+25. ASID control &gt; image select上から2番目のSTEI-BFを選択（STEI-BFは明視野、STEI-DFは暗視野）。<br />
+26. 暗ければ、ASID control &gt; BRIGHTNESSの▲を押す。<br />
+27. 最初は40k倍で見てみる（対物レンズの絞りが入っている枠が見える）。<br />
+28. 絞りを入れるとコントラストがつく。<br />
+29. スキャンを早くすると動きが見やすい。中心からずれている場合には対物レンズの微動つまみで中心に。<br />
+30. 倍率を上げて、スキャンの3にして、フォーカスを合わせる。<br />
+31. スポットS5は高分解の仕様（ビームを細く絞っている分暗くなる）。<br />
+32. 試料が厚くて透過する電子線が少ない場合は、スポットを1や2にする。<br />
+33. EDSでマッピングするときに出てくる信号が少なくなるので、スポット1や2にする。<br />
+34. ASID control &gt; AMAG（アナリティカルマグ）でEDSで信号量を稼げるような電子線の照射量にする。<br />
+35. ASID control &gt; コントラストの▲を押すとコントラストが大きくなる。<br />
+36. スポットA1やA2にするとCLレンズの値ががらっとかわってしまうので、スキャンを止めて、ビームの中心を合わせなおす。<br />
+終了時<br />
+37. ASID control &gt; TEMに戻す<br />
+38. 絞りを元に戻す<br />
+39. ビームをSHIFT x,yで中心に。<br />
+40. BRITHGNESSで拡大して、右回しで同心円状に拡大するようにする。<br />
+41. CL絞りの微動つまみで中心に戻す。<br />
+※ JEOLのサービスが行っているのを見学すると[STD FOCUS &gt; △と▽でZ軸を変える（丸い渦が見えるようにして） &gt; PLA （ロンチを中心にする）&gt; 絞りを入れて &gt; 撮影]としていた（注意：私の理解が足りていないと思われるので、同様の動作をする場合は管理者とも相談してほしい）。<br />
+※ 明視野のカメラ長は150cm、暗視野はそれより位置が上（10と返答を頂いた）。<br />
+<br />
+◆ EDS<br />
+　大学によっては装置にミニカップを用いているところがある。大学によっては操作用のＰＣにマニュアルが記載されている場合がある。例えば、ＰＣのディスクトップにある「Analysis station使用前注意、ミニカップ（ＴＭＰ）取り扱い方法」や「ミニカップ（ＴＭＰ）取り扱い方法」（&larr;JEOLのサービスの方は装置管理者と共にこの手順書を見ながら装置を終了させていた）を見ながら装置を起動させ（終了手順も記載してある）、2300Tの操作手順書がTEM装置の台の上にある黄色のファイルの中に挟まれていたりする。<br />
+<br />
+■ 測定環境の保存と読み出し（ビームを見失ったときに復帰するための方法）<br />
+（操作前に装置管理者に相談すること！）<br />
+◇ 簡易的な方法<br />
+option &gt; LENS/DEF MEMORY Option &gt; Save &gt; All DEF<br />
+option &gt; LENS/DEF MEMORY Option &gt; load &gt; All&nbsp;DEF<br />
+&nbsp;(手動の絞り以外のデータが保存される。そのため完全な復旧のためには、上記でSaveしたときの各種の絞りの状況を記録しておく必要がある｛絞りを変えるとつまみの回転数も変化する。同じ絞りにすること！ また、Data Setの下に書かれているMAGとSPOTの条件で保存されている点にも注意｝。最初は装置管理者と行い、動作をメモっておくこと)<br />
+◇ より多くの情報を扱う方法<br />
+Maintenance &gt; Save to Alignment File&hellip;<br />
+Maintenance &gt; Load Alignment File&hellip;<br />
+※上記の方法でビームが見られない場合は、管理者とJEOLに連絡する。恐らく電子銃の先端形状や方向が変化している可能性がある。大学によっては１年に一度JEOLのサービスの方にチェックをして頂いている体制にしているところもある。そのようなときに作業を見学やマニュアルに記載の無い部分を聞いてみることをさせて頂けるように管理者の先生にお願いして頂いて、正しい使い方や知識を取得することが重要である。</p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;"><br />
+<span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">■</span><span lang="JA"><font face="Century"> </font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">各測定で使用する絞り</span></p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">制限視野</span><span lang="EN-US"><font face="Century">: SA</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">絞り</span></p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">暗視野</span><span lang="EN-US"><font face="Century">: </font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">対物絞り</span></p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;"><span lang="EN-US"><font face="Century">STEM</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">：対物絞り</span></p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;"><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">※</span><span lang="JA"><font face="Century"> </font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">絞りは上から、</span><span lang="EN-US"><font face="Century">CL(</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">一番上</span><span lang="EN-US"><font face="Century">)</font></span><span lang="JA" style="color: black; font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; font-size: 10.5pt; mso-ascii-font-family: Century; mso-bidi-font-family: &quot;Times New Roman&quot;; mso-font-kerning: 0pt; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin; mso-ansi-language: EN-GB; mso-fareast-language: JA; mso-bidi-language: AR-SA;">、</span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">対物</span><span lang="EN-US"><font face="Century">(CLからまっすぐ下</font></span><span lang="EN-US"><font face="Century">)</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">、</span><span lang="EN-US"><font face="Century">SA</font></span><span lang="JA" style="font-family: &quot;ＭＳ 明朝&quot;,&quot;serif&quot;; mso-ascii-font-family: Century; mso-fareast-font-family: &quot;ＭＳ 明朝&quot;; mso-ascii-theme-font: minor-latin; mso-fareast-theme-font: minor-fareast; mso-hansi-font-family: Century; mso-hansi-theme-font: minor-latin;">絞り</span><span lang="EN-US"><font face="Century">(＝制限視野絞り、対物からさらに下で右側にある</font></span><span lang="EN-US"><font face="Century">)</font></span><br />
+<br />
+◆ フォーカスつまみの1ノッチ<br />
+800k倍(80万倍)<br />
+COARSE 1ノッチ 44 nm<br />
+FINE 1ノッチ 1.4 nm<br />
+ディフォーカス量は、PCのパネルのDefocusに記載されている。<br />
+<br />
+◆ 画像の撮影枚数の例<br />
+自分がジャストフォーカスだと思ったところから、<br />
+2ノッチアンダー、オーバー<br />
+4ノッチアンダー、オーバー<br />
+で計５枚画像を撮る。<br />
+<br />
+◆ 開口角と倍率<br />
+&alpha;=1: 200k倍以上 （ビームの収束角度｛開口角｝と平行照射時の照射領域が小さい）<br />
+&alpha;=2: 50k-200k倍<br />
+&alpha;=3: 50k倍以下 （ビームの収束角度｛開口角｝と平行照射時の照射領域が大きい）<br />
+※ Mag1が高倍率<br />
+<br />
+◆ イオンポンプ（銃とカラム）<br />
+電圧は、10kVのつまみにして、6k出ていれば正常<br />
+電流は、200mAのつまみにして、針が震えていたら異常<br />
+真空度が悪くなった時は、プロテクトが働いてイオンポンプが切れて、DPに変わる。<br />
+プロテクトは手動で解除が必要。<br />
+※ カメラ下、試料ホルダーはDPで引いている。<br />
+<br />
+◆ PC<br />
+本体はヒューレッドパッカード(HP)のPC（シャットダウンしない！）<br />
+EDXは下記のデル(Dell)のPCの左のPC<br />
+カメラ(CCD)はデル(Dell)のPC（右端）<br />
+<br />
+◆ マイクログリッドとサンプルホルダー<br />
+・裏がCu（銅）の色。表が少しくすんでいる（アモルファスカーボンを付けてあるため）。<br />
+（マイクログリッドを裏表逆に試料を付けると、試料ホルダーに正しくマイクログリッドを付けても正しい像が得られない。アモルファスカーボンの下に試料があるようなコントラストが得られる。当然といえば当然だが、貴重なマシンタイムでそれを行う者がおり、TEM初心者がパニックになって事故発生率が増加するので注意。アモルファスカーボンが破けているとさらに最悪で、初心者だけでは真空とアモルファスカーボンが違うことを経験していない可能性が高いし、たまたま試料がCuのグリットにくっついて周りは真空という場合、非点補正が上手くできないので、試料の像が微妙なぼやけたものになる）<br />
+・FIBの試料を載せるメッシュは裏表同じ色をしている。蛍光灯の光にかざして光っている方が表、ちょっとくすんでいる方が裏。<br />
+・マイクログリッドを保持するネジは緩められる長さが1.5mmくらい。ネジは３回転くらいで試料を交換できる隙間ができる。</p>
+
+<p align="left" style="margin: 0cm 0cm 0pt; text-align: left;">◆ バシュッと音がしてビームが出なくなったとき<br />
+1kV/Stepで6time/Stepの設定で電圧を下げる。<br />
+FilamentがONの場合はOFFにする。<br />
+<br />
+他大学での使用方法：<a href="http://www.ciaiu.iwate-u.ac.jp/denkenHP/JEM2100Basic.pdf"><font color="#0066cc">http://www.ciaiu.iwate-u.ac.jp/denkenHP/JEM2100Basic.pdf</font></a><br />
+法政大 精密分析室：<a href="http://www.k.hosei.ac.jp/seimitsulab/manual.html"><font color="#0066cc">http://www.k.hosei.ac.jp/seimitsulab/manual.html</font></a><br />
+解析に便利なフリーソフト：<a href="http://pmsl.planet.sci.kobe-u.ac.jp/~seto/"><font color="#0066cc">http://pmsl.planet.sci.kobe-u.ac.jp/~seto/</font></a><br />
+-----------------------------------------------------------------------</p>

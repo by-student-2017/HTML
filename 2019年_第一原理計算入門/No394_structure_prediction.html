@@ -1,0 +1,1107 @@
+Structure prediction<br />
+------------------------------------------------------------------------------<br />
+■ software<br />
+<br />
+・CALPYSO<br />
+・USPEX<br />
+・XtalOpt<br />
+・GRINSP<br />
+・GASP-python<br />
+・GASP<br />
+・MOLPAK<br />
+・EVO<br />
+・CrySPY<br />
+・AIRSS<br />
+・molSimplify<br />
+(・XenonPy: making Descriptor)<br />
+------------------------------------------------------------------------------<br />
+■ CALPYSO<br />
+(http://www.calypso.cn/)<br />
+<br />
+◇ Regigstration<br />
+(http://www.calypso.cn/getting-calypso/)<br />
+1. (input data) &gt; SUBMIT<br />
+&nbsp; (I recommend &quot;PrintScreeen&quot;)<br />
+2. Download the CALYPSO_LICENCE(PDF)<br />
+3. send e-mail (calypso@calypso.cn) including CALYPSO_LICENCE.PDF<br />
+-----<br />
+Title:&nbsp;<br />
+Registration for CALYPSO&nbsp;<br />
+<br />
+Body:<br />
+Dear developers<br />
+<br />
+I attach a license file (CALYPSO_LICENCE.PDF) to this email.<br />
+<br />
+I am looking forward to a good reply.<br />
+<br />
+Best Regards,&nbsp;<br />
+XXXX XXXXX<br />
+-----<br />
+4. wait for a long time until you receive E-mail.<br />
+5. you can get user id and password.<br />
+<br />
+□ Install<br />
+・CALYPSO_x64.tar.gz<br />
+1. tar zxvf CALYPSO_x64.tar.gz<br />
+<br />
+□ Test (VASP?)<br />
+1. cd ~/CALYPSO_x64/Test<br />
+2. cp ~/CALYPSO_x64/bin/calypso.x ./<br />
+3. ./calypso.x &gt; caly.log &amp;<br />
+<br />
+□ Examples<br />
+・Examples.tar.gz<br />
+1. cd ~/CALYPSO_x64<br />
+2. tar zxvf Examples.tar.gz<br />
+3. cd Examples<br />
+◇ GULP<br />
+4. cd 3_example<br />
+5. gedit submit.sh<br />
+-----<br />
+#!/bin/sh<br />
+$HOME/gulp-5.1/Src/gulp &lt; gulpinput &gt; out.gulp<br />
+-----<br />
+6. ~/CALYPSO_x64/bin/calypso.x | tee caly.log&nbsp;<br />
+◇ Lammps<br />
+4. cd 5_example<br />
+5. gedit submit.sh<br />
+-----<br />
+#!/bin/sh<br />
+~/lammps/src/lmp_serial -in in.lammps &gt; out<br />
+-----<br />
+6. ~/CALYPSO_x64/bin/calypso.x | tee caly.log&nbsp;<br />
+<br />
+※ VASP, CASTEP, PWSCF, GULP, CP2K, Gaussian, DFTB+, GULP, Lammps<br />
+※ 理研でもwebで登録してCALYPSO_LICENCEを送れば直ぐにダウンロードのためのメールを送ってくれた。素晴らしい。<br />
+------------------------------------------------------------------------------<br />
+■ USPEX<br />
+(https://uspex-team.org/en/uspex/overview)<br />
+&nbsp; chemical composition + P-T conditions &gt; predict structure<br />
+<br />
+◇ Regigstration<br />
+1. Regigstration<br />
+&nbsp; (input data) &gt; [check] I agree ... &gt; Submit<br />
+<br />
+□ Install (USPEX-10.3) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+・USPEX_release.tar.tar<br />
+0. sudo apt-get install libsqlite3-dev<br />
+&nbsp; sudo apt-get install python-pip<br />
+&nbsp; sudo pip install numpy scipy spglib pysqlite pysqlite3 matplotlib<br />
+&nbsp; sudo apt install python-ase<br />
+or<br />
+&nbsp; wget https://bootstrap.pypa.io/get-pip.py &amp;&amp; python get-pip.py --user<br />
+&nbsp; pip install --user numpy scipy spglib pysqlite pysqlite3 ase matplotlib<br />
+1. tar xvf USPEX_release.tar.tar<br />
+2. cd USPEX_v10.3<br />
+3. sudo ./USPEX_MATLABruntime.install<br />
+4. sudo ./install.sh<br />
+&nbsp; Please choose the installation type: 1<br />
+&nbsp; Do you agree with USPEX license terms and conditions? (y/n) &nbsp;y<br />
+&nbsp; Choose installation folder: /usr/local/USPEX-10.3<br />
+&nbsp; Choose installation folder: /usr/local/MATLAB/MATLAB_Runtime<br />
+5. sudo chmod +rw -R /usr/local/USPEX-10.3/application/archive/<br />
+6. gedit ~/.bashrc<br />
+&nbsp; export MCRROOT=/usr/local/MATLAB/MATLAB_Runtime<br />
+&nbsp; export PATH=$PATH:/usr/local/USPEX-10.3/application/archive/<br />
+&nbsp; export USPEXPATH=/usr/local/USPEX-10.3/application/archive/src<br />
+7. bash<br />
+<br />
+◇ Help<br />
+1. USPEX -h<br />
+<br />
+□ Example (&quot;examples&quot; is from USPEX-9.4.4.tar.tar)<br />
+・USPEX-9.4.4.tar.tar<br />
+1. tar xvf USPEX-9.4.4.tar.tar<br />
+2. cd USPEX-9.4.4<br />
+3. cd examples<br />
+◇ GULP<br />
+4. cd EX03-3D-const_cell_MgSiO3_gulp<br />
+5. export PATH=$PATH:$HOME/gulp-5.1/Src<br />
+6. USPEX --clean<br />
+7. USPEX -rs<br />
+◇ MOPAC<br />
+4. cd EX20-0D_Cluster_C60_MOPAC<br />
+5. export PATH=$PATH:/opt/mopac<br />
+6. gedit INPUT.txt<br />
+------<br />
+MOPAC2016.exe input.mop<br />
+------<br />
+7. USPEX --clean<br />
+8. USPEX -r<br />
+◇ Lammps (failed)<br />
+4. cd EX04-3D_C_lammps<br />
+5. export PATH=$PATH:$HOME/lammps/src<br />
+6. gedit INPUT.txt<br />
+-----<br />
+lmp_mpi &lt; lammps.in &gt; lammps.out<br />
+-----<br />
+7. USPEX --clean<br />
+8. USPEX -r<br />
+--------------------<br />
+□ USPEX-9.4.4 (please change &quot;username&quot;)<br />
+・USPEX-9.4.4.tar.tar<br />
+0. sudo apt install octave<br />
+1. tar xvf USPEX-9.4.4.tar.tar<br />
+2. cd USPEX-9.4.4<br />
+3. ./install.sh<br />
+&nbsp; Please enter the USPEX install path : &nbsp;/home/username/USPEX<br />
+&nbsp; Do you want to install USPEX at /home/inukai/USPEX ? (y/n) y<br />
+&nbsp; is not found. Do you want to create the folder? (y/n) y<br />
+4. gedit ~/.bashrc<br />
+&nbsp; export PATH=$PATH:$HOME/USPEX<br />
+&nbsp; export USPEXPATH=$HOME/USPEX/src<br />
+5. gedit $HOME/USPEX/CODEPATH<br />
+-----<br />
+/usr/local/bin<br />
+-----<br />
+6. bash<br />
+<br />
+◇ Help information<br />
+1. USPEX -h<br />
+<br />
+◇ Example (GULP) (failed)<br />
+1. cd ~/USPEX/examples/EX03-3D-const_cell_MgSiO3_gulp<br />
+2. export PATH=$PATH:$HOME/gulp-5.1/Src<br />
+3. USPEX --run --octave<br />
+<br />
+※ VASP, CASTEP, ATK, GULP, Lammps, Tinker, DMACRYS, MOPAC(MOPAC2012, MOPAC2016)<br />
+------------------------------------------------------------------------------<br />
+■ XtalOpt (http://xtalopt.github.io/index.html)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+<br />
+□ Install (easy version)<br />
+(http://xtalopt.github.io/download.html)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install git cmake qt5-default libqwt-qt5-dev libeigen3-dev libssh-dev<br />
+1. wget https://github.com/xtalopt/XtalOpt/releases/download/r12.1/linux-xtalopt.tgz<br />
+2. tar zxvf linux-xtalopt.tgz<br />
+<br />
+◇ Usage<br />
+1. $HOME/xtalopt/bin/xtalopt<br />
+<br />
+<br />
+□ Install<br />
+(http://xtalopt.github.io/install-linux.html)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install git cmake qt5-default libqwt-qt5-dev libeigen3-dev libssh-dev<br />
+1. git clone git://github.com/xtalopt/XtalOpt.git xtalopt<br />
+2. mkdir xtalopt/build<br />
+3. cd xtalopt/build<br />
+4. cmake .. -DCMAKE_INSTALL_PREFIX=$HOME/xtalopt<br />
+5. make -j3<br />
+6. make install<br />
+(7. xtalopt --help)<br />
+<br />
+<br />
+◇ Test (command line) (Generic Optimizer)<br />
+1. cd $HOME/xtalopt/samples/commandLineInterface<br />
+2. xtalopt --cli<br />
+※ $HOME/xtalopt/bin/xtalopt<br />
+&nbsp; (or $HOME/xtalopt/build/bin/xtalopt)<br />
+<br />
+<br />
+◇ Generic Optimizer (GULP)<br />
+1. cd $HOME/xtalopt/samples/commandLineInterface<br />
+2. cp xtalopt.in xtalopt.ref.in<br />
+3. gedit xtalopt.in<br />
+-----before<br />
+&nbsp; &nbsp; exeLocation = gulp<br />
+-----<br />
+-----after (please, change &quot;username&quot;)<br />
+&nbsp; &nbsp; exeLocation = /home/username/gulp-5.1/Src/gulp<br />
+-----<br />
+4. gedit xtalopt.in<br />
+-----change key words<br />
+&nbsp; &nbsp; &nbsp; empiricalFormula = Ti1O2<br />
+&nbsp; &nbsp; &nbsp; formulaUnits = 2-4<br />
+&nbsp; &nbsp; &nbsp; aMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; bMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; cMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; aMax = 10.0<br />
+&nbsp; &nbsp; &nbsp; bMax = 10.0<br />
+&nbsp; &nbsp; &nbsp; cMax = 10.0<br />
+-----<br />
+5. xtalopt --cli<br />
+<br />
+<br />
+◇ Generic Optimizer (PWscf) (please, change &quot;username&quot;) (no check)<br />
+1. cd $HOME/xtalopt/samples/commandLineInterface<br />
+2. cp xtalopt.in xtalopt.ref.in<br />
+3. gedit xtalopt.in<br />
+-----before<br />
+&nbsp; &nbsp; optimizer = gulp<br />
+&nbsp; &nbsp; exeLocation = gulp<br />
+&nbsp; &nbsp; ginTemplates = gin1<br />
+&nbsp; &nbsp; #pwscfTemplates = pwscf1, pwscf2, pwscf3<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; optimizer = pwscf<br />
+&nbsp; &nbsp; exeLocation = /home/username/q-e-qe-6.3/bin/pw.x<br />
+&nbsp; &nbsp; #ginTemplates = gin1<br />
+&nbsp; &nbsp; pwscfTemplates = pwscf1<br />
+-----<br />
+4. gedit xtalopt.in<br />
+-----change key words<br />
+&nbsp; &nbsp; &nbsp; empiricalFormula = Ti1O2<br />
+&nbsp; &nbsp; &nbsp; formulaUnits = 2-4<br />
+&nbsp; &nbsp; &nbsp; aMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; bMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; cMin = 3.0<br />
+&nbsp; &nbsp; &nbsp; aMax = 10.0<br />
+&nbsp; &nbsp; &nbsp; bMax = 10.0<br />
+&nbsp; &nbsp; &nbsp; cMax = 10.0<br />
+-----<br />
+5. xtalopt --cli<br />
+<br />
+<br />
+[X1] Official public repository for the XtalOpt crystallographic evolutionary algorithm http://xtalopt.github.io<br />
+&nbsp; https://github.com/xtalopt/XtalOpt<br />
+※ VASP, CASTEP, PWscf, Siesta, GULP<br />
+------------------------------------------------------------------------------<br />
+■ GRINSP (http://www.cristal.org/grinsp/)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+□ Install<br />
+1. wget http://www.cristal.org/grinsp/grinsp.zip<br />
+2. mkdir grinsp<br />
+&nbsp; cd grinsp<br />
+3. unzip grinsp.zip<br />
+4. gedit grinsp.f<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(igood.eq.0)type *,&#39; NO SOLUTION...&#39;<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(j.gt.5184)type *,&#39; j &gt; 5184 !! &#39;,j<br />
+<br />
+&nbsp; &nbsp; &nbsp; SUBROUTINE KILL(PRESSEDK)<br />
+&nbsp;<br />
+C &nbsp; &nbsp;Checks if the &#39;K&#39; keystroke has been pressed<br />
+&nbsp;<br />
+&nbsp; &nbsp; &nbsp; USE DFLIB<br />
+&nbsp; &nbsp; &nbsp; LOGICAL(4) PRESSED / .FALSE. /<br />
+&nbsp; &nbsp; &nbsp; LOGICAL(4) PRESSEDK<br />
+&nbsp; &nbsp; &nbsp; CHARACTER(1) KEY<br />
+&nbsp; &nbsp; &nbsp; PRESSED = PEEKCHARQQ ( )<br />
+&nbsp; &nbsp; &nbsp; IF(PRESSED)THEN<br />
+&nbsp; &nbsp; &nbsp; KEY = GETCHARQQ()<br />
+&nbsp; &nbsp; &nbsp; IF(KEY.EQ.&#39;K&#39;)PRESSEDK=.TRUE.<br />
+&nbsp; &nbsp; &nbsp; ENDIF<br />
+&nbsp; &nbsp; &nbsp; RETURN<br />
+&nbsp; &nbsp; &nbsp; END<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 201<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 259<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 200<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 202<br />
+<br />
+&nbsp; &nbsp; &nbsp; CALL KILL(PRESSEDK)<br />
+<br />
+&nbsp; &nbsp; &nbsp; integer igr(36),igrw(36),igr2(7),igr3(7),ncs(maxa,10)<br />
+&nbsp; &nbsp; &nbsp; integer ibra(7),isys(7),irl(192),nag(192),nas(192),mwyc(maxa)<br />
+-----<br />
+-----<br />
+C &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+C &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(igood.eq.0)then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; write(*,*)&#39; NO SOLUTION...&#39;<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(j.gt.5184)then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; write(*,*)&#39; j &gt; 5184 !! &#39;,j<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+C &nbsp; &nbsp; SUBROUTINE KILL(PRESSEDK)<br />
+C<br />
+C &nbsp; &nbsp;Checks if the &#39;K&#39; keystroke has been pressed<br />
+C<br />
+C &nbsp; &nbsp; USE DFLIB<br />
+C &nbsp; &nbsp; LOGICAL(4) PRESSED / .FALSE. /<br />
+C &nbsp; &nbsp; LOGICAL(4) PRESSEDK<br />
+C &nbsp; &nbsp; CHARACTER(1) KEY<br />
+C &nbsp; &nbsp; PRESSED = PEEKCHARQQ ( )<br />
+C &nbsp; &nbsp; IF(PRESSED)THEN<br />
+C &nbsp; &nbsp; KEY = GETCHARQQ()<br />
+C &nbsp; &nbsp; IF(KEY.EQ.&#39;K&#39;)PRESSEDK=.TRUE.<br />
+C &nbsp; &nbsp; ENDIF<br />
+C &nbsp; &nbsp; RETURN<br />
+C &nbsp; &nbsp; END<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 201<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 259<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 200<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 202<br />
+<br />
+C &nbsp; &nbsp; CALL KILL(PRESSEDK)<br />
+<br />
+&nbsp; &nbsp; &nbsp; integer ncs(maxa,10)<br />
+&nbsp; &nbsp; &nbsp; integer isys(7),irl(192),nag(192),nas(192),mwyc(maxa)<br />
+&nbsp; &nbsp; &nbsp; character*1 igr(36),igrw(36),igr2(7),igr3(7),ibra(7),KXK<br />
+-----<br />
+3. gfortran grinsp.f -o grinsp.exe<br />
+◇ Usage (SiO2)<br />
+1. cd $HOME/grinsp<br />
+2. gedit SiO2.dat<br />
+-----<br />
+Zeolites SG: 16-74 &nbsp; &nbsp; &nbsp; : text for this run<br />
+16 74 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: SG : Space groups range (two values between 1 230)<br />
+1 0 1 192 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: npol, ncon, nmim, nmax<br />
+4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: ncpol (coordination for each polyhedron-type)<br />
+Si &nbsp;O &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: elements for a search in the distgrinsp.txt file<br />
+3. 30. 3. 30. 3. 30. &nbsp; &nbsp; : min and max cell parameters a, b, c&nbsp;<br />
+5. 35. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : min and max framework density (FD)<br />
+1000 300000 0.02 0.12 &nbsp; &nbsp;: ncells, genmax, Rmax, Rdt0<br />
+6000 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : idls (MC cycles for distance refinement) and iref (1 or 0)<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: code for selecting models to output<br />
+-----<br />
+3. ./grinsp.exe<br />
+&nbsp;Input file (no extension)<br />
+SiO2<br />
+◇ Usage (titanosilicates)<br />
+1. cd $HOME/grinsp<br />
+2. gedit titanosilicates.dat<br />
+-----<br />
+Titanosilicates - SG: 188-194&nbsp;<br />
+188 194<br />
+2 0 2 192 &nbsp; &nbsp; &nbsp;npol = 2 here instead of 1. &nbsp; &nbsp;<br />
+6 4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;note the two coordinations defined here (octahedron and tetrahedron)<br />
+Ti &nbsp;O &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;one line for the TiO6 octahedron<br />
+Si &nbsp;O &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;and one line for the SiO4 tetrahedron<br />
+3. 30. 3. 30. 3. 30.&nbsp;<br />
+5. 35.<br />
+2000 300000 0.02 &nbsp;0.12<br />
+6000 1 &nbsp; &nbsp;<br />
+1 &nbsp; &nbsp;<br />
+-----<br />
+3. ./grinsp.exe<br />
+&nbsp;Input file (no extension)<br />
+titanosilicates<br />
+※ Input file<br />
+&nbsp; grinsp.exe, connectivity.txt, distgrinsp.txt, wyckoff.txt<br />
+&nbsp; *.dat (e.g., SiO2.dat)<br />
+<br />
+<br />
+□ Install (cif2con.f)<br />
+0. mkdir cif2con<br />
+&nbsp; cd cif2con<br />
+&nbsp; cp ../Cif2con.zip ./<br />
+1. unzip Cif2con.zip<br />
+2. gedit cif2con.f<br />
+-----<br />
+read (*,&#39;(i)&#39;)ncif<br />
+<br />
+2 &nbsp; &nbsp; read(25,&#39;(a)&#39;)text<br />
+-----<br />
+-----<br />
+read (*,&#39;(i1)&#39;)ncifs<br />
+<br />
+2 &nbsp; &nbsp; read(25,&#39;(a)&#39;,end=6)text<br />
+-----<br />
+3. gfortran cif2con.f -o cif2con.exe<br />
+◇ Usage<br />
+0. mv total.con total.ref.con<br />
+1. ./cif2con.exe<br />
+&nbsp;Enter name of multiple CIF (no extension) :total<br />
+&nbsp;Enter number of first output cif files) :1<br />
+<br />
+<br />
+□ Install (Connect.zip)<br />
+0. mkdir connect<br />
+&nbsp; cd connect<br />
+&nbsp; cp ../Connect.zip ./<br />
+1. unzip Connect.zip<br />
+2. gedit connect.f<br />
+-----<br />
+if(qex.eq..FALSE.) go to 259<br />
+<br />
+if(qex.eq..FALSE.) go to 260<br />
+-----<br />
+-----<br />
+if(qex.eqv..FALSE.) go to 259<br />
+<br />
+if(qex.eqv..FALSE.) go to 260<br />
+-----<br />
+3. gfortran connect.f -o connect.exe<br />
+◇ Usage<br />
+1. ./connect.exe<br />
+&nbsp;Input file .con (no extension)<br />
+total<br />
+&nbsp; Type any character and a RETURN to continue : end<br />
+<br />
+<br />
+□ Install (Cutcifp.zip)<br />
+0. mkdir cutcifp<br />
+&nbsp; cd cutcifp<br />
+&nbsp; cp ../Cutcifp.zip ./<br />
+1. unzip Cutcifp.zip<br />
+2. gedit cutcifp.f<br />
+-----<br />
+read (*,&#39;(i)&#39;)ncif<br />
+<br />
+&nbsp; &nbsp; &nbsp; read(25,&#39;(a)&#39;,err=40)text<br />
+-----<br />
+-----<br />
+read (*,&#39;(i1)&#39;)ncif<br />
+<br />
+&nbsp; &nbsp; &nbsp; read(25,&#39;(a)&#39;,end=40)text<br />
+-----<br />
+3. gfortran cutcifp.f -o cutcifp.exe<br />
+◇ Usage<br />
+1. ./cutcifp.exe<br />
+&nbsp;Enter name of multiple CIF (no extension) :total<br />
+&nbsp;Enter number of first output cif files) :1<br />
+<br />
+<br />
+□ Install (Framdens.zip)<br />
+0. mkdir framdens<br />
+&nbsp; cd framdens<br />
+&nbsp; cp ../Framdens.zip ./<br />
+1. unzip Framdens.zip<br />
+2. gedit framdens.f<br />
+-----<br />
+2 &nbsp; &nbsp; read(25,&#39;(a)&#39;)text<br />
+-----<br />
+-----<br />
+2 &nbsp; &nbsp; read(25,&#39;(a)&#39;,end=6)text<br />
+-----<br />
+3. gfortran framdens.f -o framdens.exe<br />
+◇ Usage<br />
+0. mv total.out total.ref.out<br />
+1. ./framdens.exe<br />
+&nbsp;Enter name of multiple CIF (no extension) :total<br />
+&nbsp; Type any character and a RETURN to continue : 1<br />
+<br />
+<br />
+□ Install (Grins.zip)<br />
+0. mkdir grins<br />
+&nbsp; cd grins<br />
+&nbsp; cp ../Grins.zip ./<br />
+1. unzip Grins.zip<br />
+2. gedit grins.f<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(igood.eq.0)type *,&#39; NO SOLUTION...&#39;<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(j.gt.5184)type *,&#39; j &gt; 5184 !! &#39;,j<br />
+<br />
+&nbsp; &nbsp; &nbsp; SUBROUTINE KILL(PRESSEDK)<br />
+&nbsp;<br />
+C &nbsp; &nbsp;Checks if the &#39;K&#39; keystroke has been pressed<br />
+&nbsp;<br />
+&nbsp; &nbsp; &nbsp; USE DFLIB<br />
+&nbsp; &nbsp; &nbsp; LOGICAL(4) PRESSED / .FALSE. /<br />
+&nbsp; &nbsp; &nbsp; LOGICAL(4) PRESSEDK<br />
+&nbsp; &nbsp; &nbsp; CHARACTER(1) KEY<br />
+&nbsp; &nbsp; &nbsp; PRESSED = PEEKCHARQQ ( )<br />
+&nbsp; &nbsp; &nbsp; IF(PRESSED)THEN<br />
+&nbsp; &nbsp; &nbsp; KEY = GETCHARQQ()<br />
+&nbsp; &nbsp; &nbsp; IF(KEY.EQ.&#39;K&#39;)PRESSEDK=.TRUE.<br />
+&nbsp; &nbsp; &nbsp; ENDIF<br />
+&nbsp; &nbsp; &nbsp; RETURN<br />
+&nbsp; &nbsp; &nbsp; END<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 201<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 259<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 200<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eq..FALSE.) go to 202<br />
+<br />
+&nbsp; &nbsp; &nbsp; CALL KILL(PRESSEDK)<br />
+<br />
+&nbsp; &nbsp; &nbsp; integer igr(36),igrw(36),igr2(7),igr3(7),ncs(maxa,10)<br />
+&nbsp; &nbsp; &nbsp; integer ibra(7),isys(7),irl(192),nag(192),nas(192),mwyc(maxa)<br />
+-----<br />
+-----<br />
+C &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+C &nbsp; &nbsp; USE PORTLIB<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(igood.eq.0)then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; write(*,*)&#39; NO SOLUTION...&#39;<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(j.gt.5184)then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; write(*,*)&#39; j &gt; 5184 !! &#39;,j<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+<br />
+C &nbsp; &nbsp; SUBROUTINE KILL(PRESSEDK)<br />
+C<br />
+C &nbsp; &nbsp;Checks if the &#39;K&#39; keystroke has been pressed<br />
+C<br />
+C &nbsp; &nbsp; USE DFLIB<br />
+C &nbsp; &nbsp; LOGICAL(4) PRESSED / .FALSE. /<br />
+C &nbsp; &nbsp; LOGICAL(4) PRESSEDK<br />
+C &nbsp; &nbsp; CHARACTER(1) KEY<br />
+C &nbsp; &nbsp; PRESSED = PEEKCHARQQ ( )<br />
+C &nbsp; &nbsp; IF(PRESSED)THEN<br />
+C &nbsp; &nbsp; KEY = GETCHARQQ()<br />
+C &nbsp; &nbsp; IF(KEY.EQ.&#39;K&#39;)PRESSEDK=.TRUE.<br />
+C &nbsp; &nbsp; ENDIF<br />
+C &nbsp; &nbsp; RETURN<br />
+C &nbsp; &nbsp; END<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 201<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 259<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 200<br />
+<br />
+&nbsp; &nbsp; &nbsp; if(qex.eqv..FALSE.) go to 202<br />
+<br />
+C &nbsp; &nbsp; CALL KILL(PRESSEDK)<br />
+<br />
+&nbsp; &nbsp; &nbsp; integer ncs(maxa,10)<br />
+&nbsp; &nbsp; &nbsp; integer isys(7),irl(192),nag(192),nas(192),mwyc(maxa)<br />
+&nbsp; &nbsp; &nbsp; character*1 igr(36),igrw(36),igr2(7),igr3(7),ibra(7)<br />
+-----<br />
+5. gfortran grins.f -o grins.exe<br />
+◇ Usage (GaF3 from FeF3)<br />
+1. cd $HOME/grinsp/grins<br />
+2. cp ./examples/GaF3/GaF3.dat ./<br />
+&nbsp; cp ./examples/GaF3/FeF3.cif ./<br />
+3. ./grins.exe<br />
+&nbsp;Input file (no extension)<br />
+GaF3<br />
+◇ Usage (TiP from total-cif-best.cif)<br />
+1. cd $HOME/grinsp/grins<br />
+2. cp ./examples/TiP/TiP.dat ./<br />
+&nbsp; cp ./examples/TiP/total-cif-best.cif ./<br />
+3. ./grins.exe<br />
+&nbsp;Input file (no extension)<br />
+TiP<br />
+<br />
+<br />
+□ Index.zip<br />
+0. mkdir index<br />
+&nbsp; cd index<br />
+&nbsp; cp ../Index.zip ./<br />
+1. unzip Index.zip<br />
+<br />
+<br />
+□ Examples.zip<br />
+0. mkdir examples<br />
+&nbsp; cd examples<br />
+&nbsp; cp ../Examples.zip ./<br />
+1. unzip Examples.zip<br />
+------------------------------------------------------------------------------<br />
+■ GASP-python<br />
+(https://github.com/henniggroup/GASP-python)<br />
+(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+<br />
+◇ Install (pymatgen, python2.7)&nbsp;<br />
+0. pip install numpy==1.16.4<br />
+&nbsp; pip install scipy<br />
+&nbsp; pip install matplotlib<br />
+&nbsp; pip install future<br />
+&nbsp; pip install networkx==2.2<br />
+&nbsp; pip install openbabel<br />
+&nbsp; sudo apt install python-yaml<br />
+1. wget https://github.com/materialsproject/pymatgen/archive/v2018.12.12.tar.gz<br />
+2. tar zxvf v2018.12.12.tar.gz<br />
+3. cd pymatgen-2018.12.12<br />
+4. cd pymatgen/io<br />
+5. gedit babel.py<br />
+-----before (python3)<br />
+&nbsp; &nbsp; def rotor_conformer(self, *rotor_args, algo=&quot;WeightedRotorSearch&quot;,&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; forcefield=&quot;mmff94&quot;):<br />
+-----<br />
+-----after (python2.7)<br />
+&nbsp; &nbsp; def rotor_conformer(self, algor=&quot;WeightedRotorSearch&quot;,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; forcefield=&quot;mmff94&quot;):<br />
+-----<br />
+6. cd $HOME/pymatgen-2018.12.12<br />
+7. cd electronic_structure<br />
+8. gedit boltztrap2.py<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_mu = (self.Seebeck_mu @ self.Seebeck_mu) @ self.Conductivity_mu<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_doping[dop_type] = (sbk @ sbk) @ cond * self.CRTA * 1e3<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_mu = (self.Seebeck_mu * self.Seebeck_mu) * self.Conductivity_mu<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_doping[dop_type] = (sbk * sbk) * cond * self.CRTA * 1e3<br />
+-----<br />
+9. cd $HOME/pymatgen-2018.12.12<br />
+10. sudo python setup.py install<br />
+11. pmg config --add PMG_MAPI_KEY USER_API_KEY<br />
+<br />
+<br />
+□ Install (Openbabel &amp; pybel) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (mirror above github)<br />
+(https://sourceforge.net/projects/openbabel/files/openbabel/)<br />
+0. sudo apt install cmake<br />
+&nbsp; sudo apt install libwxgtk3.0-dev<br />
+&nbsp; sudo apt install libxml2-dev&nbsp;<br />
+&nbsp; sudo apt install zlib1g-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+&nbsp; sudo apt install libcairo2-dev<br />
+1. wget https://jaist.dl.sourceforge.net/project/openbabel/openbabel/2.4.1/openbabel-2.4.1.tar.gz<br />
+2. tar zxvf openbabel-2.4.1.tar.gz<br />
+3. cd openbabel-2.4.1<br />
+4. mkdir build<br />
+5. cd build<br />
+4. cmake ../ -DPYTHON_BINDINGS=ON -DRUBY_BINDINGS=ON -DRUN_SWIG=ON<br />
+5. make<br />
+6. sudo make install<br />
+7. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+(/usr/local/lib/python2.7/site-packages/openbabel.py)<br />
+(/usr/local/lib/python2.7/site-packages/pybel.py)<br />
+※ sudo apt-cache search libwxgt*<br />
+※ sudo apt-cache search libwxbase*<br />
+※ sudo apt-cache search libeigen*<br />
+[OB1] https://future-chem.com/open-babel-usage/<br />
+[OB2] https://wiki.wxwidgets.org/Installing_and_configuring_under_Ubuntu<br />
+※ Note!: &quot;pip install bybel&quot; and &quot;pip3 install bybel&quot; are other codes. Do not install them.<br />
+<br />
+<br />
+◇ Install (lammps)<br />
+1. git clone git://github.com/lammps/lammps.git&nbsp;<br />
+2. cd ~/lammps/src<br />
+3. make package-status<br />
+4. make yes-MANYBODY<br />
+5. make serial<br />
+&nbsp; (or make mpi)<br />
+<br />
+<br />
+□ Install (GASP-python, python2.7)<br />
+1. git clone https://github.com/henniggroup/GASP-python.git<br />
+2. cd GASP-python<br />
+3. sudo python setup.py develop<br />
+<br />
+<br />
+◇ Test (please, change &quot;username&quot;) (LAMMPS)<br />
+1. cd $HOME/GASP-python/examples<br />
+2. cd Au_clusters_lammps<br />
+3. gedit ga_input.yaml<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; input_script: /location/of/in.min<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; input_script: /home/username/GASP-python/examples/Au_clusters_lammps/in.min<br />
+-----<br />
+4. gedit calllammps<br />
+-----before<br />
+/location/of/lammps/binary &lt; $input_file<br />
+-----<br />
+-----after<br />
+$HOME/lammps/src/lmp_serial &lt; $input_file<br />
+-----mps/src/lmp_serial &lt; $input_file<br />
+-----<br />
+5. gedit in.min<br />
+-----before<br />
+pair_coeff * * /location/of/Au_u3.eam &nbsp;## Au<br />
+-----<br />
+-----after<br />
+pair_coeff * * /home/username/GASP-python/examples/Au_clusters_lammps/Au_u3.eam &nbsp;## Au<br />
+-----<br />
+6. sudo ln -s $HOME/GASP-python/examples/Au_clusters_lammps/calllammps /usr/local/bin/calllammps<br />
+&nbsp; export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+7. run.py ga_input.yaml 2&gt;&amp;1 | tee ga_output<br />
+(Au_u3.eam, ga_input.yaml, in.min, calllammps)<br />
+<br />
+<br />
+◇ Test (please, change &quot;username&quot;) (GULP)<br />
+1. cd $HOME/GASP-python/examples<br />
+2. cd SiO2_2D_gulp<br />
+3. gedit ga_input.yaml<br />
+-----before<br />
+&nbsp; &nbsp; gulp:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; header_file: /location/of/header_file<br />
+&nbsp; &nbsp; &nbsp; &nbsp; potential_file: /location/of/potential_file<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; gulp:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; header_file: /home/username/GASP-python/examples/SiO2_2D_gulp/header_file<br />
+&nbsp; &nbsp; &nbsp; &nbsp; potential_file: /home/username/GASP-python/examples/SiO2_2D_gulp/potential_file<br />
+-----<br />
+4. gedit callgulp<br />
+-----beforels<br />
+/location/of/gulp/binary &lt; $input_file<br />
+-----<br />
+-----after<br />
+$HOME/gulp-5.1/Src/gulp &lt; $input_file<br />
+-----mps/src/lmp_serial &lt; $input_file<br />
+-----<br />
+5. sudo ln -s $HOME/GASP-python/examples/SiO2_2D_gulp/callgulp /usr/local/bin/callgulp<br />
+&nbsp; export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+7. run.py ga_input.yaml 2&gt;&amp;1 | tee ga_output<br />
+(Au_u3.eam, ga_input.yaml, in.min, calllammps)<br />
+<br />
+<br />
+[GP1] Genetic algorithm for structure and phase prediction interfaced to GULP, LAMMPS and VASP.&nbsp;<br />
+&nbsp; https://github.com/henniggroup/GASP-python<br />
+※ External routines: VASP, LAMMPS, Gulp<br />
+[PM1] materialsproject/pymatgen<br />
+&nbsp; https://github.com/materialsproject/pymatgen/tags?after=v2019.3.13<br />
+------------------------------------------------------------------------------<br />
+■ GASP<br />
+(http://gasp.mse.ufl.edu/)<br />
+(manual: https://mse.ufl.edu/wp-content/uploads/manual.pdf)<br />
+<br />
+<br />
+□ Install (no check) (failed)<br />
+(https://github.com/henniggroup/gasp)<br />
+0. sudo apt install default-jdk<br />
+&nbsp; sudo apt install openjdk-11-jdk-headless<br />
+&nbsp; sudo apt install fastjar<br />
+1. git clone https://github.com/henniggroup/gasp.git<br />
+2. cd gasp<br />
+3. mkdir bin<br />
+4. cd ga<br />
+5. jar -cvf ga.jar *.java<br />
+6. cp ga.jar $HOME/gasp/bin<br />
+<br />
+<br />
+◇ Usage (no check)<br />
+1. cd gasp/bin<br />
+2. mkdir ga<br />
+3. cd ga<br />
+4. gedit ga<br />
+-----<br />
+java -jar ga.jar &quot;$@&quot;<br />
+-----<br />
+5. chmod +x ga<br />
+<br />
+<br />
+◇ Usage (no check)<br />
+1. cd gasp/bin<br />
+2. mkdir gulp<br />
+3. cd gulp<br />
+4. gedit callgulp<br />
+-----<br />
+${HOME}/gulp-5.1/Src/gulp &lt; $1<br />
+-----<br />
+5. chmod +x callgulp<br />
+<br />
+◇ Usage (no check)<br />
+1. cd gasp/bin<br />
+2. mkdir gulp<br />
+3. cd gulp<br />
+4. gedit gulp_header<br />
+-----<br />
+opti conp conj<br />
+switch_minimiser bfgs gnorm 0.02<br />
+-----<br />
+<br />
+<br />
+◇ Usage (no check)<br />
+1. cd gasp/bin<br />
+2. mkdir gulp<br />
+3. cd gulp<br />
+4. gedit gulppotl_alcu<br />
+-----<br />
+manybody<br />
+Al core Al core 0.000 12.000<br />
+Cu core Cu core 0.000 12.000<br />
+Al core Cu core 0.000 12.000<br />
+lennard 7 6<br />
+Al core Al core 601.9448 0.000000000E+00 0.000 12.000<br />
+lennard 9 6<br />
+Cu core Cu core 1285.6223 0.000000000E+00 0.000 12.000<br />
+lennard 7 6<br />
+Al core Cu core 375.0000 0.000000000E+00 0.000 12.000<br />
+eam_functional square_root<br />
+eam_density power 6<br />
+Al core 1350.7776<br />
+Cu core 526.5984<br />
+-----<br />
+<br />
+<br />
+◇ findsym<br />
+(http://stokes.byu.edu/isotropy.html)<br />
+・Linux (ISOTROPY Software Suite for Linux: includes ISOTROPY, FINDSYM, SMODES, COMSUBS.)<br />
+1. mkdir isobyu<br />
+&nbsp; cd isobyu<br />
+&nbsp; wget https://stokes.byu.edu/iso/iso.zip<br />
+&nbsp; unzip isobyu<br />
+&nbsp; rm -f -r iso.zip<br />
+◇ setting<br />
+1. cd gasp/bin<br />
+2. gedit callfindsym<br />
+-----<br />
+&nbsp; export ISODATA=$HOME/isobyu/<br />
+&nbsp; $HOME/isobyu/findsym ${@}<br />
+-----<br />
+3. source callfindsym<br />
+-----(you can get some messages)<br />
+FINDSYM, Version 6.1, November 2018<br />
+Written by Harold T. Stokes, Branton J. Campbell, and Dorian M. Hatch<br />
+Brigham Young University<br />
+-----<br />
+<br />
+<br />
+◇ Qhull (Install, CMake version)<br />
+(http://www.qhull.org)<br />
+1. wget http://www.qhull.org/download/qhull-2019-src-7.3.2.tgz<br />
+2. tar zxvf qhull-2019-src-7.3.2.tgz<br />
+3. cd qhull-2019.1<br />
+4. cd build<br />
+5. cmake -G &quot;Unix Makefiles&quot; .. &amp;&amp; cmake ..<br />
+6. cmake ..<br />
+7. make<br />
+8. sudo make install<br />
+◇ test<br />
+1. /usr/local/bin/qhull<br />
+2. /usr/local/bin/qconvex<br />
+[Q1] Qhull development for www.qhull.org -- Qhull 2019.0.1 at https://github.com/qhull/qhull/wiki<br />
+&nbsp; https://github.com/qhull/qhull<br />
+<br />
+[G1] Genetic Algorithm for Structure and Phase Prediction http://gasp.mse.cornell.edu/<br />
+&nbsp; https://github.com/henniggroup/gasp<br />
+[G2] Genetic algorithm for structure and phase prediction interfaced to GULP, LAMMPS and VASP.&nbsp;<br />
+&nbsp; https://github.com/henniggroup/GASP-python<br />
+※ External routines: VASP, LAMMPS, MOPAC, Gulp, JDFTx<br />
+[FS1] Symmetry Resources at Otterbein University<br />
+&nbsp; https://symotter.org/<br />
+------------------------------------------------------------------------------<br />
+■ MOLPAK &nbsp;(https://sourceforge.net/projects/molpak/)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+□ Install<br />
+1. tar zxvf PREDICTIONS.tar.gz<br />
+2. cd PREDICTIONS<br />
+3. sed -i -e &#39;s/lf95/gfortran -fno-align-commons -fdec-math/g&#39; ./compile-all ./MOLPAK/compile-all ./PMIN/compile-all ./UTILITIES/compile-all<br />
+4. cp new-U/* UTILITIES/.<br />
+5. ./compile-all<br />
+6. ./rename-dir.com<br />
+7. cd UTILITIES<br />
+8. gedit transform.f<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; DATA BLANK /&#39; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&#39;/,<br />
+&nbsp; &nbsp; &nbsp;X &nbsp; &nbsp; BSLASH /Z&quot;5C&quot;/, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! BSLASH = \<br />
+&nbsp; &nbsp; &nbsp;X &nbsp; &nbsp; PIPE /&#39;|&#39;/, &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! PIPE = |<br />
+&nbsp; &nbsp; &nbsp;X &nbsp; &nbsp; SIGNAL(1:2), SIGNAL(3:5) /Z&quot;5C5C&quot;,&#39;0,1&#39;/, &nbsp;! SIGNAL = \\0,1<br />
+&nbsp; &nbsp; &nbsp;X &nbsp; &nbsp; SIGNAL2 /&#39;||0,1&#39;/ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! SIGNAL2 = ||0,1&nbsp;<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; DATA BLANK /&#39; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&#39;/<br />
+C &nbsp; &nbsp; &nbsp;DATA BSLASH /BSLASHDATA/<br />
+&nbsp; &nbsp; &nbsp; BSLASH=ACHAR(INT(Z&quot;5C&quot;))<br />
+&nbsp; &nbsp; &nbsp; DATA PIPE /&#39;|&#39;/<br />
+C &nbsp; &nbsp; &nbsp;DATA SIGNAL(1:2) /SIGNALDATA/<br />
+&nbsp; &nbsp; &nbsp; SIGNAL(1:1)=ACHAR(INT(Z&quot;5C&quot;))<br />
+&nbsp; &nbsp; &nbsp; SIGNAL(2:2)=ACHAR(INT(Z&quot;5C&quot;))<br />
+&nbsp; &nbsp; &nbsp; DATA SIGNAL(3:5) /&#39;0,1&#39;/<br />
+&nbsp; &nbsp; &nbsp; DATA SIGNAL2 /&#39;||0,1&#39;/<br />
+-----<br />
+9. ./compile-all<br />
+10. gedit make-files.com<br />
+-----before<br />
+setenv dir /home/username/PREDICTIONS<br />
+-----<br />
+-----after<br />
+export dir=$HOME/PREDICTIONS<br />
+-----<br />
+10. cd ..<br />
+11. (environment settings)<br />
+&nbsp; alias transform=&quot;$HOME/PREDICTIONS/UTILITIES/transform.exe&quot;<br />
+&nbsp; alias prepare-files=&quot;$HOME/PREDICTIONS/UTILITIES/prepare-files.exe&quot;<br />
+&nbsp; alias make-files=&quot;$HOME/PREDICTIONS/UTILITIES/make-files.com&quot;<br />
+&nbsp; alias chem3d=&quot;$HOME/PREDICTIONS/UTILITIES/chem3d.exe&quot;<br />
+&nbsp; alias summarize=&quot;$HOME/PREDICTIONS/UTILITIES/summarize_tab.com&quot;<br />
+&nbsp; alias resort-summarize=&quot;$HOME/PREDICTIONS/UTILITIES/resortsummarize.com&quot;<br />
+12. alias<br />
+------------------------------------------------------------------------------<br />
+■ EVO<br />
+(http://cpc.cs.qub.ac.uk/summaries/AEOZ_v1_0.html)<br />
+<br />
+<br />
+□ Install<br />
+(click) Download<br />
+1. tar zxvf aeoz_v1_0.tar.gz<br />
+2. cd evo<br />
+<br />
+<br />
+◇ Test (no check)<br />
+1. cd $HOME/evo/python<br />
+2. export PATH=&quot;$PATH&quot;:$HOME/gulp-5.1/Src<br />
+3. python lil_evo.py ../test/gulp_local/specs_bulk.evo<br />
+<br />
+※ External routines: Quantum ESPRESSO, GULP<br />
+------------------------------------------------------------------------------<br />
+■ CrySPY<br />
+(https://tomoki-yamashita.github.io/CrySPY/index.html)<br />
+<br />
+□ Install (COMBO)<br />
+(https://github.com/tsudalab/combo)<br />
+0. sudo apt install opnempi-dev<br />
+&nbsp; pip install numpy<br />
+&nbsp; pip install scipy<br />
+&nbsp; pip install Cython<br />
+&nbsp; pip install mpi4py<br />
+1. git clone https://github.com/tsudalab/combo.git<br />
+2. cd combo<br />
+3. sudo python setup.py install<br />
+<br />
+<br />
+◇ m_tspace<br />
+(https://github.com/nim-hrkn/m_tspace)<br />
+1. git clone https://github.com/nim-hrkn/m_tspace.git<br />
+2. cd m_tspace<br />
+3. wget http://phoenix.mp.es.osaka-u.ac.jp/~tspace/tspace_main/tsp07/tsp98.f<br />
+4. wget http://phoenix.mp.es.osaka-u.ac.jp/~tspace/tspace_main/tsp07/prmtsp.f<br />
+&nbsp; (wget http://phoenix.mp.es.osaka-u.ac.jp/~tspace/tspace_main/tsp07/wycoff)<br />
+&nbsp; (wget http://phoenix.mp.es.osaka-u.ac.jp/~tspace/tspace_main/tsp07/generator.table)<br />
+5. gedit makefile<br />
+-----before<br />
+#FC=gfortran<br />
+#FFLAGS=-g -cpp -DUSE_GEN -ffixed-line-length-255<br />
+FC=ifort<br />
+FFLAGS=-O0 -g -traceback -cpp -DUSE_GEN -132 &nbsp;-check all<br />
+-----<br />
+-----after<br />
+FC=gfortran<br />
+FFLAGS=-g -cpp -DUSE_GEN -ffixed-line-length-255<br />
+#FC=ifort<br />
+#FFLAGS=-O0 -g -traceback -cpp -DUSE_GEN -132 &nbsp;-check all<br />
+-----<br />
+6. make<br />
+<br />
+<br />
+◇ find_wy<br />
+(https://github.com/nim-hrkn/find_wy)<br />
+1. git clone https://github.com/nim-hrkn/find_wy.git<br />
+2. cd find_wy<br />
+3. gedit make.inc<br />
+-----before<br />
+TSPPATH=/home/kino/kino/work/tspace/m_tspace<br />
+#INCPATH = -I $(TSPPATH)<br />
+TSP=$(TSPPATH)/m_tsp.a<br />
+<br />
+<br />
+#FC=gfortran &nbsp;$(INCPATH)<br />
+#FFLAGS=$(INCPATH) &nbsp;-O0 -cpp -DNOSTOP -ffixed-line-length-255 &nbsp;-g -DUSE_GEN -fcheck=all<br />
+#FFLAGS_fixed= $(FFLAGS) -ffixed-line-length-132<br />
+#FFLAGS_free= $(FFLAGS) -ffree-line-length-132<br />
+<br />
+<br />
+<br />
+FC=ifort $(INCPATH) -assume realloc_lhs<br />
+FFLAGS= $(INCPATH) -O0 -cpp -DUSE_GEN -DNOSTOP &nbsp; -g -traceback &nbsp;-check &nbsp;all<br />
+FFLAGS_fixed= $(FFLAGS) -132<br />
+FFLAGS_free= $(FFLAGS)<br />
+-----<br />
+-----after (please, change &quot;username&quot;)<br />
+TSPPATH=/home/username/m_tspace<br />
+#INCPATH = -I $(TSPPATH)<br />
+TSP=$(TSPPATH)/m_tsp.a<br />
+<br />
+<br />
+FC=gfortran &nbsp;$(INCPATH)<br />
+FFLAGS=$(INCPATH) &nbsp;-O0 -cpp -DNOSTOP -ffixed-line-length-255 &nbsp;-g -DUSE_GEN -fcheck=all<br />
+FFLAGS_fixed= $(FFLAGS) -ffixed-line-length-132<br />
+FFLAGS_free= $(FFLAGS) -ffree-line-length-132<br />
+<br />
+<br />
+<br />
+#FC=ifort $(INCPATH) -assume realloc_lhs<br />
+#FFLAGS= $(INCPATH) -O0 -cpp -DUSE_GEN -DNOSTOP &nbsp; -g -traceback &nbsp;-check &nbsp;all<br />
+#FFLAGS_fixed= $(FFLAGS) -132<br />
+#FFLAGS_free= $(FFLAGS)<br />
+-----<br />
+4. make<br />
+◇ Test<br />
+1. cd ~/find_wy<br />
+2. ./find_wy input_sample/input_si4o8.txt<br />
+<br />
+<br />
+□ Install (CrySPY)<br />
+0. pip install pandas<br />
+1. git clone https://github.com/Tomoki-YAMASHITA/CrySPY.git<br />
+2. cd CrySPY<br />
+3. cd CrySPY/find_wy<br />
+4. cp $HOME/find_wy/find_wy ./<br />
+5. cd $HOME/CrySPY/CrySPY/f-fingerprint<br />
+&nbsp; (gedit Makefile)<br />
+6. make<br />
+($HOME/CrySPY/CrySPY/f-fingerprint/cal_fingerprint)<br />
+<br />
+<br />
+◇ Install (pymatgen, python2.7)&nbsp;<br />
+0. pip install numpy==1.16.4<br />
+&nbsp; pip install scipy<br />
+&nbsp; pip install matplotlib<br />
+&nbsp; pip install future<br />
+&nbsp; pip install networkx==2.2<br />
+&nbsp; pip install openbabel<br />
+&nbsp; sudo apt install python-yaml<br />
+1. wget https://github.com/materialsproject/pymatgen/archive/v2018.12.12.tar.gz<br />
+2. tar zxvf v2018.12.12.tar.gz<br />
+3. cd pymatgen-2018.12.12<br />
+4. cd pymatgen/io<br />
+5. gedit babel.py<br />
+-----before (python3)<br />
+&nbsp; &nbsp; def rotor_conformer(self, *rotor_args, algo=&quot;WeightedRotorSearch&quot;,&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; forcefield=&quot;mmff94&quot;):<br />
+-----<br />
+-----after (python2.7)<br />
+&nbsp; &nbsp; def rotor_conformer(self, algor=&quot;WeightedRotorSearch&quot;,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; forcefield=&quot;mmff94&quot;):<br />
+-----<br />
+6. cd $HOME/pymatgen-2018.12.12<br />
+7. cd electronic_structure<br />
+8. gedit boltztrap2.py<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_mu = (self.Seebeck_mu @ self.Seebeck_mu) @ self.Conductivity_mu<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_doping[dop_type] = (sbk @ sbk) @ cond * self.CRTA * 1e3<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_mu = (self.Seebeck_mu * self.Seebeck_mu) * self.Conductivity_mu<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; self.Power_Factor_doping[dop_type] = (sbk * sbk) * cond * self.CRTA * 1e3<br />
+-----<br />
+9. cd $HOME/pymatgen-2018.12.12<br />
+10. sudo python setup.py install<br />
+11. pmg config --add PMG_MAPI_KEY USER_API_KEY<br />
+<br />
+<br />
+[CS1] CrySPY日本語情報サイト<br />
+&nbsp; https://tomoki-yamashita.github.io/cryspy/cryspy.html<br />
+[CS2] Tomoki-YAMASHITA/CrySPY<br />
+&nbsp; https://github.com/Tomoki-YAMASHITA/CrySPY<br />
+------------------------------------------------------------------------------<br />
+■ AIRSS<br />
+(https://www.mtg.msm.cam.ac.uk/Codes/AIRSS)<br />
+<br />
+※ CASTEP<br />
+------------------------------------------------------------------------------<br />
+■ molSimplify<br />
+(http://hjkgrp.mit.edu/content/molsimplify-introduction)<br />
+<br />
+[1] https://w3pharm.u-shizuoka-ken.ac.jp/~bukka/ishikawa/link.html<br />
+------------------------------------------------------------------------------<br />
+■ XenonPy<br />
+(https://github.com/yoshida-lab/XenonPy)<br />
+------------------------------------------------------------------------------<br />
+■ Rosetta<br />
+(https://www.rosettacommons.org/software)<br />
+<br />
+[R1] ROSETTA (SOURCEFORGE)<br />
+&nbsp; https://sourceforge.net/projects/rosetta/<br />
+[R2] タンパク質モデリングソフトウェアパッケージRosetta 3.10のインストール方法 for macOS, Linux<br />
+&nbsp; https://qiita.com/Ag_smith/items/0e73d6d10e0b35c3f6d5<br />
+[R3] Rosetta インストール方法<br />
+&nbsp; https://computational-chemistry.com/top/blog/2017/07/12/rosetta/<br />
+[R4] ROSETTAをインストールしてみる<br />
+&nbsp; http://biokids.org/?ROSETTA%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

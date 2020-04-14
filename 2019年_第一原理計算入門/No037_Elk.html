@@ -1,0 +1,2032 @@
+&nbsp; ここではElkを用いて状態密度分布やバンド図、吸収スペクトルを描く方法を解説する<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+・Elk: <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFyg09sS_uq9vnnQIsFdlAB">https://www.youtube.com/playlist?list=PL9r3BfacS1mFyg09sS_uq9vnnQIsFdlAB</a>
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mFyg09sS_uq9vnnQIsFdlAB" width="560"></iframe></div>
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a> &nbsp;<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>Elk: <a href="http://elk.sourceforge.net/">http://elk.sourceforge.net/</a><br />
+■<span style="font-weight: bold;"> </span>dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+■<span style="font-weight: bold;"> </span>Tutorial: <a href="http://elk.sourceforge.net/cecam.html">http://elk.sourceforge.net/cecam.html</a><br />
+■ Discussion: <a href="http://sourceforge.net/p/elk/discussion/search/?q=mpirun&amp;project=0">http://sourceforge.net/p/elk/discussion/search/?q=mpirun&amp;project=0</a>&nbsp;<br />
+■ Forum: <a href="http://sourceforge.net/p/elk/discussion/">http://sourceforge.net/p/elk/discussion/</a>&nbsp;<br />
+&nbsp; -&gt; Elk Users: <a href="http://sourceforge.net/p/elk/discussion/897820/">http://sourceforge.net/p/elk/discussion/897820/</a><br />
+■<span style="font-weight: bold;"> </span>Theroy: <a href="http://www2.mpi-halle.mpg.de/theory_department/research/elk_code_development/">http://www2.mpi-halle.mpg.de/theory_department/research/elk_code_development/</a><br />
+■<span style="font-weight: bold;"> </span>Information: <a href="http://elk.sourceforge.net/CECAM/Dewhurst-Elk.pdf">http://elk.sourceforge.net/CECAM/Dewhurst-Elk.pdf</a><br />
+■<span style="font-weight: bold;"> </span>References:<br />
+[1] <a href="http://www.ims.tsukuba.ac.jp/~diffraction_lab/news/2011_poster.pdf">http://www.ims.tsukuba.ac.jp/~diffraction_lab/news/2011_poster.pdf</a><br />
+[2] <a href="http://arxiv.org/pdf/1402.5755v1.pdf">http://arxiv.org/pdf/1402.5755v1.pdf</a><br />
+[3] <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405</a>,&nbsp; <a href="http://arxiv.org/pdf/1107.0887v2.pdf">http://arxiv.org/pdf/1107.0887v2.pdf</a>, <a href="http://escholarship.org/uc/item/6k33p9br#page-6">http://escholarship.org/uc/item/6k33p9br#page-6</a><br />
+[4] <a href="http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.216402">http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.216402</a><br />
+[5] <a href="http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.186401">http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.186401</a><br />
+[6] <a href="http://iopscience.iop.org/1367-2630/14/5/053052/pdf/1367-2630_14_5_053052.pdf">http://iopscience.iop.org/1367-2630/14/5/053052/pdf/1367-2630_14_5_053052.pdf</a><br />
+■<span style="font-weight: bold;"> </span>elk*/docs<br />
+&nbsp; Brillouin_zones.pdf, spacegroup.pdf, elk.pdf<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>特徴<br />
+<br />
+利点<br />
+・ FP-LAPW法であるので擬ポテンシャルよりも精度が高い計算方法である。<br />
+・ Abinit と 入力ファイルの形式が似ている。examplesファイルが豊富に揃っているので計算も比較的容易。<br />
+　非常に簡単に入力ファイルを作れるようになっている。一方、excit!ngはチュートリアルが豊富であるが初学者には難しい。<br />
+・ 無償のコードであるため企業で導入させやすい（Abinitも無償である）。<br />
+・ Abinitは擬ポテンシャルを用いているので計算負荷が軽くスーパーセルでの計算に適している。しかし、計算が上手くいっているかを検証するために、他のコードで比較することが良い。例えば、それにelkの結果を用いるなども良いだろう。<br />
+・ 原子座標から空間群を自動認識してくれる。どの対称性で認識されたかは、INFO.OUTでの Number of Bravais Lattice symmetries&nbsp;: 対称操作の個数(＝Point group Ord.)&nbsp;と Number of crystal symmetries に記載されている。<br />
+・BSEが計算できる（古いヴァージョンの方が良いらしい）｛東大生産研の溝口先生などが試されている）<br />
+<br />
+欠点<br />
+・ 無償のコードなので、大きな系で計算できるかどうかという不安がある。WIEN2kであれば、3x3x3のスーパーセルで計算できることは私も確認しているが、elkで可能かはまだ検証していない（情報を求めています）。<br />
+・ ユーザー数がVASPやWIEN2kほど多くないので情報を得るのが難しい(このHP以外で解説しているHPがあれば教えてください)。<br />
+・ 理論ではなく、計算する方法について詳細に述べられたチュートリアルがあまりない（情報を求めています）。<br />
+<br />
+※ 私のPCでは1日程度でフォノンが計算できなかった。2x2x2のスーパーセルの計算も1日では終わらない。スーパーセルでの計算はAbinitやPWscfが良いだろう。スーパーセルを用いてk-edgeの吸収構造を計算するにはPWscfがオススメとなる。TiO2などでの吸収スペクトルはelkでも良いかもしれない。<br />
+------------------------------------------------------------------------------<br />
+■ OpenMPI (Intel Fortran) (OpenMPIを自分でコンパイルする場合)<br />
+□ インストール<br />
+1) <a href="http://www.open-mpi.org/">http://www.open-mpi.org/</a>&nbsp;<br />
+2) tar zxvf openmpi-1.4.5.tar.gz<br />
+3) cd openmpi-1.4.5<br />
+4) コンパイラにより下記のように設定<br />
+./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+5) make<br />
+6) su<br />
+7) make all install<br />
+□ 環境設定 ( .bashrc in home and root directory )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+------------------------------------------------------------------------------<br />
+■ OpenMPI (gfortran)&nbsp;(OpenMPIを自分でコンパイルする場合)<br />
+□ インストール<br />
+1) <a href="http://www.open-mpi.org/">http://www.open-mpi.org/</a><br />
+2) tar zxvf openmpi-1.4.5.tar.gz<br />
+3) cd openmpi-1.4.5<br />
+4) コンパイラにより下記のように設定<br />
+./configure -prefix=/usr/local/gnu/openmpi CXX=icpc CC=icc FC=gfortran F90=gfortran F77=gfortran<br />
+5) make<br />
+6) su<br />
+7) make all install<br />
+□ 環境設定 ( .bashrc in home and root directory )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/gnu/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+------------------------------------------------------------------------------<br />
+■ libxc<br />
+CentOS 6.4 (Final), i7-2700K<br />
+libxc-2.2.0<br />
+1) tar zxvf libxc-2.2.0<br />
+2) ./condifure<br />
+3) make<br />
+4) su<br />
+5) make install<br />
+Libraries have been installed in: /opt/etsf/lib<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>Install<br />
+CentOS 6.4 (Final)<br />
+Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz<br />
+Memory 31.1 GiB<br />
+( make all -&gt; ./setup -&gt; make clean -&gt; make all)<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. make all<br />
+7. export OMP_NUM_THREADS=4<br />
+8. make test<br />
+CPU time: 20:08:26 - 20:12:49 = 04:23 s (i7-920)<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. gedit make.inc<br />
+&nbsp; #SRC_MPI = mpi_stub.f90<br />
+&nbsp; F90 = mpif90<br />
+&nbsp; F77 = mpif90<br />
+&nbsp; SRC_MPI =<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=4<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. gedit make.inc<br />
+&nbsp; #F90_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp; #F90_OPTS = -O3 -ffast-math -funroll-loops -march=native -ftree-vectorize -fopenmp<br />
+&nbsp; F90_OPTS = -O3 -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp; #F77_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp; #F77_OPTS = -O3 -ffast-math -funroll-loops -march=native -ftree-vectorize -fopenmp<br />
+&nbsp; F77_OPTS = -O3 -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp; #SRC_MPI = mpi_stub.f90<br />
+&nbsp; F90 = mpif90<br />
+&nbsp; F77 = mpif90<br />
+&nbsp; SRC_MPI =<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=4<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+CPU time: 4m24 s (i7-920)<br />
+CPU time: 2m33 s (i7-3820)<br />
+Fe2VAl(TDDFT-LRC): 3:49 s (i7-3820)<br />
+<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI + LAPACK(Netlib)<br />
+<br />
+OS: CentOS 6.4 case<br />
+su<br />
+<code>yum install gcc-gfortran.x86_64<br />
+yum install netcdf<br />
+yum install netcdf-devel<br />
+yum install atlas<br />
+yum install atlas-devel<br />
+yum install atlas-sse3<br />
+yum install atlas-sse3-devel<br />
+yum install fftw3<br />
+yum install fftw3-devel<br />
+yum install openmpi<br />
+yum install openmpi-devel<br />
+yum install mpich2<br />
+yum install mpich2-devel<br />
+yum install libxc<br />
+yum install libxc-devel<br />
+yum install patch<br />
+yum install blas<br />
+yum install blas-devel<br />
+yum install lapack<br />
+yum install lapack-devel</code><br />
+<br />
+OS: Ubuntu 12.04 case<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. gedit make.inc<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+# F90_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp;F90_OPTS = -O3 -pipe -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;F77 = mpif90<br />
+# F77_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp;F77_OPTS = -O3 -pipe -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -L/usr/lib64 -lblas -llapack -fopenmp<br />
+# LIB_LPK = -L/usr/lib -lblas -llapack -L/usr/lib -fopenmp #Ubuntu12.04<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+&nbsp;LIB_FFT = fftlib.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = zfftifc.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=4<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+examples, Al, INFO.OUT, total:<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI + LAPACK(Netlib) + FFTW(Netlib)<br />
+<br />
+OS: CentOS 6.4 case<br />
+su<br />
+<code>yum install gcc-gfortran.x86_64<br />
+yum install netcdf<br />
+yum install netcdf-devel<br />
+yum install atlas<br />
+yum install atlas-devel<br />
+yum install atlas-sse3<br />
+yum install atlas-sse3-devel<br />
+yum install fftw3<br />
+yum install fftw3-devel<br />
+yum install openmpi<br />
+yum install openmpi-devel<br />
+yum install mpich2<br />
+yum install mpich2-devel<br />
+yum install libxc<br />
+yum install libxc-devel<br />
+yum install patch<br />
+yum install blas<br />
+yum install blas-devel<br />
+yum install lapack<br />
+yum install lapack-devel</code><br />
+<br />
+OS: Ubuntu 12.04 case<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. gedit make.inc<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+# F90_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp;F90_OPTS = -O3 -pipe -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;F77 = mpif90<br />
+# F77_OPTS = -O3 -ffast-math -funroll-loops -fopenmp<br />
+&nbsp;F77_OPTS = -O3 -pipe -ffast-math -funroll-loops -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -L/usr/lib64 -lblas -llapack&nbsp;<code>-L/usr/lib64 </code>-lfftw3_threads -lfftw3 -fopenmp<br />
+# LIB_LPK = -L/usr/lib -lblas -llapack&nbsp;<code>-L/usr/lib </code>-lfftw3_threads -lfftw3 -fopenmp #Ubuntu12.04<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = zfftifc_fftw.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=4<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+examples, Al, INFO.OUT, total:<br />
+-----<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI + ATLAS + FFTW(Netlib)<br />
+<br />
+OS: CentOS 6.4 case<br />
+su<br />
+<code>yum install gcc-gfortran.x86_64<br />
+yum install netcdf<br />
+yum install netcdf-devel<br />
+yum install atlas<br />
+yum install atlas-devel<br />
+yum install atlas-sse3<br />
+yum install atlas-sse3-devel<br />
+yum install fftw3<br />
+yum install fftw3-devel<br />
+yum install openmpi<br />
+yum install openmpi-devel<br />
+yum install mpich2<br />
+yum install mpich2-devel<br />
+yum install libxc<br />
+yum install libxc-devel<br />
+yum install patch<br />
+yum install blas<br />
+yum install blas-devel<br />
+yum install lapack<br />
+yum install lapack-devel</code><br />
+<br />
+OS: Ubuntu 12.04 case<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a>&nbsp;<br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 2<br />
+6. gedit make.inc<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+# F90_OPTS = -O3 -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;F90_OPTS = -O3 -pipe -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;F77 = mpif90<br />
+# F77_OPTS = -O3 -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;F77_OPTS = -O3 -pipe -fopenmp -mtune=native -march=native -m64<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = <code>-L/usr/lib64/atlas -llapack -lf77blas -lcblas -latlas </code>-L/usr/lib64 -lblas -llapack&nbsp;<code>-L/usr/lib64 </code>-lfftw3_threads -lfftw3 -fopenmp<br />
+# LIB_LPK = <code>-L/usr/lib/atlas -llapack -lf77blas -lcblas -latlas </code>-L/usr/lib -lblas -llapack&nbsp;<code>-L/usr/lib </code>-lfftw3_threads -lfftw3 -fopenmp #Ubuntu12.04<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = zfftifc_fftw.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=4<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+examples, BN-ELNES, INFO.OUT, total: 110181.43 s = 30.6 h = 1.28 days (but, tasks 140 not success.)<br />
+-----<br />
+◆ Intel Fortran + OpenMP<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. make all<br />
+7. export OMP_NUM_THREADS=4<br />
+8. make test<br />
+CPU time: 20:18:20 - 20:21:56 = 03:36 s (i7-920)<br />
+-----<br />
+◆ Intel Fortran + OpenMP + OpenMPI<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. gedit make.inc<br />
+&nbsp; #SRC_MPI = mpi_stub.f90<br />
+&nbsp; #F90 = mpif90<br />
+&nbsp; #F77 = mpif90<br />
+&nbsp; F90 = mpif90<br />
+&nbsp; F77 = mpif90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=1<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+-----<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. gedit make.inc<br />
+&nbsp;MKLROOT = /opt/intel/composer_xe_2013/mkl<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+&nbsp;F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include<br />
+&nbsp;F77 = mpif90<br />
+&nbsp;F77_OPTS = -O3 -ip -openmp<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -openmp<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = zfftifc_fftw.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=1<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+-----<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL + FFTW(Netlib)<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. gedit make.inc<br />
+&nbsp;MKLROOT = /opt/intel/composer_xe_2013/mkl<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+&nbsp;F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;F77 = mpif90<br />
+&nbsp;F77_OPTS = -O3 -ip -openmp<br />
+# F77_OPTS = -O3 -ip -openmp -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -openmp -L/usr/local/lib&nbsp; -lfftw3_threads -lfftw3<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = zfftifc_fftw.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=1<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+-----<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL + FFTW(Intel)<br />
+<br />
+FFTW (Intel)<br />
+su<br />
+cd /opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf<br />
+make libintel64 compiler=intel<br />
+cp /opt/intel/mkl/include/mkl_dfti.f90 /home/username/elk-2.3.22/src/mkl_dfti.f90<br />
+<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. gedit make.inc<br />
+&nbsp;MKLROOT = /opt/intel/composer_xe_2013/mkl<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -unroll -no-prec-div -traceback -mkl=sequential -xCORE-AVX-I -pc80 -mp1 -pad<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3 -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -xhost -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F77 = mpif90<br />
+# F77_OPTS = -O3 -ip -openmp<br />
+# F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -unroll -no-prec-div -traceback -mkl=sequential -xCORE-AVX-I -pc80 -mp1 -pad<br />
+# F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3 -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -xhost -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -openmp -L/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf -lfftw3xf_intel<br />
+&nbsp;SRC_MPI =<br />
+# LIB_libxc = libxcf90.a libxc.a<br />
+# SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+&nbsp;SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = mkl_dfti.f90 zfftifc_mkl.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=1<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+<br />
+Intel(R) Core(TM) i7-2700K CPU @ 3.50GHz, 15.6 GiB<br />
+examples, Al, INFO.OUT, total: 0.78 s<br />
+examples, TiC-eg-t2g: 13 s<br />
+examples, diamond-rho3D: 17 s<br />
+examples, FeAl-LDA+U-AMF: 1m10 s<br />
+examples, LiF-BSE: 2m03 s ( 1GB)<br />
+examples, Cu-ELNES: 6m30 ( 1 GB)<br />
+examples, BaTiO3-lattice-opt: 2h14m58 s (1.4 GB)<br />
+examples, Fe-XMCD: 7m06 s<br />
+examples, CaO-BSE-core: 32m43 s<br />
+<br />
+Fe2VAl primitive cell (4 atoms)<br />
+Fe2VAl(cif2cell, TiC-eg-t2g base): 1m19 s (0.9 GB)<br />
+Fe2VAl band (cif2cell, AlAs-fatbands base): 54 s ( 0.92 GB)<br />
+Fe2VAl lattce constant optimiation (cif2cell): 12m43 s<br />
+Fe2VAl LDA+U(FLL) (cif2cell): 1m32 s (1 GB)<br />
+Fe2VAl HSE06:&nbsp; not finishied ! (1.7 GB)<br />
+Fe2VAl BSE: 09:40:48 - not finished !<br />
+Fe2VAl XMCD ( Fe_lo.in, 2x2x2 k): 20m28 (1.1 GB)<br />
+Fe2VAl BSE-core(Fe_lo.in, 2x2x2 k) 7h54m52 s<br />
+Fe2VAl Mn2CoGa XMCD ( Mn_lo.in, Co_lo.in, 8x8x8 k ) 3h56m<br />
+-----<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL + FFTW(Intel) + libxc<br />
+<br />
+FFTW (Intel)<br />
+su<br />
+cd /opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf<br />
+make libintel64 compiler=intel<br />
+cp /opt/intel/mkl/include/mkl_dfti.f90 /home/username/elk-2.3.22/src/mkl_dfti.f90<br />
+<br />
+1. dowonload: <a href="http://sourceforge.net/projects/elk/files/">http://sourceforge.net/projects/elk/files/</a><br />
+2. tar zxvf elk-2.3.22.tgz<br />
+3. cd&nbsp; elk*<br />
+4. ./setup<br />
+5. 1<br />
+6. gedit make.inc<br />
+&nbsp;MKLROOT = /opt/intel/composer_xe_2013/mkl<br />
+&nbsp;MAKE = make<br />
+&nbsp;F90 = mpif90<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -unroll -no-prec-div -traceback -mkl=sequential -xCORE-AVX-I -pc80 -mp1 -pad<br />
+# F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3 -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F90_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -xhost -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F77 = mpif90<br />
+# F77_OPTS = -O3 -ip -openmp<br />
+# F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -unroll -no-prec-div -traceback -mkl=sequential -xCORE-AVX-I -pc80 -mp1 -pad<br />
+# F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3 -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;F77_OPTS = -O3 -ip -openmp -I$(MKLROOT)/include -xhost -unroll -no-prec-div -traceback -mkl=sequential -pc80 -mp1 -pad<br />
+&nbsp;AR = ar<br />
+&nbsp;LIB_SYS =<br />
+&nbsp;LIB_LPK = -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -openmp -L/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf -lfftw3xf_intel<br />
+&nbsp;SRC_MPI =<br />
+&nbsp;LIB_libxc = /opt/etsf/lib/libxcf90.a /opt/etsf/lib/libxc.a<br />
+&nbsp;SRC_libxc = libxc_funcs.f90 libxc.f90 libxcifc.f90<br />
+# SRC_libxc = libxcifc_stub.f90<br />
+&nbsp;SRC_FFT = mkl_dfti.f90 zfftifc_mkl.f90<br />
+7. make all<br />
+8. export OMP_NUM_THREADS=1<br />
+9. gedit tests/tests.sh<br />
+10. make test<br />
+-----<br />
+Refereces<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/110d1ad6/">http://sourceforge.net/p/elk/discussion/897820/thread/110d1ad6/</a><br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>Install<br />
+CentOS 6.4 (Final)<br />
+Intel(R) Core(TM) i7 CPU 920 @ 2.67GHz<br />
+Memory 31.1 GiB<br />
+<br />
+success<br />
+◆ gfortran&nbsp; + OpenMP<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL + FFTW(Netlib)<br />
+◆ Intel Fortran + OpenMP + OpenMPI + MKL + FFTW(Intel)<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>Input variables　（elk.pdf に記述がある）<br />
+　後ほど記述するが、VESTAで構造を入力して cif で出力し、cif2cell を用いて結晶構造に関するデータを用いて examples にあるファイルを書き換える。
+<ul>
+	<li>tasks (ディフォルト -1: ヴァージョンが表示される)</li>
+</ul>
+
+<div style="margin-left: 20px;">続けて他の計算を行うに examples にあるように次の行に指定していく。例えば、ELNESなら 0 (基底状態の計算) と 140（ELNES）を書き込む。examples ファイルを基にすれば tasks を書き換える必要はない。参考によく使うtasksを記す。<br />
+0: 基底状態の計算<br />
+1: 電子密度分布が記述されている STATE.out を用いた基底状態の再計算<br />
+2: 構造最適化計算<br />
+3: 構造最適化の再計算<br />
+10: DOS 計算<br />
+20: バンド図のプロット<br />
+21: 各原子に対するバンド図のプロット<br />
+25: 有効質量の計算<br />
+33: 3D 電子密度分布<br />
+102: 3D フェルミ面を描く（XcrySDen用）<br />
+120: 運動量行列要素の出力（XAS計算に用いる）<br />
+121: RPAを用いた線形光学応答テンソル計算（XAS計算に用いる）<br />
+140: ELNES計算<br />
+205: DFPTを用いたフォノン計算<br />
+210: フォノンDOSのプロット<br />
+220: フォノン分散のプロット</div>
+
+<ul>
+	<li>xctype (default: 3 = LDA, PW92)</li>
+</ul>
+
+<div style="margin-left: 20px;">交換相関ポテンシャルの指定。下記の二つがよく用いられる。<br />
+3: LSDA (スピンを考慮したLDAのことで、PW92とも記述される。ファンデルワールス力が強い場合はこちらを指定する）<br />
+20: GGA-PBE (非常に有名な交換相関ポテンシャル。WIEN2kなど多くの系で用いられている。通常はこちらを用いればよい)</div>
+
+<ul>
+	<li>spinpol (ディフォルト .false.)</li>
+</ul>
+
+<div style="margin-left: 20px;">スピンを入れた計算をする場合には、.true. を記述する。</div>
+
+<ul>
+	<li>spinorb (ディフォルト .false.)</li>
+</ul>
+
+<div style="margin-left: 20px;">価電子帯にスピン軌道相互作用を入れた計算をする場合には、.true. を記述する。</div>
+
+<ul>
+	<li>avec</li>
+</ul>
+
+<div style="margin-left: 20px;">3つの格子ベクトルを指定する。Bohr 単位</div>
+
+<ul>
+	<li>scale （ディフォルト 1.0）</li>
+</ul>
+
+<div style="margin-left: 20px;">avec で指定した格子ベクトルを何倍するかを指定する。</div>
+
+<ul>
+	<li>sppath</li>
+</ul>
+
+<div style="margin-left: 20px;">原子種の情報が記述されたファイルの場所を指定する。</div>
+
+<ul>
+	<li>atoms</li>
+</ul>
+
+<div style="margin-left: 20px;">原子種の個数　を記述する。これ以降は、原子種の数だけ[原子種のファイル名から原子位置]の記述を繰り返す。<br />
+&#39;原子種 i の情報が記されたファイル名&#39;<br />
+原子種 i の数<br />
+原子種 i の原子位置 (原子種 i の数 だけ記述される)</div>
+
+<ul>
+	<li>ngridk</li>
+</ul>
+
+<div style="margin-left: 20px;">k点数（k点グリッド）の指定。</div>
+
+<ul>
+	<li>vkloff</li>
+</ul>
+
+<div style="margin-left: 20px;">k点グリッドのシフト。これを指定すると少ないk点で多くのk点を採用したのとほぼ等価の計算ができる。この機能はAbinitと似ている。左欄のAbiniti(input files)の shiftk と同じシフトを設定すればよい。</div>
+<br />
+以上を理解しておけば、基底状態とDOSが計算出来る。<br />
+<br />
+□ space group
+<ul>
+	<li>primcell:&nbsp; .true. にするとプリミティブセルが存在する場合、プリミティブセルを用いて計算してくれる。(ディフォルト: .false.)</li>
+</ul>
+□ バンド分散やフォノン分散の計算に必要な指定
+
+<ul>
+	<li>plot1d: バンド分散やフォノン分散で用いる。指定する各点の数と各点間のメッシュ数を記述する。</li>
+	<li>plot3d: 3Dでの電子密度分布をプロットするときの原点と3つのベクトル、そして、メッシュ数を記述する。</li>
+	<li>ngridq: フォノン計算でのグリッド。フォノンに対するメッシュ点であるという以外、k点とほぼ同じである。k点に重なるようにフォノン用のメッシュ点（q点）を指定する。vkloffを指定している場合にはk点がシフトしているので、それを考慮することが必要。よく分からなければ、vkloff を設定せずに、ngridk = ngridq * 整数 となるようにすればよい。</li>
+</ul>
+□ 構造最適化に関わる指定（フォノンの計算の前には構造最適化した構造が必要）
+
+<ul>
+	<li>latvopt: ディフォルトは0で格子定数の最適化をしない。1は格子定数の最適化、2は体積を一定にして格子ベクトルが最適化される。これらの計算では空間群は保持される。1や2を設定した場合には、tasks を2か3を設定する。</li>
+	<li>epspot: ポテンシャルと場の収束条件を指定する。ディフォルトは 1x10^-6 である。</li>
+	<li>epsstress: ストレステンソルの収束条件。ディフォルトは 5 x 10^-4 である。</li>
+</ul>
+□ LDA+U
+
+<ul>
+	<li>dft+u:</li>
+</ul>
+
+<div style="margin-left: 20px;">･ Fully localised limit (FLL) の場合<br />
+1 1<br />
+原子種　軌道（pやdやｆなど）　U 値　J値<br />
+<br />
+･ Around mean eld (AFM) の場合<br />
+2 1<br />
+原子種 軌道（pやdやｆなど） U 値 J値<br />
+<br />
+FLLとAFMで大きな違いは無い。論文などで記述がある方を採用すれば良いだろう。</div>
+<br />
+□ ELNES計算に関する指定
+<ul>
+	<li>emaxelnes: ELNES計算における許される最大の初期状態の固有値。ディフォルトは-1.2である。</li>
+	<li>wplot:</li>
+</ul>
+
+<div style="margin-left: 20px;">DOSまたはオプティクスをプロットするための周波数またはエネルギーの点数（ディフォルトは500）、ブリルアンゾーンでの積分関数で用いるk点グリッド数（ディフォルトは100）、スムーズイングレベル（ディフォルトは1）<br />
+DOSまたはオプティクスをプロットするための周波数またはエネルギー範囲</div>
+
+<ul>
+	<li>vecql:</li>
+	<li>nempty: 原子とスピンあたりの空の状態の数。ディフォルトは4.0である。</li>
+</ul>
+□ BES計算に関する指定
+
+<ul>
+	<li>scissor: フェルミエネルギーよりも上にある状態へ作用するscissorシフトである。ディフォルトは0.0である。</li>
+	<li>nvbse: BSE計算で用いる価電子帯の状態数（ディフォルトは2）</li>
+	<li>ncbse: BSE計算で用いる伝導帯の状態数（ディフォルトは3）</li>
+	<li>gmaxrf: 応答関数を計算するために用いる|G|の最大値（ディフォルトは3.0）</li>
+	<li>swidth: ディラックデルタ関数を近似するスムージングの幅（ディフォルトは0.001)</li>
+	<li>istxbse:</li>
+</ul>
+□ XMCD計算に関する指定
+
+<ul>
+	<li>optcomp: 計算される一次と二次との光学テンソルの成分</li>
+	<li>bfieldc: カーテシアン座標での外部磁場</li>
+	<li>reducebf: 外部磁場のreduction factor　（ディフォルトは1.0）</li>
+</ul>
+□ 計算精度と計算時間に関わる指定（基本的にディフォルトでよい）
+
+<ul>
+	<li>全エネルギーでの収束条件。ディフォルトは 1x10^-4 である。計算時間が掛かる場合には、1 meV/atomとなるように値を変える。</li>
+	<li>rgkmax: ディフォルトは7.0で充分である。計算に時間が掛かりすぎて困るという場合には、6.0 に小さくしてみるのも良いだろう。</li>
+	<li>gmaxvr: 原子間での電子密度とポテンシャルを記述するための|G|の値。WIEN2kもディフォルトを12.0にしている。</li>
+	<li>lmaxmat: 角運動量のカットオフ。ディフォルトは6.0である。</li>
+	<li>mixtype: 前回と今回の電子密度分布のミキシングの方法である。ディフォルトは1である。2はPulay mixing で、3はBroyden mixingである。どれも非常に有名である。</li>
+	<li>xctype: 交換相関ポテンシャルの指定。100 を指定して後に、交換と相関ポテンシャルを指定できる。</li>
+</ul>
+
+<p>------------------------------------------------------------------------------<br />
+◆ cif2cell<br />
+&nbsp; VESTAで構造を入力して cif で出力し、cif2cell を用いて結晶構造に関するデータを用いて examples にあるファイルを書き換える。<br />
+1. cif2cell -p elk case.cif<br />
+2. you can get GEOMETRY.OUT<br />
+3. elk.inｔ 中にGEOMETRY.OUTの記述をコピー&amp;ペーストする<br />
+<br />
+◆ spacegroup.in を用いたプリミティブセルの探し方<br />
+1. spacegroup.in というファイルを作成する<br />
+&nbsp;&nbsp;docにある spacegroupのpdfを参考にして結晶構造のデータを入力する<br />
+&nbsp; 2x2x2 supercell&nbsp;を作成して欲しい場合には ncell に該当する行の1 1 1 を&nbsp;2 2 2 にする。<br />
+2. $HOME/elk-2.3.22/src/spacegrop/spacegroup<br />
+3. プリミティブセルでのGEOMETRY.OUTを得ることができる<br />
+<br />
+◆ XcrySDen を用いたプリミティブセルの探し方<br />
+Display -&gt; Primitive Cell Mode<br />
+または、F3 (Primitive Cell Mode), F4(Conventional Cell Mode) を押してみてもよい。<br />
+<br />
+◆ 対称性を探してくれるサイト<br />
+FINDSYM: <a href="http://stokes.byu.edu/iso/findsym.php">http://stokes.byu.edu/iso/findsym.php</a> （2014年7月 2x2x2スーパーセルでは駄目だった）<br />
+ISOTROPY Software Suite: <a href="http://stokes.byu.edu/iso/isotropy.php">http://stokes.byu.edu/iso/isotropy.php</a><br />
+<br />
+◆ VESTA を用いて空間群を探す方法<br />
+VESTA -&gt; case.cif<br />
+-&gt; Edit -&gt; Edit Data -&gt; Unit cell -&gt; Space group: 230 + Apply -&gt; 229 + Apply -&gt; ...<br />
+-&gt; stop when you can get nochange structure -&gt; OK -&gt; File -&gt; Export Data.. -&gt; cif<br />
+として、空間群の数値が高いところから低いところへと数値を下げていって、同じ構造がとなる空間群を手作業で探す。<br />
+※ PやFCC, BCC, HCPということが分かっていれば、左欄のAbinit(input files)を参考にして空間群を更に絞り込むと良い。<br />
+※ 結晶構造にn回回転対称やミラー対称があると分かれば空間群の番号とともに記載されている記号から更に絞り込める。<br />
+------------------------------------------------------------------------------<br />
+◆ Tutorial<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>SCF + DOS<br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 10<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 8&nbsp; 8&nbsp; 8<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+gnuplot<br />
+plot TODS.OUT w l<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>SCF + BAND<br />
+-----<br />
+tasks<br />
+&nbsp;&nbsp; 0<br />
+&nbsp; 21<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 8&nbsp; 8&nbsp; 8<br />
+<br />
+plot1d<br />
+&nbsp; 3 200&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; : nvp1d, npp1d<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : vlvp1d,&nbsp; L piont<br />
+&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Gamma point<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.5&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : X point<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+gnuplot<br />
+set yrange[-0.5:0.2]<br />
+plot BAND_S01_A0001.OUT w l<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>SCF + 3D<br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+<br />
+<br />
+&nbsp; 33<br />
+<br />
+! define box corners and grid size for 3D plot, first point is the origin<br />
+plot3d<br />
+&nbsp;0.0&nbsp; 0.0&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : vclp3d<br />
+&nbsp;1.0&nbsp; 0.0&nbsp; 0.0<br />
+&nbsp;0.0&nbsp; 1.0&nbsp; 0.0<br />
+&nbsp;0.0&nbsp; 0.0&nbsp; 1.0<br />
+&nbsp;56&nbsp; 56&nbsp; 56<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 8&nbsp; 8&nbsp; 8<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/0979b76b/">http://sourceforge.net/p/elk/discussion/897820/thread/0979b76b/</a><br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>Structure optimiation (optimize Lattice constant)<br />
+-----<br />
+tasks<br />
+&nbsp; 2<br />
+<br />
+! use Broyden mixing of the potential<br />
+mixtype<br />
+&nbsp; 3<br />
+<br />
+latvopt<br />
+&nbsp; 1<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 8&nbsp; 8&nbsp; 8<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<br />
+-------------------<br />
+■ LDA+U<br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 10<br />
+<br />
+DFT+U block<br />
+! here FLL double counting is used (dftu=1)<br />
+! inpdftu=1 corresponds to provide U and J in Hartree as input<br />
+dft+u<br />
+&nbsp; 1 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : dftu,inpdftu<br />
+&nbsp; 1 2 0.039399 0.00000&nbsp;&nbsp; : is, l, U, J<br />
+&nbsp; 2 2 0.025399 0.00000&nbsp;&nbsp; : is, l, U, J<br />
+<br />
+! fairly high number of empty states<br />
+nempty<br />
+&nbsp; 8<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+! this grid is too small for accurate magnetic moment<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>TDDFT - ALDA (adiabatic local density approximation)<br />
+Theory: <a href="http://www.yambo-code.org/">http://www.yambo-code.org/</a><br />
+-----<br />
+! Dielectric function of diamond calculated at finite q-vector using ALDA.<br />
+<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 120<br />
+&nbsp; 320<br />
+<br />
+! q-vector in lattice coordinates<br />
+vecql<br />
+&nbsp; 0.5 0.5 0.5<br />
+<br />
+xctype<br />
+&nbsp; 3<br />
+<br />
+fxctype<br />
+&nbsp; 3<br />
+<br />
+! G-vector cut-off for the RPA and ALDA response function<br />
+gmaxrf<br />
+&nbsp; 2.0<br />
+<br />
+wplot<br />
+&nbsp; 500 100 1<br />
+&nbsp; 0.0 1.5<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+EELS_TDDFT.OUT, EPSILON_TDDFT.OUT ( first real part, second imaginary part)<br />
+remove real part<br />
+gnuplot<br />
+set xrange[-0.5:40]<br />
+set xlabel &quot;Energy / eV&quot;<br />
+set ylabel &quot;Absorption / arb.unit&quot;<br />
+plot EELS_TDDFT.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+plot EPSILON_TDDFT.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>TDDFT - LRC (long-range contribution) (altanative BSE, but there is parameter alpha)<br />
+Theory: <a href="http://www.yambo-code.org/tutorials/fantastic_dimensions/LiF.php">http://www.yambo-code.org/tutorials/fantastic_dimensions/LiF.php</a>　<br />
+-----<br />
+tasks<br />
+&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! ground-state calculation<br />
+&nbsp; 120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute momentum matrix elements<br />
+&nbsp; 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute RPA dielectric function with no local field contributions<br />
+&nbsp; 320&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute TDDFT dielectric function with local field contributions<br />
+<br />
+! long-range contribution kernel<br />
+fxctype<br />
+&nbsp; 200<br />
+<br />
+! parameter alpha for long-range contribution kernel<br />
+fxclrc<br />
+&nbsp; 5.5<br />
+<br />
+! G-vector cut-off of exchange-correlation kernel and response function<br />
+gmaxrf<br />
+&nbsp; 1.0<br />
+<br />
+swidth<br />
+&nbsp; 0.01<br />
+<br />
+nempty<br />
+&nbsp; 8<br />
+<br />
+lradstp<br />
+&nbsp; 2<br />
+<br />
+wplot<br />
+&nbsp; 800 100 0 : nwplot, ngrkf, nswplot<br />
+&nbsp; 0.0 1.5&nbsp;&nbsp; : wplot<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+EELS_TDDFT.OUT, EPSILON_TDDFT.OUT, EPSILON_11.OUT ( first real part, second imaginary part)<br />
+remove real part<br />
+gnuplot<br />
+set xrange[-0.5:40]<br />
+set xlabel &quot;Energy / eV&quot;<br />
+set ylabel &quot;Absorption / arb.unit&quot;<br />
+plot EELS_TDDFT.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+plot EPSILON_TDDFT.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+plot EPSILON_11.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>TDDFT - bootstrap (altanative BSE, parameter-free approximation)<br />
+-----<br />
+! Time-dependent density functional theory (TDDFT) optical spectrum of lithium<br />
+! fluoride. This material has a prominent excitonic peak, which is absent in the<br />
+! usual RPA dielectric function. The &#39;bootstrap&#39; TDDFT kernel is used, see:<br />
+! arXiv:1107.0199v1 [cond-mat.mtrl-sci]<br />
+tasks<br />
+&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! ground-state calculation<br />
+&nbsp; 120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute momentum matrix elements<br />
+&nbsp; 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute RPA dielectric function with no local field contributions<br />
+&nbsp; 320&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute TDDFT dielectric function with local field contributions<br />
+<br />
+! The scissor shift is taken to be the difference between the experimental gap,<br />
+! 14.2 eV [Phys. Rev. B 13, 5530 (1976)], and the LDA gap, 8.97 eV.<br />
+! scissor shift<br />
+scissor<br />
+&nbsp; 0.192<br />
+<br />
+xctype<br />
+&nbsp; 3<br />
+<br />
+! bootstrap kernel<br />
+fxctype<br />
+&nbsp; 210<br />
+<br />
+! smearing width<br />
+swidth<br />
+&nbsp; 0.01<br />
+<br />
+! G-vector cut-off of exchange-correlation kernel and response function<br />
+gmaxrf<br />
+&nbsp; 0.0<br />
+<br />
+nempty<br />
+&nbsp; 8<br />
+<br />
+lradstp<br />
+&nbsp; 2<br />
+<br />
+wplot<br />
+&nbsp; 800 100 0 : nwplot, ngrkf, nswplot<br />
+&nbsp; 0.0 1.5&nbsp;&nbsp; : wplot<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 8&nbsp; 8&nbsp; 8<br />
+<br />
+vkloff<br />
+&nbsp; 0.25 0.5 0.625<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>XAS, XMCD, XMLD<br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 120<br />
+&nbsp; 121<br />
+<br />
+sppath<br />
+&nbsp; &#39;./&#39;<br />
+<br />
+wplot<br />
+&nbsp; 400 200 0<br />
+&nbsp; 25.0 26.5<br />
+<br />
+! compute the xx, xy, and zz components<br />
+optcomp<br />
+&nbsp; 1 1<br />
+&nbsp; 1 2<br />
+&nbsp; 3 3<br />
+<br />
+spinpol<br />
+&nbsp; .true.<br />
+<br />
+! Spin-orbit coupling has to be included for 2p 1/2 - 2p 3/2 splitting<br />
+spinorb<br />
+&nbsp; .true.<br />
+<br />
+! use GGA-PBE<br />
+xctype<br />
+&nbsp; 20<br />
+<br />
+ngridk<br />
+&nbsp; 8 8 8<br />
+<br />
+! start with a large magnetic field and reduce at each iteration<br />
+bfieldc<br />
+&nbsp; 0.0&nbsp; 0.0&nbsp; 2.0<br />
+<br />
+reducebf<br />
+&nbsp; 0.8<br />
+<br />
+! large number of empty states necessary for &quot;continuum&quot; absorption<br />
+nempty<br />
+&nbsp; 20<br />
+<br />
+! a Lorentzian broadening is applied to the spectrum<br />
+swidth<br />
+&nbsp; 0.01<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell) + atom_lo.in + atom.in<br />
+<br />
+! Fe is cubic, hence the following relations hold for B || z:<br />
+! XAS = 1/3 * Im[ 2*eps_xx + eps_zz ] = 1/3 * Tr(Im[eps])<br />
+! XMCD = Im[ sigma_xy ] = -2*Re[ eps_xy ]<br />
+! XMLD = Im[ eps_xx - eps_zz ]<br />
+<br />
+※ k点グリッド数（ngridk）が少ないと、2p 1/2 と 2p 3/2 などの間に余分なピーク構造が現れる。vkloffを設定すると少ないk点グリッドで済む場合がある。<br />
+※ Mn2CoGa の場合は、Mn_loとCo_loを共に導入しないと計算で警告が表示される。<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>BSE<br />
+Theory: <a href="http://www.yambo-code.org/tutorials/fantastic_dimensions/LiF.php">http://www.yambo-code.org/tutorials/fantastic_dimensions/LiF.php</a>　<br />
+-----<br />
+! BSE optical spectrum of lithium fluoride. This material has a prominent<br />
+! excitonic peak, which is absent in the usual RPA dielectric function.<br />
+<br />
+tasks<br />
+&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! ground-state calculation<br />
+&nbsp; 120&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute momentum matrix elements<br />
+&nbsp; 121&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! compute RPA dielectric function with no local field contributions<br />
+&nbsp; 180&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! generate RPA dielectric function with local field contributions<br />
+&nbsp; 185&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! write BSE Hamiltonian matrix<br />
+&nbsp; 186&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! diagonalize BSE matrix<br />
+&nbsp; 187&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! generate BSE dielectric function<br />
+<br />
+! The scissor shift is taken to be the difference between the experimental gap,<br />
+! 14.2 eV [Phys. Rev. B 13, 5530 (1976)], and the LDA gap, 8.97 eV.<br />
+scissor<br />
+&nbsp; 0.21<br />
+<br />
+lmaxvr<br />
+&nbsp; 5<br />
+<br />
+! automatically determine the smallest possible G-vector grid<br />
+gmaxvr<br />
+&nbsp; 0.0<br />
+<br />
+! number of BSE valence states<br />
+nvbse<br />
+&nbsp; 3<br />
+<br />
+! number of BSE conduction states<br />
+ncbse<br />
+&nbsp; 4<br />
+<br />
+! G-vector cut-off of local contribution to RPA<br />
+gmaxrf<br />
+&nbsp; 3.0<br />
+<br />
+swidth<br />
+&nbsp; 0.005<br />
+<br />
+nempty<br />
+&nbsp; 8<br />
+<br />
+wplot<br />
+&nbsp; 800 100 0 : nwplot, ngrkf, nswplot<br />
+&nbsp; 0.0 1.5&nbsp;&nbsp; : wplot<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+EPSILON_11.OUT, EPSILON_BSE_11.OUT&nbsp; ( first real part, second imaginary part)<br />
+remove real part<br />
+gnuplot<br />
+set xrange[-0.5:40]<br />
+set xlabel &quot;Energy / eV&quot;<br />
+set ylabel &quot;Absorption / arb.unit&quot;<br />
+plot EPSILON_BSE_11.OUT u&nbsp; ($1*13.602*2):2&nbsp; w l<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>BSE-core<br />
+-----<br />
+tasks<br />
+&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! ground-state calculation<br />
+&nbsp; 120&nbsp;&nbsp;&nbsp; ! compute momentum matrix elements<br />
+&nbsp; 121&nbsp;&nbsp;&nbsp; ! compute RPA dielectric function without local field contributions<br />
+&nbsp; 180&nbsp;&nbsp;&nbsp; ! generate RPA dielectric function with local field contributions<br />
+&nbsp; 185&nbsp;&nbsp;&nbsp; ! write the BSE Hamiltonian matrix to file<br />
+&nbsp; 186&nbsp;&nbsp;&nbsp; ! diagonalise BSE matrix<br />
+&nbsp; 187&nbsp;&nbsp;&nbsp; ! compute BSE dielectric function<br />
+<br />
+! do not include valence bands right below E_F<br />
+nvbse<br />
+&nbsp; 0<br />
+<br />
+! additional valence bands for the BSE calculation - these are the six 2p states<br />
+! of Ca (check EIGVAL.OUT)<br />
+istxbse<br />
+&nbsp; 1<br />
+&nbsp; 2<br />
+&nbsp; 3<br />
+&nbsp; 4<br />
+&nbsp; 5<br />
+&nbsp; 6<br />
+<br />
+! number of conduction band states for the BSE calculation<br />
+ncbse<br />
+&nbsp; 20<br />
+<br />
+! large number of empty states required<br />
+nempty<br />
+&nbsp; 20<br />
+<br />
+! enhanced G-vector cut-off of local contribution to RPA<br />
+gmaxrf<br />
+&nbsp; 5.0<br />
+<br />
+! automatically determine the smallest possible G vector cutoff<br />
+gmaxvr<br />
+&nbsp; 0.0<br />
+<br />
+! the spectrum is very sensitive to the k-point mesh<br />
+ngridk<br />
+&nbsp; 2 2 2<br />
+<br />
+! use a symmetry breaking shift for more efficient use of the k-points<br />
+vkloff<br />
+&nbsp; 0.05 0.15 0.25<br />
+<br />
+! Broyden mixing for fast convergence<br />
+mixtype<br />
+&nbsp; 3<br />
+<br />
+! the energy window for the plot starts at zero by default;<br />
+! sufficient energy points needed<br />
+wplot<br />
+&nbsp; 5000 100 0<br />
+&nbsp; 0.0 14.0<br />
+<br />
+! include spin-orbit coupling for the 2p 1/2 - 2p 3/2 splitting<br />
+spinorb<br />
+&nbsp;.true.<br />
+<br />
+! about 0.27 eV Lorentzian broadening to simulate lifetime effects<br />
+swidth<br />
+&nbsp; 0.01<br />
+<br />
+sppath<br />
+&nbsp; &#39;./&#39;<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup) + atom_lo.in + atom.in<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>ELNES<br />
+No supercell is required because of the strong metallic screening of copper.<br />
+<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf</a><br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 140<br />
+<br />
+! spin-orbit coupling required for accurate description of deep valence states<br />
+spinorb<br />
+&nbsp;.true.<br />
+<br />
+! maximum allowed energy for the initial state in the double differential<br />
+! cross-section formula<br />
+emaxelnes<br />
+&nbsp;-30.0<br />
+<br />
+! energy range for ELNES plot<br />
+wplot<br />
+&nbsp; 500 200 1&nbsp;&nbsp;&nbsp; : nwplot, ngrkf, nswplot<br />
+&nbsp; 0.0 30.0 &nbsp;&nbsp; : wplot (suitable for the XX K edge)<br />
+<br />
+vecql<br />
+&nbsp; 0.0 0.0 0.1<br />
+<br />
+rgkmax<br />
+&nbsp; 8.0<br />
+<br />
+gmaxvr<br />
+&nbsp; 14.0<br />
+<br />
+nempty<br />
+&nbsp; 20<br />
+<br />
+ngridk<br />
+&nbsp; 10 10 10<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell) + atom+.in + atom.in<br />
+<br />
+vecql = momentum transfer q ?<br />
+<br />
+momentum trasfer q, polarization vector e<br />
+EELS Intensity <span class="st">&prop; </span>|<i|exp(iqr)|f>|^2<br />
+EELS Intensity <span class="st">&prop; </span>|<i|exp(iqr) er="">|^2<br />
+<br />
+The polarization vector in XAS plays the same role as momentum transfer in (nonrelativistic) ELNES within the dipole approximation.<br />
+qR &lt;&lt; 1 -&gt; exp(iqR) = 1 + iqR + ...<br />
+EELS Intensity <span class="st">&prop; </span>|<i|qr|f>|^2<br />
+XAS Intensity <span class="st">&prop; </span>|<i|<span class="st">&epsilon;R|F&gt;|^2<br />
+core-valence spectroscopies give information on the local DOS (vexause of <fai core="" val=""> ) of angular momentum character l + 1 or&nbsp; l -1<br />
+<br />
+<br />
+-------------------<br />
+■ hybrid functional<br />
+-----<br />
+! Hybrid functional using the native PBE functional.<br />
+! Example by Tyrel McQueen.<br />
+<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 5<br />
+<br />
+xctype<br />
+&nbsp;20<br />
+<br />
+hybrid<br />
+&nbsp;.true.<br />
+<br />
+!hybridc<br />
+<br />
+<br />
+! hybrid mixing parameter<br />
+hybmix<br />
+&nbsp;0.25<br />
+<br />
+nempty<br />
+&nbsp;8<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<br />
+-------------------<br />
+■ libxc<br />
+-----</fai></i|<span></i|qr|f></i|exp(iqr)></i|exp(iqr)|f></p>
+
+<p>! first run<br />
+tasks<br />
+&nbsp; 0<br />
+<br />
+! second run<br />
+! tasks<br />
+! 5<br />
+! 10<br />
+<br />
+! first run task=0 with PBE....&nbsp; not uncomment at seconf run<br />
+xctype<br />
+&nbsp; 100 101 130<br />
+<br />
+! second run<br />
+!xctype<br />
+! 100&nbsp; 0&nbsp; 428<br />
+<br />
+nempty<br />
+&nbsp;8<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+! libxc is selected with xctype(1)=100. The remaining two numbers are the<br />
+! exchange and correlation functionals, respectively - in this case Slater<br />
+! exchange and Perdew-Wang correlation. Refer to the file<br />
+! &#39;elk/src/libxc_funcs.f90&#39; for the complete list of functionals and<br />
+! associated numbers.<br />
+<br />
+!HSE03 = 427<br />
+xctype<br />
+&nbsp;100&nbsp; 0&nbsp; 427<br />
+<br />
+!HSE06 = 428<br />
+xctype<br />
+&nbsp;100&nbsp; 0&nbsp; 428<br />
+<br />
+ell-2.3.22/src/libxc_funcs.f90<br />
+-----<br />
+&nbsp; XC_LDA_X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 1&nbsp; !&nbsp; Exchange&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_WIGNER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 2&nbsp; !&nbsp; Wigner parametrization&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_RPA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 3&nbsp; !&nbsp; Random Phase Approximation&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_HL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 4&nbsp; !&nbsp; Hedin &amp; Lundqvist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_GL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 5&nbsp; !&nbsp; Gunnarson &amp; Lundqvist&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_XALPHA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 6&nbsp; !&nbsp; Slater Xalpha&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_VWN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 7&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (5)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_VWN_RPA&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 8&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (RPA)<br />
+&nbsp; XC_LDA_C_PZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp; 9&nbsp; !&nbsp; Perdew &amp; Zunger&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_PZ_MOD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 10&nbsp; !&nbsp; Perdew &amp; Zunger (Modified)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_OB_PZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 11&nbsp; !&nbsp; Ortiz &amp; Ballone (PZ)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_PW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 12&nbsp; !&nbsp; Perdew &amp; Wang&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_PW_MOD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 13&nbsp; !&nbsp; Perdew &amp; Wang (Modified)&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_OB_PW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 14&nbsp; !&nbsp; Ortiz &amp; Ballone (PW)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_2D_AMGB&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 15&nbsp; !&nbsp; Attaccalite et al&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_2D_PRM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 16&nbsp; !&nbsp; Pittalis, Rasanen &amp; Marques correlation in 2D<br />
+&nbsp; XC_LDA_C_vBH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 17&nbsp; !&nbsp; von Barth &amp; Hedin&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_1D_CSC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 18&nbsp; !&nbsp; Casula, Sorella, and Senatore 1D correlation&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_X_2D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 19&nbsp; !&nbsp; Exchange in 2D<br />
+&nbsp; XC_LDA_XC_TETER93&nbsp;&nbsp;&nbsp; =&nbsp; 20&nbsp; !&nbsp; Teter 93 parametrization&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_X_1D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 21&nbsp; !&nbsp; Exchange in 1D&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_ML1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 22&nbsp; !&nbsp; Modified LSD (version 1) of Proynov and Salahub<br />
+&nbsp; XC_LDA_C_ML2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 23&nbsp; !&nbsp; Modified LSD (version 2) of Proynov and Salahub<br />
+&nbsp; XC_LDA_C_GOMBAS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 24&nbsp; !&nbsp; Gombas parametrization&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_PW_RPA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 25&nbsp; !&nbsp; Perdew &amp; Wang fit of the RPA<br />
+&nbsp; XC_LDA_C_1D_LOOS&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 26&nbsp; !&nbsp; P-F Loos correlation LDA&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_RC04&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 27&nbsp; !&nbsp; Ragot-Cortona<br />
+&nbsp; XC_LDA_C_VWN_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 28&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (1)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_VWN_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 29&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (2)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_VWN_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 30&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (3)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_C_VWN_4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 31&nbsp; !&nbsp; Vosko, Wilk, &amp; Nussair (4)&nbsp; &nbsp;<br />
+&nbsp; XC_LDA_K_TF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 50&nbsp; !&nbsp; Thomas-Fermi kinetic energy functional<br />
+&nbsp; XC_LDA_K_LP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 51&nbsp; !&nbsp; Lee and Parr Gaussian ansatz&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_Q2D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 47&nbsp; !&nbsp; Chiodo et al &nbsp;<br />
+&nbsp; XC_GGA_X_Q2D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 48&nbsp; !&nbsp; Chiodo et al &nbsp;<br />
+&nbsp; XC_GGA_X_PBE_MOL&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 49&nbsp; !&nbsp; Del Campo, Gazquez, Trickey and Vela (PBE-like)<br />
+&nbsp; XC_GGA_K_TFVW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 52&nbsp; !&nbsp; Thomas-Fermi plus von Weiszaecker correction<br />
+&nbsp; XC_GGA_K_REVAPBEINT&nbsp; =&nbsp; 53&nbsp; !&nbsp; interpolated version of REVAPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_APBEINT&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 54&nbsp; !&nbsp; interpolated version of APBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_REVAPBE&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 55&nbsp; !&nbsp; revised APBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_AK13&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 56&nbsp; !&nbsp; Armiento &amp; Kuemmel 2013<br />
+&nbsp; XC_GGA_K_MEYER&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 57&nbsp; !&nbsp; Meyer,&nbsp; Wang, and Young<br />
+&nbsp; XC_GGA_X_LV_RPW86&nbsp;&nbsp;&nbsp; =&nbsp; 58&nbsp; !&nbsp; Berland and Hyldgaard<br />
+&nbsp; XC_GGA_X_PBE_TCA&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 59&nbsp; !&nbsp; PBE revised by Tognetti et al&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_PBEINT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 60&nbsp; !&nbsp; PBE for hybrid interfaces&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_ZPBEINT&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 61&nbsp; !&nbsp; spin-dependent gradient correction to PBEint&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_PBEINT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 62&nbsp; !&nbsp; PBE for hybrid interfaces&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_ZPBESOL&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 63&nbsp; !&nbsp; spin-dependent gradient correction to PBEsol&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_OPBE_D&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 65&nbsp; !&nbsp; oPBE_D functional of Goerigk and Grimme&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_OPWLYP_D&nbsp;&nbsp; =&nbsp; 66&nbsp; !&nbsp; oPWLYP-D functional of Goerigk and Grimme<br />
+&nbsp; XC_GGA_XC_OBLYP_D&nbsp;&nbsp;&nbsp; =&nbsp; 67&nbsp; !&nbsp; oBLYP-D functional of Goerigk and Grimme &nbsp;<br />
+&nbsp; XC_GGA_X_VMT84_GE&nbsp;&nbsp;&nbsp; =&nbsp; 68&nbsp; !&nbsp; VMT{8,4} with constraint satisfaction with mu = mu_GE &nbsp;<br />
+&nbsp; XC_GGA_X_VMT84_PBE&nbsp;&nbsp; =&nbsp; 69&nbsp; !&nbsp; VMT{8,4} with constraint satisfaction with mu = mu_PBE &nbsp;<br />
+&nbsp; XC_GGA_X_VMT_GE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 70&nbsp; !&nbsp; Vela, Medel, and Trickey with mu = mu_GE &nbsp;<br />
+&nbsp; XC_GGA_X_VMT_PBE&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 71&nbsp; !&nbsp; Vela, Medel, and Trickey with mu = mu_PBE<br />
+&nbsp; XC_GGA_C_N12_SX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 79&nbsp; !&nbsp; N12-SX functional from Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_N12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 80&nbsp; !&nbsp; N12 functional from Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_N12&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 82&nbsp; !&nbsp; N12 functional from Minnesota&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_VPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 83&nbsp; !&nbsp; variant PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_OP_XALPHA&nbsp;&nbsp; =&nbsp; 84&nbsp; !&nbsp; one-parameter progressive functional (XALPHA version) &nbsp;<br />
+&nbsp; XC_GGA_C_OP_G96&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 85&nbsp; !&nbsp; one-parameter progressive functional (G96 version)&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_OP_PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 86&nbsp; !&nbsp; one-parameter progressive functional (PBE version)&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_OP_B88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 87&nbsp; !&nbsp; one-parameter progressive functional (B88 version)&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_FT97&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 88&nbsp; !&nbsp; Filatov &amp; Thiel correlation<br />
+&nbsp; XC_GGA_C_SPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 89&nbsp; !&nbsp; PBE correlation to be used with the SSB exchange&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_SSB_SW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 90&nbsp; !&nbsp; Swarta, Sola and Bickelhaupt correction to PBE &nbsp;<br />
+&nbsp; XC_GGA_X_SSB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 91&nbsp; !&nbsp; Swarta, Sola and Bickelhaupt &nbsp;<br />
+&nbsp; XC_GGA_X_SSB_D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 92&nbsp; !&nbsp; Swarta, Sola and Bickelhaupt dispersion &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_407P&nbsp; =&nbsp; 93&nbsp; !&nbsp; HCTH/407+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_P76&nbsp;&nbsp; =&nbsp; 94&nbsp; !&nbsp; HCTH p=7/6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_P14&nbsp;&nbsp; =&nbsp; 95&nbsp; !&nbsp; HCTH p=1/4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_B97_GGA1&nbsp;&nbsp; =&nbsp; 96&nbsp; !&nbsp; Becke 97 GGA-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_A&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 97&nbsp; !&nbsp; HCTH-A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_BPCCAC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 98&nbsp; !&nbsp; BPCCAC (GRAC for the energy)<br />
+&nbsp; XC_GGA_C_REVTCA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 99&nbsp; !&nbsp; Tognetti, Cortona, Adamo (revised)<br />
+&nbsp; XC_GGA_C_TCA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 100&nbsp; !&nbsp; Tognetti, Cortona, Adamo<br />
+&nbsp; XC_GGA_X_PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 101&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof exchange&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_PBE_R&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 102&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof exchange (revised)&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_B86&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 103&nbsp; !&nbsp; Becke 86 Xalfa,beta,gamma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_HERMAN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 104&nbsp; !&nbsp; Herman et al original GGA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_B86_MGC&nbsp;&nbsp;&nbsp;&nbsp; = 105&nbsp; !&nbsp; Becke 86 Xalfa,beta,gamma (with mod. grad. correction)<br />
+&nbsp; XC_GGA_X_B88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 106&nbsp; !&nbsp; Becke 88<br />
+&nbsp; XC_GGA_X_G96&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 107&nbsp; !&nbsp; Gill 96&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_PW86&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 108&nbsp; !&nbsp; Perdew &amp; Wang 86<br />
+&nbsp; XC_GGA_X_PW91&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 109&nbsp; !&nbsp; Perdew &amp; Wang 91<br />
+&nbsp; XC_GGA_X_OPTX&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 110&nbsp; !&nbsp; Handy &amp; Cohen OPTX 01&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_DK87_R1&nbsp;&nbsp;&nbsp;&nbsp; = 111&nbsp; !&nbsp; dePristo &amp; Kress 87 (version R1)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_DK87_R2&nbsp;&nbsp;&nbsp;&nbsp; = 112&nbsp; !&nbsp; dePristo &amp; Kress 87 (version R2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_LG93&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 113&nbsp; !&nbsp; Lacks &amp; Gordon 93<br />
+&nbsp; XC_GGA_X_FT97_A&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 114&nbsp; !&nbsp; Filatov &amp; Thiel 97 (version A)<br />
+&nbsp; XC_GGA_X_FT97_B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 115&nbsp; !&nbsp; Filatov &amp; Thiel 97 (version B)<br />
+&nbsp; XC_GGA_X_PBE_SOL&nbsp;&nbsp;&nbsp;&nbsp; = 116&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof exchange (solids)&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_RPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 117&nbsp; !&nbsp; Hammer, Hansen &amp; Norskov (PBE-like)<br />
+&nbsp; XC_GGA_X_WC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 118&nbsp; !&nbsp; Wu &amp; Cohen<br />
+&nbsp; XC_GGA_X_MPW91&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 119&nbsp; !&nbsp; Modified form of PW91 by Adamo &amp; Barone<br />
+&nbsp; XC_GGA_X_AM05&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 120&nbsp; !&nbsp; Armiento &amp; Mattsson 05 exchange&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_PBEA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 121&nbsp; !&nbsp; Madsen (PBE-like)<br />
+&nbsp; XC_GGA_X_MPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 122&nbsp; !&nbsp; Adamo &amp; Barone modification to PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_XPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 123&nbsp; !&nbsp; xPBE reparametrization by Xu &amp; Goddard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_2D_B86_MGC&nbsp; = 124&nbsp; !&nbsp; Becke 86 MGC for 2D systems<br />
+&nbsp; XC_GGA_X_BAYESIAN&nbsp;&nbsp;&nbsp; = 125&nbsp; !&nbsp; Bayesian best fit for the enhancement factor<br />
+&nbsp; XC_GGA_X_PBE_JSJR&nbsp;&nbsp;&nbsp; = 126&nbsp; !&nbsp; JSJR reparametrization by Pedroza, Silva &amp; Capelle<br />
+&nbsp; XC_GGA_X_2D_B88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 127&nbsp; !&nbsp; Becke 88 in 2D<br />
+&nbsp; XC_GGA_X_2D_B86&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 128&nbsp; !&nbsp; Becke 86 Xalfa,beta,gamma&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_2D_PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 129&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof exchange in 2D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 130&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof correlation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 131&nbsp; !&nbsp; Lee, Yang &amp; Parr<br />
+&nbsp; XC_GGA_C_P86&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 132&nbsp; !&nbsp; Perdew 86<br />
+&nbsp; XC_GGA_C_PBE_SOL&nbsp;&nbsp;&nbsp;&nbsp; = 133&nbsp; !&nbsp; Perdew, Burke &amp; Ernzerhof correlation SOL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_PW91&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 134&nbsp; !&nbsp; Perdew &amp; Wang 91<br />
+&nbsp; XC_GGA_C_AM05&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 135&nbsp; !&nbsp; Armiento &amp; Mattsson 05 correlation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_XPBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 136&nbsp; !&nbsp; xPBE reparametrization by Xu &amp; Goddard&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_LM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 137&nbsp; !&nbsp; Langreth and Mehl correlation&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_PBE_JRGX&nbsp;&nbsp;&nbsp; = 138&nbsp; !&nbsp; JRGX reparametrization by Pedroza, Silva &amp; Capelle<br />
+&nbsp; XC_GGA_X_OPTB88_VDW&nbsp; = 139&nbsp; !&nbsp; Becke 88 reoptimized to be used with vdW functional of Dion et al<br />
+&nbsp; XC_GGA_X_PBEK1_VDW&nbsp;&nbsp; = 140&nbsp; !&nbsp; PBE reparametrization for vdW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_OPTPBE_VDW&nbsp; = 141&nbsp; !&nbsp; PBE reparametrization for vdW<br />
+&nbsp; XC_GGA_X_RGE2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 142&nbsp; !&nbsp; Regularized PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_RGE2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 143&nbsp; !&nbsp; Regularized PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_RPW86&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 144&nbsp; !&nbsp; refitted Perdew &amp; Wang 86<br />
+&nbsp; XC_GGA_X_KT1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 145&nbsp; !&nbsp; Keal and Tozer version 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_KT2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 146&nbsp; !&nbsp; Keal and Tozer version 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_WL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 147&nbsp; !&nbsp; Wilson &amp; Levy<br />
+&nbsp; XC_GGA_C_WI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 148&nbsp; !&nbsp; Wilson &amp; Ivanov<br />
+&nbsp; XC_GGA_X_MB88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 149&nbsp; !&nbsp; Modified Becke 88 for proton transfer<br />
+&nbsp; XC_GGA_X_SOGGA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 150&nbsp; !&nbsp; Second-order generalized gradient approximation<br />
+&nbsp; XC_GGA_X_SOGGA11&nbsp;&nbsp;&nbsp;&nbsp; = 151&nbsp; !&nbsp; Second-order generalized gradient approximation 2011<br />
+&nbsp; XC_GGA_C_SOGGA11&nbsp;&nbsp;&nbsp;&nbsp; = 152&nbsp; !&nbsp; Second-order generalized gradient approximation 2011<br />
+&nbsp; XC_GGA_C_WI0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 153&nbsp; !&nbsp; Wilson &amp; Ivanov initial version<br />
+&nbsp; XC_GGA_XC_TH1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 154&nbsp; !&nbsp; Tozer and Handy v. 1<br />
+&nbsp; XC_GGA_XC_TH2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 155&nbsp; !&nbsp; Tozer and Handy v. 2<br />
+&nbsp; XC_GGA_XC_TH3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 156&nbsp; !&nbsp; Tozer and Handy v. 3<br />
+&nbsp; XC_GGA_XC_TH4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 157&nbsp; !&nbsp; Tozer and Handy v. 4<br />
+&nbsp; XC_GGA_X_C09X&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 158&nbsp; !&nbsp; C09x to be used with the VdW of Rutgers-Chalmers&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_SOGGA11_X&nbsp;&nbsp; = 159&nbsp; !&nbsp; To be used with hyb_gga_x_SOGGA11-X &nbsp;<br />
+&nbsp; XC_GGA_X_LB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 160&nbsp; !&nbsp; van Leeuwen &amp; Baerends<br />
+&nbsp; XC_GGA_XC_HCTH_93&nbsp;&nbsp;&nbsp; = 161&nbsp; !&nbsp; HCTH functional fitted to&nbsp; 93 molecules &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_120&nbsp;&nbsp; = 162&nbsp; !&nbsp; HCTH functional fitted to 120 molecules &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_147&nbsp;&nbsp; = 163&nbsp; !&nbsp; HCTH functional fitted to 147 molecules &nbsp;<br />
+&nbsp; XC_GGA_XC_HCTH_407&nbsp;&nbsp; = 164&nbsp; !&nbsp; HCTH functional fitted to 407 molecules &nbsp;<br />
+&nbsp; XC_GGA_XC_EDF1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 165&nbsp; !&nbsp; Empirical functionals from Adamson, Gill, and Pople<br />
+&nbsp; XC_GGA_XC_XLYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 166&nbsp; !&nbsp; XLYP functional<br />
+&nbsp; XC_GGA_XC_B97&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 167&nbsp; !&nbsp; Becke 97&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_B97_1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 168&nbsp; !&nbsp; Becke 97-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_B97_2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 169&nbsp; !&nbsp; Becke 97-2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_B97_D&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 170&nbsp; !&nbsp; Grimme functional to be used with C6 vdW term<br />
+&nbsp; XC_GGA_XC_B97_K&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 171&nbsp; !&nbsp; Boese-Martin for Kinetics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_B97_3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 172&nbsp; !&nbsp; Becke 97-3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_PBE1W&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 173&nbsp; !&nbsp; Functionals fitted for water<br />
+&nbsp; XC_GGA_XC_MPWLYP1W&nbsp;&nbsp; = 174&nbsp; !&nbsp; Functionals fitted for water<br />
+&nbsp; XC_GGA_XC_PBELYP1W&nbsp;&nbsp; = 175&nbsp; !&nbsp; Functionals fitted for water<br />
+&nbsp; XC_GGA_XC_SB98_1a&nbsp;&nbsp;&nbsp; = 176&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1a&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_SB98_1b&nbsp;&nbsp;&nbsp; = 177&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1b&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_SB98_1c&nbsp;&nbsp;&nbsp; = 178&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1c&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_SB98_2a&nbsp;&nbsp;&nbsp; = 179&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2a&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_SB98_2b&nbsp;&nbsp;&nbsp; = 180&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2b&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_XC_SB98_2c&nbsp;&nbsp;&nbsp; = 181&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2c&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_LBM&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 182&nbsp; !&nbsp; van Leeuwen &amp; Baerends modified<br />
+&nbsp; XC_GGA_X_OL2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 183&nbsp; !&nbsp; Exchange form based on Ou-Yang and Levy v.2<br />
+&nbsp; XC_GGA_X_APBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 184&nbsp; !&nbsp; mu fixed from the semiclassical neutral atom&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_APBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 185&nbsp; !&nbsp; mu fixed from the semiclassical neutral atom&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_C_APBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 186&nbsp; !&nbsp; mu fixed from the semiclassical neutral atom&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_TW1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 187&nbsp; !&nbsp; Tran and Wesolowski set 1 (Table II)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_TW2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 188&nbsp; !&nbsp; Tran and Wesolowski set 2 (Table II)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_TW3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 189&nbsp; !&nbsp; Tran and Wesolowski set 3 (Table II)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_TW4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 190&nbsp; !&nbsp; Tran and Wesolowski set 4 (Table II)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_X_HTBS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 191&nbsp; !&nbsp; Haas, Tran, Blaha, and Schwarz &nbsp;<br />
+&nbsp; XC_GGA_X_AIRY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 192&nbsp; !&nbsp; Constantin et al based on the Airy gas<br />
+&nbsp; XC_GGA_X_LAG&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 193&nbsp; !&nbsp; Local Airy Gas<br />
+&nbsp; XC_GGA_XC_MOHLYP&nbsp;&nbsp;&nbsp;&nbsp; = 194&nbsp; !&nbsp; Functional for organometallic chemistry<br />
+&nbsp; XC_GGA_XC_MOHLYP2&nbsp;&nbsp;&nbsp; = 195&nbsp; !&nbsp; Functional for barrier heights<br />
+&nbsp; XC_GGA_XC_TH_FL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 196&nbsp; !&nbsp; Tozer and Handy v. FL &nbsp;<br />
+&nbsp; XC_GGA_XC_TH_FC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 197&nbsp; !&nbsp; Tozer and Handy v. FC &nbsp;<br />
+&nbsp; XC_GGA_XC_TH_FCFO&nbsp;&nbsp;&nbsp; = 198&nbsp; !&nbsp; Tozer and Handy v. FCFO<br />
+&nbsp; XC_GGA_XC_TH_FCO&nbsp;&nbsp;&nbsp;&nbsp; = 199&nbsp; !&nbsp; Tozer and Handy v. FCO<br />
+&nbsp; XC_GGA_C_OPTC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 200&nbsp; !&nbsp; Optimized correlation functional of Cohen and Handy<br />
+&nbsp; XC_GGA_K_VW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 500&nbsp; !&nbsp; von Weiszaecker functional<br />
+&nbsp; XC_GGA_K_GE2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 501&nbsp; !&nbsp; Second-order gradient expansion (l = 1/9)<br />
+&nbsp; XC_GGA_K_GOLDEN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 502&nbsp; !&nbsp; TF-lambda-vW form by Golden (l = 13/45)<br />
+&nbsp; XC_GGA_K_YT65&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 503&nbsp; !&nbsp; TF-lambda-vW form by Yonei and Tomishima (l = 1/5)<br />
+&nbsp; XC_GGA_K_BALTIN&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 504&nbsp; !&nbsp; TF-lambda-vW form by Baltin (l = 5/9)<br />
+&nbsp; XC_GGA_K_LIEB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 505&nbsp; !&nbsp; TF-lambda-vW form by Lieb (l = 0.185909191)<br />
+&nbsp; XC_GGA_K_ABSP1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 506&nbsp; !&nbsp; gamma-TFvW form by Acharya et al [g = 1 - 1.412/N^(1/3)]<br />
+&nbsp; XC_GGA_K_ABSP2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 507&nbsp; !&nbsp; gamma-TFvW form by Acharya et al [g = 1 - 1.332/N^(1/3)]<br />
+&nbsp; XC_GGA_K_GR&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 508&nbsp; !&nbsp; gamma-TFvW form by G&aacute;zquez and Robles<br />
+&nbsp; XC_GGA_K_LUDENA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 509&nbsp; !&nbsp; gamma-TFvW form by Lude&ntilde;a<br />
+&nbsp; XC_GGA_K_GP85&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 510&nbsp; !&nbsp; gamma-TFvW form by Ghosh and Parr<br />
+&nbsp; XC_GGA_K_PEARSON&nbsp;&nbsp;&nbsp;&nbsp; = 511&nbsp; !&nbsp; Pearson<br />
+&nbsp; XC_GGA_K_OL1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 512&nbsp; !&nbsp; Ou-Yang and Levy v.1<br />
+&nbsp; XC_GGA_K_OL2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 513&nbsp; !&nbsp; Ou-Yang and Levy v.2<br />
+&nbsp; XC_GGA_K_FR_B88&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 514&nbsp; !&nbsp; Fuentealba &amp; Reyes (B88 version)<br />
+&nbsp; XC_GGA_K_FR_PW86&nbsp;&nbsp;&nbsp;&nbsp; = 515&nbsp; !&nbsp; Fuentealba &amp; Reyes (PW86 version)<br />
+&nbsp; XC_GGA_K_DK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 516&nbsp; !&nbsp; DePristo and Kress&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_PERDEW&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 517&nbsp; !&nbsp; Perdew&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_VSK&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 518&nbsp; !&nbsp; Vitos, Skriver, and Kollar&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_GGA_K_VJKS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 519&nbsp; !&nbsp; Vitos, Johansson, Kollar, and Skriver<br />
+&nbsp; XC_GGA_K_ERNZERHOF&nbsp;&nbsp; = 520&nbsp; !&nbsp; Ernzerhof<br />
+&nbsp; XC_GGA_K_LC94&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 521&nbsp; !&nbsp; Lembarki &amp; Chermette<br />
+&nbsp; XC_GGA_K_LLP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 522&nbsp; !&nbsp; Lee, Lee &amp; Parr<br />
+&nbsp; XC_GGA_K_THAKKAR&nbsp;&nbsp;&nbsp;&nbsp; = 523&nbsp; !&nbsp; Thakkar 1992<br />
+&nbsp; XC_GGA_X_WPBEH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 524&nbsp; !&nbsp; short-range version of the PBE<br />
+&nbsp; XC_GGA_X_HJS_PBE&nbsp;&nbsp;&nbsp;&nbsp; = 525&nbsp; !&nbsp; HJS screened exchange PBE version<br />
+&nbsp; XC_GGA_X_HJS_PBE_SOL = 526&nbsp; !&nbsp; HJS screened exchange PBE_SOL version<br />
+&nbsp; XC_GGA_X_HJS_B88&nbsp;&nbsp;&nbsp;&nbsp; = 527&nbsp; !&nbsp; HJS screened exchange B88 version<br />
+&nbsp; XC_GGA_X_HJS_B97X&nbsp;&nbsp;&nbsp; = 528&nbsp; !&nbsp; HJS screened exchange B97x version<br />
+&nbsp; XC_GGA_X_ITYH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 529&nbsp; !&nbsp; short-range recipe for exchange GGA functionals<br />
+&nbsp; XC_GGA_X_SFAT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 530&nbsp; !&nbsp; short-range recipe for exchange GGA functionals<br />
+&nbsp; XC_HYB_GGA_X_N12_SX&nbsp; =&nbsp; 81&nbsp; !&nbsp; N12-SX functional from Minnesota<br />
+&nbsp; XC_HYB_GGA_XC_B3PW91 = 401&nbsp; !&nbsp; The original (ACM) hybrid of Becke&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B3LYP&nbsp; = 402&nbsp; !&nbsp; The (in)famous B3LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B3P86&nbsp; = 403&nbsp; !&nbsp; Perdew 86 hybrid similar to B3PW91&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_O3LYP&nbsp; = 404&nbsp; !&nbsp; hybrid using the optx functional<br />
+&nbsp; XC_HYB_GGA_XC_mPW1K&nbsp; = 405&nbsp; !&nbsp; mixture of mPW91 and PW91 optimized for kinetics<br />
+&nbsp; XC_HYB_GGA_XC_PBEH&nbsp;&nbsp; = 406&nbsp; !&nbsp; aka PBE0 or PBE1PBE<br />
+&nbsp; XC_HYB_GGA_XC_B97&nbsp;&nbsp;&nbsp; = 407&nbsp; !&nbsp; Becke 97&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B97_1&nbsp; = 408&nbsp; !&nbsp; Becke 97-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B97_2&nbsp; = 410&nbsp; !&nbsp; Becke 97-2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_X3LYP&nbsp; = 411&nbsp; !&nbsp; maybe the best hybrid<br />
+&nbsp; XC_HYB_GGA_XC_B1WC&nbsp;&nbsp; = 412&nbsp; !&nbsp; Becke 1-parameter mixture of WC and PBE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B97_K&nbsp; = 413&nbsp; !&nbsp; Boese-Martin for Kinetics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B97_3&nbsp; = 414&nbsp; !&nbsp; Becke 97-3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_MPW3PW = 415&nbsp; !&nbsp; mixture with the mPW functional&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B1LYP&nbsp; = 416&nbsp; !&nbsp; Becke 1-parameter mixture of B88 and LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_B1PW91 = 417&nbsp; !&nbsp; Becke 1-parameter mixture of B88 and PW91&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_mPW1PW = 418&nbsp; !&nbsp; Becke 1-parameter mixture of mPW91 and PW91&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_MPW3LYP = 419&nbsp; !&nbsp; mixture of mPW and LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_1a = 420&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1a&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_1b = 421&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1b&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_1c = 422&nbsp; !&nbsp; Schmider-Becke 98 parameterization 1c&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_2a = 423&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2a&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_2b = 424&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2b&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_SB98_2c = 425&nbsp; !&nbsp; Schmider-Becke 98 parameterization 2c&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_X_SOGGA11_X = 426&nbsp; !&nbsp; Hybrid based on SOGGA11 form<br />
+&nbsp; XC_HYB_GGA_XC_HSE03&nbsp; = 427&nbsp; !&nbsp; the 2003 version of the screened hybrid HSE<br />
+&nbsp; XC_HYB_GGA_XC_HSE06&nbsp; = 428&nbsp; !&nbsp; the 2006 version of the screened hybrid HSE<br />
+&nbsp; XC_HYB_GGA_XC_HJS_PBE = 429&nbsp; !&nbsp; HJS hybrid screened exchange PBE version<br />
+&nbsp; XC_HYB_GGA_XC_HJS_PBE_SOL = 430&nbsp; !&nbsp; HJS hybrid screened exchange PBE_SOL version<br />
+&nbsp; XC_HYB_GGA_XC_HJS_B88 = 431&nbsp; !&nbsp; HJS hybrid screened exchange B88 version<br />
+&nbsp; XC_HYB_GGA_XC_HJS_B97X = 432&nbsp; !&nbsp; HJS hybrid screened exchange B97x version<br />
+&nbsp; XC_HYB_GGA_XC_CAM_B3LYP = 433&nbsp; !&nbsp; CAM version of B3LYP<br />
+&nbsp; XC_HYB_GGA_XC_TUNED_CAM_B3LYP = 434&nbsp; !&nbsp; CAM version of B3LYP tunes for excitations<br />
+&nbsp; XC_HYB_GGA_XC_BHANDH = 435&nbsp; !&nbsp; Becke half-and-half&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_BHANDHLYP = 436&nbsp; !&nbsp; Becke half-and-half with B88 exchange&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_MB3LYP_RC04 = 437&nbsp; !&nbsp; B3LYP with RC04 LDA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_MPWLYP1M = 453&nbsp; !&nbsp; MPW with 1 par. for metals/LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_REVB3LYP = 454&nbsp; !&nbsp; Revised B3LYP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_GGA_XC_CAMY_BLYP = 455&nbsp; !&nbsp; BLYP with yukawa screening<br />
+&nbsp; XC_HYB_GGA_XC_PBE0_13 = 456&nbsp; !&nbsp; PBE0-1/3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_MGGA_XC_OTPSS_D&nbsp;&nbsp; =&nbsp; 64&nbsp; !&nbsp; oTPSS_D functional of Goerigk and Grimme&nbsp; &nbsp;<br />
+&nbsp; XC_MGGA_C_CS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 72&nbsp; !&nbsp; Colle and Salvetti<br />
+&nbsp; XC_MGGA_C_MN12_SX&nbsp;&nbsp;&nbsp; =&nbsp; 73&nbsp; !&nbsp; MN12-SX functional of Minnesota<br />
+&nbsp; XC_MGGA_C_MN12_L&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 74&nbsp; !&nbsp; MN12-L functional of Minnesota &nbsp;<br />
+&nbsp; XC_MGGA_C_M11_L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 75&nbsp; !&nbsp; M11-L functional of Minnesota&nbsp; &nbsp;<br />
+&nbsp; XC_MGGA_C_M11&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 76&nbsp; !&nbsp; M11 functional of Minnesota&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_MGGA_C_M08_SO&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 77&nbsp; !&nbsp; M08-SO functional of Minnesota &nbsp;<br />
+&nbsp; XC_MGGA_C_M08_HX&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp; 78&nbsp; !&nbsp; M08-HX functional of Minnesota &nbsp;<br />
+&nbsp; XC_MGGA_X_LTA&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 201&nbsp; !&nbsp; Local tau approximation of Ernzerhof &amp; Scuseria<br />
+&nbsp; XC_MGGA_X_TPSS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 202&nbsp; !&nbsp; Perdew, Tao, Staroverov &amp; Scuseria exchange<br />
+&nbsp; XC_MGGA_X_M06_L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 203&nbsp; !&nbsp; M06-Local functional of Minnesota<br />
+&nbsp; XC_MGGA_X_GVT4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 204&nbsp; !&nbsp; GVT4 from Van Voorhis and Scuseria<br />
+&nbsp; XC_MGGA_X_TAU_HCTH&nbsp;&nbsp; = 205&nbsp; !&nbsp; tau-HCTH from Boese and Handy<br />
+&nbsp; XC_MGGA_X_BR89&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 206&nbsp; !&nbsp; Becke-Roussel 89 &nbsp;<br />
+&nbsp; XC_MGGA_X_BJ06&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 207&nbsp; !&nbsp; Becke &amp; Johnson correction to Becke-Roussel 89 &nbsp;<br />
+&nbsp; XC_MGGA_X_TB09&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 208&nbsp; !&nbsp; Tran &amp; Blaha correction to Becke &amp; Johnson &nbsp;<br />
+&nbsp; XC_MGGA_X_RPP09&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 209&nbsp; !&nbsp; Rasanen, Pittalis, and Proetto correction to Becke &amp; Johnson &nbsp;<br />
+&nbsp; XC_MGGA_X_2D_PRHG07&nbsp; = 210&nbsp; !&nbsp; Pittalis, Rasanen, Helbig, Gross Exchange Functional<br />
+&nbsp; XC_MGGA_X_2D_PRHG07_PRP10 = 211&nbsp; !&nbsp; PRGH07 with PRP10 correction<br />
+&nbsp; XC_MGGA_X_REVTPSS&nbsp;&nbsp;&nbsp; = 212&nbsp; !&nbsp; revised Perdew, Tao, Staroverov &amp; Scuseria exchange<br />
+&nbsp; XC_MGGA_X_PKZB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 213&nbsp; !&nbsp; Perdew, Kurth, Zupan, and Blaha<br />
+&nbsp; XC_MGGA_X_M05&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 214&nbsp; !&nbsp; M05 functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M05_2X&nbsp;&nbsp;&nbsp;&nbsp; = 215&nbsp; !&nbsp; M05-2X functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M06_HF&nbsp;&nbsp;&nbsp;&nbsp; = 216&nbsp; !&nbsp; M06-HF functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M06&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 217&nbsp; !&nbsp; M06 functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M06_2X&nbsp;&nbsp;&nbsp;&nbsp; = 218&nbsp; !&nbsp; M06-2X functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M08_HX&nbsp;&nbsp;&nbsp;&nbsp; = 219&nbsp; !&nbsp; M08-HX functional of Minnesota<br />
+&nbsp; XC_MGGA_X_M08_SO&nbsp;&nbsp;&nbsp;&nbsp; = 220&nbsp; !&nbsp; M08-SO functional of Minnesota<br />
+&nbsp; XC_MGGA_X_MS0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 221&nbsp; !&nbsp; MS exchange of Sun, Xiao, and Ruzsinszky<br />
+&nbsp; XC_MGGA_X_MS1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 222&nbsp; !&nbsp; MS1 exchange of Sun, et al<br />
+&nbsp; XC_MGGA_X_MS2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 223&nbsp; !&nbsp; MS2 exchange of Sun, et al<br />
+&nbsp; XC_MGGA_X_MS2H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 224&nbsp; !&nbsp; MS2 hybrid exchange of Sun, et al<br />
+&nbsp; XC_MGGA_X_M11_L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 226&nbsp; !&nbsp; M11-L functional of Minnesota<br />
+&nbsp; XC_MGGA_X_MN12_L&nbsp;&nbsp;&nbsp;&nbsp; = 227&nbsp; !&nbsp; MN12-L functional from Minnesota &nbsp;<br />
+&nbsp; XC_MGGA_X_MN12_SX&nbsp;&nbsp;&nbsp; = 228&nbsp; !&nbsp; MN12-SX functional from Minnesota<br />
+&nbsp; XC_MGGA_C_CC06&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 229&nbsp; !&nbsp; Cancio and Chou 2006<br />
+&nbsp; XC_MGGA_X_MK00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 230&nbsp; !&nbsp; Exchange for accurate virtual orbital energies<br />
+&nbsp; XC_MGGA_C_TPSS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 231&nbsp; !&nbsp; Perdew, Tao, Staroverov &amp; Scuseria correlation<br />
+&nbsp; XC_MGGA_C_VSXC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 232&nbsp; !&nbsp; VSxc from Van Voorhis and Scuseria (correlation part)<br />
+&nbsp; XC_MGGA_C_M06_L&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 233&nbsp; !&nbsp; M06-Local functional of Minnesota<br />
+&nbsp; XC_MGGA_C_M06_HF&nbsp;&nbsp;&nbsp;&nbsp; = 234&nbsp; !&nbsp; M06-HF functional of Minnesota<br />
+&nbsp; XC_MGGA_C_M06&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 235&nbsp; !&nbsp; M06 functional of Minnesota<br />
+&nbsp; XC_MGGA_C_M06_2X&nbsp;&nbsp;&nbsp;&nbsp; = 236&nbsp; !&nbsp; M06-2X functional of Minnesota<br />
+&nbsp; XC_MGGA_C_M05&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 237&nbsp; !&nbsp; M05 functional of Minnesota<br />
+&nbsp; XC_MGGA_C_M05_2X&nbsp;&nbsp;&nbsp;&nbsp; = 238&nbsp; !&nbsp; M05-2X functional of Minnesota<br />
+&nbsp; XC_MGGA_C_PKZB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 239&nbsp; !&nbsp; Perdew, Kurth, Zupan, and Blaha<br />
+&nbsp; XC_MGGA_C_BC95&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 240&nbsp; !&nbsp; Becke correlation 95<br />
+&nbsp; XC_MGGA_C_REVTPSS&nbsp;&nbsp;&nbsp; = 241&nbsp; !&nbsp; revised TPSS correlation<br />
+&nbsp; XC_MGGA_XC_TPSSLYP1W = 242&nbsp; !&nbsp; Functionals fitted for water<br />
+&nbsp; XC_MGGA_X_MK00B&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 243&nbsp; !&nbsp; Exchange for accurate virtual orbital energies (v. B)<br />
+&nbsp; XC_MGGA_X_BLOC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = 244&nbsp; !&nbsp; functional with balanced localization<br />
+&nbsp; XC_MGGA_X_MODTPSS&nbsp;&nbsp;&nbsp; = 245&nbsp; !&nbsp; Modified Perdew, Tao, Staroverov &amp; Scuseria exchange<br />
+&nbsp; XC_HYB_MGGA_X_M11&nbsp;&nbsp;&nbsp; = 225&nbsp; !&nbsp; M11 functional of Minnesota<br />
+&nbsp; XC_HYB_MGGA_XC_M05&nbsp;&nbsp; = 438&nbsp; !&nbsp; M05 functional of Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_M05_2X = 439&nbsp; !&nbsp; M05-2X functional of Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_B88B95 = 440&nbsp; !&nbsp; Mixture of B88 with BC95 (B1B95)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_B86B95 = 441&nbsp; !&nbsp; Mixture of B86 with BC95&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_PW86B95 = 442&nbsp; !&nbsp; Mixture of PW86 with BC95&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_BB1K&nbsp; = 443&nbsp; !&nbsp; Mixture of B88 with BC95 from Zhao and Truhlar&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_M06_HF = 444&nbsp; !&nbsp; M06-HF functional of Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_MPW1B95 = 445&nbsp; !&nbsp; Mixture of mPW91 with BC95 from Zhao and Truhlar<br />
+&nbsp; XC_HYB_MGGA_XC_MPWB1K = 446&nbsp; !&nbsp; Mixture of mPW91 with BC95 for kinetics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_X1B95 = 447&nbsp; !&nbsp; Mixture of X with BC95&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_XB1K&nbsp; = 448&nbsp; !&nbsp; Mixture of X with BC95 for kinetics&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_M06&nbsp;&nbsp; = 449&nbsp; !&nbsp; M06 functional of Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_M06_2X = 450&nbsp; !&nbsp; M06-2X functional of Minnesota&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_PW6B95 = 451&nbsp; !&nbsp; Mixture of PW91 with BC95 from Zhao and Truhlar &nbsp;<br />
+&nbsp; XC_HYB_MGGA_XC_PWB6K = 452&nbsp; !&nbsp; Mixture of PW91 with BC95 from Zhao and Truhlar for kinetics<br />
+&nbsp; XC_HYB_MGGA_XC_TPSSH = 457&nbsp; !&nbsp;&nbsp;&nbsp;&nbsp; TPSS hybrid<br />
+&nbsp; XC_HYB_MGGA_XC_REVTPSSH = 458&nbsp; !&nbsp; revTPSS hybrid<br />
+-----<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>OEP + band<br />
+-----<br />
+tasks<br />
+&nbsp; 0<br />
+&nbsp; 20<br />
+<br />
+! exact exchange only (no correlation)<br />
+xctype<br />
+&nbsp;-1<br />
+<br />
+! large number of OEP iterations to converge the gap<br />
+maxitoep<br />
+&nbsp;200<br />
+<br />
+! large number of empty states required<br />
+nempty<br />
+&nbsp;15<br />
+<br />
+sppath<br />
+&nbsp; &#39;../../species/&#39;<br />
+<br />
+ngridk<br />
+&nbsp; 4&nbsp; 4&nbsp; 4<br />
+<br />
+! These are the vertices to be joined for the band structure plot<br />
+plot1d<br />
+&nbsp; 7 200&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nvp1d, npp1d<br />
+&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp; 1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : vlvp1d, Gamma<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.5&nbsp;&nbsp; 1.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : X<br />
+&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Gamma<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : L<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.5&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : X<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.25 -0.25&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : W<br />
+&nbsp; 0.5&nbsp;&nbsp; 0.0&nbsp;&nbsp; 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : L<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+<br />
+-------------------<br />
+■<span style="font-weight: bold;"> </span>Phonon (???)<br />
+-----<br />
+-----<br />
++ GEOMETRY.OUT(cif2cell or spacegroup)<br />
+<br />
+-------------------<br />
+------------------------------------------------------------------------------<br />
+◆ Core-hole<br />
+1. rmt, sprmax<br />
+&nbsp; rmt -&gt; around 0.8 - 0.83333 times (heavy element{ Lanthanoids and Actinoids} 2/3 times)<br />
+&nbsp; &nbsp; (N 0.8, Cu 0.83, Pu 0.66)<br />
+&nbsp; sprmax -&gt; around 0.72 - 0.86 times<br />
+&nbsp; &nbsp; (N 0.77, Cu 0.86, Pu 0.72)<br />
+2. spocc, spcore<br />
+&nbsp; ---<br />
+&nbsp; ! strong metallic screening effect case, e.g. Cu<br />
+&nbsp; spocc 2.00000 -&gt; 1.50000 (core)<br />
+&nbsp; spocc +0.50000 (core -&gt; condcution bands)<br />
+&nbsp;<br />
+&nbsp; ! weak screening effect case, e.g. MnO<br />
+&nbsp; spocc 2.00000 -&gt; 1.00000 (core)<br />
+&nbsp; spocc +1.00000 (core -&gt; condcution bands)<br />
+&nbsp; ---<br />
+&nbsp; spcore F -&gt; T at core-hole state in core state<br />
+&nbsp; spcore T -&gt; F above core-hole state in core state<br />
+3. nlorb<br />
+&nbsp; nlorb+3 , (heavy element{Lanthanoids and Actinoids}: nlorb+0)<br />
+4. lorbe0, lorbdm, lorbve<br />
+&nbsp; lorbve T when lorbe0 &lt; 0.0<br />
+&nbsp; ----- transition atom (local orbitals setting)<br />
+&nbsp;add<br />
+&nbsp; &nbsp;&nbsp; 3&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (f orbit), lorbord<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+<br />
+&nbsp; &nbsp;&nbsp; 0&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (s orbit, unoccupied level), lorbord<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;-4.0000&nbsp;&nbsp; 0&nbsp; T <span class="st">:threshold energy (Ha unit) at </span>3s Absorption (e.g. Cu 3s). see&nbsp; Table 1-1 in X-Ray data booklet.<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : p orbit (unoccupied level)<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+-34.0000&nbsp;&nbsp; 0&nbsp; T <span class="st">:threshold energy (Ha unit) at </span>2pAbsorption (e.g. Cu 2p1/2). see&nbsp; Table 1-1 in X-Ray data booklet.<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : s orbit (unoccupied level)<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+-41.0000&nbsp;&nbsp; 0&nbsp; T <span class="st">:threshold energy (Ha unit) at </span>2s Absorption (e.g. Cu 2s). see&nbsp; Table 1-1 in X-Ray data booklet.<br />
+&nbsp; ----- transition atom (local orbitals setting)<br />
+&nbsp; lorbord = number of line (lorbe0, lorbdm, lorbve)<br />
+<br />
+&nbsp; ----- Lanthanoids and Actinoids (local orbitals setting)<br />
+&nbsp; remove<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (f orbit), lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -0.0579&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;<br />
+&nbsp;add<br />
+&nbsp; &nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (d orbit, unoccupied level), lorbord<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+-30.0000&nbsp;&nbsp; 0&nbsp; T&nbsp; <span class="st">:threshold energy (Ha unit) at </span>3d Absorption (e.g. La 3d5/2). see&nbsp; Table 1-1 in X-Ray data booklet.<br />
+&nbsp; ----- Lanthanoids and Actinoids (local orbitals setting)<br />
+------------------------------------------------------------------------------<br />
+◆ Z+1<br />
+1. spzn<br />
+&nbsp; spzn -1<br />
+2. spmass<br />
+&nbsp; - 0.07292<br />
+3. rmt, sprmax<br />
+&nbsp; rmt -&gt; around 0.8 - 0.83333 times (heavy element 2/3 times) (N 0.8, Cu 0.83, Pu 0.66)<br />
+&nbsp; sprmax -&gt; around 0.72 - 0.86 times (N 0.77, Cu 0.86, Pu 0.72)<br />
+4. spocc, spcore<br />
+&nbsp; ---<br />
+&nbsp; spocc +1.00000 (valence -&gt; condcution bands)<br />
+&nbsp; ---<br />
+&nbsp; spcore F -&gt; T at core-hole state in core state<br />
+&nbsp; spcore T -&gt; F above core-hole state in core state<br />
+&nbsp; T : if state is in the core and therefore treated with the Dirac equation in the spherical part of the muffin-tin Kohn-Sham potential.<br />
+5. nlorb<br />
+&nbsp; +3 , (heavy element +0)<br />
+6. lorbe0, lorbdm, lorbve<br />
+&nbsp; lorbve T when lorbe0 &lt; 0.0<br />
+&nbsp; ----- (local orbitals setting)<br />
+&nbsp;add<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 2 &nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : d orbit<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 0 &nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : s orbit (unoccupied level)<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+-20.0000&nbsp;&nbsp; 0&nbsp; T&nbsp; <span class="st">:threshold energy (Ha unit) at </span>1s Absorption (e.g. N 1s -&gt; O 1s). see&nbsp; Table 1-1 in X-Ray data booklet.<br />
+&nbsp; ----- (local orbitals setting)<br />
+&nbsp; lorbl, lorbord<br />
+&nbsp; Respectively, the angular momentum l of the local-orbital; and the order of the radial derivative which goes to zero at the muffin-tin surface.<br />
+<br />
+&nbsp; lorbe0, lorbdm, lorbve<br />
+&nbsp; Respectively, the default local-orbital linearisation energy; the order of the energy derivative of the local-orbital radial function; and .T. if the linearisation energy is allowed to vary.<br />
+------------------------------------------------------------------------------<br />
+◆&nbsp; ?_lo (XAS, XMCD, XMLD)<br />
+1. rmt, sprmax<br />
+&nbsp; rmt -&gt; around 0.8 - 0.83333 times (heavy element{ Lanthanoids and Actinoids} 2/3 times)<br />
+&nbsp; &nbsp; (N 0.8, Cu 0.83, Pu 0.66)<br />
+&nbsp; sprmax -&gt; around 0.72 - 0.86 times<br />
+&nbsp; &nbsp; (N 0.77, Cu 0.86, Pu 0.72)<br />
+2. spcore T -&gt; F (exitation core)<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+3. nlorb + 1<br />
+----- transition atom (local orbitals setting)<br />
+add<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (p orbit core), lorbord<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+-26.0000&nbsp;&nbsp; 0&nbsp; T&nbsp;&nbsp;&nbsp; :&nbsp; <span class="st">threshold energy (Ha unit) at </span>2p3/2 Absorption, see&nbsp; Table 1-1 in X-Ray data booklet. wplot = |this value|-0.5&nbsp; |this value|+0.5<br />
+----- transition atom (local orbitals setting)<br />
+4. BSE core case (need 6x6x6 or more kpoint)<br />
+----- (local orbitals{unoccupied state} setting)<br />
+add<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl (d state, unoccupied state) , lorbord<br />
+&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp; 0.5000&nbsp;&nbsp; 0&nbsp; T<br />
+----- (local orbitals{unoccupied state} setting)<br />
+<br />
+--BSE calculation MEMO<br />
+the calculation of the 2p 1/2 - 2p 3/2 (L2 / L3) x-ray absorption spectra<br />
+additional local orbitals are added to allow an accurate description of the unoccupied 3d states<br />
+Look at the imaginary part of the spectrum (EPSILON_BSE_11.OUT)<br />
+the independent-particle calculation (EPSILON_11.OUT)<br />
+<br />
+------------------------------------------------------------------------------<br />
+◆ Benchmark<br />
+◆ gfortran&nbsp; + OpenMP + OpenMPI + ATLAS + FFTW(Netlib)<br />
+CentOS 6.4 (Final)<br />
+Intel(R) Core(TM) i7-2600K CPU @ 3.40GHz<br />
+Memory 31.1 GiB<br />
+(See examples)<br />
+<br />
+■<span style="font-weight: bold;"> </span>SCF calculation<br />
+&nbsp; Al<br />
+■<span style="font-weight: bold;"> </span>DOS<br />
+&nbsp; Al, TiC-eg-t2g (19 s)<br />
+■<span style="font-weight: bold;"> </span>Band Structure<br />
+&nbsp; graphene (6:42 s), Si, Ge, Pb<br />
+■<span style="font-weight: bold;"> </span>LDA+U (AFM, FLL)<br />
+&nbsp; FeAl-LDA+U-AMF, FeAl-LDA+U-INT, NiO-LDA+U-FLL, NiO-LDA+U-FLL-tensmom, NiO-LDA+U-FLL-Ykwa, NiO-LDA+U-optimized<br />
+■<span style="font-weight: bold;"> </span>BSE<br />
+&nbsp; LiF-BSE (4:01 s), CaO-BSE-core, Si-BSE<br />
+■<span style="font-weight: bold;"> </span>XPS<br />
+■<span style="font-weight: bold;"> </span>ELNES<br />
+&nbsp; BN-ELNES (15:20:03 - failed in my MPI case {mca_oob_tcp_msg_recv: readv failed: Connection timed out (110)}!, 2.7 GB), Cu-ELNES, Pu-ELNES<br />
+■<span style="font-weight: bold;"> </span>XAS, XMCD, XMLD<br />
+&nbsp; Fe-XMCD (6:04 s &lt;- i7 920)<br />
+■<span style="font-weight: bold;"> </span>lattice-optimization<br />
+&nbsp; BaTiO3-lattice-opt, MgB2-lattice-opt<br />
+■<span style="font-weight: bold;"> </span>geometry optimisation<br />
+&nbsp; Si-geom-opt<br />
+■<span style="font-weight: bold;"> </span>phonon (DFPT: <span class="st">density functional perturbation theory</span>)<br />
+&nbsp; Al-phonon-DFPT, Nb-phonon-DFPT (16:26:46 - not finishied (&gt; 1 day) &lt;- i7 920)<br />
+■<span style="font-weight: bold;"> </span>Eliashberg<br />
+&nbsp; Al-Eliashberg<br />
+■<span style="font-weight: bold;"> </span>magnetic-response<br />
+&nbsp; Ni-magnetic-response<br />
+■<span style="font-weight: bold;"> </span>magnon<br />
+&nbsp; Ni-magnon<br />
+■ MOKE<br />
+&nbsp; Ni-MOKE<br />
+■<span style="font-weight: bold;"> </span>Mossbauer<br />
+&nbsp; Fe-Mossbauer<br />
+■<span style="font-weight: bold;"> </span>magnetc anisotropy energy (MAE)<br />
+&nbsp; FeCo-MAE<br />
+■<span style="font-weight: bold;"> </span>Fermi-surface<br />
+■<span style="font-weight: bold;"> </span>rho3D<br />
+&nbsp; diamond-rho3D<br />
+■<span style="font-weight: bold;"> </span>STM<br />
+&nbsp; Al-STM<br />
+■<span style="font-weight: bold;"> </span>SOC<br />
+&nbsp; US-LDA+SOC+U-tensmom<br />
+■<span style="font-weight: bold;"> </span>Linear optical spectrum<br />
+&nbsp; Al-linopt, TiO2-linopt<br />
+■<span style="font-weight: bold;"> </span>TDDFT<br />
+&nbsp; diamond-TDDFT-ALDA, LiF-TDDFT-LRC, LiF-TDDFT-bootstrap<br />
+■<span style="font-weight: bold;"> </span>OEP<br />
+&nbsp; Si-OEP, HEG-OEP<br />
+■<span style="font-weight: bold;"> </span>libxc<br />
+&nbsp; Al-libxc, Si-hybrid-libxc<br />
+■<span style="font-weight: bold;"> </span>AFM<br />
+&nbsp; Fe-AFM<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> Elk / Discussion / Forums で良い記述を探してみた。まだまだ良い記述はたくさんあると思う。</span><br />
+----------<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/d5490ec7/">http://sourceforge.net/p/elk/discussion/897820/thread/d5490ec7/</a><br />
+&nbsp; elk&nbsp; produces the bandgap of 2.519eV in elk for MgS(Magnesium Sulfide) in the following calculation details 10x10x10 kpoints, PBE-GGA, rgkmax=8.0, (the structure is the optimized one in elk) while wien2k shows 2.768eV in the same calculation settings. The difference between elk and wien2k is 0.25eV.<br />
+&nbsp; Have you tried to converge the calculations with respect to smearing width?<br />
+&nbsp; I confirmed that&nbsp; the calculations of MgS are converged with respect to smearing width trying 0.01, 0.001, and so on.<br />
+&nbsp; one possible reason is a different choice of basis sets: FLAPW does not uniquely describe the basis set.<br />
+&nbsp; You can check for errors of the augmentation by using different muffin-tin radii.<br />
+&nbsp; varying muffin-tin radii does not change the bandgap more than 0.01eV.<br />
+----------<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/ad83d8be/?limit=50#1083">http://sourceforge.net/p/elk/discussion/897820/thread/ad83d8be/?limit=50#1083</a><br />
+&nbsp; The projected density of states (decomposed in s, p,d, f contributions) is stored in PDOS_S01_A0001.OUT where S is the species and A is the atom number.<br />
+----------<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/a7285676/?limit=25#458d">http://sourceforge.net/p/elk/discussion/897820/thread/a7285676/?limit=25#458d</a><br />
+&nbsp; Elk automatically finds the space group from the atomic positions (so you have to input these precisely). It can also automatically reduce a conventional cell to a primitive cell using</p>
+
+<div class="codehilite">
+<pre>
+<span class="n">primcell</span>
+ <span class="p">.</span><span class="nb">true</span><span class="p">.</span>
+</pre>
+</div>
+
+<p>&nbsp; You can also use the &#39;spacegroup&#39; utility to generate the coordinates for elk.in by supplying the space group symbol and Wykoff coordinates. Look in the &#39;elk/src/spacegroup&#39; directory for this code, and take a look at the manual: <a href="http://elk.sourceforge.net/spacegroup.pdf">http://elk.sourceforge.net/spacegroup.pdf</a><br />
+----------<br />
+http://sourceforge.net/p/elk/discussion/897820/thread/905a807b/?limit=50#0d8b<br />
+&nbsp; ou first need to provide the vector &#39;vklem&#39; in elk.in. This specifies the k-point at which you&#39;d like to calculated the effective mass. Then run task=25.<br />
+&nbsp; The file EFFMASS.OUT contains the effective mass tensor for your input k-point and for all states from 1 to nstsv.<br />
+----------<br />
+TDDFT ouput file: <a href="http://sourceforge.net/p/elk/discussion/897820/thread/735d2e5a/?limit=50#a078">http://sourceforge.net/p/elk/discussion/897820/thread/735d2e5a/?limit=50#a078</a><br />
+&nbsp; EELS_TDDFT.OUT: VEELs spectrum<br />
+&nbsp; The real and imaginary parts of 1/epsilon(0,0,w) are written to EPSILON_11.OUT and EPSILON_TDDFT.OUT.<br />
+&nbsp; The difference is that EPSILON_11.OUT is the macroscopic RPA dielectric function with no microscopic corrections, and EPSILON_TDDFT.OUT is the TDDFT version with microscopic corrections.<br />
+&nbsp;</p>
+
+<p>You&#39;re all quite correct: for epsilon read epsilon^{-1}.</p>
+
+<p>To summarize:</p>
+
+<p>EPSILON_11.OUT contains RPA 1/epsilon^{-1}(0,0,w) with <em>no</em> microscopic contributions. i.e. epsilon(0,0,w)</p>
+
+<p>EPSILON_TDDFT.OUT contains TDDFT 1/epsilon^{-1}(0,0,w) with microscopic contributions.</p>
+
+<p>EELS_TDDFT.OUT contains epsilon^{-1}(0,0,w) with microscopic contributions.</p>
+
+<p>----------<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/4ec66e06/?limit=50#400c">http://sourceforge.net/p/elk/discussion/897820/thread/4ec66e06/?limit=50#400c</a><br />
+<br />
+Dear elk users and developers,<br />
+I have a question regarding the basis, let&#39;s take for example &#39;Mn.in&#39;<br />
+-----</p>
+
+<p>The APW+lo and LAPW+LO refer to that there are essentially two types of basis functions.<br />
+So the first thing to understand is the difference of an augmented plane wave (APW/LAPW)and a local orbital (lo/LO)<br />
+They simply differ in the interstitial region, the APW is a plane wave and the LO vanishes.</p>
+
+<p>However inside a muffin-tin both these are expanded in local spherical functions in essentially the same way.<br />
+For each angular momentum at each atom, the radial part can be expressed with one or several radial functions. Each radial functions corresponds to a partial wave solution at a certain energy or to an energy derivate of a certain order of that function at a given energy.</p>
+
+<p>Now the lorbord parameter is the number of different radial functions for the given angular momentum lorbl.<br />
+However, in principle you can mix the energies and derivatives in any way you want for each lo (or apw). Hence the forms you find in Cottenier&#39;s description are only special cases, though the two most common.</p>
+
+<p>Now you do not want to use many radial functions in the APW part, most often only one, due to slower convergence.<br />
+When you use two in the APW, for historically reasons it is referred to as a LAPW &hellip;</p>
+
+<p>In the example you have given. The basis consists of:<br />
+1) APW&#39;s with one radial function (apword=1) for each atom and each l, with no exception (nlx=0). The number of APW&#39;s is determined by the PW-cutoff of the parameter, rgkmax.<br />
+and<br />
+2) six independent lo&#39;s<br />
+The first three with two radial functions. A function and its derivative at same energy, in all three cases.<br />
+The three last lo&#39;s use three radial functions. A function and its derivative at same energy plus another function at a lower energy.</p>
+
+<p>The first three lo&#39;s are to cover the valence states, ie 4s, 4p and 3d.<br />
+the fourth and fifth cover the semicores, 3s, 3p,<br />
+while the last one add variational freedom for the 3d states in order to treat the fairly large exchange splitting of Mn.</p>
+
+<p>In Wien2k-terminology (as used by Cottenier) the six lo&#39;s would best be described as: 3 lo, 2 LO and 1 lo, respectively.<br />
+However, the 6&#39;th lo has three radial functions and therefore is in form close to the LO, but is not intended for semi-core states &hellip; I prefer to use &quot;lo&quot; for all kinds of lo&#39;s in order to avoid such confusion.</p>
+
+<p>This input file is by no means unique, you can alter it in many ways and get the same result. If one wants to understand the basis set better that is the way to go! I give three examples below how to get your fingers dirty:</p>
+
+<p>For instance I suggest that you try to use two exception (nlx=2), with two radial functions for the 4s and 4p partial waves and then skip the corresponding lo&#39;s, ending up with four lo&#39;s. This results in a somewhat smaller total basis set but probably give very similar results. Why? This would end up in a mixed APW/LAPW basis set. Therefore I prefer to use APW for all possible choices, other than the classical LAPW choice, with two radial function, the partial wave and its energy derivative at one given linearisation energy.</p>
+
+<p>You never really have to go higher order (lorbord) than two. How would that look like in the Mn.in file?</p>
+
+<p>Another thing is that in principle we never need to use energy derivatives, but instead partial waves at different energies. Try to rewrite the Mn.in file in order to do that. The energy derivatives are there for completeness and historical reasons, as they were introduced in the linearisation of the old APW-method, i.e. in the LAPW.<br />
+<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/5008c564/?limit=25#ba55">http://sourceforge.net/p/elk/discussion/897820/thread/5008c564/?limit=25#ba55</a><br />
+<br />
+<a href="http://sourceforge.net/p/elk/discussion/897820/thread/8aa889df">http://sourceforge.net/p/elk/discussion/897820/thread/8aa889df</a><br />
+----------<br />
+------------------------------------------------------------------------------<br />
+http://sourceforge.net/p/elk/discussion/897820/thread/00adc96c/?limit=25#bd31<br />
+&nbsp; nvbse and ncbse refers to the number of occupied and unoccupied states respectively. These are the states used for setting up the BSE Hamiltonian. If you look at the EIGVAL.OUT file you can see how many occupied (with occupation number 2) and unoccupied (with occupation number 0) states there are. For the case of insulators/semiconductors this number is not k-point dependent. You must make sure that your nvbse is at most equal to or less than nuber of occupied stares and ncbse is at most equal to or less than number of unoccupied states.<br />
+------------------------------------------------------------------------------<br />
+http://sourceforge.net/p/elk/discussion/897820/thread/b303e0fe/<br />
+&nbsp;<br />
+------------------------------------------------------------------------------<br />
+phonon: <a href="http://sourceforge.net/p/elk/discussion/897820/thread/e44cb16c/?limit=50#cf7a">http://sourceforge.net/p/elk/discussion/897820/thread/e44cb16c/?limit=50#cf7a</a>　<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span><a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405</a>,&nbsp; <a href="http://arxiv.org/pdf/1107.0887v2.pdf">http://arxiv.org/pdf/1107.0887v2.pdf</a>, <a href="http://escholarship.org/uc/item/6k33p9br#page-6">http://escholarship.org/uc/item/6k33p9br#page-6</a><br />
+&nbsp; The Brillouin zone integration was performed on a 16 &times; 16 &times; 16 k-point mesh in the irreducible wedge, the Perdew-Burke-Ernzerhof functional18 was chosen for exchange and correlation, and spin-orbit coupling was included in a second-variational scheme. The absorption and dichroic spectra were calculated within a first-order optical response formalism, i.e., core-hole correlations were not taken into account. half-metallic<br />
+ground statewas obtained with a total spin magnetic moment of 2 &mu;B/f.u. and site-resolved spin (orbital) moments as follows: Co 1.03 &mu;B (0.046 &mu;B), Mn(B) 2.91 &mu;B (0.011 &mu;B), and Mn(C) &minus;1.93 &mu;B (&minus;0.019 &mu;B).Adetailed discussion of the electronic structure is given in Ref. 2.<br />
+&nbsp; All these features are reproduced by the ab initio calculations [Figs. 1(c) and 1(d)], which are broadened with a Lorentzian of 0.3 eV width to account for lifetime effects.<br />
+&nbsp; The asymmetric line shape and the broad tails of the resonances are a consequence of 2p-3d e-e correlation,19 which is neglected in our simulations. Electron-hole correlations can significantly alter the shape of the XAS or XMCD spectra of 3d transition elements, even in a metallic environment.20 Thus, the good agreement of our calculations with the experimental spectra indicates an effective screening of the 2p core hole.<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span><a href="http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.216402">http://journals.aps.org/prl/pdf/10.1103/PhysRevLett.107.216402</a><br />
+&nbsp; In practice, however, the macroscopic dielectric function calculated using this kernel has two well-known deficiencies: the quasiparticle gap is too small, and the physics of the bound electron-hole pair is totally missing&mdash;in fact, ALDA does not improve on the results obtained within the random phase approximation (RPA) which corresponds to the trivial kernel fxc = 0. In the present work, we concentrate on the second of these problems, namely, the missing excitonic peak in the spectrum. There have been previous attempts to solve this problem, and there exist kernels which correctly reproduce the peaks in the optical spectrum associated with bound excitons. The nanoquanta kernel by Sottile et al., derived from the four-point Bethe-Salpeter kernel, is very accurate but has the drawback of being nearly as computationally demanding as solving the BSE itself. The long-range correction (LRC) kernel has a particularly simple form in reciprocal space, fxc = - alpha / q^2, which limits its computational cost. This kernel produces the desired excitonicpeak but depends on the choice of the parameter alpha, which&nbsp; turns out to be strongly material-dependent, thereby limiting the predictiveness of this approximation. In the present Letter, we propose a new parameter-free approximation for fxc and demonstrate that this kernel gives accurate results with the computational cost of ALDA.<br />
+<br />
+Good !<br />
+BSE: LiF, Ar?, Ne?<br />
+TDDFT-bootstrap: Ge, Si, GaAs, Diamond, AlN, SiC, NiO, TiO2<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span><a href="http://arxiv.org/pdf/1402.5755v1.pdf">http://arxiv.org/pdf/1402.5755v1.pdf</a><br />
+&nbsp; For comparison, the electronic structure was calculated with the elk code. Optical spectra were calculated<br />
+within the random phase approximation (RPA) and by solving the Bethe-Salpeter-Equation (BSE), for which the Brillouin zone was sampled with a shifted 8x8x8 k-point mesh. A Lorentzian broadening of 0.1 eV<br />
+was applied. The loss function -Im(1/epsilon(q = 0;E)) was calculated with time-dependent DFT (TDDFT) in<br />
+the adiabatic approximation including local eld e ects (LFE) with a broadening of 1 eV.<br />
+<br />
+&nbsp; The structure of the unoccupied Fe states was investigated with x-ray absorption spectroscopy at the Fe L2,3 edges. The x-ray absorption (XAS) and magnetic circular dichroism (XMCD) spectra were taken at temperatures down to 13K at beamline 4.0.2 of the Advanced Light Source, Berkeley. The substrate luminescence was detected with a photodiode in addition to the total electron yield to measure the absorption signal of the lms. The experimental spectrum in Fig. 4 shows a strong double-peak structure and some weaker features at the high-energy side of the absorption edge. X-ray absorption spectra were calculated in the random phase approximation without local elds and by solving the Bethe-Salpeter-Equation. Here, the Brillouin zone was sampled with a shifted 6 x 6 x 6 k-point mesh and spin-orbit coupling was included.<br />
+------------------------------------------------------------------------------</p>

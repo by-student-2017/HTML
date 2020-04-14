@@ -1,0 +1,1691 @@
+RMCA (http://www.cristal.org/glasses/rmca/rmcaw95.html)<br />
+------------------------------------------------------------------------------<br />
+■ RMCA<br />
+(http://www.cristal.org/glasses/rmca/rmcaw95.html)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit) on window 10 (64 bit))<br />
+0. rmcaw95.zip (233Ko)<br />
+1. mkdir rmca<br />
+2. cd rmca<br />
+&nbsp; (wget http://www.cristal.org/ftp/rmcaw95.zip)<br />
+3. unzip rmcaw95.zip<br />
+4. gedit rmca.f<br />
+----------before<br />
+Line &nbsp;772： if(qex.eq..FALSE.) go to 200<br />
+Line &nbsp;824： if(qex.eq..FALSE.) go to 201<br />
+Line 2049： if(qex.eq..FALSE.) go to 200<br />
+Line 2217： if(qex.eq..FALSE.) go to 200<br />
+Line 2293： use portlib<br />
+----------<br />
+----------after<br />
+Line &nbsp;772： if(qex.eqcat v..FALSE.) go to 200<br />
+Line &nbsp;824： if(qex.eqv..FALSE.) go to 201<br />
+Line 2049： if(qex.eqv..FALSE.) go to 200<br />
+Line 2217： if(qex.eqv..FALSE.) go to 200<br />
+Line 2293：C use portlib<br />
+----------<br />
+5. コンパイル<br />
+&nbsp; gfortran rmca.f -o rmca_linux<br />
+※ 10 x 10 x 10 nm order:<br />
+&nbsp; parameter &nbsp; &nbsp; (array_size=6900000)<br />
+<br />
+◇ Test<br />
+1. cd ~/rmca<br />
+2. ./rmca_linux<br />
+3. cubig<br />
+&nbsp; (2. and 3. command: printf &#39;cubig&#39; | ./rmca_linux )<br />
+4. cp cubig.out plot.dat<br />
+5. gedit plot.dat<br />
+&nbsp; (remain &nbsp;below Total S(Q)&#39;s data)<br />
+&nbsp; e.g.,<br />
+&nbsp; 0.100000001 &nbsp; &nbsp; -0.852366567 &nbsp; &nbsp; -0.945742130<br />
+&nbsp; 0.200000003 &nbsp; &nbsp; -0.819584131 &nbsp; &nbsp; -0.945742130<br />
+&nbsp; 0.300000012 &nbsp; &nbsp; -0.787066102 &nbsp; &nbsp; -0.945742130<br />
+&nbsp; ...<br />
+6. gnuplot<br />
+&nbsp; plot &quot;plot.dat&quot; u 1:2 w l t &quot;S(Q) (RMC)&quot;, &quot;plot.dat&quot; u 1:3 w l t &quot;S(Q) (Expt)&quot;<br />
+7. quit<br />
+8. cp *.cfg&nbsp;<br />
+※ need to repeat calculation (avobe 2. sequence)<br />
+※ sudo apt install ovito<br />
+<br />
+※ manual<br />
+&nbsp; https://www.szfki.hu/~nphys/rmc++/docs.html &gt; RMC_POT from scratch: (&gt; RMCA manual)<br />
+&nbsp; https://www.szfki.hu/~nphys/rmc++/rmca_3_14.pdf<br />
+※ 他の欄でポテンシャルの記述はRMC++と同じと書いているが、見つかったマニュアルを読むとRMCAとRMC++は記述内容も異なっていた。ここでお詫びしたい。申し訳ない。過去に書いた欄は修正が容易ではないので申し訳ない。<br />
+<br />
+※ glass<br />
+&nbsp; http://bb.phys.se.tmu.ac.jp/~bb/SmartLab_wiki/index.php?glass_holder<br />
+※ 反射法の場合、バックグラウンドは空気とする<br />
+&nbsp; X線散乱パターンを用いたPDF解析?理論と実際 - リガク<br />
+&nbsp; https://www.rigaku.co.jp/members/rj/1904_No111/J0501001TN1.pdf<br />
+<br />
+□ cfg file<br />
+&nbsp; The simulation half box length of the simulation box in Angstrom.&nbsp;<br />
+&nbsp; Coordinates have to be normalized, between ?1 and 1 for each direction.<br />
+<br />
+□ *.cfg to POSCAR (1 element case)<br />
+1. gedit cfg2vasp<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot;title: ${filename}.cfg&quot; &nbsp;&gt; tmp.vasp<br />
+echo &quot;1.0&quot; &nbsp;&gt;&gt; tmp.vasp<br />
+#<br />
+set a_half_lattice = `awk &#39;NR==14{print $1}&#39; tmp.cfg`<br />
+echo &quot;a lattice * 0.5:&quot; ${a_half_lattice}<br />
+set b_half_lattice = `awk &#39;NR==15{print $2}&#39; tmp.cfg`<br />
+echo &quot;b lattice * 0.5:&quot; ${b_half_lattice}<br />
+set c_half_lattice = `awk &#39;NR==16{print $3}&#39; tmp.cfg`<br />
+echo &quot;c lattice * 0.5:&quot; ${c_half_lattice}<br />
+#<br />
+set a = `echo &quot;${a_half_lattice}*2&quot; | bc`<br />
+set b = `echo &quot;${b_half_lattice}*2&quot; | bc`<br />
+set c = `echo &quot;${c_half_lattice}*2&quot; | bc`<br />
+echo &quot;a, b, c = &quot;${a}&quot;, &quot;${b}&quot;, &quot;${c}<br />
+#<br />
+awk -v n=2 &#39;NR==14{printf &quot;%12.6f %12.6f %12.6f \n&quot;, ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+awk -v n=2 &#39;NR==15{printf &quot;%12.6f %12.6f %12.6f \n&quot;, ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+awk -v n=2 &#39;NR==16{printf &quot;%12.6f %12.6f %12.6f \n&quot;, ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+echo &quot; C H &quot; &gt;&gt; tmp.vasp<br />
+set total_atoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+set num_1st_elem = `awk &#39;NR==18{print $1}&#39; tmp.cfg`<br />
+set num_2nd_elem = `echo &quot;${total_atoms} ${num_1st_elem}&quot; | awk &#39;{print $1-$2}&#39;`<br />
+echo &quot; ${num_1st_elem} ${num_2nd_elem} &quot; &gt;&gt; tmp.vasp<br />
+echo &quot;frac&quot; &gt;&gt; tmp.vasp<br />
+awk &#39;NR&gt;=26{printf &quot;%12.6f %12.6f %12.6f \n&quot;,($1+1)/2,($2+1)/2,($3+1)/2}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+rm -f -r tmp.cfg<br />
+mv tmp.vasp ${filename}.vasp<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2vasp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2vasp)<br />
+3. chmod +x cfg2vasp<br />
+4. ./cfg2vasp *.cfg<br />
+<br />
+□ *.cfg to POSCAR (binary case)<br />
+1. gedit cfg2vasp<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot;title&quot; &gt; tmp.vasp<br />
+echo &quot;1.0&quot; &nbsp;&gt;&gt; tmp.vasp<br />
+awk -v n=2 &#39;NR==14{print ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+awk -v n=2 &#39;NR==15{print ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+awk -v n=2 &#39;NR==16{print ($1)*n, ($2)*n, ($3)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+echo &quot; C H &quot; &gt;&gt; tmp.vasp<br />
+#awk -v n=1 &#39;NR==18{print ($1)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+#awk -v n=1 &#39;NR==22{print ($1)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+echo &quot; 874 124 &quot; &gt;&gt; tmp.vasp<br />
+echo &quot;direct&quot; &gt;&gt; tmp.vasp<br />
+#awk -v n=1 &#39;NR&gt;=22{print ($1+1)*n, ($2+1)*n, ($3+1)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+awk -v n=1 &#39;NR&gt;=26{print ($1+1)*n, ($2+1)*n, ($3+1)*n}&#39; tmp.cfg &gt;&gt; tmp.vasp<br />
+mv tmp.vasp ${filename}.vasp<br />
+rm -f -r tmp.cfg<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2vasp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2vasp)<br />
+3. chmod +x cfg2vasp<br />
+4. ./cfg2vasp *.cfg<br />
+※ please, change C, H, 874, 124<br />
+------------------------------------------------------------------------------<br />
+■ Auxiliary programs<br />
+<br />
+□ xcoeff<br />
+(Create X-ray data file with coefficients for X-ray fitting with the simple)<br />
+0. wget http://www.szfki.hu/~nphys/rmc++/auxiliary/xcoeff.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir xcoeff<br />
+3. tar zxvf xcoeff.tar.gz -C ./xcoeff<br />
+4. cd xcoeff<br />
+5. gedit Makefile<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; g77 -Wall -o xcoeff $(OBJS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; g77 -Wall -O3 -c -o $@ $&lt;<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; gfortran -Wall -o xcoeff $(OBJS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; gfortran -Wall -O3 -c -o $@ $&lt;<br />
+-----<br />
+<br />
+◇ Usage<br />
+1. gedit xcoeff.dat<br />
+-----<br />
+2<br />
+0.876<br />
+C<br />
+0.124<br />
+H<br />
+inp.dat<br />
+3<br />
+out.fqd<br />
+-----<br />
+2. gedit inp.dat<br />
+-----<br />
+(number of data)<br />
+comment<br />
+Q F(Q)<br />
+...<br />
+-----<br />
+3. ./xcoeff<br />
+(You can get out.fqd)<br />
+※ F(Q) = Q*[S(Q)-1]<br />
+&nbsp; e.g., get S(Q) from PDFgetX<br />
+<br />
+□ S(Q) -&gt; F(Q)<br />
+(e.g., get S(Q) from PDFgetX)<br />
+1. gedit sq2fq<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.dat tmp.dat<br />
+set filename2 = `echo &quot;${filename}&quot; | sed -e &#39;s/sq//g&#39;`<br />
+#<br />
+awk &#39;NR==1{print $1}&#39; tmp.dat &gt; tmp.fq<br />
+echo &quot;# Q &nbsp; &nbsp; &nbsp; F(Q)&quot; &gt;&gt; tmp.fq<br />
+awk &#39;NR&gt;=3{print $1 &quot; &quot; ($2-1)*$1}&#39; tmp.dat &gt;&gt; tmp.fq<br />
+rm -f -r tmp.dat<br />
+mv tmp.fq ${filename2}fq.dat<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; sq2fq<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place sq2fq)<br />
+3. chmod +x sq2fq<br />
+4. ./sq2fq msc30sq<br />
+&nbsp; (e.g., file name is msc30sq.dat)<br />
+◇ xcoeff<br />
+5. gedit xcoeff.dat<br />
+-----<br />
+2<br />
+0.876<br />
+C<br />
+0.124<br />
+H<br />
+msc30fq.dat<br />
+3<br />
+msc30fqd.dat<br />
+-----<br />
+6. ./xcoeff<br />
+◇ msc30.dat (RMCA input file)<br />
+-----<br />
+0 0 1 0 &nbsp;! sets of experiments (g(r), neutron, X-ray, EXAFS expts)<br />
+msc30fqd<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ Note<br />
+<br />
+□ Fatal error: RMCA array space exhausted<br />
+1. gedit rmca.f<br />
+-----before<br />
+parameter &nbsp; &nbsp; (array_size=690000)<br />
+-----<br />
+-----after<br />
+parameter &nbsp; &nbsp; (array_size=6900000)<br />
+-----<br />
+2. gfortran rmca.f -o rmca_linux<br />
+------------------------------------------------------------------------------<br />
+■ RMCA input file (C only version)<br />
+<br />
+□ MSC30.dat<br />
+1. 1st settings<br />
+-----<br />
+MSC, C only at 300 K (example)<br />
+0.0146&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number density<br />
+1.8&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! cut offs<br />
+0.3 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! maximum moves<br />
+0.1&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! r spacing<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! movout option<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number of configurations to collect<br />
+5000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step for printing<br />
+100000 100000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step limit, step for saving<br />
+0 1 0 0 &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! sets of experiments (g(r), neutron, X-ray, EXAFS expts)<br />
+msc30sq<br />
+1 1000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Range of points<br />
+1.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Constant to subtract<br />
+1.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Coefficients<br />
+0.01&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Standard deviation<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Renormalise<br />
+.true.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Offset<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of coordination constraints<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of average coordination constraints<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! whether to use a potential<br />
+-----<br />
+2. 2nd settings<br />
+-----<br />
+MSC30, C only at 300 K (example)<br />
+0.0146&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number density<br />
+1.1&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! cut offs<br />
+0.1 &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! maximum moves<br />
+0.1&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! r spacing<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! movout option<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number of configurations to collect<br />
+9000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step for printing<br />
+100000 100000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step limit, step for saving<br />
+0 1 0 0 &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! sets of experiments (g(r), neutron, X-ray, EXAFS expts)<br />
+msc30sq<br />
+1 1960&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Range of points<br />
+1.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Constant to subtract<br />
+1.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Coefficients<br />
+0.005&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Standard deviation<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Renormalise<br />
+.true.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Offset<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of coordination constraints<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of average coordination constraints<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! whether to use a potential<br />
+-----<br />
+<br />
+□ MSC30.cfg<br />
+(same cubig.cfg)<br />
+<br />
+□ MSC30sq.dat<br />
+-----<br />
+&nbsp;1960<br />
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Q &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;S(Q) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dQ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dS<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.145910 &nbsp; &nbsp; &nbsp; &nbsp;149.134 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;25237.7<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.149470 &nbsp; &nbsp; &nbsp; &nbsp;239.035 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; -60692.1<br />
+&nbsp; &nbsp; &nbsp; &nbsp;...<br />
+-----<br />
+<br />
+※ gnuplot<br />
+&nbsp;plot &quot;plot.dat&quot; u 1:2 w l t &quot;S(Q) (RMC)&quot;, &quot;plot.dat&quot; u 1:3 w l t &quot;S(Q) (Expt)&quot; axis x1y2<br />
+------------------------------------------------------------------------------<br />
+■ RMCA input file (C and H version)<br />
+<br />
+□ MSC30.dat<br />
+-----<br />
+MSC30, C and H only, LJ potential at 300 K (example)<br />
+0.0164&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number density<br />
+1.1 0.86 0.63&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! cut offs<br />
+0.1 0.1&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! maximum moves<br />
+0.1&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! r spacing<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! movout option<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! number of configurations to collect<br />
+9000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step for printing<br />
+100000 100000&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! step limit, step for saving<br />
+0 1 0 0 &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! sets of experiments (g(r), neutron, X-ray, EXAFS expts)<br />
+msc30chsq<br />
+1 1960&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! range of points<br />
+1.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! constant to subtract<br />
+1.181 -0.188 0.0075&nbsp;&nbsp; &nbsp;! partial coefs (C-C, C-H, H-H)<br />
+0.005&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! standard deviation<br />
+.true.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Renormalise<br />
+.true.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! Offset<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of coordination constraints<br />
+0&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! no. of average coordination constraints<br />
+.false.&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;! whetheuse potential<br />
+-----<br />
+<br />
+□ MSC30.cfg<br />
+-----<br />
+&nbsp;(Version 3 format configuration file)<br />
+&nbsp;MSC<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; 0 &nbsp; &nbsp; 0 moves generated, tried, accepted<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; configurations saved<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp;1000 molecules (of all types)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 2 types of molecule<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 is the largest number of atoms in a molecule<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 Euler angles are provided<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; F (Box is not truncated octahedral)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Defining vectors are:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;17.358173 &nbsp; 0.000000 &nbsp; 0.000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp;17.358173 &nbsp; 0.000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;17.358173<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 876 molecules of type &nbsp;1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 atomic sites<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp; 0.000000<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 124 molecules of type &nbsp;2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 atomic sites<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp; 0.000000<br />
+<br />
+&nbsp; 0.9497890 &nbsp;0.1114018 -0.0719070<br />
+&nbsp;-0.3780727 &nbsp;0.6450744 -0.9291840<br />
+&nbsp;...<br />
+-----<br />
+<br />
+□ MSC30sq.dat<br />
+-----<br />
+&nbsp;1960<br />
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Q &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;S(Q) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dQ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dS<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.145910 &nbsp; &nbsp; &nbsp; &nbsp;3972.43 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;671840.<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.149470 &nbsp; &nbsp; &nbsp; &nbsp;6506.88 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp;1.65150e+06<br />
+&nbsp; &nbsp; &nbsp; &nbsp;....<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ RMCA input file (C and H version)<br />
+<br />
+□ MSC30.dat<br />
+-----<br />
+MSC30, C and H only at 300 K (example)<br />
+0.0164 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number density<br />
+1.1 0.86 0.63 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! cut offs<br />
+0.1 0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! maximum moves<br />
+0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! r spacing<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! movout option<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of configurations to collect<br />
+5000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! step for printing<br />
+100000 100000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! step limit, step for saving<br />
+0 0 1 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! sets of experiments (g(r), neutron, X-ray, EXAFS)<br />
+msc30chfq<br />
+1 500 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! Range of points<br />
+0. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Constant to subtract<br />
+0.0025 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Standard deviation<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Renormalise<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Offset<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of coordination constraints<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of average coordination constraints<br />
+.false. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! whether to use a potential<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ RMCA input file (C and H version)<br />
+<br />
+□ MSC30.dat<br />
+-----<br />
+MSC30, C and H only at 300 K (example)<br />
+0.0164 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number density<br />
+1.1 0.86 0.63 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! cut offs<br />
+0.1 0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! maximum moves<br />
+0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! r spacing<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! movout option<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of configurations to collect<br />
+5000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! step for printing<br />
+100000 100000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! step limit, step for saving<br />
+0 0 1 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! sets of experiments (g(r), neutron, X-ray, EXAFS)<br />
+msc30chfq<br />
+1 500 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! Range of points<br />
+0. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Constant to subtract<br />
+0.005 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Standard deviation<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Renormalise<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Offset<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of coordination constraints<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of average coordination constraints<br />
+.true. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! whether to use a potential<br />
+298.0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! absolute temperature<br />
+1000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! unit (conversion factor to Joules)<br />
+1.0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! weighting factor (conventional MMC should be 1)<br />
+CH.pot<br />
+-----<br />
+<br />
+◇ potential data (LJ)<br />
+・CH.pot.dat<br />
+-----<br />
+number of data<br />
+title<br />
+r C-C C-H H-H<br />
+...<br />
+-----<br />
+e.g.,&nbsp;<br />
+-----<br />
+&nbsp;130<br />
+#r(Angstrom) &nbsp; &nbsp;E_C &nbsp; &nbsp; &nbsp; E_C-H &nbsp; &nbsp; &nbsp; &nbsp;E_H<br />
+0.5 &nbsp; &nbsp; 15280651185 &nbsp; &nbsp; 1382258340 &nbsp; &nbsp; &nbsp;83280071.77<br />
+0.6 &nbsp; &nbsp; 1713797789 &nbsp; &nbsp; &nbsp;155022318.7 &nbsp; &nbsp; 9338971.137<br />
+0.7 &nbsp; &nbsp; 269514000 &nbsp; &nbsp; &nbsp; 24377373.24 &nbsp; &nbsp; 1468195.86<br />
+...<br />
+-----<br />
+<br />
+Lennard-Jones:<br />
+&nbsp; E (kJ/mol) = 4 * epsilon * [(sigma/r)^12 - (sigma/r)^6]<br />
+<br />
+element: sigma [Angstrom] | epsilon [kJ/mol]<br />
+C: 3.5 &nbsp;| 0.276<br />
+H: 2.42 | 0.126<br />
+C-H: (3.5+2.42)/2 | sqrt(0.276*0.126)<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetN<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX<br />
+<br />
+□ Install<br />
+(PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/)<br />
+・pdfgetx1.1.tar.gz<br />
+0. sudo apt get install yorick<br />
+&nbsp; wget https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/pdfgetx1.1.tar.gz<br />
+1. mkdir Yorick<br />
+2. unzip pdfgetx1.1.tar.gz<br />
+3. cd PDFgetX<br />
+4. cp pdfgetx_custom.i ~/Yorick/custom.i&nbsp;<br />
+3. gedit pdfgetxdistribution.i<br />
+-----before<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;lpr -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+-----after<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;print -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+4. yorick<br />
+5. pdfgetx<br />
+<br />
+<br />
+◇ information<br />
+----------<br />
+MSC-30<br />
+component: C, H, N<br />
+1.16wt% (H2)<br />
+(if 98.84wt% (C), C8.23H1.16 = C0.876H0.124)<br />
+<br />
+micropore volume: 1.54 cm^3/g<br />
+<br />
+BET surface area: &nbsp;3244&plusmn;28 m^2/g<br />
+<br />
+Cu Ka = 1.54060 Angstrom<br />
+<br />
+absorption coefficient<br />
+C: 8 keV, 4.576 &nbsp;cm^2/g (mu/density)<br />
+H: 8 keV, 0.3914 cm^2/g (mu/density)<br />
+<br />
+(4.576*0.876+0.3914*0.124)*0.29*0.5/1000*10 = 0.0058828<br />
+<br />
+thickness of sample holder<br />
+t = 0.2 mm, 0.5 mm<br />
+<br />
+1 cm^3 = 1e24 Angstrom^3<br />
+<br />
+・partial coefficients coherent(C-C, C-H, H-H)<br />
+Coh b: H, -3.7390<br />
+Coh b: C, &nbsp;6.6460<br />
+C-C: (0.874^2)*6.6460^2 = 33.739&nbsp;<br />
+&nbsp;&gt; 33.739/(33.739+-5.386+0.215) = 1.181<br />
+C-H: (2*0.874*0.124)*(6.6460*-3.739) = -5.386<br />
+&nbsp;&gt; -5.386/(33.739+-5.386+0.215) = -0.188<br />
+H-H: (0.124^2)*(-3.739)^2 = 0.215<br />
+&nbsp;&gt; 0.215/(33.739+-5.386+0.215) = 0.0075<br />
+<br />
+<br />
+・number density<br />
+MSC30: 6.022e23/1e24*0.29/12 = 0.0146 (C only)<br />
+MSC30: 6.022e23/1e24*0.29/(0.876*12+0.124*1) = 0.0164 (C and H)<br />
+<br />
+Apparent density: 0.39 g/cm^3<br />
+Estimated Bulk Density: 0.29 g/cm^3<br />
+skeltal density: 2.1 g/cm^3 (framework)<br />
+<br />
+Cu: 0.0721 at 1833 K<br />
+<br />
+[1] Murialdo_Maxwell_Thesis_Ch4.pdf<br />
+&nbsp; https://thesis.library.caltech.edu/9907/19/Murialdo_Maxwell_Thesis_Ch4.pdf<br />
+[2] HYDROGEN AND NATURAL GAS STORAGE IN ADSORBENT MATERIALS FOR AUTOMOTIVE APPLICATIONS&nbsp;<br />
+&nbsp; https://www.researchgate.net/profile/Matthew_Beckner/publication/263809106_HYDROGEN_AND_NATURAL_GAS_STORAGE_IN_ADSORBENT_MATERIALS_FOR_AUTOMOTIVE_APPLICATIONS/links/55afcb5a08aeb0ab466979ee.pdf<br />
+----------<br />
+1. Excel<br />
+&nbsp; calculate 2theta and I, time/step<br />
+2. sakura<br />
+&nbsp; replace Tab to &quot; &quot;<br />
+&nbsp; File &gt; Save &gt; UTF-8 and 改行コード: LF (UNIX) &gt; save<br />
+3. https://onlineutf8tools.com/convert-utf8-to-ascii<br />
+&nbsp; copy to clipboradls<br />
+----------<br />
+<br />
+<br />
+◇ Usage<br />
+1. cd PDFgetX<br />
+2. yorick<br />
+3. pdfgetx<br />
+------<br />
+&nbsp; &nbsp;Pair Distribution Function from the X-ray powder diffraction (PDFgetX 1.1)<br />
+<br />
+&nbsp; &nbsp;0) Preliminary data reduction<br />
+&nbsp; &nbsp;1) Build a setup file<br />
+&nbsp; &nbsp;2) Background Subtraction<br />
+&nbsp; &nbsp;3) Reduction of Structure Function: S(Q)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, I, dQ, dI)<br />
+&nbsp; &nbsp;4) PDF calculation :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, S(Q), dQ, dS)<br />
+&nbsp; &nbsp;P) Print, S) Save, U) Unzoom, L) Limits windows<br />
+&nbsp; &nbsp;Q) Quit<br />
+<br />
+&nbsp; &nbsp;[0-4 qsulp] 0<br />
+&nbsp; &nbsp;------------------------------------------------------------------<br />
+<br />
+&nbsp; &nbsp;1) Extract Scan(s) from SPEC file<br />
+&nbsp; &nbsp;2) Compare N-column(N&gt;=2) ascii files<br />
+&nbsp; &nbsp;3) Combine N-column(N&gt;=2) ascii files<br />
+&nbsp; &nbsp;4) Build PDFgetX input format: (Q, I, dQ, dI)<br />
+&nbsp; &nbsp;5) Convert MCA file to N-column ascii file<br />
+&nbsp; &nbsp;Q) Return to Main<br />
+<br />
+&nbsp; &nbsp;[1-5Q] 4<br />
+<br />
+&nbsp; &nbsp;The Input should be N-column(N&gt;=2) ascii file<br />
+&nbsp; &nbsp;All columns should have same number of lines<br />
+&nbsp; &nbsp;Blanks and commas in columns are not permitted<br />
+<br />
+&nbsp; &nbsp;Continue (y/n)? y<br />
+<br />
+&nbsp; &nbsp;ENTER FILE NAME TO CONVERT TO INPUT FILE: MSC30_1_16_sub.dat<br />
+<br />
+&nbsp; &nbsp;CHECK FILE FORMAT:<br />
+<br />
+&nbsp; &nbsp;1) Column contains Two-theta/Q? &nbsp; &nbsp; &nbsp; : 1<br />
+&nbsp; &nbsp; &nbsp; - Data in Q or Two-Theta step? &nbsp; &nbsp; : Q<br />
+&nbsp; &nbsp;2) Column contains Intensity? &nbsp; &nbsp; &nbsp; &nbsp; : 2<br />
+&nbsp; &nbsp;3) Column contains Monitor/Time? &nbsp; &nbsp; &nbsp;: 0<br />
+&nbsp; &nbsp; &nbsp; - Normalization by Monitor/Time? &nbsp; : No Normalization<br />
+&nbsp; &nbsp;x) Exit<br />
+<br />
+&nbsp; &nbsp;[1-3X] 1<br />
+<br />
+&nbsp; &nbsp;Column contains Q/Two-theta? &nbsp;: 1<br />
+&nbsp; &nbsp; &nbsp;- Data in Q or Two-theta value (Q/TT)? TT<br />
+<br />
+&nbsp; &nbsp;1) Column contains Two-theta/Q? &nbsp; &nbsp; &nbsp; : 1<br />
+&nbsp; &nbsp; &nbsp; - Data in Q or Two-Theta step? &nbsp; &nbsp; : Two-Theta<br />
+&nbsp; &nbsp;2) Column contains Intensity? &nbsp; &nbsp; &nbsp; &nbsp; : 2<br />
+&nbsp; &nbsp;3) Column contains Monitor/Time? &nbsp; &nbsp; &nbsp;: 0<br />
+&nbsp; &nbsp; &nbsp; - Normalization by Monitor/Time? &nbsp; : No Normalization<br />
+&nbsp; &nbsp;x) Exit<br />
+<br />
+&nbsp; &nbsp;[1-3X] 3<br />
+<br />
+&nbsp; &nbsp;Column contains Monitor/Time? : 3<br />
+&nbsp; &nbsp; &nbsp;- Normalization by Monitor or Time (M/T)? T<br />
+<br />
+&nbsp; &nbsp;1) Column contains Two-theta/Q? &nbsp; &nbsp; &nbsp; : 1<br />
+&nbsp; &nbsp; &nbsp; - Data in Q or Two-Theta step? &nbsp; &nbsp; : Two-Theta<br />
+&nbsp; &nbsp;2) Column contains Intensity? &nbsp; &nbsp; &nbsp; &nbsp; : 2<br />
+&nbsp; &nbsp;3) Column contains Monitor/Time? &nbsp; &nbsp; &nbsp;: 3<br />
+&nbsp; &nbsp; &nbsp; - Normalization by Monitor/Time? &nbsp; : Time<br />
+&nbsp; &nbsp;x) Exit<br />
+<br />
+&nbsp; &nbsp;[1-3X] x<br />
+<br />
+&nbsp; &nbsp;CONVERT TWO-THETA TO Q !<br />
+&nbsp; &nbsp; &nbsp;- Convert Two-Theta to Q using Q=4*PI*sin(theta)/lambda<br />
+&nbsp; &nbsp; &nbsp;- &#39;theta&#39; is a half of the scattering angle in degree<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Enter wavelength(Angstrom) of Incident X-rays: 1.54058<br />
+<br />
+&nbsp; &nbsp;SAVE PDFgetX INPUT FILE (Q, I, dQ, dI):<br />
+&nbsp; &nbsp; &nbsp;- Enter file name for input file: MSC30_int.dat<br />
+<br />
+&nbsp; &nbsp;Return to Preliminary data reduction<br />
+------<br />
+※ 先にバックグラウンドを引いたデータではエラーが出て止まった。<br />
+<br />
+<br />
+◇ Usage<br />
+1. cd PDFgetX<br />
+2. yorick<br />
+3. pdfgetx<br />
+-----<br />
+&nbsp; &nbsp;[0-4 qsulp] 2<br />
+<br />
+&nbsp; &nbsp;The Input should be 4-column ascii file(Q, I, dQ, dI)<br />
+&nbsp; &nbsp;Continue (y/n)? y<br />
+<br />
+&nbsp; &nbsp;ENTER DATA FILE NAME TO READ &nbsp; &nbsp; &nbsp; : *_raw.dat<br />
+<br />
+&nbsp; &nbsp;ENTER BACKGROUND FILE NAME TO READ : *_bg.dat<br />
+<br />
+&nbsp; &nbsp;BACKGROUND SUBTRACTION:<br />
+&nbsp; &nbsp; &nbsp;- Multiply correction constant to background to make<br />
+&nbsp; &nbsp; &nbsp;- it match data more nicely in low Q (y/n)? y<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Enter background correction constant, to End, enter &#39;0&#39;<br />
+&nbsp; &nbsp; &nbsp;- Background correction constant : 0<br />
+&nbsp; &nbsp; &nbsp;- 159 negative intensities =&gt; set to 0.3055.<br />
+<br />
+&nbsp; &nbsp;ENTER FILE NAME FOR BACKGROUND CORRECTED DATA: *.dat<br />
+-----<br />
+<br />
+<br />
+◇ Usage<br />
+1. cd PDFgetX<br />
+2. yorick<br />
+3. pdfgetx<br />
+-----<br />
+&nbsp; &nbsp;Pair Distribution Function from the X-ray powder diffraction (PDFgetX 1.1)<br />
+<br />
+&nbsp; &nbsp;0) Preliminary data reduction<br />
+&nbsp; &nbsp;1) Build a setup file<br />
+&nbsp; &nbsp;2) Background Subtraction<br />
+&nbsp; &nbsp;3) Reduction of Structure Function: S(Q)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, I, dQ, dI)<br />
+&nbsp; &nbsp;4) PDF calculation :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, S(Q), dQ, dS)<br />
+&nbsp; &nbsp;P) Print, S) Save, U) Unzoom, L) Limits windows<br />
+&nbsp; &nbsp;Q) Quit<br />
+<br />
+&nbsp; &nbsp;[0-4 qsulp] 1<br />
+&nbsp; &nbsp;<br />
+&nbsp; &nbsp;ENTER THE TYPE OF INCIDENT X-RAY RADIATION:<br />
+&nbsp; &nbsp; &nbsp;- [S]ilver, [M]olybdenum, [C]opper or enter [E]nergy [smce]? C<br />
+<br />
+&nbsp; &nbsp;SAMPLE INFORMATION:<br />
+&nbsp; &nbsp; &nbsp;- Number of elements in the sample[Ex. InGaAs =&gt; 3]? 2<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Element #: 1<br />
+&nbsp; &nbsp; &nbsp;- Enter the element (ions not yet supported) : H<br />
+&nbsp; &nbsp; &nbsp;- Enter fractional composition: 0.124<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Element #: 2<br />
+&nbsp; &nbsp; &nbsp;- Enter the element (ions not yet supported) : C<br />
+&nbsp; &nbsp; &nbsp;- Enter fractional composition: 0.876<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Enter absorption coefficient*thickness of sample, mu*t: 0.0058828<br />
+<br />
+&nbsp; &nbsp;MONOCHROMATOR INFO.:<br />
+<br />
+&nbsp; &nbsp; &nbsp;1) d-spacing of monochromator: 3.135<br />
+&nbsp; &nbsp; &nbsp;2) Position of monochromator : incident_beam<br />
+&nbsp; &nbsp; &nbsp;3) Type of monochromator &nbsp; &nbsp; : perfect_cryst<br />
+&nbsp; &nbsp; &nbsp;Q) Exit<br />
+<br />
+&nbsp; &nbsp; &nbsp;[123Q] Q<br />
+<br />
+&nbsp; &nbsp;SAVE SETUP FILE AS: MSC30_set.dat<br />
+&nbsp; &nbsp; &nbsp;- File MSC30_set.dat FOUND; OVERWRITE it (y/n)? y<br />
+-----<br />
+※ mu*tで小さい値を入力すると、3)でのAPPLY ABSORPTION CORRECTION で y としたときにF(Q)の図で低いQ値での強度が減少する。<br />
+<br />
+<br />
+◇ Usage<br />
+1. cd PDFgetX<br />
+2. yorick<br />
+3. pdfgetx<br />
+-----<br />
+&nbsp; &nbsp;Pair Distribution Function from the X-ray powder diffraction (PDFgetX 1.1)<br />
+<br />
+&nbsp; &nbsp;0) Preliminary data reduction<br />
+&nbsp; &nbsp;1) Build a setup file<br />
+&nbsp; &nbsp;2) Background Subtraction<br />
+&nbsp; &nbsp;3) Reduction of Structure Function: S(Q)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, I, dQ, dI)<br />
+&nbsp; &nbsp;4) PDF calculation :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, S(Q), dQ, dS)<br />
+&nbsp; &nbsp;P) Print, S) Save, U) Unzoom, L) Limits windows<br />
+&nbsp; &nbsp;Q) Quit<br />
+<br />
+&nbsp; &nbsp;[0-4 qsulp] 3<br />
+<br />
+&nbsp; &nbsp;ENTER SETUP FILE NAME: MSC30_set.dat<br />
+<br />
+&nbsp; &nbsp;READ INPUT FILE: It should be 4-column ascii file(Q, I, dQ, dI)<br />
+&nbsp; &nbsp; &nbsp;- Enter input data file name to read: MSC30_int.dat<br />
+<br />
+&nbsp; &nbsp;DATA REDUCTION :<br />
+<br />
+read-write binary stream: _history.pdb<br />
+&nbsp; In directory: /home/inukai/PDFgetX/<br />
+<br />
+&nbsp; &nbsp;Smooth data using Savitzky &amp; Golay method (y/n)? y<br />
+&nbsp; &nbsp; &nbsp;- Only data points between q_s and q_max will be smoothed<br />
+&nbsp; &nbsp; &nbsp;- Enter starting value q_s : 0.0<br />
+&nbsp; &nbsp; &nbsp;- Number of points to be used for a smoothing<br />
+&nbsp; &nbsp; &nbsp;- This number should be odd &amp; &lt;=9, [Ex. 3, 5, 7, 9] ? 7<br />
+<br />
+&nbsp; &nbsp;WINDOW 0: DATA BEFORE AND AFTER SMOOTHING!<br />
+<br />
+&nbsp; &nbsp;SMOOTHING LOOKS OKAY (y/n)? y<br />
+<br />
+&nbsp; &nbsp;Flat Symmetric [R]eflection or [T]ransmission geometry (r/t)? r<br />
+<br />
+&nbsp; &nbsp;--------------------------------------------------------<br />
+&nbsp; &nbsp;Flat Plate Symmetric Reflection Geometry Data Correction<br />
+&nbsp; &nbsp;--------------------------------------------------------<br />
+<br />
+&nbsp; &nbsp;WINDOW 0: CORRECTION EFFETS ON RAW DATA !<br />
+<br />
+&nbsp; &nbsp;APPLY MULTIPLE SCATTERING CORRECTION (y/n)? y<br />
+&nbsp; &nbsp; &nbsp;- Does the data contain Compton scattering in high Q (y/n)? y<br />
+&nbsp; &nbsp; &nbsp;- Multiple scattering calculation in reflection geometry !!<br />
+<br />
+&nbsp; &nbsp;WINDOW 3: MULTIPLE SCATTERING RATIO!<br />
+<br />
+&nbsp; &nbsp;APPLY POLARIZATION CORRECTION (y/n)? y<br />
+&nbsp; &nbsp; &nbsp;Degree of Polarization of the incident X-rays<br />
+&nbsp; &nbsp; &nbsp;Conventional X-rays: Not polarized &nbsp;=&gt; deg. pol. = 0<br />
+&nbsp; &nbsp; &nbsp;Synchrotron X-rays : Almost 100% Polarized =&gt; deg. pol. = 1<br />
+<br />
+&nbsp; &nbsp;Degree of polarization of X-rays : 0<br />
+<br />
+&nbsp; &nbsp;APPLY ABSORPTION CORRECTION (y/n)? y<br />
+<br />
+&nbsp; &nbsp;NORMALIZATION USING MID-HIGH Q PART OF DATA<br />
+&nbsp; &nbsp; &nbsp;- Enter a mid-range Q value (roughly 4.12399): 4.12399<br />
+&nbsp; &nbsp; &nbsp;- 683 points are used for normalization<br />
+&nbsp; &nbsp; &nbsp;- Approximate normalization constant: 1.33763<br />
+<br />
+&nbsp; &nbsp;WINDOW 1: CORRECTED DATA vs. TIS!<br />
+<br />
+&nbsp; &nbsp;ENTER NORMALIZATION CONSTANT: 1.33763<br />
+<br />
+&nbsp; &nbsp;APPLY COMPTON SCATTERING CORRECTION<br />
+&nbsp; &nbsp; &nbsp;Compton correction using theoretical calculations<br />
+<br />
+&nbsp; &nbsp;WINDOW 2: REDUCED STRUCTURE FACTOR, Q*(S(Q)-1)!<br />
+<br />
+&nbsp; &nbsp;CHECK IF F(Q) = (S(Q)-1)*Q IS APPROXIMATELY 0 AT HIGH Q<br />
+&nbsp; &nbsp; &nbsp;Is F(Q) approximately 0 at high Q (y/n)? y<br />
+<br />
+&nbsp; &nbsp;SAVE STRUCTURE FUNCTION, S(Q), TO ASCII FILE:<br />
+&nbsp; &nbsp; &nbsp;- Enter file name to save data: *_sq.dat<br />
+-----<br />
+4. gedit *_sq.dat<br />
+-----before<br />
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Q &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;S(Q) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dQ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dS<br />
+#<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.145910 &nbsp; &nbsp; &nbsp; &nbsp;3972.43 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;671840.<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.149470 &nbsp; &nbsp; &nbsp; &nbsp;6506.88 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp;1.65150e+06<br />
+-----<br />
+-----after<br />
+&nbsp; (number of S(Q) data)<br />
+# &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Q &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;S(Q) &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;dQ &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; dS<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.145910 &nbsp; &nbsp; &nbsp; &nbsp;3972.43 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;671840.<br />
+&nbsp; &nbsp; &nbsp; &nbsp;0.149470 &nbsp; &nbsp; &nbsp; &nbsp;6506.88 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp;1.65150e+06<br />
+-----<br />
+※ ENTER NORMALIZATION CONSTANT: の値は Approximate normalization constant: で表示されているのかも。<br />
+※ Error was occured when there are bad data (near last).<br />
+<br />
+◇ Usage<br />
+1. cd PDFgetX<br />
+2. yorick<br />
+3. pdfgetx<br />
+-----<br />
+&nbsp; &nbsp;0) Preliminary data reduction<br />
+&nbsp; &nbsp;1) Build a setup file<br />
+&nbsp; &nbsp;2) Background Subtraction<br />
+&nbsp; &nbsp;3) Reduction of Structure Function: S(Q)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, I, dQ, dI)<br />
+&nbsp; &nbsp;4) PDF calculation :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Input file format : (Q, S(Q), dQ, dS)<br />
+&nbsp; &nbsp;P) Print, S) Save, U) Unzoom, L) Limits windows<br />
+&nbsp; &nbsp;Q) Quit<br />
+<br />
+&nbsp; &nbsp;[0-4 qsulp] 4<br />
+<br />
+&nbsp; &nbsp;CALCULATE PAIR DISTRIBUTION FUNCTION(PDF): G(r)<br />
+&nbsp; &nbsp; &nbsp;- Read structure function: (Q, S(Q), dQ, dS)<br />
+<br />
+&nbsp; &nbsp;ENTER FILE NAME: MSC30_v5qs.dat<br />
+&nbsp; &nbsp; &nbsp;- Enter Qmax at which to cut the data: 6<br />
+&nbsp; &nbsp; &nbsp;- Read structure function from Q = 0.14591 to Q = 6.00179.<br />
+&nbsp; &nbsp; &nbsp;- Enter maxmimum range, r(Angstrom) for PDF calculation: 20<br />
+&nbsp; &nbsp; &nbsp;- Enter PDF step size(dr): 0.01<br />
+<br />
+&nbsp; &nbsp;Calculating PDF up to rmax=20 with dr=0.01.<br />
+<br />
+&nbsp; &nbsp; &nbsp;- SAVE PDF: (r, G(r), dr, dG) (y/n)? y<br />
+&nbsp; &nbsp; &nbsp;- Enter file name to save PDF : msc30_gr.dat<br />
+<br />
+&nbsp; &nbsp; &nbsp;- Recalculate PDF (y/n)? n<br />
+-----<br />
+◇ gnuplot<br />
+1. gnuplot<br />
+&nbsp; set xlabel &quot;r [Angstrom]&quot;<br />
+&nbsp; set ylabel &quot;G(r)&quot;<br />
+&nbsp; plot &quot;msc30_gr.dat&quot; u 1:2 w l<br />
+------------------------------------------------------------------------------<br />
+□ subtract background (Overview)<br />
+<br />
+◇ fullprof<br />
+(https://www.ill.eu/sites/fullprof/php/old-windows.html)<br />
+・Setup_FullProf_Suite_April2018_64b.exe<br />
+1. fullprof_suite<br />
+2. Run WinPlotr<br />
+3. File &gt; Open pettern file &gt; &gt; X,Y data + &nbsp;&gt; OK<br />
+4. Calculations &gt; Background subtraction &gt; Backgound points<br />
+&nbsp; select background points &gt; OK<br />
+5. Data-background &gt; Spline interpolation &gt; OK<br />
+6. File &gt; save data as... &gt; save as multicolumns files &gt; (All check) OK<br />
+<br />
+◇ fullprof<br />
+1. X space &gt; X to Q<br />
+2. Save as XY file<br />
+<br />
+◇ Igor<br />
+1. Analysis &gt; Interpolate &gt; line &gt; 2000<br />
+<br />
+MSC-30<br />
+----------<br />
+Area &nbsp;: 2-theta (peak area)<br />
+Part 1: 0 &nbsp;- 8 &nbsp;(3.1 - 7.0)<br />
+Part 2 &nbsp;8 &nbsp;- 30 (11.8 - 20.1)<br />
+Part 2: 30 - 62.5 (34 - 59.3)<br />
+Part 3: 62.5 - 100 (69.9 - 96)<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ Gudrun<br />
+(https://www.isis.stfc.ac.uk/Pages/Gudrun.aspx)<br />
+・Gudrun-2017-10.zip<br />
+・Gudrun-RawData.zip<br />
+------------------------------------------------------------------------------<br />
+■ RAD<br />
+(http://people.cst.cmich.edu/petko1vg/software.html)<br />
+<br />
+□ RAD-1 (failed)<br />
+・rad-1.0-setup.exe<br />
+・Windows版 日本語文字追加+Gvim文字処理追加プログラム(iconv.dll) (https://free.pjc.co.jp/Iconv/index.html)<br />
+iconv2.lzh を解凍して得られた iconv.dll を C:\Program Files (x86)\rad に入れる<br />
+<br />
+□ RAD-2 (failed)<br />
+・rad-2.0-setup-demo.exe<br />
+・Windows版 日本語文字追加+Gvim文字処理追加プログラム(iconv.dll) (https://free.pjc.co.jp/Iconv/index.html)<br />
+iconv2.lzh を解凍して得られた iconv.dll を C:\Program Files (x86)\rad に入れる<br />
+------------------------------------------------------------------------------<br />
+■ lammps<br />
+<br />
+□ structure optimization<br />
+0. cp ~/lammps/potentials/CH.airebo ./<br />
+&nbsp; mkdir cfg<br />
+1. *.cfg &gt; (modify POSCAR format) &gt; VESTA &gt; *.cif<br />
+2. cif2cell -p lammps -f *.cif<br />
+3. gedit in.lmp<br />
+-----<br />
+clear<br />
+# ----- Structure settings -----<br />
+units metal<br />
+atom_style atomic<br />
+dimension &nbsp;3<br />
+boundary &nbsp; p p p<br />
+read_data &nbsp;msc30ch.data<br />
+replicate &nbsp;1 1 1<br />
+<br />
+mass 1 12.0107 # C<br />
+mass 2 1.00794 # H<br />
+<br />
+# ----- Potential settings -----<br />
+pair_style airebo 3.0 1 1<br />
+pair_coeff * * CH.airebo C H<br />
+<br />
+# ----- Relax calculation (0 K) -----<br />
+thermo_style custom step etotal temp lx vol press atoms<br />
+thermo 100<br />
+fix f1 all box/relax iso 0.0<br />
+minimize 1.0e-10 0.0 1000 100000<br />
+unfix f1<br />
+<br />
+# output setting<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp;d1 all cfg 100 cfg/run.*.cfg mass type xs ys zs id type<br />
+dump_modify d1 element C H<br />
+<br />
+velocity all create 10.0 139466 dist gaussian<br />
+fix f1 all nvt temp 10.0 298.0 0.01<br />
+run 10000<br />
+unfix f1<br />
+<br />
+fix f1 all nvt temp 298.0 298.0 0.01<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp;d2 all custom 1 out.xyz xs ys zs type<br />
+run 0<br />
+-----<br />
+4. ~/lammps/src/lmp_serial &lt; in.lmp<br />
+<br />
+□ RMCA + lammps<br />
+1. printf &#39;cubig&#39; | ./rmca_linux<br />
+2. *.cfg &gt; (modify POSCAR format) &gt; VESTA &gt; *.cif<br />
+3. cif2cell -p lammps -f *.cif<br />
+4. ~/lammps/src/lmp_serial &lt; in.lmp<br />
+<br />
+□ *.cfg to lammps.data<br />
+1. gedit cfg2lmp<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot;title: ${filename}.cfg &quot; &gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+awk -v n=1 &#39;NR==7{printf &quot;%d atoms \n&quot;,($1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+#echo &quot;2 atom types&quot; &nbsp;&gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==14{printf &quot;0.0 %10.6f xlo xhi \n&quot;,($1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==15{printf &quot;0.0 %10.6f ylo yhi \n&quot;,($2)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==16{printf &quot;0.0 %10.6f zlo zhi \n&quot;,($3)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+echo &quot;Atoms &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+set a_half_lattice = `awk &#39;NR==14{print $1}&#39; tmp.cfg`<br />
+echo &quot;a lattice * 0.5:&quot; ${a_half_lattice}<br />
+#<br />
+set total_atoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+set count = 0<br />
+set natom_remain = ${total_atoms}<br />
+set read_start = 0<br />
+while (${natom_remain} &gt; 0)<br />
+&nbsp; @ count += 1<br />
+&nbsp; set num_elem = `awk -v n=${count} &#39;NR==(14+n*4){print $1}&#39; tmp.cfg`<br />
+&nbsp; set natom_remain = `echo &quot;${natom_remain} - ${num_elem}&quot; | bc`<br />
+&nbsp; awk -v n=${a_half_lattice} -v rs=${read_start} -v natom=${num_elem} -v no=${count} &#39;(NR&gt;=26+rs &amp;&amp; NR&lt;natom+26+rs){printf &quot;%d %d %12.6f %12.6f %12.6f \n&quot;,(NR-25),no,($1+1)*n,($2+1)*n,($3+1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+&nbsp; set read_start = `echo &quot;${read_start} + ${num_elem}&quot; | bc`<br />
+end<br />
+#<br />
+sed -i &quot;3a\ ${count} atom types&quot; tmp.data<br />
+#<br />
+mv tmp.data ${filename}.data<br />
+rm -f -r tmp.cfg<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2lmp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2lmp)<br />
+3. chmod +x cfg2lmp<br />
+4. ./cfg2lmp msc30<br />
+※ e.g., msc30.cfg file<br />
+※ please, change 876<br />
+<br />
+□ lammps *.xyz to RMCA *.cfg<br />
+1. gedit lmp2cfg<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.xyz tmp.xyz<br />
+echo &quot; (Version 3 format configuration file)&quot; &gt; tmp.cfg<br />
+echo &quot; M &nbsp; &nbsp;&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 0 moves generated, tried, accepted&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; configurations saved&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+awk &nbsp;&#39;NR==4{printf &quot; &nbsp; &nbsp; %d molecules (of all types) \n&quot;, $1}&#39; tmp.xyz &gt;&gt; tmp.cfg<br />
+set atom_type_max = `awk &#39;{if(m&lt;$4 &amp;&amp; NR&gt;=10) m=$4} END{print m}&#39; tmp.xyz`<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; ${atom_type_max} types of molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 is the largest number of atoms in a molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 Euler angles are provided&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;F (Box is not truncated octahedral)&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defining vectors are:&quot; &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==6{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;\n&quot;,($2-$1)*n }&#39; tmp.xyz &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==7{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp;\n&quot;,($2-$1)*n }&#39; tmp.xyz &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==8{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;%10.6f \n&quot;, ($2-$1)*n }&#39; tmp.xyz &gt;&gt; tmp.cfg<br />
+#<br />
+set count = 1<br />
+while (${count} &lt;= ${atom_type_max})<br />
+#<br />
+&nbsp; echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+&nbsp; set num_elem = `awk -v no=${count} &#39;(NR&gt;=10 &amp;&amp; $4==no){print $4}&#39; tmp.xyz | grep -c -i &quot;${count}&quot;`<br />
+&nbsp; echo &quot; &nbsp; &nbsp; ${num_elem} molecules of type &nbsp;${count}&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 atomic sites&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.000000&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; @ count += 1<br />
+&nbsp; #<br />
+end<br />
+#<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+set count = 1<br />
+while (${count} &lt;= ${atom_type_max})<br />
+&nbsp; awk -v no=${count} -v n=2 &#39;(NR&gt;=10 &amp;&amp; $4==no){printf &quot;%12.6f %12.6f %12.6f \n&quot;,($1-0.5)*n,($2-0.5)*n,($3-0.5)*n}&#39; tmp.xyz &gt;&gt; tmp.cfg<br />
+&nbsp; @ count += 1<br />
+end<br />
+#<br />
+mv tmp.cfg ${filename}.cfg<br />
+rm -f -r tmp.xyz<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; lmp2cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place lmp2cfg)<br />
+3. lmp2cfg out<br />
+※ out.xyz<br />
+<br />
+□ RMCA + lammps<br />
+0. mkdir cfg<br />
+1. printf &#39;msc30&#39; | ./rmca_linux<br />
+2. ./cfg2lmp msc30<br />
+3. ~/lammps/src/lmp_serial &lt; in.lmp<br />
+4. ./lmp2cfg out<br />
+5. mv out.cfg msc30.cfg<br />
+6. (goto 1.)ged<br />
+※ msc30.cfg<br />
+<br />
+□ RMCA + lammps (auto)<br />
+1. gedit run_rmca_lmp<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+mkdir cfg<br />
+<br />
+set No = 1<br />
+set MaxNo = $2<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; printf $1 | ./rmca_linux<br />
+&nbsp; ./cfg2lmp $1<br />
+&nbsp; ~/lammps/src/lmp_serial &lt; in.lmp<br />
+&nbsp; ./lmp2cfg out<br />
+&nbsp; mv out.cfg $1.cfg<br />
+<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_rmca_lmp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_rmca_lmp)<br />
+3. chmod +x run_rmca_lmp<br />
+4. ./run_rmca_lmp msc30 100<br />
+※ mes30ch.cfg, 100 cycle<br />
+※ number density も変化させて最も低いエネルギーを探すようにした方が良いと思われるがまだそのようにはできていない<br />
+&nbsp;sed を用いて原子数の変化に対応するようにすればよいと思われる。時間がないのでここまで。<br />
+※ cfg2lmp, lmp2cfg などは上に記載されているものを用いればよいです<br />
+<br />
+◇ lammps control file<br />
+・in.lmp<br />
+-----<br />
+clear<br />
+# ----- Structure settings -----<br />
+units metal<br />
+atom_style atomic<br />
+dimension &nbsp;3<br />
+boundary &nbsp; p p p<br />
+read_data &nbsp;msc30ch.data<br />
+replicate &nbsp;1 1 1<br />
+<br />
+mass 1 12.0107 # C<br />
+mass 2 1.00794 # H<br />
+<br />
+# ----- Potential settings -----<br />
+pair_style airebo 3.0 1 1<br />
+pair_coeff * * CH.airebo C H<br />
+<br />
+# ----- Relax calculation (0 K) -----<br />
+thermo_style custom step etotal temp lx vol press atoms<br />
+thermo 100<br />
+fix f1 all box/relax iso 0.0<br />
+minimize 1.0e-10 0.0 1000 100000<br />
+unfix f1<br />
+<br />
+# output setting<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp;d1 all cfg 100 cfg/run.*.cfg mass type xs ys zs id type<br />
+dump_modify d1 element C H<br />
+<br />
+velocity all create 10.0 139466 dist gaussian<br />
+fix f1 all nvt temp 10.0 298.0 0.01<br />
+run 10000<br />
+unfix f1<br />
+<br />
+fix f1 all nvt temp 298.0 298.0 0.01<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp;d2 all custom 1 out.xyz xs ys zs type<br />
+run 0<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ Gromacs (underconstracting)<br />
+<br />
+□ InterMol: a conversion tool for molecular dynamics simulations<br />
+(https://github.com/shirtsgroup/InterMol)<br />
+0. sudo apt install lammps<br />
+&nbsp; sudo apt install gromacs<br />
+1. git clone https://github.com/shirtsgroup/InterMol.git<br />
+2. cd InterMol<br />
+3. sudo python setup.py install<br />
+4. python ~/InterMol/intermol/convert.py -h<br />
+<br />
+◇ Test<br />
+1. cd ~/InterMol/intermol/tests<br />
+2. cd lammps<br />
+3. cd unit_tests<br />
+4. cd atom_style-atomic_vacuum<br />
+5. mkdir test_output<br />
+6. python ~/InterMol/intermol/convert.py --lmp_in atom_style-atomic-data_vacuum.input --gromacs --odir test_output -e --inefile=./test_output/mdout.mdp -lp=/usr/bin/lammps -gp=/usr/bin<br />
+&nbsp; (python ~/InterMol/intermol/convert.py --lmp_in atom_style-atomic-data_vacuum.input --gromacs --odir test_output -e --inefile=./test_output/mdout.mdp -lp=$HOME/lammps/src/lmp_serial -gp=/usr/bin)<br />
+&nbsp; (gmx_d grompp -f /usr/local/lib/python2.7/dist-packages/intermol-0.1.0.dev0-py2.7.egg/intermol/tests/gromacs/grompp.mdp -c ./atom_style-atomic-data_vacuum_converted.gro -p ./atom_style-atomic-data_vacuum_converted.top -o ./topol.tpr -po ./mdout.mdp -maxwarn 5)<br />
+(7. cd test_output)<br />
+(8. cp /usr/local/lib/python2.7/dist-packages/intermol-0.1.0.dev0-py2.7.egg/intermol/tests/gromacs/grompp.mdp ./<br />
+&nbsp; -----<br />
+&nbsp; gmx_d grompp -f grompp.mdp -c atom_style-atomic-data_vacuum_converted.gro -p atom_style-atomic-data_vacuum_converted.top -o topol.tpr -po mdout.mdp -maxwarn 5<br />
+&nbsp; -----<br />
+(9. gedit grompp.mdp<br />
+&nbsp; -----before<br />
+&nbsp; nsteps &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0<br />
+&nbsp; -----<br />
+&nbsp; -----after<br />
+&nbsp; nsteps &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 1000<br />
+&nbsp; -----<br />
+(10. gmx grompp -f grompp.mdp -c atom_style-atomic-data_vacuum_converted.gro -p atom_style-atomic-data_vacuum_converted.top -o test.tpr -maxwarn 5<br />
+&nbsp; gmx mdrun -ntomp 4 -ntmpi 1 -s test.tpr -c test.gro)<br />
+(11. cp *.gro test.gro<br />
+&nbsp; gmx trjconv -f test.gro -o test.pdb<br />
+&nbsp; gmx trjconv -f test.gro -s topol.tpr -o test.pdb)<br />
+※ &quot;gmx mdrun&quot; need only topol.tpr<br />
+<br />
+□ *.cfg to lammps.data for InterMol(gromacs)<br />
+1. gedit cfg2lmp_gro<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot;title: ${filename}.cfg &quot; &gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+awk -v n=1 &#39;NR==7{printf &quot;%d atoms \n&quot;,($1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+#echo &quot;2 atom types&quot; &nbsp;&gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==14{printf &quot;0.0 %10.6f xlo xhi \n&quot;,($1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==15{printf &quot;0.0 %10.6f ylo yhi \n&quot;,($2)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+awk -v n=2 &#39;NR==16{printf &quot;0.0 %10.6f zlo zhi \n&quot;,($3)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+#<br />
+echo &quot;Masses &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+echo &quot;1 12.0110 &quot; &gt;&gt; tmp.data<br />
+echo &quot;2 &nbsp;1.0080 &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+echo &quot;Pair Coeffs &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+echo &quot;1 0.0660 3.5000 &quot; &gt;&gt; tmp.data<br />
+echo &quot;2 0.0300 2.5000 &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+#<br />
+echo &quot;Atoms &quot; &gt;&gt; tmp.data<br />
+echo &quot; &quot; &gt;&gt; tmp.data<br />
+set a_half_lattice = `awk &#39;NR==14{print $1}&#39; tmp.cfg`<br />
+echo &quot;a lattice * 0.5:&quot; ${a_half_lattice}<br />
+#<br />
+set total_atoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+set count = 0<br />
+set natom_remain = ${total_atoms}<br />
+set read_start = 0<br />
+while (${natom_remain} &gt; 0)<br />
+&nbsp; @ count += 1<br />
+&nbsp; set num_elem = `awk -v n=${count} &#39;NR==(14+n*4){print $1}&#39; tmp.cfg`<br />
+&nbsp; set natom_remain = `echo &quot;${natom_remain} - ${num_elem}&quot; | bc`<br />
+&nbsp; awk -v n=${a_half_lattice} -v rs=${read_start} -v natom=${num_elem} -v no=${count} &#39;(NR&gt;=26+rs &amp;&amp; NR&lt;natom+26+rs){printf &quot;%d %d %12.6f %12.6f %12.6f \n&quot;,(NR-25),no,($1+1)*n,($2+1)*n,($3+1)*n}&#39; tmp.cfg &gt;&gt; tmp.data<br />
+&nbsp; set read_start = `echo &quot;${read_start} + ${num_elem}&quot; | bc`<br />
+end<br />
+#<br />
+sed -i &quot;3a\ ${count} atom types&quot; tmp.data<br />
+#<br />
+mv tmp.data ${filename}.data<br />
+rm -f -r tmp.cfg<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2lmp_gro<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2lmp_gro)<br />
+3. chmod +x cfg2lmp_gro<br />
+4. ./cfg2lmp_gro msc30<br />
+※ e.g., msc30.cfg file<br />
+※ please, change 876<br />
+<br />
+□ RMCA + Gromacs<br />
+1. printf &#39;msc30&#39; | ./rmca_linux<br />
+2. ./cfg2lmp msc30<br />
+&nbsp; (You can get msc30.data)<br />
+3. python ~/InterMol/intermol/convert.py --lmp_in in.lmp_gro --gromacs --odir ./ -e --inefile=./mdout.mdp -lp=$HOME/lammps/src/lmp_serial -gp=/usr/bin<br />
+(4. mv in_converted.gro msc30ch.gro)<br />
+※ e.g., msc30.cfg file<br />
+<br />
+◇ input file (in.lmp_gro)<br />
+1. gedit in.lmp_gro<br />
+-----<br />
+units real<br />
+atom_style atomic<br />
+<br />
+dimension 3<br />
+boundary p p p<br />
+<br />
+pair_style lj/cut 20.0<br />
+pair_modify mix geometric<br />
+<br />
+read_data msc30ch.data<br />
+<br />
+thermo_style custom ebond eangle edihed eimp epair evdwl ecoul elong etail pe<br />
+<br />
+run 0<br />
+-----<br />
+<br />
+◇ input file (grompp.mdp)<br />
+1. gedit grompp.mdp<br />
+------<br />
+; RUN CONTROL PARAMETERS =<br />
+integrator &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = md<br />
+; start time and timestep in ps =<br />
+tinit &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 0<br />
+dt &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0.002<br />
+nsteps &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 1000<br />
+; mode for center of mass motion removal =<br />
+comm-mode &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= Linear<br />
+; number of steps for center of mass motion removal =<br />
+nstcomm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 1<br />
+; group(s) for center of mass motion removal =<br />
+comm-grps &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;=<br />
+; NEIGHBORSEARCHING PARAMETERS =<br />
+; nblist update frequency =<br />
+nstlist &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 1<br />
+; ns algorithm (simple or grid) =<br />
+ns_type &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= grid<br />
+; Periodic boundary conditions: xyz or no =<br />
+pbc &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= xyz<br />
+; nblist cut-off &nbsp; &nbsp; &nbsp; &nbsp; =<br />
+rlist &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 0.9<br />
+<br />
+; OPTIONS FOR ELECTROSTATICS AND VDW =<br />
+; Method for doing electrostatics =<br />
+cutoff-scheme &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= verlet<br />
+coulombtype &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= PME<br />
+coulomb-modifier &nbsp; &nbsp; &nbsp; &nbsp; = None<br />
+rcoulomb &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0.9<br />
+; Dielectric constant (DC) for cut-off or DC of reaction field =<br />
+epsilon-r &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 1<br />
+; Method for doing Van der Waals =<br />
+vdw-type &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = cut-off<br />
+vdw-modifier &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = None<br />
+; cut-off lengths &nbsp; &nbsp; &nbsp; &nbsp;=<br />
+rvdw &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0.9<br />
+; Apply long range dispersion corrections for Energy and Pressure =<br />
+DispCorr &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = Ener<br />
+; Spacing for the PME/PPPM FFT grid =<br />
+fourierspacing &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 0.1<br />
+; EWALD/PME/PPPM parameters =<br />
+pme_order &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 4<br />
+ewald_rtol &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 1e-05<br />
+ewald_geometry &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = 3d<br />
+epsilon_surface &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= 0<br />
+<br />
+; OPTIONS FOR BONDS &nbsp; &nbsp; =<br />
+constraints &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= none<br />
+<br />
+; GENERATE VELOCITIES FOR STARTUP RUN =<br />
+gen_vel &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= no<br />
+continuation &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; = no<br />
+------<br />
+※ e.g., nsteps = 10000<br />
+<br />
+◇ *.gro to *.cfg<br />
+1. gedit gro2cfg<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.gro tmp.gro<br />
+echo &quot; (Version 3 format configuration file)&quot; &gt; tmp.cfg<br />
+echo &quot; M &nbsp; &nbsp;&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 0 moves generated, tried, accepted&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; configurations saved&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+awk &nbsp;&#39;NR==2{print &quot; &nbsp; &nbsp; &nbsp; %d molecules (of all types) \n&quot;, $1}&#39; tmp.gro &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2 types of molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 is the largest number of atoms in a molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 Euler angles are provided&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;F (Box is not truncated octahedral)&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defining vectors are:&quot; &gt;&gt; tmp.cfg<br />
+#<br />
+set a = `awk &#39;END{print $1}&#39; tmp.gro`<br />
+set b = `awk &#39;END{print $2}&#39; tmp.gro`<br />
+set c = `awk &#39;END{print $3}&#39; tmp.gro`<br />
+echo &quot;lattice constant a, b, c: &quot;${a}&quot;, &quot;${b}&quot;, &quot;${c}<br />
+awk -v a=${a} &#39;NR==6{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;\n&quot;,a/2 }&#39; tmp.gro &gt;&gt; tmp.cfg<br />
+awk -v b=${b} &#39;NR==7{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp;\n&quot;,b/2 }&#39; tmp.gro &gt;&gt; tmp.cfg<br />
+awk -v c=${c} &#39;NR==8{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;%10.6f \n&quot;, c/2 &nbsp; &nbsp; &nbsp; &nbsp; }&#39; tmp.gro &gt;&gt; tmp.cfg<br />
+#<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp;219 molecules of type &nbsp;1&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 atomic sites&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.000000&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; 31 molecules of type &nbsp;2&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 atomic sites&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.000000&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+sed -i &#39;$d&#39; tmp.gro<br />
+awk -v a=${a} -v b=${b} -v c=${c} &#39;(NR&gt;=3){printf &quot;%12.6f %12.6f %12.6f \n&quot;,($4/a-0.5),($5/b-0.5),($6/c-0.5) }&#39; tmp.gro &gt;&gt; tmp.cfg<br />
+mv tmp.cfg ${filename}.cfg<br />
+rm -f -r tmp.gro<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; gro2cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place gro2cfg)<br />
+3. chmod +x gro2cfg<br />
+4. ./gro2cfg msc30ch<br />
+※ e.g., msc30ch.cfg<br />
+※ please, change &quot;219&quot; and &quot;31&quot;<br />
+<br />
+□ RMCA + Gromacs (auto)<br />
+1. gedit run_rmca_gromacs<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+rm -f -r $1.tpr $1.edr md.log ener.edr<br />
+<br />
+set No = 1<br />
+set MaxNo = $2<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; printf $1 | ./rmca_linux<br />
+&nbsp; #<br />
+&nbsp; ./cfg2lmp_gro $1<br />
+&nbsp; python $HOME/InterMol/intermol/convert.py --lmp_in in.lmp_gro --gromacs --odir ./ --inefile=./mdout.mdp -lp=$HOME/lammps/src/lmp_serial -gp=/usr/bin<br />
+&nbsp; rm -f -r $1.tpr $1.edr md.log ener.edr<br />
+&nbsp; #<br />
+&nbsp; gmx grompp -f grompp.mdp -c in_converted.gro -p in_converted.top -o $1.tpr -maxwarn 5<br />
+&nbsp; rm -f -r topol.tpr in_converted.gro in_converted.top<br />
+&nbsp; #<br />
+&nbsp; gmx mdrun -s $1.tpr -c $1.gro -e $1.edr<br />
+&nbsp; ./gro2cfg $1<br />
+&nbsp; rm -f -r $1.tpr<br />
+&nbsp; mv $1.gro $1.gro.${No}<br />
+&nbsp; mv $1.edr $1.edr.${No}<br />
+&nbsp; mv md.log md.log.${No}<br />
+<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_rmca_mopac<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_rmca_mopac)<br />
+3. chmod +x run_rmca_mopac<br />
+4. ./run_rmca_gromacs msc30 100<br />
+※ mes30.cfg, 100 cycle<br />
+<br />
+※ Gromacs<br />
+1. gmx pdb2gmx -f PROTEIN.pdb -o PROTEIN.gro -p PROTEIN.top -ff amber14sb -water tip3p<br />
+&nbsp; (convert *.pdb to *.gro)<br />
+2. gmx editconf -f PROTEIN.gro -bt triclinic -d 2<br />
+&nbsp; (gmx editconf -f PROTEIN.gro -o PROTEIN_box.gro -box 7.5 6.7 6.9)<br />
+&nbsp; (setting box size, nm units)<br />
+3. gmx solvate -cp PROTEIN_box.gro -cs spc216 -o PROTEIN_solv.gro -p PROTEIN.top<br />
+&nbsp; (add water)<br />
+4. gmx grompp -f ions.mdp -c PROTEIN_solv.gro -p PROTEIN.top -o ions.tpr<br />
+&nbsp; gmx genion -s ions.tpr -o PROTEIN_system.gro -p PROTEIN.top -pname NA -np NP -nname CL -nn NN<br />
+&nbsp; (add ion)<br />
+5. (chech structure on VMD, etc)<br />
+6. gmx grompp -f EM.mdp -c PROTEIN_system.gro -p PROTEIN.top -o PROTEIN_em.tpr<br />
+&nbsp; (makng binary of topology file)<br />
+7. gmx mdrun<br />
+[1] https://mumeiyamibito.0am.jp/分子シミュレーション関連/gromacs/gromacs計算手順_ver.5<br />
+<br />
+※ files<br />
+・*.top: トポロジーファイル<br />
+・*.gro: 構造ファイル<br />
+・*.itp: 位置拘束情報ファイル<br />
+[2] http://www.scls.riken.jp/wp-content/uploads/2013/12/scls_GROMACS_lecture.pdf<br />
+[3] https://wiki.archlinux.jp/index.php/GROMACS<br />
+------------------------------------------------------------------------------<br />
+■ MOPAC<br />
+<br />
+□ *.cfg to *.mop<br />
+1. gedit cfg2mop<br />
+-----<br />
+#! /bin/csh -f<br />
+set elem_data = (C H)<br />
+#<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot; AUX LARGE CHARGE=0 SINGLET PM7&quot; &gt; tmp.mop<br />
+echo &quot;Title&quot; &gt;&gt; tmp.mop<br />
+echo &quot; &quot; &gt;&gt; tmp.mop<br />
+#<br />
+set a_half_lattice = `awk &#39;NR==14{print $1}&#39; tmp.cfg`<br />
+echo &quot;a lattice * 0.5:&quot; ${a_half_lattice}<br />
+set b_half_lattice = `awk &#39;NR==15{print $2}&#39; tmp.cfg`<br />
+echo &quot;b lattice * 0.5:&quot; ${b_half_lattice}<br />
+set c_half_lattice = `awk &#39;NR==16{print $3}&#39; tmp.cfg`<br />
+echo &quot;c lattice * 0.5:&quot; ${c_half_lattice}<br />
+#<br />
+set total_atoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+set count = 0<br />
+set natom_remain = ${total_atoms}<br />
+set read_start = 0<br />
+while (${natom_remain} &gt; 0)<br />
+&nbsp; @ count += 1<br />
+&nbsp; set elem_symbol = ${elem_data[${count}]}<br />
+&nbsp; set num_elem = `awk -v n=${count} &#39;NR==(14+n*4){print $1}&#39; tmp.cfg`<br />
+&nbsp; set natom_remain = `echo &quot;${natom_remain} - ${num_elem}&quot; | bc`<br />
+&nbsp; awk -v elem_symbol=${elem_symbol} -v ha=${a_half_lattice} -v hb=${b_half_lattice} -v hc=${c_half_lattice} -v rs=${read_start} -v natom=${num_elem} &#39;(NR&gt;=26+rs &amp;&amp; NR&lt;natom+26+rs){printf &quot; %s &nbsp;%7.4f 1 %7.4f 1 %7.4f 1 \n&quot;,elem_symbol,($1+1)*ha,($2+1)*hb,($3+1)*hc}&#39; tmp.cfg &gt;&gt; tmp.mop<br />
+&nbsp; set read_start = `echo &quot;${read_start} + ${num_elem}&quot; | bc`<br />
+end<br />
+#<br />
+awk -v n=2 &#39;NR==14{printf &quot; Tv %7.4f 1 &nbsp;0.0000 0 &nbsp;0.0000 0 \n&quot;,($1)*n}&#39; tmp.cfg &gt;&gt; tmp.mop<br />
+awk -v n=2 &#39;NR==15{printf &quot; Tv &nbsp;0.0000 0 &nbsp;%7.4f 1 &nbsp;0.0000 0 \n&quot;,($2)*n}&#39; tmp.cfg &gt;&gt; tmp.mop<br />
+awk -v n=2 &#39;NR==16{printf &quot; Tv &nbsp;0.0000 0 &nbsp;0.0000 0 &nbsp;%7.4f 1 \n&quot;,($3)*n}&#39; tmp.cfg &gt;&gt; tmp.mop<br />
+#<br />
+mv tmp.mop ${filename}.mop<br />
+rm -f -r tmp.cfg<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2mop<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2mop)<br />
+3. chmod +x cfg2mop<br />
+4. ./cfg2mop msc30<br />
+5. /opt/mopac/MOPAC2016.exe msc30.mop<br />
+※ e.g., msc30.cfg file<br />
+※ please, change &quot;set elem_data = (C H)&quot;<br />
+<br />
+□ *.mop to *.cfg<br />
+1. gedit mop2cfg<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cat ${filename}.out | tac | sed &#39;/UNIT CELL TRANSLATION VECTORS/q&#39; | tac &gt; tmp.out<br />
+#<br />
+echo &quot; (Version 3 format configuration file)&quot; &gt; tmp.cfg<br />
+echo &quot; M &nbsp; &nbsp;&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 0 moves generated, tried, accepted&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; configurations saved&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+awk &nbsp;&#39;{if($7==&quot;atoms&quot;){printf &quot; &nbsp; &nbsp; &nbsp; %d molecules (of all types) \n&quot;,$6}}&#39; tmp.out &gt;&gt; tmp.cfg<br />
+#<br />
+set rev_element_list = (Og Ts Lv Mc Fl Nh Cn Rg Ds Mt Hs Bh Sg Df Rf Lr No Md Fm Es Cf Bk Cm Am Pu Np U Pa Th Ac Ra Fr Rn At Po Bi Pb Tl Hg Au Pt Ir Os Re W Ta Hf Lu Yb Tm Er Ho Dy Tb Gd Eu Sm Pm Nd Pr Ce La Ba Cs Xe I Te Sb Sn In Cd Ag Pd Rh Ru Tc Mo Nb Zr Y Sr Rb Kr Br Se As Ge Ga Zn Cu Ni Co Fe Mn Cr V Ti Sc Ca K Ar Cl S P Si Al Mg Na Ne F O N C B Be Li He H)<br />
+#<br />
+set read_start = `grep -n &quot;CARTESIAN COORDINATES&quot; tmp.out | sed -e &#39;s/:.*//g&#39;`<br />
+set read_end &nbsp; = `grep -n &quot;Empirical Formula:&quot; tmp.out | sed -e &#39;s/:.*//g&#39;`<br />
+set total_atoms = `awk &#39;{if($1==&quot;Empirical&quot; &amp;&amp; $2==&quot;Formula:&quot;){print $6}}&#39; tmp.out`<br />
+#<br />
+set count = 0<br />
+set total_atoms_list = &quot;&quot;<br />
+set atom_symbol = &quot;&quot;<br />
+foreach atom (${rev_element_list})<br />
+&nbsp; set num = `awk -v rs=${read_start} -v ndata=${total_atoms} &#39;{if(NR&gt;=rs+4 &amp;&amp; NR&lt;=rs+4+ndata){print $2}}&#39; tmp.out | grep -c -i ${atom}`<br />
+&nbsp; if (${num} &gt; 0) then<br />
+&nbsp; &nbsp; set atom_symbol = `echo &quot;${atom_symbol} ${atom}&quot;`<br />
+&nbsp; &nbsp; set total_atoms_list = `echo &quot;${total_atoms_list} ${num}&quot;`<br />
+&nbsp; &nbsp; @ count += 1<br />
+&nbsp; endif<br />
+end<br />
+#<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;${count} types of molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 is the largest number of atoms in a molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 Euler angles are provided&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;F (Box is not truncated octahedral)&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defining vectors are:&quot; &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==4{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;\n&quot;,($3)*n}&#39; tmp.out &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==5{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp;\n&quot;,($4)*n}&#39; tmp.out &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==6{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 %10.6f \n&quot;,($5)*n}&#39; tmp.out &gt;&gt; tmp.cfg<br />
+#<br />
+set a = `awk &#39;NR==4{print $3}&#39; tmp.out`<br />
+echo &quot;a lattice constant:&quot; ${a}<br />
+set b = `awk &#39;NR==5{print $4}&#39; tmp.out`<br />
+echo &quot;b lattice constant:&quot; ${b}<br />
+set c = `awk &#39;NR==6{print $5}&#39; tmp.out`<br />
+echo &quot;c lattice constant:&quot; ${c}<br />
+#<br />
+set count = 0<br />
+foreach i (${total_atoms_list})<br />
+&nbsp; @ count += 1<br />
+&nbsp; echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp;$i molecules of type &nbsp;${count}&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 atomic sites&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.000000&quot; &gt;&gt; tmp.cfg<br />
+end<br />
+#<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+foreach atom (${atom_symbol})<br />
+&nbsp; awk -v atomic_symbol=${atom} -v n=2 -v a=${a} -v b=${b} -v c=${c} &#39;(NR&gt;=12 &amp;&amp; $2==atomic_symbol){printf &quot;%12.6f %12.6f %12.6f \n&quot;,($3/a-0.5)*n,($4/b-0.5)*n,($5/c-0.5)*n}&#39; tmp.out &gt;&gt; tmp.cfg<br />
+end<br />
+#<br />
+mv tmp.cfg ${filename}.cfg<br />
+rm -f -r tmp.out<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; mop2cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place mop2cfg)<br />
+3. chmod +x mop2cfg<br />
+4. ./mop2cfg msc30<br />
+※ msc30.cfgs<br />
+※ please, change 219 and 31<br />
+<br />
+□ RMCA + MOPAC2016<br />
+1. printf &#39;msc30&#39; | ./rmca_linux<br />
+2. ./cfg2mop msc30<br />
+3. /opt/mopac/MOPAC2016.exe msc30.mop<br />
+&nbsp; (You can get set.out)<br />
+4. ./mop2cfg msc30<br />
+5. (goto 1.)<br />
+※ msc30.cfgs<br />
+<br />
+□ RMCA + MOPAC2016 (auto)<br />
+1. gedit run_rmca_mopac<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set No = 1<br />
+set MaxNo = $2<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; printf $1 | ./rmca_linux<br />
+&nbsp; ./cfg2mop $1<br />
+&nbsp; /opt/mopac/MOPAC2016.exe $1.mop<br />
+&nbsp; ./mop2cfg $1<br />
+<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; run_rmca_mopac<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_rmca_mopac)<br />
+3. chmod +x run_rmca_mopac<br />
+4. ./run_rmca_mopac msc30 100<br />
+※ mes30.cfg, 100 cycle<br />
+※ number density も変化させて最も低いエネルギーを探すようにした方が良いと思われるがまだそのようにはできていない<br />
+&nbsp;sed を用いて原子数の変化に対応するようにすればよいと思われる。時間がないのでここまで。<br />
+※ cfg2mop, mop2cfg などは上に記載されているものを用いればよいです<br />
+------------------------------------------------------------------------------<br />
+■ Avogadro<br />
+<br />
+□ structure optimization<br />
+0. cp ~/lammps/potentials/CH.airebo ./<br />
+&nbsp; mkdir cfg<br />
+1. *.cfg &gt; (modify POSCAR format) &gt; VESTA &gt; *.cif<br />
+2. avogadro<br />
+&nbsp;(drag &amp; drop *.cif)<br />
+&nbsp;(Crustallography &gt; remove unit cell)<br />
+3. Extensions &gt; Optimize Geometory &gt; OK&nbsp;<br />
+&nbsp;(click Messages)<br />
+4. File &gt; Save as ... &gt; *.xyz<br />
+5. ./cfg2vasp<br />
+6. VESTA &gt; *.vasp &gt; File &gt; Export Data ... &gt; *.vasp &gt; Fractional coordinates &gt; OK<br />
+※ a, b, c [bohr] (half box) = (number of atoms / number density)^(1/3) * 0.52918 / 2<br />
+&nbsp;atomic positon = x/2-1, y/2-1, z/2-1<br />
+※ avogadro [options] [files]<br />
+------------------------------------------------------------------------------<br />
+■ VESTA(VASP)<br />
+<br />
+・vasp2cfg<br />
+1. gedit vasp2cfg<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.vasp tmp.vasp<br />
+echo &quot; (Version 3 format configuration file)&quot; &gt; tmp.cfg<br />
+echo &quot; M &nbsp; &nbsp;&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; 0 moves generated, tried, accepted&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; configurations saved&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+#<br />
+set total_atoms_list = `awk &#39;NR==7{print $0}&#39; tmp.vasp`<br />
+set count = 0<br />
+set total_atoms = 0<br />
+foreach i (${total_atoms_list})<br />
+&nbsp; set total_atoms = `echo &quot;${total_atoms} + $i&quot; | bc`<br />
+&nbsp; @ count += 1<br />
+end<br />
+#<br />
+echo &quot; &nbsp; &nbsp; &nbsp; ${total_atoms} molecules (of all types)&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;${count} types of molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 is the largest number of atoms in a molecule&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 Euler angles are provided&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;F (Box is not truncated octahedral)&quot; &gt;&gt; tmp.cfg<br />
+echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Defining vectors are:&quot; &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==3{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;%10.6f &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 \n&quot;,($1)*n }&#39; tmp.vasp &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==4{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp;%10.6f &nbsp; &nbsp; 0.000000 \n&quot;,($2)*n }&#39; tmp.vasp &gt;&gt; tmp.cfg<br />
+awk -v n=0.5 &#39;NR==5{printf &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.000000 &nbsp; 0.000000 &nbsp;%10.6f \n&quot;, ($3)*n }&#39; tmp.vasp &gt;&gt; tmp.cfg<br />
+#<br />
+set count = 0<br />
+set total_atoms = 0<br />
+foreach i (${total_atoms_list})<br />
+&nbsp; @ count += 1<br />
+&nbsp; echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp;$i molecules of type &nbsp;${count}&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 atomic sites&quot; &gt;&gt; tmp.cfg<br />
+&nbsp; echo &quot; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.000000&quot; &gt;&gt; tmp.cfg<br />
+end<br />
+#<br />
+echo &quot; &quot; &gt;&gt; tmp.cfg<br />
+awk -v n=2 &#39;(NR&gt;=9){printf &quot;%12.6f %12.6f %12.6f \n&quot;,($1-0.5)*n,($2-0.5)*n,($3-0.5)*n}&#39; tmp.vasp &gt;&gt; tmp.cfg<br />
+mv tmp.cfg ${filename}.cfg<br />
+rm -f -r tmp.vasp<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; vasp2cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place vasp2cfg)<br />
+3. chmod +x vasp2cfg<br />
+4. ./vasp2cfg msc30<br />
+※ e.g., msc30.vasp<br />
+※ VESTA &gt; *.vasp &gt; File &gt; Export Data ... &gt; *.vasp &gt; Fractional coordinates &gt; OK<br />
+※ a, b, c [bohr] (half box) = (number of atoms / number density)^(1/3) * 0.52918 / 2<br />
+&nbsp;atomic positon = x/2-1, y/2-1, z/2-1<br />
+------------------------------------------------------------------------------<br />
+■ pdb file (test version)<br />
+<br />
+□ convert *.cfg to *.pdb<br />
+1. gedit cfg2pdb<br />
+-----<br />
+#! /bin/csh -f<br />
+set elem_data = (C H)<br />
+#<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+echo &quot;title&quot; &gt; tmp.pdb<br />
+#<br />
+set NumOfAtoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+echo ${NumOfAtoms} &gt;&gt; tmp.pdb<br />
+echo &quot;number of atoms &quot;${NumOfAtoms}<br />
+#<br />
+set a_half_lattice = `awk &#39;NR==14{print $1}&#39; tmp.cfg`<br />
+echo &quot;a lattice * 0.5:&quot; ${a_half_lattice}<br />
+set b_half_lattice = `awk &#39;NR==15{print $2}&#39; tmp.cfg`<br />
+echo &quot;b lattice * 0.5:&quot; ${b_half_lattice}<br />
+set c_half_lattice = `awk &#39;NR==16{print $3}&#39; tmp.cfg`<br />
+echo &quot;c lattice * 0.5:&quot; ${c_half_lattice}<br />
+#<br />
+set a = `echo &quot;${a_half_lattice}*2&quot; | bc`<br />
+set b = `echo &quot;${b_half_lattice}*2&quot; | bc`<br />
+set c = `echo &quot;${c_half_lattice}*2&quot; | bc`<br />
+echo &quot;a, b, c = &quot;${a}&quot;, &quot;${b}&quot;, &quot;${c}<br />
+#<br />
+set total_atoms = `awk &#39;NR==7{print $1}&#39; tmp.cfg`<br />
+set count = 0<br />
+set natom_remain = ${total_atoms}<br />
+set read_start = 0<br />
+while (${natom_remain} &gt; 0)<br />
+&nbsp; @ count += 1<br />
+&nbsp; set elem_symbol = ${elem_data[${count}]}<br />
+&nbsp; set num_elem = `awk -v n=${count} &#39;NR==(14+n*4){print $1}&#39; tmp.cfg`<br />
+&nbsp; set natom_remain = `echo &quot;${natom_remain} - ${num_elem}&quot; | bc`<br />
+&nbsp; #<br />
+&nbsp; awk -v elem_symbol=${elem_symbol} -v ha=${a_half_lattice} -v hb=${b_half_lattice} -v hc=${c_half_lattice} -v rs=${read_start} -v natom=${num_elem} &#39;(NR&gt;=26+rs &amp;&amp; NR&lt;natom+26+rs){printf &quot;ATOM %d %s MOL %12.6f %12.6f %12.6f 1.00 0.00 %s \n&quot;,(NR-25),elem_symbol,($1+1)*ha,($2+1)*hb,($3+1)*hc,elem_symbol}&#39; tmp.cfg &gt;&gt; tmp.pdb<br />
+&nbsp; #<br />
+&nbsp; set read_start = `echo &quot;${read_start} + ${num_elem}&quot; | bc`<br />
+end<br />
+#<br />
+mv tmp.pdb ${filename}.pdb<br />
+rm -f -r tmp.cfg<br />
+-----<br />
+2. sed -i &#39;s/\r//g&#39; cfg2pdb<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg2pdb)<br />
+3. chmod +x cfg2pdb<br />
+4. ./cfg2pdb msc30<br />
+※ e.g., msc30.vasp<br />
+※ please, change &quot;set elem_data = (C H)&quot;<br />
+------------------------------------------------------------------------------<br />
+<br />
+&nbsp;

@@ -1,0 +1,257 @@
+QMMM (QM/MM method) (Gamess/Gamess)<br />
+------------------------------------------------------------------------------<br />
+■ QuanPol QM/MM (Gamess/Gamess)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10 (64 bit))<br />
+<br />
+□ GAMESS (gfortran + OpenBLAS) (※ Please, change &quot;username&quot;)<br />
+・GAMESS version September 30, 2019 R2 for 64 bit x86_64 under Linux with gnu compilers<br />
+(Downloading GAMESS)<br />
+0. sudo apt install gfortran libopenblas-dev csh tsch build-essential<br />
+1. tar zxvf gamess-current.tar.gz<br />
+2. cd gamess<br />
+3. sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; config<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; compall<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; comp<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; lked<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; rungms<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; runall<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; ./ddi/compddi<br />
+4. ./config<br />
+&nbsp; 4.1. After the new window is open, please hit &lt;return&gt; to go on.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.2. please enter your target machine name: linux64<br />
+&nbsp; 4.3. GAMESS directory? [/home/username/gamess]<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.4. GAMESS build directory? [/home/username/gamess]&nbsp;<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.5. Version? [00] 19<br />
+&nbsp; 4.6. Please enter your choice of FORTRAN: gfortran<br />
+&nbsp; 4.7. Please enter only the first decimal place, such as 4.9: 7.4<br />
+&nbsp; 4.8. Linux distributions do not include a standard math library.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.9. Enter your choice of &#39;mkl&#39; or &#39;atlas&#39; or &#39;acml&#39; or &#39;libflame&#39; or &#39;openblas&#39; or &#39;pgiblas&#39; or &#39;armpl&#39; or &#39;none&#39;: openblas<br />
+&nbsp; 4.10. enter this full pathname: /usr/lib/x86_64-linux-gnu<br />
+&nbsp; 4.11. please hit &lt;return&gt; to compile the GAMESS source code activator<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.12. please hit &lt;return&gt; to set up your network for Linux clusters.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.13. communication library (&#39;serial&#39;,&#39;sockets&#39; or &#39;mpi&#39; or &#39;mixed&#39;)? sockets<br />
+&nbsp; 4.14. Optional: Build Michigan State University CCT3 &amp; CCSD3A methods? &nbsp;(yes/no): no<br />
+&nbsp; 4.15. Do you want to try LIBCCHEM? &nbsp;(yes/no): no<br />
+&nbsp; ------<br />
+&nbsp; Your configuration for GAMESS compilation is now in<br />
+&nbsp; &nbsp; &nbsp;/home/username/gamess/install.info<br />
+&nbsp; Now, please follow the directions in<br />
+&nbsp; &nbsp; &nbsp;/home/username/gamess/machines/readme.unix<br />
+&nbsp; ------<br />
+5. less install.info<br />
+&nbsp; space &gt; q<br />
+6. cd ~/gamess/ddi<br />
+&nbsp; ./compddi<br />
+&nbsp; mv ddikick.x ..<br />
+7. cd ~/gamess<br />
+&nbsp; ./compall<br />
+8. ./lked gamess 19<br />
+9. gedit rungms<br />
+-----<br />
+set TARGET=sockets<br />
+set SCR=~/gamess/USER<br />
+set USERSCF=~/gamess/USER/src<br />
+set GMSPATH=~/gamess<br />
+-----<br />
+10. mkdir USER<br />
+&nbsp; cd USER<br />
+&nbsp; mkdir src<br />
+&nbsp; cd ~/gamess/<br />
+11. export NCPUS=4<br />
+&nbsp; export OPENBLAS_NUM_THREADS=1<br />
+&nbsp; export OMP_NUM_THREADS=1<br />
+&nbsp; sudo ./runall 19<br />
+12. ./tests/standard/checktst<br />
+<br />
+□ QuanPol (QM/MM calculation)<br />
+1. cd ~/gamess/tests<br />
+2. cd quanpol<br />
+3. export NCPUS=4<br />
+&nbsp; export OPENBLAS_NUM_THREADS=1<br />
+&nbsp; export OMP_NUM_THREADS=1<br />
+4. sudo ~/gamess/rungms 1ao6pbcw-qmmm.inp 19 $NCPUS | tee 1ao6pbcw-qmmm.out<br />
+<br />
+□ wxMacMolPlt<br />
+(http://brettbode.github.io/wxmacmolplt/) &gt; (http://brettbode.github.io/wxmacmolplt/downloads.html)<br />
+1. tar zxvf wxmacmolplt-7.7.tar.gz<br />
+2. cd wxmacmolplt-7.7<br />
+3. ./configure --with-gtk --with-opengl --enable-unicode<br />
+4. make<br />
+5. sudo make install<br />
+6. /usr/local/bin/wxmacmolplt<br />
+<br />
+□ Facio (64 bit)<br />
+(http://zzzfelis.sakura.ne.jp/)<br />
+0. sudo apt install wine-stable<br />
+&nbsp; sudo apt install libgl1-mesa-dev<br />
+1. wget http://zzzfelis.sakura.ne.jp/Facio/Facio2211-64.zip<br />
+2. unzip Facio2211-64.zip<br />
+3. cd Facio2211-64<br />
+4. wine ~/Facio2211-64/Facio.exe<br />
+&nbsp; (or wine64 ~/Facio2211-64/Facio.exe)<br />
+------------------------------------------------------------------------------<br />
+□ GAMESS (gfortran + MKL) (※ Please, change &quot;username&quot;)<br />
+・GAMESS version September 30, 2019 R2 for 64 bit x86_64 under Linux with gnu compilers<br />
+(Downloading GAMESS)<br />
+0. sudo apt install gfortran libopenblas-dev csh tsch build-essential<br />
+1. tar zxvf gamess-current.tar.gz<br />
+2. cd gamess<br />
+3. sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; config<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; compall<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; comp<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; lked<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; rungms<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; runall<br />
+&nbsp; sed -i &quot;1 s/\#\!\/bin\/csh/\#\!\/bin\/tcsh/g&quot; ./ddi/compddi<br />
+4. ./config<br />
+&nbsp; 4.1. After the new window is open, please hit &lt;return&gt; to go on.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.2. please enter your target machine name: linux64<br />
+&nbsp; 4.3. GAMESS directory? [/home/username/gamess]<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.4. GAMESS build directory? [/home/username/gamess]&nbsp;<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.5. Version? [00] 19<br />
+&nbsp; 4.6. Please enter your choice of FORTRAN: gfortran<br />
+&nbsp; 4.7. Please enter only the first decimal place, such as 4.9: 7.4<br />
+&nbsp; 4.8. Linux distributions do not include a standard math library.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.9. Enter your choice of &#39;mkl&#39; or &#39;atlas&#39; or &#39;acml&#39; or &#39;libflame&#39; or &#39;openblas&#39; or &#39;pgiblas&#39; or &#39;armpl&#39; or &#39;none&#39;: mkl<br />
+&nbsp; 4.10. MKL pathname? /opt/intel/mkl<br />
+&nbsp; 4.11. MKL version (or &#39;proceed&#39;)? proceed<br />
+&nbsp; 4.12. please hit &lt;return&gt; to compile the GAMESS source code activator<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.13. please hit &lt;return&gt; to set up your network for Linux clusters.<br />
+&nbsp; &nbsp; [Enter]<br />
+&nbsp; 4.13. communication library (&#39;serial&#39;,&#39;sockets&#39; or &#39;mpi&#39; or &#39;mixed&#39;)? sockets<br />
+&nbsp; 4.14. Optional: Build Michigan State University CCT3 &amp; CCSD3A methods? &nbsp;(yes/no): no<br />
+&nbsp; 4.15. Do you want to try LIBCCHEM? &nbsp;(yes/no): no<br />
+&nbsp; ------<br />
+&nbsp; Your configuration for GAMESS compilation is now in<br />
+&nbsp; &nbsp; &nbsp;/home/username/gamess/install.info<br />
+&nbsp; Now, please follow the directions in<br />
+&nbsp; &nbsp; &nbsp;/home/username/gamess/machines/readme.unix<br />
+&nbsp; ------<br />
+5. less install.info<br />
+&nbsp; space &gt; q<br />
+6. cd ~/gamess/ddi<br />
+&nbsp; ./compddi<br />
+&nbsp; mv ddikick.x ..<br />
+7. cd ~/gamess<br />
+&nbsp; ./compall<br />
+8. ./lked gamess 19<br />
+9. gedit rungms<br />
+-----<br />
+set TARGET=sockets<br />
+set SCR=~/gamess/USER<br />
+set USERSCF=~/gamess/USER/src<br />
+set GMSPATH=~/gamess<br />
+-----<br />
+10. mkdir USER<br />
+&nbsp; cd USER &nbsp;mkdir src<br />
+&nbsp; cd ~/gamess/<br />
+11. export NCPUS=4<br />
+&nbsp; export MKL_NUM_THREADS=1<br />
+&nbsp; export OMP_NUM_THREADS=1<br />
+&nbsp; sudo ./runall 19<br />
+12. ./tests/standard/checktst<br />
+<br />
+□ QuanPol<br />
+1. cd ~/gamess/tests<br />
+2. cd quanpol<br />
+3. export NCPUS=4<br />
+&nbsp; export MKL_NUM_THREADS=1<br />
+&nbsp; export OMP_NUM_THREADS=1<br />
+4. sudo ~/gamess/rungms 1ao6pbcw-qmmm.inp 19 $NCPUS | tee 1ao6pbcw-qmmm.log<br />
+<br />
+※ gfortran -v<br />
+----------<br />
+gfortran -v<br />
+Using built-in specs.<br />
+COLLECT_GCC=gfortran<br />
+COLLECT_LTO_WRAPPER=/usr/lib/gcc/x86_64-linux-gnu/7/lto-wrapper<br />
+OFFLOAD_TARGET_NAMES=nvptx-none<br />
+OFFLOAD_TARGET_DEFAULT=1<br />
+Target: x86_64-linux-gnu<br />
+Configured with: ../src/configure -v --with-pkgversion=&#39;Ubuntu 7.4.0-1ubuntu1~18.04.1&#39; --with-bugurl=file:///usr/share/doc/gcc-7/README.Bugs --enable-languages=c,ada,c++,go,brig,d,fortran,objc,obj-c++ --prefix=/usr --with-gcc-major-version-only --program-suffix=-7 --program-prefix=x86_64-linux-gnu- --enable-shared --enable-linker-build-id --libexecdir=/usr/lib --without-included-gettext --enable-threads=posix --libdir=/usr/lib --enable-nls --with-sysroot=/ --enable-clocale=gnu --enable-libstdcxx-debug --enable-libstdcxx-time=yes --with-default-libstdcxx-abi=new --enable-gnu-unique-object --disable-vtable-verify --enable-libmpx --enable-plugin --enable-default-pie --with-system-zlib --with-target-system-zlib --enable-objc-gc=auto --enable-multiarch --disable-werror --with-arch-32=i686 --with-abi=m64 --with-multilib-list=m32,m64,mx32 --enable-multilib --with-tune=generic --enable-offload-targets=nvptx-none --without-cuda-driver --enable-checking=release --build=x86_64-linux-gnu --host=x86_64-linux-gnu --target=x86_64-linux-gnu<br />
+Thread model: posix<br />
+gcc version 7.4.0 (Ubuntu 7.4.0-1ubuntu1~18.04.1)<br />
+----------<br />
+※ Intel? Math Kernel Library Link Line Advisor<br />
+&nbsp; https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/<br />
+※ gedit ~/gamess/machines/readme.unix&nbsp;<br />
+※ mpich: /usr/bin/mpif90.mpich, openmpi: /usr/bin/mpif90.openmpi<br />
+※ settings (failed)<br />
+&nbsp; 4.13. communication library (&#39;serial&#39;,&#39;sockets&#39; or &#39;mpi&#39; or &#39;mixed&#39;)? mpi<br />
+&nbsp; &nbsp; &nbsp;Enter MPI library (impi, mpich, mpich2, mvapich2, mpt, sockets): openmpi<br />
+&nbsp; &nbsp; &nbsp;Please enter your mpich&#39;s location: /usr/lib/x86_64-linux-gnu/openmpi<br />
+<br />
+※ settings (failed)<br />
+&nbsp; 4.13. communication library (&#39;serial&#39;,&#39;sockets&#39; or &#39;mpi&#39; or &#39;mixed&#39;)? mpi<br />
+&nbsp; &nbsp; &nbsp;Enter MPI library (impi, mpich, mpich2, mvapich2, mpt, sockets): openmpi<br />
+&nbsp; &nbsp; &nbsp;Please enter your mpich&#39;s location: /usr/lib/x86_64-linux-gnu/openmpi<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[GT1] PC-CHEM.INFO (GAMESSでQM/MM計算 )<br />
+&nbsp; http://pc-chem.info/applications/237<br />
+[GT2] Facio<br />
+&nbsp; http://zzzfelis.sakura.ne.jp/<br />
+[GT3] QMMM Home Page<br />
+&nbsp; https://comp.chem.umn.edu/qmmm/<br />
+[GT4] BLAS ライブラリの違いによる GAMESS のパフォーマンス比較<br />
+&nbsp; https://machakann.hatenablog.com/entry/2018/09/16/210848<br />
+&nbsp; MP2 &gt; CCSD(T)と高度な計算にしていくとライブラリの種類により計算時間に差が出るようだが、この報告例ではMKLとOpenBLASの差は1%程度なのでインストールし易くて安定に動作するライブラリ（MKLまたはOpenBLAS）を選べばよいだろう。<br />
+&nbsp; 私はmpiやmixedでmpichやopenmpiを試してみたが全て失敗した。<br />
+[GT5] QuanPol: A full spectrum and seamless QM/MM program<br />
+&nbsp; https://www.onlinelibrary.wiley.com/doi/full/10.1002/jcc.23435<br />
+&nbsp; ※ QuanPolは全範囲の理論(HF, MCSCF, GVB, MP2, DFT, TDDFT, CHARMM, AMBER, OPLSAA)が利用可能な QM/MM計算パッケージであり、GAMESS (US)に組み込まれている[9]。(wikipediaより）<br />
+------------------------------------------------------------------------------<br />
+□ Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+<br />
+◇ registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+<br />
+◇ unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+-----<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

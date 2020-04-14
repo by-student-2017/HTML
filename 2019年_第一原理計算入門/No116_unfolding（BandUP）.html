@@ -1,0 +1,170 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+<br />
+◇ PWscf
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/vV8P_Clugrw" width="560"></iframe></div>
+<br />
+◇ Abinit
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/1nG96mie-zw" width="560"></iframe></div>
+<br />
+・Abinit: <a href="https://www.youtube.com/watch?v=1nG96mie-zw&amp;list=PL9r3BfacS1mFnw6DXaP6xAVoBohmLLzKM&amp;t=0s&amp;index=15">https://www.youtube.com/watch?v=1nG96mie-zw&amp;list=PL9r3BfacS1mFnw6DXaP6xAVoBohmLLzKM&amp;t=0s&amp;index=15</a><br />
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+------------------------------------------------------------------------------<br />
+■ BandUP (download and install), 2/June/2016<br />
+(https://www.ifm.liu.se/theomod/compphys/band-unfolding/)<br />
+1) download<br />
+&nbsp;sudo apt-get install python-numpy<br />
+&nbsp;sudo apt-get install python-scipy<br />
+&nbsp;sudo apt-get install scilab-plotlib<br />
+&nbsp;sudo apt-get install python-qt4<br />
+2) Download and license<br />
+&nbsp;GitHub page, Clone or download, Download ZIP<br />
+3) unzip $HOME/Downloads/band_unfolding-master.zip<br />
+4) cd band*<br />
+5) ./build.sh<br />
+&nbsp;default ifort<br />
+&nbsp;./build.sh ifort<br />
+&nbsp;./build.sh gfortran<br />
+&nbsp;(ifort: version 12.1.4 (or higher))<br />
+&nbsp;(gfortran: version 5.2 (or higher))<br />
+------------------------------------------------------------------------------<br />
+■ BandUP (PWscf), 2/June/2016<br />
+1) cd $HOME/band_unfolding-master/tutorial/Quantum_ESPRESSO/example_2_bulk_Si<br />
+2) cd step_1*<br />
+&nbsp;gedit job.sh<br />
+&nbsp;----<br />
+&nbsp;pwscf=$HOME/espresso-5.4.0/bin/pw.x<br />
+&nbsp;----<br />
+&nbsp;mpirun -np 4 $pwscf -input bulk_Si_pwscf.in &gt; pwscf.out<br />
+&nbsp;or<br />
+&nbsp;$pwscf -input bulk_Si_pwscf.in &gt; pwscf.out<br />
+&nbsp;----<br />
+&nbsp;./job.sh<br />
+&nbsp;cd ..<br />
+3) cd step_2*<br />
+&nbsp; cd input_files<br />
+&nbsp; gedit ...<br />
+&nbsp; cd ..<br />
+&nbsp; gedit get*<br />
+&nbsp; ----<br />
+&nbsp; bandup_folder=&quot;${HOME}/band_unfolding-master&quot;<br />
+&nbsp; ----<br />
+&nbsp; ./get*<br />
+&nbsp; cd input_files<br />
+&nbsp; copy KPOINTS_supercell.out<br />
+&nbsp; cd ..<br />
+-----<br />
+What to do with the gerenated &quot;KPOINTS_supercell.out&quot; file:<br />
+&nbsp;&nbsp;&nbsp; * Copy the number of SC-Kpts, as well as their coordinates, and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; paste them into Quantum espresso&#39;s &quot;.in&quot; file in the step #3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Remember to use &quot;K_POINTS crystal&quot; in that &quot;.in&quot; file!<br />
+<br />
+modify top of &quot;KPOINTS_supercell.out&quot; like following<br />
+---before<br />
+70<br />
+Reciprocal (fractional) coords. w.r.t. the SCRL vectors:<br />
+&nbsp; -0.50000&nbsp; -0.50000&nbsp; -0.50000<br />
+&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727<br />
+...<br />
+---after<br />
+70<br />
+&nbsp; -0.50000&nbsp; -0.50000&nbsp; -0.50000<br />
+&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727<br />
+...<br />
+---<br />
+-----<br />
+4) cd step_3*<br />
+&nbsp; past bulk_Si* and remove &quot;Reciprocal (fractional) coords. w.r.t. the SCRL vectors:&quot; line<br />
+&nbsp; gedit job.sh<br />
+&nbsp; ----<br />
+&nbsp; pwscf=$HOME/espresso-5.4.0/bin/pw.x<br />
+&nbsp; ----<br />
+&nbsp; mpirun -np 4 $pwscf -input bulk_Si_pwscf_bands.in &gt; pwscf_bands.out<br />
+&nbsp; or<br />
+&nbsp; $pwscf -input bulk_Si_pwscf_bands.in &gt; pwscf_bands.out<br />
+&nbsp; ----<br />
+&nbsp; ./job.sh<br />
+&nbsp; cd ..<br />
+5) cd step_4*<br />
+&nbsp; gedit run_BandUP_and_plot.sh<br />
+&nbsp; ----<br />
+&nbsp; bandup_folder=&quot;${HOME}/band_unfolding-master&quot;<br />
+&nbsp; ----<br />
+<br />
+if you failed, you need to remove linked files.<br />
+------------------------------------------------------------------------------<br />
+■ BandUP (Abinit), 2/June/2016<br />
+1) cd $HOME/band_unfolding-master/tutorial/ABINIT/example_2_bulk_Si<br />
+2) cd step_1*<br />
+&nbsp;gedit job.sh<br />
+&nbsp;----<br />
+&nbsp;if [ &quot;$NSC_RESOURCE_NAME&quot; == &#39;triolith&#39; ]; then<br />
+&nbsp;&nbsp;&nbsp; abinit=/usr/local/bin/abinit<br />
+&nbsp;else<br />
+&nbsp;&nbsp;&nbsp; abinit=/usr/local/bin/abinit<br />
+&nbsp;fi<br />
+&nbsp;----<br />
+&nbsp;mpirun -np 4 $abinit &lt; bulk_Si_chg.files &gt;&amp; log.abinit<br />
+&nbsp;or<br />
+&nbsp;$abinit &lt; bulk_Si_chg.files &gt;&amp; log.abinit<br />
+&nbsp;----<br />
+&nbsp;./job.sh<br />
+&nbsp;cd ..<br />
+3) cd step_2*<br />
+&nbsp; cd input_files<br />
+&nbsp; gedit ...<br />
+&nbsp; cd ..<br />
+&nbsp; gedit get*<br />
+&nbsp; ----<br />
+&nbsp; bandup_folder=&quot;${HOME}/band_unfolding-master&quot;<br />
+&nbsp; ----<br />
+&nbsp; ./get*<br />
+&nbsp; cd input_files<br />
+&nbsp; copy KPOINTS_supercell.out<br />
+&nbsp; cd ..<br />
+-----<br />
+What to do with the gerenated &quot;KPOINTS_supercell.out&quot; file:<br />
+&nbsp;&nbsp;&nbsp; * Copy the number of SC-Kpts, as well as their coordinates, and<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; paste them into Quantum espresso&#39;s &quot;.in&quot; file in the step #3.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; * Remember to use &quot;K_POINTS crystal&quot; in that &quot;.in&quot; file!<br />
+<br />
+modify top of &quot;KPOINTS_supercell.out&quot; like following<br />
+---before<br />
+70<br />
+Reciprocal (fractional) coords. w.r.t. the SCRL vectors:<br />
+&nbsp; -0.50000&nbsp; -0.50000&nbsp; -0.50000<br />
+&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727<br />
+...<br />
+---after<br />
+# K-points<br />
+kptopt 0 # Read directly nkpt, kpt, kptnrm and wtk.<br />
+nkpt 70<br />
+kpt # Direct kpt coordinates follow below<br />
+&nbsp; -0.50000&nbsp; -0.50000&nbsp; -0.50000<br />
+&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727&nbsp;&nbsp; 0.47727<br />
+...<br />
+---<br />
+-----<br />
+4) cd step_3*<br />
+&nbsp; gedit job.sh<br />
+&nbsp; ----<br />
+&nbsp; if [ &quot;$NSC_RESOURCE_NAME&quot; == &#39;triolith&#39; ]; then<br />
+&nbsp;&nbsp;&nbsp; abinit=/usr/local/bin/abinit<br />
+&nbsp; else<br />
+&nbsp;&nbsp;&nbsp; abinit=/usr/local/bin/abinit<br />
+&nbsp; fi<br />
+&nbsp; ----<br />
+&nbsp; mpirun -np 4 $abinit &lt; bulk_Si_WF.files &gt;&amp; log.abinit<br />
+&nbsp; or<br />
+&nbsp; $abinit &lt; bulk_Si_WF.files &gt;&amp; log.abinit<br />
+&nbsp; ----<br />
+&nbsp; ./job.sh<br />
+&nbsp; cd ..<br />
+5) cd step_4*<br />
+&nbsp; gedit run_BandUP_and_plot.sh<br />
+&nbsp; ----<br />
+&nbsp; bandup_folder=&quot;${HOME}/band_unfolding-master&quot;<br />
+&nbsp; ----<br />
+------------------------------------------------------------------------------

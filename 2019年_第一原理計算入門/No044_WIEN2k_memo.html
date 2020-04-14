@@ -1,0 +1,153 @@
+<p>cif format (for WIEN2k_14)<br />
+------------------------------------------------------------------------------<br />
+Please, change index on *.cif file<br />
+-----before<br />
+_space_group_name_H-M_alt<br />
+_space_group_IT_number<br />
+_space_group_symop_operation_xyz<br />
+-----<br />
+-----after (old format)<br />
+_symmetry_space_group_name_H-M<br />
+_symmetry_Int_Tables_number<br />
+_symmetry_equiv_pos_as_xyz<br />
+-----<br />
+<br />
+Carbon base materials<br />
+1. J. Evers et al., J. Phys. Chem. A 122 (2018) 3287-3292.<br />
+&nbsp; &quot;Molecular Structure of Isocyanic Acid, HNCO, the Imide of Carbon Dioxide&quot;<br />
+&nbsp; RMT C 0.545 Ang, N 0.598 Ang, O 0.598 Ang, H 0.333 Ang<br />
+&nbsp; RKmax 4<br />
+&nbsp; Gmax 20<br />
+&nbsp; 4x4x4 Pca21<br />
+&nbsp; 2x4x8 Pnma<br />
+<br />
+2. J. T. Titantah et al., J. Phys.: Condens. Matter 18 (2006) 10803&ndash;10815.<br />
+&nbsp; &quot;The effect of hydrogen on the electronic and bonding properties of amorphous carbon&quot;<br />
+&nbsp; RKmax a-C 5.0, a-C:H 3.0&nbsp;<br />
+<br />
+WIEN2kにおけるSCF計算高速化の研究<br />
+------------------------------------------------------------------------------<br />
+※ SOC + LDA+U の計算をより低コストで早く収束するようにすることは、Uをパラメーターとして試行錯誤するのに必須の技術である。現在、SOCまたはLDA+Uにおいては上手くいっているが、両者の組み合わせでは lapw2dmエラーなどのエラーが頻発する。幾つかの対策方法については左欄の「WIEN2k tips」に記載している。<br />
+※ 現在、最終的なDOSの形状が予測できる場合に、case.in1をどのように書き換えればよいかを模索している。この問題を解決できれば、論文を参照したりUPSの結果を用いて物理を議論する範囲が広くなると考えている。<br />
+※ Uを入れた場合には、UでEFから広がって軌道が分布すると思われるが、UとElの関係がいまいちつかめていない。<br />
+<br />
+spin-polarized SCF -&gt; SOC -&gt; SOC + LDA+U<br />
+-----<br />
+1. Fast mode:<br />
+&nbsp; spin-polarized calculation<br />
+&nbsp; RKmax 4<br />
+&nbsp; 6 k-pint(対称性を考慮して実際には1 k-pointで計算できる最大のk点数に設定)<br />
+2. LDA+Uの準備をして、SOCの計算のためにinitso_lapwを行っておく。<br />
+　(価電子帯のDOSの形状の変化が小さいすぎるのでSOCでは p1/2のLOを入れない）<br />
+3. 再度同じ条件でFast mode: を実行<br />
+4. run SCF で計算<br />
+&nbsp; Energy 0.001 Ry<br />
+---<br />
+5. SOC calculation<br />
+6. 26 k-point<br />
+7. SOC calculation<br />
+---<br />
+以上は成功だが、LDA+Uにするとエラーが出る。この対策法を模索中。<br />
+-<br />
+128 k-point<br />
+Prepare new input files で_soのデータを現在のものに移し変えてみた。<br />
+LDA+U calculation<br />
+どうにか動いている。ただし、2 h / 1 cycleと遅い。終わりも見えそうにない。<br />
+10 cycleで止めて、k点数を減らしてみる。<br />
+(initso_lapwのx kgen -soを用いて）124 k(=4x4x4) で計算してみる。 1 h / 1 cycle となった。これでもまだ終わりが見えそうにない。2 cycleで止めた。<br />
+(initso_lapwのx kgen -soを用いて）63 k(=3x3x3)で計算してみる。30 m /&nbsp;1 cycle となった。これでもまだ終わりが見えそうにない。3 cycleで止めた。<br />
+(initso_lapwのx kgen -soを用いて）26 k(=2x2x2)で計算してみる。エラーが出たので63 kに戻すもエラーで止まる。124 kにして計算するがエラーで停止。<br />
+63 k でSOCで計算し直す。<br />
+7 kでSOCから再開するもエラーが発生。<br />
+Fast modeを行って6 kにてSOCから再開。<br />
+63 kでLDA+Uを行ったが失敗。<br />
+124 kでも失敗。<br />
+215 kでSOCから再開。<br />
+以上と同様のことを何度か繰り返すがだめ。<br />
+下記の抜本的な変更を行う。<br />
+case.inmのmixingを0.2 から 0.05に変更（SOCの収束後からあまり大きく電子構造を変えないようにした）。そして、in1_soにて、EFを基準に論文にある各軌道の真ん中の値を LOに入力する。失敗した。<br />
+下記の方法をトライ中<br />
+SCF -&gt; mixing at case.inm, LO energy at case.in1 -&gt; LDA+U -&gt; Prepare new input files at initso_lapw -&gt; LDA+U + SOC<br />
+-----<br />
+完全に新しいファイルで作り直す。<br />
+安定に動作するold schemeを行い、RKmax 4, 7 k-pointにてLDA+Uで計算する。2セットrun SCFを繰り返すも収束せず。その後、initso_lapwを行い、LDA+U + SOC計算を行う。<br />
+上記との違いは、SOCの計算範囲を -12から-9にしてしまったことがエラー要因のひとつか？<br />
+入力ファイルのcase.in1cをみるとYb の l = 1のLOが存在している。やはり、フェルミ準位付近（0.3 Ry）と-11 eV近傍(-1.85 Ry)の軌道の2つが必要であることを認識した。EFは0.41 eVとしてしていされている。<br />
+メモリ使用量は2.2 GBになっている。4 min / 1 cycle と早い。<br />
+7点は成功した。この後、更に試行錯誤が続くため、纏める。<br />
+<br />
+■ LDA+U -&gt; LDA+U + SOC (success、2.8GB)<br />
+----<br />
+1. GtructGenTM -&gt; old scheme<br />
+2. initialize calc. -&gt; fast mode -&gt; spin polarized, RKmax 4, 7 k-point -&gt; CHECK BATCH VALUES<br />
+3. case.inorb, case.indmc<br />
+4. run SCF -&gt;&nbsp;Energy 0.001 -&gt; start SCF cycle&nbsp;(LDA+U)<br />
+5. initso_lapw<br />
+6. start SCF cycle&nbsp; (LDA+U + SOC)<br />
+7. x kgen<br />
+8. start SCF cycle&nbsp; (LDA+U + SOC)<br />
+----<br />
+ここまでは成功。ここからcase.in1を下記のようにして編集したが失敗。<br />
+-----<br />
+x lstart -&gt; -3.0 -&gt; instgen_lapw -&gt; x lstart<br />
+case.in1 -&gt; RKmax 4<br />
+initso_lapw -&gt; run SCF<br />
+-----<br />
+<br />
+■ LDA+U -&gt; LDA+U + SOC (2.9GB)<br />
+----<br />
+1. GtructGenTM -&gt; old scheme<br />
+2. initialize calc. -&gt; fast mode -&gt; spin polarized, RKmax 4, 7 k-point -&gt; CHECK BATCH VALUES<br />
+3. case.inorb, case.indmc, case.in1にて（7 k-pointで収束した値 でのEF 0.425とした) -&gt; fast mode<br />
+4. run SCF -&gt;&nbsp;Energy 0.01 -&gt;&nbsp;start SCF cycle&nbsp;(LDA+U)<br />
+5. initso_lapw<br />
+6. start SCF cycle&nbsp; (LDA+U + SOC)<br />
+7. x kgen<br />
+8. start SCF cycle&nbsp; (LDA+U + SOC)<br />
+----<br />
+<br />
+■ SOC -&gt; LDA+U + SOC (2.9GB)<br />
+----<br />
+1. GtructGenTM -&gt; old scheme<br />
+2. initialize calc. -&gt; fast mode -&gt; spin polarized, RKmax 4, 7 k-point -&gt; CHECK BATCH VALUES<br />
+3. case.inorb, case.indmc, case.in1にて（7 k-pointで収束した値 でのEF 0.425とした) -&gt; fast mode<br />
+4. run SCF -&gt;&nbsp;Energy 0.01 -&gt; start SCF cycle&nbsp;(non-SOC)<br />
+5. initso_lapw<br />
+6. run SCF -&gt;&nbsp;Energy 0.01 -&gt; start SCF cycle&nbsp;(non-SOC)<br />
+7. x kgen<br />
+8. start SCF cycle&nbsp; (SOC)<br />
+9. start SCF cycle&nbsp; (LDA+U + SOC)<br />
+急に計算でエラーが出るようになった。PCが悪いのか、何が悪いのか、よくわからない。<br />
+----<br />
+<br />
+■ SOC -&gt; LDA+U + SOC (2.9GB)<br />
+----<br />
+1. GtructGenTM -&gt; old scheme<br />
+2. initialize calc. -&gt; fast mode -&gt; spin polarized, RKmax 4, 7 k-point -&gt; CHECK BATCH VALUES<br />
+3. run SCF -&gt;&nbsp;Energy 0.01 -&gt; start SCF cycle&nbsp;&nbsp;(non-SOC)<br />
+4. case.inorb, case.indmc, case.in1にて（7 k-pointで収束した値 でのEF 0.425とした) -&gt; fast mode<br />
+5. initso_lapw<br />
+6. start SCF cycle&nbsp; (SOC)<br />
+7. x kgen<br />
+8. start SCF cycle&nbsp;&nbsp;(LDA+U + SOC)<br />
+----<br />
+これら全て収束したが、Cd6YbのDOSにおいて Cd 5d のピークがブロードになっていて明確に二つに分かれていない。構造によるものか収束のさせ方が悪いなどの理由が考えられる。特に、LDA+Uは収束のさせかたで結果が変わると聞くので、正しい方向に収束できるような条件をまだまだ探さなけれいけなそうである。やっと論文を書く目途がつきそうだというのに残念。あと少し&hellip;&hellip;。最悪の場合はクラスターPCでも作るか？<br />
+<br />
+-----<br />
+Yb は SCFのみでLDA+Uを行うとエラー。<br />
+LDA+Uで計算を行うと動く。RMTはold schemeにしてある。<br />
+in1cが存在する場合は、indmだけでなく、indmcも編集が必要。<br />
+SOを入れた場合には、inorb_soだけでなく、inorbも編集が必要。<br />
+Yb 4f は 1.2 eVと論文に書かれている。そうすると Uは0.42 Ry程度となった。<br />
+Uの値を変えても問題句無く収束してくれるので、<br />
+論文で報告されているUPSの結果と重なるようにする心算である。<br />
+<br />
+Yb 4f, Uの値 (SIC)<br />
+Yb metal: 0.42 Ry、非磁性の結果が得られた。<br />
+YbAl3: 0 Ry または 負の値(U = -0.41 Ry)にしないと実験と合わない。負のUの場合、超伝導体となる可能性がある。この物質は 0.94 Kで超伝導になるらしい。非磁性の結果が得られた。<br />
+Yb4As3: 0.08 Ry、これ以上値を大きくしていくとピークが分裂してしまう。どう対処すればいいか？<br />
+Yb4Sb3: 最初に 0.075 RyとしてSOC+LDA+Uをすると、ピークが2つに分裂する。少しずつUを変えたほうがよいのかもしれない。0.06 Ry<br />
+Yb4Bi3: 0.055 Ry、これ以上値を大きくしていくとピークが分裂してしまう。<br />
+Cd6Yb: 0.2279 Ry、非磁性の結果が報告されている。<br />
+※ ピーク形状が汚い（スパイク構造が見えたり、ショルダーや別のピークが出たりする）のはk点数が足りないからだと思う。小さな系ではなんとかなるが、大きな系では対処できない。<br />
+Yb4As3, Yb4Sb3, Yb4Bi3 は、実験的にはピーク位置がEFに近くなっていく。</p>

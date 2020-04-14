@@ -1,0 +1,566 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：<br />
+基本的な使い方： <a href="https://www.youtube.com/watch?v=A4tvitLdKi8">https://www.youtube.com/watch?v=A4tvitLdKi8</a>　<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+1. chmod +x vasp_run<br />
+2. chmod +x gplot<br />
+3. chmod +x fenergy<br />
+4. gedit vasp_run<br />
+change<br />
+------<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+set pseudo_potential_adress = $HOME&#39;/vasp/potpaw_PBE&#39;<br />
+set standard_input_adress = $HOME&#39;/Desktop/Link to vasp_work/standard_input_files&#39;<br />
+------<br />
+5. put gplot, fenergy, INCAR_opt_template, INCAR_scf_template and INCAR_dos_template in same directory.<br />
+6. put vasp_run and cif files in same directory.<br />
+7. vasp_run<br />
+8. fenergy<br />
+------------------------------------------------------------------------------<br />
+■ vasp_run<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+# user settting<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+set pseudo_potential_adress = $HOME&#39;/vasp/potpaw_PBE&#39;<br />
+set standard_input_adress = $HOME&#39;/Desktop/Link to vasp_work/standard_input_files&#39;<br />
+#<br />
+# Automatically setting<br />
+setenv OMP_NUM_THREADS 1<br />
+set node = `grep &#39;physical id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+set num_core = `grep &#39;core id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+echo &quot;&quot;<br />
+set DATE = `date`<br />
+echo $DATE<br />
+echo &quot;Automatically setting environments&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo &quot;OpenMP threads = 1&quot;<br />
+echo &quot;automatic setting Parallel calculation (MPI) = &quot;$num_core&quot; core&quot;&quot; / &quot;&quot;$node&quot;&quot; node&quot;<br />
+set NPAR = `echo 4-&quot;sqrt($num_core)&quot; | bc`<br />
+echo &quot;automatic setting NPAR = &quot;$NPAR<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_opt_template&quot; &gt; &quot;${standard_input_adress}/INCAR_opt&quot;<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_scf_template&quot; &gt; &quot;${standard_input_adress}/INCAR_scf&quot;<br />
+sed &#39;s/#NPAR/NPAR = &#39;${NPAR}&#39;/g&#39; &quot;${standard_input_adress}/INCAR_dos_template&quot; &gt; &quot;${standard_input_adress}/INCAR_dos&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo $vasp_adress<br />
+echo $pseudo_potential_adress<br />
+echo $standard_input_adress<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+# current adress setting<br />
+set address = `pwd`<br />
+echo &quot;$address&quot;<br />
+echo &quot;$address&quot; &gt;&gt; &quot;$address/log&quot;<br />
+set DATE = `date`<br />
+echo &quot;start: &quot;$DATE &gt; &quot;$address/log&quot;<br />
+#<br />
+# get cif data<br />
+set cif_list=`ls *.cif`<br />
+foreach cif_name ( $cif_list )<br />
+&nbsp; # remove extension<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; mkdir ${cif_folder_name}<br />
+&nbsp; cp &quot;$address/$cif_name&quot; &quot;$address/${cif_folder_name}/$cif_name&quot;<br />
+end<br />
+echo &quot;include&quot;<br />
+set list=`find . -maxdepth 1 -mindepth 1 -type d | awk -F/ &#39;{print $NF}&#39;`<br />
+echo $list<br />
+echo &quot;folder list: &quot;$list &gt;&gt; &quot;$address/log&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+# make directory<br />
+mkdir graph<br />
+mkdir cif<br />
+# initial setting<br />
+echo `date` &gt; fermi_energy.txt<br />
+echo `date` &gt; total_energy.txt<br />
+# setting for formation energy calculation<br />
+set compound_no = 0<br />
+#<br />
+# loop<br />
+foreach folder_name_list ( $cif_list )<br />
+&nbsp; set folder_name = `echo $folder_name_list:r`<br />
+&nbsp; echo &quot;--------------------&quot; &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo $DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; #<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; echo &quot;vasp calculation start: &quot;&quot;$folder_name&quot;<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; date<br />
+&nbsp; #<br />
+&nbsp; cd &quot;$address/$folder_name&quot;<br />
+&nbsp; echo &quot;folder name: &quot;$folder_name &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; echo &quot;absolute adress: &quot;`pwd` &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; #<br />
+&nbsp; echo &quot;run cif2cell&quot;<br />
+&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;${pseudo_potential_adress}&quot; --vasp-cartesian-lattice-vectors -f *.cif<br />
+&nbsp; cp INCAR INCAR_cif2cell<br />
+&nbsp; #<br />
+&nbsp; echo &quot;set standard input files&quot;<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_opt&quot; INCAR_opt<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_scf&quot; INCAR_scf<br />
+&nbsp; cp &quot;${standard_input_adress}/INCAR_dos&quot; INCAR_dos<br />
+&nbsp; cp &quot;${standard_input_adress}/gplot&quot; &quot;$address/gplot&quot;<br />
+&nbsp; cp &quot;${standard_input_adress}/fenergy&quot; &quot;$address/fenergy&quot;<br />
+&nbsp; chmod +x &quot;$address/gplot&quot;<br />
+&nbsp; chmod +x &quot;$address/fenergy&quot;<br />
+&nbsp; # structure optimization<br />
+&nbsp; date<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;optimize structure calculation&quot;<br />
+&nbsp; echo &quot;optimize structure calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; mpirun -np $num_core $vasp_adress # run opt calculation<br />
+&nbsp; cp OUTCAR OUTCAR_opt<br />
+&nbsp; cp CONTCAR POSCAR<br />
+&nbsp; # scf calculation (use optimized structure)<br />
+&nbsp; date<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;scf calculation&quot;<br />
+&nbsp; echo &quot;scf calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; cp INCAR_scf INCAR<br />
+&nbsp; mpirun -np $num_core $vasp_adress # run scf calculation<br />
+&nbsp; cp OUTCAR OUTCAR_scf<br />
+&nbsp; # dos calculation<br />
+&nbsp; date<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;dos calculation&quot;<br />
+&nbsp; echo &quot;dos calculation: &quot;$DATE &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; # setting automatically dos energy range<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt; fermi_temp1<br />
+&nbsp; awk &#39;{print $4}&#39; fermi_temp1 &gt; fermi_energy_temp1<br />
+&nbsp; sed -e &#39;s/;.*//g&#39; fermi_energy_temp1 &gt; fermi_energy_temp2<br />
+&nbsp; set fermi_energy = `sed -n 1p fermi_energy_temp2`<br />
+&nbsp; set energy_min = `echo &quot;${fermi_energy} - 13.0&quot; | bc -l`<br />
+&nbsp; set energy_max = `echo &quot;${fermi_energy} + 6.0&quot; | bc -l`<br />
+&nbsp; cp INCAR_dos INCAR_dos_temp<br />
+&nbsp; sed -e &#39;s/#ELOW#/&#39;${energy_min}&#39;/g&#39; -e &#39;s/#EHIGH#/&#39;${energy_max}&#39;/g&#39; INCAR_dos_temp &gt; INCAR_dos<br />
+&nbsp; rm -f fermi_temp1<br />
+&nbsp; rm -f fermi_energy_temp1<br />
+&nbsp; rm -f fermi_energy_temp2<br />
+&nbsp; rm -f fermi_energy<br />
+&nbsp; rm -f INCAR_dos_temp<br />
+&nbsp; #<br />
+&nbsp; cp KPOINTS_scf KPOINTS<br />
+&nbsp; cp INCAR_dos INCAR<br />
+&nbsp; mpirun -np $num_core $vasp_adress # run dos calculation<br />
+&nbsp; cp OUTCAR OUTCAR_dos<br />
+&nbsp; # data file<br />
+&nbsp; date<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/log&quot;<br />
+&nbsp; # new file<br />
+&nbsp; echo &quot;folder name: &quot; &quot;$folder_name&quot; &gt;&gt; &quot;$address/fermi_energy.txt&quot;<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/fermi_energy.txt&quot;<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/total_energy.txt&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/total_energy.txt&quot;<br />
+&nbsp; # formation energy data<br />
+&nbsp; set atom_chara = `awk &#39;NR==6 {print $1}&#39; POSCAR`<br />
+&nbsp; set check_single = `awk &#39;NR==6 {print $2}&#39; POSCAR`<br />
+&nbsp; if(${check_single} == &quot;&quot;)then<br />
+&nbsp;&nbsp;&nbsp; echo $atom_chara &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 7p POSCAR &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/atom_total_energy.txt&quot;<br />
+&nbsp; else<br />
+&nbsp;&nbsp;&nbsp; @ compound_no += 1<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${compound_no}&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${compound_no}&quot; &gt; &quot;$address/compound_num.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; #echo ${compound_no} &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 6p POSCAR &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; sed -n 7p POSCAR &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp;&nbsp;&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/compound_total_energy.txt&quot;<br />
+&nbsp; endif<br />
+&nbsp; # calculating file<br />
+&nbsp; echo &quot;folder name: &quot; &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; grep &quot;Fermi energy:&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt;&gt; &quot;$address/$folder_name/log&quot;<br />
+&nbsp; # dos plot data<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; echo &quot;dos plot: &quot;$DATE &gt;&gt; $address/log<br />
+&nbsp; sed -n 6p DOSCAR &gt; dos_num_line<br />
+&nbsp; awk &#39;{print $3}&#39; dos_num_line &gt; dos_num<br />
+&nbsp; set end_line = `sed -n 1p dos_num`<br />
+&nbsp; @ end_line += 6<br />
+&nbsp; sed -n 7,${end_line}p DOSCAR &gt; tdos_temp<br />
+&nbsp; awk &#39;{print $4}&#39; dos_num_line &gt; fermi_temp<br />
+&nbsp; set fermi_energy = `sed -n 1p fermi_temp`<br />
+&nbsp; echo &quot;${fermi_energy}&quot;<br />
+&nbsp; awk -v p=&quot;${fermi_energy}&quot; &#39;{print $1-p,$2,$3}&#39; tdos_temp &gt; tdos<br />
+&nbsp; awk -v p=&quot;${fermi_energy}&quot; &#39;{print $1-p,$2,$3}&#39; tdos_temp &gt; &quot;tdos_$folder_name&quot;<br />
+&nbsp; cp &quot;tdos_$folder_name&quot; &quot;$address/graph/tdos_$folder_name&quot;<br />
+&nbsp; rm -f dos_num_line<br />
+&nbsp; rm -f dos_num<br />
+&nbsp; rm -f tdos_temp<br />
+&nbsp; rm -f fermi_temp<br />
+&nbsp; echo &quot;$folder_name&quot; &gt;&gt; &quot;$address/$folder_name/title&quot;<br />
+&nbsp; # dos plot<br />
+&nbsp; &quot;$standard_input_adress/gplot&quot;<br />
+&nbsp; cp *.ps &quot;$address/graph/${folder_name}.ps&quot;<br />
+&nbsp; mv &quot;$address/$folder_name.cif&quot; &quot;$address/cif/$folder_name.cif&quot;<br />
+&nbsp; rm -f title<br />
+end<br />
+# go back adress<br />
+cd &quot;$address&quot;<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ gplot<br />
+----------<br />
+#!/bin/csh -f<br />
+<br />
+set tempfile = `sed -n 1p title`<br />
+set filename&nbsp; = $tempfile<br />
+set psformat&nbsp; = $filename&quot;.ps&quot;<br />
+set epsformat = $filename&quot;.eps&quot;<br />
+<br />
+gnuplot -persist &lt;&lt; EOF<br />
+<br />
+set title &quot;$filename&quot;<br />
+set size 0.7,1.0<br />
+set xr[-12.0:6.0]<br />
+set xl &quot;{/=30 Energy&nbsp; / eV}&quot;<br />
+set yr[0.0:*]<br />
+set yl &quot;{/=30 Density of States / eV}&quot;<br />
+<br />
+set yzeroaxis lt 2 lw 2 lc rgb &quot;black&quot;<br />
+<br />
+# linetype=lt, linecolor=lc, linewidth=lw, pointtype=pt, pointsize=ps<br />
+# with=w, line=l, color setting=lc rgb &quot;&quot;,<br />
+set key box center top<br />
+<br />
+# dos_updn<br />
+#plot &quot;dos_updn&quot; using 1:2 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 up spin}&quot;, &quot;dos_updn&quot; using 1:3 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 down spin}&quot;<br />
+<br />
+# tdos<br />
+plot &quot;tdos&quot; using 1:2 w l lt 1 lw 2 lc rgb &quot;black&quot; title &quot;{/=30 total}&quot;<br />
+<br />
+unset key<br />
+#set key left top<br />
+<br />
+set size 1.0,1.0<br />
+set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$psformat&quot;<br />
+replot<br />
+<br />
+#set size 1.5,2.1<br />
+#set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$epsformat&quot;<br />
+#replot<br />
+<br />
+set terminal x11<br />
+<br />
+EOF<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ fenergy<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+set nc = `awk &#39;{print $1}&#39; compound_num.txt`<br />
+set n = 1<br />
+while (${n} &lt;= ${nc})<br />
+&nbsp; set n1 = `echo &quot;((${n}-1)*4+1)&quot; | bc`<br />
+&nbsp; set n2 = `echo &quot;((${n}-1)*4+2)&quot; | bc`<br />
+&nbsp; set n3 = `echo &quot;((${n}-1)*4+3)&quot; | bc`<br />
+&nbsp; set n4 = `echo &quot;((${n}-1)*4+4)&quot; | bc`<br />
+&nbsp; set atom_list=`sed -n ${n2}p compound_total_energy.txt`<br />
+&nbsp; set atom_num=`sed -n ${n3}p compound_total_energy.txt`<br />
+&nbsp; sed -n ${n4}p compound_total_energy.txt &gt; formation_energy<br />
+&nbsp; awk -v p=&quot;${n4}&quot; &#39;NR==p {print $5}&#39; compound_total_energy.txt &gt; formation_energy<br />
+&nbsp; #cat formation_energy<br />
+&nbsp; #awk &#39;NR==4 {print $5}&#39; compound_total_energy.txt &gt; formation_energy<br />
+&nbsp; set No = 0<br />
+&nbsp; #echo &quot;----------------&quot;<br />
+&nbsp; foreach atom_name ( ${atom_list} )<br />
+&nbsp;&nbsp;&nbsp; @ No += 1<br />
+&nbsp;&nbsp;&nbsp; #echo ${atom_name}<br />
+&nbsp;&nbsp;&nbsp; set atom_line = `grep -e ${atom_name} -n atom_total_energy.txt | sed -e &#39;s/:.*//g&#39;`<br />
+&nbsp;&nbsp;&nbsp; #echo ${atom_line}<br />
+&nbsp;&nbsp;&nbsp; set atom_total_energy_num = `awk -v p=&quot;${atom_line}&quot; &#39;NR==(p+1) {print $1}&#39; atom_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp; set atom_total_energy_unitcell = `awk -v p=&quot;${atom_line}&quot; &#39;NR==(p+2) {print $5}&#39; atom_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp; set atom_total_energy = `echo &quot;${atom_total_energy_unitcell}/${atom_total_energy_num}&quot; | bc -l`<br />
+&nbsp;&nbsp;&nbsp; #echo ${atom_total_energy}&quot; eV/atom&quot;<br />
+&nbsp;&nbsp;&nbsp; if(${No} == 1)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $1}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $1, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 2)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $2}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $2, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 3)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $3}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $3, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 4)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $4}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $4, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 5)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $5}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $5, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 6)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $6}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $6, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; else if(${No} == 7)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set natom = `awk -v n=&quot;${n3}&quot; &#39;NR==n {print $7}&#39; compound_total_energy.txt`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set AETOT = `echo &quot;${natom}*${atom_total_energy}&quot; | bc`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #awk -v n=&quot;${n3}&quot; &#39;NR==n {print $7, &quot;atoms&quot;}&#39; compound_total_energy.txt<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; #echo &quot;total energy: &quot;${AETOT} &quot; eV&quot;<br />
+&nbsp;&nbsp;&nbsp; awk -v p=&quot;${AETOT}&quot; &#39;{print $1-p}&#39; formation_energy &gt; formation_energy_temp<br />
+&nbsp;&nbsp;&nbsp; awk &#39;{print $1}&#39; formation_energy_temp &gt; formation_energy<br />
+&nbsp;&nbsp;&nbsp; #cat formation_energy<br />
+&nbsp;&nbsp;&nbsp; #echo &quot;----------------&quot;<br />
+&nbsp; end<br />
+&nbsp; #<br />
+&nbsp; echo &quot;----------------&quot; &gt;&gt; formation_energy.txt<br />
+&nbsp; sed -n ${n1}p compound_total_energy.txt &gt;&gt; formation_energy.txt<br />
+&nbsp; #echo ${atom_list} &gt;&gt; formation_energy.txt<br />
+&nbsp; #echo ${atom_num} &gt;&gt; formation_energy.txt<br />
+&nbsp; awk &#39;{print &quot;formation energy: &quot;, $1, &quot;eV&quot;}&#39; formation_energy &gt;&gt; formation_energy.txt<br />
+&nbsp; #<br />
+&nbsp; cat formation_energy.txt<br />
+&nbsp; #<br />
+&nbsp; rm -f formation_energy_temp<br />
+&nbsp; rm -f formation_energy<br />
+&nbsp; #<br />
+&nbsp; @ n = $n + 1<br />
+end<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ INCAR_opt_template<br />
+----------<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy, eV unit<br />
+#ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+NSW = 100<br />
+IBRION = 2<br />
+ICHARG = 1<br />
+LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+#NBANDS = 580<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+#EMIN = -15.0<br />
+#EMAX = 15.0<br />
+#NEDOS = 6001<br />
+<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ INCAR_scf_template<br />
+----------<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy<br />
+ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+ISMEAR = -5<br />
+SIGMA = 0.2<br />
+NSW = 100<br />
+IBRION = 2<br />
+ICHARG = 1<br />
+LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+#ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+#NBANDS = 580<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+#EMIN = -15.0<br />
+#EMAX = 15.0<br />
+#NEDOS = 6001<br />
+<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+■ INCAR_dos_template<br />
+----------<br />
+#NPAR<br />
+<br />
+#<br />
+SYSTEM = system<br />
+# Common<br />
+ALGO = Fast<br />
+EDIFF = 1.0E-5<br />
+#EDIFF = 0.0001<br />
+EDIFFG = -0.01<br />
+LREAL = Auto<br />
+LWAVE = .TRUE.<br />
+#LCHARG = .TRUE<br />
+#LVTOT = .TRUE<br />
+#MAGMON = 0 0 1<br />
+#NELM = 200<br />
+#NPAR= 1<br />
+PREC = Accurate<br />
+#ISTART = 0<br />
+<br />
+# cut off energy, eV unit<br />
+ENCUT = 500<br />
+<br />
+#spin 2, nonspin 1<br />
+#ISPIN = 2<br />
+<br />
+#XC potential<br />
+GGA = PE<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+#NSW = 100<br />
+#IBRION = 2<br />
+#ICHARG = 1<br />
+#LORBIT = 11<br />
+<br />
+#SCF OPTIMIZATION<br />
+#ISIF = 3<br />
+<br />
+#SCF energy range Ry<br />
+#EINT -3 30<br />
+<br />
+# NBANDS, see OUTCAR, for HRplot<br />
+#NBANDS = 500<br />
+<br />
+#DOS<br />
+ISMEAR = -5<br />
+NSW = 0<br />
+IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+#DOS range eV<br />
+EMIN = #ELOW#<br />
+EMAX = #EHIGH#<br />
+NEDOS = 4500<br />
+<br />
+#band<br />
+#ICHARG=11 #charge read file<br />
+#ISMEAR = 0; SIGMA = 0.1;<br />
+#LORBIT=11<br />
+<br />
+## HSE<br />
+#LHFCALC = .TRUE. ; HFSCREEN = 0.2 ; AEXX = 0.25<br />
+#ALGO = D ; TIME = 0.4 ; LDIAG = .TRUE.<br />
+<br />
+##VASP2WANNIER<br />
+#LWANNIER90=.TRUE.<br />
+----------<br />
+------------------------------------------------------------------------------

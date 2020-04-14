@@ -1,0 +1,1613 @@
+MUSIC (http://www.iec.northwestern.edu/music.php)<br />
+------------------------------------------------------------------------------<br />
+■ MUSIC (http://www.iec.northwestern.edu/music.php)<br />
+(http://www.iec.northwestern.edu/music.php)<br />
+<br />
+<br />
+□ Registration<br />
+(http://www.iec.northwestern.edu/Music/licence.txt)<br />
+1. send e-mail<br />
+-----<br />
+Title:&nbsp;<br />
+Registration for MUSIC<br />
+<br />
+Body:<br />
+Dear Dr. Q Snur&nbsp;<br />
+<br />
+&nbsp; I have read and agree with the terms of the MUSIC GNU General Public License.&nbsp;<br />
+&nbsp; Please provide me the required password key if possible.&nbsp;<br />
+&nbsp; My registration information is summarized below as requested:&nbsp;<br />
+<br />
+&nbsp; 1. XXXX XXXXX<br />
+&nbsp; 2. RIKEN Baton Zone Program&nbsp;<br />
+&nbsp; &nbsp; 2-1 Hirosawa, Wako-shi, saitama 351-0198, JAPAN&nbsp;<br />
+&nbsp; 3. GCMC calculation for MOFs with H2 gas.&nbsp;<br />
+<br />
+Best Regards,&nbsp;<br />
+XXXX XXXXX<br />
+-----<br />
+2. wait for a long time until you receive E-mail.<br />
+3. you can get user id and password.<br />
+<br />
+<br />
+--------------------<br />
+□ install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(http://www.iec.northwestern.edu/music.php)<br />
+・music-4.0.tar.gz<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0/src<br />
+3. sed -i -e &quot;s/AtomList/AtomListc/g&quot; *.F90<br />
+4. gedit config.F90<br />
+-----before (Line 1612 and 1618)<br />
+Type(VecType), Dimension(:,:), Pointer :: vpntr<br />
+<br />
+vpntr =&gt; sorbates(sorb)%coords(1:natoms,1:nmoles)%v<br />
+-----<br />
+-----after<br />
+!Type(VecType), Dimension(:,:), Pointer :: vpntr<br />
+Type(VecType), Pointer :: vpntr<br />
+<br />
+!vpntr =&gt; sorbates(sorb)%coords(1:natoms,1:nmoles)%v<br />
+vpntr =&gt; sorbates(sorb)%coords(natoms,nmoles)%v<br />
+-----<br />
+<br />
+◇ MD<br />
+5. cp ../drivers/music_md.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_md&quot;<br />
+(9. ln -s ~/music-4.0/music_md)<br />
+<br />
+◇ GCMC<br />
+5. cp ../drivers/music_gcmc.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_gcmc&quot;<br />
+(9. ln -s ~/music-4.0/music_gcmc)<br />
+<br />
+◇ Hybrid GCMC<br />
+5. cp ../drivers/music_hgcmc.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_hgcmc&quot;<br />
+(9. ln -s ~/music-4.0/music_hgcmc)<br />
+<br />
+◇ mapmaker<br />
+5. cp ../drivers/music_mapmaker.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_mapmaker&quot;<br />
+(9. ln -s ~/music-4.0/music_mapmaker)<br />
+<br />
+◇ mapdisplay<br />
+5. cp ../drivers/music_mapdisplay.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_mapdisplay&quot;<br />
+(9. ln -s ~/music-4.0/music_mapdisplay)<br />
+<br />
+◇ post<br />
+5. cp ../drivers/music_post.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. make FC=&quot;gfortran&quot; CMD=&quot;music_post&quot;<br />
+(9. ln -s ~/music-4.0/music_post)<br />
+--------------------<br />
+※ information<br />
+・music_mapmaker.F90 - used to create a potential map&nbsp;<br />
+・music_mapdisplay.F90 - creates an xyz file that displays the layout of your potential map&nbsp;<br />
+・music_md.F90 - used to run a molecular dynamics simulation&nbsp;<br />
+・music_gcmc.F90 - used to run a grand canonical Monte Carlo simulation&nbsp;<br />
+・music_post.F90 - converts the binary files created during the simulation into data files that contain the results.&nbsp;<br />
+※ 構造体のメンバにアクセスするのに%を使う<br />
+※ ポインタ代入文は =&gt; を指定して行う<br />
+--------------------<br />
+◇ Test (MD)<br />
+1. cd ~/music-4.0/tests<br />
+2. cd test001-md-ch4<br />
+3. cp ~/music-4.0/music_md md.exe<br />
+4. ./run<br />
+5. diff -y out output_reference<br />
+&nbsp; (diff -ry out output_reference)<br />
+&nbsp; (diff -q out output_reference)<br />
+&nbsp; (diff out output_reference)<br />
+<br />
+◇ Test (GCMC)<br />
+1. cd ~/music-4.0/tests<br />
+2. cd test007-gcmc-CH4<br />
+3. cp ~/music-4.0/music_gcmc gcmc.exe<br />
+4. ./run<br />
+5. diff -y out output_reference<br />
+<br />
+◇ Test (ALL)<br />
+1. cd ~/music-4.0<br />
+&nbsp; cp music_gcmc gcmc.exe<br />
+&nbsp; cp music_hgcmc hgcmc.exe<br />
+&nbsp; cp music_md md.exe<br />
+&nbsp; cp music_mapmaker map.exe<br />
+2. cd tests<br />
+&nbsp; cd test010-hgcmc-butane<br />
+&nbsp; sed -i &#39;s/hgcmc.exe/.\/hgcmc.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test011-mdgcmc-butane<br />
+&nbsp; sed -i &#39;s/hgcmc.exe/.\/hgcmc.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test012-pmapgen<br />
+&nbsp; sed -i &#39;s/map.exe/.\/map.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test013-emapgen<br />
+&nbsp; sed -i &#39;s/map.exe/.\/map.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test014-largehgcmc<br />
+&nbsp; sed -i &#39;s/hgcmc.exe/.\/hgcmc.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test015-nptMD-CH4<br />
+&nbsp; sed -i &#39;s/hgcmc.exe/.\/hgcmc.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; cd test016-nptMC-CH4<br />
+&nbsp; sed -i &#39;s/hgcmc.exe/.\/hgcmc.exe/g&#39; ./run<br />
+&nbsp; cd ..<br />
+&nbsp; sed -i &#39;s/run/.\/run/g&#39; ./testall<br />
+&nbsp; sed -i &#39;s/diff/diff -y/g&#39; ./testall<br />
+3. ./testall<br />
+※ *.ctr (e.g., hgcmc.ctr, etc) are in ctrlfiles folder<br />
+--------------------<br />
+※ Program received signal SIGSEGV: Segmentation fault - invalid memory reference.が生じることがあるので、やはり商用のFortranコンパイラ（例えば、Intel(ifort), NAG(nagfor), Lahey(lf95), Compaq(f90), Absoft(AbSf95), etc）を使ってコンパイルする必要がありそうだ。<br />
+※ make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; DEBUG_FLAGS=&quot;-fbounds-check&quot; CMD=&quot;music_gcmc&quot;<br />
+※ make FC=&quot;gfortran -L/usr/lib -lfftw3&quot; OFLAGS=&quot;-O2&quot; DEBUG_FLAGS=&quot;-fbounds-check -ffpe-trap=invalid,zero,overflow -fbacktrace -g&quot; CMD=&quot;music_gcmc&quot;<br />
+※ make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -O -Wuninitialized -fbacktrace -g&quot; CMD=&quot;music_gcmc&quot;<br />
+&nbsp; (http://slpr.sakura.ne.jp/qp/ferror/)<br />
+--------------------<br />
+□ install excess(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(http://people.bath.ac.uk/td222/research/excess/index.html)<br />
+・excess.tar.gz<br />
+(http://people.bath.ac.uk/td222/research/excess/program/excess.tar.gz)<br />
+0. cd ~/music-4.0<br />
+&nbsp; mkdir src_excess<br />
+&nbsp; cd src_excess<br />
+&nbsp; (wget http://people.bath.ac.uk/td222/research/excess/program/excess.tar.gz)<br />
+1. tar zxvf excess.tar.gz<br />
+2. gedit makefile<br />
+-----before<br />
+fuga: $(OBJS)&nbsp;<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;Linking excess ...&quot;<br />
+&nbsp;&nbsp; &nbsp;@ifort $(FOPS) $(OBJS) -o excess_UFF.exe<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;done&quot;<br />
+<br />
+clean:;&nbsp;&nbsp; &nbsp;@ rm -f *.o *.mod<br />
+<br />
+<br />
+%.o: %.f90<br />
+&nbsp;&nbsp; &nbsp;ifort -c $(FOPS) $^<br />
+-----<br />
+-----after<br />
+fuga: $(OBJS)&nbsp;<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;Linking excess ...&quot;<br />
+&nbsp;&nbsp; &nbsp;@gfortran $(FOPS) $(OBJS) -o excess_UFF.exe<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;done&quot;<br />
+<br />
+clean:;&nbsp;&nbsp; &nbsp;@ rm -f *.o *.mod<br />
+<br />
+<br />
+%.o: %.f90<br />
+&nbsp;&nbsp; &nbsp;gfortran -c $(FOPS) $^<br />
+-----<br />
+3. gedit fluid_properties.f90<br />
+-----before<br />
+&nbsp; &nbsp; CASE(&#39;CH4&#39;)&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Acc_factor(i) = 0.008<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; T_crit(i) = 190.5<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P_crit(i) = 4.61e6<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; CASE(&#39;CH4&#39;)&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Acc_factor(i) = 0.008<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; T_crit(i) = 190.5<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P_crit(i) = 4.61e6<br />
+&nbsp; &nbsp; CASE(&#39;Methane&#39;)&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Acc_factor(i) = 0.008<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; T_crit(i) = 190.5<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; P_crit(i) = 4.61e6<br />
+-----<br />
+4. make clean<br />
+5. make<br />
+6. cp excess_UFF.exe ~/music-4.0/excess.exe<br />
+--------------------<br />
+□ install excess(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(http://people.bath.ac.uk/td222/research/fugacity/index.html)<br />
+・fugacity.tar.gz<br />
+(http://people.bath.ac.uk/td222/research/excess/program/excess.tar.gz)<br />
+0. cd ~/music-4.0<br />
+&nbsp; mkdir src_fugacity<br />
+&nbsp; cd src_fugacity<br />
+&nbsp; (wget http://people.bath.ac.uk/td222/research/fugacity/program/fugacity.tar.gz)<br />
+1. tar zxvf fugacity.tar.gz<br />
+2. gedit makefile<br />
+-----before<br />
+fuga: $(OBJS)&nbsp;<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;Linking fuga ...&quot;<br />
+&nbsp;&nbsp; &nbsp;@ifort $(FOPS) $(OBJS) -o fuga.exe<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;done&quot;<br />
+<br />
+clean:;&nbsp;&nbsp; &nbsp;@ rm -f *.o *.mod<br />
+<br />
+<br />
+%.o: %.f90<br />
+&nbsp;&nbsp; &nbsp;ifort -c $(FOPS) $^<br />
+-----<br />
+-----after<br />
+fuga: $(OBJS)&nbsp;<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;Linking fuga ...&quot;<br />
+&nbsp;&nbsp; &nbsp;@gfortran $(FOPS) $(OBJS) -o fuga.exe<br />
+&nbsp;&nbsp; &nbsp;@echo &quot;done&quot;<br />
+<br />
+clean:;&nbsp;&nbsp; &nbsp;@ rm -f *.o *.mod<br />
+<br />
+<br />
+%.o: %.f90<br />
+&nbsp;&nbsp; &nbsp;gfortran -c $(FOPS) $^<br />
+-----<br />
+3. make clean<br />
+4. make<br />
+5. cp fuga.exe ~/music-4.0/fuga.exe<br />
+--------------------<br />
+<br />
+--------------------<br />
+□ IRMOF1(MOF-5) (GCMC) (UFF force field)<br />
+(http://people.bath.ac.uk/td222/research/music/Tutorial/index.html)<br />
+<br />
+◇ pmasp (step 1)<br />
+(http://people.bath.ac.uk/td222/research/music/Tutorial/make_pmap.tar)<br />
+1. cd ~/music-4.0<br />
+2. mkdir tutorial<br />
+3. cd tutorial<br />
+4. wget http://people.bath.ac.uk/td222/research/music/Tutorial/make_pmap.tar<br />
+5. tar xvf make_pmap.tar<br />
+6. cd make_pmap<br />
+7. cd run<br />
+8. gedit set_path<br />
+-----before<br />
+export ATOMSDIR=/home/tina/tutorial/make_pmap/atoms<br />
+export MOLSDIR=/home/tina/tutorial/make_pmap/molecules<br />
+export PMAPDIR=/home/tina/tutorial/make_pmap/pmaps<br />
+-----<br />
+-----after<br />
+export ATOMSDIR=$HOME/music-4.0/tutorial/make_pmap/atoms<br />
+export MOLSDIR=$HOME/music-4.0/tutorial/make_pmap/molecules<br />
+export PMAPDIR=$HOME/music-4.0/tutorial/make_pmap/pmaps<br />
+-----<br />
+9. source set_path<br />
+10. ~/music-4.0/music_mapmaker ctr.map.IRMOF1.CH4<br />
+11. cp IRMOF1.CH4.UFF.pmap ../pmaps<br />
+<br />
+◇ gcmc.tar (step 2)<br />
+(http://people.bath.ac.uk/td222/research/music/Tutorial/gcmc.tar)<br />
+1. cd ~/music-4.0<br />
+2. cd tutorial<br />
+3. wget http://people.bath.ac.uk/td222/research/music/Tutorial/gcmc.tar<br />
+4. tar xvf gcmc.tar<br />
+5. cd gcmc<br />
+6. cd run<br />
+7. gedit set_path<br />
+-----before<br />
+export ATOMSDIR=/home/tina/tutorial/gcmc/atoms<br />
+export MOLSDIR=/home/tina/tutorial/gcmc/molecules<br />
+export PMAPDIR=/home/tina/tutorial/gcmc/pmaps<br />
+-----<br />
+-----after<br />
+export ATOMSDIR=$HOME/music-4.0/tutorial/gcmc/atoms<br />
+export MOLSDIR=$HOME/music-4.0/tutorial/gcmc/molecules<br />
+export PMAPDIR=$HOME/music-4.0/tutorial/make_pmap/pmaps<br />
+-----<br />
+8. source set_path<br />
+9. gedit fugacity_IRMOF1.dat<br />
+-----before<br />
+&nbsp;Methane<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 15<br />
+&nbsp;24.99, &nbsp; &nbsp; &nbsp;49.94, &nbsp; &nbsp; &nbsp;99.78, &nbsp; &nbsp; &nbsp;149.5, &nbsp; &nbsp; &nbsp;225.6, &nbsp; &nbsp; &nbsp;414.3, &nbsp; &nbsp; &nbsp;784.3, &nbsp; &nbsp; &nbsp;1043., &nbsp; &nbsp; &nbsp;1441., &nbsp; &nbsp; &nbsp;1751., &nbsp; &nbsp; &nbsp;2111., &nbsp; &nbsp; &nbsp;2413., &nbsp; &nbsp; &nbsp;2733., &nbsp; &nbsp; &nbsp;3245., &nbsp; &nbsp; &nbsp;3397.<br />
+-----<br />
+-----after (70 MPa = 70000 kPa)<br />
+&nbsp;Methane<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1<br />
+&nbsp;70000, 24.99, &nbsp; &nbsp; &nbsp;49.94, &nbsp; &nbsp; &nbsp;99.78, &nbsp; &nbsp; &nbsp;149.5, &nbsp; &nbsp; &nbsp;225.6, &nbsp; &nbsp; &nbsp;414.3, &nbsp; &nbsp; &nbsp;784.3, &nbsp; &nbsp; &nbsp;1043., &nbsp; &nbsp; &nbsp;1441., &nbsp; &nbsp; &nbsp;1751., &nbsp; &nbsp; &nbsp;2111., &nbsp; &nbsp; &nbsp;2413., &nbsp; &nbsp; &nbsp;2733., &nbsp; &nbsp; &nbsp;3245., &nbsp; &nbsp; &nbsp;3397.<br />
+-----<br />
+10. gedit gcmc.Methane.IRMOF1<br />
+-----before<br />
+------ GCMC Information -----------------------------------------------<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of iterations<br />
+298. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# temperature<br />
+Ideal Parameters &nbsp; # Tag for the equation of state (NULL = Ideal Gas)<br />
+15 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of simulation points<br />
+-----<br />
+-----after<br />
+------ GCMC Information -----------------------------------------------<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of iterations<br />
+298. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# temperature<br />
+Ideal Parameters &nbsp; # Tag for the equation of state (NULL = Ideal Gas)<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of simulation points (fugacity_IRMOF1.dat)<br />
+-----<br />
+11. ~/music-4.0/music_gcmc gcmc.Methane.IRMOF1<br />
+12. vmd initconfig.xyz<br />
+&nbsp; vmd finalconfig.xyz<br />
+&nbsp; Graphics (on VMD Main) &gt; Represenations... &gt; Drawing Method [CPK] &gt; Apply &gt; x (close)<br />
+&nbsp; ※ see finalconfig.xyz (add CH molecules(=Methane=CH4))<br />
+◇ gcmc.tar (step 2) sequential<br />
+9. gedit gcmc.Methane.IRMOF1<br />
+-----before<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Start numbering simulations from .<br />
+-----<br />
+-----after<br />
+XXXX &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Start numbering simulations from .<br />
+-----<br />
+10. gedit run<br />
+-----<br />
+#!/bin/csh<br />
+<br />
+set ctr_file = gcmc.Methane.IRMOF1<br />
+set press_file = fugacity_IRMOF1.dat<br />
+<br />
+cp $press_file pressure.dat<br />
+cp $press_file pressure_fuga.dat<br />
+cp $ctr_file $ctr_file&quot;_temp&quot;<br />
+cp $press_file $press_file&quot;_data&quot;<br />
+sed -i s/,//g $press_file&quot;_data&quot;<br />
+<br />
+set count = -1<br />
+set end_count = 99999<br />
+foreach pressure (`cat $press_file&quot;_data&quot;`)<br />
+&nbsp; if ($count == -1) then<br />
+&nbsp; &nbsp; echo &quot;Gas: &quot; $pressure<br />
+&nbsp; &nbsp; echo $pressure &gt; $press_file<br />
+&nbsp; else if ($count == 0) then<br />
+&nbsp; &nbsp; echo &quot;Number of data: &quot; $pressure<br />
+&nbsp; &nbsp; echo &quot;1&quot; &gt;&gt; $press_file<br />
+&nbsp; &nbsp; echo &quot;YYYY&quot; &gt;&gt; $press_file<br />
+&nbsp; &nbsp; set end_count = $pressure<br />
+&nbsp; else if ($count &gt;= 1 &amp;&amp; $count &lt;= $end_count) then<br />
+&nbsp; &nbsp; echo &quot;[&quot;$count&quot;]&quot; $pressure &quot;kPa&quot;<br />
+&nbsp; &nbsp; cp $press_file $press_file&quot;_temp&quot;<br />
+&nbsp; &nbsp; sed -i -e s/XXXX/$count/g $ctr_file<br />
+&nbsp; &nbsp; sed -i -e s/YYYY/$pressure/g $press_file<br />
+&nbsp; &nbsp; $HOME/music-4.0/gcmc.exe $ctr_file<br />
+&nbsp; &nbsp; cp $ctr_file&quot;_temp&quot; $ctr_file<br />
+&nbsp; &nbsp; cp $press_file&quot;_temp&quot; $press_file<br />
+&nbsp; endif<br />
+&nbsp; @ count += 1<br />
+end<br />
+cp &nbsp;pressure.dat $press_file<br />
+rm -f -r $ctr_file&quot;_temp&quot; $press_file&quot;_temp&quot; $press_file&quot;_data&quot;<br />
+-----<br />
+11. chmod +x run<br />
+12. ./run<br />
+<br />
+◇ Post Processing (step 3)<br />
+0. cd ~/music-4.0/tutorial/gcmc/run<br />
+&nbsp; source set_path<br />
+1. gedit post.ctr<br />
+-----<br />
+# this section is required for working with any post code<br />
+#<br />
+#<br />
+------------------------------------------------------------<br />
+&nbsp; &nbsp;### Required section ######<br />
+-- Post Processor Information ------------<br />
+GCMC &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Type of simulation GCMC, NVTMC , MD ....&nbsp;<br />
+IRMOF1.Methane.con &nbsp; # basename for config files what your .con files are called in your gcmc folder &nbsp;&nbsp;<br />
+1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder&nbsp;<br />
+new.met &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# name for new ctrlfile that will be regenerated&nbsp;<br />
+met.post &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Base name for output files&nbsp;<br />
+40, 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Percentages of data to skipped at start and end&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# In this case 40% of the data at the beginning of the simulation<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# is skipped to allow the system to equilibrate<br />
+<br />
+# The sections below are necessary only if you want the corresponding&nbsp;<br />
+# analysis performed<br />
+# ---------------- ALL OF THEM ARE OPTIONAL ------------------------<br />
+<br />
+#### &nbsp; &nbsp;This section is reqd for energy averages in your post code output files<br />
+#### &nbsp; &nbsp;as of now only total enrgies vs sim. step<br />
+------ Post : Energy Average Info -----------------------------------<br />
+20 &nbsp; &nbsp; &nbsp; # Number of blocks into which data should be divided for stats<br />
+<br />
+#### &nbsp; &nbsp;This section is reqd for Loading averages in your post code outputfiles<br />
+#### &nbsp; &nbsp;as of now only species loading vs sim. step (for all species)<br />
+------ Post : Loading Average Info -----------------------------------<br />
+20 &nbsp; &nbsp; &nbsp; # Number of blocks into which data should be divided for stats<br />
+-----<br />
+2. ~/music-4.0/post.exe post.ctr<br />
+&nbsp; (isotherm.IRMOF1, isotherm.Methane, met.post, new.met)<br />
+※ met.post - This file displays the information from the .con files in the number of blocks that you specified in the post.ctr file.&nbsp;<br />
+※ new.met is new ctrlfile that will be regenerated&nbsp;<br />
+※ sequential case: e.g., change [1, 9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder ]<br />
+<br />
+◇ Post Processing (step 4)<br />
+0. cd ~/music-4.0/tutorial/gcmc/run<br />
+1. cp met.post IRMOF1.Methane.post<br />
+2. gedit input.dat<br />
+-----<br />
+! file with pressure data&nbsp;<br />
+pressure.dat&nbsp;<br />
+! music post processing file&nbsp;<br />
+IRMOF1.Methane.post&nbsp;<br />
+! output file&nbsp;<br />
+adiso.IRMOF1.Methane.298K.dat<br />
+! number of species<br />
+1&nbsp;<br />
+! name of species (music name)&nbsp;<br />
+Methane&nbsp;<br />
+! temperature of gcmc run in K&nbsp;<br />
+298.&nbsp;<br />
+! name of adsorbent&nbsp;<br />
+IRMOF1&nbsp;<br />
+-----<br />
+3. gedit pressure.dat<br />
+-----<br />
+Methane<br />
+1<br />
+70000.<br />
+<br />
+<br />
+# Name of the gas molecules<br />
+# number of pressure points<br />
+# pressure in kPa&nbsp;<br />
+-----<br />
+4. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+-----<br />
+&nbsp;post file to be analysed: IRMOF1.Methane.post &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;<br />
+<br />
+&nbsp;pressure &nbsp;fugacity &nbsp; N_abs &nbsp; &nbsp; &nbsp;error &nbsp; &nbsp; N_ex &nbsp; &nbsp; &nbsp; &nbsp;N_ex &nbsp; &nbsp; &nbsp;N_ex<br />
+&nbsp; &nbsp;kPa &nbsp; &nbsp; &nbsp; &nbsp;kPa &nbsp; &nbsp;molec/uc &nbsp;molec/uc &nbsp;molec/uc &nbsp; &nbsp; mmol/g &nbsp; cm3(STP)/cm3<br />
+&nbsp;7.000E+04 6.189E+04 &nbsp; 169.383 &nbsp; &nbsp; 0.281 &nbsp; -67.389 &nbsp; -10.947 &nbsp;-144.678<br />
+-----<br />
+◇ Post Processing (step 4) sequential<br />
+3. gedit pressure.dat<br />
+-----<br />
+Methane<br />
+9<br />
+100., 500., 1000., 1500., 2000., 2500., 3000., 3500., 4000.<br />
+<br />
+<br />
+# Name of the gas molecules<br />
+# number of pressure points<br />
+# pressure in kPa&nbsp;<br />
+-----<br />
+4. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+-----<br />
+&nbsp;post file to be analysed: IRMOF1.Methane.post &nbsp; &nbsp;<br />
+<br />
+◇ Post Processing (step 5)<br />
+0. cd ~/music-4.0/tutorial/gcmc/run<br />
+2. gedit input_fuga.dat<br />
+-----<br />
+! input file with pressure data&nbsp;<br />
+pressure_fuga.dat&nbsp;<br />
+! output file with fugacity data<br />
+fugacity.dat&nbsp;<br />
+! number of fluid species<br />
+1&nbsp;<br />
+! name of species (chemical formula not music name!)&nbsp;<br />
+CH4&nbsp;<br />
+! temperature of gcmc run in K&nbsp;<br />
+298.&nbsp;<br />
+-----<br />
+3. gedit pressure_fuga.dat<br />
+-----<br />
+Methane<br />
+9<br />
+100., 500., 1000., 1500., 2000., 2500., 3000., 3500., 4000.<br />
+<br />
+# Name of the gas molecules<br />
+# number of pressure points<br />
+# pressure in kPa&nbsp;<br />
+-----<br />
+4. ~/music-4.0/fuga.exe &lt; input_fuga.dat<br />
+-----<br />
+&nbsp;=====================================================<br />
+&nbsp; Calculating the fugacity with the Peng Robinson EOS<br />
+&nbsp;=====================================================<br />
+<br />
+&nbsp;Pressure input file: pressure_fuga.dat<br />
+<br />
+<br />
+&nbsp; i &nbsp; y(1) &nbsp; &nbsp;fugacity/kPa &nbsp;pressure/kPa<br />
+&nbsp;CH4<br />
+&nbsp; 1 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;99.7786 &nbsp; &nbsp; &nbsp;100.000<br />
+&nbsp; 2 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;494.505 &nbsp; &nbsp; &nbsp;500.000<br />
+&nbsp; 3 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;978.229 &nbsp; &nbsp; &nbsp;1000.00<br />
+&nbsp; 4 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;1451.48 &nbsp; &nbsp; &nbsp;1500.00<br />
+&nbsp; 5 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;1914.57 &nbsp; &nbsp; &nbsp;2000.00<br />
+&nbsp; 6 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;2367.81 &nbsp; &nbsp; &nbsp;2500.00<br />
+&nbsp; 7 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;2811.51 &nbsp; &nbsp; &nbsp;3000.00<br />
+&nbsp; 8 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;3245.97 &nbsp; &nbsp; &nbsp;3500.00<br />
+&nbsp; 9 &nbsp; 1.00 &nbsp; &nbsp; &nbsp;3671.52 &nbsp; &nbsp; &nbsp;4000.00<br />
+-----<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ UFF force field<br />
+<br />
+・Oxygen<br />
+&nbsp; SIG = xi/(2^(1/6) = 3.500/(2^(1/6) = 3.118<br />
+&nbsp; EPS = Di/0.0019872 = 0.060/0.0019872 = 30.193<br />
+<br />
+・Methane: xi=4.18662010682, Di=0.29410929031<br />
+&nbsp; SIG = xi/(2^(1/6) = 4.187/(2^(1/6) = 3.730<br />
+&nbsp; EPS = Di/0.0019872 = 0.2941093/0.0019872 = 148.002<br />
+&nbsp;&nbsp;<br />
+&nbsp; Methane (LJ): http://www.sklogwiki.org/SklogWiki/index.php/Methane<br />
+&nbsp; Force-filed | epsilon/kb(K) | sigma (Angstrom)<br />
+&nbsp; OPLS &nbsp; | 147.9 | 3.73<br />
+&nbsp; TraPPE | 148 &nbsp; | 3.73<br />
+<br />
+・Methane &nbsp; &nbsp; Oxygen &nbsp; &nbsp; &nbsp;LJ&nbsp;<br />
+&nbsp; SIGij = (SIGi + SIGj)/2 = (3.118+3.730)/2 = 3.424<br />
+&nbsp; EPSij = sqrt(EPSi x EPSj) = sqrt(30.193*148.002) = 66.848<br />
+<br />
+・O : xi=3.500, Di=0.060<br />
+・C : xi=3.851, Di=0.105<br />
+・Zn: xi=2.763, Di=0.124<br />
+・H : xi=2.886, Di=0.044<br />
+<br />
+・HICUT = cut-off radius = 12.8<br />
+<br />
+[UFF1] Rappe et al. &quot;UFF, a Full Periodic Table Force Field for Molecular Mechanics and Molecular Dynamics Simulations&quot;, Journal American Chemistry Society 1992, 114, 10024-10035. (http://wag.caltech.edu/publications/sup/pdf/275.pdf)<br />
+[UFF2] Music Tutorial - The atom atom file<br />
+&nbsp; http://people.bath.ac.uk/td222/research/music/Tutorial/atomatom.html<br />
+[P1] http://www.rsc.org/suppdata/cc/c2/c2cc17168f/c2cc17168f.pdf<br />
+&nbsp; sorbate atom | epsilon/kb(K) | sigma (Angstrom)<br />
+&nbsp; N(N2) | &nbsp;36.0 | 3.31<br />
+&nbsp; Ar &nbsp; &nbsp;| 119.8 | 3.40<br />
+&nbsp; H2 &nbsp; &nbsp;| &nbsp;36.7 | 2.958<br />
+&nbsp; ※ N(N2)の36.0は86.0の誤りか？<br />
+[P2] https://journals.aps.org/prb/pdf/10.1103/PhysRevB.75.075424<br />
+[P3] https://saecanet.com/20100716/saecanet_calculation_page.php?pagenumber=585<br />
+[P4] Per Freiesleben Hansen, &quot;The Science of Construction Materials&quot;, springer<br />
+&nbsp; Lennard-Jones parameters<br />
+&nbsp; Gas | J/mol | ro (Angstrom)<br />
+&nbsp; He &nbsp;| &nbsp;85 &nbsp; | 2.87<br />
+&nbsp; H2 &nbsp;| 308 &nbsp; | 3.29<br />
+&nbsp; Ar &nbsp;| 996 &nbsp; | 3.82<br />
+&nbsp; N2 &nbsp;| 791 &nbsp; | 4.15<br />
+&nbsp; O2 &nbsp;| 984 &nbsp; | 3.88<br />
+&nbsp; 1 J/mol = 0.120273 K<br />
+&nbsp; sigma = r0/2^(1/6)<br />
+&nbsp; Ar: 996 J/mol = 119.792 K = 119.792 [epsilon/kb(K)], r0=3.82 &gt; sigma=3.82/2^(1/6)=3.40 [Angstrom]<br />
+&nbsp; H2: 308 J/mol = &nbsp;37.044 K = &nbsp;37.044 [epsilon/kb(K)], r0=3.29 &gt; sigma=3.29/2^(1/6)=2.93 [Angstrom]<br />
+&nbsp; Energy Units Converter (http://www.colby.edu/chemistry/PChem/Hartree.html)<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ converter (*.xyz to *.mol)<br />
+1. cd ~/music-4.0/utils/general<br />
+2. ./tomol IRMOF1.xyz<br />
+<br />
+□ modified tomo<br />
+1. cd ~/music-4.0/utils/general<br />
+2. gedit tomol<br />
+-----before<br />
+$nalist = 6;<br />
+@alist = ([&quot;H&quot;,&quot;Hydrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;C&quot;,&quot;Carbon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Si&quot;,&quot;Silicon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Al&quot;,&quot;Aluminum&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;N&quot;,&quot;Nitrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;O&quot;,&quot;Oxygen&quot;],<br />
+);<br />
+-----<br />
+-----after<br />
+$nalist = 13;<br />
+@alist = ([&quot;H&quot;,&quot;Hydrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;C&quot;,&quot;Carbon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Si&quot;,&quot;Silicon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Al&quot;,&quot;Aluminum&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;N&quot;,&quot;Nitrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;O&quot;,&quot;Oxygen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Zn&quot;,&quot;Zinc&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Li&quot;,&quot;Lithium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Na&quot;,&quot;Sodium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;K&quot;,&quot;Potassium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Ca&quot;,&quot;Calcium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Mg&quot;,&quot;Magnesium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Ba&quot;,&quot;Barium&quot;],<br />
+);<br />
+-----<br />
+3. (change) IRMOF12.mol<br />
+-----<br />
+&nbsp;Molecule_name: IRMOF1<br />
+&nbsp;<br />
+&nbsp;Coord_Info: Listed Cartesian None<br />
+<br />
+&nbsp; Fundcell_Info: Listed<br />
+&nbsp; &nbsp; &nbsp; &nbsp;25.83200 &nbsp; &nbsp; &nbsp; 25.83200 &nbsp; &nbsp; &nbsp; 25.83200<br />
+&nbsp; &nbsp; &nbsp; &nbsp;90.00000 &nbsp; &nbsp; &nbsp; 90.00000 &nbsp; &nbsp; &nbsp; 90.00000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00000 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;0.00000<br />
+&nbsp; &nbsp; &nbsp; &nbsp;25.83200 &nbsp; &nbsp; &nbsp; 25.83200 &nbsp; &nbsp; &nbsp; 25.83200<br />
+-----<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Accessible surface area per mass (m^2/g)<br />
+1. ./nonorthoSA.exe &lt; input_IRMOF1.dat&nbsp;<br />
+&nbsp; (Accessible surface area per mass in m^2/g: 3653.36)<br />
+※ Maximum Surface Area: 2517 m2 / g BET surface area<br />
+&nbsp;https://www.sigmaaldrich.com/technical-documents/articles/materials-science/metal-organic-frameworks/irmof-1.html<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+◇ ZIF-8 (under testing)<br />
+(https://datashare.is.ed.ac.uk/handle/10283/3047)<br />
+・DS_10283_3047.zip<br />
+1. mkdir ZIF-8_MUSIC<br />
+2. unzip DS_10283_3047.zip -d ZIF-8_MUSIC<br />
+3. cd ZIF-8_MUSIC<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ debug<br />
+<br />
+0. ulimit -c unlimited<br />
+1. gdb ~/music-4.0/music_mapmaker<br />
+2. run ctr.map.IRMOF1.CH4<br />
+3. list<br />
+&nbsp; b 55<br />
+&nbsp; print&nbsp;<br />
+&nbsp; next<br />
+(-ffpe-trap=overflow)<br />
+<br />
+0. ulimit -c unlimited<br />
+1. gdb ~/music-4.0/music_gcmc<br />
+2. run gcmc.Methane.IRMOF1<br />
+3. where<br />
+&nbsp; (or bt)<br />
+4. frame 1<br />
+<br />
+[d1] https://rat.cis.k.hosei.ac.jp/article/devel/debugongccgdb1.html<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ fuga (http://people.bath.ac.uk/td222/research/fugacity/)<br />
+<br />
+□ install<br />
+(http://people.bath.ac.uk/td222/research/fugacity/index.html)<br />
+・fugacity.tar.gz<br />
+1. mkdir fuga<br />
+2. tar zxvf fugacity.tar.gz -C fuga<br />
+3. cd fuga<br />
+4. gedit makefile<br />
+-----before<br />
+&nbsp;&nbsp; &nbsp;@ifort $(FOPS) $(OBJS) -o fuga.exe<br />
+&nbsp;&nbsp; &nbsp;ifort -c $(FOPS) $^<br />
+-----<br />
+-----after<br />
+&nbsp;&nbsp; &nbsp;@gfortran $(FOPS) $(OBJS) -o fuga.exe<br />
+&nbsp;&nbsp; &nbsp;gfrotran -c $(FOPS) $^<br />
+-----<br />
+5. make<br />
+<br />
+◇ test<br />
+1. ./fuga.exe &lt; input.dat<br />
+------------------------------------------------------------------------------<br />
+■ Pairmodel Module<br />
+(http://www.iec.northwestern.edu/pairmodel.php)<br />
+<br />
+□ insall<br />
+(http://www.iec.northwestern.edu/pairmodel.php)<br />
+1. cd $HOME/music-4.0<br />
+&nbsp; wget http://www.iec.northwestern.edu/Music/pairmodel_src/pmodel_src.tar.gz<br />
+2. tar zxvf pmodel_src.tar.gz<br />
+3. pmodel_src<br />
+4. make FC=gfortran<br />
+&nbsp; (make clean)<br />
+&nbsp; (make FC=&quot;gfortran -O2&quot;)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Music - Multipurpose Simulation Code<br />
+&nbsp; http://www.iec.northwestern.edu/music.php<br />
+[2] ZIF-8<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[3] GCMC simulations with music<br />
+&nbsp; http://www.iec.northwestern.edu/Music/gcmc/gcmc.htm<br />
+[4] Music Tutorial (GCMC, IRMOF1 (MOF5))<br />
+&nbsp; http://people.bath.ac.uk/td222/research/music/Tutorial/<br />
+[5] Music Documentation<br />
+&nbsp; http://www.iec.northwestern.edu/Music/Documentation/index.html<br />
+[6] Snurr Research Group&nbsp;<br />
+&nbsp; https://github.com/snurr-group<br />
+[7] MCCCS Towhee: Related Software<br />
+&nbsp; http://towhee.sourceforge.net/software.html<br />
+------------------------------------------------------------------------------<br />
+■ music-4.0-gnu version (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(https://github.com/by-student-2017/music-gnu)<br />
+<br />
+◇ install<br />
+・music-4.0-gnu.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu.tar.gz<br />
+・music-4.0-gnu-O2.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu-O2.tar.gz<br />
+・music-4.0-gnu-debug.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu-debug.tar.gz<br />
+<br />
+◇ tests<br />
+1. cd ~/music-4.0/tests<br />
+2. ./testall<br />
+<br />
+◇ tutorial -1-<br />
+1. cd ~/music-4.0/tutorial/make_pmap/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/map.exe ctr.map.IRMOF1.CH4<br />
+&nbsp; cp IRMOF1.CH4.UFF.pmap ../pmaps<br />
+2. cd ~/music-4.0/tutorial/gcmc/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/gcmc.exe gcmc.Methane.IRMOF1<br />
+&nbsp; (vmd finalconfig.xyz)<br />
+&nbsp; (vmd initconfig.xyz)<br />
+3. ~/music-4.0/post.exe post.ctr<br />
+&nbsp; (gedit post.ctr)<br />
+4. cp met.post IRMOF1.Methane.post<br />
+&nbsp; cp fugacity_IRMOF1.dat pressure.dat<br />
+&nbsp; cp fugacity_IRMOF1.dat pressure_fuga.dat<br />
+5. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+&nbsp; (gedit input.dat)<br />
+6. ~/music-4.0/fuga.exe &lt; input_fuga.dat<br />
+&nbsp; (gedit input_fuga.dat)<br />
+<br />
+◇ tutorial -2- (sequential calculation)<br />
+1. cd ~/music-4.0/tutorial/make_pmap/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/map.exe ctr.map.IRMOF1.CH4<br />
+&nbsp; cp IRMOF1.CH4.UFF.pmap ../pmaps<br />
+2. cd ~/music-4.0/tutorial/gcmc/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/gcmc.exe gcmc.Methane.IRMOF1<br />
+3. cp pressure.dat fugacity_IRMOF1.dat<br />
+4. gedit gcmc.Methane.IRMOF1<br />
+&nbsp; ------before (Line 7)<br />
+&nbsp; 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Start numbering simulations from .<br />
+&nbsp; ------<br />
+&nbsp; ------after (Line 7)<br />
+&nbsp; XXXX &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Start numbering simulations from .<br />
+&nbsp; ------<br />
+5. ./run<br />
+&nbsp; (chmod +x run)<br />
+&nbsp; (./run)<br />
+6. gedit post.ctr<br />
+&nbsp; -----<br />
+&nbsp; 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder<br />
+&nbsp; new.met &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# name for new ctrlfile that will be regenerated<br />
+&nbsp; met.post &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Base name for output files<br />
+&nbsp; -----<br />
+&nbsp; -----<br />
+&nbsp; 1, 9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder<br />
+&nbsp; new.met &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# name for new ctrlfile that will be regenerated<br />
+&nbsp; IRMOF1.Methane.post &nbsp;# Base name for output files<br />
+&nbsp; -----<br />
+7. ~/music-4.0/post.exe post.ctr<br />
+8. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+&nbsp; (gedit input.dat)<br />
+9. ~/music-4.0/fuga.exe &lt; input_fuga.dat<br />
+&nbsp; (gedit input_fuga.dat)<br />
+------------------------------------------------------------------------------<br />
+■ music-4.0-gnu.tar.gz<br />
+<br />
+□ install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+<br />
+◇ gfortran<br />
+・music-4.0-gnu.tar.gz<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0<br />
+&nbsp; cd src<br />
+&nbsp; cp ../drivers/music_md.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;md.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_gcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;gcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_hgcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;hgcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapmaker.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;map.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapdisplay.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;mapdisplay.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_post.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;post.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_phess.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;phess.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_snip.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;snip.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_checkForce.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; CMD=&quot;checkForce.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cd ../src_excess<br />
+&nbsp; make clean<br />
+&nbsp; make<br />
+&nbsp; cp excess_UFF.exe ../excess.exe<br />
+<br />
+&nbsp; cd ../src_fugacity<br />
+&nbsp; make clean<br />
+&nbsp; make<br />
+&nbsp; cp fuga.exe ../fuga.exe<br />
+<br />
+◇ gfortran -O2<br />
+・music-4.0-gnu.tar.gz<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0<br />
+&nbsp; cd src<br />
+&nbsp; cp ../drivers/music_md.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;md.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_gcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;gcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_hgcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;hgcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapmaker.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;map.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapdisplay.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;mapdisplay.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_post.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;post.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_phess.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;phess.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_snip.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;snip.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_checkForce.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;checkForce.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cd ../src_excess<br />
+&nbsp; make clean<br />
+&nbsp; sed -i -e &quot;s/gfortran/gfortran -O2/g&quot; makefile<br />
+&nbsp; make<br />
+&nbsp; cp excess_UFF.exe ../excess.exe<br />
+<br />
+&nbsp; cd ../src_fugacity<br />
+&nbsp; make clean<br />
+&nbsp; sed -i -e &quot;s/gfortran/gfortran -O2/g&quot; makefile<br />
+&nbsp; make<br />
+&nbsp; cp fuga.exe ../<br />
+<br />
+◇ gfortran -fbounds-check -fbacktrace -g<br />
+・music-4.0-gnu.tar.gz<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0<br />
+&nbsp; cd src<br />
+&nbsp; cp ../drivers/music_md.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;md.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_gcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;gcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_hgcmc.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;hgcmc.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapmaker.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;map.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_mapdisplay.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;mapdisplay.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_post.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;post.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_phess.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;phess.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_snip.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;snip.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cp ../drivers/music_checkForce.F90 music.F90<br />
+&nbsp; make clean<br />
+&nbsp; ./makemake *.F90 *.F<br />
+&nbsp; make FC=&quot;gfortran&quot; DEBUG_FLAGS=&quot;-fbounds-check -fbacktrace -g&quot; &nbsp;CMD=&quot;checkForce.exe&quot;<br />
+&nbsp;&nbsp;<br />
+&nbsp; cd ../src_excess<br />
+&nbsp; make clean<br />
+&nbsp; sed -i -e &quot;s/gfortran -O2/gfortran -fbounds-check -fbacktrace -g/g&quot; makefile<br />
+&nbsp; make<br />
+&nbsp; cp excess_UFF.exe ../excess.exe<br />
+<br />
+&nbsp; cd ../src_fugacity<br />
+&nbsp; make clean<br />
+&nbsp; sed -i -e &quot;s/gfortran -O2/gfortran -fbounds-check -fbacktrace -g/g&quot; makefile<br />
+&nbsp; make<br />
+&nbsp; cp fuga.exe ../<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ Fortran (Ubuntu 18.04 LTS (64 bit))<br />
+<br />
+--------------------<br />
+□ PGI Fortran (trial)<br />
+(https://www.pgroup.com/products/community.htm)<br />
+・Linux x86-64<br />
+&nbsp; pgilinux-2019-194-x86-64.tar.gz<br />
+1. wget https://download.pgroup.com/secure/pgilinux-2019-194-x86-64.tar.gz?4d8bL4MI6ajJS5s94dYNQlmtP1mIy_bPvdrpGPc-Uzj1nu_q-JQk4Ge3kmaz89uLYuLUk6OpfYiQ4tQHZvZIWyq1DIJtkAkisxBCpQn2p_a-p7psbEbzqzkiZ0ucMxkMwlELA8c<br />
+2. mv pgilinux-2019-194-x86-64.tar.gz?4d8bL4MI6ajJS5s94dYNQlmtP1mIy_bPvdrpGPc-Uzj1nu_q-JQk4Ge3kmaz89uLYuLUk6OpfYiQ4tQHZvZIWyq1DIJtkAkisxBCpQn2p_a-p7psbEbzqzkiZ0ucMxkMwlELA8c pgilinux-2019-194-x86-64.tar.gz<br />
+3. mkdir pgfortran<br />
+4. cd pgfortran<br />
+5. tar zxvf pgilinux-2019-194-x86-64.tar.gz<br />
+6. sudo ./install<br />
+7. [Enter] &gt; [space]<br />
+&nbsp; Do you accept these terms? (accept,decline) accept<br />
+&nbsp; All [Enter]<br />
+&nbsp; Do you accept these terms? (accept,decline) accept<br />
+&nbsp; All [Enter]<br />
+&nbsp; Do you wish to obtain permanent license key or configure license service? (y/n) n<br />
+&nbsp; Do you want the files in the install directory to be read-only? (y/n) n<br />
+8. /opt/pgi<br />
+<br />
+◇ Usage<br />
+1. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+2. bash<br />
+3. pgf95 -V<br />
+&nbsp; (or /opt/pgi/linux86-64/19.4/bin/pgf95 -V)<br />
+<br />
+◇ music-4.0<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0/src<br />
+・MD<br />
+3. cp ../drivers/music_md.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_md&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_md&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_md&quot;)<br />
+(8. ln -s ~/music-4.0/music_md)<br />
+・GCMC<br />
+3. cp ../drivers/music_gcmc.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_gcmc&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_gcmc&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_gcmc&quot;)<br />
+(8. ln -s ~/music-4.0/music_gcmc)<br />
+・mapmaker<br />
+3. cp ../drivers/music_mapmaker.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_mapmaker&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_mapmaker&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_mapmaker&quot;)<br />
+(8. ln -s ~/music-4.0/music_mapmaker)<br />
+・mapdisplay<br />
+3. cp ../drivers/music_mapdisplay.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_mapdisplay&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_mapdisplay&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_mapdisplay&quot;)<br />
+(8. ln -s ~/music-4.0/music_mapdisplay)<br />
+・post (failed)<br />
+3. cp ../drivers/music_post.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_post&quot;<br />
+(8. ln -s ~/music-4.0/music_post)<br />
+・hess<br />
+3. cp ../drivers/music_hess.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_hess&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_hess&quot;)<br />
+&nbsp; -----<br />
+&nbsp; PGF90-F-0004-Unable to open MODULE file interact.mod (music.F90: 28)<br />
+&nbsp; PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+&nbsp; Makefile:116: recipe for target &#39;music.o&#39; failed<br />
+&nbsp; make: *** [music.o] Error 2<br />
+&nbsp; -----<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_hess&quot;)<br />
+&nbsp; -----<br />
+&nbsp; PGF90-F-0004-Unable to open MODULE file interact.mod (music.F90: 28)<br />
+&nbsp; PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+&nbsp; Makefile:116: recipe for target &#39;music.o&#39; failed<br />
+&nbsp; make: *** [music.o] Error 2<br />
+&nbsp; -----<br />
+(8. ln -s ~/music-4.0/music_hess)<br />
+9. pgf95 -c interact.F90<br />
+・hgcmc (failed)<br />
+3. cp ../drivers/music_hgcmc.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_hgcmc&quot;<br />
+(8. ln -s ~/music-4.0/music_hgcmc)<br />
+8. pgf95 -c randomvec.F90 hybridmoves.F90 volmoves.F90 hybridmc.F90 emd.F90 md.F90 music.F90<br />
+9. make FC=&quot;pgf95&quot; CMD=&quot;music_hgcmc&quot;<br />
+・neb (failed)<br />
+3. cp ../drivers/music_neb.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_neb&quot;<br />
+(8. ln -s ~/music-4.0/music_neb)<br />
+-----<br />
+PGF90-F-0004-Unable to open MODULE file storebase.mod (neb.F90: 84)<br />
+PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+Makefile:116: recipe for target &#39;neb.o&#39; failed<br />
+make: *** [neb.o] Error 2<br />
+-----<br />
+・nrg (failed)<br />
+3. cp ../drivers/music_nrg.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_nrg&quot;<br />
+(8. ln -s ~/music-4.0/music_nrg)<br />
+-----<br />
+PGF90-S-0188-Argument number 2 to datafile_writeconfig: type mismatch (music.F90: 221)<br />
+PGF90-S-0188-Argument number 3 to datafile_writeconfig: type mismatch (music.F90: 221)<br />
+&nbsp; 0 inform, &nbsp; 0 warnings, &nbsp; 2 severes, 0 fatal for music<br />
+Makefile:116: recipe for target &#39;music.o&#39; failed<br />
+make: *** [music.o] Error 2<br />
+-----<br />
+・nvtmc<br />
+3. cp ../drivers/music_nvtmc.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_nvtmc&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_nvtmc&quot;)<br />
+&nbsp; -----<br />
+&nbsp; PGF90-F-0004-Unable to open MODULE file interact.mod (track.F90: 74)<br />
+&nbsp; PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+&nbsp; Makefile:116: recipe for target &#39;track.o&#39; failed<br />
+&nbsp; make: *** [track.o] Error 2<br />
+&nbsp; -----<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_nvtmc&quot;)<br />
+&nbsp; -----<br />
+&nbsp; PGF90-F-0004-Unable to open MODULE file interact.mod (track.F90: 74)<br />
+&nbsp; PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+&nbsp; Makefile:116: recipe for target &#39;track.o&#39; failed<br />
+&nbsp; make: *** [track.o] Error 2<br />
+&nbsp; -----<br />
+(8. ln -s ~/music-4.0/music_nvtmc)<br />
+-----<br />
+PGF90-F-0004-Unable to open MODULE file interact.mod (track.F90: 74)<br />
+PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+Makefile:116: recipe for target &#39;track.o&#39; failed<br />
+make: *** [track.o] Error 2<br />
+-----<br />
+・opt<br />
+3. cp ../drivers/music_opt.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_opt&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_opt&quot;)<br />
+&nbsp; -----<br />
+&nbsp; PGF90-F-0004-Unable to open MODULE file interact.mod (music.F90: 32)<br />
+&nbsp; PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+&nbsp; Makefile:116: recipe for target &#39;music.o&#39; failed<br />
+&nbsp; make: *** [music.o] Error 2<br />
+&nbsp; -----<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_opt&quot;)<br />
+(8. ln -s ~/music-4.0/music_opt)<br />
+-----<br />
+PGF90-F-0004-Unable to open MODULE file interact.mod (music.F90: 32)<br />
+PGF90/x86-64 Linux 19.4-0: compilation aborted<br />
+Makefile:116: recipe for target &#39;music.o&#39; failed<br />
+make: *** [music.o] Error 2<br />
+-----<br />
+・phess<br />
+3. cp ../drivers/music_phess.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_phess&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_phess&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_phess&quot;)<br />
+(8. ln -s ~/music-4.0/music_phess)<br />
+・snip<br />
+3. cp ../drivers/music_snip.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_snip&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_snip&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_snip&quot;)<br />
+(8. ln -s ~/music-4.0/music_snip)<br />
+<br />
+・cat ~/music-4.0/drivers/Readme<br />
+-----<br />
+FileName &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Function<br />
+&nbsp;music_baker.f90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; OLD CODE for energy minimization<br />
+&nbsp;music_confinteg.f90 &nbsp; &nbsp;: &nbsp; M22 driver for alkane config integ<br />
+&nbsp;music_gcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; GCMC, CBGCMC<br />
+&nbsp;music_hess.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; calculates the hessian of a given molecule<br />
+&nbsp;music_hgcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; HYBRID GCMC (NVT, MuVT; MD-GCMC, H-GCMC)<br />
+&nbsp;music_mapdisplay.F90 &nbsp; : &nbsp; diplay a pmap<br />
+&nbsp;music_mapmaker.F90 &nbsp; &nbsp; : &nbsp; make a pmap<br />
+&nbsp;music_md.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; MD<br />
+&nbsp;music_neb.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Nudeged Elastic Band<br />
+&nbsp;music_nrg.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; reports nrg of xyz (movie) file<br />
+&nbsp;music_nvtmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; NVT Monte Carlo<br />
+&nbsp;music_opt.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; reads in xyz configs/nrgs and optimizes intra FF<br />
+&nbsp;music_phess.F90 &nbsp; &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_post.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; All of Post Code<br />
+&nbsp;music_restart.f90 &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_snip.F90 &nbsp; &nbsp; &nbsp; &nbsp; :<br />
+-----<br />
+<br />
+◇ music-3.1<br />
+1. &nbsp;tar zxvf music-3-1.tar.gz<br />
+2. cd Music<br />
+・MD<br />
+3. cp ../drivers/music_md.F90 music.F90<br />
+4. make clean<br />
+5. ./makemake *.F90 *.F<br />
+6. export PGI=/opt/pgi<br />
+&nbsp; export PATH=$PGI/linux86-64/19.4/bin:$PATH&nbsp;<br />
+&nbsp; export MANPATH=$MANPATH:$PGI/linux86-64/19.4/man&nbsp;<br />
+&nbsp; export LM_LICENSE_FILE=$PGI/license.dat<br />
+&nbsp; bash<br />
+7. make FC=&quot;pgf95&quot; CMD=&quot;music_md&quot;<br />
+&nbsp; (make FC=&quot;pgf95&quot; DEBUG_FLAGS=&quot;-traceback -C -Ktrap=fp -g&quot; CMD=&quot;music_md&quot;)<br />
+&nbsp; (make FC=&quot;pgf95&quot; OFLAGS=&quot;-O2&quot; CMD=&quot;music_md&quot;)<br />
+(8. ln -s ~/music-4.0/music_md)<br />
+--------------------<br />
+<br />
+・cat ~/Music/drivers/Readme<br />
+-----<br />
+FileName &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Function<br />
+&nbsp;music_baker.f90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; OLD CODE for energy minimization<br />
+&nbsp;music_confinteg.f90 &nbsp; &nbsp;: &nbsp; M22 driver for alkane config integ<br />
+&nbsp;music_gcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; GCMC, CBGCMC<br />
+&nbsp;music_hgcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; HYBRID GCMC (NVT, MuVT; MD-GCMC, H-GCMC)<br />
+&nbsp;music_mapdisplay.F90 &nbsp; : &nbsp; diplay a pmap<br />
+&nbsp;music_mapmaker.F90 &nbsp; &nbsp; : &nbsp; make a pmap<br />
+&nbsp;music_md.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; MD<br />
+&nbsp;music_neb.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Nudeged Elastic Band<br />
+&nbsp;music_nvtmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; NVT Monte Carlo<br />
+&nbsp;music_phess.F90 &nbsp; &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_post.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp;All of Post Code<br />
+&nbsp;music_restart.f90 &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_snip.F90 &nbsp; &nbsp; &nbsp; &nbsp; :<br />
+&nbsp;-----<br />
+--------------------<br />
+□ Absoft (trial)<br />
+<br />
+◇ Registration<br />
+(https://www.absoft.com/)<br />
+Get Your Free Pro Fortran Evaluation Today!&nbsp;<br />
+・you can get E-mail<br />
+1. tar zxvf absoft_profortran-19.0.1.x86_64.tar.gz<br />
+2. cd absoft_profortran-19.0<br />
+3. sudo ./install<br />
+4. All [Enter]<br />
+&nbsp; Enter the product license :<br />
+※ E-mailの#LICENSE STARTS HEREと#LICENSE ENDS HEREの間にあるPRO:の後の英数字を入力<br />
+<br />
+◇ Usage<br />
+1. source /opt/absoft19.0/bin/absvars.sh<br />
+2. bash<br />
+3. f95<br />
+<br />
+◇ music-4.0<br />
+1. tar zxvf music-4.0.tar.gz<br />
+2. cd music-4.0/src<br />
+3. sed -i -e &quot;s/AtomList/AtomListc/g&quot; *.F90<br />
+4. gedit config.F90<br />
+-----before (Line 1612 and 1618)<br />
+Type(VecType), Dimension(:,:), Pointer :: vpntr<br />
+<br />
+vpntr =&gt; sorbates(sorb)%coords(1:natoms,1:nmoles)%v<br />
+-----<br />
+-----after<br />
+!Type(VecType), Dimension(:,:), Pointer :: vpntr<br />
+Type(VecType), Pointer :: vpntr<br />
+<br />
+!vpntr =&gt; sorbates(sorb)%coords(1:natoms,1:nmoles)%v<br />
+vpntr =&gt; sorbates(sorb)%coords(natoms,nmoles)%v<br />
+-----<br />
+・MD<br />
+5. cp ../drivers/music_md.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. source /opt/absoft19.0/bin/absvars.sh<br />
+&nbsp; bash<br />
+9. sudo make FC=&quot;f95&quot; CMD=&quot;music_md&quot;<br />
+(10. ln -s ~/music-4.0/music_md)<br />
+・MD<br />
+5. cp ../drivers/music_md.F90 music.F90<br />
+6. make clean<br />
+7. ./makemake *.F90 *.F<br />
+8. source /opt/absoft19.0/bin/absvars.sh<br />
+&nbsp; bash<br />
+9. sudo make FC=&quot;f95&quot; CMD=&quot;music_md&quot;<br />
+&nbsp; (sudo make FC=f95 DEBUG_FLAGS=&quot;-s -g&quot; CMD=&quot;music_md&quot;)<br />
+(10. ln -s ~/music-4.0/music_md)<br />
+<br />
+・cat ~/music-4.0/drivers/Readme<br />
+-----<br />
+FileName &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Function<br />
+&nbsp;music_baker.f90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; OLD CODE for energy minimization<br />
+&nbsp;music_confinteg.f90 &nbsp; &nbsp;: &nbsp; M22 driver for alkane config integ<br />
+&nbsp;music_gcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; GCMC, CBGCMC<br />
+&nbsp;music_hess.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; calculates the hessian of a given molecule<br />
+&nbsp;music_hgcmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; HYBRID GCMC (NVT, MuVT; MD-GCMC, H-GCMC)<br />
+&nbsp;music_mapdisplay.F90 &nbsp; : &nbsp; diplay a pmap<br />
+&nbsp;music_mapmaker.F90 &nbsp; &nbsp; : &nbsp; make a pmap<br />
+&nbsp;music_md.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; MD<br />
+&nbsp;music_neb.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; Nudeged Elastic Band<br />
+&nbsp;music_nrg.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; reports nrg of xyz (movie) file<br />
+&nbsp;music_nvtmc.F90 &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; NVT Monte Carlo<br />
+&nbsp;music_opt.F90 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: &nbsp; reads in xyz configs/nrgs and optimizes intra FF<br />
+&nbsp;music_phess.F90 &nbsp; &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_post.F90 &nbsp; &nbsp; &nbsp; &nbsp; : &nbsp; All of Post Code<br />
+&nbsp;music_restart.f90 &nbsp; &nbsp; &nbsp;:<br />
+&nbsp;music_snip.F90 &nbsp; &nbsp; &nbsp; &nbsp; :<br />
+-----<br />
+<br />
+◇ music-4.0 (other method)<br />
+8. gedit Makefile<br />
+-----before<br />
+### ---------- define flags for Absoft compiler ------------------------<br />
+###<br />
+###<br />
+ifeq ($(FC),AbSf95)<br />
+#DEBUG_FLAGS = -g -Rb -Rc -Rp -Rs #for Absoft compiler &nbsp;(-Rb doesn&#39;t work)<br />
+DEBUG_FLAGS = -s -g -B111 -B80 -Rc -Rp -Rs #for Absoft compiler<br />
+LINKERFLAGS = -lU77 &nbsp;#needed for Absoft compiler, accesses UNIX commands<br />
+endif<br />
+-----<br />
+-----after<br />
+### ---------- define flags for Absoft compiler ------------------------<br />
+###<br />
+###<br />
+ifeq ($(FC),f95)<br />
+#DEBUG_FLAGS = -g -Rb -Rc -Rp -Rs #for Absoft compiler &nbsp;(-Rb doesn&#39;t work)<br />
+DEBUG_FLAGS = -s -g #for Absoft compiler<br />
+#LINKERFLAGS = -lU77 &nbsp;#needed for Absoft compiler, accesses UNIX commands<br />
+endif<br />
+-----<br />
+8.5. sudo make FC=f95<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ NAG (Trial Request, Fortran)<br />
+(https://www.nag.co.uk/content/downloads-nag-fortran-compiler-versions)<br />
+・Linux x64, NPL6A62NA, Download (tgz)<br />
+&nbsp; I would like to try: * [NAG Fortran Libary]<br />
+&nbsp; Do you want to trial the NAG Fortran Compiler with the Library? [- None -]<br />
+&nbsp; If you know the product code of the software you want to trial please add it here: [NPL6A62NA]<br />
+&nbsp; Architecture: [64-bit]<br />
+&nbsp; Fortran Compiler / Programming Environment [unknown]<br />
+&nbsp; Operating System: [Linux]<br />
+&nbsp; Which Industry Do You Work In? [Educatin]<br />
+&nbsp; Accept NAG&#39;s Software Licence Agreement: * [Yes]<br />
+&nbsp; How did you hear about NAG? [Recommendation by others]<br />
+<br />
+□ NAG (trial)<br />
+(https://www.nag.co.uk/content/downloads-nag-fortran-compiler-versions)<br />
+・Linux x64, NPL6A62NA, Download (tgz)<br />
+1. wget https://www.nag.co.uk/downloads/impl/npl6a62na_amd64.tgz<br />
+2. cd NAG_Fortran-amd64<br />
+3. sudo ./INSTALL.sh<br />
+4. Do you accept this licence agreement [Y]? y<br />
+5. All [Enter]<br />
+6. nagfor --help<br />
+&nbsp; (/usr/local/bin/nagfor)<br />
+&nbsp; (which nagfor)<br />
+-----<br />
+NAG Fortran Compiler Release 6.2(Chiyoda) Build 6223<br />
+Error: Licence file not found<br />
+Makefile:126: recipe for target &#39;post.exe&#39; failed<br />
+make: *** [post.exe] Error 2<br />
+-----<br />
+<br />
+◇ music-4.0<br />
+8. gedit Makefile<br />
+-----before<br />
+### ------------ define flags for nagf95, intel-linux compiler by NAG ---------<br />
+###<br />
+###<br />
+ifeq ($(FC),nagf95)<br />
+F90FLAGS = -w=unused #-useful for NAG compiler<br />
+#DEBUG_FLAGS = -g -C -gline #debug flags for NAG compiler<br />
+DFLAGS = -DNAGCOMPILER #-Define the cpp flags to be used<br />
+OFLAGS = &nbsp;-O4 # optimization<br />
+#OFLAGS = -Wc,-mcpu=pentium -O4 # OR ,-mcpu=pentium4, athlon etc..<br />
+#LINKERFLAGS = -L/usr/local/lib/NAGWare/ -lf96 # maybe needed for NAG compiler<br />
+#LINKERFLAGS = -unsharedf95 # for not using runtime libraries<br />
+endif<br />
+-----<br />
+-----after<br />
+### ------------ define flags for nagf95, intel-linux compiler by NAG ---------<br />
+###<br />
+###<br />
+ifeq ($(FC),nagfor)<br />
+F90FLAGS = -w=unused #-useful for NAG compiler<br />
+#DEBUG_FLAGS = -g -C -gline #debug flags for NAG compiler<br />
+DFLAGS = -DNAGCOMPILER #-Define the cpp flags to be used<br />
+OFLAGS = &nbsp;-O4 # optimization<br />
+#OFLAGS = -Wc,-mcpu=pentium -O4 # OR ,-mcpu=pentium4, athlon etc..<br />
+#LINKERFLAGS = -L/usr/local/lib/NAGWare/ -lf96 # maybe needed for NAG compiler<br />
+#LINKERFLAGS = -unsharedf95 # for not using runtime libraries<br />
+endif<br />
+-----<br />
+8.5. make FC=nagfor<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ G95 (free)<br />
+(http://www.g95.org/downloads.shtml)<br />
+G95 Binaries and Source<br />
+Linux x86_64/EMT64 (64 bit D.I.), HTTP<br />
+1. wget http://ftp.g95.org/v0.93/g95-x86_64-64-linux.tgz<br />
+2. tar zxvf g95-x86_64-64-linux.tgz<br />
+3. cd g95-install<br />
+4. ln -s $PWD/bin/*g95* /usr/local/bin/g95<br />
+<br />
+◇ music-4.0 (failed)<br />
+8. make FC=&quot;g95 -fintrinsic-extensions&quot;<br />
+※ 組み込み関数のIorでエラーが生じる。<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Lahey (failed)<br />
+(http://www.lahey.com/LF64p_down.htm)<br />
+1. (input information)<br />
+&nbsp; [Please provide the following information then click Download to get your copy of LF64 Pro v8.1 Trial.]<br />
+2. [Download]<br />
+3. mkdir lf64<br />
+4. cd lf64<br />
+5. tar xvf lf64-8.1b.tar<br />
+6. sudo ./install<br />
+7. View agreement? (answering no will terminate install) [y] y<br />
+8. [space]<br />
+9. Do you accept the terms of the Fortran License Agreement? [n] y<br />
+10. Al [Enter]&nbsp;<br />
+・you can get e-mail<br />
+11. sudo gedit /usr/local/lf6481/bin/lflic.dat<br />
+-----<br />
+[BEGINLICENSE]<br />
+...<br />
+[ENDLICENSE]<br />
+-----<br />
+12. sudo /usr/local/lf6481/bin/activate<br />
+13. Do you want to proceed with online activation? [y]: n<br />
+※ 下記のように表示されるが lf95 -v と入力しても lflic.dat ファイルが無いという ERROR -- &nbsp;License error: 1. しか表示されない。<br />
+-----<br />
+Lahey/Fujitsu Linux64 Fortran Pro v8.1 Installation<br />
+-------------------------------------------------------<br />
+<br />
+The activation information file was successfully created.<br />
+To use LF64 Pro v8.1 you will need to complete a manual activation.<br />
+See Manual Activation in the README file for instructions.<br />
+<br />
+Press ENTER to continue.<br />
+-----<br />
+<br />
+◇ Usage<br />
+1. source /usr/local/lf6481/bash_laheyfort_setup<br />
+2. bash<br />
+3. lf95 -v<br />
+&nbsp; (lf95 --help)<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ DEC/Compaq (Not found)<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Open Watcom (F77) (Resigned)<br />
+(https://sourceforge.net/projects/openwatcom/files/)<br />
+・Download Latest Version<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Sun Studio<br />
+(http://www.oracle.com/technetwork/server-storage/solarisstudio/downloads/index-jsp-141149.html)<br />
+[check] Accept License Agreement&nbsp;<br />
+・Oracle Linux/ Red Hat Linux<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Open64 (failed)<br />
+(https://sourceforge.net/projects/open64/)<br />
+1. sudo apt-get install mawk csh bash make flex bison gfortran gcc-multilib g++-multilib gfortran-multilib<br />
+2. sudo dpkg-reconfigure dash<br />
+&nbsp; No<br />
+3. ls -al /etc/alternatives/awk<br />
+4. cd /usr/lib<br />
+&nbsp; sudo ln -s /usr/lib32/crt* .<br />
+&nbsp; sudo mkdir /usr/lib64/<br />
+&nbsp; cd /usr/lib64/<br />
+&nbsp; sudo ln -s /usr/lib/x86_64-linux-gnu/crt* .<br />
+5. cd ~<br />
+wget http://downloads.sourceforge.net/project/open64/open64/Open64-5.0/open64-5.0-0.src.tar.bz2<br />
+6. tar xjvf open64-5.0-0.src.tar.bz2<br />
+&nbsp; cd open64-5.0/<br />
+7. mkdir objs<br />
+&nbsp; cd objs<br />
+8. ../configure --target=ia64-unknown-linux-gnu --with-build-compiler=GNU --includedir=&quot;/usr/include/x86_64-linux-gnu&quot;<br />
+9. gedit ../osprey/ipa/local/Makefile.gbase<br />
+-----before<br />
+ipl_summarize_util.o: OPTIMIZER += -CG:all_sched=0<br />
+-----after<br />
+#ipl_summarize_util.o: OPTIMIZER += -CG:all_sched=0<br />
+-----<br />
+11. make<br />
+12. sudo make install<br />
+<br />
+[O1] https://askubuntu.com/questions/62129/how-to-install-open64-compiler<br />
+--------------------<br />
+□ Open64 (failed)<br />
+(https://sourceforge.net/projects/open64/)<br />
+(https://sourceforge.net/projects/open64/files/latest/download)<br />
+・open64-5.0-0.src.tar.bz2<br />
+0. sudo apt install gcc-multilib g++-multilib<br />
+&nbsp; sudo apt install libc6-dev-i386<br />
+&nbsp; sudo apt install original-awk<br />
+&nbsp; sudo apt install csh&nbsp;<br />
+&nbsp; sudo apt install bash&nbsp;<br />
+&nbsp; sudo apt install flex&nbsp;<br />
+&nbsp; sudo apt install bison<br />
+&nbsp; cd /usr/bin<br />
+&nbsp; sudo ln -s make gmake<br />
+&nbsp; export LD_LIBRARY_PATH=&quot;$LD_LIBRARY_PATH:/usr/include/x86_64-linux-gnu/&quot;<br />
+&nbsp; export PATH=&quot;$PATH:/usr/include/x86_64-linux-gnu&quot;<br />
+&nbsp; bash<br />
+1. tar xvf open64-5.0-0.src.tar.bz2<br />
+2. cd open64-5.0<br />
+3. ./configure &nbsp;--build=x86_64-unknown-linux-gnu --with-build-compiler=GNU --includedir=&quot;/usr/include/x86_64-linux-gnu&quot; CC=&quot;/usr/bin/gcc -I/usr/include/x86_64-linux-gnu&quot;<br />
+&nbsp;(./configure --target=ia64-unknown-linux-gnu --with-build-compiler=GNU --includedir=&quot;/usr/include/x86_64-linux-gnu&quot;)<br />
+4. make all<br />
+5. sudo make install<br />
+6. /usr/local/open64<br />
+※ /usr/include/stdio.h:27:10: fatal error: bits/libc-header-start.h: No such file or directory<br />
+&nbsp;#include &lt;bits/libc-header-start.h&gt;<br />
+<br />
+※ wget https://excellmedia.dl.sourceforge.net/project/open64/open64/Open64-5.0/open64-5.0-0.src.tar.bz2<br />
+<br />
+・sudo gedit /usr/include/stdio.h<br />
+-----before<br />
+#include &lt;bits/libc-header-start.h&gt;<br />
+-----after<br />
+#include &lt;/usr/include/x86_64-linux-gnu/bits/libc-header-start.h&gt;<br />
+-----<br />
+・sudo gedit /usr/include/features.h<br />
+-----before (Line 424)<br />
+# &nbsp;include &lt;sys/cdefs.h&gt;<br />
+-----after<br />
+# &nbsp;include &lt;/usr/include/x86_64-linux-gnu/sys/cdefs.h&gt;<br />
+-----<br />
+--------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

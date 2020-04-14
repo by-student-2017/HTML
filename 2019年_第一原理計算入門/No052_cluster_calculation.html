@@ -1,0 +1,373 @@
+------------------------------------------------------------------------------<br />
+■ 動画（全てクリエイティブコモンにしています）<br />
+・Youtube動画： <a href="https://www.youtube.com/playlist?list=PLYoIKHKPkcsFqmS8VBCuFWbP2ie9Na3D7">https://www.youtube.com/playlist?list=PLYoIKHKPkcsFqmS8VBCuFWbP2ie9Na3D7</a>　<br />
+・動画リスト： <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a>　<br />
+・関連動画： <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a>　<br />
+・igor macro： <a href="https://github.com/by-student-2017/Igor-Macro">https://github.com/by-student-2017/Igor-Macro</a> （gaussian_brodening.ipf ）<br />
+------------------------------------------------------------------------------<br />
+■ cluster calculation (guide)<br />
+1. VASP or PWscf calculation (optimized structure)<br />
+&nbsp; ( 1.5. PWscf use XcrySDen -&gt; *.xsf)<br />
+2. VESTA -&gt; expand 2x2x2 -&gt; *.xyz<br />
+3. displat -&gt; cut -&gt; f01<br />
+4. VESTA -&gt; expand 2x2x2 -&gt; *.mld<br />
+&nbsp; ( 5.5. Winmoster -&gt; enbedded H (click +H) )<br />
+6. VESTA -&gt; *.xyz<br />
+7. displat -&gt; cut -&gt; f01 (on windows)<br />
+7.5. For wine on Linux, cd $HOME/.wine/drive_c -&gt; wine cmd<br />
+8. setdvxa -&gt; cd calc -&gt; makef05 -&gt; dvscat (on windows or wine)<br />
+9. make l04<br />
+9.1. modify l04<br />
+9.2. lvlshm<br />
+10. make d04<br />
+10.1 modify d04<br />
+10.2 dos<br />
+------------------------------------------------------------------------------<br />
+■ makeing cluster (outline)<br />
+1) optimized calculation on PWscf or VASP (for example, 2x2x2 supercell)<br />
+(1.5) read out file on XcrySDen and output *.sxf format when you used PWscf)<br />
+2) convert xyz format on VESTA (VESTA can expand cell)<br />
+3) use displat (on windows)<br />
+&nbsp;3.1) select &quot;3:Specail&quot;<br />
+&nbsp;3.2) Number of Data (0:auto):0<br />
+&nbsp;3.3) input 1, 2, 3, 4 designated as atomic number, X, Y, Z, then input 1 (Angstrom)<br />
+&nbsp;3.4) select atom you want to set center with &quot;i&quot; button<br />
+&nbsp;3.5) put on &quot;ESC&quot; button, select &quot;Selected Atom to Center&quot;<br />
+&nbsp;3.6) put on &quot;ESC&quot; button, select &quot;Search Selected Atoms Neighbor&quot;<br />
+&nbsp;&nbsp; 3.6.1) input value to &quot;Search Lenght:&quot;<br />
+&nbsp;&nbsp; 3.6.2) put on &quot;s&quot; to arrange ascending order<br />
+&nbsp;&nbsp; 3.6.3) &quot;S&quot; mean showing classify atomic number<br />
+&nbsp;4) to get cluster, put on &quot;ESC&quot; button and select &quot;Delete Atoms out of sphere&quot;<br />
+&nbsp;5) put on &quot;ESC&quot; button and select &quot;Make F01 (XYZ in double)&quot;<br />
+&nbsp;&nbsp; 5.1) select 3 for Select NEQ order<br />
+&nbsp;&nbsp; 5.2) 0.01% is enough to calculation for Deviation<br />
+&nbsp;&nbsp; 5.3) input all enter<br />
+6) arrange same &quot;XD, YD, ZD&quot; to same NEQ value in f01<br />
+7) calculate on dvxa code (on windows or wine on Linus)<br />
+8) For wine on Linux, cd $HOME/.wine/drive_c -&gt; wine cmd<br />
+9) setdvxa -&gt; cd calc -&gt; makef05 -&gt; dvscat (on windows or wine)<br />
+10) make l04<br />
+&nbsp;&nbsp; 10.1) modify l04<br />
+&nbsp;&nbsp; 10.2) lvlshm<br />
+11) make d04<br />
+&nbsp;&nbsp; 11.1) modify d04<br />
+&nbsp;&nbsp; 11.2) dos<br />
+12) get L08 or L08KG and dd7<br />
+------------------------------------------------------------------------------<br />
+■ displat (on Windows)<br />
+・Menu ：Esc<br />
+・change difference value：shift + h, j, k or l<br />
+・rotation：<br />
+&nbsp;x-axis：&uarr; or &darr;<br />
+&nbsp;y-axis：&larr; or &rarr;<br />
+&nbsp;z-axis：z or x<br />
+・change display scale：w<br />
+・parallel transport：h, j, k or l<br />
+・change size on &quot;Detele Atomic on Screen-2&quot;: a or z<br />
+------------------------------------------------------------------------------<br />
+■ l04 (input file for energy level diagram)<br />
+to get absolute value, you change l04 file as following,<br />
+(First line and 4th number is switch (1: change Fermi level to 0, 0:absolute value)<br />
+(2nd line and 1th number is number of dos)<br />
+<br />
+-----before<br />
+&nbsp;-15.00000&nbsp; 10.00000&nbsp;&nbsp; 5.00000&nbsp;&nbsp;&nbsp; 1 &nbsp;&nbsp; 0&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp; 14&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se<br />
+&nbsp; 2Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se<br />
+&nbsp; 4Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se<br />
+&nbsp; 6Se&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu<br />
+&nbsp; 8Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu<br />
+&nbsp;10Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu<br />
+&nbsp;12Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu<br />
+&nbsp;14Cu<br />
+<br />
+above input data mean following<br />
+Start: -15.0 eV, end: 10.0 eV, <span lang="en">The pitch of the energy scale</span>: 5.0 eV, Fermi level = 0<br />
+number of PDOS (print number) = 1, 1Ni 1s (0 = no print), 1Ni 2s (0 = no print),1Ni 2p (0 = no print), 1Ni 3s (0 = no print), 1Ni 3p (0 = no print), 1Ni 3d (1 = print No.1), 1Ni 4s (0 = no print), 1Ni 4p (0 = no print), 2Se 1s (0 = no print), ...<br />
+<br />
+-----after<br />
+&nbsp;-15.00000&nbsp; 10.00000&nbsp;&nbsp; 5.00000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp; 14&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se<br />
+&nbsp; 2Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se<br />
+&nbsp; 4Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se<br />
+&nbsp; 6Se&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu<br />
+&nbsp; 8Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu<br />
+&nbsp;10Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu<br />
+&nbsp;12Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu<br />
+&nbsp;14Cu<br />
+above input data mean following<br />
+number of PDOS (number of print PDOS) = 1, 1Ni 1s (0 = no print), 1Ni 2s (0 = no print),1Ni 2p (0 = no print), 1Ni 3s (0 = no print), 1Ni 3p (0 = no print), 1Ni 3d (1 = print No.1), 1Ni 4s (0 = no print), 1Ni 4p (0 = no print), 2Se 1s (0 = no print), ...<br />
+<br />
+-----for example, other setting<br />
+&nbsp;-15.00000&nbsp; 10.00000&nbsp;&nbsp; 5.00000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 2 &nbsp;&nbsp; 2 &nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0 &nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;&nbsp;&nbsp; 0<br />
+&nbsp;<br />
+&nbsp;<br />
+&nbsp;&nbsp; 14&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 1Ni&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se&nbsp; 2Se<br />
+&nbsp; 2Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 3Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se&nbsp; 4Se<br />
+&nbsp; 4Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 5Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se&nbsp; 6Se<br />
+&nbsp; 6Se&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 7Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu&nbsp; 8Cu<br />
+&nbsp; 8Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu&nbsp; 9Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu 10Cu<br />
+&nbsp;10Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 11Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu 12Cu<br />
+&nbsp;12Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 13Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu 14Cu<br />
+&nbsp;14Cu<br />
+above input data mean following<br />
+number of PDOS (number of print PDOS) = 2, 1Ni 1s (0 = no print), 1Ni 2s (0 = no print),1Ni 2p (0 = no print), 1Ni 3s (0 = no print), 1Ni 3p (0 = no print), 1Ni 3d (1 = print No.1), 1Ni 4s (0 = no print), 1Ni 4p (0 = no print), 2Se 1s (2 = print No.2), 2Se 2s (2 = print No.2), ......<br />
+------------------------------------------------------------------------------<br />
+下記を考慮して系の対称性を高めると、より大きな系でより安定して計算できる確率が増える。<br />
+<br />
+■ 鏡面対称性の作成の仕方1<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+2. symOrbでsを押して探索させCsが表示される<br />
+3. f01を出力する<br />
+4. f01のNEWを見やすいように並べて、同じNEWのXYZの値を揃える<br />
+5. makef25<br />
+6. makef05<br />
+7. dvscat<br />
+<br />
+■ 鏡面対称性の作成の仕方2（鏡面対称性のあるf01がmakef25で自動認識されない場合など）<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+&nbsp;（displatで鏡面対称性を作ると入力ファイルに対して少し安心できる）<br />
+（ここでNEWが順番になるようにコピー＆ペーストしておくとf25を比較しやすくなるが、f25.inでのチェックは難しくなる）<br />
+2. Excelなどでf01を読み取り、angstromの場合は1.889725989倍にしてbohr(atomic)単位にする。桁数は揃えておきたい（Excelのボタンにある）。<br />
+2. f25.inの名称のファイルを作る（makef25sでｚに対して+と-の座標ができる）。Excelのデータをコピー&amp;ペーストする。置換でTabを空白に変えておく。<br />
+Cs<br />
+&nbsp;考慮に入れる軌道（第四と五周期の原子があるならばd、第六周期があるならばf）<br />
+bohr(atomic)単位で座標を入力する（鏡面に対する片方のみを記述する）<br />
+3. makef25sを入力し作成されたf25を確認し、f25の形式と同じ順番となるようにf01を確認する<br />
+4. makef05<br />
+5. dvscat<br />
+------------------------------------------------------------------------------<br />
+■ f06zp<br />
+<a href="http://chem.sci.hyogo-u.ac.jp/hajimete/download.html">http://chem.sci.hyogo-u.ac.jp/hajimete/download.html</a> (<b><i><a href="http://chem.sci.hyogo-u.ac.jp/hajimete/dv_doc.lzh">dv_doc.lzh　 12KB</a></i></b>)<br />
+DV2.doc<br />
+----------referec<br />
+<style type="text/css">p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: justify; }p.western { font-family: "Century",serif; font-size: 10pt; }p.cjk { font-family: "ＭＳ 明朝"; font-size: 10pt; }p.ctl { font-family: "Century"; font-size: 12pt; }a:link { color: rgb(0, 0, 255); }
+</style>
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>ncycm pdec pinc phmx fcvj phmt</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>10 0.90 1.02 0.50 0.70 0.00000</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;">&nbsp;</p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>jtd ftd</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>2 0.20</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;">&nbsp;</p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>jsw fsw jswc nkp tdxm phsw</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>0 0.80 0 5 5.00000 0.01000</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;">&nbsp;</p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>cvj jch chj</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>0.0000100 0 0.0010000</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;">&nbsp;</p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>sig1 sig2 sig3</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>0.01000 0.00000 0.00000</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>tdxc1 tdxc2 mdst</b></font></p>
+
+<p align="justify" class="western" style="line-height: 100%; margin-bottom: 0in; orphans: 0; widows: 0;"><font face="ＭＳ ゴシック, serif"><b>0.00000 0.00000 1</b></font></p>
+----------<br />
+----------my setting<br />
+ncycm pdec pinc phmx fcvj&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phmt<br />
+&nbsp; 900 0.90 1.02 0.50 0.70&nbsp;&nbsp; 0.00000<br />
+<br />
+&nbsp; jtd&nbsp; ftd<br />
+&nbsp;&nbsp;&nbsp; 2 0.20<br />
+<br />
+&nbsp; jsw&nbsp; fsw jswc&nbsp; nkp&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; tdxm&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phsw<br />
+&nbsp;&nbsp;&nbsp; 0 0.80&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp; 5.00000&nbsp;&nbsp; 0.01000<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cvj&nbsp; jch&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; chj<br />
+&nbsp;0.0000100&nbsp;&nbsp;&nbsp; 0 0.0010000<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sig3<br />
+&nbsp;&nbsp; 0.03000&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000<br />
+&nbsp;&nbsp;&nbsp;&nbsp; tdxc1&nbsp;&nbsp;&nbsp;&nbsp; tdxc2 mdst<br />
+&nbsp;&nbsp; 0.00000&nbsp;&nbsp; 0.00000&nbsp;&nbsp;&nbsp; 1<br />
+----------<br />
+----------<br />
+ncycm = number of cycle<br />
+cvj = convergence parameter (Please, change cvj to more large value by using of many atoms, e.g. cvj = 0.01 -0.001 at 150 atoms)<br />
+mdst: 0 = off, 1 =
+<style type="text/css">p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: justify; }p.western { font-family: "Century",serif; font-size: 10pt; }p.cjk { font-family: "ＭＳ 明朝"; font-size: 10pt; }p.ctl { font-family: "Century"; font-size: 12pt; }a:link { color: rgb(0, 0, 255); }
+</style>
+Gaussian Broadening (GB), 2 =
+<style type="text/css">p { margin-bottom: 0.1in; direction: ltr; line-height: 120%; text-align: justify; }p.western { font-family: "Century",serif; font-size: 10pt; }p.cjk { font-family: "ＭＳ 明朝"; font-size: 10pt; }p.ctl { font-family: "Century"; font-size: 12pt; }a:link { color: rgb(0, 0, 255);
+</style>
+Fermi-Drac Distribution (FD)<br />
+<style type="text/css">
+</style>
+sig1: <span class="st">half width </span>* 1/2 for GB (sigma of Gaussian distribution), Kelvin for FD<br />
+Papers often use 0.05 - 0.10 eV for GB, but there is effect by using of 0.01 eV.<br />
+fcvj: change 0.6 &gt; 0.7, 0.7 setting is faster than 0.6.<br />
+tdxc1 &lt; tdxc: use sig1<br />
+tdxc2 &lt; tdxc&nbsp; &lt;= tdxc1: use sig2<br />
+tdxc &lt;= tdxc2: use sig3<br />
+tdxc =<span lang="en"> The amount of movement of the charge (value on the left in f06z)</span><br />
+Can not recommend setting sig2, sig3, tdxc1, tdxc2, because population change might occuers.<br />
+------------------------------------------------------------------------------<br />
+■ Igor macro&nbsp;(Igor Pro 6.03A)<br />
+<br />
+Macros &gt; gaussian_brodening&nbsp;<br />
+----------
+<p>#pragma rtGlobals=1&nbsp;&nbsp;// Use modern global access method.</p>
+
+<p>Window Graph0() : Graph<br />
+&nbsp;PauseUpdate; Silent 1&nbsp;&nbsp;// building window...<br />
+&nbsp;String fldrSav= GetDataFolder(1)<br />
+&nbsp;SetDataFolder root:dvxa:&#39;5.0Ang&#39;:<br />
+&nbsp;Display /W=(189,54.5,656.25,389) :::wien2k:&#39;total_DOSx0.5&#39; vs :::wien2k:ENERGY<br />
+&nbsp;AppendToGraph Si2_centor_lvl vs lvlshm_eV<br />
+&nbsp;AppendToGraph Si_centor_dosx05 vs dos_eV<br />
+&nbsp;SetDataFolder fldrSav<br />
+&nbsp;ModifyGraph gFont=&quot;Arial&quot;,gfSize=18,gmSize=18,width=340,height=227<br />
+&nbsp;ModifyGraph mode(Si2_centor_lvl)=1<br />
+&nbsp;ModifyGraph lSize(&#39;total_DOSx0.5&#39;)=2<br />
+&nbsp;ModifyGraph rgb(&#39;total_DOSx0.5&#39;)=(0,0,0),rgb(Si2_centor_lvl)=(65280,0,0),rgb(Si_centor_dosx05)=(0,0,65280)<br />
+&nbsp;ModifyGraph offset(&#39;total_DOSx0.5&#39;)={0,1}<br />
+&nbsp;ModifyGraph tick=2<br />
+&nbsp;ModifyGraph mirror=1<br />
+&nbsp;ModifyGraph font=&quot;Arial&quot;<br />
+&nbsp;ModifyGraph fSize=18<br />
+&nbsp;ModifyGraph lblMargin(left)=22,lblMargin(bottom)=9<br />
+&nbsp;ModifyGraph standoff=0<br />
+&nbsp;ModifyGraph lblLatPos(left)=3<br />
+&nbsp;Label left &quot;DOS, <a href="file://\\f02N(\\F'Symbol'e\\f00\\F'Arial'">\\f02N(\\F&#39;Symbol&#39;e\\f00\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;Label bottom &quot;Energy, <a href="file://\\F'Symbol'\\f02e-e\\M\\f00\\F'Arial'\\Bf\\M\\F'Arial'">\\F&#39;Symbol&#39;\\f02e-e\\M\\f00\\F&#39;Arial&#39;\\Bf\\M\\F&#39;Arial&#39;</a> / eV&quot;<br />
+&nbsp;SetAxis left 0,3<br />
+&nbsp;SetAxis bottom -15,10<br />
+&nbsp;ShowInfo<br />
+&nbsp;Legend/N=text0/J/F=0/H=16/B=1/A=MC/X=-11.26/Y=29.14 &quot;<a href="file://\\s('total_DOSx0.5'">\\s(&#39;total_DOSx0.5&#39;</a>) Band calc. (FLAPW-GGA)&quot;<br />
+&nbsp;AppendText &quot;<a href="file://\\s(Si2_centor_lvl">\\s(Si2_centor_lvl</a>) Cluster calc. (DVX\\F&#39;Symbol&#39;\\f02a\\f00\\F&#39;Arial&#39;)&quot;<br />
+&nbsp;AppendText &quot;<a href="file://\\s(Si_centor_dosx05">\\s(Si_centor_dosx05</a>) Cluster calc. (DVX\\F&#39;Symbol&#39;\\f02a\\f00\\F&#39;Arial&#39;)&quot;<br />
+EndMacro</p>
+
+<p><br />
+//Macro gaussian_borodening(x,y,FWHM)<br />
+Macro gaussian_borodening(x,y,FWHM,xmin,xmax,estep)<br />
+string x=&quot;eV&quot;;<br />
+string y=&quot;Si1&quot;;<br />
+variable FWHM=0.1;<br />
+variable xmin=-13, xmax=10,estep=0.02720;<br />
+silent 1; pauseupdate;<br />
+variable ndata, nstep;<br />
+variable i,j;<br />
+variable sigma;<br />
+sigma=FWHM/(2*sqrt(2*ln(2))); print &quot;sigma=&quot;,sigma, &quot;, sigma^2=&quot;, sigma^2;<br />
+ndata=(DimSize($x,0));<br />
+nstep=round((xmax-xmin)/estep); //print nstep;<br />
+make/O/N=(nstep) xgb,ygb;<br />
+i=0;<br />
+i=0;<br />
+do<br />
+&nbsp; xgb[i] = xmin + estep * i;<br />
+&nbsp; ygb[i] = 0.0<br />
+&nbsp; i=i+1;<br />
+while(i&lt;=nstep)<br />
+variable A=(1/(sqrt(2*3.1415926)*sigma))<br />
+variable B=(2*sigma^2)<br />
+variable four_sigma = 4*sigma<br />
+i=0;<br />
+do<br />
+&nbsp; j=0;<br />
+&nbsp; do<br />
+&nbsp;&nbsp;&nbsp; if(xgb[i]+four_sigma&gt;=$x[j] &amp;&amp; $x[j]&gt;=xgb[i]-four_sigma)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ygb[i] = ygb[i] + $y[j]*A*exp(-(xgb[i]-$x[j])^2/B)<br />
+&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; j=j+1;<br />
+&nbsp; while(j&lt;ndata)<br />
+&nbsp; i=i+1<br />
+while(i&lt;nstep)<br />
+//<br />
+Display $y vs $x<br />
+ModifyGraph rgb=(0,0,0),mode($y)=1<br />
+//<br />
+string new_xw, new_yw<br />
+new_xw = &quot;xgb_&quot; + y<br />
+new_yw = &quot;ygb_&quot; + y<br />
+make/O/N=(nstep) $new_xw,$new_yw;<br />
+$new_xw=xgb;<br />
+$new_yw=ygb;<br />
+killwaves xgb, ygb;<br />
+//<br />
+AppendToGraph $new_yw vs $new_xw<br />
+//AppendToGraph ygb vs xgb<br />
+ModifyGraph tick=2,mirror=1,fSize=18,standoff=0,font=&quot;Arial&quot;;DelayUpdate<br />
+Label left &quot;DOS, <a href="file://\\f02N\\f00\\M(\\F'Symbol'e\\F'Arial')&quot;;DelayUpdate">\\f02N\\f00\\M(\\F&#39;Symbol&#39;e\\F&#39;Arial&#39;)&quot;;DelayUpdate</a><br />
+Label bottom &quot;Energy, <a href="file://\\F'Symbol'\\f02e-e\\f00\\B\\F'Arial'f\\M">\\F&#39;Symbol&#39;\\f02e-e\\f00\\B\\F&#39;Arial&#39;f\\M</a> / eV&quot;<br />
+ModifyGraph width=340,height=227,gFont=&quot;Arial&quot;<br />
+ModifyGraph rgb=(0,0,0)<br />
+ModifyGraph lsize=2<br />
+//Legend/C/N=text0/J/F=0/B=1/A=MC &quot;<a href="file://\\s('total_DOSx0.5'">\\s(&#39;total_DOSx0.5&#39;</a>) Band calc. (FLPAW-GGA)&quot;<br />
+ModifyGraph gfSize=18,gmSize=18<br />
+SetAxis bottom xmin,xmax<br />
+SetAxis left 0.0,5<br />
+EndMacro<br />
+Window Graph4() : Graph<br />
+&nbsp;PauseUpdate; Silent 1&nbsp;&nbsp;// building window...<br />
+&nbsp;String fldrSav= GetDataFolder(1)<br />
+&nbsp;SetDataFolder root:SnSe_rt:&#39;5Ang&#39;:Ni:lvlshm:<br />
+&nbsp;Display /W=(5.25,43.25,453,356) Total vs eV<br />
+&nbsp;AppendToGraph ygb_Total vs xgb_Total<br />
+&nbsp;SetDataFolder fldrSav<br />
+&nbsp;ModifyGraph gFont=&quot;Arial&quot;,gfSize=18,gmSize=18,width=340,height=227<br />
+&nbsp;ModifyGraph mode(Total)=1<br />
+&nbsp;ModifyGraph lSize=2<br />
+&nbsp;ModifyGraph rgb=(0,0,0)<br />
+&nbsp;ModifyGraph tick=2<br />
+&nbsp;ModifyGraph mirror=1<br />
+&nbsp;ModifyGraph font=&quot;Arial&quot;<br />
+&nbsp;ModifyGraph fSize=18<br />
+&nbsp;ModifyGraph standoff=0<br />
+&nbsp;Label left &quot;DOS, <a href="file://\\f02N\\f00\\M(\\F'Symbol'e\\F'Arial'">\\f02N\\f00\\M(\\F&#39;Symbol&#39;e\\F&#39;Arial&#39;</a>)&quot;<br />
+&nbsp;Label bottom &quot;Energy, <a href="file://\\F'Symbol'\\f02e-e\\f00\\B\\F'Arial'f\\M">\\F&#39;Symbol&#39;\\f02e-e\\f00\\B\\F&#39;Arial&#39;f\\M</a> / eV&quot;<br />
+&nbsp;SetAxis left 0,5<br />
+&nbsp;SetAxis bottom -13,10<br />
+EndMacro</p>
+
+<p>Window Table0() : Table<br />
+&nbsp;PauseUpdate; Silent 1&nbsp;&nbsp;// building window...<br />
+&nbsp;String fldrSav= GetDataFolder(1)<br />
+&nbsp;SetDataFolder root:Cu2Se:&#39;7.6ang&#39;:Y:lvlshm:&#39;shift_x-0.872&#39;:<br />
+&nbsp;Edit/W=(5.25,43.25,510,235.25) ::xgb_Y1,::ygb_Y1,xgb_Y1,ygb_Y1,xgb_Y2,ygb_Y2<br />
+&nbsp;SetDataFolder fldrSav<br />
+EndMacro</p>
+<br />
+----------<br />
+------------------------------------------------------------------------------

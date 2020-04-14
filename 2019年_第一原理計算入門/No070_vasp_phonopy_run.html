@@ -1,0 +1,301 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：<br />
+基本的な使い方： <a href="https://www.youtube.com/watch?v=uQ2OsXZbhMY">https://www.youtube.com/watch?v=uQ2OsXZbhMY</a><br />
+group velocity and thermal displacements: <a href="https://www.youtube.com/watch?v=IT5KzcnD_eI">https://www.youtube.com/watch?v=IT5KzcnD_eI</a><br />
+------------------------------------------------------------------------------<br />
+■ setting<br />
+1. chmod +x vasp_phonopy_run<br />
+2. gedit vasp_phonopy_run<br />
+change<br />
+------<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+------<br />
+3. gedit vasp_phonopy_run<br />
+If you get libraries form Ubuntu Software center, I reccommend below,<br />
+------before<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------after<br />
+#set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+0. calculate optimized structure (for example, vasp_run)<br />
+1. vasp_phonopy_run<br />
+2. vasp_phonopy_run<br />
+<br />
+recalculation<br />
+1. mv disp.yaml disp.yaml_backup<br />
+&nbsp; if you want to need new setting<br />
+mv band.conf band.conf_backup<br />
+mv mesh.conf mesh.conf_backup<br />
+mv pdos.conf pdos.conf_backup<br />
+2. vasp_phonopy_run<br />
+<br />
+setting band.conf<br />
+Youtube: <a href="https://www.youtube.com/watch?v=VvHgjCOoKhM">https://www.youtube.com/watch?v=VvHgjCOoKhM</a><br />
+------------------------------------------------------------------------------<br />
+■ Output data<br />
+band structure:&nbsp; band_data.txt<br />
+pdos and tdos: partial_dos.dat<br />
+pdos element data: pdos_data.txt<br />
+------------------------------------------------------------------------------<br />
+■ vasp_phonopy_run<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+# user settting<br />
+set vasp_adress = $HOME&#39;/vasp/vasp.5.4.1/bin/vasp_std&#39;<br />
+#set vasp_adress = $HOME&#39;/vasp/vasp.5.3/vasp&#39;<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+# Automatically setting<br />
+set num_core = `grep &#39;core id&#39; /proc/cpuinfo | sort -u | wc -l`<br />
+setenv OMP_NUM_THREADS 1<br />
+#<br />
+# DFPT<br />
+if ( -f disp.yaml ) then<br />
+&nbsp; echo &quot;already disp.yaml&quot;<br />
+else<br />
+&nbsp; echo &quot;&nbsp;&nbsp; PREC = Accurate&quot; &gt; INCAR<br />
+&nbsp; echo &quot;#&nbsp; ENCUT = 500&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot; IBRION = 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; EDIFF = 1.0e-08 &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; IALGO = 38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot; ISMEAR = 0; SIGMA = 0.1&quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; LREAL = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;ADDGRID = .TRUE.&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot;&nbsp; LWAVE = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; echo &quot; LCHARG = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp; cp POSCAR POSCAR_backup<br />
+&nbsp; mv POSCAR POSCAR-unitcell<br />
+&nbsp; phonopy -d --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+&nbsp; mv SPOSCAR POSCAR<br />
+&nbsp; ${__mpirun__} -np $num_core $vasp_adress<br />
+&nbsp; phonopy --fc vasprun.xml<br />
+endif<br />
+#<br />
+# phonopy dos plot<br />
+if ( -f mesh.conf ) then<br />
+&nbsp; echo &quot;use mesh.conf&quot;<br />
+else<br />
+&nbsp; echo &quot;automatically make mesh.conf file&quot;<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&nbsp; mesh.conf<br />
+&nbsp; echo &quot;MP = 16 16 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot; &gt;&gt; mesh.conf<br />
+&nbsp; echo &quot;TPROP = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; echo &quot;TMIN&nbsp; = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; echo &quot;TMAX&nbsp; = 2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; echo &quot;TSTEP = 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; #echo &quot;DOS_RANGE = 0 40 0.1&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; #echo &quot;SIGMA = 0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; #echo &quot;DEBYE_MODEL = .TRUE.&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; #echo &quot;MOMENT = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp; #echo &quot;MOMENT_ORDER = 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+endif<br />
+#phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -p mesh.conf &amp;<br />
+phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -t -p mesh.conf -s<br />
+phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -t -p mesh.conf &amp;<br />
+#<br />
+# phonopy pdos plot<br />
+if ( -f pdos.conf ) then<br />
+&nbsp; echo &quot;use pdos.conf&quot;<br />
+else<br />
+&nbsp; # POSCAR-unitcell<br />
+&nbsp; sed -n 6p POSCAR-unitcell<br />
+&nbsp; set no_list=`sed -n 7p POSCAR-unitcell`<br />
+&nbsp; echo ${no_list}<br />
+&nbsp; echo &quot;PDOS = &quot; &gt; pdos_temp1<br />
+&nbsp; set n = 1<br />
+&nbsp; foreach no ( ${no_list} )<br />
+&nbsp;&nbsp;&nbsp; set npc = 1<br />
+&nbsp;&nbsp;&nbsp; while (${npc} &lt;= ${no})<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set pdos_temp = `cat pdos_temp1`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;${pdos_temp} ${n}&quot; &gt; pdos_temp1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @ n = ${n} + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @ npc = ${npc} + 1<br />
+&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp; set pdos_temp = `cat pdos_temp1`<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${pdos_temp},&quot; &gt; pdos_temp1<br />
+&nbsp; end<br />
+&nbsp; # tdos<br />
+&nbsp; set n = 1<br />
+&nbsp; foreach no ( ${no_list} )<br />
+&nbsp;&nbsp;&nbsp; set npc = 1<br />
+&nbsp;&nbsp;&nbsp; while (${npc} &lt;= ${no})<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set pdos_temp = `cat pdos_temp1`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;${pdos_temp} ${n}&quot; &gt; pdos_temp1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @ n = ${n} + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; @ npc = ${npc} + 1<br />
+&nbsp;&nbsp;&nbsp; end<br />
+&nbsp;&nbsp;&nbsp; set pdos_temp = `cat pdos_temp1`<br />
+&nbsp;&nbsp;&nbsp; echo &quot;${pdos_temp}&quot; &gt; pdos_temp1<br />
+&nbsp; end<br />
+&nbsp; set pdos_temp = `cat pdos_temp1`<br />
+&nbsp; set pdos_temp2 = `sed -n 6p POSCAR-unitcell`<br />
+&nbsp; echo &quot;PDOS = &quot;${pdos_temp2}&quot; TDOS&quot; &gt;&nbsp; pdos_data.txt<br />
+&nbsp; echo &quot;${pdos_temp}&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; pdos_data.txt<br />
+&nbsp; rm -f -r pdos_temp1<br />
+&nbsp; #<br />
+&nbsp; echo &quot;automatically make pdos.conf file&quot;<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&nbsp; pdos.conf<br />
+&nbsp; echo &quot;MP = 16 16 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; echo &quot;${pdos_temp}&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; pdos.conf<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; #echo &quot;DOS_RANGE = 0 40 0.1&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; #echo &quot;SIGMA = 0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; #echo &quot;DEBYE_MODEL = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; #echo &quot;MOMENT = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+&nbsp; #echo &quot;MOMENT_ORDER = 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; pdos.conf<br />
+endif<br />
+# THz<br />
+#phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -p pdos.conf -v<br />
+# meV<br />
+phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -p pdos.conf --factor 64.6541363414 -v --irreps=&quot;0 0 0&quot; &gt; pdos.txt<br />
+phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -p pdos.conf --factor 64.6541363414 &amp;<br />
+# pdosplot<br />
+sed -n 2p pdos_data.txt &gt; pdosplot_data.txt<br />
+set pdos_data = `sed -e &#39;s/PDOS = //g&#39; pdosplot_data.txt`<br />
+rm -f -r pdosplot_data.txt<br />
+cp &quot;$HOME/phonopy&quot;*&quot;/scripts/pdosplot&quot; ./<br />
+pdosplot&nbsp; --xlabel=&quot;Energy (meV)&quot; --ylabel=&quot;Partial density of states (States/meV)&quot; --title=&quot;${file}&quot; --factor 4.13566733 --indices=&quot;${pdos_data}&quot; --output=&quot;partial_dos.tiff&quot;<br />
+#<br />
+# phonopy band plot<br />
+if ( -f band.conf ) then<br />
+&nbsp; echo &quot;use band.conf&quot;<br />
+else<br />
+&nbsp; # FCC<br />
+&nbsp; echo &quot;automatically make band.conf file&quot;<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt; band.conf<br />
+&nbsp; echo &quot;BAND = 0.0 0.0 0.0&nbsp; 0.0 0.5 0.5&nbsp; 0.375 0.75 0.375&nbsp; 0.0 0.0 0.0&nbsp; 0.5 0.5 0.5&quot; &gt;&gt; band.conf<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot; &gt;&gt; band.conf<br />
+&nbsp; echo &#39;BAND_LABELS = $\Gamma$ X K $\Gamma$ L&#39; &gt;&gt; band.conf<br />
+&nbsp; echo &quot;BAND_POINTS = 51&quot; &gt;&gt; band.conf<br />
+&nbsp; echo &quot;GROUP_VELOCITY = .TRUE.&quot; &gt;&gt; band.conf<br />
+&nbsp; echo &quot;GV_DELTA_Q = 0.01&quot; &gt;&gt; band.conf<br />
+&nbsp; #echo &quot;BAND_CONNECTION = .TRUE.&quot; &gt;&gt; band.conf<br />
+&nbsp; #<br />
+&nbsp; #----- WIEN2k setting -----<br />
+&nbsp; # FCC, W - L - LAMBDA - G - DELTA - X - Z - W - K, Primitive Brillouin Zone (Please check result)<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;&nbsp;&nbsp; &gt; band.conf_fcc<br />
+&nbsp; echo &quot;BAND = 0.25 0.5 0.75&nbsp; 0.5 0.5 0.5&nbsp; 0.25 0.25 0.25&nbsp; 0.0 0.0 0.0&nbsp; 0.0 0.25 0.25&nbsp; 0.0 0.5 0.5&nbsp; 0.125 0.5 0.625&nbsp; 0.25 0.5 0.75&nbsp; 0.375 0.375 0.75&quot; &gt;&gt; band.conf_fcc<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot;&nbsp; &gt;&gt; band.conf_fcc<br />
+&nbsp; echo &#39;BAND_LABELS = W L $\Lambda$ $\Gamma$ $\Delta$ X Z W K&#39; &gt;&gt; band.conf_fcc<br />
+&nbsp; echo &quot;BAND_POINTS = 51&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_fcc<br />
+&nbsp; echo &quot;GROUP_VELOCITY = .TRUE.&quot; &gt;&gt; band.conf_fcc<br />
+&nbsp; echo &quot;GV_DELTA_Q = 0.01&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_fcc<br />
+&nbsp; # BCC, G - DELTA - H - N - SIGMA - G - LAMBDA - P, Primitive Brillouin Zone (Please check result)<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;&nbsp;&nbsp; &gt; band.conf_bcc<br />
+&nbsp; echo &quot;BAND = 0.0 0.0 0.0&nbsp; 0.25 0.25 -0.25&nbsp; 0.5 0.5 -0.5&nbsp; 0.0 0.5 0.0&nbsp; 0.0 0.25 0.0&nbsp; 0.0 0.0 0.0&nbsp; 0.125 0.125 0.125&nbsp; 0.25 0.25 0.25&quot; &gt;&gt; band.conf_bcc<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot;&nbsp; &gt;&gt; band.conf_bcc<br />
+&nbsp; echo &#39;BAND_LABELS = $\Gamma$ $\Delta$ H N $\Sigma$ $\Gamma$ $\Lambda$ P&#39; &gt;&gt; band.conf_bcc<br />
+&nbsp; echo &quot;BAND_POINTS = 51&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_bcc<br />
+&nbsp; echo &quot;GROUP_VELOCITY = .TRUE.&quot; &gt;&gt; band.conf_bcc<br />
+&nbsp; echo &quot;GV_DELTA_Q = 0.01&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_bcc<br />
+&nbsp; # HCP, G - SIGMA - M - K - LAMBDA - G - DELTA - A, Primitive Brillouin Zone (Please check result)<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;&nbsp;&nbsp; &gt; band.conf_hcp<br />
+&nbsp; echo &quot;BAND = 0.0 0.0 0.0&nbsp; 0.25 0.0 0.0&nbsp; 0.5 0.0 0.0&nbsp; 1/3 1/3 0.0&nbsp; 1/6 1/6 0.0&nbsp; 0.0 0.0 0.0&nbsp; 0.0 0.0 0.25&nbsp; 0.0 0.0 0.5&quot; &gt;&gt; band.conf_hcp<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot;&nbsp; &gt;&gt; band.conf_hcp<br />
+&nbsp; echo &#39;BAND_LABELS = $\Gamma$ $\Sigma$ M K $\Lambda$ $\Gamma$&nbsp; $\Delta$ A&#39; &gt;&gt; band.conf_hcp<br />
+&nbsp; echo &quot;BAND_POINTS = 51&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_hcp<br />
+&nbsp; echo &quot;GROUP_VELOCITY = .TRUE.&quot; &gt;&gt; band.conf_hcp<br />
+&nbsp; echo &quot;GV_DELTA_Q = 0.01&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_hcp<br />
+&nbsp; # SC, R - LAMBDA - G - DELTA - X - Z - M - SIGMA - G, Primitive Brillouin Zone (Please check result)<br />
+&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;&nbsp;&nbsp; &gt; band.conf_sc<br />
+&nbsp; echo &quot;BAND = 0.5 0.5 0.5&nbsp; 0.25 0.25 0.25&nbsp; 0.0 0.0 0.0&nbsp; 0.25 0.0 0.0&nbsp; 0.5 0.0 0.0&nbsp; 0.5 0.25 0.0&nbsp; 0.5 0.5 0.0&nbsp; 0.25 0.25 0.0&nbsp; 0.0 0.0 0.0&quot; &gt;&gt; band.conf_sc<br />
+&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot;&nbsp; &gt;&gt; band.conf_sc<br />
+&nbsp; echo &#39;BAND_LABELS = R $\Lambda$ $\Gamma$ $\Delta$ X Z M $\Sigma$ $\Gamma$&#39; &gt;&gt; band.conf_sc<br />
+&nbsp; echo &quot;BAND_POINTS = 51&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_sc<br />
+&nbsp; echo &quot;GROUP_VELOCITY = .TRUE.&quot; &gt;&gt; band.conf_sc<br />
+&nbsp; echo &quot;GV_DELTA_Q = 0.01&quot;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &gt;&gt; band.conf_sc<br />
+&nbsp; #----- WIEN2k setting -----<br />
+&nbsp; #<br />
+&nbsp; # detect symmetry<br />
+&nbsp; # phonopy --symmetry -tolerance=some_distance &gt; sym.dat<br />
+&nbsp; phonopy --symmetry &gt; sym.dat<br />
+&nbsp; sed -n -e /space_group_type:/p sym.dat &gt; out.txt<br />
+&nbsp; awk &#39;{print $2}&#39; out.txt &gt; out2.txt<br />
+&nbsp; cut -c 1 out2.txt &gt; band_path.conf<br />
+&nbsp; rm -f -r out.txt<br />
+&nbsp; rm -f -r out2.txt<br />
+&nbsp; #<br />
+&nbsp; # exchange band path file<br />
+&nbsp; set bravais = `awk &#39;{print $1}&#39; band_path.conf`<br />
+&nbsp; echo &quot;bravais lattice:&quot; ${bravais}<br />
+&nbsp; switch( ${bravais} )<br />
+&nbsp;&nbsp;&nbsp; case F :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;set fcc band path&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp band.conf_fcc band.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; breaksw<br />
+&nbsp;&nbsp;&nbsp; case B :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;set bcc band path&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp band.conf_bcc band.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; breaksw<br />
+&nbsp;&nbsp;&nbsp; case H :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;set hcp band path&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp band.conf_hcp band.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; breaksw<br />
+&nbsp;&nbsp;&nbsp; default :<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;set simple cubic band path&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp band.conf_sc band.conf<br />
+&nbsp; endsw<br />
+endif<br />
+&nbsp; #<br />
+phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell band.conf --gv<br />
+cp &quot;$HOME/phonopy&quot;*&quot;/scripts/bandplot&quot; ./<br />
+# THz<br />
+#bandplot --xlabel=&quot;&quot; --ylabel=&quot;Frequency (THz)&quot; --title=&quot;${file}&quot; --fmin=0 --fmax=12<br />
+#bandplot --xlabel=&quot;&quot; --ylabel=&quot;Frequency (THz)&quot; --title=&quot;${file}&quot; --fmin=0 --fmax=12 --dos=partial_dos.dat &amp;<br />
+# meV<br />
+bandplot --factor 4.13566733 --gnuplot &gt; band_data.txt<br />
+#bandplot --xlabel=&quot;&quot; --ylabel=&quot;Energy (meV)&quot; --title=&quot;${file}&quot; --fmin=-10 --fmax=50 --factor 4.13566733 --output=&quot;band_plot.tiff&quot;<br />
+#bandplot --xlabel=&quot;&quot; --ylabel=&quot;Energy (meV)&quot; --title=&quot;${file}&quot; --fmin=-10 --fmax=50 --dos=partial_dos.dat --factor 4.13566733 --output=&quot;band_pdos_plot.tiff&quot;<br />
+bandplot --xlabel=&quot;&quot; --ylabel=&quot;Energy (meV)&quot; --title=&quot;${file}&quot; --factor 4.13566733 --output=&quot;band_plot.tiff&quot;<br />
+bandplot --xlabel=&quot;&quot; --ylabel=&quot;Energy (meV)&quot; --title=&quot;${file}&quot; --dos=partial_dos.dat --factor 4.13566733 --output=&quot;band_pdos_plot.tiff&quot;<br />
+bandplot --xlabel=&quot;&quot; --ylabel=&quot;Energy (meV)&quot; --title=&quot;${file}&quot; --dos=partial_dos.dat --factor 4.13566733 &amp;<br />
+#<br />
+# phonopy atomic displacements<br />
+echo &quot;automatically make tdis.conf file&quot;<br />
+echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&nbsp; tdis.conf<br />
+echo &quot;MP = 16 16 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; tdis.conf<br />
+echo &quot;FORCE_CONSTANTS = READ&nbsp;&nbsp; &quot; &gt;&gt; tdis.conf<br />
+echo &quot;TDISPMAT = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; tdis.conf<br />
+# 300 K<br />
+phonopy --tdm tdis.conf --tdm_cif=300<br />
+#<br />
+if ( -d results ) then<br />
+&nbsp; echo &quot;use results folder&quot;<br />
+else<br />
+&nbsp; mkdir results<br />
+endif<br />
+cp pdos_data.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./results/pdos_data.txt<br />
+cp pdos.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./results/pdos.txt<br />
+cp band_data.txt&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./results/band_data.txt<br />
+cp partial_dos.dat&nbsp;&nbsp;&nbsp;&nbsp; ./results/partial_dos.dat<br />
+cp tdispmat.cif&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./results/tdispmat.cif<br />
+cp band.yaml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./results/group_velocity.txt<br />
+#<br />
+if ( -d graph ) then<br />
+&nbsp; echo &quot;use graph folder&quot;<br />
+else<br />
+&nbsp; mkdir graph<br />
+endif<br />
+cp partial_dos.tiff&nbsp;&nbsp;&nbsp; ./graph/partial_dos.tiff<br />
+cp band_pdos_plot.tiff ./graph/band_pdos_plot.tiff<br />
+cp band_plot.tiff&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./graph/band_plot.tiff<br />
+cp tdispmat.cif&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./graph/tdispmat.cif<br />
+#<br />
+mv POSCAR_backup POSCAR<br />
+#<br />
+-----<br />
+------------------------------------------------------------------------------

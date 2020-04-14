@@ -1,0 +1,458 @@
+Database (making calculation data)<br />
+------------------------------------------------------------------------------<br />
+■ MySQL (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(get cif data)<br />
+<br />
+□ Install<br />
+1. sudo apt install mysql-client-core-5.7<br />
+<br />
+◇ test<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e &#39;select file from data where flags like &quot;%has Fobs%&quot;&#39; cod<br />
+2. curl --silent http://www.crystallography.net/cod/2018107.cif &gt; test.cif<br />
+<br />
+◇ Usage<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e &#39;select count(*) from data where text like &quot;%mof%&quot;&#39; cod | cat | tail -1 | (read num ; echo &quot;Number of cif data: $num&quot;;)<br />
+2. mysql -u cod_reader -h sql.crystallography.net -e &#39;select file from data where text like &quot;%mof%&quot;&#39; cod | tail -n +2 | &nbsp;(while read line ; do curl -s http://www.crystallography.net/cod/&quot;$line&quot;.cif &gt; &quot;$line&quot;.cif; echo &quot;[ID] $line&quot;; done;)<br />
+[SQL1] http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?%B7%EB%BE%BD%B9%BD%C2%A4%B8%A1%BA%F7COD_SQL%C8%C7<br />
+[SQL2] COD wiki/ COD MySQL database schema<br />
+&nbsp; http://wiki.crystallography.net/cod_mysql_schema/<br />
+<br />
+◇ Usage (simple version)<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e &#39;select count(*) from data where text like &quot;%mof%&quot;&#39; cod | cat<br />
+2. mysql -u cod_reader -h sql.crystallography.net -e &#39;select file from data where text like &quot;%mof%&quot;&#39; cod | tail -n +2 | &nbsp;(while read line ; do curl -s http://www.crystallography.net/cod/&quot;$line&quot;.cif &gt; &quot;$line&quot;.cif; done;)<br />
+[COD1] http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?COD%A4%C7%CD%B7%A4%D6<br />
+[COD2] https://pypi.org/project/crystals/<br />
+[COD3] https://pymatgen.org/_modules/pymatgen/ext/cod.html<br />
+------------------------------------------------------------------------------<br />
+■ pymatgen, etc (python3) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)<br />
+(get cif data)<br />
+<br />
+□ Install<br />
+1. pip3 install pymatgen<br />
+2. pip3 install pymatgen-db<br />
+3. pip3 install crystals<br />
+<br />
+◇ Registration<br />
+1. https://www.materialsproject.org/janrain/loginpage/?next=/dashboard<br />
+&nbsp; Sign in with your email address<br />
+&nbsp; (input) Email address: []<br />
+&nbsp; Check email address<br />
+2. get email<br />
+&nbsp; &gt; API &gt; API keys<br />
+3. pmg config --add PMG_MAPI_KEY &quot;USER_API_KEY&quot;<br />
+<br />
+◇ Usage<br />
+1. mkdir SiO_cif<br />
+2. cd SiO_cif<br />
+3. gedit run.py<br />
+-----<br />
+import os<br />
+from pymatgen import MPRester<br />
+api_key= &quot;USER_API_KEY&quot;<br />
+with MPRester(api_key) as m:<br />
+&nbsp; &nbsp; data= m.get_data(&quot;Si-O&quot;)<br />
+for d in data:<br />
+&nbsp; &nbsp; fname = d[&#39;material_id&#39;]+&#39;.cif&#39;<br />
+&nbsp; &nbsp; with open(fname,&#39;w&#39;) as f:<br />
+&nbsp; &nbsp; &nbsp; &nbsp; f.write(d[&#39;cif&#39;])<br />
+-----<br />
+4. python3 run.py<br />
+※ please, change &quot;USER_API_KEY&quot;<br />
+<br />
+[PYM1] https://qiita.com/KentoObata/items/a909ecc42c8805594c89<br />
+[PYM2] https://github.com/materialsproject/pymatgen-db<br />
+[PYM3] http://ryokbys.web.nitech.ac.jp/pymatgen.html<br />
+※ pythonでのインストールであるpip installコマンドではERROR: Command &quot;python setup.py egg_info&quot; failed with error code 1 in /tmp/pip-install-DP6yTW/pymatgen/と出力される。<br />
+------------------------------------------------------------------------------<br />
+■ PyMOL (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (failed ?)<br />
+(Remove water)<br />
+<br />
+◇ Install<br />
+0. sudo apt-get install build-essential python-dev python-pmw libglew-dev freeglut3-dev libpng-dev libfreetype6-dev libxml2-dev libmsgpack-dev python-pyqt5.qtopengl libglm-dev<br />
+1. sudo apt install pymol<br />
+<br />
+◇ Usage<br />
+1. gedit run.py<br />
+-----<br />
+import pymol<br />
+<br />
+pdb_file = &#39;./sample.cif&#39;<br />
+<br />
+pymol.finish_launching()<br />
+pymol.cmd.load(pdb_file)<br />
+<br />
+pymol.cmd.remove(&quot;resn hoh&quot;)<br />
+pymol.cmd.save(pdb_file)<br />
+<br />
+pymol.cmd.quit()<br />
+-----<br />
+2. python run.py<br />
+※ other command<br />
+&nbsp; pymol.cmd.do(&quot;load ./test.cif&quot;)<br />
+&nbsp; pymol.cmd.do(&quot;remove resn hoh&quot;)<br />
+&nbsp; pymol.cmd.do(&quot;save ./test.cif&quot;)<br />
+[RW1] https://gehrcke.de/2011/06/pymol-remove-hydrogens-and-water/<br />
+[RW2] https://tokky-info-memo.blogspot.com/2012/03/pymolpython.html<br />
+[RW3] https://pymolwiki.org/index.php/Linux_Install<br />
+[RW4] https://pymolwiki.org/index.php/Cif_keepinmemory<br />
+[RW5] https://bi.biopapyrus.jp/protein/visualize/pymol/finish-launching.html<br />
+[RW6] https://magattaca.hatenablog.com/entry/2019/02/24/000506#RDKitと組み合わせてPLIFを計算<br />
+※ sudo apt-get install x11-apps<br />
+&nbsp; &nbsp;export DISPLAY=localhost:0.0<br />
+&nbsp; &nbsp;(xeyes &amp;)<br />
+※ pyenvの環境で使おうと思ったら pip install pymolが無いのでmoduleがありませんと表示されて動作しなかった<br />
+------------------------------------------------------------------------------<br />
+■ Pymongo and MongoDB (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)<br />
+<br />
+□ Pymongo<br />
+1. python -m pip install pymongo<br />
+<br />
+□ MongoDB (easy method) [MDB3,4]<br />
+1. sudo apt install mongodb<br />
+<br />
+◇ Start setting<br />
+1. sudo service mongodb start<br />
+2. mongo<br />
+[MDB3] https://lab4ict.com/system/archives/1137<br />
+[MDB4] https://www.osradar.com/how-to-install-mongodb-on-ubuntu-18-04/<br />
+<br />
+◇ Uninstall<br />
+1. sudo apt purge mongodb<br />
+&nbsp; sudo apt autoremove<br />
+&nbsp; sudo rm -r /var/log/mongodb<br />
+&nbsp; sudo rm -r /var/lib/mongodb<br />
+<br />
+□ MongoDB [MDB3,4] (no check)<br />
+1. sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv 9DA31620334BD75D9DCB49F368818C72E52529D4<br />
+2. echo &quot;deb [ arch=amd64 ] https://repo.mongodb.org/apt/ubuntu bionic/mongodb-org/4.0 multiverse&quot; | sudo tee /etc/apt/sources.list.d/mongodb-org-4.0.list<br />
+3. sudo apt-get update<br />
+4. sudo apt-get install -y mongodb-org<br />
+&nbsp; echo &quot;mongodb-org hold&quot; | sudo dpkg --set-selections<br />
+&nbsp; echo &quot;mongodb-org-server hold&quot; | sudo dpkg --set-selections<br />
+&nbsp; echo &quot;mongodb-org-shell hold&quot; | sudo dpkg --set-selections<br />
+&nbsp; echo &quot;mongodb-org-mongos hold&quot; | sudo dpkg --set-selections<br />
+&nbsp; echo &quot;mongodb-org-tools hold&quot; | sudo dpkg --set-selections<br />
+5. sudo service mongod start<br />
+&nbsp; sudo service mongod status<br />
+<br />
+◇ Start setting<br />
+1. cat /var/log/mongodb/mongod.log<br />
+2. sudo service mongod start<br />
+3. mongo<br />
+4. cat /etc/mongodb.conf<br />
+<br />
+◇ Stop<br />
+1. sudo service mongod stop<br />
+<br />
+◇ Uninstall<br />
+1. sudo apt install mongodb<br />
+<br />
+[MDB1] https://www.trifields.jp/how-to-install-mongodb-on-ubuntu-2751<br />
+[MDB2] https://www.utali.io/entry/2016/09/07/150054<br />
+[MDB3] https://lab4ict.com/system/archives/1137<br />
+[MDB4] https://www.osradar.com/how-to-install-mongodb-on-ubuntu-18-04/<br />
+[MDB5] http://may46onez.hatenablog.com/entry/2018/09/08/134428<br />
+[MDB6] Ideas for chemical similarity searches in MongoDB. http://blog.matt-swain.com/post/87093&hellip;<br />
+&nbsp; https://github.com/mcs07/mongodb-chemistry<br />
+[MDB7] Molecules &amp; MongoDB ? Numbers and Thoughts<br />
+&nbsp; http://blog.rguha.net/?p=472<br />
+<br />
+[1] Welcome to the Computation-Ready, Experimental (CoRE) Metal-Organic Frameworks Database!<br />
+&nbsp; http://gregchung.github.io/CoRE-MOFs/<br />
+[2] MOFDB<br />
+&nbsp; https://mof.tech.northwestern.edu/<br />
+[3] COSMOS<br />
+&nbsp; https://cosmoserc.ku.edu.tr/<br />
+<br />
+・UM<br />
+・CoRE+UM<br />
+・Northwestern&nbsp;<br />
+・ToBaCCo&nbsp;<br />
+・Mg-MOFs&nbsp;<br />
+<br />
+◇ Usage<br />
+1. sudo service mongodb start<br />
+&nbsp; export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+2. gedit run.py<br />
+-----<br />
+import glob<br />
+import pybel<br />
+import RASPA2<br />
+import pymongo<br />
+from datetime import datetime<br />
+<br />
+db = pymongo.MongoClient().sample<br />
+<br />
+# get cif<br />
+cif_list = glob.glob(&#39;*.cif&#39;)<br />
+<br />
+for cif_file in cif_list:<br />
+&nbsp; &nbsp; print cif_file &nbsp; # python2<br />
+&nbsp; &nbsp; # print(cif_file) &nbsp; &nbsp;# python3<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; # Use pybel to parse, fill, and charge cif structure<br />
+&nbsp; &nbsp; mol = pybel.readfile(&quot;cif&quot;, cif_file).next()<br />
+&nbsp; &nbsp; mol.unitcell.FillUnitCell(mol.OBMol)<br />
+&nbsp; &nbsp; mol.calccharges(&quot;eqeq&quot;)<br />
+&nbsp; &nbsp; charged_mol = mol.calccharges(&quot;eqeq&quot;)<br />
+&nbsp; &nbsp; helium_void_fraction = RASPA2.get_helium_void_fraction(mol)<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; # Mongo setting<br />
+&nbsp; &nbsp; #client_1 = MongoClient()<br />
+&nbsp; &nbsp; #client_2 = MongoClient(&#39;localhost&#39;, 27017)<br />
+&nbsp; &nbsp; #client_3 = MongoClient(&#39;mongodb://localhost:27017/&#39;)<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; output = pybel.Outputfile(&quot;cif&quot;,&quot;temp.cif&quot;,overwrite=True)<br />
+&nbsp; &nbsp; output.write(mol)<br />
+&nbsp; &nbsp; output.close()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; file = open(&#39;temp.cif&#39;, &#39;r&#39;)<br />
+&nbsp; &nbsp; cif_string = file.read()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; output = pybel.Outputfile(&quot;smi&quot;,&quot;temp.smiles&quot;,overwrite=True)<br />
+&nbsp; &nbsp; output.write(mol)<br />
+&nbsp; &nbsp; output.close()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; file = open(&#39;temp.smiles&#39;, &#39;r&#39;)<br />
+&nbsp; &nbsp; smiles_string = file.read()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; print smiles_string<br />
+&nbsp; &nbsp; print cif_string<br />
+&nbsp; &nbsp; print charged_mol<br />
+&nbsp; &nbsp; print helium_void_fraction<br />
+&nbsp; &nbsp; print mol.calcdesc()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; post = {<br />
+&nbsp; &nbsp; &nbsp; &#39;cod&#39;: cif_file,<br />
+&nbsp; &nbsp; &nbsp; &#39;wt&#39;: mol.molwt,<br />
+&nbsp; &nbsp; &nbsp; &#39;atoms&#39;: len(mol.atoms),<br />
+&nbsp; &nbsp; &nbsp; &#39;data&#39;: str(mol.data),<br />
+&nbsp; &nbsp; &nbsp; &#39;key&#39;: str(mol.data.keys()),<br />
+&nbsp; &nbsp; &nbsp; &#39;cif&#39;: str(cif_string),<br />
+&nbsp; &nbsp; &nbsp; &#39;smiles&#39;: str(smiles_string),<br />
+&nbsp; &nbsp; &nbsp; &#39;charged mol&#39;: charged_mol,<br />
+&nbsp; &nbsp; &nbsp; &#39;helium void fraction&#39;: helium_void_fraction,<br />
+&nbsp; &nbsp; &nbsp; &#39;spin&#39;: mol.spin,<br />
+&nbsp; &nbsp; &nbsp; &#39;charge&#39;: mol.charge,<br />
+&nbsp; &nbsp; &nbsp; &#39;name&#39;: mol.title,<br />
+&nbsp; &nbsp; &nbsp; &#39;dimension&#39;: mol.dim,<br />
+&nbsp; &nbsp; &nbsp; &#39;fingerprint&#39;: &#39;[&#39;+str(mol.calcfp(&#39;FP2&#39;))+&#39;]&#39;,<br />
+&nbsp; &nbsp; &nbsp; &#39;molecular formula&#39;: str(mol.formula),<br />
+&nbsp; &nbsp; &nbsp; &#39;created_at&#39;: datetime.now(),<br />
+&nbsp; &nbsp; &nbsp; }<br />
+&nbsp; &nbsp; post.update(**mol.calcdesc())<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; db.mof.insert_one(post)<br />
+-----<br />
+3. python run.py<br />
+4. mongo<br />
+&nbsp; show dbs<br />
+&nbsp; use sample<br />
+&nbsp; show collections<br />
+&nbsp; db.mof.find()<br />
+&nbsp; quit()<br />
+(5. delete database)<br />
+&nbsp; mongo<br />
+&nbsp; show dbs<br />
+&nbsp; use sample<br />
+&nbsp; db.dropDatabase()<br />
+&nbsp; show dbs<br />
+&nbsp; quit()<br />
+<br />
+◇ Usage (simple version)<br />
+1. sudo service mongodb start<br />
+&nbsp; export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+2. gedit run.py<br />
+-----<br />
+import glob<br />
+import pybel<br />
+import pymongo<br />
+<br />
+db = pymongo.MongoClient().sample<br />
+<br />
+# get cif<br />
+cif_list = glob.glob(&#39;*.cif&#39;)<br />
+<br />
+for cif_file in cif_list:<br />
+&nbsp; &nbsp; print cif_file &nbsp; # python2<br />
+&nbsp; &nbsp; # print(cif_file) &nbsp; &nbsp;# python3<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; # Use pybel to parse, fill, and charge cif structure<br />
+&nbsp; &nbsp; mol = pybel.readfile(&quot;cif&quot;, cif_file).next()<br />
+&nbsp; &nbsp; mol.unitcell.FillUnitCell(mol.OBMol)<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; output = pybel.Outputfile(&quot;cif&quot;,&quot;temp.cif&quot;,overwrite=True)<br />
+&nbsp; &nbsp; output.write(mol)<br />
+&nbsp; &nbsp; output.close()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; file = open(&#39;temp.cif&#39;, &#39;r&#39;)<br />
+&nbsp; &nbsp; cif_string = file.read()<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; print string<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; post = {<br />
+&nbsp; &nbsp; &nbsp; &#39;title&#39;: cif_file,<br />
+&nbsp; &nbsp; &nbsp; &#39;cif&#39;: str(cif_string)<br />
+&nbsp; &nbsp; &nbsp; }<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; db.mof.insert_one(post)<br />
+-----<br />
+3. python run.py<br />
+4. mongo<br />
+&nbsp; show dbs<br />
+&nbsp; use sample<br />
+&nbsp; show collections<br />
+&nbsp; db.mof.find()<br />
+&nbsp; quit()<br />
+(5. delete database)<br />
+&nbsp; mongo<br />
+&nbsp; show dbs<br />
+&nbsp; use sample<br />
+&nbsp; db.dropDatabase()<br />
+&nbsp; show dbs<br />
+&nbsp; quit()<br />
+<br />
+[1] https://qiita.com/Syoitu/items/db192385a4b2e4884ed5<br />
+[2] http://openbabel.org/docs/current/UseTheLibrary/Python_Pybel.html<br />
+[3] http://blog.kzfmix.com/entry/1329993092<br />
+※ other file [2,3]<br />
+&nbsp; mol = pybel.readstring(&quot;smi&quot;, smiles_file)<br />
+&nbsp; mol.write(&quot;smi&quot;, smiles_file)<br />
+&nbsp; mol.make3D()<br />
+&nbsp; output = Outputfile(&quot;cif&quot;, cif_file)<br />
+&nbsp; output.write(mol)<br />
+&nbsp; output.close()<br />
+&nbsp; mol = pybel.readfile(&quot;pdb&quot;, pdb_file).next()<br />
+&nbsp;&nbsp;<br />
+&nbsp; #print print mol.calcdesc()<br />
+&nbsp; #print mol.calcdesc([&#39;MW&#39;])<br />
+※ mol.calccharges(&quot;eqeq&quot;) の計算が上手くいかないことがある。charged_molとmol.calccharges(&quot;eqeq&quot;)と&#39;charged mol&#39;: charged_mol,の前に#を付けてコメントとして対処するしかないこともある。<br />
+------------------------------------------------------------------------------<br />
+■ COD-tools<br />
+<br />
+□ cod-tools (ubuntu 18.10) (no check)<br />
+1. sudo apt-get install cod-tools<br />
+<br />
+□ cod-tools (ubuntu 18.04) (failed)<br />
+(http://wiki.crystallography.net/cod-tools/#index2h2)<br />
+0. sudo apt-get install swig<br />
+&nbsp; sudo apt-get install flex bison<br />
+&nbsp; sudo perl -MCPAN -e &#39;install List::MoreUtils&#39;<br />
+&nbsp; sudo apt-get install libjson-perl<br />
+1. wget http://www.crystallography.net/archives/2019/software/cod-tools/cod-tools-2.4.tar.gz<br />
+2. tar -xvf cod-tools-2.4.tar<br />
+3. mv cod-tools-2.4 cod-tools<br />
+4. make -C cod-tools<br />
+5. sudo make -C cod-tools install<br />
+&nbsp;(or gedit ~/.bashrc)<br />
+-----<br />
+CODTOOLS_SRC=~/cod-tools<br />
+export PATH=${CODTOOLS_SRC}/scripts:${PATH}<br />
+export PERL5LIB=${CODTOOLS_SRC}/src/lib/perl5:${PERL5LIB}<br />
+-----<br />
+<br />
+◇ test<br />
+1. cif_filter --help<br />
+2. cif_filter --usage<br />
+<br />
+◇ Usage<br />
+1. curl --silent http://www.crystallography.net/cod/2231955.cif | cif_filter | cif_fix_values | cif_molecule | cif_cell_contents --use-attached-hydrogens<br />
+2. curl --silent http://www.crystallography.net/2018107.cif | cif_mark_disorder | cif_select --cif --tag _atom_site_lab<br />
+<br />
+[COD4] http://wiki.crystallography.net/cod-tools/&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ RDKit<br />
+[RDK1] https://future-chem.com/rdkit-intro/<br />
+------------------------------------------------------------------------------<br />
+■ VMD (ubuntu 18.04 LTS on windows 10 (64 bit))<br />
+(https://www.ks.uiuc.edu/Development/Download/download.cgi?PackageName=VMD)<br />
+<br />
+・LINUX_64 OpenGL, CUDA, OptiX, OSPRay&nbsp;<br />
+0. input and click<br />
+&nbsp; Username:&nbsp;<br />
+&nbsp; Password:&nbsp;<br />
+&nbsp; Continue with registration or download<br />
+&nbsp; No: The work I do with TCBG software is funded (at least partially) by NIH:<br />
+1. tar zxvf vmd-1.9.4a35.bin.LINUXAMD64-CUDA9-OptiX600-RTX-OSPRay170.opengl.tar.gz<br />
+2. cd vmd-1.9.4a35<br />
+3. ./configure<br />
+4. cd src<br />
+5. sudo make install<br />
+6. vmd<br />
+<br />
+◇ (rlwrap: No match. case) (http://www.ks.uiuc.edu/Research/vmd/mailing_list/vmd-l/19158.html)<br />
+7. sudo gedit /usr/local/bin/vmd<br />
+-----before<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+&nbsp; &nbsp; if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+&nbsp; &nbsp; else&nbsp;<br />
+&nbsp; &nbsp; &nbsp; set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+&nbsp; &nbsp; endif<br />
+&nbsp; endif<br />
+endif<br />
+-----<br />
+-----after<br />
+# detect if we have rlwrap available to have commandline editing<br />
+set vmdprefixcmd=&quot;&quot;<br />
+if ((&quot;${ARCH}&quot; == &quot;LINUX&quot;) || (&quot;${ARCH}&quot; == &quot;LINUXAMD64&quot;)) then<br />
+&nbsp; set rlwrap=`which rlwrap`<br />
+&nbsp; if ( -x &quot;$rlwrap&quot; ) then<br />
+# &nbsp; &nbsp;if ( -f ${MASTERVMDDIR}/vmd_completion.dat ) then&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ -f ${MASTERVMDDIR}/vmd_completion.dat &quot;<br />
+# &nbsp; &nbsp;else&nbsp;<br />
+# &nbsp; &nbsp; &nbsp;set vmdprefixcmd=&quot;rlwrap -C vmd -c -b(){}[],&amp;^%#;|\\ &quot;<br />
+# &nbsp; &nbsp;endif<br />
+# &nbsp;endif<br />
+endif<br />
+-----<br />
+8. vmd<br />
+※ 初めての場合、これから使用したいUsernameとPasswordを入力する<br />
+[VMD1] https://www.youtube.com/watch?v=ybI3R3BCLAE<br />
+[VMD2] https://mumeiyamibito.blogspot.com/2015/09/vmd.html<br />
+<br />
+□ charmm-gui(http://www.charmm-gui.org/)<br />
+&gt; Input Generator &gt; 「Membrane Builder」, 「Martini Maker」, etc &gt; download.tgz<br />
+[CHARMMGUI1] http://nuushi.hatenablog.com/entry/2017/07/08/021803<br />
+[CHARMMGUI2] http://www.ag.kagawa-u.ac.jp/charlesy/2016/10/27/膜タンパク質のモデリング-charmm-gui-amber-lipid14-force-field/<br />
+------------------------------------------------------------------------------<br />
+□ Install (VMD python library) (failed ?)<br />
+(http://www.ks.uiuc.edu/Research/vmd/plugins/pythonlib/)<br />
+・pylib.linux.amd64.tar.gz<br />
+0. wget http://www.ks.uiuc.edu/Research/vmd/plugins/pythonlib/vmd-1.8.7/pylib.linux.amd64.tar.gz<br />
+1. tar zxvf pylib.linux.amd64.tar.gz<br />
+<br />
+□ Test<br />
+1. export PYTHONPATH=$HOME/lib_LINUX:$PYTHONPATH<br />
+------------------------------------------------------------------------------<br />
+■ VMD (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (failed ?)<br />
+(Remove water)<br />
+<br />
+□ Insatall (VMD-python)<br />
+(https://vmd.robinbetz.com/)<br />
+・vmd-python.git<br />
+0. sudo apt install libsqlite3-dev&nbsp;<br />
+&nbsp; sudo apt install libexpat1-dev<br />
+&nbsp; sudo apt install libnetcdf-dev<br />
+&nbsp; sudo apt install tcl8.5-dev<br />
+&nbsp; sudo apt install libegl1-mesa-dev<br />
+&nbsp; sudo apt install libopengl0<br />
+1. git clone https://github.com/Eigenstate/vmd-python.git<br />
+2. cd vmd-python<br />
+3. python setup.py build<br />
+4. sudo python setup.py install<br />
+<br />
+◇ Test<br />
+1. python<br />
+2. import vmd<br />
+<br />
+◇ Usage<br />
+1. set selprotein [atomselect top protein]<br />
+2. $selprotein writepdb common/ubq_ww_eq.pdb&nbsp;<br />
+------------------------------------------------------------------------------

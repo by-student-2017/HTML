@@ -1,0 +1,405 @@
+<p>分子動力学（MD）でのポテンシャル作成法 -2-<br />
+（主にニューラルネットワークを用いた方法）<br />
+------------------------------------------------------------------------------<br />
+■ 各種のポテンシャル作成ソフト<br />
+<br />
+・aenet (Atomic Energy Network)<br />
+&nbsp; http://ann.atomistic.net/<br />
+&nbsp;&nbsp;https://gitlab.com/AKaiser85/ann-interface-dl_poly-and-aenet<br />
+・libAtoms + QUIP<br />
+&nbsp;&nbsp;http://libatoms.github.io/QUIP/<br />
+&nbsp;&nbsp;http://www.libatoms.org/Home/Software<br />
+&nbsp;&nbsp;https://github.com/libAtoms/QUIP<br />
+&nbsp;&nbsp;QUIPforLAMMPS (https://github.com/libAtoms/QUIPforLAMMPS)<br />
+・Amp<br />
+&nbsp;&nbsp;https://bitbucket.org/andrewpeterson/amp/src/master/<br />
+&nbsp;&nbsp;https://github.com/jboes/amp<br />
+・PROPhet<br />
+&nbsp; https://biklooost.github.io/PROPhet/<br />
+・TensorMol<br />
+&nbsp;&nbsp;https://github.com/jparkhill/TensorMol<br />
+・<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(36, 41, 46); font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">DiffiQult<br />
+&nbsp;&nbsp;https://github.com/aspuru-guzik-group/DiffiQult</span><br />
+・DeePMD-kit<br />
+&nbsp; http://www.deepmd.org/<br />
+・Differentiable atomistic potentials (<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(36, 41, 46); font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">This is not an official Google product)</span><br />
+&nbsp;&nbsp;https://github.com/google/differentiable-atomistic-potentials<br />
+・<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(36, 41, 46); font-family: -apple-system,BlinkMacSystemFont,Segoe UI,Helvetica,Arial,sans-serif,Apple Color Emoji,Segoe UI Emoji; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">SchNetPack<br />
+&nbsp;&nbsp;https://github.com/atomistic-machine-learning/schnetpack</span><br />
+※ 上記以外にもポテンシャルの作成ソフトは存在する<br />
+※ 機械工学年鑑2019 -機械工学の最新動向- (https://www.jsme.or.jp/kikainenkan2019/chap05/)は非常に勉強になる。<br />
+------------------------------------------------------------------------------<br />
+■ aenet (Atomic Energy Network)<br />
+&nbsp; (http://ann.atomistic.net/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit)) (gfortran and OpenBLAS)<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">0. sudo apt-get install gfortran</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; sudo apt-get install build-essential</span><br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; sudo apt install libopenblas-dev</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka－等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka－等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; sudo apt install libopenmpi-dev</span><br />
+1. git clone&nbsp;https://github.com/atomisticnet/aenet.git<br />
+2.&nbsp;cd ~/aenet/lib<br />
+3. make<br />
+4.&nbsp;cd ~/aenet/src<br />
+5. make -f ./makefiles/Makefile.gfortran_openblas_mpi<br />
+&nbsp; (or make -f ./makefiles/Makefile.gfortran_mpi)<br />
+6.&nbsp;cd ~/aenet/bin | ls<br />
+7. cd&nbsp;~/aenet/python3<br />
+8. python3 setup.py install --user<br />
+&nbsp; (python setup.py install --user)<br />
+<br />
+□ test (Cu-dimer-forces)<br />
+1. cd&nbsp;~/aenet/unittests/Cu-dimer-forces<br />
+2. cd&nbsp;Cu-dimer-forces<br />
+3. ./plot-forces.gnu<br />
+4.&nbsp;evince graph-forces.pdf<br />
+5. cd&nbsp;output-reference<br />
+&nbsp;&nbsp;../get-forces.sh<br />
+&nbsp;&nbsp;evince graph-forces.pdf<br />
+&nbsp; cd ..<br />
+6. export OMP_NUM_THREADS=1<br />
+7. mpirun -np 1 ~/aenet/bin/predict.x-2.0.4-gfortran_openblas_mpi predict.in<br />
+<br />
+□ test (AuCu-dimer-forces)<br />
+1. cd&nbsp;~/aenet/unittests/Cu-dimer-forces<br />
+2. cd&nbsp;AuCu-dimer-forces<br />
+3. ./plot-forces.gnu<br />
+4.&nbsp;evince graph-forces.pdf<br />
+5. cd&nbsp;sample-output<br />
+&nbsp;&nbsp;../get-forces.sh<br />
+&nbsp;&nbsp;evince graph-forces.pdf<br />
+&nbsp; cd ..<br />
+6. export OMP_NUM_THREADS=1<br />
+7. mpirun -np 1 ~/aenet/bin/predict.x-2.0.4-gfortran_openblas_mpi predict.in<br />
+<br />
+□ Example<br />
+1.&nbsp;cd ~/aenet/examples<br />
+2. wget http://ann.atomistic.net/files/aenet-example-02-TiO2-Chebyshev.tar.bz2<br />
+3.&nbsp;tar xvf aenet-example-02-TiO2-Chebyshev.tar.bz2<br />
+4. cd aenet-example-02-TiO2-Chebyshev<br />
+5.&nbsp;cd 01-generate<br />
+6. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 ~/aenet/bin/generate.x-2.0.4-gfortran_openblas_mpi generate.in<br />
+&nbsp; (or mpirun -np 4 ~/aenet/bin/generate.x-2.0.4-gfortran_openblas_mpi generate.in &gt;&nbsp;generate.out)<br />
+&nbsp;&nbsp;(or mpirun -np 4 ~/aenet/bin/generate.x-2.0.4-gfortran_openblas_mpi generate.in | tee generate.out)<br />
+7. cp&nbsp;TiO.train ../02-train/set001<br />
+&nbsp;&nbsp;cp&nbsp;TiO.train ../02-train/set002<br />
+8. cd ..<br />
+9. cd 02-train<br />
+10. cd set001<br />
+11.&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in<br />
+&nbsp; (or&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in &gt; train.out)<br />
+&nbsp;&nbsp;(or&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in | tee train.out)<br />
+12.&nbsp;cp ./Ti.15t-15t.nn ../../03-predict/set001<br />
+&nbsp;&nbsp;cp ./O.15t-15t.nn ../../03-predict/set001<br />
+13. cd ..<br />
+14.&nbsp;cd set002<br />
+15.&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in<br />
+&nbsp; (or&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in &gt; train.out)<br />
+&nbsp;&nbsp;(or&nbsp;mpirun -np 4 ~/aenet/bin/train.x-2.0.4-gfortran_openblas_mpi train.in | tee train.out)<br />
+16. cp ./Ti.10t-10t.nn ../../03-predict/set002<br />
+&nbsp;&nbsp;cp ./O.10t-10t.nn ../../03-predict/set002<br />
+17. cd ..<br />
+18. cd 03-predict<br />
+19. cd set001<br />
+20.&nbsp;mpirun -np 1 ~/aenet/bin/predict.x-2.0.4-gfortran_openblas_mpi&nbsp;predict.in<br />
+21. cd ..<br />
+22.&nbsp;cd set002<br />
+23.&nbsp;mpirun -np 1 ~/aenet/bin/predict.x-2.0.4-gfortran_openblas_mpi predict.in<br />
+※ predict.x は -np 1 でしか動作しなかった。<br />
+----------<br />
+◇ set001 (fit-01.dat)<br />
+Number of layers : &nbsp; 4<br />
+Number of nodes (without bias)<br />
+and activation type per layer :<br />
+&nbsp; 1 : &nbsp; &nbsp;44<br />
+&nbsp; 2 : &nbsp; &nbsp;15&nbsp; hyperbolic tangent (tanh)<br />
+&nbsp; 3 : &nbsp; &nbsp;15&nbsp; hyperbolic tangent (tanh)<br />
+&nbsp; 4 : &nbsp; &nbsp; 1 &nbsp;linear function (linear)<br />
+----------<br />
+◇ set002 (fit-01.dat)<br />
+Number of layers : &nbsp; 4<br />
+Number of nodes (without bias)<br />
+and activation type per layer :<br />
+&nbsp; 1 : &nbsp; &nbsp;44<br />
+&nbsp; 2 : &nbsp; &nbsp;10 &nbsp;hyperbolic tangent (tanh)<br />
+&nbsp; 3 : &nbsp; &nbsp;10 &nbsp;hyperbolic tangent (tanh)<br />
+&nbsp; 4 : &nbsp; &nbsp; 1 &nbsp;linear function (linear)<br />
+----------<br />
+<br />
+※ XCrysSDen -&gt; xsf format<br />
+----------(xsf file)<br />
+# total energy = XXX eV<br />
+----------<br />
+&nbsp; any unit system may be used, but the length, energy, and force units have to be consistent. The example below uses &Aring;, eV, and eV/&Aring;.<br />
+<br />
+※ descriptor&nbsp;(The code (aenet) is designed such that implementing further methods is straightforward.)<br />
+・Artrith-Urban-Ceder descriptor (Chebyshev expansion)<br />
+・invariant symmetry function basis (Behler and Parrinello)<br />
+------------------------------------------------------------------------------<br />
+■ DeePMD-kit (http://www.deepmd.org/)<br />
+&nbsp; Github: https://github.com/deepmodeling/deepmd-kit<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit)) (underconstructing) (no check)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install python3-dev python3-pip<br />
+&nbsp; sudo pip3 install -U virtualenv<br />
+&nbsp;&nbsp;sudo apt install virtualenv<br />
+1. virtualenv --system-site-packages -p python3 ./venv<br />
+&nbsp;&nbsp;source ./venv/bin/activate<br />
+&nbsp; virtualenv -p python3 $tensorflow_venv<br />
+&nbsp;&nbsp;pip install --upgrade pip<br />
+&nbsp; (pip list)<br />
+&nbsp; (deactivate)<br />
+&nbsp;&nbsp;pip install --upgrade tensorflow==1.14.0<br />
+&nbsp;&nbsp;source $tensorflow_venv/bin/activate<br />
+&nbsp;&nbsp;virtualenv -p python3.6 $tensorflow_venv<br />
+&nbsp; python-c &quot;import tensorflow as tf;print(tf.reduce_sum(tf.random.normal([1000, 1000])))&quot;<br />
+2.&nbsp; cd ~<br />
+&nbsp; git clone --recursive https://github.com/deepmodeling/deepmd-kit.git deepmd-kit -b devel<br />
+&nbsp;&nbsp;cd deepmd-kit<br />
+&nbsp;&nbsp;deepmd_source_dir=`pwd`<br />
+&nbsp;&nbsp;pip install .<br />
+&nbsp; dp -h<br />
+3. cd $deepmd_source_dir/source<br />
+&nbsp; mkdir build&nbsp;<br />
+&nbsp; cd build<br />
+4. cmake -DTENSORFLOW_ROOT=$tensorflow_root -DCMAKE_INSTALL_PREFIX=$deepmd_root ..<br />
+&nbsp; make<br />
+&nbsp; make install<br />
+&nbsp; ls $deepmd_root/bin<br />
+&nbsp; ls $deepmd_root/lib<br />
+&nbsp; cd $deepmd_source_dir/source/build<br />
+&nbsp; make lammps<br />
+5. cd deepmd-kit-1.1.2<br />
+&nbsp; wget https://lammps.sandia.gov/tars/lammps-31Mar17.tar.gz<br />
+&nbsp; tar xf lammps-31Mar17.tar.gz<br />
+6. cd lammps-31Mar17/src/<br />
+&nbsp; cp -r $deepmd_source_dir/source/build/USER-DEEPMD .<br />
+7. make yes-user-deepmd<br />
+&nbsp; make mpi -j4<br />
+<br />
+[DPK1] DeePMD-kit: A deep learning package for many-body potential energy representation and molecular dynamics (https://arxiv.org/abs/1712.03641)<br />
+------------------------------------------------------------------------------<br />
+■ PROPhet (https://biklooost.github.io/PROPhet/)<br />
+&nbsp; Github: https://github.com/biklooost/PROPhet<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://github.com/biklooost/PROPhet.git<br />
+2. cd ~/PROPhet/src<br />
+3. ./configure --enable-lammps=$HOME/lammps-stable_7Aug2019/src<br />
+4. make<br />
+5. make install<br />
+6. cd $HOME/lammps-stable_7Aug2019/src<br />
+7. make mpi<br />
+(~/PROPhet/bin/PROPhet)<br />
+<br />
+□ Tutorial<br />
+1. cd ~/PROPhet/doc/tutorial<br />
+2. mpirun ~/PROPhet/bin/PROPhet -in input_train -train<br />
+3. mpirun ~/PROPhet/bin/PROPhet -in input_validate -validate<br />
+4. mpirun ~/PROPhet/bin/PROPhet -in input_predict -validate<br />
+5. gedit in.lmp<br />
+-----<br />
+clear<br />
+units &nbsp; &nbsp; &nbsp; &nbsp;metal<br />
+<br />
+dimension &nbsp; &nbsp;3<br />
+boundary &nbsp; &nbsp; p p p<br />
+<br />
+lattice &nbsp; &nbsp; &nbsp;diamond 3.5<br />
+region &nbsp; &nbsp; &nbsp; box block 0 3 0 3 0 3<br />
+create_box &nbsp; 1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style &nbsp; nn 4 # Rcut<br />
+pair_coeff &nbsp; 1 potential_C<br />
+<br />
+mass &nbsp; &nbsp; &nbsp; &nbsp; 1 12.0107 # C<br />
+<br />
+variable &nbsp; &nbsp; atom_pe &nbsp;equal pe/atoms<br />
+variable &nbsp; &nbsp; atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol lx v_atom_vol temp press<br />
+thermo &nbsp; &nbsp; &nbsp; 1<br />
+<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; d1 all cfg 1 cfg/run.*.cfg mass type xs ys zs id type<br />
+dump_modify &nbsp;d1 element C<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;f1 all box/relax iso 0.0<br />
+minimize &nbsp; &nbsp; 1.0e-10 0.0 1000 100000<br />
+<br />
+print &quot;Lattice constant of diamond carbon: $(lx/3) Angstrom at 0 K&quot;<br />
+-----<br />
+6. mkdir cfg<br />
+7. export OMP_NUM_THREADS=1<br />
+8. mpirun -np 4 $HOME/lammps-stable_7Aug2019/src/lmp_mpi &lt; in.lmp<br />
+※ Rcut=4 (in input_train, input_validate and input_predict)<br />
+<br />
+※ to create analytical potentials<br />
+&nbsp; Carbon: 64 atoms (supercell 2x2x2), 50 - 400 K<br />
+※ PWscf, VASP, FHI (ab initio MD simulations)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+※ 文献[2]がオススメ。論文を読むと、NNPはエネルギーを出力するNNが検討される（場合によってはフォースも含む）が、HDNNPだと電荷密度を出力するNNも検討される。<br />
+<br />
+[1] J. Behler and M. Parrinello, Phys. Rev. Lett. 98 (2007) 146401.<br />
+&nbsp; Behler-Parrinello Neural Network<br />
+&nbsp;&nbsp;Neural Network Interatomic Potential (NNP): 原子構造を入力情報としてエネルギーを出力する。原子構造（ベクトル情報）からエネルギー（スカラー）へ写像を模擬するNNモデル [C5]。文献[1]では、中間層（隠れ層）の活性化関数としては双曲線正接関数 (hyperbolic tangent)、出力層には線形関数を用いている。中間層は1層。<br />
+&nbsp; High-Dimensional NNP: 系のポテンシャルを各原子のポテンシャルエネルギーの総和で表す。原子iの近傍にある原子群の配置を入力とし、原子iのポテンシャルエネルギーを出力するNNを作成する。配位数の項、放射対称の項、角度対称の項を導入して周囲の原子配置を表現 [C5]。<br />
+&nbsp; ※ カットオフ半径は 6Å。放射対称はガウス関数（つまり、exp{-&eta;(R-Rs)<sup>2</sup>})。PWscfで Si 64原子で計算（LDA, k-point 3x3x3。smearing 0.1 eV, cut-off 20 Ry）。9000のDFTのエネルギーデータを用いて、9割をNNの最適化、1割を評価に用いた。&nbsp;The RMSE of the optimization set is typically 4&ndash;5 meV per atom, the RMSE of the test set 5&ndash;6 meV. For the NN atomic forces we found a RMSE of about 0.2 eV/Å with respect to DFT. 3000 KでのRDFもDFTと比較的良い一致。セル形状と体積を変えた場合のDFTとNNPのエネルギー差は-7.5～15 meV/atom。絶対値で5 meV/atom以内が多い。謝辞で書かれている人達からNNのコードを得ている。パラメータをDFTの結果と合うようにとは書かれているが、誤差逆伝搬でパラメータを決めているとは書かれていない。NNが提供されたものであるため詳細に書かれていない？ 角度対称の項は二面角の式に近いので4体まで含まれたポテンシャルと考えてよいか？<br />
+&nbsp; ※ 画像の分野だと、中間層にReLU関数を用いたNNでも出力層では、分類問題にSoftmax関数でクラスの確率、回帰に線形関数が用いられる。<br />
+&nbsp; ※ NNPではポテンシャルエネルギーの発現メカニズムが完全にブラックボックス化される。NNPの分子系の報告は多いが、結晶構造・凝集系ではそれほど多くない [C5]。</p>
+
+<p>[2] J. Behler, J. Phys.: Condens. Matter 26 (2014) 183001.<br />
+&nbsp; 図2では中間層は2層として示されている。原子種と原子間の距離から入力変数のGとする（それをNNの入力層に入れる）。Atomic Energies を出力するNNを作りエネルギーの合計を<em>E</em><sub>s</sub>とする。この他にAtomic Charges を出力するNNを別に作り、そこから静電エネルギー<em>E</em><sub>e</sub>を出力させる。全エネルギー <em>E</em><sub>total</sub> = <em>E</em><sub>s</sub> + <em>E</em><sub>e</sub> とする。<br />
+&nbsp;&nbsp;角度関数のG<sup>4</sup>とG<sup>5</sup>の主な違いは、G<sup>5</sup>に隣接する原子jとkの間の距離であるR<sub>jk</sub>がないことです。したがって、G<sup>4</sup>の場合、3つの原子間距離が全てカットオフ半径よりも小さい場合にのみ角度が考慮されます。一方、G<sup>5</sup>ではR<sub>jk</sub>は任意の値を持つことができます。<br />
+&nbsp; ※ 数千から数万（場合によっては数万から数十万）程度のDFTのデータが必要になるようです。<br />
+[3] N. Artrith and A. Urban, Comput. Mater. Sci. 114 (2016) 135-150.<br />
+&nbsp;&nbsp;aenet (Atomic Energy Network)<br />
+&nbsp; (http://ann.atomistic.net/)<br />
+[4] N. Artrith et al., Phys. Rev. B 96 (2017) 014112.<br />
+&nbsp; PBE+U で計算されている。LM-BFGSを用いて3000回のトレーニング。記述子の次元が40～70で最小二乗差の減少が飽和（3 meV/atom近傍に収束）する（原子種が3～11で検証されている）。データ数が50程度必要という他の機械学習との傾向とも対応している。<br />
+[5] A. P. Bartok and M. C. Payne, Phys. Rev. Lett. 104 (2010) 136403.<br />
+&nbsp; ガウシアン近似ポテンシャル（GAP）: ガウス過程回帰で原子間相互作用を記述し、相互作用を二体間・三体間・多体間と展開してカーネル（構造記述子）で表現 [C5] 。<br />
+&nbsp;&nbsp;The method is extremely accurate [2]<br />
+&nbsp; 局所原子密度と4D spherical harmonics (Wigner matrix) から係数を得て、その係数とクレプシュゴルダン係数を掛け算し、ガウシアンプロセス回帰（そのため逆行列の計算が入る）を用いてエネルギーが得られるようにパラメータを学習する。<br />
+[6] R. Kobayashi et al., Phys. Rev. Mater. 1 (2017) 053604.<br />
+&nbsp; Al-Mg-Si合金系。活性化関数としてsigmoid関数を用い、x=0で0となるように-1/2している。参照されている論文が2007年のBehlarらの論文であると式から恐らく中間層は1層と考えられる。NNのパラメータの最適化には準ニュートン法のBFGSが用いられている。NNPであるようで、HDNNPではないと思われる。放射対称の式は論文中に記載されているが角度対称の項は記載されていない。論文には記載していないがこれらの項が入っているのだろうか？ 配位数は放射対称からNNで算出されているか？<br />
+[7] S. Bukkapatnam et al., Phys. Rev. B 74 (2006) 224102.<br />
+&nbsp; パラメータの最適化部分にNNを用いた論文。パラメータ最適化の際の目的変数が変数（パラメータ）の変化に対して極めて非線形性が強いとともに、その勾配がゼロに近いプラトー領域が非常に広いため、一般的な最適化アルゴリズム（遺伝的アルゴリズムも含む）による最適値探索が上手く機能しない場合の対策として考案された方法 [C5]。<br />
+[8] M. Malshe et al., J. Chem. Phys. 129 (2008) 044111.<br />
+&nbsp; パラメータの最適化部分にNNを用いた論文。パラメータ最適化の際の目的変数が変数（パラメータ）の変化に対して極めて非線形性が強いとともに、その勾配がゼロに近いプラトー領域が非常に広いため、一般的な最適化アルゴリズム（遺伝的アルゴリズムも含む）による最適値探索が上手く機能しない場合の対策として考案された方法 [C5]。<br />
+[9] B. J. Braams and J. M. Bowman,&nbsp;Int. Rev. Phys. Chem. 28 (2009) 577-606.<br />
+&nbsp;&nbsp;https://www.tandfonline.com/doi/abs/10.1080/01442350903234923<br />
+[10] J. M. Bowman et al., J. Phys. Chem. Lett. 1 (2010) 1866&ndash;1874.<br />
+&nbsp;&nbsp;https://pubs.acs.org/doi/10.1021/jz100626h<br />
+<br />
+□&nbsp;Machine Learning Potentials Papers<br />
+&nbsp;&nbsp;https://github.com/getblackbox/Machine-Learning-Potentials-Papers<br />
+<br />
+□ [C5] 機械工学年鑑2019 -機械工学の最新動向-<br />
+&nbsp; (https://www.jsme.or.jp/kikainenkan2019/chap05/)<br />
+<br />
+□&nbsp;Applications of Machine Learning in Molecular Dynamics<br />
+&nbsp;&nbsp;http://cacs.usc.edu/education/cs699/NNFF-YuanShichunSize.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Note<br />
+<br />
+◇ [1]&nbsp;<br />
+----------<br />
+&nbsp; &nbsp;For a 64 atom system the NN is currently about 5&nbsp;orders of magnitude faster than the DFT calculations, and in contrast to DFT the NN scales linearly with system size and is easily parallelized. An extension to multicomponent systems is straightforward, but requires the incorporation of the corresponding crossterms in the symmetry functions and an extended set of DFT energies.<br />
+----------<br />
+<br />
+◇ [2]<br />
+---------<br />
+&nbsp; Further, the method is still limited to systems containing about three or four chemical elements due to the rapidly increasing complexity of the configuration space, although many atoms of each species can be present.&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;&nbsp;In the output layer a linear function is applied to avoid any restriction on the range of NN output (energy) values.<br />
+---------<br />
+&nbsp;&nbsp;According to the second point, no experimental data should be used to construct an NNP. For any reference electronic structure method, there are necessarily some deviations between theoretically determined physical quantities, like equilibrium bond lengths, and their experimental counterparts. This is not only a consequence of the unavoidable uncertainty of experimental data but also of the numerical limitations of practical electronic structure calculations. If both experimental and theoretical data were used in the construction of an NNP, these data would not be consistent, giving rise to problems in the determination of the NN parameters. For the same reason, different levels of theory for the reference calculations should not be used together.<br />
+---------<br />
+&nbsp;&nbsp;There are several conceptual problems that need to be solved to extend the applicability of NNPs to high-dimensional systems. First, the size of feed-forward NNs, i.e. the number of layers and nodes per layer, cannot be increased arbitrarily. Each new atom in the system introduces three additional degrees of freedom, which increases the number of nodes required in the input layer. Further, with a growing number of input nodes, also the number of nodes in the hidden layers needs to be adjusted to properly process the structural information. Necessarily, with increasing size, the computational performance of the NN evaluation decreases. Further, the number of weight parameters grows substantially with the size of the NN making the determination of the optimum set of weights more challenging. Finally, the rapidly increasing configuration space, which needs to be covered by the reference electronic structure calculations, does not allow for an arbitrary extension of the system size if its full complexity is described by a single NN.<br />
+---------<br />
+&nbsp; If these numbers are not invariant with respect to rotation, translation or permutation, then the potential energy output of the NN is not invariant. A prominent example of an unsuitable set of coordinates are Cartesian coordinates, whose absolute values have no physical meaning since only relative atomic positions are important for the potential energy of a system.<br />
+---------<br />
+&nbsp; The main problem for obtaining an NNP with permutation symmetry upon exchange of like atoms is that the input coordinates of the NN form an ordered vector. Since different input coordinates, even if they refer to atoms of the same element, are connected to the NN by numerically different weight parameters, a permutation of any pair of atoms results in a change of the NN output. While this problem can be circumvented for small systems by using a well-defined order of atoms or by training the NNP using a reference set containing all equivalent representations of a molecule explicitly, for high dimensional systems a rigorous solution must be found.<br />
+---------<br />
+&nbsp;&nbsp;The specific size of the cutoff radius needs to be determined in convergence tests until all relevant interactions are included, and we found that typically a value of 6&ndash;10 Å is sufficient.&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;In general, the cutoff radius is a convergence parameter that needs to be increased until all energetically relevant atomic interactions are included, and we found that cutoff radii of 6&ndash;10 Å are sufficient for obtaining high-quality potentials. The correct choice of the cutoff radius is very important, because any interaction between atoms separated by more than R c not covered by the electrostatic term is treated as noise and gives rise to increased fitting errors. The cutoff function, which from now on will be specified by f c to represent either of the two possible functions, is an essential part of all many-body symmetry functions.<br />
+---------<br />
+&nbsp;&nbsp;&nbsp;The resulting high-dimensional NN scheme is shown schematically in figure 4 for a four-atom system. Each line represents one atom i starting from its Cartesian coordinate vector R<sub>i</sub> on the left. Then a transformation of the coordinates to a symmetry function vector G<sub>i</sub> is performed, which typically consists of 50&ndash;100 symmetry function values. Since these functions describe the atomic environment, they depend on the positions of all neighboring atoms within the cutoff radius. The G<sub>i</sub> are then used as input for the corresponding atomic NNs yielding the E<sub>i</sub> , which are added in the final step to obtain E<sub>s</sub>.<br />
+---------<br />
+&nbsp;&nbsp;Even for very large systems the structural complexity that needs to be processed by each individual atomic NN does not increase due to the employed cutoff, and therefore atomic NNs of very similar architecture, which are independent of the system, can be used. As one NN evaluation is needed per atom, once the NN weight parameters have been determined, high-dimensional NNPs can be used for very large systems and the computational costs scale linearly with system size. Further, since each atomic NN can be calculated independently, the method is also well suited for parallel implementations. Finally, the description of the atomic environments by many-body symmetry functions ensures that the atomic energies are invariant with respect to rotation and translation of the system (section 3.3). In summary, this method fulfills all requirements of high-dimensional NNPs discussed in the previous section.<br />
+---------<br />
+&nbsp;&nbsp;As the cut-off is still notably larger than for many other potentials, the only relevant long-range interactions that may not be captured completely are electrostatic ones. In particular, for multicomponent systems with significant charge transfer between atoms of different elements, electrostatic interactions may be important. In order to include these interactions explicitly, the total energy expression has been generalized by employing equation (4) for the &lsquo;short-range&rsquo; interactions E s only. Further, the electrostatic energy contribution E elec is calculated by an additional term [106, 107] resulting in the total energy expression<br />
+&nbsp;&nbsp;<em>E</em><sub>total</sub> = <em>E</em><sub>s</sub> + <em>E</em><sub>e</sub>&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;Employing these charges, the electrostatic energy contribution is then calculated by standard procedures according to Coulomb&#39;s law for non-periodic systems, or an Ewald summation [108] for periodic systems. Using the generalized high-dimensional NN method, the range of the electrostatic interactions is not truncated, while the atomic charges used to calculate E elec only depend on the local chemical environments. For short interatomic distances the electrostatic interactions can also be included in the short-range energies and forces, which can be used to introduce a screening of the electrostatic energy for close atomic encounters [107]. This screening has the advantage that an increased corrugation of the short-range energies can be avoided, which could arise by removing large electrostatic energies from total energies that are rather smooth.<br />
+---------<br />
+&nbsp;&nbsp;There are several possibilities for training the atomic NNs providing the charges. While in principle the NN weights governing the charges could be determined simultaneously with the short-range NN weights, employing a single constraint that the smallest possible error of the resulting total energies should be obtained, this is a very complex coupled optimization problem. Therefore, it is advantageous to separate the training of the electrostatic NNs and the short-range NNs in the following way: first, atomic partial charges are determined in DFT calculations. There are many partitioning schemes available, and we usually use the Hirshfeld method [109], since Hirshfeld charges are not sensitive to the specific basis sets employed in the reference DFT calculations. Then the atomic NNs are trained to reproduce these charges as accurately as possible. In a second step, the NN atomic charges are used to calculate for each structure in the training set the electrostatic energy and forces, which are then removed from the DFT total energy and forces to obtain the short-range energy and force contributions. In the final step, these short-range components are then used to optimize the weight parameters of the short-range NNs. When the resulting NNP is applied to new structures, the electrostatic energy and the short-range energy can be calculated independently and are then combined to yield the total energy.<br />
+---------<br />
+&nbsp;&nbsp;Several comments should be made concerning the extended NNP method including electrostatics. First, since the calculation of electrostatic interactions is physically exact and does not involve approximations reducing the accuracy, the formal definition of NNPs given in section 2.3 is still fulfilled. The only choice that is to some extent arbitrary is the selection of the Hirshfeld method to generate the reference charges. Since each charge partitioning method yields slightly different charges and thus also different electrostatic energies, this is in principle an approximation. However, the NN total energy is not sensitive to this choice at all, because the short-range energy is defined as the difference between the total energy and the electrostatic energy. Any error in the electrostatic energy will thus be compensated automatically by the short-range energy inside the cutoff radius. Only outside the cutoff radius does this error compensation not work, but the resulting errors are extremely small, and for large interatomic distances the differences between the charges obtained from different partitioning methods are usually quite small due to the negligible overlap of the electron densities.<br />
+---------<br />
+&nbsp;&nbsp;The modification of the charges by this scaling step is usually about one order of magnitude smaller than the fitting error, which is typically only about 0.001 e. We further note that NNs have not only been applied to represent atomic charges, since it has been suggested by Popelier and coworkers that NNs could be employed to construct electrostatic multipoles to improve the description of electrostatic interactions in classical force fields [110&ndash;113]. In this approach, which by itself does not represent a self-contained NNP, the structure of the environment has been taken into account.<br />
+&nbsp;&nbsp;Finally, it should be mentioned that it is possible to improve the description of van der Waals interactions in high-dimensional NNPs in a straightforward way [114]. A correction of van der Waals interactions is not a requirement of the NNP approach itself as the short-range part is able to describe any type of atomic interaction as long as the cutoff radius is sufficiently large. Still, the quality of the description of van der Waals interactions can be low if DFT calculations are used for training the NNs. It has been known for a long time that current exchange-correlation functionals based on the generalized gradient approximation (GGA), which are still dominant in the literature, are not able to describe van der Waals interactions with sufficient accuracy.<br />
+&nbsp;&nbsp;&nbsp;Consequently, in recent years, the development of correction schemes has been a very active field of research and a number of methods have been proposed [115&ndash;118]. Since the NN energies are numerically extremely close to the underlying DFT data, in particular the D3 method suggested by Grimme [119] can easily be combined with NNPs even after the construction of the NNP employing plain DFT-GGA data has been completed. For this purpose no modification of the NN weight parameters is required.<br />
+---------<br />
+&nbsp;&nbsp;For NNPs, the NN input coordinates will be called &lsquo;symmetry &nbsp;functions&rsquo; here, because they have the same numerical values for all energetically equivalent representations of a system. Historically, the term &lsquo;symmetry function&rsquo; was introduced because these functions can be used to take the symmetry of ideal low-index single crystal surfaces into account [123]. These days the term symmetry function is used in a much broader context, referring not only to formal symmetry operations but to all operations leaving the relative atomic configuration of the system unchanged. In general, suitable sets of symmetry functions need to fulfill the following criteria:<br />
+&nbsp; (a) They need to be continuous in value and slope.<br />
+&nbsp; (b) They must be invariant with respect to translation and rotation of the system.<br />
+&nbsp; (c) The vector of symmetry function values has to be invariant with respect to permutations in the order of chemically equivalent atoms in the atomic environments.<br />
+&nbsp; (d) The number of symmetry functions in the NN input vector must be the same irrespective of the number of atoms in the chemical environment.<br />
+&nbsp; The first point is a mandatory condition for constructing meaningful PESs, which must be continuous and differentiable in order to be applicable to MD simulations requiring the calculation of forces.<br />
+---------<br />
+&nbsp;&nbsp;In general, we found that sets of 50&ndash;100 symmetry functions are able to provide excellent structural fingerprints of the atomic environments resulting in typical total energy errors of only a few meV per atom. In the various systems we have studied so far we have found that the quality of the obtained NNPs is, surprisingly, not very sensitive to changes in the symmetry function sets and that in turn a given set of symmetry functions is applicable to very different systems like semiconductors, metals and oxides. Still, it would be desirable to develop a computational scheme to derive the optimum set of symmetry functions for arbitrary systems wholly automatically, and this work is currently in progress.<br />
+---------<br />
+&nbsp;&nbsp;For the derivative of the electrostatic energy, it is important to remember that the atomic charges are environment dependent, which gives rise to additional derivatives compared to conventional classical force fields employing fixed atomic charges.&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;In the context of NNs, the backpropagation algorithm is the most established method [130], but the adaptive global extended Kalman filter [131&ndash;133] and the Levenberg&ndash;Marquardt algorithm [134] have been used frequently. Other techniques that have been proposed are swarm searches [129], simulated annealing [129], genetic algorithms [129, 135] and combinations of these methods. Unfortunately, the optimization of the weight parameters is extremely challenging due to the large number of weights, and there is no hope of finding the global minimum. Still, in most cases it is possible to find sufficiently accurate local minima in the weight parameter space, which will provide reliable potentials.<br />
+---------<br />
+&nbsp;&nbsp;A basic procedure that is almost always used to estimate the accuracy of NNPs is the &lsquo;early stopping&rsquo; method. Here, a part of the known reference structure is not used to optimize the NN weights, but it is employed as an independent test or validation set. During the iterative optimization of the weight parameters, the RMSEs of the training and the test sets are monitored, and the optimum fit can be identified in the following way (figure 6(b)): in the early stage of the fitting process the errors for both the training and the test sets decrease, as the NNP learns the overall features of the PES. Then, while the error for the training set gets smaller and smaller, the error for the test set typically reaches a minimum and starts to increase again. This is the onset of overfitting, which is defined as an improved description of structures in the training set at the cost of a worse description of structures in between (figure 6(a)).&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;In a good NNP, the training and the test sets have very similar errors.<br />
+---------<br />
+&nbsp;&nbsp;Still, the early stopping method is not sufficient to ensure that an NNP is always reliable, because any part of the configuration space that is not well represented in the reference electronic structure calculations will not be present either in the training set or in the test set. These &lsquo;holes&rsquo; in the configuration space will thus remain undetected. Consequently, it may happen that the NN predicts energies and forces with spectacularly large errors for structures very different from the training structures. This is an immediate consequence of the &lsquo;non-physical&rsquo;, i.e. completely unbiased, functional form of the NN. Fortunately, this fundamental drawback of NNPs can be turned into a unique advantage and it can be used in a very elegant way to detect the holes in the reference set, to add missing training structures and to obtain converged NNPs.<br />
+---------<br />
+&nbsp;&nbsp;In this procedure, initially several NNPs are constructed using the same reference set. They should have different functional forms, which can be enforced, e.g. by selecting different NN architectures. Then, NNPs with comparable errors are chosen and one of them is used to generate a large number of structures, for instance by extended MD or MC simulations. Afterwards, the energies and forces of these structures are recalculated by the other available NNPs and the energies and forces are compared to the respective values of the first NNP.&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;If, for a given structure, the energy and the forces predicted by all the NNPs are very similar, then the structure is very likely close to a structure in the training set and the NNPs are reliable. If, on the other hand, all NNPs predict very different energies and forces, then in this part of the configuration space the NN has too much flexibility, because the set of training structures is too sparse. Such structures should then be added to the training set to improve the NNPs. This procedure, the generation of many structures by NNP-based simulations and the identification of structures missing in the training set, is repeated iteratively until the training set is sufficiently dense in all relevant parts of the configuration space.<br />
+---------<br />
+&nbsp;&nbsp;The final comment to be made concerns the extrapolation capabilities of NNPs for structures outside the part of configuration space spanned by the training structures. For such structures the transferability is very limited, as for all mathematical potentials. For such extrapolation, NNPs will usually fail and the predicted energies and forces will have large errors. While in principle the same strategy described above could be used by employing several NNPs to check for extrapolation problems, there is a much simpler way to identify extrapolation. Extrapolation can easily be detected by an analysis of the symmetry function vector even before the energy and forces are calculated. For this purpose, for each symmetry function the minimum and maximum values are determined from the data in the training set. Then, whenever during an NNP based simulation the energy and forces for a structure are requested, its symmetry function values are compared to these boundaries. If any symmetry function value is outside this range, an error message is issued and the simulation can be stopped. Like in the iterative improvement of the training set described above, these extrapolation events can be used to extend the structural range of validity of the NNP systematically by including these structures in the training set.<br />
+---------<br />
+&nbsp;&nbsp;Based on a training set of about 20 000 energies, a potential was derived that gave a very accurate description of all investigated crystal structures of silicon and a wide range of amorphous configurations. The remaining total energy errors were as low as about 5&ndash;6 meV/atom, which is the typical accuracy that can be achieved by NNPs. Employing this NNP, the full high-pressure phase diagram of silicon was obtained and it had excellent agreement with experiment and DFT [136, 137]. A series of metadynamics simulations [128, 145] at increasing pressures were used, which required only about 1% of the computer time that would be needed to carry out the simulations directly by DFT. The largest part of this computer time was spent on constructing the training set and fitting the NN parameters, while the computational costs for carrying out the actual simulations were negligible.<br />
+---------<br />
+&nbsp;&nbsp;A problem, which has not yet been solved to full satisfaction, is the applicability of NNPs to systems containing a large number of different chemical elements. Being able to address such systems would be important, for instance, for biochemical problems, which require the inclusion of at least six or seven elements. A temporary solution to overcome this limitation for specific applications is to sacrifice the full generality of NNPs, since in biochemical systems like proteins it is generally not necessary to describe the breaking of each bond properly. Instead, NNPs could provide here a useful tool to improve the description of the relevant active sites, which often involve complicated transition metal structures that are difficult to represent by classical force fields.&nbsp;<br />
+---------<br />
+&nbsp;&nbsp;If, on the other hand, full chemical generality is required, because chemical reactions or significant atomic rearrangements could occur at many different places in the system, then high-dimensional NNPs are the method of choice as long as three or four chemical species are sufficient. This includes many questions in materials and surface science, and for these systems NNPs are expected to prove very useful in the near future. If localized chemical processes, e.g. at surfaces, are currently too complex for NNPs, then embedding approaches like a &lsquo;QM/NN&rsquo; ansatz might also be an interesting alternative option, which has not yet been explored.<br />
+---------<br />
+&nbsp;&nbsp;The performance of NNPs is significantly better than that of any electronic structure method. The evaluation by NNPs scales almost linearly with system size in contrast to methods like DFT, which typically exhibit a cubic scaling behavior. For systems that contain about one hundred atoms and are thus routinely accessible by DFT, NNPs are about four to five orders of magnitude more efficient, and this difference becomes even more drastic for larger systems. For very large systems, high dimensional NNPs are one of the very few methods available for performing MD simulations with an accuracy close to that of electronic structure methods. The effort that needs to be spent on the construction of an NNP is high, but it is paid back quickly in large-scale simulations. On the other hand, NNPs are about two orders of magnitude less efficient than simple classical force fields due to the comparably demanding calculation of the symmetry functions and the evaluation of the nested analytic function of the NN.<br />
+---------<br />
+&nbsp;&nbsp;Compared to other mathematical potentials, like GAPs [63], which have comparable scopes and limitations, the efficiency of the NNP evaluation does not depend on the size of the underlying reference set, because all information about the topology of the PES is stored in the NN weight parameters. Still, apart from this difference, all mathematical potentials share similar components, like the description of the system by a suitable set of transformed coordinates and the assignment of the energy to the resulting coordinate values. These components can also be combined in a modular way if they have been developed for different approaches. It would be possible, e.g. to use the four-dimensional spherical harmonics of Bart&oacute;k et al [122] instead of our many-body symmetry functions as NN input variables. Another example, which has been implemented recently, is the combination of permutationally invariant polynomials and NNs [120].<br />
+---------<br />
+※ 一般的に使用されるいくつかの活性化関数が図3に示されているが、ReLUやそれに関する関数は示されていない。図3で示されているのは、Sigmoid, Gaussian, Hyperbolic Tangent, Linearのみである。<br />
+※ 余談であるが2011年にReLU関数の論文が報告されている。<br />
+※ 通常、学習を続けていくとエラーが最小に達し、再び増加し始めるようになる。これは、過学習の始まりである。エラーが最小に達したところで学習を止めるのが[&lsquo;early stopping&rsquo; method]となる。<br />
+※ 例えば2つのNNPを作成して出力の比較を行い、両方の結果が異なるときにその構造に対してDFTで計算して新たにトレーニングデータとして加える。<br />
+<br />
+◇ [4]<br />
+----------<br />
+&nbsp;&nbsp;In general, multilayer ANNs can reproduce any function with arbitrary precision [29]. However, the resolution of the invariant descriptor determines the maximal precision with which an ANN potential can resolve the chemical space of a given material. To determine the resolution of our combined descriptor, we trained ANN potentials to extensive reference data sets with different numbers of chemical species. We consider the resolution satisfactory if the ANN potential can reproduce the reference energies of our data sets with a precision of &sim;3 meV/atom, which is the order of magnitude of the noise in our reference data.<br />
+----------<br />
+&nbsp;&nbsp;The RMSE was evaluated after 3000 training iterations using the Limited-Memory Broyden-Fletcher-Goldfarb-Shanno (LM-BFGS) method [44,45]; however, with increasing number of species and increasing descriptor size the required number of training iterations to achieve convergence generally also increases. Thus, the ANN potentials for 11 chemical species and descriptor dimensions above 40 have not converged after 3000 iterations, and the RMSEs after 5000 iterations are shown in Fig. 1.<br />
+----------<br />
+&nbsp;&nbsp;Remarkably, the optimal descriptor dimension is essentially independent of the number of chemical species in the composition, and a descriptor dimension of 44 is sufficient to capture the structural and chemical features of the distinct atomic configurations in the LiMO<sub>2</sub> data set with up to 11 chemical species.<br />
+----------<br />
+&nbsp;&nbsp;The high precision of the ANN potentials with an RMSE of &sim;3 meV/atom for 5 and 11 chemical species indicates that our combined descriptor is not limited to crystal structures with similar atomic positions, but is also suitable to distinguish between continuous atomic arrangements.<br />
+----------<br />
+&nbsp;&nbsp;For this paper, we employed the Chebyshev polynomials of the first kind as basis functions (see Ref. [38]), as they can be defined in terms of a recurrence relation that allows for highly efficient numerical evaluation of the function values and their derivatives.&nbsp;<br />
+----------<br />
+&nbsp;&nbsp;In conclusion, we showed that machine-learning potentials do not require (mathematically) complete descriptors of the local atomic environment to reproduce potential-energy surfaces with high precision. With this insight, we devised a combined descriptor of the local atomic structure and composition the complexity of which does not scale with the number of chemical species. The method is conceptually simple and allows for highly efficient numerical implementations. The utility of the approach was demonstrated for two exemplary material classes, lithium transition-metal oxides and amino acid complexes, each separately comprising compositions with 11 different chemical species. We showed that the potential-energy landscape of both example systems can be represented with high precision by artificial neural network potentials using the combined descriptor achieving a resolution of around 3 meV/atom. Hence, machine-learning potential are in practice not limited to compositions with small numbers of chemical species as previously argued in the literature and may be effective for the modeling of high-dimensional materials such as oxide solid solutions and peptide chains.<br />
+----------<br />
+※ RDFとADFの計算で基底関数を用いている。基底関数には第一種チェビシェフ多項式を用いている。<br />
+<br />
+◇ [5]<br />
+----------<br />
+&nbsp;&nbsp;The local atomic density is invariant to permuting the atoms in the neighborhood. One way to achieve rotational invariance as well would be to expand it in spherical harmonics and a set of radial basis functions and appropriately combine the resulting coefficients, similarly to how the structure factor is computed from Fourier components. However, just as the structure factor (a two-point correlation) is missing all &lsquo;&lsquo;phase&rsquo;&rsquo; information (the relative phases of the different planewaves), such a set of spherical invariants would lose a lot of information about the configuration of the neighborhood. In contrast, the bispectrum [9], which is a three-point correlation function, is a much richer system of invariants, and can provide an almost oneto-one representation of the atomic neighborhood.<br />
+----------<br />
+&nbsp;&nbsp;Determining the PES is now reduced to interpolating the atomic energy in the truncated bispectrum space, and for this we use a nonparametric method called Gaussian process (GP) regression [11,12].&nbsp;<br />
+----------<br />
+&nbsp;&nbsp;The agreement with experiment is also good for the frequency of the Raman mode as a function of temperature. For iron, the agreement with DFT is even better. We also omputed the linear thermal expansion coefficient of diamond, shown in Fig. 3, using two different methods, applicable at low and high temperatures. Our low temperature curve is derived from the phonon spectrum via the quasiharmonic approximation and agrees well with the DFT and experimental results. At higher temperatures higher order anharmonic terms come into play, so we use moleculardynamics (MD) and obtain good agreement with experiment, showing that the GAP model is accurate significantly beyond the small displacements that control phonons.<br />
+----------<br />
+&nbsp;&nbsp;Even for the small systems considered above, the GAP model is orders of magnitude faster than standard plane wave DFT codes, but significantly more expensive than simple analytical potentials. The computational cost is roughly comparable to the cost of numerical bond order potential models [17]. The current implementation of the GAP model takes 0.01 s/atom/time step on a single CPU core. For comparison, a time step of the 216-atom unit cell of Fig. 3 takes 191 s/atom using CASTEP , about 20000 times longer, while the same for iron would take more than 10<sup>6</sup> times longer.<br />
+----------<br />
+&nbsp;&nbsp;In summary, we have outlined a framework for automatically generating finite range interatomic potential models from quantum-mechanically calculated atomic forces and energies. The models were tested on bulk semiconductors and iron and were found to have remarkable accuracy in matching the ab initio potential energy surface at a fraction of the cost, thus demonstrating the fundamental capabilities of the method. Preliminary data for GaN, presented in [8], shows that the extension to multicomponent and charged systems is straightforward by augmenting the local energy with a simple Coulomb term using fixed charges. Our long-term goal is to expand the range of interpolated configurations and thus create &lsquo;&lsquo;general&rsquo;&rsquo; interatomic potentials whose accuracy approaches that of quantum mechanics.<br />
+----------<br />
+※ Gaussian Process を用いているとすると逆行列があるため計算が重いことと精度を出すのが難しい可能性がある。さらに、非線形の場合はカーネル法を用いるからカーネル関数の決め方が難しい問題も生じる。<br />
+※ DFTの数分の1のコストでCAP計算となると導入への判断は難しい方もいよう。論文ではフォノン分散もかなり良く再現されているのでフォノンを計算したい場合には有効になるか？<br />
+<br />
+※ 仮にTPUを用いてNNで8 bitでの出力にすると、eV単位では0.008 eV程度、Ry単位では0.1 eV程度、Ha単位だと0.2 eV程度までしか表現できない？ そうなるとGGAやB3LYPでのDFTでの計算精度 1 meV/atomを目指すならば16 bitのGPUが必要かな？ DFTが倍精度である64 bitで計算数するとなると、単純計算で64/16=4倍の速度がGPUの設定で既に高速化できているということだろうか？<br />
+※&nbsp;Behler-Parrinello Neural Network だと、古典のMDと同様に主に「原子種の数」と「計算に入れる周囲の原子数」に次元の数が依存することになるから、その部分でも速度が速くなっていることだろう。オーダーN法のDFTと比べてアルゴリズム的にどう速いのかの検討も必要になる。<br />
+※ 結合力 E<sub>bind</sub> &prop; A*配位数*配位数<sup>-&delta;</sup> = B*&rho;*&rho;<sup>-&delta;</sup> であるから、背景電子密度&rho;を&quot;1-&delta;&quot;乗したパラメータフィッティングとしてNNPやHDNNPが機能しているかを検証するもの大切だと思う。配位数の&quot;-&delta;&quot;乗がボンドオーダーになるのは理論的な支持がある（局所状態密度の2次モーメント近似より導かれる）。&delta;は0.5に近い値。配位数はすべての近接原子についての和（背景電子密度=部分電子密度の和 とも関連がある）となる。EAMだと、斥力は原子間距離の関数で、引力は埋め込み関数F(背景電子密度)で表現される。Behlerらはこれらのような効果を入れられている可能性がある。<br />
+※ Behlerの2007年では、各原子のエネルギーが中間層が1つで節が3つのモデルでtanhを用いているということは、もし理想的に節の意味を別けることができたら、節の1つが斥力で、残りの二つの節が埋め込み関数F（配位数の数でエネルギーが減少する項と逆にエネルギーが減少する項）に対応するか？ バイアスはエネルギーの減少をtanhで表すためか？<br />
+※ Behlerの2014年では中間層をさらに1つ追加。Short Range EnergyとElectrostatic Energyと分けてNNも作成。静電エネルギーは遠距離相互作用。そのため、短距離と長距離の項に分けて計算していると考えられるか？ 中間層を1つ追加したのはd電子系に対応させるためか(節を4にしたとするとs, p, d, fの4つに対応か？)？<br />
+------------------------------------------------------------------------------</p>

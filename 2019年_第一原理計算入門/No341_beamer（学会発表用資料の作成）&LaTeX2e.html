@@ -1,0 +1,279 @@
+&nbsp; ここでは学会発表でパワーポイントの変わりに使われる beamer &amp;&nbsp; LaTeX2e について纏める。<br />
+------------------------------------------------------------------------------<br />
+■ Install (CentOS 6 x86_64)<br />
+0. yum install texlive-latex texlive-east-asian xdvik dvipdfmx&nbsp;<br />
+&nbsp; yum install sazanami-mincho-fonts sazanami-gothic-fonts<br />
+<span style="font-family: monospace;">&nbsp;</span>yum install ipa-mincho-fonts ipa-gothic-fonts<br />
+1. download: http://sourceforge.net/projects/latex-beamer/files/<br />
+&nbsp; latex-beamer, pgf, xcolor<br />
+2. tar zxvf latex-beamer-3.07.tar.gz<br />
+&nbsp; tar zxvf pgf-1.01.tar.gz<br />
+&nbsp; tar zxvf xcolor-2.00.tar.gz<br />
+3.<span style="font-family: monospace;"> </span>cp -r /home/*/latex-beamer-3.07 /usr/share/<span style="font-family: monospace;">texmf/tex/latex/</span>latex-beamer<br />
+&nbsp; cp -r /home/*/pgf-1.01 /usr/share/<span style="font-family: monospace;">texmf/tex/latex/</span>pgf<br />
+&nbsp; cp -r /home/*/xcolor /usr/share/<span style="font-family: monospace;">texmf/tex/latex/</span><br />
+4. mktexlsr<br />
+<br />
+■ tex -&gt; dvi -&gt; ps -&gt; pdf<br />
+1. mkdir New_filename<br />
+2. cd New_filename<br />
+3. gedit Pre_file.tex<br />
+4. platex Pre_file<br />
+5. dvipdfmx Pre_file<br />
+<br />
+■ 具体的なtexの記述方法については文献[2,7,12] を参照すると良いだろう。<br />
+・ 文章の後に \\ を入れると改行する（Linuxだと \\ が斜めの線で表示される）。<br />
+<br />
+References<br />
+[1] <a href="http://windom.phys.hirosaki-u.ac.jp/fswiki/wiki.cgi?page=LaTeX+Beamer%A4%C7%A5%D7%A5%EC%A5%BC%A5%F3%A5%C6%A1%BC%A5%B7%A5%E7%A5%F3">http://windom.phys.hirosaki-u.ac.jp/fswiki/wiki.cgi?page=LaTeX+Beamer%A4%C7%A5%D7%A5%EC%A5%BC%A5%F3%A5%C6%A1%BC%A5%B7%A5%E7%A5%F3</a><br />
+[2] <a href="http://www002.upp.so-net.ne.jp/latex/">http://www002.upp.so-net.ne.jp/latex/</a><br />
+[3] <a href="http://www.ms.u-tokyo.ac.jp/~tado/beamer/">http://www.ms.u-tokyo.ac.jp/~tado/beamer/</a><br />
+[4] <a href="http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?Beamer">http://oku.edu.mie-u.ac.jp/~okumura/texwiki/?Beamer</a><br />
+[5] <a href="http://math.shinshu-u.ac.jp/~hanaki/beamer/beamer.html">http://math.shinshu-u.ac.jp/~hanaki/beamer/beamer.html</a><br />
+[6] <a href="http://www.hilano.org/hilano-lab/hilanohp_s1.html">http://www.hilano.org/hilano-lab/hilanohp_s1.html</a><br />
+TeX &rarr; LaTeX &rarr; LaTeX2&epsilon;<br />
+[7] <a href="http://www.www1.kiy.jp/~yoka/LaTeX/latex.html">http://www.www1.kiy.jp/~yoka/LaTeX/latex.html</a>&nbsp;<br />
+[8] <a href="http://oku.edu.mie-u.ac.jp/~okumura/texfaq/archive/ipsj-old/sample.pdf">http://oku.edu.mie-u.ac.jp/~okumura/texfaq/archive/ipsj-old/sample.pdf</a><br />
+[9] <a href="http://www.ipsj.or.jp/journal/submit/style.html">http://www.ipsj.or.jp/journal/submit/style.html</a><br />
+[10] <a href="http://www.ieice.org/ftp/">http://www.ieice.org/ftp/</a><br />
+[11] <a href="http://www.ieice.or.jp/hokkaido/mihon-tex.html">http://www.ieice.or.jp/hokkaido/mihon-tex.html</a><br />
+[12] <a href="http://denki.nara-edu.ac.jp/~yabu/soft/tex/tex.html">http://denki.nara-edu.ac.jp/~yabu/soft/tex/tex.html</a><br />
+[13] <a href="http://www.am.sanken.osaka-u.ac.jp/~mukaigaw/misc/thesis/LaTeX.html">http://www.am.sanken.osaka-u.ac.jp/~mukaigaw/misc/thesis/LaTeX.html</a>&nbsp;<br />
+[14] <a href="http://d.hatena.ne.jp/next49/20110508/p1">http://d.hatena.ne.jp/next49/20110508/p1</a><br />
+[15] 鷺谷好輝、&rdquo;日本語LaTeX 定番スタイル集 No.1&rdquo;、インプレス、1992年、初版<br />
+[16] 奥村晴彦、&rdquo;LaTeX入門 美文書作成のポイント&rdquo;、技術評論社、1994年、第1刷<br />
+[17] 奥村晴彦、&rdquo;LaTeX2&epsilon; 美文書作成入門&rdquo;、技術評論社<br />
+------------------------------------------------------------------------------<br />
+■ 具体例（和文論文) [15]<br />
+\documentstyle{info} %% 「info」というスタイルファイル名<br />
+<br />
+\MonthYear{Aug 2013} %% 何年何月かを指定<br />
+\Vol{25} %% 号数を指定<br />
+\No{10} %% 号数を指定<br />
+\MagTitle{Journal of Applied Physics Society} %% 雑誌名<br />
+<br />
+\evenchapter %% 開始ページの指定<br />
+<br />
+\title{Hume-Rothery電子濃度則と複雑構造金属間化合物の電子構造} %% タイトル<br />
+<br />
+\organization{Nagoya Institute of Technology} %% 所属<br />
+\organization{Aichi University of Education\} %%所属<br />
+<br />
+\author{XXYY}[1] %% 著者名、[]内は著者名の後に付くダガーの数<br />
+\author{ZZAA}[2] %% 著者名、[]内は著者名の後に付くダガーの数<br />
+<br />
+\begin{document} %% 文章の開始<br />
+<br />
+\begin{preface} %% アブストラクト<br />
+%% ここにアブストラクトを記述する<br />
+\end{preface}<br />
+<br />
+\maketitle %% タイトルから論文のアブストラクトまでを段抜きして出力。脚注部もこの命令で出力する。<br />
+<br />
+\section{Introduction} %% 背景｛Introduction｝の｛節｝見出し<br />
+%% ここに Introduction の文章を記述<br />
+<br />
+\section{Experimental] %% 実験手法<br />
+%% ここに Experimental の文章を記述<br />
+<br />
+\begin{equation} %% 式の記述<br />
+A = B + C<br />
+\end{equation}<br />
+<br />
+\section{Results and Discussion} %% 実験結果と考察<br />
+%% ここに 実験結果と考察を記述<br />
+<br />
+\begin{figure}[t] %% 図を入れるスペース, []の中は図を入れたい位置の記号, h:コマンドを書いた位置、t:ページの上揃え、b:ページの下揃え、p:次のページ<br />
+\caption(60mm, 30mm) {電子状態密度分布} %% （縦、横）で縦は \Vs/mm/cm/pt などが選択できる。横は mm/cm/ptなど。<br />
+\end{figure}<br />
+<br />
+\end{document} %% 文章の終了<br />
+------------------------------------------------------------------------------<br />
+■ 具体例（研究室内発表用） (文献[1, 5]をベースにして、文献[2,7]を参考にしてアレンジした)<br />
+※ Fe_THHR_E35.eps, Fe_THHR_E35+K.eps, Cu_THHR_E35.eps, Cu_THHR_E35+K.eps という名称の eps ファイルを gnuplotなどで作っておいてください（これらは名称を対応させれば変更しても大丈夫です）。<br />
+<br />
+\documentclass[dvipdfm,cjk]{beamer}&nbsp; %% オプションは環境や利用するプログラムによって変える<br />
+%\documentclass[dvips,cjk]{beamer}&nbsp;&nbsp;<br />
+<br />
+\AtBeginDvi{\special{pdf:tounicode 90ms-RKSJ-UCS2}} %% しおりが文字化けしないように<br />
+%\AtBeginDvi{\special{pdf:tounicode EUC-UCS2}}<br />
+<br />
+%\setbeamertemplate{navigation symbols}{} %% 右下のアイコンを消す<br />
+<br />
+\usetheme{CambridgeUS}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% theme の選択<br />
+%\usetheme{Boadilla}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% Beamer のディレクトリの中の<br />
+%\usetheme{Madrid}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% beamerthemeCambridgeUS.sty を指定<br />
+%\usetheme{Antibes}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% 色々と試してみるといいだろう<br />
+%\usetheme{Montpellier}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% サンプルが beamer\doc に色々とある。<br />
+%\usetheme{Berkeley}<br />
+%\usetheme{Goettingen}<br />
+%\usetheme{Singapore}<br />
+%\usetheme{Szeged}<br />
+<br />
+%\usetheme{AnnArbor}<br />
+\setbeamertemplate{navigation symbols}{}<br />
+%\usepackage{graphicx}<br />
+%\usepackage{amsmath}<br />
+%\usepackage{amssymb}<br />
+%<br />
+\usepackage{txfonts}<br />
+\mathversion{bold}<br />
+\renewcommand{\familydefault}{\sfdefault}<br />
+\renewcommand{\kanjifamilydefault}{\gtdefault}<br />
+\setbeamerfont{title}{size=\large,series=\bfseries}<br />
+%\setbeamerfont{institute}{size=\large}<br />
+\setbeamerfont{frametitle}{size=\large,series=\bfseries}<br />
+\setbeamertemplate{frametitle}[default][center]<br />
+\usefonttheme{professionalfonts}<br />
+<br />
+%\usecolortheme{rose}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% colortheme を選ぶと色使いが変わる<br />
+%\usecolortheme{albatross}<br />
+<br />
+%\useoutertheme{shadow}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% 箱に影をつける<br />
+%\usefonttheme{professionalfonts}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% 数式の文字を通常の LaTeX と同じにする<br />
+<br />
+%\setbeamercovered{transparent}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% 消えている文字をうっすらと表示する<br />
+<br />
+\setbeamertemplate{theorems}[numbered]&nbsp; %% 定理に番号をつける<br />
+\newtheorem{thm}{Theorem}[section]<br />
+\newtheorem{proposition}[thm]{Proposition}<br />
+\theoremstyle{example}<br />
+\newtheorem{exam}[thm]{Example}<br />
+\newtheorem{remark}[thm]{Remark}<br />
+\newtheorem{question}[thm]{Question}<br />
+\newtheorem{prob}[thm]{Problem}<br />
+<br />
+\begin{document}<br />
+\title[MSIZ]{development of Automated Tetrahedron Hume-Rothery calculation}<br />
+\author[Nitech]{X. XXX$^{a*}$, Y. YYY$^{b}$, Z. ZZZ$^{c}$ and A. A. AAA$^{d}$ } %% ここに書かれた情報は色々なところに使われるので<br />
+\institute[Nagoya Inst. Tech.]{$^{a*}$Shikumi College, Nagoya Institute of Technology, Gokiso-cho, Showa-ku, Aichi 466-8555, Japan \\<br />
+$^{b}$Department of Physics, Aichi University of Education, Kariya-shi, Aichi 448-8542, Japan \\<br />
+$^{c}$Nagoya Industrial Science Research Institute, JST Plaza-Tokai, Ahara-cho, Minami-ku, Nagoya 457-0063, Japan \\<br />
+$^{d}$Theoretical Physics, University of Kassel, 34132 Kassel, Germany}&nbsp;&nbsp; %% なるべく設定した方が良い<br />
+\date{August/6/2013}<br />
+<br />
+\begin{frame}&nbsp; %% \begin{frame}..\end{frame} で 1 枚のスライド<br />
+\titlepage&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %% タイトルページ<br />
+\end{frame}<br />
+<br />
+\begin{frame}&nbsp;&nbsp; %% 目次 (必要なければ省略)<br />
+&nbsp; \frametitle{Outline}<br />
+&nbsp; \tableofcontents<br />
+\end{frame}<br />
+<br />
+\section{Introduction}&nbsp;&nbsp; %% セクション名<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Introduction}&nbsp;&nbsp;&nbsp; %% フレームタイトル<br />
+%&nbsp; Recently, We have developed automated TH- and CG-HR code. However, NFE-HR curve is not smooth line for all materials as including 3d and 4d orbits near Fermi level.<br />
+&nbsp; \begin{figure}[htbp]<br />
+&nbsp;&nbsp;&nbsp; \begin{tabular}{cc}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \includegraphics[width=\hsize]{Fe_THHR_E35.eps}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \caption{1. Calculation range~35 eV }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Recently, We have developed automated TH- and CG-HR code. However, NFE-HR curve is not smooth line for all materials as including 3d and 4d orbits near Fermi level.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp; \end{tabular}<br />
+&nbsp; \end{figure}<br />
+\end{frame}<br />
+<br />
+\section{Purpose} &nbsp;<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Purpose}<br />
+&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp; We estimate NFE curve by using two types of calculation ranges following.<br />
+&nbsp;&nbsp;&nbsp; \begin{itemize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \item&nbsp; Range ~35 eV case<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \item&nbsp; Range ~35 eV + 2K case<br />
+&nbsp;&nbsp;&nbsp; \end{itemize}<br />
+&nbsp; \end{center}<br />
+&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp; Which is good NFE curve ?<br />
+&nbsp; \end{center}<br />
+\end{frame}<br />
+<br />
+\section{Calculation Procedure} &nbsp;<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Calculation Procedure}<br />
+&nbsp; \begin{center}<br />
+&nbsp; WIEN2k \\<br />
+&nbsp; XC potential: GGA-PBE \\<br />
+&nbsp; Totak k point: 1000 (Monkhost-Pack) \\<br />
+&nbsp; k point shift: YES \\<br />
+&nbsp; \end{center}<br />
+&nbsp; %<br />
+&nbsp; \begin{center}<br />
+&nbsp; Model: Fe FCC<br />
+&nbsp; \end{center}<br />
+\end{frame}<br />
+<br />
+\section{Results}<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Results (BCC Fe)}<br />
+&nbsp; %\centering<br />
+&nbsp; %\includegraphics[height=0.85\textheight]{Fe_THHR_E35.eps}<br />
+&nbsp; \begin{figure}[htbp]<br />
+&nbsp;&nbsp;&nbsp; \begin{tabular}{cc}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \includegraphics[width=\hsize]{Fe_THHR_E35.eps}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \caption{2. Calculation range ~35 eV}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %\label{fig:Fig}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \includegraphics[width=\hsize]{Fe_THHR_E35+K.eps}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \caption{3. Calculation range~35 eV + 2K}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %\label{fig:Fig}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp; \end{tabular}<br />
+&nbsp; \end{figure}<br />
+\end{frame}<br />
+<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Results (FCC Cu)}<br />
+&nbsp; %\centering<br />
+&nbsp; %\includegraphics[height=0.85\textheight]{Fe_THHR_E35.eps}<br />
+&nbsp; \begin{figure}[htbp]<br />
+&nbsp;&nbsp;&nbsp; \begin{tabular}{cc}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \includegraphics[width=\hsize]{Cu_THHR_E35.eps}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \caption{4. Calculation range ~35 eV}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %\label{fig:Fig}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{minipage}{0.5\hsize}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \includegraphics[width=\hsize]{Cu_THHR_E35+K.eps}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \caption{5. Calculation range~35 eV + 2K}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; %\label{fig:Fig}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{center}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; \end{minipage}<br />
+&nbsp;&nbsp;&nbsp; \end{tabular}<br />
+&nbsp; \end{figure}<br />
+\end{frame}<br />
+<br />
+\section{Summary}<br />
+\begin{frame}<br />
+&nbsp; \frametitle{Summary}<br />
+&nbsp; \begin{center}<br />
+&nbsp;&nbsp;&nbsp; \begin{itemize}<br />
+&nbsp;&nbsp;&nbsp; \item ~35 eV range calculation is not good curve.<br />
+<br />
+&nbsp;&nbsp;&nbsp; \item {\color{red} ~35 eV + 2K range calculation is good curve.} \pause<br />
+&nbsp;&nbsp;&nbsp; \end{itemize}<br />
+&nbsp; \end{center}<br />
+\end{frame}<br />
+<br />
+\end{document}<br />
+------------------------------------------------------------------------------<br />
+■ 具体例（学会発表用）<br />
+------------------------------------------------------------------------------

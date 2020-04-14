@@ -1,0 +1,1200 @@
+ここではゾルゲル法に関する情報を掲示していきます。<br />
+※ 上手く置換できない場合は結晶成長や反応を遅くすると良いと聞いている（私自身まだ確認のための実験をしていない）。例えば、反応するギリギリの温度に下げたり、析出するギリギリのSP値にしたり、結晶成長や反応時間が長くなるようにするなど。<br />
+--------------------------------------------------------------------------------<br />
+■ Diffrerent chemical interactions and their respective strength [1,4]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>Type of interaction</td>
+			<td>Strength[kJmol<sup>-1</sup>]</td>
+			<td>Range</td>
+			<td>Character</td>
+		</tr>
+		<tr>
+			<td>van der Waals</td>
+			<td>ca. 50</td>
+			<td>Short</td>
+			<td>nonselective, nondirectional</td>
+		</tr>
+		<tr>
+			<td>H-bonding</td>
+			<td>5-65</td>
+			<td>short</td>
+			<td>selective, directional</td>
+		</tr>
+		<tr>
+			<td>Coordination bonding</td>
+			<td>50-200</td>
+			<td>Short</td>
+			<td>directional</td>
+		</tr>
+		<tr>
+			<td>Ionic</td>
+			<td>50-250*</td>
+			<td>Long</td>
+			<td>nonselective</td>
+		</tr>
+		<tr>
+			<td>Covalent</td>
+			<td>350</td>
+			<td>Short</td>
+			<td>predominantly, irreversible</td>
+		</tr>
+	</tbody>
+</table>
+* Depending on solvent and ion solution; data are for organic media.<br />
+ca. = about, 約<br />
+<br />
+■ ゾルゲル反応<br />
+　金属塩や金属アルコキシドと水から加水分解・重縮合反応によって金属-酸素（M-O）結合を形成し、加熱乾燥によって金属酸化物を作製する方法<br />
+<br />
+・加水分解反応： Si-OEt + H<sub>2</sub>O&nbsp;&gt; (-EtOH) &gt; Si-OH<br />
+・重縮合反応： Si-OH + HO-Si &gt; (-H<sub>2</sub>O) &gt; Si-O-Si<br />
+・重縮合反応： Si-OH + EtO-Si &gt; (-EtOH) &gt; Si-O-Si<br />
+<br />
+・原料溶液 &gt; ゾル &gt;（固化）&gt; ゲル &gt; （乾燥加熱）&gt; 金属酸化物<br />
+・原料：金属アルコキシド[M(OR)n]<br />
+　M: Si &lt; Sn &lt; Ti &lt; Zr &lt; Ce<br />
+　(Al, Mg)<br />
+・反応速度<br />
+　R: CH<sub>3</sub> &gt; C<sub>2</sub>H<sub>5</sub> &gt; C<sub>3</sub>H<sub>7</sub> &gt; C<sub>4</sub>H<sub>9</sub><br />
+<br />
+■ ゾルゲル法の特徴<br />
+1.&nbsp;加水分解と重縮合は並行して進行<br />
+2. 置換基（アルコキシ基）の大きさにより加水分解速度が異なる<br />
+3. 触媒（酸・塩基）により加水分解機構が異なり、ゲル構造が変化<br />
+　酸触媒：アルコキシ基の酸素がプロトン化される段階（親電子反応）が律速<br />
+　塩基触媒：金属（ケイ素）への求核攻撃（求核反応）が律速<br />
+4. 加水分解条件（濃度、水分濃度、温度、触媒）によりゲルの微細構造が変化<br />
+　酸触媒・水分が少ない条件：架橋密度が低い<br />
+　酸触媒・水分が多い条件：架橋密度が高く、均一性の高い網目構造<br />
+　塩基触媒・水分が少ない条件：不均一な網目構造<br />
+　塩基触媒・水分が多い条件：架橋密度が高く、3次元的な粗い網目構造<br />
+5. 熱処理（乾燥）条件の違いによりコンポジット（ハイブリッド）物性が変化<br />
+　高い熱処理温度：ゲル内部・表面の水酸基濃度が減少（金属-酸素結合（シロキサン結合）の増加）<br />
+<br />
+■ シランカップリング剤の置換基効果[2]<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RO<br />
+&nbsp;&nbsp;&nbsp; &nbsp;|<br />
+R&#39;-Si-R*<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;RO<br />
+R&#39; = R &gt; RO &gt; OH &gt; SiO で塩基性が増加（電子供与性）<br />
+R* = OSi &gt; OH &gt; OR &gt; R&nbsp;で酸性が増加（電子求引性）<br />
+◇電子供与性基<br />
+・水酸基（-OH）<br />
+・メトキシ基（-OMe）などアルコキシ基<br />
+・アミノ基（-NH<sub>2</sub>）<br />
+・メチルアミノ基（-NH<sub>2</sub>Me）<br />
+・アルキルアミノ基<br />
+・ジアルキルアミノ基<br />
+・トリアルキルアミノ基<br />
+・メチル基（-Me）などアルキル基<br />
+※ Me は CH<sub>3</sub><br />
+◇電子求引性基<br />
+・ニトロ基（-NO<sub>2</sub>）<br />
+・シアノ基（-CN）<br />
+・スルホ基（スルホン酸基）（-SO<sub>3</sub>H）<br />
+・トシル基（p-トルエンスルホン酸基）（-Ts）<br />
+・メシル基（メタンスルホン酸基）（-Ms）<br />
+・ハロゲン（-F, -Cl, -Br, -I）<br />
+・フェニル基（-Ph）<br />
+・アシル基（-Ac）などケト基<br />
+<br />
+■ ゾルゲル反応の支配因子[2]<br />
+シリケート化合物の加水分解反応における置換基の効果<br />
+<br />
+テトラアルコキシシラン（Si(OR)<sub>4</sub>）の酸加水分解における相対反応速度（室温）
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>R</td>
+			<td>k[1 mol<sup>-1</sup>s<sup>-1</sup>[H<sup>+</sup>]<sup>-1</sup>]</td>
+		</tr>
+		<tr>
+			<td>CH3</td>
+			<td>0.19</td>
+		</tr>
+		<tr>
+			<td>C2H5</td>
+			<td>0.051</td>
+		</tr>
+		<tr>
+			<td>C4H9</td>
+			<td>0.019</td>
+		</tr>
+		<tr>
+			<td>C6H13</td>
+			<td>0.0083</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+Relative water concentation vs Reaction time (s) の関係は文献[2]に記載<br />
+TMOS: Si(OCH<sub>3</sub>)<sub>4</sub><br />
+TEOS: Si(OC<sub>2</sub>H<sub>5</sub>)<sub>4</sub><br />
+<br />
+◇ シリケート化合物の加水分解反応<br />
+酸触媒条件（酸性条件下）： CH<sub>3</sub>Si(OEt)<sub>3</sub> &gt; Si(OEt)<sub>4</sub><br />
+塩基触媒条件（塩基性条件下）： CH<sub>3</sub>Si(OEt)<sub>3</sub> &lt; Si(OEt)<sub>4</sub><br />
+酸触媒条件（HCl）や塩基触媒条件（NH<sub>3</sub>）での濃度と時間の関係を示した図は文献[2]を参照<br />
+<br />
+■ ゾルゲル反応における加水分解反応速度と重重合反応速度のpH依存性
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>領域Ⅰ（P&lt;&lt;H）</td>
+			<td>領域Ⅱ（P&gt;&gt;H）</td>
+			<td>領域（P&gt;=H）</td>
+		</tr>
+		<tr>
+			<td>加水分解反応</td>
+			<td>高（pH=0*で最高）</td>
+			<td>低（pH=7で最低）</td>
+			<td>中</td>
+		</tr>
+		<tr>
+			<td>重重合反応速度</td>
+			<td>低（pH=2.5で最低）</td>
+			<td>中（pH=8.5で最高）</td>
+			<td>中</td>
+		</tr>
+		<tr>
+			<td>反応条件（pH）</td>
+			<td>0*-4</td>
+			<td>4-8.5</td>
+			<td>8.5-14</td>
+		</tr>
+	</tbody>
+</table>
+* 限りなく0<br />
+<br />
+■ ゾルゲル法を使ったプロセス<br />
+・ヒドロゲル（Hydrogel）：分散媒が水のゲル<br />
+・オルガノゲル（Organogel）：分散媒が有機溶媒のゲル<br />
+・アルコゲル（Alcogel）：有機溶媒がアルコールのゲル<br />
+・キセロゲル（Xerogel）：蒸発などにより内部の溶媒を失い、空隙を持つ網目構造となったもの（シリカゲル）<br />
+・クリオゲル（Cryogel）：凍結乾燥により分散媒を除去したゲル<br />
+・エアロゲル（Aerogel）：超臨界乾燥により分散媒を除去したゲル<br />
+<br />
+■ 金属アルコキシドの反応[3]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>Alkoxides</td>
+			<td><em>&chi;</em></td>
+			<td><em>r</em>(Å)</td>
+			<td><em>N</em></td>
+			<td><em>N-Z</em></td>
+		</tr>
+		<tr>
+			<td>Si(OPr<sup>i</sup>)<sub>4</sub></td>
+			<td>1.74</td>
+			<td>0.40</td>
+			<td>4</td>
+			<td>0</td>
+		</tr>
+		<tr>
+			<td>Sn(OPr<sup><font size="2">i</font></sup>)<sub><font size="2">4</font></sub></td>
+			<td>1.89</td>
+			<td>0.60</td>
+			<td>6</td>
+			<td>2</td>
+		</tr>
+		<tr>
+			<td>Ti(OPr<sup><font size="2">i</font></sup>)<sub><font size="2">4</font></sub></td>
+			<td>1.32</td>
+			<td>0.64</td>
+			<td>6</td>
+			<td>2</td>
+		</tr>
+		<tr>
+			<td>Zr(OPr<sup><font size="2">i</font></sup>)<sub><font size="2">4</font></sub></td>
+			<td>1.29</td>
+			<td>0.87</td>
+			<td>7</td>
+			<td>3</td>
+		</tr>
+		<tr>
+			<td>Ce(OPr<sup><font size="2">i</font></sup>)<sub><font size="2">4</font></sub></td>
+			<td>1.17</td>
+			<td>1.02</td>
+			<td>8</td>
+			<td>4</td>
+		</tr>
+	</tbody>
+</table>
+<em>&chi;</em>：Electronegativitiy<br />
+<em>r</em>：Ionic radius<br />
+<em>N</em>：Preferred coordination number<br />
+<em>N-Z</em>：Degree of unsaturation<br />
+<em>&chi;</em>：元素の電気陰性度が小さくなるにつれて、また、そのイオン半径が大きくなるにつれて、アルコキシドの加水分解に対する反応性は増大する。<br />
+<em>N-Z</em>：その金属酸化物における通常の配位数Nよりも価電子数Zが小さいとき、その金属アルコキシドは高い反応性を示す。<br />
+<br />
+■ ゾルの親水、疎水<br />
+親水性ゾル； -OH<br />
+疎水性ゾル： -CH<sub>3</sub><br />
+<br />
+■ 代表的なシランカップリング剤の構造<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;R<sub><font size="2">1</font></sub>O<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;|<br />
+R<sub>1</sub>O-Si-R<sub>2</sub>-X<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;R<sub><font size="2">1</font></sub>O<br />
+X: -NH<sub>2</sub>, -OH, -NCO. -COOH, -OOCCH<sub>2</sub>CH<sub>3</sub>, など<br />
+R<sub><font size="2">1</font></sub>: -CH<sub>3</sub>, -C<sub>2</sub>H<sub>5</sub>, -C<sub>3</sub>H<sub>8</sub><br />
+R<sub><font size="2">2</font></sub>: -[CH<sub>2</sub>]<sub>n</sub>-<br />
+<br />
+■ シランカップリング剤の化学構造<br />
+&nbsp;(CH<sub>3</sub>)<sub>n</sub><br />
+&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+Y-Si-(OR)<sub>3-n</sub><br />
+Y: 反応性官能基(アミノ、エポキシ、ビニル（アクリル）、メタクリル、メルカプト、イソシアネート、スルフィドなど)<br />
+OR: 加水分解性基(OCH<sub>3</sub>, OC<sub>2</sub>H<sub>5</sub>, OCOCH<sub>3</sub>)<br />
+<br />
+■ 代表的なシランカップリング剤
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>化学名（略称）</td>
+			<td>構造式</td>
+			<td>水溶液保存安定性（25℃）</td>
+			<td>最小被服面積(m<sup>2</sup>g<sup>-1</sup>)</td>
+		</tr>
+		<tr>
+			<td>ビニルトリメトキシシラン（VS）</td>
+			<td>CH<sub>2</sub>=CHSi(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH3.9<br />
+			10日以内</td>
+			<td>515</td>
+		</tr>
+		<tr>
+			<td>&gamma;-ギリシドキシプロピルトリメトキシシラン（GPS）</td>
+			<td>&nbsp;</td>
+			<td>pH4.0<br />
+			30日以内</td>
+			<td>330</td>
+		</tr>
+		<tr>
+			<td>&gamma;-メタクリロキシプロピルトリメトキシシラン（MPS）</td>
+			<td>CH<sub>2</sub>=CCH<sub>3</sub>COO(CH<sub>2</sub>)<sub>3</sub>Si(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH4.2<br />
+			1日以内</td>
+			<td>314</td>
+		</tr>
+		<tr>
+			<td>&gamma;-アミノプロピルトリメトキシシラン（APS）</td>
+			<td>NH<sub>2</sub>(CH<sub>2</sub>)<sub>3</sub>Si(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH10.0<br />
+			30日以内</td>
+			<td>436</td>
+		</tr>
+		<tr>
+			<td>N-&beta;(アミノエチル)&gamma;-網のプロピルトリメトキシシラン（AEAPS）</td>
+			<td>NH<sub>2</sub>(CH<sub>2</sub>)<sub>2</sub>NH(CH<sub>2</sub>)<sub>3</sub>Si(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH10.0<br />
+			30日以内</td>
+			<td>351</td>
+		</tr>
+		<tr>
+			<td>N-フェニル-&gamma;-アミノプロピルトリメトキシシラン（AnPS）</td>
+			<td>C<sub>6</sub>H<sub>5</sub>NH(CH<sub>2</sub>)<sub>3</sub>Si(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH4.0<br />
+			30日以内</td>
+			<td>351</td>
+		</tr>
+		<tr>
+			<td>&gamma;-メルカプトプロピルトリメトキシシラン（MGPS）</td>
+			<td>HS(CH<sub>2</sub>)<sub>3</sub>Si(OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>pH4.0<br />
+			1日以内</td>
+			<td>398</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+■ 耐熱性シラン化合物<br />
+結合エネルギー（kcal/mol）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>C</td>
+			<td>Si</td>
+		</tr>
+		<tr>
+			<td>C</td>
+			<td>84.9</td>
+			<td>75.0</td>
+		</tr>
+		<tr>
+			<td>Si</td>
+			<td>75.0</td>
+			<td>51.0</td>
+		</tr>
+		<tr>
+			<td>H</td>
+			<td>98.1</td>
+			<td>79.9</td>
+		</tr>
+		<tr>
+			<td>O</td>
+			<td>80.0</td>
+			<td>106.0</td>
+		</tr>
+		<tr>
+			<td>N</td>
+			<td>81.9</td>
+			<td>73-78.9</td>
+		</tr>
+		<tr>
+			<td>F</td>
+			<td>102.0</td>
+			<td>134.0</td>
+		</tr>
+		<tr>
+			<td>Cl</td>
+			<td>77.9</td>
+			<td>90.3</td>
+		</tr>
+		<tr>
+			<td>Br</td>
+			<td>66.4</td>
+			<td>73.5</td>
+		</tr>
+		<tr>
+			<td>I</td>
+			<td>52.1</td>
+			<td>55.1</td>
+		</tr>
+		<tr>
+			<td>S</td>
+			<td>54.5</td>
+			<td>60.9</td>
+		</tr>
+	</tbody>
+</table>
+材料の熱分解は、結合の弱い（結合エネルギーの小さい）部分から切断、分解される。<br />
+そのため、結合エネルギーの大きな分子構造からなるシランカップリング剤を使用。<br />
+<br />
+■ シランカップリング剤溶液の調整方法<br />
+1. 有機溶剤<br />
+　シランカップリング剤は一般に有機溶媒に可溶であるため（反応するものも一部ある）、よく攪拌しながら有機溶剤中へ徐々に滴下する。<br />
+2. 水溶液<br />
+１）pH4前後に調整した水を準備する<br />
+・pH調整剤としては、酢酸、ギ酸、乳酸、塩酸などを使用（主として酢酸が使われる）。<br />
+・アミノシランはpH調整の必要は無い。<br />
+・溶解性の悪い場合はアルコール（メタノール、エタノール、IPAなど）を共溶媒として加える。<br />
+２）よく攪拌しながらシランカップリング剤を水中に徐々に滴下する（濃度：0.1-2wt%）。<br />
+３）滴下終了後、透明になるまで攪拌（30 min - 1 h）を続ける。沈殿物やゲル化物がある場合はろ過して使用する）。<br />
+<br />
+■ 水に対するシランカップリング剤の溶解性
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>化学名</td>
+			<td>pH7の水への溶解</td>
+			<td>水溶液への標準的な調整法</td>
+			<td>適正pH</td>
+		</tr>
+		<tr>
+			<td>ビニルシラン</td>
+			<td>&nbsp;</td>
+			<td>不溶</td>
+			<td>適正pHに調整した水に添加し攪拌する</td>
+			<td>3.0-3.5</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>不溶</td>
+			<td>適正pHに調整した水に添加し攪拌する</td>
+			<td>5.0-5.5</td>
+		</tr>
+		<tr>
+			<td>メタクリロキシシラン</td>
+			<td>&nbsp;</td>
+			<td>不溶</td>
+			<td><br />
+			適正pHに調整した水に添加し攪拌する</td>
+			<td>3.5-4.0</td>
+		</tr>
+		<tr>
+			<td>エポキシシラン</td>
+			<td>&nbsp;</td>
+			<td>不溶</td>
+			<td>pH4.0以下に調整した水に添加し攪拌する</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>5%以下</td>
+			<td>水に添加、攪拌する</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>メルカプトシラン</td>
+			<td>&nbsp;</td>
+			<td>不溶</td>
+			<td><br />
+			適正pHに調整した水に添加し攪拌する</td>
+			<td>4.0-4.5</td>
+		</tr>
+		<tr>
+			<td>アミノシラン</td>
+			<td>&nbsp;</td>
+			<td>5%以下</td>
+			<td>適正pHに調整した水に添加し攪拌する（1%水溶液のpH:11-12）</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>5%以下</td>
+			<td>適正pHに調整した水に添加し攪拌する（1%水溶液のpH:11-12）</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>5%以下</td>
+			<td>適正pHに調整した水に添加し攪拌する（1%水溶液のpH:11-12）</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>イソシアナトシラン</td>
+			<td>&nbsp;</td>
+			<td>-</td>
+			<td>イソシアナト基が水と反応</td>
+			<td>&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+※ 化学名は時間がないので記述しないことにしました。テーブルを書き換える（コピー&amp;ペーストできず、1から作り直すことになる）のも大変なのでこのままにしておきます。<br />
+<br />
+■ 有機溶媒に対するシランカップリングの溶解性<br />
+　一般にシランカップリング剤は、種々の有機溶媒に対して溶解する。ただし、水酸基（-OH）を持つ化合物とは一部反応する。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>MeOH</td>
+			<td>EtOH</td>
+			<td>IPA</td>
+			<td>アセトン</td>
+			<td>トルエン</td>
+			<td>キシレン</td>
+		</tr>
+		<tr>
+			<td>ビニルシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>メタクリリロキシシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>エボキシシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>メルカプトシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>アミノシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>◆</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>ウレシドシラン</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+		<tr>
+			<td>イソシアネートシラン</td>
+			<td>◆</td>
+			<td>◆</td>
+			<td>◆</td>
+			<td>○</td>
+			<td>○</td>
+			<td>○</td>
+		</tr>
+	</tbody>
+</table>
+○:可溶、◆：反応<br />
+<br />
+■ 主なシランカップリング剤の反応<br />
+・アルコキシシランの加水分解反応<br />
+&nbsp;RSi(OR&#39;)<sub>3</sub> + 2H<sub>2</sub>O &gt; (-3R&#39;OH) &gt; RSi(OH)<sub>3</sub> &gt; (-(3/2)H<sub>2</sub>O) &gt; RSiO<sub>3/2</sub><br />
+・付加重合反応<br />
+&nbsp;&equiv;Si-C=C+ -C=C &gt; &equiv;Si-C-C-C-C-<br />
+・アミノシラン化合物の反応<br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2 + </font></sub><font size="2">R&#39;-NHCONHCH<sub>2</sub>OH &gt; SiRNH-CH<sub>2</sub>NHCONHR&#39;&nbsp;+ H<sub>2</sub>O</font><br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2</font></sub> + HX(acid) &gt; &equiv;SiRNH2-HX<br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2</font></sub> + R&#39;COOR&#39;&#39; &gt; &equiv;SiRNHOCR&#39; + R&#39;&#39;OH<br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2</font></sub> + R&#39;CHO &gt; SiRN=CHR&#39; + H<sub>2</sub>O<br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2</font></sub> + R&#39;<sub>2</sub>CO &gt; SiRN=CR&#39;2 + H<sub>2</sub>O<br />
+&nbsp;&equiv;SiRNH<sub><font size="2">2</font></sub> + R&#39;X &gt; SiRNHR&#39;-HX<br />
+&nbsp;&equiv;SiRNH<sub>2</sub> + C=C-Y (Y=COOR&#39;, CONH<sub>2</sub>, CN) &gt; &equiv;SiRN-C-C-Y + &equiv;SiRN-(C-C-Y)<sub>2</sub><br />
+&nbsp;など<br />
+・エポキシシラン化合物の反応<br />
+&nbsp;炭素と結合している酸素（&gt;O）が、R&#39;NH<sub>2</sub>, HX(acid), R&#39;OHなどと反応して水酸基（-OH）の結合となる。残り（-R&#39;NH, -X, -R&#39;Oなど）は炭素に結合。<br />
+・メルカプトシラン化合物の反応<br />
+&nbsp;&equiv;SiRSH + &gt;C=C&lt; &gt; &equiv;SiR-S-C-C-H<br />
+&nbsp;&equiv;SiRSH + R&#39;NCO &gt; SiRS-CONHR&#39;<br />
+&nbsp;&equiv;SiRSH + R&#39;SH &gt; (PbO) &gt; SiR-S-S-R&#39; + PbO + H<sub>2</sub>O<br />
+&nbsp;など<br />
+<br />
+■ 種々のSi-C形成反応<br />
+・グリニャール反応（Grignard reaction）<br />
+　&equiv;SiCl or &equiv;SiOR + XMg-R (X=halogen)&gt; &equiv;Si-R<br />
+・ヒドロシリル化反応（Hydrosilylation）<br />
+　&equiv;Si-H + H<sub>2</sub>C=CH-R &gt; (Pt catalyst) &gt; &equiv;Si-CH<sub>2</sub>-CH<sub>2</sub>-R<br />
+・Pd触媒を用いたシリル化<br />
+　(EtO)<sub>3</sub>Si-H + X-R &gt; (Pd or Rh catalyst, 70-80%) &gt; (EtO)<sub>3</sub>Si-R<br />
+　(R=aryl, X=halogen)<br />
+<br />
+■ シランかプリン剤の構造と反応性（反応速度）<br />
+(RO)<sub>3</sub>-(CH<sub>2</sub>)<sub>3</sub>-Si-Y<br />
+アルコキシ基（OR）：メトキシ &gt; エトキシ &gt; プロポキシ &gt; ブトキシ<br />
+有機官能基（Y）： アミノシラン &gt; エポキシシラン &gt; ビニルシラン &gt; メルカプトシラン &gt; メタクリロキシシラン<br />
+<br />
+■ シランカップリング剤の加水分解反応と縮合反応に及ぼすpHの影響<br />
+CH<sub>2</sub>-CHCH<sub>2</sub>OC<sub>3</sub>H<sub>6</sub>Si(OCH<sub>3</sub>)<sub>3</sub><br />
+&nbsp;&nbsp;&nbsp;&nbsp;\/<br />
+&nbsp;&nbsp;&nbsp;&nbsp;O<br />
+log k の概ねの値
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>pH</td>
+			<td>1</td>
+			<td>2</td>
+			<td>3</td>
+			<td>4</td>
+			<td>5</td>
+			<td>6</td>
+			<td>7</td>
+			<td>8</td>
+			<td>9</td>
+			<td>10</td>
+		</tr>
+		<tr>
+			<td>加水分解反応速度</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>2</td>
+			<td>-1</td>
+			<td>-3</td>
+			<td>-3.8</td>
+			<td>-4</td>
+			<td>-3.8</td>
+			<td>-3</td>
+			<td>-1.5</td>
+		</tr>
+		<tr>
+			<td>縮合反応速度</td>
+			<td>-2</td>
+			<td>-3</td>
+			<td>-3.8</td>
+			<td>-4.2</td>
+			<td>-4</td>
+			<td>-3.8</td>
+			<td>-3.5</td>
+			<td>-2</td>
+			<td>0</td>
+			<td>2.5</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+<br />
+■ 各種のアルコキシシラン化合物の加水分解速度<br />
+アルコキシシラン残存率 wt%
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>0 h</td>
+			<td>1 h</td>
+			<td>2 h</td>
+			<td>3 h</td>
+			<td>4 h</td>
+		</tr>
+		<tr>
+			<td>ViSi(OEt)<sub>3</sub></td>
+			<td>100</td>
+			<td>ca. 50</td>
+			<td>ca. 22</td>
+			<td>ca. 10</td>
+			<td>ca. 5</td>
+		</tr>
+		<tr>
+			<td>ViSi(OMe)<sub>3</sub></td>
+			<td>100</td>
+			<td>ca. 78</td>
+			<td>ca. 55</td>
+			<td>ca. 40</td>
+			<td>ca. 30</td>
+		</tr>
+		<tr>
+			<td>ViSi(OCH<sub>2</sub>OCH<sub>3</sub>)<sub>3</sub></td>
+			<td>100</td>
+			<td>ca. 92</td>
+			<td>ca. 87</td>
+			<td>ca. 82</td>
+			<td>ca. 80</td>
+		</tr>
+	</tbody>
+</table>
+加水分解条件<br />
+反応温度：70℃<br />
+組成： アルコキシシラン;5、H<sub>2</sub>O；25, THF;30, ジオキサン;40<br />
+<br />
+■ ビニルトリメトキシシシラン水溶液の安定性<br />
+シラン濃度； 30 wt%, pH; 1.5
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>濃度(wt%)</td>
+			<td>0.1</td>
+			<td>3</td>
+			<td>10</td>
+		</tr>
+		<tr>
+			<td>白濁するまでの時間（h）</td>
+			<td>50</td>
+			<td>1</td>
+			<td>0.5</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp;
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>pH</td>
+			<td style="width: 53.85px;">1</td>
+			<td style="width: 31.14px;">2</td>
+			<td>3</td>
+			<td>3.5</td>
+		</tr>
+		<tr>
+			<td>白濁するまでの時間（h）</td>
+			<td style="width: 53.85px;">0.25</td>
+			<td style="width: 31.14px;">1</td>
+			<td>7.5</td>
+			<td>50</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp;
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>メタノール添加量(wt%)</td>
+			<td>0</td>
+			<td>25</td>
+			<td>50</td>
+		</tr>
+		<tr>
+			<td>白濁するまでの時間（h）</td>
+			<td>1</td>
+			<td>2</td>
+			<td>8.5</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+■ シリコーンオリゴマーの使用<br />
+・作用（安全）性の向上<br />
+・反応時間の短縮<br />
+<br />
+■ チタン化合物のゾルゲル反応（TiO<sub>2</sub>）<br />
+Ti-アルコキシド：Ti(OEt)<sub>4</sub>, Ti(O-n-Pr)<sub>4</sub>, Ti(O-i-Pr)<sub>4</sub>, Ti(O-n-Bu)<sub>4</sub>. Ti(O-t-Bu)<sub>4</sub><br />
+その他：TiCl<sub>4</sub>, Ti(SO<sub>4</sub>)<sub>2</sub><br />
+・容易に加水分解される（加水分解反応速度大）<br />
+・乾燥雰囲気下で取り扱い<br />
+・安定化剤（キレート剤 ）の添加：アセチルアセトン（AcAc）による安定化<br />
+<br />
+■ シランカップリング剤の選択基準<br />
+1. 金属・無機材料からの選択<br />
+　表面水酸基と加水分解・縮合反応による共有結合（シラノール結合）の形成によって作用するので、特に選択基準はない。<br />
+2. 有機材料からの選択<br />
+・有機材料中の官能基との反応によって結合（共有結合、イオン結合、配位結合など）するので、有機部位（Y）有機材料中の官能基と反応するシランカップリング剤を選択<br />
+・有機材料と加水分解後のシランカップリング剤のSP値の差が小さいシランカップリング剤を選択（相溶性がよい）。<br />
+3. 反応溶媒の選択<br />
+　溶液のSP値と加水分解後のシランカップリング剤のSP値が近いシランカップリング剤を選択（SP値の差が大きいほど大きな凝集構造を形成する。溶解性の低下による自己縮合の進行）。<br />
+4. 使用量<br />
+・単分子層（薄層）を形成するに十分な量<br />
+・低濃度処理<br />
+5. 反応条件の選択（反応時間/反応温度など）<br />
+<br />
+■ シランカップリング剤のポリマーへの適応基準<br />
+◎：優れた効果、○：効果<br />
+熱硬化性樹脂
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>アミノ</td>
+			<td>メルカプト<br />
+			スルフィド</td>
+			<td>ビニル</td>
+			<td>エポキシ</td>
+			<td>メタクリロキシ</td>
+			<td>ウレイド</td>
+			<td>イソシアナト</td>
+		</tr>
+		<tr>
+			<td>フェノール樹脂</td>
+			<td>◎</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>ユリア樹脂</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>◎</td>
+		</tr>
+		<tr>
+			<td>メラミン樹脂</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>フラン樹脂</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>不飽和ポリエステル</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>○</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>エポキシ樹脂</td>
+			<td>◎</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>シリコーン樹脂</td>
+			<td>○</td>
+			<td>&nbsp;</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>&nbsp;</td>
+		</tr>
+		<tr>
+			<td>ポリウレタン</td>
+			<td>◎</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>◎</td>
+			<td>&nbsp;</td>
+			<td>○</td>
+			<td>◎</td>
+		</tr>
+	</tbody>
+</table>
+熱可塑性樹脂
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 100.26px;">ポリオレフィン</td>
+			<td style="width: 36.09px;">&nbsp;</td>
+			<td style="width: 59.26px;">&nbsp;</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 45.42px;">&nbsp;</td>
+			<td style="width: 70.92px;">&nbsp;</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.26px;">アクリル樹脂</td>
+			<td style="width: 36.09px;">○</td>
+			<td style="width: 59.26px;">&nbsp;</td>
+			<td style="width: 34.42px;">◎</td>
+			<td style="width: 45.42px;">○</td>
+			<td style="width: 70.92px;">◎</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.26px;">ポリビニルブチラール</td>
+			<td style="width: 36.09px;">◎</td>
+			<td style="width: 59.26px;">○</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 45.42px;">◎</td>
+			<td style="width: 70.92px;">○</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">○</td>
+		</tr>
+		<tr>
+			<td style="width: 100.26px;">ポリアミド</td>
+			<td style="width: 36.09px;">◎</td>
+			<td style="width: 59.26px;">&nbsp;</td>
+			<td style="width: 34.42px;">○</td>
+			<td style="width: 45.42px;">&nbsp;</td>
+			<td style="width: 70.92px;">○</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">◎</td>
+		</tr>
+		<tr>
+			<td style="width: 100.26px;">セルロース樹脂</td>
+			<td style="width: 36.09px;">◎</td>
+			<td style="width: 59.26px;">&nbsp;</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 45.42px;">&nbsp;</td>
+			<td style="width: 70.92px;">&nbsp;</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">○</td>
+		</tr>
+		<tr>
+			<td style="width: 100.26px;">ポリエーテル</td>
+			<td style="width: 36.09px;">◎</td>
+			<td style="width: 59.26px;">&nbsp;</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 45.42px;">&nbsp;</td>
+			<td style="width: 70.92px;">◎</td>
+			<td style="width: 48.42px;">&nbsp;</td>
+			<td style="width: 66.57px;">○</td>
+		</tr>
+	</tbody>
+</table>
+エラストマー
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 100.09px;">プチルゴム</td>
+			<td style="width: 36.76px;">○</td>
+			<td style="width: 59.09px;">○</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 44.26px;">○</td>
+			<td style="width: 71.1px;">◎</td>
+			<td style="width: 48.76px;">&nbsp;</td>
+			<td style="width: 69.23px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.09px;">スチレンブタジエンゴム</td>
+			<td style="width: 36.76px;">◎</td>
+			<td style="width: 59.09px;">◎</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 44.26px;">◎</td>
+			<td style="width: 71.1px;">&nbsp;</td>
+			<td style="width: 48.76px;">&nbsp;</td>
+			<td style="width: 69.23px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.09px;">クロロブレンゴム</td>
+			<td style="width: 36.76px;">○</td>
+			<td style="width: 59.09px;">◎</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 44.26px;">&nbsp;</td>
+			<td style="width: 71.1px;">&nbsp;</td>
+			<td style="width: 48.76px;">&nbsp;</td>
+			<td style="width: 69.23px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.09px;">ニトリルゴム</td>
+			<td style="width: 36.76px;">○</td>
+			<td style="width: 59.09px;">◎</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 44.26px;">◎</td>
+			<td style="width: 71.1px;">&nbsp;</td>
+			<td style="width: 48.76px;">&nbsp;</td>
+			<td style="width: 69.23px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 100.09px;">ポリサルファイド</td>
+			<td style="width: 36.76px;">○</td>
+			<td style="width: 59.09px;">◎</td>
+			<td style="width: 34.42px;">&nbsp;</td>
+			<td style="width: 44.26px;">◎</td>
+			<td style="width: 71.1px;">&nbsp;</td>
+			<td style="width: 48.76px;">&nbsp;</td>
+			<td style="width: 69.23px;">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+■ シランカップリング剤の使用方法<br />
+・前処理（直接処理）法：無機材料とシランカップリング剤を前もって反応させ、無機材料に導入[乾式法、スラリー（湿式法）、スプレー法]<br />
+・インテグラルブレンド法：ポリマーブレンドなど混練時に直接添加<br />
+・プライマー法：シランカップリング剤を無機材料表面へ塗布（表面処理）し、接着性などを付与<br />
+・無機材料表面処理（表面修飾法）：無機材料と反応させ表面に有機官能基（反応性基）を付与<br />
+・有機材料（ポリマー）のシリル化：共重合あるいは置換反応によってポリマー主鎖、側鎖、末端にアルコキシ基を導入<br />
+反応条件（温度、時間、濃度、水分、溶媒、pHの調整など）の選択・最適化<br />
+<br />
+■ シランカップリング剤の使用量<br />
+有機成分（樹脂）への添加：一般的には0.2-2wt%程度使用する。<br />
+無機成分（無機フィラー）への添加：1wt%程度使用する。<br />
+◇シランカプリング剤の処理量<br />
+　無機表面に単分子層を形成する程度の処理量が理想的であり、最良のカップリング効果が得られる。<br />
+シランカップリング剤の必要量（g）＝ 充填剤の表面（m<sup>2</sup>）/ シランカップリング剤の最小被膜面積（m<sup>2</sup>/g）<br />
+= 充填剤の重量（g）* 充填剤の比面積 / シランカップリング剤の最小被膜面積（m<sup>2</sup>/g）<br />
+<br />
+■ シランカップリング剤の最小被膜面積<br />
+　シランカップリング剤の最小被膜面積は、Stuart-brieglebの分子モデルから計算できる。<br />
+最小被膜面積（m<sup>2</sup>/g） = 78.3 * 1000 / シランカップリング剤の分子量<br />
+<br />
+■ 効果的なシランカップリング剤処理<br />
+　有機/無機成分の界面に単分子層を形成させる最小量の使用<br />
+シランカップリング処理が<br />
+・厚い場合<br />
+　多くのOH基がシラノール結合のスパイラル構造内で遮蔽され、水素結合が有効に働かず、固体表面に弱い相関を形成（弱い相互作用）。<br />
+・薄い場合<br />
+　シラノール結合のスパイラル構造が歪められ破壊されており、固体表面と有機層との間の水素結合が有効に働き、固体表面に強い相関を形成（強い相互作用）。<br />
+◇ 薄いシランカップリング層の形成が重要であり、有効なシランカップリング効果が得られる。<br />
+<br />
+■ 各種シランカップリング剤のSP値<br />
+◇加水分解前（アルコキシド）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>SP value (MPa)<sup><font size="2">1/2</font></sup></td>
+		</tr>
+		<tr>
+			<td>Water</td>
+			<td>47.9</td>
+		</tr>
+		<tr>
+			<td>IPA/water</td>
+			<td>35.7</td>
+		</tr>
+		<tr>
+			<td>IPA</td>
+			<td>23.5</td>
+		</tr>
+		<tr>
+			<td>Toluene</td>
+			<td>18.2</td>
+		</tr>
+		<tr>
+			<td>MPTMS</td>
+			<td>18.2</td>
+		</tr>
+		<tr>
+			<td>MPDMS</td>
+			<td>18.0</td>
+		</tr>
+		<tr>
+			<td>APDES</td>
+			<td>17.6</td>
+		</tr>
+		<tr>
+			<td>APDES</td>
+			<td>17.2</td>
+		</tr>
+		<tr>
+			<td>VTES</td>
+			<td>16.0</td>
+		</tr>
+		<tr>
+			<td>VDES</td>
+			<td>15.3</td>
+		</tr>
+		<tr>
+			<td>VDMES</td>
+			<td>14.5</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+◇加水分解後（シラノール）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td>&nbsp;</td>
+			<td>SP value (MPa)<sup><font size="2">1/2</font></sup></td>
+		</tr>
+		<tr>
+			<td>Water</td>
+			<td>47.9</td>
+		</tr>
+		<tr>
+			<td>IPA/water</td>
+			<td>35.7</td>
+		</tr>
+		<tr>
+			<td>IPA</td>
+			<td>23.5</td>
+		</tr>
+		<tr>
+			<td>Toluene</td>
+			<td>18.2</td>
+		</tr>
+		<tr>
+			<td>VTES</td>
+			<td>37.5</td>
+		</tr>
+		<tr>
+			<td>APTES</td>
+			<td>35.1</td>
+		</tr>
+		<tr>
+			<td>MPTMS</td>
+			<td>30.8</td>
+		</tr>
+		<tr>
+			<td>VDES</td>
+			<td>28.3</td>
+		</tr>
+		<tr>
+			<td>APDES</td>
+			<td>28.0</td>
+		</tr>
+		<tr>
+			<td>MPDMS</td>
+			<td>26.0</td>
+		</tr>
+		<tr>
+			<td>VDMES</td>
+			<td>20.7</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+（SP値：極性をあらわす尺度で、SP値が大きいほど極性が高い。詳細は左欄の「溶解度パラメーター（SP）」へ）<br />
+　溶液のSP値と加水分解後のシランカップリング剤のSP値の差が大きいほど大きな凝集構造を形成する（溶解性の低下による自己縮合の進行）。<br />
+<br />
+■ シランカップリング剤<br />
+・シランカップリング剤<br />
+分子内に有機材料と反応する官能基と無機材料と反応する官能基を持つ有機ケイ素化合物<br />
+・シランカップリング剤の作用<br />
+有機（高分子）材料と無機材料間に新たな界面を形成<br />
+・シランカップリング剤の効果<br />
+表面改質：濡れ性（相溶性）、分散性、接着性の向上<br />
+被膜の安定性、耐久性の向上<br />
+材料（力学）特性の向上<br />
+成形性の向上<br />
+耐環境特性の向上<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X 無機材料（シリカ）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+有機材料（ポリマー） R-Si-X 無機材料（シリカ）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;X&nbsp;無機材料（シリカ）<br />
+<br />
+■ 中空シリカ粒子の製法と構造<br />
+無機ビーズテンプレート法によるシリカ中空粒子の合成（コア技術）<br />
+1. コア粒子（炭酸カルシウム）<br />
+2. ゾルゲル法によりシリカコーティング<br />
+3. 酸処理し、コア粒子を溶解させる<br />
+4. シリカ中空粒子<br />
+粒子径 10-300 nm, シェル厚み 1-10 nm, 従来法より簡便・安価な生産プロセス<br />
+<br />
+■ ポリシルセスキオサン（PSQ）粒子<br />
+・ RSi(OR&#39;)<sub>3</sub>の加水分解により合成<br />
+・ 分散性に優れた真球状ナノ粒子分散液<br />
+・ 粒子径20 nmで優れた透明性<br />
+・ 屈折率1.42 (PMSQ)<br />
+・ 用途：光学材料、フィラー材料等<br />
+<br />
+■ 固体表面の構造・特性解析<br />
+1. 分散性評価：動的光散乱法（DLS）<br />
+2. 構造解析：FT-IR, NMR(<sup>1</sup>H, <sup>13</sup>C, <sup>29</sup>Si), X線解析, XPS, 表面積・細孔測定<br />
+3. 特性解析：熱分析（TG-DTA, DSC）, 光学特性（全光線透過率、VIS-UV, 屈折率）、表面硬度<br />
+4. 形態（モルホロジー）観察：SEM, TEM<br />
+<br />
+■ 熱重量分析（TG）による表面修飾シランカップリング剤の分析<br />
+（修飾量の概量を測定する簡易分析法）<br />
+　TG測定から求められる修飾率の定量精度は高くないが、表面修飾されているシランカップリング剤量を概ね分析できる。<br />
+・170℃付近までの減量：<br />
+　吸着水および溶媒（MEK）<br />
+・170℃-415℃までの減量：<br />
+　1.52wt%が表面収束された有機成分<br />
+・450℃以上の温度域における減量：<br />
+　シリカ表面の水酸基の縮合反応（脱水）による減量<br />
+◇ ベース（原料）の無機酸化物（シリカ）のTG測定と比較し、無機表面の水酸基（-OH）からの脱水減量（300℃、特に400℃以上で起こる）を差し引く。<br />
+◇ 熱分析CG/LC-MS（質量分析）分析を行えば、分析成分のMSスペクトルからシランカップリング剤がどのような化合物かを分析することも可能。<br />
+<br />
+■ 動的光散乱法（DLS）：粒径、粒度分布が分かる<br />
+■ FT-IR [5]<br />
+・3750cm<sup><sub>-</sub>1</sup>：粒子の表面水酸基<br />
+（吸着水はこの近辺で構造を示す。真空加熱セルにすると、3750cm<sup><sub><font size="1">-</font></sub><font size="2">1</font></sup>近傍で鋭いピークの粒子の表面水酸基、その低いcm<sup>-1</sup>側に強固に粒子表面の水酸基と結合した水分子。<br />
+・ シランカップリング剤のOH基の吸収が処理層の厚みが薄くなるとともに低波数側へシフト &gt; 水素結合によるOH基の自由度の低下 &gt; 水素結合の形成によりOH基が表面により強固に結合<br />
+<br />
+[1] Y. Yamada, johokiko<br />
+[2] C. J. Brinker and G. W. Scherer, <em>&quot;Sol-Gel Science&quot; , </em>Adademic Press (1990).; <a href="https://books.google.co.jp/books?id=V2vRvsTaCwMC&amp;printsec=frontcover&amp;hl=ja&amp;source=gbs_ge_summary_r&amp;cad=0#v=onepage&amp;q&amp;f=false">https://books.google.co.jp/books?id=V2vRvsTaCwMC&amp;printsec=frontcover&amp;hl=ja&amp;source=gbs_ge_summary_r&amp;cad=0#v=onepage&amp;q&amp;f=false</a><br />
+[3] Nanostructures and Nanomaterials: Synthesis, Properties, and Applications; <a href="https://books.google.co.jp/books?id=HRvNTjo4tZQC&amp;pg=PA104&amp;lpg=PA104&amp;dq=Si(OPr1)4&amp;source=bl&amp;ots=02oyaQ7V2W&amp;sig=BplvFVrKXyTK4HpGfloCIGrBY14&amp;hl=ja&amp;sa=X&amp;ved=0ahUKEwihg8eI2dfJAhWKkJQKHfUSDTAQ6AEIIzAB#v=onepage&amp;q=Si(OPr1)4&amp;f=false">https://books.google.co.jp/books?id=HRvNTjo4tZQC&amp;pg=PA104&amp;lpg=PA104&amp;dq=Si(OPr1)4&amp;source=bl&amp;ots=02oyaQ7V2W&amp;sig=BplvFVrKXyTK4HpGfloCIGrBY14&amp;hl=ja&amp;sa=X&amp;ved=0ahUKEwihg8eI2dfJAhWKkJQKHfUSDTAQ6AEIIzAB#v=onepage&amp;q=Si(OPr1)4&amp;f=false</a><br />
+[4] <a href="http://www.chemguide.co.uk/atoms/bonding/vdwstrengths.html">http://www.chemguide.co.uk/atoms/bonding/vdwstrengths.html</a><br />
+[5] K. W. Allen, J. Adhesion Sci. 6 (1992) 23.<br />
+[6] <a href="https://www.jstage.jst.go.jp/article/sfj/57/6/57_6_390/_pdf">https://www.jstage.jst.go.jp/article/sfj/57/6/57_6_390/_pdf</a>&nbsp;<br />
+[7] <a href="http://www.hst.titech.ac.jp/~meb/Ceramics/hybrid/hybrid.htm">http://www.hst.titech.ac.jp/~meb/Ceramics/hybrid/hybrid.htm</a><br />
+[8] <a href="http://repository.dl.itc.u-tokyo.ac.jp/dspace/bitstream/2261/43457/1/sk042008004.pdf">http://repository.dl.itc.u-tokyo.ac.jp/dspace/bitstream/2261/43457/1/sk042008004.pdf</a>&nbsp;<br />
+[9] <a href="http://www.ed.tus.ac.jp/~kaken/studies/10/10_tue.pdf">http://www.ed.tus.ac.jp/~kaken/studies/10/10_tue.pdf</a><br />
+[10] <a href="http://www.m-chem.co.jp/documents/pdf/20130614_02.pdf">http://www.m-chem.co.jp/documents/pdf/20130614_02.pdf</a><br />
+[11] <a href="https://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=20&amp;ved=0ahUKEwil24r0tuLJAhXChaYKHQU-Bv44ChAWCFAwCQ&amp;url=https%3A%2F%2Fsojo-u.repo.nii.ac.jp%2Findex.php%3Faction%3Dpages_view_main%26active_action%3Drepository_action_common_download%26item_id%3D815%26item_no%3D1%26attribute_id%3D22%26file_no%3D1%26page_id%3D13%26block_id%3D21&amp;usg=AFQjCNFNjC_e_41rcGMgfSvP57-bMRgwfA&amp;sig2=JH2d9h8MlxZ_Z9h5jDQUaQ">https://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=20&amp;ved=0ahUKEwil24r0tuLJAhXChaYKHQU-Bv44ChAWCFAwCQ&amp;url=https%3A%2F%2Fsojo-u.repo.nii.ac.jp%2Findex.php%3Faction%3Dpages_view_main%26active_action%3Drepository_action_common_download%26item_id%3D815%26item_no%3D1%26attribute_id%3D22%26file_no%3D1%26page_id%3D13%26block_id%3D21&amp;usg=AFQjCNFNjC_e_41rcGMgfSvP57-bMRgwfA&amp;sig2=JH2d9h8MlxZ_Z9h5jDQUaQ</a><br />
+[12] <a href="https://books.google.co.jp/books?id=I-ZSuWE3MtYC&amp;pg=PA203&amp;lpg=PA203&amp;dq=%E3%82%BE%E3%83%AB%E3%82%B2%E3%83%AB%E6%B3%95&amp;source=bl&amp;ots=pqX95JbtIP&amp;sig=_qkwiaUKvyHqMe2h9HiZ2SsVSTE&amp;hl=ja&amp;sa=X&amp;ved=0ahUKEwiW64-Nt-LJAhUhGaYKHbXGCj44FBDoAQggMAE#v=onepage&amp;q=%E3%82%BE%E3%83%AB%E3%82%B2%E3%83%AB%E6%B3%95&amp;f=false">https://books.google.co.jp/books?id=I-ZSuWE3MtYC&amp;pg=PA203&amp;lpg=PA203&amp;dq=%E3%82%BE%E3%83%AB%E3%82%B2%E3%83%AB%E6%B3%95&amp;source=bl&amp;ots=pqX95JbtIP&amp;sig=_qkwiaUKvyHqMe2h9HiZ2SsVSTE&amp;hl=ja&amp;sa=X&amp;ved=0ahUKEwiW64-Nt-LJAhUhGaYKHbXGCj44FBDoAQggMAE#v=onepage&amp;q=%E3%82%BE%E3%83%AB%E3%82%B2%E3%83%AB%E6%B3%95&amp;f=false</a><br />
+[13] <a href="http://www.tagen.tohoku.ac.jp/labo/muramatsu/image/ITO-gelsol.pdf">http://www.tagen.tohoku.ac.jp/labo/muramatsu/image/ITO-gelsol.pdf</a><br />
+[14]<br />
+--------------------------------------------------------------------------------

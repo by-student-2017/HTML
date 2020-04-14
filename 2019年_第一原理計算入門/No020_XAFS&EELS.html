@@ -1,0 +1,413 @@
+&nbsp; ここでは、分子軌道法及びバンド計算法によるXAS(XANES)及びEELS(ELNES)の計算方法をまとめる。<br />
+------------------------------------------------------------------------------<br />
+■ オススメの教科書<br />
+　日本XAFS研究会『XAFSの基礎と応用』講談社<br />
+　この教科書は素晴らしい。これがあればこのHPを立ち上げる必要はなかった。<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;基本事項<br />
+&nbsp; XANESやEELSでの実験結果と計算結果を比較するとピークの数と位置は&rdquo;大体&rdquo;は合う。現在、ピークの数や位置、そして、ピーク強度の比率がより実験結果と合うように理論的な研究が進められている。現状を以下にまとめる。<br />
+<br />
+□ 内殻に正孔を導入して吸収スペクトルを計算する場合（一粒子計算＝DFT=LDA/GGA計算）<br />
+・ 典型元素の金属における K-edge（及び非遷移金属元素のL<sub>2,3</sub>-edge&larr;確認中） であれば、一般的に8Åから10Åのスーパーセル（約100原子程度）を用いればよい。例えば3x3x3のスーパーセルを用いた計算で比較的に実験結果と良く合う結果が得られ易い<br />
+・ 下で示すような物質では、より精度の高いBSEやCIが実験結果と似たスペクトルを予測するが、解釈には実空間のイメージが容易な一粒子で行うと良いだろう。そういう意味で、一粒子での計算はピーク強度やピーク位置はズレていても解釈に役立て易い。（※ あまり強度は気にせず、何のedgeなのかを気にする）<br />
+※ 内殻に空孔を入れると、遮蔽が無くなって、電子がぐっと引き寄せられて局在化した形になる<br />
+<br />
+□ BSE (Bethe-Salpeter equation) で吸収スペクトルを計算する場合 （エキシトンの効果が取り入れられる） (二粒子計算)<br />
+・ 遷移金属のL<sub>2,3</sub>-edge（閉殻のみ） であれば比較的実験結果と合う結果が得られ易い<br />
+・ 軽元素のK端（内殻空孔と遷移した電子のエネルギー差が小さく、電子-ホール｛エキシトン｝の相互作用を取り入れる必要がある）[9]<br />
+・ 軽元素（Li、Be, B等）のK-edge、軽金属元素（Na～Alの100 eV以下）のL<sub>2,3</sub>-edge はBSEで計算して確認を取っておくとよい<br />
+・ 励起する内殻から伝導帯まで約100 eV以上離れていれば通常の計算ではBSE計算は必要ない。しかし、エキシトンの効果が大きくなる系（ペロブスカイト型構造）ではBSEがないとわずかにピーク位置がズレる<br />
+・ エキシトンの効果は、バンドの分散がフラット（＝移動度が小さい）、次元が下がるとき（例えば低次元結合になるなど）、で大きくなる<br />
+・ 遷移エネルギーはBSE計算では&times;。BSE-GWやDFT-GGA計算が良い<br />
+・ BSEは金属は&times;<br />
+<br />
+□ CIで吸収スペクトルを計算する場合（多粒子計算）<br />
+・クラスター計算｛DVME｝などで精力的に研究されている。原子番号50以上は相対論も導入が必要。<br />
+・ホワイトラインと呼ばれる<em>3d</em>遷移金属のL<sub>2,3</sub>-edgeやM<sub><font size="2">2,3</font></sub>-edgeとレアアースメタル（ランタノイド） M<sub>4,5</sub>-edge、アクチノイドN<sub>4,t</sub>-edge<br />
+・エキシトンに加えて、部分的に占有された<em>3d</em>軌道や<em>4f</em>軌道に存在する電子との相互作用も影響している。そのような多粒子の計算にはスレーター行列式の線形結合を多電子波動関数の基底としたConfiguration Interaction(CI)計算が必要になる。[9]<br />
+・ハートリーフォック（HF）では1つのスレーター行列を用いるが、CIでは考えられる励起した状態での波動関数を含めたスレーター行列を複数用意して計算することになるのでHFよりも計算コストが大幅に高くなる。<br />
+・L<sub>2</sub>のブロードネスはCharge Transferが原因であることもある。同時遷移（二電子遷移）を加味する。<br />
+<br />
+◆&nbsp;エネルギー位置について<br />
+□ 第一原理計算を用いた場合、遷移エネルギーの1%程度、理論値が実験値よりもズレることが知られています（※1, 2）。逆に、FEFFは（吸収での横軸が）正確である（と言われている）。<br />
+（※ &Delta;-SCF-calculation ( = E(N) - E(N-1) ) とするとXPSの予測におてはより実験値に近い値（0.1%程度のズレ）になる場合もある。XAFSにおいて適応できるかは不明。<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf</a>&nbsp;を参照してみるとよい)<br />
+・遷移エネルギーはBSE計算では&times;。BSE-GWやDFT-GGA計算が良い。<br />
+<br />
+※1 交換・相関ポテンシャル（HF + EXX + PT2SC)を使うと、占有軌道の軌道エネルギーをかなり正確に再現できる。（省略）この方法は、イオン化ポテンシャル実験値の逆符号に対して、占有軌道エネルギーを価電子軌道について 0.2 eV以下、内殻軌道について1 eV以下の平均誤差の化学的精度で算出している。（省略）このことから、価電子軌道エネルギーを化学的精度で再現するためにはクラスター展開法レベルの高次の電子相関を取り込んだポテンシャルが必要であり、さらに内殻軌道エネルギーを再現するにはそのレベルでも十分ではないことが明らかになった。（常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書</span>）<br />
+<br />
+※2 コーン・シャム法で価電子軌道エネルギーを再現するには汎関数に長距離補正が必要であり、さらに内殻軌道や希ガスのHOMOについても再現するには自己相互作用補正も必要であると結論づけられる。（常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書</span>）<br />
+<br />
+◆&nbsp;FEFFと他の第一原理計算との比較[1]<br />
+□ XANES領域：DV-Xa, WIEN2k など<br />
+□ EXAFS領域：FEFF<br />
+□ 両者の中間：DVXa, WIEN2k , FEFF<br />
+・&nbsp;FEFFは横軸の精度が高いと言われており、実験値の方が横軸がズレるために、FEFFに横軸を合わせる方が良い<br />
+・&nbsp;FEFFは完全結晶など、周期構造がしっかりしていないと駄目。クラスターや非周期系ではDV-Xa法(SCAT)の方が良い<br />
+・&nbsp;FEFFでの&mu;<sub>0</sub>を生スペクトルから差し引いて、DV-Xa法(SCAT)での結果と比較すると、実験値とよく合うという話を聞く<br />
+・&nbsp;DV-Xa法(SCAT)よりもWIEN2kはピークから幅広いEXAFS範囲まで比較的良く合うという報告がある<br />
+・&nbsp;理論計算は0 Kでの予測であるため、実験も低温の結果の方が理論の値に合いやすいという報告がある<br />
+・&nbsp;FEFFでは、ATOMS on the Web [9]も利用してみると良いだろう<br />
+・&nbsp;多重項が計算可能なFEFF8においては、日本語のマニュアルが存在する[リンク先消失]<br />
+※ クラスター法のDVXaと似ていて表面効果が入ってくる。球対称（MT）を用いているので、クローズドパックな系であれば比較的高い精度で計算できる。SiO<sub>2</sub>はFEFFでは&times;。<br />
+・ FEFFでフルポテンシャル計算を行いたい場合は、富山大学の畑田先生に相談してみる<br />
+※ 他の第一原理計算コードとしては、WIEN2kやDVXa以外にもFDMNESやVASP, PWscfなどがある。特に無償のコードであるFDMNESはフルポテンシャルの計算やL-edgeなどの計算に適するTDDFTが計算可能であるのでオススメである（左欄に[FDMNES]を作っておいた。加えて、cif2cell-informalではFDMNESの入力ファイルの作成や計算もサポートさせておいた）。<br />
+<br />
+◆ pre-edge peak [6-7]<br />
+　吸収端より低いエネルギー側では周囲の構造の対称性を反映する。構造に依存したり、選択則が成り立つ軌道が混成したりすることでプリエッジピークの形状と強度が変化する。<br />
+<br />
+◆&nbsp;解析での近似[8]<br />
+□ マフィンティン近似： 原子ポテンシャルを簡単な球対称クーロン型で表し、原子間領域は平らなポテンシャルとする。<br />
+□ 一電子近似： 一つの内殻電子が一光子を吸収し、一電子の終状態へと遷移する過程を計算する。原子内のほかの電子の影響は考えない。<br />
+□ 双極子近似： X線の波長は原子の大きさとほぼ同程度であり、内殻電子の波動関数の広がりに比べて十分大きいとする。<br />
+□ 平面波近似： 光電子の波長が進行する原子間の間隔に比べて十分に短いとき、その光電子は平面波とみなせる。光電子の波長の長い、低エネルギー領域ではこの近似が破綻するので球面波を取り入れなければならない。<br />
+□ 一回散乱近似： EXAFS領域では光電子の平均自由行程は原子間隔とほぼ同程度であるため、まずは一回の散乱過程のみを考えて差し支えない。散乱能の大きい配位原子が存在する場合や平均自由行程の長いXANES領域では多重散乱過程を考慮する必要がある。<br />
+<br />
+◆ EELS: 0.4～0.5 eV は振動やフォノン<br />
+（余談だが、HAADF像の明暗｛輝度｝は原子番号 Zだけでなく密度も影響する。Zで説明が付かない場合は密度もチェックすること！　密度：大 -&gt; 輝度：大）<br />
+<br />
+◆ MCD<br />
+・実験では円偏光を入れて、右回転ではl からl+1 へ遷移し、左回転ではlからl-1へと遷移することを利用して、両者のスペクトルを差分することが行われる。<br />
+・理論計算ではゼーマンエネルギーを計算してMCDのスペクトルが予測される。<br />
+　H = H<sub>0</sub> + Hzeeman<br />
+　Hzeeman = &mu; (l + 2s)B<br />
+<br />
+◆ 液体のELNES計算<br />
+1. MDで計算する（当然ながらスーパーセルを用いる）<br />
+2. 適当なところで止めて、そのときのスーパーセルをELNES計算の入力にする<br />
+3. そのスーパーセルを用いて各サイトの原子に対してELNES計算を行う（メタノールやアセトンなら16コ。32コでは変化なし）<br />
+　（クラスターではなくスーパーセルを用いることが大切。クラスターでは上手く再現できない）<br />
+4. 得られたスペクトルの平均を実験結果と比較する<br />
+※ Y. Matsui et al., Sci. Rep. (2013). を参照すると良い。文献に記載されているMDの計算条件は下記となる。<br />
+&nbsp; 2x2x1 supercell comprising the unit cell of solid methanol, which contains 16 methanol molecules, was used as the initial structure for the MD simulation.&nbsp; An MD simulation using the empirical force field potential was performed to obtain the liquid structure, and the COMPASS&nbsp;force field was employed in the MD calculations.&nbsp; The time step was set at 0.01 fs, and the simulation time was set&nbsp; to 10 ps.&nbsp; The standard NPT ensemble was used: 1,000,000 steps were simulated at the respective temperatures. (省略)<br />
+　一方、ELNESはCASTEPでC1sにコアホールを入れた擬ポテンシャルを用いて計算している（カットオフエネルギーは500 eV）。<br />
+※ 実験も理論も温度でスペクトルが変わる（これは液体でなくても固体アルミナでも変わるので注意）。測定条件での温度は大切に記録しておきたい。<br />
+<br />
+◆ ファン・デル・ワールス（vdW）力の計算<br />
+・vdW力は電荷密度から計算可能（A. Tkatchenko and M. Scheffler, Phys. Rev. Lett. 102 (2009) 073005.を参照）<br />
+・vdW力を考慮するとピーク構造は0.1 eV程度低エネルギー側にシフトする。これは基底状態（core holeなし）と励起状態（core holeあり)でvdWの大きさが異なることによる（励起状態でvdW効果大&rarr;低エネルギーへシフト）。<br />
+・vdW力が重要になってくる材料（グラフェンなどの二次元化合物、van der Waals 結晶、熱電材料、炭化ケイ素（SiC）(多形の安定性）など）<br />
+<br />
+[1] 3d遷移金属のX線吸収スペクトルのプレエッジピークは電気四重極遷移か電気双極子遷移か？（<a href="http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf">http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf</a>）<br />
+[2]&nbsp;透過電子顕微鏡と電子エネルギー損失分光法による材料評価の最先端（<a href="http://www.nims.go.jp/AEMG/research/eels-j.html">http://www.nims.go.jp/AEMG/research/eels-j.html</a>）<br />
+[3] 炭素材料の電子エネルギー損失分光法におけるコンピュータ利用（<a href="https://www.jstage.jst.go.jp/article/tanso1949/2004/212/2004_212_75/_pdf">https://www.jstage.jst.go.jp/article/tanso1949/2004/212/2004_212_75/_pdf</a>）<br />
+[4] 3d遷移金属のX線吸収スペクトルのプレエッジピークについて（<a href="http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_1.pdf">http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_1.pdf</a>）<br />
+[5] SPring-8 利用推進協議会（<a href="http://www.jasri.jp/iuss/">http://www.jasri.jp/iuss/</a>）<br />
+[6] WebAtoms（<a href="http://cars9.uchicago.edu/cgi-bin/atoms/atoms.cgi">http://cars9.uchicago.edu/cgi-bin/atoms/atoms.cgi</a>）<br />
+[7] 広域X 線発光微細構造（<a href="http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo36-171EXEFS.pdf">http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo36-171EXEFS.pdf</a>）<br />
+[8] XAFS/EELSによる局所構造解析・状態密度技術、情報機構（大事な情報が記載されているので、各大学の図書館には備えておきたい一冊である。密度汎関数に関する常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書も備えておきたい</span>）<br />
+[9] MTERE2 53 (9) 393～448 (2014) ： まてりあ Vol.53 (2014)<br />
+[10] SPring-8 利用推進協議会（<a href="http://www.jasri.jp/iuss/">http://www.jasri.jp/iuss/</a>）<br />
+[11] 第一原理計算の基礎とEELS計算への応用（<a href="http://microscopy.or.jp/archive/magazine/50_1/pdf/50-1-16.pdf">http://microscopy.or.jp/archive/magazine/50_1/pdf/50-1-16.pdf</a>） (recommend)<br />
+[12] XANESと理論計算による二次電池、振動、エキシトンおよびvan der Waals力の解析（<a href="http://www.ritsumei.ac.jp/acd/re/src/RitsSR_sympo_20161111/20161111_RitsSR_sympo_Mizoguchi.pdf">http://www.ritsumei.ac.jp/acd/re/src/RitsSR_sympo_20161111/20161111_RitsSR_sympo_Mizoguchi.pdf</a>）<br />
+[13] JFCC 計算セミナー 配布資料（2018）<br />
+<br />
+※ FEFFも第一原理計算といわれたので呼び方は考えておいたほうが良い。<br />
+------------------------------------------------------------------------------<br />
+■ 結果の解釈の仕方<br />
+<br />
+□ ギャップがある系の場合 [5]<br />
+・ 標準試料や比較する試料において、XPSやXASの吸収スペクトルと理論計算でのLDA+Uのスペクトルを比較して、Uの値を決める。似た系の原子に同じUを入れればよい。磁気に関する実験結果からUを決めることもある。<br />
+・ 標準試料や比較試料が無い場合は、Uを入れて全体のスペクトルがより上手く合うようにして議論してみるのもよい。文献[5]を見てみよう！<br />
+<br />
+□ スクリーニング（遮蔽効果） [6]<br />
+・ スーパーセルを用いて、内殻から1つ電子を取り去り、価電子帯に1つ電子を加えると、実験値に近い結果となっていく[1]。H<sub>2</sub>Oや有機分子などでは1/2の電子を動かす[4]。金属では0個の方がよいときもある[6]。<br />
+・ 電子を動かす量はスクリーニングの違いによる。絶縁体 &lt; 半導体, 分子 &lt; 金属になるほどスクリーニングが強くなるため、実験結果を再現させるために理論計算において電子を動かす量は少なくて済む。<br />
+・ 誘電率とスクリーニングは関係しており、誘電率が高いほどスクリーニングは大きくなる（※ Abinit だと、誘電率に関するパラメーターが 、絶縁体 2.0～4.0、（孤立）分子 1.5 ～ 3.0、Siや半導体 12.0、金属では10<sup>6</sup> となっている）。<br />
+・ スクリーニングはCu基板など電子の共有がしやすい物質が隣接していると大きくなる（※ 左欄の「XPS」も読んでおくとよい）。<br />
+・ 金属のように自由電子密度の高い物質では、伝導帯バンドの自由電子によりコアホールの電荷が遮蔽される。絶縁体ではコアホールの効果がそのまま伝導帯バンドに影響して基底状態とは異なる部分状態密度になる。<br />
+・ 最近の報告[2]では理論的なXAS吸収スペクトルの計算において、各種の第一原理計算コードにおける大きな差異は見られていない。しかし、欠陥モデルに依存して各ピーク位置・強度やスペクトル形状が異なっている。<br />
+<br />
+□ ピークの解釈 [5]<br />
+・ 非占有準位の電子状態密度分布が対応します。LDOS（各原子に対する状態密度分布：局所状態密度分布）やPDOS（各軌道に対する状態密度分布：部分状態密度分布）を比較する。⊿l = &plusmn;1 などの選択則を忘れないように！<br />
+・ コアホールを入れたときのLDOSなども比較すると良い<br />
+・ 化学シフトについては左欄の「XPS」を参照するとよい<br />
+※ 温度が高くなると原子振動が大きくなり、ピーク強度が減少する<br />
+・L<sub>3</sub>/L<sub>2</sub>またはM<sub>5</sub>/M<sub>4</sub>と価数の間に相関が見られること（L<sub>2</sub>またはM<sub>4</sub>は高価数だとピーク強度が増加し、低価数だとピーク強度が低下する傾向）が知られている。しかし、価数が大きいほど波動関数が広がることになり、同じ価数の物質でもL<sub><font size="2">3</font></sub>/L<sub><font size="2">2 </font></sub>値の幅も大きくなる（S. Nishida et al., JAP {2013}）。<br />
+<br />
+□ 配位数<br />
+・ フーリエ変換（FT）して得られたピーク強度は同一動径内に存在する原子の数（配位数）と温度因子などの振幅に依存している。<br />
+・ 第一近接原子と一直線上に並んでいる近接原子はFTして得られたピークが強くなる。これはレンズ効果または焦点効果と呼ばれる。この原因は放出された光電子が途中にある原子（この場合、第一近接原子）に引き寄せられるため、遠くにある原子からの散乱が見かけ上強くなることによる。<br />
+・ FTして得られたピーク位置は各原子に対する光電子散乱の位相シフトの補正をしないと正確とは言えない。目安にはなる。<br />
+<br />
+□ 結合・反結合の解釈<br />
+・ DVXa法SCATやSiestaを用いて非占有準位の構造と比較する。二原子間の結合様式と軌道が議論できる<br />
+<br />
+□ 偏光依存性<br />
+・ 構造の異方性が分かる<br />
+・ 2p軌道（軌道の広がっている方向）とX線の電場ベクトルが平行となると吸収強度が大きくなり、反対に2p軌道とX線の電場ベクトルが垂直になると吸収強度が減少する<br />
+<br />
+□ 遷移エネルギー [7-9]<br />
+・全電子計算法： 計算する系の基底状態と遷移状態の全エネルギー差から遷移エネルギーを求める<br />
+・擬ポテンシャル法：内殻軌道を含んでいないため、全電子計算法と同じ様にして全エネルギー差だけから遷移エネルギーを算出することはできない（擬ポテンシャルの形状によって全エネルギーが色々な値をとるため）。このため、遷移エネルギーに対する内殻軌道の寄与を孤立単原子の計算によって取り入れることで対処する。<br />
+<br />
+文献[8]の計算式<br />
+E<sub>TE</sub> = &Delta;E<sub>valence</sub> + &Delta;E<sub>core(atom)</sub><br />
+&Delta;E<sub>core(atom)</sub> = &Delta;E<sub>ALL orbitals(atom)</sub> - &Delta;E<sub>valence(atom)</sub><br />
+E<sub><font size="2">TE</font></sub> =&nbsp;&Delta;E<sub><font size="2">ALL orbitals(atom)</font></sub> - &Delta;E<sub><font size="2">valence(atom) </font></sub>+ &Delta;E<sub><font size="2">valence</font></sub><br />
+&Delta;E<sub>valence</sub>： the total energy difference between the excited and ground states by the pseudopotential calculation<br />
+&Delta;E<sub>ALL orbitals(atom)</sub>： the total energy difference between the excited state and ground state obtained in the isolated atom calculation.<br />
+&Delta;E<sub>valence(atom)</sub>： the contribution of valence orbitals to the &Delta;E<sub>ALL orbitals(atom)</sub><br />
+計算の実例は（<a href="http://www.edge.iis.u-tokyo.ac.jp/CASTEP-ELNES-manual.htm">http://www.edge.iis.u-tokyo.ac.jp/CASTEP-ELNES-manual.htm</a>）にある。Excelファイルも公開されている。計算は下記の通り。<br />
+遷移エネルギー ETE = 単原子全電子エネルギー差 - 単原子価電子エネルギー差 + 系の全エネルギー差<br />
+(= E<sub><font size="2">TE</font></sub> =&nbsp;&Delta;E<sub><font size="2">ALL orbitals(atom)</font></sub> - &Delta;E<sub><font size="2">valence(atom) </font></sub>+ &Delta;E<sub><font size="2">valence</font></sub> )<br />
+系の全エネルギー差 = 系の励起状態全エネルギー - 系の基底状態全エネルギー<br />
+単原子全電子エネルギー差 = 励起状態全電子エネルギー - 基底状態全電子エネルギー<br />
+単原子価電子エネルギー差 = 励起状態価電子エネルギー - 基底状態価電子エネルギー<br />
+※ 系の全エネルギー差は必ずマイナス<br />
+計算で得られたスペクトルの横軸に[遷移エネルギー ETE]を加算する。<br />
+※ 内殻空孔を含んだ励起擬ポテンシャルを用いても上手く吸収スペクトルが再現できる。それは、内殻では周辺との相互作用がないため、固体内部の内殻を孤立単原子の内殻で良く再現できるためである。<br />
+<br />
+文献[9]の計算式<br />
+The core excitation energy &Delta;E<sup>CEX</sup> = E<sup>PPX</sup> - E<sup>PP0</sup> - &Delta;E<sup>PPA</sup> + &Delta;E<sup>AEA</sup><br />
+E<sup>PP0</sup>： the total energies of the solid or molecule for the&nbsp;ground states<br />
+E<sup>PPX</sup>： the total energies of the solid or molecule for the&nbsp;excited states<br />
+&Delta;E<sup>AEA</sup>： The excitation energies of the all-electron atoms (were calculated from total energy differences.)<br />
+&Delta;E<sup>PPA</sup>： Corresponding &lsquo;&lsquo;excitation&rsquo;&rsquo; energies of the pseudopotential atoms (were similarly calculated.)<br />
+<br />
+※ 励起エネルギーの計算式の考察<br />
+&Delta;E = Eeps - Egps - (Eecp - Egcp) + (Eeca - Egca)<br />
+Eevp = Eeva, Egvp = Egva<br />
+Eep = Eevp + Eecp<br />
+Egp = Egvp + Egcp<br />
+Eea = Eeva + Eeca<br />
+Ega = Egva + Egca<br />
+&Delta;E = Eeps - Egps - (Eecp - Egcp) + (Eeca - Egca) - (Eevp - Eevp) + (Egvp - Egvp)<br />
+= Eeps - Egps - ((Eevp + Eecp) - (Egvp + Egcp)) + ((Eevp + Eeca) - ( Egvp + Egca))<br />
+= Eeps - Egps - (Eep - Egp) + (Eea - Ega) = &Delta;Es - &Delta;Ep + &Delta;Ea<br />
+e: excitation state<br />
+g: ground state<br />
+s: system ( use pseudopotential)<br />
+a: all electron<br />
+p: pseudo potential<br />
+c: core<br />
+v: valence<br />
+・擬ポテンシャルを作った方なら分かるが、全電子計算と擬ポテンシャルでの価電子帯のエネルギーが(指定した電子配置で)単原子の場合に一致するように作っている。そのため、Eevp = Eeva, Egvp = Egva となる。<br />
+・概念としては、系の価電子帯のエネルギーを得るために計算で用いた余分な擬ポテンシャルの内殻を除いて、内殻のエネルギーを全電子計算のものに置き換えることをしている。<br />
+・簡単には、励起と基底状態の全エネルギーの差を得て、「系での差 - 擬ポテンシャルでの差&nbsp;+ 全電子での差」とすればよい。擬ポテンシャルと全電子は、擬ポテンシャル作成時に全エネルギーが表示されるのでそれを用いればよい。<br />
+・文献[9]は上の式のようになるため感覚的に理解しやすいが、文献[8]は式（E<sub><font size="2">TE</font></sub> = &Delta;E<sub><font size="2">valence</font></sub> + &Delta;E<sub><font size="2">core(atom)</font></sub>）は正しいとして、Excelシートでの式がいまの私では全く理解できない。擬ポテンシャルを用いて計算した擬ポテンシャルの内殻部分のエネルギーが励起と基底で同じであるという仮定でないかぎり、厳密にはその先の式が成り立たないように思える。<br />
+・系の全エネルギーは用いた擬ポテンシャルによって（全電子計算とは異なった値として）様々な値を取る。<br />
+<br />
+※ 第一原理計算では誘電関数の虚部が用いられることがあるが、誘電関数の虚部が吸収スペクトルを反映しているためである。<br />
+※ 平均自由行程は、金属ナノ粒子の場合、プラズモン励起のために、粒径に減少に対して光電子の平均自由行程が減少する。<br />
+※ 真空準位でエッジジャンプが観測される。グラファイトだと、&pi;<sup>*</sup>、エッジジャンプ、&sigma;<sup>*</sup>の順に構造が観測される。<br />
+※ EELSではこの他、ゼロロスピークでデコンボリューションし、クラマース・クローニッヒ変換を行うと、損失関数から吸収スペクトル（誘電関数の虚部）を得られる。これにより、バンド間遷移に応じてピークが現れ、立ち上がりのエネルギーからバンドギャップを見積もることができる。しかしながら、これはデコンボリューションが適切でないと難しい。<br />
+<br />
+□ スペクトル形状<br />
+・遷移金属の価数が変わるとスペクトルは大きく変わりやすい。一方、ピーク位置のシフトや強度が少しだけ変化した場合には、原子配列の影響かを考えることも必要になる（遷移金属は価数が変わらず、他の元素の価数が変わってないかもチェックする）。<br />
+・一粒子 -&gt; 二粒子（BSE） -&gt; 多粒子（CI）とすれば計算コストと精度は向上する。しかし、スペクトルは一粒子で解釈するのがよい。それは実空間でのイメージが行い易いためである。<br />
+<br />
+参考文献<br />
+[1] X-ray absorption lecture note :<br />
+<a href="http://cdsagenda5.ictp.it/askArchive.php?base=agenda&amp;categ=a10125&amp;id=a10125s1t6/lecture_notes">http://cdsagenda5.ictp.it/askArchive.php?base=agenda&amp;categ=a10125&amp;id=a10125s1t6/lecture_notes</a>　<br />
+[2] K. Matsunaga et al., Acta Biomater. 6 (2010) 2289.<br />
+[3] LGM Pettersson&nbsp;（ストックホルムのグループ）<br />
+[4] M. Cavalleri et al., Phys. Chem. Chem. Phys. 7 (2005) 2854-2858.; <a href="http://pubs.rsc.org/en/content/articlelanding/2005/cp/b505723j/unauth#!divAbstract">http://pubs.rsc.org/en/content/articlelanding/2005/cp/b505723j/unauth#!divAbstract</a>&nbsp;; <a href="http://pubs.rsc.org/en/content/articlepdf/2005/cp/b505723j">http://pubs.rsc.org/en/content/articlepdf/2005/cp/b505723j</a>&nbsp;<br />
+[5] <a href="http://arxiv.org/pdf/0912.2894.pdf">http://arxiv.org/pdf/0912.2894.pdf</a>, <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.81.115115">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.81.115115</a><br />
+[6] <a href="http://arxiv.org/pdf/1107.0887v2.pdf">http://arxiv.org/pdf/1107.0887v2.pdf</a><br />
+[7]<br />
+[8] T. Mizoguchi et al., J. Phys.: Cond. Matter, 21 (2009), 104204.; <a href="http://iopscience.iop.org/0953-8984/21/10/104204">http://iopscience.iop.org/0953-8984/21/10/104204</a><br />
+[9]&nbsp;DR. Hamann and DA. Muller: Phys. Rev. Lett., 89 (2002), 126404.; <a href="http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.89.126404">http://journals.aps.org/prl/abstract/10.1103/PhysRevLett.89.126404</a><br />
+----------------------------------------------------------------------------<br />
+ELNESを勉強するのに良いテキスト<br />
+&rdquo;材料解析における ELNES/XANES の第一原理計算&rdquo;、溝口 照康, <input id="AF06S010Form_chshnm" name="chshnm" type="hidden" value="溝口 照康" /> 栃木 栄太, <input id="AF06S010Form_chshnm" name="chshnm" type="hidden" value="栃木 栄太" /> 柴田 直哉, <input id="AF06S010Form_chshnm" name="chshnm" type="hidden" value="柴田 直哉" /> 幾原 雄一, <input id="AF06S010Form_chshnm" name="chshnm" type="hidden" value="幾原 雄一" /> 松永 克志、まてりあ、53 (2014) 414-418.&nbsp;<br />
+　<a href="https://www.jstage.jst.go.jp/article/materia/53/9/53_53.414/_article/-char/ja/">https://www.jstage.jst.go.jp/article/materia/53/9/53_53.414/_article/-char/ja/</a><br />
+&quot;特集：ELNESの理論解析&quot; 、溝口照康，田中功，日本結晶学会，47 (2005) 73-78.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/47/1/47_1_73/_pdf">https://www.jstage.jst.go.jp/article/jcrsj1959/47/1/47_1_73/_pdf</a><br />
+&quot;解説：理論計算に基づいたELNESの解釈 I&quot; 、田中功，溝口照康，顕微鏡，40 (2005) 116-119.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/kenbikyo2004/40/2/40_2_116/_pdf">https://www.jstage.jst.go.jp/article/kenbikyo2004/40/2/40_2_116/_pdf</a><br />
+&quot;解説：理論計算に基づいたELNESの解釈 II&quot; 、田中功，溝口照康，顕微鏡，40 (2005) 172-175.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/kenbikyo2004/40/3/40_3_172/_pdf">https://www.jstage.jst.go.jp/article/kenbikyo2004/40/3/40_3_172/_pdf</a><br />
+T. Mizoguchi, W. Olovsson, H. Ikeno, and I. Tanaka, &quot;Theoretical ELNES: one particle and many particle calculations&quot;, Micron 41 (2010) 695-709.<br />
+&quot;講座：種々の電子状態評価技法の比較&quot;、武藤俊介、巽一厳、顕微鏡 44 (2009) 191-198.<br />
+&nbsp; <a href="http://www.microscopy.or.jp/magazine/44_3/pdf/44-3-191.pdf">http://www.microscopy.or.jp/magazine/44_3/pdf/44-3-191.pdf</a><br />
+下記の関連雑誌にも目を通しておくと良いだろう。<br />
+J-STAGE (無料): <a href="https://www.jstage.jst.go.jp/result/-char/ja/?item1=4&amp;word1=%E9%A1%95%E5%BE%AE%E9%8F%A1%E3%80%80%E7%94%B0%E4%B8%AD%E3%80%80%E6%BA%9D%E5%8F%A3">https://www.jstage.jst.go.jp/result/-char/ja/?item1=4&amp;word1=%E9%A1%95%E5%BE%AE%E9%8F%A1%E3%80%80%E7%94%B0%E4%B8%AD%E3%80%80%E6%BA%9D%E5%8F%A3</a><br />
+・<a href="https://www.jstage.jst.go.jp/article/materia1994/46/6/46_6_427/_pdf">https://www.jstage.jst.go.jp/article/materia1994/46/6/46_6_427/_pdf</a><br />
+Pre-edge Peak<br />
+・<a href="http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf">http://www.process.mtl.kyoto-u.ac.jp/pdf/shinpo_38_45_65.pdf</a>　<br />
+・<a href="https://www.jstage.jst.go.jp/article/materia1994/42/3/42_3_207/_pdf">https://www.jstage.jst.go.jp/article/materia1994/42/3/42_3_207/_pdf</a>　<br />
+・<a href="https://www.jstage.jst.go.jp/article/materia1994/46/6/46_6_427/_pdf">https://www.jstage.jst.go.jp/article/materia1994/46/6/46_6_427/_pdf</a><br />
+理論を理解したい場合は下記を参照すると良い。<br />
+&quot;EXAFSの基礎&quot;、石井忠男、裳華房<br />
+----------------------------------------------------------------------------<br />
+<br />
+分子軌道法<br />
+------------------------------------------------------------------------------<br />
+DV-X alpha法 SCAT の利用<br />
+　『はじめての電子状態計算 』（DVXa研究協会｛学生は無料｝に入れば、 会誌や相対論や遷移確率の計算が可能なプログラムを頂ける） 夏の学校などに参加するのも良い。<br />
+<br />
+DV-X alpha 法 SCATを用いての解析は下記の論文を参照するとよい。<br />
+<a href="https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf">https://www.jstage.jst.go.jp/article/kenbikyo1950/35/3/35_3_221/_pdf</a>　<br />
+・ 遷移状態を計算を行った場合、小さなクラスターでも空孔を入れた状態における波動関数が、大きなクラスターで計算したものと同様の波動関数が形成される場合は、大きなくクラスターを用いなくとも実験をよく再現できる。<br />
+・ K端やL1端のようにp軌道成分だけのPDOSを用いる場合には吸収断面積（PACS; photo-absorption cross section)までの計算が必要ない場合がある。<br />
+・ 遷移エネルギーを計算する場合はスピン分極を考慮して計算を行う。<br />
+・ 多重散乱法 FFF8と第一原理計算、実験結果との比較もされている。<br />
+<br />
+1)&nbsp;DOSをプロットして、EELSなどの実験結果と非占有軌道のDOSを比較する[1]。&nbsp;<br />
+2) 遷移状態法[2]を用いてPDOSを描き、EELSなどの実験結果と比較する。<br />
+2) K-edge は遷移確率計算のプログラムを用いる（夏の学校などに参加して取得）[3]。<br />
+3) L<sub>2,3</sub>-edge は DV-ME法のプログラムをDVXa協会を通じて利用する[3]。<br />
+<br />
+※ XPSでは偏光依存性を利用した実験が容易になりつつあり、各軌道での遷移確率を求めることが重要になってくる。特に、遷移確率は入射光のエネルギーにも依存することから、PACS計算の重要性が増している。「夏の学校」や「講習会」ではPACSの計算方法も積極的に教えて貰うと良いだろう。<br />
+<br />
+下記と同じような結果が得られるかを調べてみると良いでしょう。<br />
+alpha - Al2O3 : I. Tanaka and H. Adachi, Phys. Rev. B 54 (1996) 4604.<br />
+MgO : T. Mizoguchi et al., Phys. Rev. B 61 (2000) 2180.<br />
+AmO2 : T. Nishi et al., Journal of Nuclear Materials 374 (2008) 339.<br />
+SrTiO3 &amp; CaTiO3[4]: M. Fujita et al., J. Comput. Chem. Jpn. 3 (2004) 21.<br />
+[1] <a href="http://www.kobelcokaken.co.jp/zigyou/kadaikaiketsu/it/pdf/k/22_e.pdf">http://www.kobelcokaken.co.jp/zigyou/kadaikaiketsu/it/pdf/k/22_e.pdf</a><br />
+[2] Slater Transition Stateの計算やイオン化エネルギーの計算、１電子励起状態の計算などを行う際の電子の移動方法: <a href="http://www.chem.ous.ac.jp/~gsakane/STS.html">http://www.chem.ous.ac.jp/~gsakane/STS.html</a><br />
+[3] <a href="http://144.206.159.178/ft/964/567215/12376075.pdf">http://144.206.159.178/ft/964/567215/12376075.pdf</a><br />
+[4] <a href="http://jolissrch-inter.tokai-sc.jaea.go.jp/pdfdata/JAERI-Review-99-008.pdf">http://jolissrch-inter.tokai-sc.jaea.go.jp/pdfdata/JAERI-Review-99-008.pdf</a><br />
+[5] <a href="http://www.sccj.net/publications/JCCJ/v3n1/a13/abstj.html">http://www.sccj.net/publications/JCCJ/v3n1/a13/abstj.html</a><br />
+------------------------------------------------------------------------------<br />
+<br />
+バンド計算法<br />
+------------------------------------------------------------------------------<br />
+exciting : <a href="http://exciting-code.org/">http://exciting-code.org/</a>&nbsp;<br />
+<a href="http://amadm.unileoben.ac.at/codes_exciting.html">http://amadm.unileoben.ac.at/codes_exciting.html</a>　<br />
+WIEN2k : <a href="http://www.wien2k.at/">http://www.wien2k.at/</a>&nbsp;<br />
+<a href="http://www.cnrs-imn.fr/ICAMM_2010/PDF-FILES-WIEN2k-WORKSHOP/6_Wien2k%20workshop%20Nantes%202010%20-%20calculating%20ELNES.pdf">http://www.cnrs-imn.fr/ICAMM_2010/PDF-FILES-WIEN2k-WORKSHOP/6_Wien2k%20workshop%20Nantes%202010%20-%20calculating%20ELNES.pdf</a><br />
+<a href="http://msc.psu.edu/events/2007wien2kworkshop/Jorissen-ws07-eels.pdf"><font color="#000000">　</font>http://msc.psu.edu/events/2007wien2kworkshop/Jorissen-ws07-eels.pdf</a><br />
+<a href="http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html"><font color="#000000">　</font>http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html</a><br />
+<a href="http://www.edge.iis.u-tokyo.ac.jp/j/index.php?wien2k-elnes-xanes"><font color="#000000">　</font>http://www.edge.iis.u-tokyo.ac.jp/j/index.php?wien2k-elnes-xanes</a><br />
+<a href="http://www.wien2k.at/reg_user/textbooks/thesis_jorissen_telnes.pdf">http://www.wien2k.at/reg_user/textbooks/thesis_jorissen_telnes.pdf</a>&nbsp;<br />
+ELK : <a href="http://elk.sourceforge.net/">http://elk.sourceforge.net/</a>&nbsp;<br />
+SPRKKR : <a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7">http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7</a><br />
+PWscf : <a href="http://www.quantum-espresso.org/">http://www.quantum-espresso.org/</a> 　<br />
+Yambo : <a href="http://www.yambo-code.org/">http://www.yambo-code.org/</a><br />
+&nbsp; （ABINIT or PWscfの結果が必要、Optical absorption）<br />
+BigDFT : <a href="http://inac.cea.fr/L_Sim/BigDFT/">http://inac.cea.fr/L_Sim/BigDFT/</a><br />
+GPAW : <a href="https://wiki.fysik.dtu.dk/gpaw/">https://wiki.fysik.dtu.dk/gpaw/</a> &nbsp;<br />
+APE : <a href="http://www.tddft.org/programs/APE/node/5">http://www.tddft.org/programs/APE/node/5</a> &nbsp;<br />
+EXC : <a href="http://theory.polytechnique.fr/codes/exc/">http://theory.polytechnique.fr/codes/exc/</a> （ABINITの結果が必要）<br />
+DP : <a href="http://dp-code.org/">http://dp-code.org/</a>&nbsp;&nbsp;（ABINITの結果が必要）<br />
+CASTEP : <a href="http://www.castep.org/">http://www.castep.org/</a>&nbsp;&nbsp;<br />
+QMAS: <a href="http://qmas.jp/">http://qmas.jp/</a><br />
+初学者が、上記のソフトを利用する場合には、下記のHPが参考になる<br />
+用語集 : <a href="http://www.geocities.co.jp/Technopolis/4765/INTRO/yogo.html">http://www.geocities.co.jp/Technopolis/4765/INTRO/yogo.html</a><br />
+解説　: <a href="http://www.nims.go.jp/cmsc/staff/kobayak/INFO/metal.html">http://www.nims.go.jp/cmsc/staff/kobayak/INFO/metal.html</a><br />
+上記のコードの実行ファイルは下記のHPから取得すると少し楽になる場合がある。<br />
+ETSF Software Suite : <a href="http://www.etsf.eu/resources/software/codes">http://www.etsf.eu/resources/software/codes</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+<br />
+附録：EXAFSの分析方法<br />
+------------------------------------------------------------------------------<br />
+SPring-8での講習会 : <a href="http://support.spring8.or.jp/event/XAFS_110113.html">http://support.spring8.or.jp/event/XAFS_110113.html</a><br />
+SPring-8産業利用推進室：<a href="http://support.spring8.or.jp/xafs.html">http://support.spring8.or.jp/xafs.html</a><br />
+XAFS講習会資料 : <a href="http://pfwww.kek.jp/innovationPF/04_EVENT/XAFS_Seminor_1010/analysis.pdf">http://pfwww.kek.jp/innovationPF/04_EVENT/XAFS_Seminor_1010/analysis.pdf</a><br />
+AthenaとArtemisを用いたEXAFS解析 : イトー様のHP<br />
+<a href="http://athenaandartemis.seesaa.net/category/6429149-1.html">http://athenaandartemis.seesaa.net/category/6429149-1.html</a><br />
+Athena : <a href="http://cars9.uchicago.edu/~ravel/software/">http://cars9.uchicago.edu/~ravel/software/</a><br />
+産業利用：<a href="http://support.spring8.or.jp/Doc_lecture/Text_090127.html">http://support.spring8.or.jp/Doc_lecture/Text_090127.html</a>　<br />
+Cu箔：<a href="http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_4.pdf">http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_4.pdf</a>　<br />
+ZnO結晶：<a href="http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_5.pdf">http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_5.pdf</a>　<br />
+PF-XAFS：<a href="http://pfwww.kek.jp/nomura/pfxafs/">http://pfwww.kek.jp/nomura/pfxafs/</a>　<br />
+------------------------------------------------------------------------------<br />
+<br />
+EELSやXANESの計算方法の概要<br />
+（フリーソフトで操作が比較的易しい計算方法として、下記の７つの方法がある）<br />
+1)&nbsp;DVXa法 SCAT で計算<br />
+2) xband を用いて入力ファイルを作成し、SPRKKR で計算<br />
+3)&nbsp;PWgui を用いて入力ファイルを作成し、PWscf で計算<br />
+4) cif2cell を用いて VESTA で書き出した cif 形式のファイルを exciting などの入力ファイルに変換して計算<br />
+5) ASE-GUIを用いて入力ファイルを作成し、GPAWで計算<br />
+6)&nbsp;BigDFT&nbsp;で計算<br />
+7) Akai-KKRを用いて計算<br />
+8) CASTEP を用いた計算（高価なのでここでは取り扱わない。<a href="http://www.edge.iis.u-tokyo.ac.jp/CASTEP-ELNES-manual.htm">http://www.edge.iis.u-tokyo.ac.jp/CASTEP-ELNES-manual.htm</a> を参照）<br />
+※ PWscf や ABINIT&nbsp;は擬ポテンシャルを用いているので、内殻に空孔を導入したい場合は、空孔を導入した擬ポテンシャルを用いる必要がある。<br />
+------------------------------------------------------------------------------<br />
+1) DVXa法 SCAT で計算<br />
+&nbsp; 左欄の「DVXa + DVME」を参照。<br />
+------------------------------------------------------------------------------&nbsp;<br />
+2) xband を用いて入力ファイルを作成し、SPRKKR で計算<br />
+&nbsp; ダウンロードと使い方は 左欄の 「SPRKKR」 を参照。XMCDの計算も可能。<br />
+------------------------------------------------------------------------------<br />
+3)&nbsp; PWgui を用いて入力ファイルを作成し、PWscf で計算<br />
+1. PWgui とPWscf をダウンロードし、セットアップする。<br />
+&nbsp; ダウンロードと使い方は 左欄の 「PWscf」 を参照。&nbsp;<br />
+2. 下記のHPを参照（一応、下記を行った結果が PWscf の「XANES：」にある）<br />
+&nbsp; <a href="http://cdsagenda5.ictp.it/askArchive.php?base=agenda&amp;categ=a10125&amp;id=a10125s1t6/lecture_notes">http://cdsagenda5.ictp.it/askArchive.php?base=agenda&amp;categ=a10125&amp;id=a10125s1t6/lecture_notes</a>&nbsp;<br />
+&nbsp; Hands-on Tutorial on Electronic Structure Computations &rarr; Monday 17 January 2011 (X-ray absorption&nbsp;&rarr; lecture_notes)<br />
+------------------------------------------------------------------------------<br />
+4) cif2cell を用いて VESTA で書き出した cif 形式のファイルを exciting などの入力ファイルに変換して計算<br />
+1. cif2cell をダウンロードし、セットアップする。<br />
+&nbsp; ダウンロードと使い方は 左欄の&nbsp;「入力ファイルの変換」 を参照。<br />
+2. exciting をダウンロードし、セットアップする。<br />
+&nbsp;&nbsp;ダウンロードと使い方は 左欄の 「exciting」 を参照。&nbsp;<br />
+------------------------------------------------------------------------------<br />
+5) ASE-GUIを用いて入力ファイルを作成し、GPAWで計算<br />
+1. ASE-GUI でcifファイルを読み込み、入力ファイルを作成。<br />
+2. GPAWで計算。<br />
+------------------------------------------------------------------------------<br />
+6)&nbsp; BigDFT で計算<br />
+1. BigDFT をダウンロードし、セットアップする。<br />
+&nbsp; ダウンロードとセットアップは 左欄の 「BigDFT」 を参照。<br />
+2. <a href="http://inac.cea.fr/L_Sim/BigDFT/tutorials/H3D-Xabs.html">http://inac.cea.fr/L_Sim/BigDFT/tutorials/H3D-Xabs.html</a><br />
+------------------------------------------------------------------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+付録：WIEN2kでのXASの計算のさせ方（常に単位、bohrならbohr かを確認して下さい）<br />
+※ 左欄の「WIEN2k」も参照。<br />
+<br />
+■ 基本的な入力ファイルの作成<br />
+1. Execution&nbsp;&rarr; StructGen&nbsp;&rarr;&nbsp;&nbsp;Number of atoms に inequivalent な原子の数（代表的となる原子の数）を入力する。<br />
+2. Lattice: の欄から空間群を選らんで青色のラインが掛かるようにする。<br />
+3. Lattice parameters を入力。<br />
+4. Atom1 の直ぐ右の欄に原子記号を入力する。続いて、Pos 1:のある行の x, y, z へ座標を入力する。<br />
+5. Save Structure &rarr; set automatically RMT and continue editing &rarr; do it<br />
+6. Save Structure &rarr; save file and clean up<br />
+<br />
+■ スーパーセルの作成<br />
+1. Execution &rarr; single prog. &rarr; Other programs にある supercell にチェックを入れる &rarr; Execute !<br />
+2. Number of cells in x direction にx軸方向で拡張したい倍率を入力（同様に y, z も入力）<br />
+3. Enter your target lattice type: で指定した空間群の分類に対応するものを選択する。（基本的な入力ファイルの作成でLattice で選んだ記号で&nbsp;P があればP, FがあればF, BがあればBを選択する）&rarr; Execute !<br />
+4. Files &rarr; struct file(s) &rarr; super.struct とあるファイルの行の一番左をクリック &rarr; Copy の行にある最後の/の次から同じ行の最後までの文字をコピーして to の横にある枠に入れる &rarr; _super を削除する &rarr; copy it<br />
+5. Execution &rarr; StructGen<br />
+<br />
+■ hole または 置換系をする原子の種類分け<br />
+1. Execution &rarr; StructGen &rarr; edit STRUCT file &rarr; 目的の座標の原子が1原子だけで inequivalent になっていない場合は 対応する座標の右にあるsplit を押す &rarr; 目的の座標の原子（置換やholeを入れる原子）の左から二番目の欄だけに他と異なった数値を入力する（他が空白であれば、目的の座標の原子だけ1を入力） 。置換する場合は原子記号も変える。<br />
+2. Save Structure &rarr; set automatically RMT and continue editing &rarr; do it<br />
+3. Save Structure &rarr; save file and clean up<br />
+4. Execution &rarr; initialize calc. &rarr; x nn (&rarr; Execute! &rarr; initlapw ) &rarr; view outputnn (&rarr; initlapw ) &rarr; x group (&nbsp;&rarr; initlapw ) &rarr; view outputsgroup (&nbsp;&rarr; initlapw ) &rarr; Yes &rarr; x symmetry ( &rarr; initlapw )<br />
+5. copy struct_st ( &rarr; initlapw&nbsp;) &rarr; x lstart ( &rarr;&nbsp;Execute! &rarr;&nbsp;initlapw&nbsp;) &rarr; view outputst&nbsp;( &rarr; initlapw )&nbsp;等々と順番に押していく。<br />
+&nbsp; ※ 面倒な場合は Expert : で必要な情報（select spin-polarized calulation の場合はチェックを入れて、use X k-points in full BZ (default: 1000) にk点を入力｛2x2x2なら130、 3x3x3なら37、半導体や絶縁体ならさらに1/4～1/5倍する｝）を入力して、CHECK&nbsp;BATCH&nbsp;VALES &rarr; RUN BATCH INITIAKISATION<br />
+<br />
+■ hole の導入と valence electron の追加<br />
+1. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、hole にする原子の軌道のOCCUPを2から1にする。NUMBER OF&nbsp;ORBITALS の組は StructGenのinequivalent atomの順番に並んでいる。（KAPPAはWIEN2k のUserguideにある。nは主量子数）&rarr; Save<br />
+2. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を+1する &rarr; Save<br />
+<br />
+■ 並列計算の設定<br />
+1. Utils &rarr; edit .machines &rarr; 1:localhost の行を CPUの数と同じにする &rarr; save<br />
+<br />
+■ SCF計算の実行<br />
+1. run SCF &rarr; parallel にチェックを入れる &rarr; start SCF cycle<br />
+<br />
+■ XSPEC の計算<br />
+1. Tasks &rarr; XSPEC &rarr; .in1 の一番最後の行の左から二番目の数値を2.5から4.5にする &rarr; save &rarr; continue with xspec<br />
+2. x lapw1<br />
+3. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save<br />
+4. x lapw2 -qtl<br />
+5. .inxsで atom と n colre と l core の値を書き換え、S（装置の分解能）とgamma0（内殻の寿命）の値を入力する &rarr; save<br />
+6. x xspec &rarr; continue with xspec &rarr; plot<br />
+※ Sとgamma0 はとりあえず 0.5 0.5 にしてplot した後、結果を見て再度 .inxs ファイルを書き直して、x xspec を実行すれば良い。<br />
+□ 方位指定<br />
+7. x xspec を行っていない場合は、x init_xspec<br />
+8. Files &rarr; input.files &rarr; .int にDOSのときと同じように計算する軌道を指定する。<br />
+9. x tetra<br />
+10. x txspec<br />
+11. x lorentz<br />
+※ x xspec = x init_xspec + x tetra + x txspec + x lorentz となる。結果はDOSでのplotで見れる。<br />
+※ SCF計算直後に「3. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save」を行ってしまっても良いかどうかは調査中。<br />
+<br />
+■ EELSの計算（調査中）<br />
+1. Tasks &rarr; TELNES3<br />
+2. .innes で計算条件を記入する。濃い灰色の部分はディフォルトのままでよい。<br />
+&nbsp; Collection s.a.: と Convergence s.a.: を 0.00 にして、NRとNTを1にするとXSPECの結果と同等になる。<br />
+3. x qtl -telnes &rarr; continue with TELNES3<br />
+4. x telnes3 &rarr; continue with TELNES3<br />
+5. 後は上から最後まで順番に進めていけば良いだろう。<br />
+□ 方位指定<br />
+6. .innes でORIENTATION SENSITIVEを指定する。(0.0 0.0 0.0 で結晶のc軸と電子ビームが平行)<br />
+※ SCF計算後に「Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save」を行った方が良いかどうは調査中。<br />
+------------------------------------------------------------------------------

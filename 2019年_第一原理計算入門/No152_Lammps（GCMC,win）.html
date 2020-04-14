@@ -1,0 +1,282 @@
+Lammps GCMC bat file (ZTC with H2 at the high pressure) (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ GCMC (ZTC with H2 at high pressure) calculation (https://lammps.sandia.gov/threads/msg58606.html)<br />
+&nbsp; bat file example (Windows 10 (64 bit))<br />
+<br />
+◇ Usage (Windows 10 (64 bit))<br />
+1. notepad run.bat<br />
+2. .\run<br />
+※ Not ZTC but HydroCarbon is OK.<br />
+※ ZTCと書いていますが炭化水素でも同様に計算できます。batファイルをもっとスマートに書きたかったのですが私の力では上手くいかなくて、linuxのbashがどんなに楽であるかよくわかりました。<br />
+※ structure file name: ztc_openbabel.dat<br />
+※ potential file: Nouranian_CH.meam, Nouranian_CH_library.meam<br />
+&nbsp; CH.airebo (C:\Program Files\LAMMPS 64-bit 8Feb2019-MPI\Examples)<br />
+※ 温度が下がっていくだけなので最後のrun ${nstep}はrun 10000 とした<br />
+※ lmp_mpi を lmp_serial にしても動作する。ただし、インストールはどちらかにしないとエラーが出る。誤って必要のない方をインストールした場合にはアンインストールの作業も必要（Uninstall.exeをクリックするだけ）。<br />
+<br />
+◇ bat file (run.bat)<br />
+------<br />
+@echo off<br />
+rem カレントディレクトリ移動（バッチ実行ディレクトリ）<br />
+cd /d %~dp0<br />
+<br />
+rem 入力ファイル<br />
+set infilenm=ztc_gcmc_XXXMPa.lmp<br />
+rem 出力ファイル<br />
+set outfilenm=ztc_gcmc_1MPa.lmp<br />
+rem 置換前文字列<br />
+set beforestr=XXX<br />
+rem 置換後文字列<br />
+set afterstr=10<br />
+<br />
+rem 出力ファイル作成<br />
+type nul &gt;%outfilenm%<br />
+<br />
+rem ファイル編集<br />
+setlocal enabledelayedexpansion<br />
+for /f &quot;delims=&quot; %%A in (%infilenm%) do (<br />
+&nbsp; &nbsp; set line=%%A<br />
+&nbsp; &nbsp; echo !line:%beforestr%=%afterstr%!&gt;&gt;%outfilenm%<br />
+)<br />
+endlocal<br />
+rem &quot;Reference: https://knowledge.reontosanta.com/archives/816&quot;<br />
+<br />
+mkdir cfg<br />
+lmp_mpi -in %outfilenm%<br />
+move cfg cfg_1MPa<br />
+move log.lammps .\cfg_1MPa\log.lammps_1MPa<br />
+move log.lammps .\cfg_1MPa\ztc_gcmc_1MPa.lmp<br />
+<br />
+rem -------------------------------<br />
+<br />
+rem 入力ファイル<br />
+set infilenm=ztc_gcmc_XXXMPa.lmp<br />
+rem 出力ファイル<br />
+set outfilenm=ztc_gcmc_10MPa.lmp<br />
+rem 置換前文字列<br />
+set beforestr=XXX<br />
+rem 置換後文字列<br />
+set afterstr=100<br />
+&nbsp;<br />
+rem 出力ファイル作成<br />
+type nul &gt;%outfilenm%<br />
+<br />
+rem ファイル編集<br />
+setlocal enabledelayedexpansion<br />
+for /f &quot;delims=&quot; %%A in (%infilenm%) do (<br />
+&nbsp; &nbsp; set line=%%A<br />
+&nbsp; &nbsp; echo !line:%beforestr%=%afterstr%!&gt;&gt;%outfilenm%<br />
+)<br />
+endlocal<br />
+rem &quot;Reference: https://knowledge.reontosanta.com/archives/816&quot;<br />
+<br />
+mkdir cfg<br />
+lmp_mpi -in %outfilenm%<br />
+move cfg cfg_10MPa<br />
+move log.lammps .\cfg_10MPa\log.lammps_10MPa<br />
+move log.lammps .\cfg_10MPa\ztc_gcmc_10MPa.lmp<br />
+<br />
+rem -------------------------------<br />
+<br />
+rem 入力ファイル<br />
+set infilenm=ztc_gcmc_XXXMPa.lmp<br />
+rem 出力ファイル<br />
+set outfilenm=ztc_gcmc_35MPa.lmp<br />
+rem 置換前文字列<br />
+set beforestr=XXX<br />
+rem 置換後文字列<br />
+set afterstr=350<br />
+&nbsp;<br />
+rem 出力ファイル作成<br />
+type nul &gt;%outfilenm%<br />
+&nbsp;<br />
+rem ファイル編集<br />
+setlocal enabledelayedexpansion<br />
+for /f &quot;delims=&quot; %%A in (%infilenm%) do (<br />
+&nbsp; &nbsp; set line=%%A<br />
+&nbsp; &nbsp; echo !line:%beforestr%=%afterstr%!&gt;&gt;%outfilenm%<br />
+)<br />
+endlocal<br />
+rem &quot;Reference: https://knowledge.reontosanta.com/archives/816&quot;<br />
+<br />
+mkdir cfg<br />
+lmp_mpi -in %outfilenm%<br />
+move cfg cfg_35MPa<br />
+move log.lammps .\cfg_35MPa\log.lammps_35MPa<br />
+move log.lammps .\cfg_35MPa\ztc_gcmc_35MPa.lmp<br />
+<br />
+rem -------------------------------<br />
+<br />
+rem 入力ファイル<br />
+set infilenm=ztc_gcmc_XXXMPa.lmp<br />
+rem 出力ファイル<br />
+set outfilenm=ztc_gcmc_70MPa.lmp<br />
+rem 置換前文字列<br />
+set beforestr=XXX<br />
+rem 置換後文字列<br />
+set afterstr=700<br />
+&nbsp;<br />
+rem 出力ファイル作成<br />
+type nul &gt;%outfilenm%<br />
+&nbsp;<br />
+rem ファイル編集<br />
+setlocal enabledelayedexpansion<br />
+for /f &quot;delims=&quot; %%A in (%infilenm%) do (<br />
+&nbsp; &nbsp; set line=%%A<br />
+&nbsp; &nbsp; echo !line:%beforestr%=%afterstr%!&gt;&gt;%outfilenm%<br />
+)<br />
+endlocal<br />
+rem &quot;Reference: https://knowledge.reontosanta.com/archives/816&quot;<br />
+<br />
+mkdir cfg<br />
+lmp_mpi -in %outfilenm%<br />
+move cfg cfg_70MPa<br />
+move log.lammps .\cfg_70MPa\log.lammps_70MPa<br />
+move log.lammps .\cfg_70MPa\ztc_gcmc_70MPa.lmp<br />
+<br />
+rem -------------------------------<br />
+<br />
+rem 入力ファイル<br />
+set infilenm=ztc_gcmc_XXXMPa.lmp<br />
+rem 出力ファイル<br />
+set outfilenm=ztc_gcmc_100MPa.lmp<br />
+rem 置換前文字列<br />
+set beforestr=XXX<br />
+rem 置換後文字列<br />
+set afterstr=1000<br />
+&nbsp;<br />
+rem 出力ファイル作成<br />
+type nul &gt;%outfilenm%<br />
+&nbsp;<br />
+rem ファイル編集<br />
+setlocal enabledelayedexpansion<br />
+for /f &quot;delims=&quot; %%A in (%infilenm%) do (<br />
+&nbsp; &nbsp; set line=%%A<br />
+&nbsp; &nbsp; echo !line:%beforestr%=%afterstr%!&gt;&gt;%outfilenm%<br />
+)<br />
+endlocal<br />
+rem &quot;Reference: https://knowledge.reontosanta.com/archives/816&quot;<br />
+<br />
+mkdir cfg<br />
+lmp_mpi -in %outfilenm%<br />
+move cfg cfg_100MPa<br />
+move log.lammps .\cfg_100MPa\log.lammps_100MPa<br />
+move log.lammps .\cfg_100MPa\ztc_gcmc_100MPa.lmp<br />
+------<br />
+<br />
+◇ ztc_gcmc_XXXMPa.lmp<br />
+-----<br />
+#LAMMPS Input file<br />
+# Title<br />
+<br />
+# ----- Initialization -----&nbsp;<br />
+clear<br />
+<br />
+# variables modifiable using -var command line switch<br />
+variable &nbsp; &nbsp;temp index 298.0 # K<br />
+variable &nbsp; &nbsp;mu &nbsp; index -5.46 # Fermi Energy (eV) from MOPAC2016 PM7<br />
+variable &nbsp; &nbsp;disp index 0.01<br />
+variable &nbsp; &nbsp;pres index XXX # bar<br />
+# for units metal, pressure is in [bars] = 100 [kPa] = 1/10000 [GPa]<br />
+variable &nbsp; &nbsp;fs &nbsp; index 0.0001 # 0.1 fs for units metal<br />
+variable &nbsp; &nbsp;ps &nbsp; index 20 # 20 ps for units metal<br />
+variable &nbsp; &nbsp;nfre index 100 # = Nevery * Nrepeat<br />
+<br />
+variable &nbsp; &nbsp;nstep equal ${ps}/${fs}<br />
+variable &nbsp; &nbsp;tdamp equal ${fs}*100<br />
+variable &nbsp; &nbsp;pdamp equal ${fs}*1000<br />
+<br />
+# ----- Structure settings -----&nbsp;<br />
+units metal<br />
+atom_style full<br />
+dimension &nbsp;3<br />
+boundary &nbsp; p p p<br />
+read_data &nbsp;ztc_openbabel.dat<br />
+replicate &nbsp;1 1 1<br />
+<br />
+mass 1 12.0107 # C<br />
+mass 2 1.00794 # H<br />
+mass 3 1.00794 # H2<br />
+<br />
+# ----- Potential settings -----&nbsp;<br />
+pair_style airebo 3.0 1 1 1<br />
+pair_coeff * * CH.airebo C H H<br />
+<br />
+#neighbor &nbsp; &nbsp; &nbsp;0.5 bin # Lammps example setting<br />
+#neigh_modify &nbsp;delay 5 every 1 # Lammps example setting<br />
+<br />
+# ----- Relax calculation (0 K) -----&nbsp;<br />
+thermo_style &nbsp; &nbsp;custom step etotal temp lx vol press atoms<br />
+thermo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;10<br />
+<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; f1 all box/relax iso 0.0<br />
+minimize &nbsp; &nbsp; &nbsp; &nbsp;1.0e-10 0.0 1000 100000 # run structure optimization (0 K)<br />
+unfix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; f1<br />
+<br />
+reset_timestep &nbsp;0<br />
+timestep &nbsp; &nbsp; &nbsp; &nbsp;${fs}<br />
+<br />
+# ----- Output setting -----&nbsp;<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;d1 all cfg 100 cfg/run.*.cfg mass type xs ys zs id type<br />
+dump_modify &nbsp; &nbsp; d1 element C H H<br />
+<br />
+# ----- Check equilibriation setting -----&nbsp;<br />
+variable &nbsp; &nbsp; &nbsp; &nbsp;energy equal etotal<br />
+variable &nbsp; &nbsp; &nbsp; &nbsp;temperature equal temp<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; fout1 all ave/time 1 100 ${nfre} v_energy v_temperature file out_energy.txt<br />
+<br />
+print &quot;# ----- Equilibriation ----- &quot;<br />
+# ----- Equilibriation -----&nbsp;<br />
+velocity &nbsp; &nbsp; &nbsp; &nbsp;all create 10.0 139466 dist gaussian<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; f1 all npt temp 10.0 ${temp} ${tdamp} iso 0.0 ${pres} ${pdamp}<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ${nstep}<br />
+unfix &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; f1<br />
+<br />
+print &quot;# ----- GCMC ----- (298 K)&quot;<br />
+# ----- GCMC ----- (298 K)<br />
+#velocity &nbsp; &nbsp; &nbsp; &nbsp;all scale ${temp}<br />
+molecule &nbsp;h2 H2.txt<br />
+group ztc type 1:2<br />
+group gas type 3<br />
+fix f1 all nvt temp ${temp} ${temp} ${tdamp}<br />
+fix f2 gas gcmc 10 10 10 0 761341 ${temp} ${mu} ${disp} mol h2 pressure ${pres}<br />
+<br />
+# ----- atom count -----&nbsp;<br />
+variable &nbsp; &nbsp;type1 atom &quot;type==1&quot; # C<br />
+variable &nbsp; &nbsp;type2 atom &quot;type==2&quot; # H<br />
+variable &nbsp; &nbsp;type3 atom &quot;type==3&quot; # H2<br />
+group &nbsp; &nbsp; &nbsp; type1 dynamic ztc var type1 # C<br />
+group &nbsp; &nbsp; &nbsp; type2 dynamic ztc var type2 # H<br />
+group &nbsp; &nbsp; &nbsp; type3 dynamic gas var type3 # H2<br />
+variable &nbsp; &nbsp;nc &nbsp;equal count(type1) # C<br />
+variable &nbsp; &nbsp;nh &nbsp;equal count(type2) # H<br />
+variable &nbsp; &nbsp;nh2 equal count(type3) # H2<br />
+<br />
+# ----- averaging -----&nbsp;<br />
+variable &nbsp; &nbsp;rho equal density<br />
+variable &nbsp; &nbsp;p equal press<br />
+variable &nbsp; &nbsp;nugget equal 1.0e-8<br />
+variable &nbsp; &nbsp; &nbsp;lambda equal 1.0<br />
+variable &nbsp; &nbsp; &nbsp;muex equal ${mu}-${temp}*ln(density*${lambda}+${nugget})<br />
+fix &nbsp; &nbsp; &nbsp; &nbsp; ave all ave/time 1 100 ${nfre} v_rho v_p v_muex v_nh2 v_nc v_nh ave one file rho_vs_p.dat<br />
+variable &nbsp; &nbsp;rhoav equal f_ave[1]<br />
+variable &nbsp; &nbsp;pav equal f_ave[2]<br />
+variable &nbsp; &nbsp;muexav equal f_ave[3]<br />
+variable &nbsp; &nbsp;nh2av equal f_ave[4] # H2<br />
+variable &nbsp; &nbsp;ncav equal f_ave[5] # C<br />
+variable &nbsp; &nbsp;nhav equal f_ave[6] # H<br />
+<br />
+variable &nbsp; &nbsp;wtav equal f_ave[4]/(f_ave[5]*12+f_ave[6]+f_ave[4]+${nugget})*100<br />
+compute_modify &nbsp;thermo_temp dynamic yes<br />
+thermo_style &nbsp; &nbsp;custom step temp press pe ke density atoms v_rhoav v_pav v_muexav v_nh2av v_ncav v_nhav v_wtav<br />
+thermo &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;${nfre}<br />
+<br />
+# ----- Output setting -----&nbsp;<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;d3 all cfg 100 cfg/gcmc_run.*.cfg mass type xs ys zs id type<br />
+dump_modify &nbsp; &nbsp; d3 element C H H<br />
+<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ${nstep}<br />
+unfix f1&nbsp;<br />
+unfix f2<br />
+-----<br />
+------------------------------------------------------------------------------

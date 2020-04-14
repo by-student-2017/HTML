@@ -1,0 +1,291 @@
+&nbsp; FP(Full Potential)-SPR(Spin-polarized)-KKR-CPA-GGA(PBE)+U-AMF Calculation という長い名称になる計算の練習(Execrcise)<br />
+------------------------------------------------------------------------------
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mHlZOmAwSpOGX9CtW4ljA2L" width="560"></iframe></div>
+------------------------------------------------------------------------------<br />
+■ xband<br />
+<br />
+□ SCF calculation ( for example, sample = Fe2V0.97Al1.03 )<br />
+1. xband (on Terminal or console)<br />
+2. DIRECTORIES<br />
+&nbsp; 1) select directory<br />
+&nbsp;&nbsp;&nbsp;&nbsp; $HOME -&gt; sprkkr -&gt; calc<br />
+&nbsp; 2) directory name<br />
+&nbsp;&nbsp;&nbsp; /home/username/sprkkr -&gt; /home/username/sprkkr/sample<br />
+&nbsp; 3) create new + change directory<br />
+&nbsp; 4) close<br />
+3. CREATE SYSYEM<br />
+&nbsp; 1) Space group<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example,&nbsp; 225 FM-3M Oh^5<br />
+&nbsp;&nbsp;&nbsp; a) a (Angstroum)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example,&nbsp; 5.76517<br />
+&nbsp;&nbsp;&nbsp; b) CONFIRM<br />
+&nbsp;&nbsp;&nbsp; c) convert lattice parameters from Angstroem to a.u. if necessary<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (Angstroum -&gt; a.u. unit)<br />
+&nbsp;&nbsp;&nbsp; d) input OK -- GO ON<br />
+&nbsp;&nbsp;&nbsp; e) select desired sited<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example,&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 a m-3m 0 0 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4 b m-3m 1/2 1/2 1/2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 8 c -43m 1/4 1/4 1/4<br />
+&nbsp;&nbsp;&nbsp; f) all done -- GO ON<br />
+&nbsp; 2) CREATE 3D-SYSTEM<br />
+&nbsp;&nbsp;&nbsp; a) click line to specify occupation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, 1 1 - 0.000000&nbsp; 0.000000&nbsp; 0.000000<br />
+&nbsp;&nbsp;&nbsp; b) number of occupants (atom types) on site 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, 1<br />
+&nbsp;&nbsp;&nbsp; c) specify occupant 1 -&gt; Al<br />
+&nbsp;&nbsp;&nbsp; d) click line to specify occupation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, 2 2 - 0.500000&nbsp; 0.500000&nbsp; 0.500000<br />
+&nbsp;&nbsp;&nbsp; e) number of occupants (atom types) on site 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, 2<br />
+&nbsp;&nbsp;&nbsp; f) concentration of occupant 1 -&gt; 0.97<br />
+&nbsp;&nbsp;&nbsp; g) concentration of occupant 1 -&gt; 0.03<br />
+&nbsp;&nbsp;&nbsp; h) specify occupant 1 -&gt; V<br />
+&nbsp;&nbsp;&nbsp; i) specify occupant 2 -&gt; Al<br />
+&nbsp;&nbsp;&nbsp; j) click line to specify occupation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, 3 3 - 0.250000&nbsp; 0.250000&nbsp; 0.250000<br />
+&nbsp;&nbsp;&nbsp; k) specify occupant 1 -&gt; Fe<br />
+&nbsp; 3) suppress symmetry<br />
+&nbsp; 4) set same R_WS for all spheres<br />
+&nbsp; 5) adjust R_WS by scaling<br />
+&nbsp; 6) calculate R_WS + empty spheres -&gt; OK --RUN<br />
+&nbsp; 7) show structure<br />
+&nbsp;&nbsp;&nbsp; a) unit cell repeated along primitives axes<br />
+&nbsp;&nbsp;&nbsp; b) Visualizer: XCrySDen<br />
+&nbsp;&nbsp;&nbsp; c) run visualizer (set up of input may take a while)<br />
+&nbsp;&nbsp;&nbsp; d) CLOSE<br />
+&nbsp; 8) DONE - RETURN<br />
+4. SPR-KKR<br />
+&nbsp; 1) system -&gt; create input<br />
+&nbsp;&nbsp;&nbsp; a) EXPERT MODE<br />
+&nbsp; &nbsp; b) TASKs for the programs: kkrscf. embscf -&gt; SCF -&gt; SCFVXC PBE -&gt; RETURN<br />
+&nbsp;&nbsp;&nbsp; c) CONTROL -&gt; LLOYD, FULLPOT<br />
+&nbsp;&nbsp;&nbsp; d) Hamiltonian -&gt; LDA+U<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, AMF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; V d U=1.34 (for 1 step case, click gray par)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fe_1 d U=1.80 (for 1 step case, click gray par)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Fe_2 d U=1.80 (for 1 step case, click gray par)<br />
+&nbsp;&nbsp;&nbsp; e) write inpfile quit<br />
+&nbsp; 2) input-file menu -&gt; edit input file<br />
+&nbsp;&nbsp;&nbsp; In MODE, add SP-SREL<br />
+&nbsp;&nbsp;&nbsp; SCF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NITER=200 -&gt; SCF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NITER=900<br />
+&nbsp;&nbsp;&nbsp; see ■ input file example (Fe2V0.97Al1.03)<br />
+&nbsp; 3) kkrscf6.3.0<br />
+&nbsp;&nbsp;&nbsp; a) create job file<br />
+&nbsp;&nbsp;&nbsp; b) select directory $HOME -&gt; sprkkr<br />
+&nbsp;&nbsp;&nbsp; c) programs found -&gt; kkrscf6.3<br />
+&nbsp; 4) kkrscf6.3.0 -&gt; create job file<br />
+&nbsp; 5) job-file menu<br />
+&nbsp;&nbsp;&nbsp; a) edit job file<br />
+&nbsp;&nbsp;&nbsp; b) source /usr/local/stc/bashrc_akhe -&gt; #source /usr/local/stc/bashrc_akhe<br />
+&nbsp;&nbsp;&nbsp; c) mpirun -np 8 /home/username/sprkkr/kkrscf6.3MPI AlV0.97Al0.03Fe2_SCF.inp&nbsp;&nbsp; &gt; AlV0.97Al0.03Fe2_SCF.out<br />
+&nbsp;&nbsp;&nbsp; -&gt; mpirun -np 4 /home/username/sprkkr/kkrscf6.3MPI AlV0.97Al0.03Fe2_SCF.inp<br />
+&nbsp;&nbsp;&nbsp; For example,<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp;&nbsp;&nbsp; #source /usr/local/etc/bashrc_akhe<br />
+&nbsp;&nbsp;&nbsp; cd /home/username/sprkkr/calc/Fe2V097Al103_PBE_AMF<br />
+&nbsp;&nbsp;&nbsp; mpirun -np 4 /home/username/sprkkr/kkrscf6.3MPI AlV0.97Al0.03Fe2_SCF.inp<br />
+&nbsp;&nbsp;&nbsp; -----<br />
+&nbsp; 6) jog-file menu -&gt; run (interactive)<br />
+&nbsp; -----(language Japanese case)<br />
+&nbsp; 6) close<br />
+&nbsp; 7) SELECT / MODIFY<br />
+&nbsp;&nbsp;&nbsp; a) .sys -&gt; edit -&gt; 1st line: remove japanese<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2.sys<br />
+&nbsp;&nbsp;&nbsp; b) .pot -&gt; edit -&gt; HEADER: remove japanese<br />
+&nbsp; &nbsp; &nbsp; For example, AlV0.97Al0.03Fe2.pot<br />
+&nbsp;&nbsp;&nbsp; c) close<br />
+&nbsp; 8) SPR-KKR<br />
+&nbsp;&nbsp;&nbsp; a) select | edit inpu-file -&gt; .inp<br />
+&nbsp;&nbsp; &nbsp;&nbsp; For example, AlV0.97Al0.03Fe2_DOS.inp<br />
+&nbsp;&nbsp;&nbsp; b) select | edit job-file -&gt; .job<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2_DOS.job<br />
+&nbsp; 9) jog-file menu -&gt; run (interactive)<br />
+□ retry SCF calculation<br />
+0. file and input file path<br />
+&nbsp; DIRECTORIES<br />
+&nbsp; 1) select directory<br />
+&nbsp;&nbsp;&nbsp;&nbsp; $HOME -&gt; sprkkr -&gt; calc -&gt; sample<br />
+&nbsp; 2) close<br />
+&nbsp; SELECT / MODIFY<br />
+&nbsp; 1) .sys<br />
+&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2.sys<br />
+&nbsp; 2) .pot<br />
+&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2.pot<br />
+&nbsp; 3) close<br />
+1. SPR-KKR<br />
+&nbsp; a) select | edit inpu-file -&gt; .inp<br />
+&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2_DOS.inp<br />
+&nbsp; b) select | edit job-file -&gt; .job<br />
+&nbsp;&nbsp;&nbsp; For example, AlV0.97Al0.03Fe2_DOS.job<br />
+2. jog-file menu -&gt; run (interactive)<br />
+<br />
+□ DOS calculation<br />
+SPR-KKR<br />
+1. ceate input<br />
+&nbsp; a) TASKs for the programs: kkrgen, embgen -&gt; DOS<br />
+&nbsp; b) NE 50 -&gt; 600<br />
+&nbsp; c) EMAX 1.0 -&gt; 1.25<br />
+&nbsp; d) Im(E) 0.01 -&gt; 0.001<br />
+&nbsp; e) Hamiltonian LDA+U<br />
+&nbsp;&nbsp;&nbsp; For example, AMF, V d U=1.34 (for 1 step case, click gray par), Fe_1 d U=1.80, Fe_2 d U=1.80<br />
+&nbsp; f) write inpfile quit<br />
+&nbsp; (retray case: replace *.pot by *.pot_new and CONTINUE)<br />
+2. inp-file menu<br />
+&nbsp; a) edit input-file<br />
+&nbsp; b) In MODE, SP-SREL<br />
+3. kkrgen6.3.0<br />
+&nbsp;&nbsp;&nbsp; a) create job file<br />
+&nbsp;&nbsp;&nbsp; b) select directory $HOME -&gt; sprkkr<br />
+&nbsp;&nbsp;&nbsp; c) programs found -&gt; kkrgen6.3<br />
+4. kkrgen6.3.0 -&gt; create job file<br />
+&nbsp; a) job-file menu<br />
+&nbsp; b) edit job file<br />
+&nbsp; c) source /usr/local/stc/bashrc_akhe -&gt; #source /usr/local/stc/bashrc_akhe<br />
+&nbsp; d) mpirun -np 8 /home/username/sprkkr/kkrgen6.3MPI AlV0.97Al0.03Fe2_DOS.inp&nbsp;&nbsp; &gt; AlV0.97Al0.03Fe2_DOS.out<br />
+&nbsp;&nbsp;&nbsp; -&gt; mpirun -np 4 /home/username/sprkkr/kkrgen6.3MPI AlV0.97Al0.03Fe2_DOS.inp<br />
+&nbsp; For example,<br />
+&nbsp; -----<br />
+&nbsp; #source /usr/local/etc/bashrc_akhe<br />
+&nbsp; cd /home/username/sprkkr/calc/Fe2V097Al103_PBE_AMF<br />
+&nbsp; mpirun -np 4 /home/username/sprkkr/kkrgen6.3MPI AlV0.97Al0.03Fe2_DOS.inp<br />
+&nbsp; -----<br />
+&nbsp; e) jog-file menu -&gt; run (interactive)<br />
+<br />
+□ plot<br />
+----<br />
+SPR-KKR<br />
+1. plot ( see right side)<br />
+2. select and run datafile -&gt; *_DOS.dos<br />
+3. close<br />
+----<br />
+1. cd $HOME/sprkkr/calc/sample<br />
+2. agr2eps -f *_DOS_dos.agr<br />
+3. chmod +x *_DOS.dos.agr.gnuplot<br />
+4. *_DOS.dos.agr.gnuplot<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 542px; height: 339px;" />
+<div style="text-align: center;">DOS (Fe2V0.97Al1.03)<br />
+・Fullpotential (FULLPOT)<br />
+・spin-polarized + scalar-relativistic (=SP-SREL)<br />
+・GGA(PBE)+U-AMF(around mean field) (V 3d 1.34 eV, Fe 3d 1.80 eV)<br />
+・EF calculation (LLOYD)<br />
+・SCF iteration 900 cycle (max)<br />
+Seebeck coefficient is ca. 80 microV/K @ 500 K derived from dos only, but it at high temperature (&gt; 600 K) is far from experimental results. Eg(T) ? mass or velocity ? tau ?&nbsp;</div>
+
+<p><br />
+------------------------------------------------------------------------------<br />
+■ input file example<br />
+<br />
+□ Fe2V0.97Al1.03 (SCF calculation)<br />
+・Fullpotential (FULLPOT)<br />
+・spin-polarized + scalar-relativistic (=SP-SREL)<br />
+・GGA(PBE)+U-AMF(around mean field) (V 3d 1.34 eV, Fe 3d 1.80 eV)<br />
+・EF calculation (LLOYD)<br />
+・SCF iteration 900 cycle (max)<br />
+------<br />
+###################################<br />
+#&nbsp; SPR-KKR input file&nbsp;&nbsp;&nbsp; AlV0.97Al0.03Fe2_SCF.inp<br />
+#&nbsp; created by xband on 10:27:12 JST<br />
+###################################<br />
+<br />
+CONTROL&nbsp; DATASET&nbsp;&nbsp;&nbsp;&nbsp; = AlV0.97Al0.03Fe2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ADSI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = SCF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; POTFIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = AlV0.97Al0.03Fe2.pot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRINT = 0&nbsp;&nbsp; &nbsp;<br />
+&nbsp;<br />
+MODE&nbsp;&nbsp;&nbsp;&nbsp; OP = LDA+U-MF&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LOPT&nbsp; = { n d n d d }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF1 = 0.00 eV&nbsp;&nbsp; JEFF1 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF2 = 1.34 eV&nbsp;&nbsp; JEFF2 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF3 = 0.00 eV&nbsp;&nbsp; JEFF3 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF4 = 1.80 eV&nbsp;&nbsp; JEFF4 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF5 = 1.80 eV&nbsp;&nbsp; JEFF5 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LLOYD<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SP-SREL<br />
+&nbsp;<br />
+TAU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BZINT= POINTS&nbsp; NKTAB= 250<br />
+&nbsp;<br />
+ENERGY&nbsp;&nbsp; GRID={5}&nbsp; NE={30}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ImE=0.0 Ry&nbsp;&nbsp; EMIN=-0.2 Ry<br />
+&nbsp;<br />
+SCF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NITER=900 MIX=0.20 VXC=PBE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOL=0.00001&nbsp; MIXOP=0.20&nbsp; ISTBRY=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FULLPOT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QIONSCL=0.80<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOSSITER<br />
+-----<br />
+<br />
+□ Fe2V0.97Al1.03 (DOS calculation)<br />
+-----<br />
+###################################<br />
+#&nbsp; SPR-KKR input file&nbsp;&nbsp;&nbsp; AlV0.97Al0.03Fe2_DOS.inp<br />
+#&nbsp; created by xband on ST<br />
+####################################<br />
+&nbsp;<br />
+CONTROL&nbsp; DATASET&nbsp;&nbsp;&nbsp;&nbsp; = AlV0.97Al0.03Fe2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ADSI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = DOS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; POTFIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = AlV0.97Al0.03Fe2.pot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRINT = 0&nbsp;&nbsp; &nbsp;<br />
+&nbsp;<br />
+MODE&nbsp;&nbsp;&nbsp;&nbsp; OP = LDA+U-MF&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LOPT&nbsp; = { n d n d d }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF1 = 0.00 eV&nbsp;&nbsp; JEFF1 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF2 = 1.34 eV&nbsp;&nbsp; JEFF2 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF3 = 0.00 eV&nbsp;&nbsp; JEFF3 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF4 = 1.80 eV&nbsp;&nbsp; JEFF4 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF5 = 1.80 eV&nbsp;&nbsp; JEFF5 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LLOYD<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SP-SREL<br />
+&nbsp;<br />
+TAU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BZINT= POINTS&nbsp; NKTAB= 250<br />
+&nbsp;<br />
+ENERGY&nbsp;&nbsp; GRID={3}&nbsp; NE={600}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ImE=0.001 Ry&nbsp;&nbsp; EMIN=-0.2&nbsp;&nbsp; EMAX=1.25 Ry<br />
+&nbsp;<br />
+TASK&nbsp;&nbsp;&nbsp;&nbsp; DOS<br />
+-----<br />
+<br />
+□ Fe2VAl<br />
+・Fullpotential (FULLPOT)<br />
+・spin-polarized + scalar-relativistic (=SP-SREL)<br />
+・GGA(PBE)+U-AMF(around mean field) (V 3d 1.34 eV, Fe 3d 1.80 eV)<br />
+・EF calculation (LLOYD)<br />
+・SCF iteration 900 cycle (max)<br />
+-----<br />
+###############################################################################<br />
+#&nbsp; SPR-KKR input file&nbsp;&nbsp;&nbsp; AlVFe2_SCF.inp<br />
+#&nbsp; created by xband on JST<br />
+###############################################################################<br />
+&nbsp;<br />
+CONTROL&nbsp; DATASET&nbsp;&nbsp;&nbsp;&nbsp; = AlVFe2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ADSI&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = SCF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; POTFIL&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = AlVFe2.pot<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PRINT = 0&nbsp;&nbsp; &nbsp;<br />
+&nbsp;<br />
+MODE&nbsp;&nbsp;&nbsp;&nbsp; OP = LDA+U-MF&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LOPT&nbsp; = { n d d d }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF1 = 0.00 eV&nbsp;&nbsp; JEFF1 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF2 = 1.34 eV&nbsp;&nbsp; JEFF2 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF3 = 1.80 eV&nbsp;&nbsp; JEFF3 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; UEFF4 = 1.80 eV&nbsp;&nbsp; JEFF4 = 0.00 eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LLOYD<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SP-SREL<br />
+&nbsp;<br />
+TAU&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BZINT= POINTS&nbsp; NKTAB= 250<br />
+&nbsp;<br />
+ENERGY&nbsp;&nbsp; GRID={5}&nbsp; NE={30}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ImE=0.0 Ry&nbsp;&nbsp; EMIN=-0.2 Ry<br />
+&nbsp;<br />
+SCF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NITER=900 MIX=0.20 VXC=PBE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; TOL=0.00001&nbsp; MIXOP=0.20&nbsp; ISTBRY=1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FULLPOT<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; QIONSCL=0.80<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NOSSITER<br />
+-----<br />
+<br />
+* NiS2 case<br />
+FULLPOT (MODE SP-SREL, NTAB=50): OK!<br />
+LDA+U (VWN + AMF &amp; AAL, SP-SREL): U=6.39 eV: fault (due to Japanese font ?)<br />
+------------------------------------------------------------------------------<br />
+&nbsp;</p>
