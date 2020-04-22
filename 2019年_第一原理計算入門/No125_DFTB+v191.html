@@ -812,7 +812,10 @@ Geometry = GenFormat {<br />
 	</tbody>
 </table>
 
-<p><br />
+<p>※ 3OB: <font face="Arial,Verdana,Geneva,Helvetica,sans-serif"><font size="2">T<span style="text-align: justify; color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: normal; font-style: normal; font-variant: normal; font-weight: 400; text-decoration: none; word-spacing: 0px; display: inline !important; white-space: normal; orphans: 2; float: none; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">he Third-Order Parametrization for Organic and Biological Systems<br />
+※&nbsp;</span></font></font><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">DFTB3: Third Order Density Functional Tight Binding<br />
+※ You should click &quot;Name&quot; on &quot;https://www.dftb.org/parameters/download/&quot; and read text, e.g., 3ob (https://www.dftb.org/parameters/download/3ob/3ob-3-1-cc/) that show setting parameters.</span><br />
+<br />
 □ Graphite + H2<br />
 28. cp graphite.gen graphite_h2.gen<br />
 29. gedit&nbsp;graphite_h2.gen<br />
@@ -851,7 +854,7 @@ Geometry = GenFormat {<br />
 &nbsp; &nbsp; #O = -0.1575<br />
 &nbsp; }<br />
 &nbsp; DampXH = Yes<br />
-&nbsp; DampXHExponent = 4.05<br />
+&nbsp; DampXHExponent = 4.00<br />
 -----<br />
 34. dftb+<br />
 35. jmol geo_end.xyz<br />
@@ -1119,106 +1122,145 @@ Driver = VelocityVerlet {<br />
 ■ Parameter<br />
 <br />
 ・ Download of Slater-Koster files<br />
-<br />
-&nbsp; https://www.dftb.org/parameters/download/</p>
+&nbsp; (https://www.dftb.org/parameters/download/)</p>
 
-<table border="1" cellpadding="1" cellspacing="1" style="width: 423px;">
+<table border="1" cellpadding="1" cellspacing="1" style="width: 551px;">
 	<tbody>
 		<tr>
-			<td style="width: 73px; text-align: center;">CH</td>
-			<td style="width: 337px; text-align: center;">炭化水素</td>
+			<td style="width: 80px; text-align: center;">Name<br />
+			(Requires)</td>
+			<td style="width: 313px; text-align: center;">Target（element）[SOC parameter]</td>
+			<td style="width: 144px; text-align: center;">Feature</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">CHNO</td>
-			<td style="width: 337px; text-align: center;">炭素、水素、窒素、酸素を含む分子</td>
+			<td style="width: 80px; text-align: center;">CH</td>
+			<td style="width: 313px; text-align: center;">炭化水素</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">SiGeH</td>
-			<td style="width: 337px; text-align: center;">シリコン、ゲルマニウム、水素を含む半導体</td>
+			<td style="width: 80px; text-align: center;">CHNO</td>
+			<td style="width: 313px; text-align: center;">炭素、水素、窒素、酸素を含む分子</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">3ob</td>
-			<td style="width: 337px; text-align: center;">3次SCC法による生体および有機分子<br />
+			<td style="width: 80px; text-align: center;">SiGeH</td>
+			<td style="width: 313px; text-align: center;">シリコン、ゲルマニウム、水素を含む半導体</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">3ob</td>
+			<td style="width: 313px; text-align: center;">3次SCC法による生体および有機分子<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Br-C-Ca-Cl-F-H-I-K-Mg-N-Na-O-P-S-Zn</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">AuOrg</td>
-			<td style="width: 337px; text-align: center;">有機物と金元素を含む系<br />
-			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Au - Au,H,C,N,O,S</span>)</td>
+			<td style="width: 80px; text-align: center;">mio</td>
+			<td style="width: 313px; text-align: center;">生体および有機分子<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">H - C - N - O - S - P</span>)<br />
+			[spin coupling constant: mio-1-1.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">borg</td>
-			<td style="width: 337px; text-align: center;">ホウ素およびホウ素化合物<br />
+			<td style="width: 80px; text-align: center;">AuOrg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">有機物と金元素を含む系<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Au - Au,H,C,N,O,S</span>)<br />
+			[spin coupling constant]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">borg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">ホウ素およびホウ素化合物<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">B-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">chalc</td>
-			<td style="width: 337px; text-align: center;">カルコゲン化物<br />
+			<td style="width: 80px; text-align: center;">chalc<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">カルコゲン化物<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">As-S-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">halorg</td>
-			<td style="width: 337px; text-align: center;">ハロゲン元素を含む有機分子<br />
+			<td style="width: 80px; text-align: center;">halorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">ハロゲン元素を含む有機分子<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(F,Cl,Br,I)-(C,N,O,H)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">hyb</td>
-			<td style="width: 337px; text-align: center;">有機・無機の混合物<br />
-			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ag - O - C - H | Ga - As - S - H | Ga - S - O - C - H | Ag - Si | As - Si | Ga - Si | S - Si</span>)</td>
+			<td style="width: 80px; text-align: center;">hyb<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">有機・無機の混合物<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ag - O - C - H | Ga - As - S - H | Ga - S - O - C - H | Ag - Si | As - Si | Ga - Si | S - Si</span>)<br />
+			[spin coupling constant: hyb-0-2.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">magsil</td>
-			<td style="width: 337px; text-align: center;">クリソタイルナノチューブ<br />
-			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Mg - Si,O,H,Mg</span>)</td>
-		</tr>
-		<tr>
-			<td style="width: 73px; text-align: center;">matsci</td>
-			<td style="width: 337px; text-align: center;">有機物・金属酸化物・ゼオライトなどの系<br />
+			<td style="width: 80px; text-align: center;">matsci</td>
+			<td style="width: 313px; text-align: center;">有機物・金属酸化物・ゼオライトなどの系<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Al-O-H | Al-Si-O-H | Cu-Si-Al-Na-O-H | Ti-P-O-N-C-H | O-N-C-B-H | Al-O-C-H | Si-P-N-O-C-H</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA (Ceperly-Alder)</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">mio</td>
-			<td style="width: 337px; text-align: center;">生体および有機分子<br />
-			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">H - C - N - O - S - P</span>)</td>
+			<td style="width: 80px; text-align: center;">magsil<br />
+			(matsci)</td>
+			<td style="width: 313px; text-align: center;">クリソタイルナノチューブ<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Mg - Si,O,H,Mg</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA (Ceperly-Alder)</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">ob2</td>
-			<td style="width: 337px; text-align: center;">生体および有機分子に対する長距離補正<br />
+			<td style="width: 80px; text-align: center;">ob2</td>
+			<td style="width: 313px; text-align: center;">生体および有機分子に対する長距離補正<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">H-C-N-O</span>)</td>
+			<td style="width: 144px; text-align: center;">pxchybrid (omega=0.3)</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">pbc</td>
-			<td style="width: 337px; text-align: center;">固体および表面<br />
-			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Si - F - O - N - C - H&nbsp; | Fe</span>)</td>
+			<td style="width: 80px; text-align: center;">pbc</td>
+			<td style="width: 313px; text-align: center;">固体および表面<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Si - F - O - N - C - H&nbsp; | Fe</span>)<br />
+			[spin coupling constant: pbc-0-3.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">rare</td>
-			<td style="width: 337px; text-align: center;">GaN中のEu不純物の計算用<br />
+			<td style="width: 80px; text-align: center;">rare</td>
+			<td style="width: 313px; text-align: center;">GaN中のEu不純物の計算用<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Eu-Ga-N</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA+U<br />
+			(LDA:Ceperly-Alder)</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">siband</td>
-			<td style="width: 337px; text-align: center;">シリコンおよびシリカの電子状態計算用<br />
+			<td style="width: 80px; text-align: center;">siband</td>
+			<td style="width: 313px; text-align: center;">シリコンおよびシリカの電子状態計算用<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Si-O-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">tiorg</td>
-			<td style="width: 337px; text-align: center;">チタン単金属、TiO2結晶および表面と有機分子<br />
+			<td style="width: 80px; text-align: center;">tiorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">チタン単金属、TiO<sub>2</sub>結晶および表面と有機分子<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ti-Ti | Ti - (C, H, N, O, S)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">trans3d</td>
-			<td style="width: 337px; text-align: center;">有機物中に遷移金属を含む系<br />
+			<td style="width: 80px; text-align: center;">trans3d<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">有機物中に遷移金属を含む系<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(Sc,Ti,Fe,Co,Ni) - (H,C,N,O) | Sc - Sc | Ti - Ti | Fe - Fe | Co - Co | Ni - Ni</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 		<tr>
-			<td style="width: 73px; text-align: center;">znorg</td>
-			<td style="width: 337px; text-align: center;">亜鉛単金属、ZnO2結晶および表面と有機分子<br />
+			<td style="width: 80px; text-align: center;">znorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">亜鉛単金属、ZnO<sub>2</sub>結晶および表面と有機分子<br />
 			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Zn-Zn | Zn - (C,H,N,O,S)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
 		</tr>
 	</tbody>
 </table>
 ※&nbsp;CH,&nbsp;CHNO,&nbsp;SiGeHはどこに存在するかまだ私がよくわかっていない。<br />
+※ LC: long range correction<br />
 &nbsp; Slater-Koster parameters<br />
 1. cd ~/dftbplus/recipes/slakos<br />
 2. wget https://www.dftb.org/fileadmin/DFTB/public/slako-packed.tar<br />
@@ -1226,7 +1268,7 @@ Driver = VelocityVerlet {<br />
 3. tar xvf slako-packed.tar<br />
 <br />
 ・ KIST Integrated Force Field Platform<br />
-&nbsp; http://kiff.vfab.org/<br />
+&nbsp; (http://kiff.vfab.org/)<br />
 <br />
 [P1] DFTB Parameters for the Periodic Table: Part 1, Electronic Structure<br />
 &nbsp; https://pubs.acs.org/doi/suppl/10.1021/ct4004959<br />
@@ -1410,7 +1452,28 @@ ARPACK_NEEDS_LAPACK := 1<br />
 6. make test&nbsp;TEST_OMP_THREADS=2<br />
 7. make install<br />
 (~/dftbplus-19.1/_install/bin/dftb+)<br />
-------------------------------------------------------------------------------<br />
+<br />
+□ bug fix: 22/April/2020<br />
+--------------------------<br />
+Turned off mulliken analysis in non-scc runs produces garbage #447<br />
+<br />
+When the Mulliken analysis is explicitely turned of in non-scc runs, the resulting energy only contains the repulsive contribution. The electronic part is set to zero, resulting in invalid results.<br />
+<br />
+https://github.com/dftbplus/dftbplus/issues/447<br />
+--------------------------<br />
+(e.g, for ~/dftbplus-18.2/recipes/moleculardynamics/annealSW/dftb_in.hsd)<br />
+<br />
+As a workaround for the moment, turn on the&nbsp;<br />
+<br />
+MullikenAnalysis<br />
+<br />
+option in the&nbsp;<br />
+<br />
+Analyses<br />
+<br />
+block, and you should recover the old (correct) results.<br />
+--------------------------<br />
+------------------------------------------------------------------------<br />
 ■ Appendix 2 (DFTB+ 18.2, installation using wget command)<br />
 (for &quot;Introduction &mdash; DFTB+ Recipes 18.2 documentation&quot;)<br />
 <br />
