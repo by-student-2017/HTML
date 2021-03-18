@@ -1,0 +1,164 @@
+　ここでは、他者のとの共同開発に必要な技術を記述する。<br />
+--------------------------------------------------------------------------------<br />
+■ 分散型のバージョン管理システム<br />
+・ GitHub： <a href="https://github.com/">https://github.com/</a><br />
+・ Bitbucket： <a href="https://bitbucket.org/">https://bitbucket.org/</a><br />
+&nbsp; <a href="https://www.atlassian.com/ja/software/bitbucket/overview">https://www.atlassian.com/ja/software/bitbucket/overview</a>, <a href="http://ja.wikipedia.org/wiki/Bitbucket">http://ja.wikipedia.org/wiki/Bitbucket</a>, <a href="http://webbingstudio.com/weblog/internet/entry-651.html">http://webbingstudio.com/weblog/internet/entry-651.html</a><br />
+・ gitlab：<a href="https://about.gitlab.com/">https://about.gitlab.com/</a><br />
+・ GitBucket：<a href="https://github.com/takezoe/gitbucket">https://github.com/takezoe/gitbucket</a><br />
+<br />
+■ 学習<br />
+・ サルでも分かるGit入門： <a href="http://www.backlog.jp/git-guide/">http://www.backlog.jp/git-guide/</a><br />
+・ Pro Git： <a href="http://progit-ja.github.io/">http://progit-ja.github.io/</a><br />
+・ Gitを使いこなすための20のコマンド： <a href="http://sourceforge.jp/magazine/09/03/16/0831212">http://sourceforge.jp/magazine/09/03/16/0831212</a><br />
+※ UNIX/Linux/Macの場合は man git でマニュアルを読むことができる。<br />
+<br />
+■ テキストファイルでの差分の取り方<br />
+・ git diff<br />
+・ svn diff<br />
+・ TortoiseGit： <a href="http://code.google.com/p/tortoisegit/">http://code.google.com/p/tortoisegit/</a><br />
+・ TortoiseSVN： <a href="http://tortoisesvn.net/">http://tortoisesvn.net/</a><br />
+・ SourceTree： <a href="http://www.sourcetreeapp.com/">http://www.sourcetreeapp.com/</a>　<br />
+<br />
+■ ドキュメント作成ソフト<br />
+・ Markdown： &nbsp;<br />
+・ Textile：<br />
+・ reStructuredText：<br />
+<br />
+■ 外部ライブラリ<br />
+・ Apache Commons：<br />
+・ ImageMagick：<br />
+・ Mechanize：<br />
+<br />
+■ ブランチ戦略<br />
+・ gtihub-flow：<br />
+・ git-flow：<br />
+※ Pull Request はリポジトリ間だけではなく、同一リポジトリ内のブランチ間だけでも送ることができます。[1]<br />
+<br />
+■ データベースイマグレーションツール<br />
+・ Migration (Ruby on Rails)<br />
+・ south (Django)<br />
+・ Migrations Plugin (Cake PHP)<br />
+・ Evolution (Play Framework)<br />
+Java<br />
+・ Flyway<br />
+・ Liquibase<br />
+・ dbdeploy<br />
+<br />
+■ 依存関係の管理<br />
+◇ JVM系言語（リポジトリしてMavenリポジトリを参照する）<br />
+・ Apache Ant ( + Apache ivy)<br />
+・ Maven<br />
+・ sbt<br />
+・ Gradle<br />
+◇ Mavenリポジトリ<br />
+・ Maven セントラルリポジトリ<br />
+・ Sonatype （セントラルリポジトリのミラー）<br />
+◇ スクリプト系 (リポジトリとツールは同一）<br />
+・ ＣＰＡＮ<br />
+・ PyPl<br />
+・ RubyGems<br />
+・ npm<br />
+<br />
+■ 世の中には「うまくいかない、終わらない」（＝チャレンジングな）プロジェクトが（多数）存在します。[1]<br />
+理由<br />
+・ 目標（建前と本音）が間違っている<br />
+・ 見積もり（実験計画）が不正確（蛸壺化し、上が事務化したため、適した実験手法を各段階で現場レベルの知識で選択できていない）で納期（プロジェクト期間と実験計画のフロー）が異常に短く（原因結果を追求できず）、（各実験におけるプロフェッショナル）要員が（予算不足で）不足している<br />
+・ プロジェクトの終わりが定義されていない（最終目標やフローはあるが実際には逆さになっても実現できない）<br />
+・ メンバーのモチベーションが（壁が多すぎて失敗続きで）上がらず進捗しない<br />
+・ （開催期日だけが決められて形だけの会議で時間が取られ）プロジェクトの見える化ができていない<br />
+・ タスクの整理、進捗の管理、情報（要求仕様の建前と本音）の共有などができていない（特に前任者の仕事を引き継ぐ場合は後任者に情報を容易に受け渡せるようにできているかは大切にして欲しい。前任者の仕事を調べるだけで多大な苦労と時間を要し、上司からも文句を言われる状況は間違っている）<br />
+※ 買い手市場なのは分かりますが、必要な学術的知識を与えているかも先任者や上司は気を配るべきです。<br />
+<br />
+■ チケット管理システム<br />
+◇ メリット<br />
+・ 「何をしなければいけないのか」というタスクの定義<br />
+・ 「誰がするのか」という担当者のアサイン<br />
+・ 「いつまでにするのか」という期限の管理<br />
+・ 「今どうなっているのか、作業中なのか、完了したのか」というステータスの管理<br />
+◇ システム（バグ管理システム、お客様からの問い合わせ管理、他部署への作業依頼管理）<br />
+・ Redmine<br />
+・ GitHub<br />
+・ Trac<br />
+・ Kanon<br />
+・ Bugzilla<br />
+・ Mantis<br />
+・ Backlog （10ユーザー、1プロジェクトまで無料）<br />
+・ YouTRACK （10ユーザーまで無償）<br />
+・ JIRA (商用)<br />
+・ Pivotal Tracker<br />
+<br />
+■ インテグレーション　＝ 以下のビルドとテストを行うプロセス　[1]<br />
+・ すべてのソースコードを1ヶ所に集める<br />
+・ 依存するライブラリなどにパスを通す<br />
+・ 必要な場合はコンパイルする<br />
+・ データベースの構築とデータのロードを行う<br />
+・ 必要に応じてミドルウェアの設定や起動を行う<br />
+・ 単体テストと結合テスト、ユーザ受け入れテストなどを実施する<br />
+<br />
+■ ビルドツール<br />
+・ Maven<br />
+・ Ant<br />
+・ Gradle<br />
+・ make<br />
+・ SCons<br />
+・ Ｒａｋｅ<br />
+<br />
+■ テストを書くためのフレームワーク<br />
+◇&nbsp;テスト駆動開発（TDD）系フレームワーク<br />
+・ JUnit<br />
+・ TestNG<br />
+◇ 振る舞い駆動開発（BDD）系フレームワーク<br />
+・ RSpec (Ruby)<br />
+・ Cucumber<br />
+・ Ｊａｓｍｉｎｅ (Javascript)<br />
+・ Specs2 (Scala)<br />
+<br />
+■ CIツール<br />
+・ Ｊｅｎｋｉｎｓ<br />
+・ TravisCI<br />
+<br />
+■&nbsp;ガバレッジ計測ツール<br />
+・ Jacoco<br />
+・ Cobertura<br />
+・ Scct<br />
+・ SimpleCov<br />
+・ Rcov<br />
+<br />
+■ 静的解析 (Jenkinsで利用可能)<br />
+・ Checkstyle<br />
+・ PMD<br />
+・ Findbugs<br />
+■&nbsp;動的型付け言語<br />
+・ JSLint (JavaScript)<br />
+<br />
+■ 手作業のデプロイで便利なツール<br />
+・ Tera Term<br />
+・ RLogin<br />
+・ ClusterSSH/ Parallelssh/ Clusterlt<br />
+<br />
+Java系言語（Scala, Groovy, JRubyなど）のOSSライブラリ： <a href="http://search.maven.org/">http://search.maven.org/</a><br />
+Mavenのpom.xml に依存関係を書く。&lt;dependencies&gt;<br />
+◇ Mavenの構成<br />
+・ pom.xml： プロジェクトのビルド定義<br />
+・ src/main/japa： アプリケーショコード<br />
+・ src/main/resources： アプリケーションのリソース<br />
+・ src/main/webapp： EWB-INFやJSPファイルなどのWeb関連ファイル<br />
+・ src/test/japa： テストコード<br />
+・ src/test/resources： テストでのみ使うリソース<br />
+・ target： Classやjar、テスト結果などの成果物<br />
+<br />
+参考文献<br />
+[1] 池田尚史ら著、『チーム開発 実践入門』、技術評論社<br />
+[2] 「そもそもGitって何？」： <a href="http://blog.sixapart.jp/2014-03/mttips-02-what-is-git.html">http://blog.sixapart.jp/2014-03/mttips-02-what-is-git.html</a>&nbsp;<br />
+[3] 「チーム開発実践入門」勉強会： <a href="http://www.slideshare.net/yuishikawa/2014-0428-teamdevelopment">http://www.slideshare.net/yuishikawa/2014-0428-teamdevelopment</a><br />
+--------------------------------------------------------------------------------<br />
+「どこでも自動化」 「デイリービルドは君の友達」<br />
+<br />
+池田尚史ら著、『チーム開発 実践入門』、技術評論社<br />
+　今までデプロイのすべてを手動で行っていた環境からすべてを自動化に変えようとする際に、何から手をつければよいかという質問を受けたことがあります。それに対する回答は「協力者と出資者を見つけろ」です。<br />
+　デプロイの自動化は開発者からQAチーム、そしてインフラチームの横串一環で達成できる成果物です。デプロイの自動化を進めると何がどう良くなるのかを根気よく説得し、チーム一丸となって目指してください。<br />
+　またそれを目指すうえでは、新しい環境やそれに費やす時間が必要です。出資者、会社であれば経営層に対してもデプロイの自動化について説得するようにしましょう。あなたの会社ではリソースが十分に余っていて、Googleの20%ルールのような研究時間が与えられているのであれば、説得する前に自動化に必要な作業を進めてしまい、動くものを持ってデモすることで説得してみましょう。価値を頻繁に届けることができれば、少なからず会社にとっても良い影響が出てくるはずです。<br />
+　チーム内に非協力的なメンバーがいた場合には、最初は面倒臭がって決められたルールを守らないかもしれませんが、根気よく自動化を推進してください。少しずつデプロイの自動化がチーム全体に、そして会社全体に浸透し始めたときにはそれがなくてはならない存在になっているでしょう。<br />
+　旧来からのデプロイには職人芸を求められていましたが、自動化がきちんと回り始めればこの職人芸は必要ありません。今までの職人も自動化環境をメンテナンスすることによって、夜はきちんと睡眠がとれて、休日を、プライベートをエンジョイできるようになるでしょう。会社にとっても、エンジニアを幸せにするデプロイの自動化をやらない手はないはずです。<br />
+--------------------------------------------------------------------------------

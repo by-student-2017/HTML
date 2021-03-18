@@ -1,0 +1,110 @@
+------------------------------------------------------------------------------<br />
+■ クラスターのモデルをどのように近似するか？　<br />
+-アモルファス的な構造の場合-<br />
+A1. 局所的な構造が決まっているものであればそれを用いる<br />
+A2. 分子動力学で用いられるポテンシャルを大まかに理解してモデルを作る<br />
+　例えば、Siではターソフポテンシャルを見ると、ある角度、ある原子間距離で安定になることが分かる。その安定な構造を元にモデルを構築して、第一原理計算で構造最適化し、置換した場合での物性等を議論していけばよい。<br />
+A3. 分子動力学で得た局所的な構造を用いる<br />
+------------------------------------------------------------------------------<br />
+■ Youtube Movies; <a href="https://www.youtube.com/watch?v=kJF2MtEtmLc&amp;list=PLYoIKHKPkcsEQEw-3B642uT3Nak526yge">https://www.youtube.com/watch?v=kJF2MtEtmLc&amp;list=PLYoIKHKPkcsEQEw-3B642uT3Nak526yge</a><br />
+------------------------------------------------------------------------------<br />
+■ クラスターの作り方<br />
+1. PWscfで構造最適化する<br />
+2. XcrySDenでoutファイルを読み込んで、最適化の構造を選択する。WIEN2k形式でsaveする<br />
+3. VESTAで読み、xyz形式にする<br />
+4. displatを用いる<br />
+　1) 3:Specailを選択<br />
+　2) 原子番号、X、Y、Zをそれぞれ１、２、３、４、と入力し、Angstromとして1を入力<br />
+　3) iボタンで中心にしたい原子を選択する<br />
+　4) ESCを押して、Selected Atom to Centerを選択<br />
+　5) ESCを押して、Search Selected Atoms Neighborを選択<br />
+　　Search Lenght:に値を入力<br />
+　　sを押して距離の小さい順に並べなおす<br />
+　　Sは原子の種類を分けて表示<br />
+　6) Delete Atoms out of sphere を選択して欲しいクラスターを切り出す<br />
+　7) Make F01 (XYZ in double)を選択<br />
+　　Select NEQ order はどれでもよいが3がよいと思う<br />
+　　Deviation は 0.01%にすればよい<br />
+5. f01の中身を見て、XD, YD, ZDがほぼ同じものを同じ値にしてNEQの値も同じにする<br />
+6. dvxaで計算する<br />
+------------------------------------------------------------------------------<br />
+■ Si system<br />
+1. PWscf (vc-relux, 2x2x2 supercell)<br />
+2. case.out (PWscf output file) &gt; xcrysden &gt; case.xsf or case.struct &gt; VESTA (Edit &gt; Edit Data &gt; unitcell &gt; Transform... &gt; Origin shift p 0.5 0.5 0.5 &gt; OK &gt; apply &gt; OK)&gt; case.xyz &gt; displat (change center and cut 5.5 Ang form center) &gt; case.xyz &gt; VESTA &gt; case.cif &gt; Winmostar (delete Si and add H, Si35H36) &gt; MOL(*.mol, *.mdl) &gt; VESTA &gt; xyz &gt; displat &gt; f01<br />
+3. DVXa scat<br />
+------------------------------------------------------------------------------<br />
+■ displat (on Windows)<br />
+・メニュー：Esc<br />
+・変化量の調整：shift + h, j, k or l<br />
+・回転：<br />
+　x軸中心：&uarr; or &darr;<br />
+　y軸中心：&larr; or &rarr;<br />
+　z軸中心：z or&nbsp;x<br />
+・画面の大きさ変更：w<br />
+・平行移動：h, j, k or l<br />
+・Detele Atomic on Screen-2で大きさを変更: a or z<br />
+------------------------------------------------------------------------------<br />
+■ 鏡面対称性の作成の仕方1<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+2. symOrbでsを押して探索させCsが表示される<br />
+3. f01を出力する<br />
+4. f01のNEWを見やすいように並べて、同じNEWのXYZの値を揃える<br />
+5. makef25<br />
+6. makef05<br />
+7. dvscat<br />
+------------------------------------------------------------------------------<br />
+■ 鏡面対称性の作成の仕方2（鏡面対称性のあるf01がmakef25で自動認識されない場合など）<br />
+1. displatでZ軸が画面に対して垂直であるようにしてf01を出力する<br />
+&nbsp;（displatで鏡面対称性を作ると入力ファイルに対して少し安心できる）<br />
+（ここでNEWが順番になるようにコピー＆ペーストしておくとf25を比較しやすくなるが、f25.inでのチェックは難しくなる）<br />
+2. Excelなどでf01を読み取り、angstromの場合は1.889725989倍にしてbohr(atomic)単位にする。桁数は揃えておきたい（Excelのボタンにある）。<br />
+2. f25.inの名称のファイルを作る（makef25sでｚに対して+と-の座標ができる）。Excelのデータをコピー&amp;ペーストする。置換でTabを空白に変えておく。<br />
+Cs<br />
+&nbsp;考慮に入れる軌道（第四と五周期の原子があるならばd、第六周期があるならばf）<br />
+bohr(atomic)単位で座標を入力する（鏡面に対する片方のみを記述する）<br />
+3. makef25sを入力し作成されたf25を確認し、f25の形式と同じ順番となるようにf01を確認する<br />
+4. makef05<br />
+5. dvscat<br />
+------------------------------------------------------------------------------<br />
+■ makeing cluster (outline)<br />
+1) optimized calculation on PWscf or VASP&nbsp;(for example, 2x2x2 supercell)<br />
+(1.5) read out file on XcrySDen and output *.sxf format when you used PWscf)<br />
+2) convert xyz format on VESTA&nbsp;(VESTA can expand cell)<br />
+3) use displat (on windows)<br />
+&nbsp;3.1) select &quot;3:Specail&quot;<br />
+&nbsp;3.2) Number of Data (0:auto):0<br />
+&nbsp;3.3) input 1, 2, 3, 4 designated as atomic number, X, Y, Z, then input 1 (Angstrom)<br />
+&nbsp;3.4) select atom you want to set center with &quot;i&quot; button<br />
+&nbsp;3.5) put on &quot;ESC&quot; button, select &quot;Selected Atom to Center&quot;<br />
+&nbsp;3.6) put on &quot;ESC&quot; button, select &quot;Search Selected Atoms Neighbor&quot;<br />
+&nbsp;&nbsp; 3.6.1) input value to &quot;Search Lenght:&quot;<br />
+&nbsp;&nbsp; 3.6.2) put on &quot;s&quot; to arrange ascending order<br />
+&nbsp;&nbsp; 3.6.3) &quot;S&quot; mean showing classify atomic number<br />
+&nbsp;4) to get cluster, select &quot;Delete Atoms out of sphere&quot;<br />
+&nbsp;5) select &quot;Make F01 (XYZ in double)&quot;<br />
+&nbsp;&nbsp; 5.1) select 3 for Select NEQ order<br />
+&nbsp;&nbsp; 5.2) 0.01% is enough to calculation for Deviation<br />
+6) arrange same &quot;XD, YD, ZD&quot; to same NEQ value3 in f01<br />
+7) calculate on dvxa code (on windows or wine on Linus)<br />
+8) For wine on Linux, cd $HOME/.wine/drive_c -&gt; wine cmd<br />
+9) setdvxa -&gt; cd calc -&gt; makef05 -&gt; dvscat (on windows or wine)<br />
+10)&nbsp;make l04<br />
+&nbsp;&nbsp; 10.1) modify l04<br />
+&nbsp;&nbsp; 10.2) lvlshm<br />
+11) make d04<br />
+&nbsp;&nbsp; 11.1) modify d04<br />
+&nbsp;&nbsp; 11.2) dos<br />
+12) get L08 or L08KG and dd7<br />
+------------------------------------------------------------------------------<br />
+■ displat (on Windows)<br />
+・Menu ：Esc<br />
+・change difference value：shift + h, j, k or l<br />
+・rotation：<br />
+&nbsp;x-axis：&uarr; or &darr;<br />
+y-axis：&larr; or &rarr;<br />
+z-axis：z or x<br />
+・change display scale：w<br />
+・parallel transport：h, j, k or l<br />
+・change size on &quot;Detele Atomic on Screen-2&quot;: a or z<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

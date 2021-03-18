@@ -1,0 +1,245 @@
+------------------------------------------------------------------------------<br />
+■ FPMS &amp; FPXMAN &amp; XMAN<br />
+(Edit:9/Mar/2021)<br />
+<br />
+・FPMS: Full-Potential Multiple-Scattering.<br />
+・FPXMAN:&nbsp;Full-Potential version of XMAN.<br />
+・XMAN: Fit the XANES part of experimental X-ray Absorption data.<br />
+&nbsp;&nbsp;(<a href="http://www.esrf.eu/computing/scientific/MXAN/index.html">MXAN (esrf.eu)</a>) (<a href="http://www.lnf.infn.it/theory/CondensedMatter/">Condensed Matter Physics (infn.it)</a>)<br />
+&nbsp;&nbsp;(<a href="http://www.lnf.infn.it/theory/CondensedMatter/ksups2011.html">Condensed Matter Physics (infn.it)</a>)<br />
+------------------------------------------------------------------------------<br />
+■ FPMS<br />
+<br />
+□ Get code (Dr. K. Hatada at &quot;University of Toyama&quot;)<br />
+・<a href="https://www.sci.u-toyama.ac.jp/phys/3ken/index_3ken.html">富山大学理学部物理３研 (u-toyama.ac.jp)</a><br />
+&nbsp; &gt;&nbsp;<a href="https://www.sci.u-toyama.ac.jp/phys/3ken/index_study_hatada.html">Group 3 (u-toyama.ac.jp)</a><br />
+<br />
+□ Usage<br />
+1. gedit data.ms<br />
+2. fpms_nompi.exe<br />
+&nbsp;&nbsp;(multi-core case:&nbsp;fpms_mpi.exe)<br />
+&nbsp;&nbsp;<br />
+□ Plot<br />
+1. gnuplot&nbsp;<br />
+2. set xlabel &quot;Photoelectron kinetic energy [eV]&quot;<br />
+3. set ylabel &quot;Absorption [arb. unit]<br />
+4. plot &quot;abs.dat&quot; u ($1*13.6):2 w l t &quot;z-pol&quot;<br />
+&nbsp; plot &quot;abs.dat&quot; u ($1*13.6):3 w l t &quot;x-pol&quot;<br />
+&nbsp;&nbsp;plot &quot;abs.dat&quot; u ($1*13.6):4 w l t &quot;y-pol&quot;<br />
+&nbsp;&nbsp;plot &quot;abs.dat&quot; u ($1*13.6):5 w l t &quot;total (non polarization)&quot;&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ FPXMAN<br />
+<br />
+□ Input file<br />
+・COMMAND.MIN<br />
+&nbsp; set fitting parameters<br />
+&nbsp; r = radius, f = phi angle, t = theta angle, 00X = ID of atom<br />
+・data.ms<br />
+&nbsp; set calculation condition and strcuture<br />
+&nbsp; (Add [calcmode=&quot;fpms&quot;,] on data.ms of XMAN)<br />
+・exp.dat<br />
+&nbsp; experimental data (energy (eV), abs)<br />
+<br />
+□ Usage<br />
+1. fpxman_nompi.exe<br />
+&nbsp;&nbsp;(multi-core case:&nbsp;fpxman_mpi.exe)<br />
+<br />
+□ Plot<br />
+1. gnuplot&nbsp;<br />
+2. set xlabel &quot;Relative energy [eV]&quot;<br />
+3. set ylabel &quot;Absorption [arb. unit]<br />
+4. plot &quot;*_GNU.OUT&quot; u 1:8 w l t &quot;Exp.&quot;, &quot;*_GNU.OUT&quot; u 1:7 w l t &quot;FPXMAN with fitting&quot;<br />
+※ For example, * = NiH2O<br />
+------------------------------------------------------------------------------<br />
+■ Information<br />
+<br />
+□&nbsp;Muffin-Tin (MT) vs.&nbsp;Full-Potential (FP)<br />
+・Normally, MT approximation (e.g., FEFF code) shows good results in 80-90% systems. Full potential FPMS is required for the remaining 10-20% (Systems with large gaps between atoms, e.g., severely distorted structures and surfaces, diamond structures, etc).<br />
+<br />
+□ Empty cell<br />
+・It is equivalent to placing atomic number zero.<br />
+<br />
+□ Boundary of&nbsp;Full-Potential<br />
+・Set boundaries with Voronoi polyhedra.<br />
+<br />
+□ Core hole<br />
+&nbsp;&nbsp;Half-core tends to improve energy value.<br />
+<br />
+□ lmax&nbsp;(default: 0)<br />
+・Usually, it is 3-5 for light elements. [15] It is a larger value in the calculation with atomic number and high energy.<br />
+・0 case: lmax&nbsp;is calculated for each atom. The classical relation lmax = kR<sub>b</sub>, where k is the electron wavevector (either in the excited or ground state of the system under consideration) and R<sub>b</sub> is the radius of the bounding sphere of the scattering cell. [16]<br />
+<br />
+□&nbsp;When the calculation does not go well<br />
+・change&nbsp;NORM settings (It may be possible to calculate well by changing the definition of the Green's function with &quot;NORM&quot;. )<br />
+<br />
+□ Read cluster structure<br />
+------<br />
+・feff6 (input_type = 'feff',)<br />
+&nbsp; feff.inp: structure data (The structure of feff.inp takes precedence over data.ms)<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Optical potential [9-12]<br />
+<br />
+◇ Hedin-Lundqvist potential (complex)<br />
+・This potential is often used in normal EXAFS calculations.<br />
+・Empirically better fits transition metals than &quot;Dirac-Hara potential&quot;<br />
+・Elements heavier than &quot;hedin-Lundqvist potential (real part)&quot;<br />
+・The exchange potential and the Coulomb potential are shielded by random phase approximation (RPA).<br />
+・The present approximation for the optical potential builds on the GW-expression. [12]<br />
+・The effect of weakening the exchange potential as the photoelectron energy increases is considered.<br />
+・The high energy peak is slightly lower position.<br />
+・Due to the influence of the imaginary part, the peak becomes broadened at the energy after 10-20 eV.<br />
+<br />
+◇ Hedin-Lundqvist potential (real part)<br />
+・Empirically better fits metal than &quot;Dirac-Hara potential&quot;&nbsp;<br />
+・Elements heavier than &quot;Dirac-Hara potential&quot;<br />
+・The exchange potential and the Coulomb potential are shielded by random phase approximation (RPA).<br />
+・The present approximation for the optical potential builds on the GW-expression. [12]<br />
+・The effect of weakening the exchange potential as the photoelectron energy increases is considered.<br />
+・The high energy peak is slightly lower position.<br />
+<br />
+◇ Dirac-Hara potential<br />
+・Empirically, it fits well with molecules and light elements (C, N, O, Organic molecule, etc).<br />
+・LDA approximation of HF exchange potential.<br />
+・Exchange potential only.<br />
+・The high energy peak is slightly higher position.<br />
+・The effect of weakening the exchange potential as the photoelectron energy increases is considered.<br />
+<br />
+◇ X&alpha; poential<br />
+・Usually, use 0.7 or 2/3. 2/3 is&nbsp;the exact solution in the electron gas model.<br />
+・Energy average of &quot;Dirac-Hara potential&quot;.<br />
+<br />
+※&nbsp;von. Barth-Hedin potential:&nbsp;Energy at chemical potential for Hedin-Lundqvist potential<br />
+※&nbsp;The DFT exchange correlation kernel corresponds to the Hedin-Lundqvist potential, which eliminates energy dependence.<br />
+------------------------------------------------------------------------------<br />
+■ DFT interface (Gaussian, MOLCAS, VASP, LMTO or Potgen)<br />
+<br />
+・Multiple scattering theory (such as FPMS) is not as good at calculating bound states as DFT.<br />
+・The electronic state is calculated by DFT, and the Poisson equation is solved from the electronic state to obtain the Coulomb potential.<br />
+・FPMS: Atom is a self-consistent solution, but the cluster is not a self-consistent solution (Clusters are superpositions of atomic charge densities).&nbsp;Therefore, it is possible to read the charge density obtained from DFT calculation.<br />
+------<br />
+・Gaussian 09<br />
+&nbsp; ----- data.ms -----<br />
+&nbsp; potcalc = &quot;N&quot;<br />
+&nbsp; file_type=&quot;gasussian&quot;<br />
+&nbsp;&nbsp;---------------------<br />
+&nbsp; ----- inpuf file -----<br />
+&nbsp; *.fchk: check point file. (use formchk option. see,&nbsp;<a href="http://gaussian.com/formchk/">formchk | Gaussian.com</a>)<br />
+&nbsp; input_GAUSSIAN.inp: empty file<br />
+&nbsp;&nbsp;---------------------<br />
+・MOLCAS<br />
+&nbsp; ----- data.ms -----<br />
+&nbsp; potcalc = &quot;N&quot;<br />
+&nbsp; input_type=&quot;molcas&quot;<br />
+&nbsp;&nbsp;---------------------<br />
+&nbsp; ----- inpuf file -----<br />
+&nbsp; molden<br />
+&nbsp;&nbsp;input_MOLCAS.inp: empty file<br />
+&nbsp;&nbsp;---------------------<br />
+・VASP<br />
+&nbsp; ----- data.ms -----<br />
+&nbsp; potcalc = &quot;N&quot;<br />
+&nbsp; input_type=&quot;vasp&quot;<br />
+&nbsp;&nbsp;---------------------<br />
+&nbsp; ----- inpuf file -----<br />
+&nbsp; CHGCAR: density file<br />
+&nbsp;&nbsp;---------------------<br />
+・LMTO<br />
+&nbsp; ----- data.ms -----<br />
+&nbsp; potcalc = &quot;N&quot;<br />
+&nbsp;&nbsp;input_type=&quot;lmtp&quot;<br />
+&nbsp;&nbsp;---------------------<br />
+&nbsp; ----- inpuf file -----<br />
+&nbsp;&nbsp;flmto (potnetial and density)<br />
+&nbsp;&nbsp;---------------------<br />
+・Potgen<br />
+&nbsp; ----- data.ms -----<br />
+&nbsp; potcalc = &quot;N&quot;<br />
+&nbsp;&nbsp;input_type=&quot;ptgn&quot;<br />
+&nbsp;&nbsp;---------------------<br />
+&nbsp; ----- inpuf file -----<br />
+&nbsp;&nbsp;fptgen_p: potential file<br />
+&nbsp;&nbsp;fptgn_r: density file<br />
+&nbsp;&nbsp;---------------------<br />
+------<br />
+※&nbsp;MOLCAS is a limited CI calculation.<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;&nbsp;XMAN or FPXMAN<br />
+<br />
+・Depends on the quality of experimental results.<br />
+・If the MT approximation breaks down at low energy, it is severe, but the structure is likely to be obtained correctly. Evidence from other experiments and calculations needs to be gathered.<br />
+・XMAN is not possible to match the shoulder structure (The MT approximation is not good). it is necessary to use FPMS.<br />
+・Comparisons with differential spectra (dI/dE) are also common.<br />
+・Basically done at the K-edge or L<sub>1</sub>-edge.&nbsp;<br />
+・When the L<sub>2,3</sub>-edge of heavy elements are close to the core (the interaction with valence state is weakened), it can be fitted by XMAN. On the other hand, the core hole is close to the valence state (e.g., transition metal) (Many-body effect (quasiparticles) is all), so it cannot be fitted by XMAN.<br />
+・In the case of too light atoms (carbon, oxygen, etc.), Rydberg state and many sharp peaks or&nbsp; Franck-Condon effect appear at the same level of intensity as that derived from the structure, so it can not be fitted.<br />
+・The life time of the core is too short (thus the spectrum is broad and is almost no structure of XAFS. e.g., too heavy elements). In such case, the&nbsp;L<sub>2,3</sub>-edge is recommended.<br />
+・Currently, CPA (Coherent Potential Approximation) is not supported, so it is necessary to manually prepare an input file with different substitution amounts for the element substitution system.<br />
+<br />
+□ More information<br />
+&nbsp; Please, see&nbsp;<a href="https://software.pan-data.eu/software/114/mxan">MXAN - PaNdata Software (pan-data.eu)</a>&nbsp;-&gt;&nbsp;<a href="http://www.esrf.eu/computing/scientific/MXAN/how.html">MXAN (esrf.eu)</a>&nbsp;-&gt;&nbsp;<a href="http://www.esrf.eu/computing/scientific/MXAN/MXAN_new.doc">http://www.esrf.eu/computing/scientific/MXAN/MXAN_new.doc</a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Relativity<br />
+<br />
+・The charge density is a superimposed version of the atomic charge density.<br />
+・The atomic charge density is calculated by relativity.<br />
+&nbsp;&nbsp; (In detail, for the atomic charge density, the Dirac equation is solved by the non-local Hartree-Fock with the configuration interaction. If the user set a core hole, the core hole is taken into account in the calculation.).<br />
+・photoelectrons are performed without the relativistic effect.<br />
+・Relativity is not dealt with in multiple scattering.<br />
+※&nbsp;SPR-KKR calculates multiple scattering with full relativstic.<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Possible problems on FDMNES (Comparison with other code)<br />
+<br />
+□ FDMNES<br />
+1. In the atom, the Schr&ouml;dinger equation is solved by sphere approximation (sphere potential) so that the wave function can be connected by the first derivative at the boundary.<br />
+2. If you do not make the grid smaller, you will be in trouble with light elements such as hydrogen.<br />
+3. lmax is determined by the radius and energy of the cluster. If you use a large cluster, lmax will be large and it will be difficult.<br />
+4. Since the entire cluster is treated like an atom, multiple scattering techniques that shake it cannot be used. Calculation of heat factors is also strict.<br />
+5.&nbsp;Multiple scattering by MT approximation. (Green)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1]&nbsp;FPMS: full potential multiple scattering<br />
+&nbsp;&nbsp;<a href="https://onlinelibrary.wiley.com/iucr/itc/Ia/qx0011/">(International Tables for Crystallography) FPMS: full potential multiple scattering (wiley.com)</a><br />
+[2]&nbsp;XANES: MXAN and FPMS codes<br />
+&nbsp;&nbsp;<a href="https://www.iucr.org/__data/assets/pdf_file/0004/60781/IUCr2011-XAFS-Tutorial-Hatada.pdf">IUCr2011-XAFS-Tutorial-Hatada.pdf</a><br />
+[3]&nbsp;XANES: MXAN and FPMS codes<br />
+&nbsp;&nbsp;<a href="https://www.iucr.org/__data/assets/pdf_file/0016/102634/IUCR14_FPMS_Hatada_sub.ppt.pdf">IUCR14_FPMS_Hatada_sub.ppt</a><br />
+[4]&nbsp;Mul$ channel mul$ple sca.ering theory for X-ray absorp$on spectroscopy<br />
+&nbsp;&nbsp;<a href="http://ewins2016.ijs.si/slides/hatada-slides-ewins2016.pdf">ewins16-hatada-link.pptx (ijs.si)</a><br />
+[5] Studies of X-ray absorption spectroscopy for functional materials by using multiple scattering theory January 2016<br />
+&nbsp;&nbsp;<a href="https://core.ac.uk/download/pdf/96948145.pdf">96948145.pdf (core.ac.uk)</a><br />
+[6]&nbsp;<a href="https://www.researchgate.net/publication/51547999_Full-potential_multiple_scattering_for_core_electron_spectroscopies">(PDF) Full-potential multiple scattering for core electron spectroscopies (researchgate.net)</a><br />
+[7]&nbsp;C K端X線吸収分光を用いた 鋼中固溶炭素と炭化鉄中炭素の結合状態測定<br />
+&nbsp;&nbsp;<a href="http://www.astf-kha.jp/synchrotron/publication/files/P6_%E6%96%B0%E6%97%A5%E9%90%B5%E4%BD%8F%E9%87%91%E7%B1%B3%E6%9D%91.pdf">PowerPoint プレゼンテーション (astf-kha.jp)</a><br />
+[8]&nbsp;<a href="https://www2.kek.jp/imss/pf/workshop/kenkyukai/FPMS_tutorial.pdf">Microsoft Word - FPMS_tutorial_v5.docx (kek.jp)</a><br />
+[9]&nbsp;POT: Scattering potentials<br />
+&nbsp;&nbsp;<a href="http://leonardo.phys.washington.edu/feff//Docs/feff8/feff8web/node6.html">POT: Scattering potentials (washington.edu)</a><br />
+[10] FEFFによるXANESシミュレーション<br />
+&nbsp;&nbsp;<a href="http://www.icc.sk.ritsumei.ac.jp/xafs_summer2017/data/XAFS_nakanishi2.pdf">スライド 1 (ritsumei.ac.jp)</a><br />
+[11]&nbsp;局所密度汎関数法<br />
+&nbsp;&nbsp;<a href="http://cms.phys.s.u-tokyo.ac.jp/~naoki/CIPINTRO/CIP/atom.html">Quantum:Many electron atom (u-tokyo.ac.jp)</a><br />
+[12] Theory of spin-polarized optical potential<br />
+&nbsp;&nbsp;<a href="https://core.ac.uk/download/pdf/206156313.pdf">Theory of spin-polarized optical potential (core.ac.uk)</a><br />
+[13]&nbsp;電極表面の第一原理計算<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/jsssj/24/12/24_12_771/_pdf/-char/ja">本文／７　研究紹介（山本・他）７７１&minus;７７８Ｃ (jst.go.jp)</a><br />
+[14]&nbsp;List of FreeHEP packages<br />
+&nbsp;&nbsp;<a href="https://www.slac.stanford.edu/spires/spikludge/fhpack.html">List of FreeHEP packages (stanford.edu)</a><br />
+[15] K. Hatada et al., Phys. Rev. B 76 (2007) 060102(R).<br />
+[16] K. Hatada et al.,&nbsp;J. Phys.: Condens. Matter 22 (2010) 185501.<br />
+------------------------------------------------------------------------------<br />
+※&nbsp;For highly symmetric crystals, LMTO program [L1] is the code that locates the optimal &quot;Empty cell&quot;.<br />
+&nbsp; [L1] O. K. Anderson, Phys. Rev. B 12 (1975) 3060.<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Part of the XMAN manual (XMAN_new.doc)<br />
+(<a href="http://www.esrf.eu/computing/scientific/MXAN/MXAN_new.doc">http://www.esrf.eu/computing/scientific/MXAN/MXAN_new.doc</a>)<br />
+----------<br />
+1. Introduction<br />
+&nbsp;&nbsp;This procedure is able to fit the XANES part (from the edge to about 200 eV) of experimental X-ray Absorption data. The method is based on the fitting between the experimental spectrum and several theoretical calculations generated by changing the relevant geometrical parameters of the site around the absorbing atom. The x-ray photo-absorption cross section is calculated using the full multiple scattering scheme; different choices of the exchange correlation part of the potential can be utilized.<br />
+----------<br />
+&nbsp; The MXAN procedure needs three input files containing respectively the experimental data to be fitted, the starting atomic coordinates of the cluster (the putative structure), and the commands and options necessary for the chosen minimization strategy. MXAN makes use of the set of programs developed by the Frascati theory group; in particular VGEN, a generator of muffin tin potentials, and the CONTINUUM code for the full multiple scattering cross section calculation. The size of the scattering cluster and the value of the lmax in the basis functions expansion can be chosen on the basis of convergence criterion, while the MT radii are chosen on the basis of the Norman criterion. The exchange correlation part of the potential can be chosen according to the Hedin-Lunqvist (H-L) optical form. Alternatively, either the real part of the H-L potential, or the X-&alpha; potential is utilised. In these latter cases, inelastic processes are taken into account by a convolution with a broadening lorentzian function, with a full width given by &Gamma; = &Gamma;<sub>c</sub> + &Gamma;(E). The constant part &Gamma;<sub>c</sub> includes the core hole lifetime and the experimental resolution, while the energy dependent term &Gamma;(E) represents all the inelastic processes. The &Gamma;(E) function is zero below an onset energy Es, and it begins to increase from a value As following the universal functional form of the mean free path in solid. &nbsp;This method introduces three non-structural parameters that are refined on the basis of Monte Carlo search at each step of optimisation of the structural parameters. In such a way, together with the MT radii, the MXAN method uses only four non-structural parameters; in facts, coordination numbers and Debye-Waller factors are not treated, whereas the edge jump and the edge position (E<sub>0</sub>) are completely unrelated to the fitted structural parameters. As a consequence, the relevant parameters are essentially geometrical. However, careful should be taken to avoid artificial results owing to a bad definition of non-structural parameters. In a final minimization run, they should be fixed.<br />
+----------<br />
+4) Energy dependent broadening.<br />
+&nbsp; An energy dependent broadening can simulate the effect of finite electron mean free path due to the inelastic losses of any type suffered by the photoelectron in its way out in the system. We have already given some information in the introduction. &nbsp;If option Y is used, MXAN will add this value to the width of the lorentian function used in the convolution. In the following example MXAN use 1 plasmon frequency at 11 +/- 4 eV, with an enlargement of the lorentian width of 10.0 +/- 3.5 eV. We note that it is possible to use two plasmons, one for the xy polarizations, and the other for the z component. This option can be used in the case of strong anisotropy of the system. In this case, the idea is to account for the anisotropy of the dielectric function via a phenomenological approach by two components in the inelastic losses.&nbsp;<br />
+----------<br />
+------------------------------------------------------------------------------

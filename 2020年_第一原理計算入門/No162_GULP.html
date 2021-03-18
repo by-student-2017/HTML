@@ -1,0 +1,1683 @@
+GULP (http://gulp.curtin.edu.au/gulp/)<br />
+------------------------------------------------------------------------------<br />
+■ GULP (http://gulp.curtin.edu.au/gulp/)<br />
+<br />
+◇ Register<br />
+(http://gulp.curtin.edu.au/gulp/register.cfm)<br />
+1. (input data) &gt; [check] I agree ... &gt; Send<br />
+<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+・gulp-5.1.tgz<br />
+1. tar zxvf gulp-5.1.tgz<br />
+2. cd gulp-5.1<br />
+3. cd Src<br />
+4. ./mkgulp<br />
+&nbsp;(./mkgulp -h)<br />
+&nbsp;(./mkgulp -m -f -k -c intel)<br />
+&nbsp;(./mkgulp -m -f -k -c gfortran)<br />
+<br />
+◇ Settings<br />
+1. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+<br />
+◇ run command<br />
+1. $HOME/gulp-5.1/Src/gulp &lt; case.gin &gt; case.got<br />
+<br />
+<br />
+◇ Examples (Test calcultion)<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. chmod +x run.sh<br />
+3. ./run.sh<br />
+4. cd Output<br />
+<br />
+◇ Examples (thermal conductivity calcultion for MgO by using ALAMODE code)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. ~/gulp-5.1/Src/gulp &lt; example67.gin | tee example67.got<br />
+3. gedit example67_anphon.in<br />
+-----before<br />
+TMAX = &nbsp; &nbsp;0.0<br />
+-----after<br />
+TMAX = 1500.0<br />
+-----<br />
+4. ~/alamode/anphon/anphon example67_anphon.in<br />
+5. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;example67_rta.kl&quot; usi 1:2 w lp<br />
+6. quit<br />
+<br />
+◇ Examples (phonon properties for Si by using ShengBTE code)<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. cp example67.gin Si.gin<br />
+3. gedit Si.gin<br />
+-----<br />
+opti conp phon noden alamode nosym full shopt<br />
+name Si<br />
+cell<br />
+5.437 5.437 5.437 90 90 90<br />
+frac<br />
+Si core 0.000000 0.000000 0.000000<br />
+space<br />
+227<br />
+origin choice 1<br />
+# alamode<br />
+super 2 2 2<br />
+ala_disp 0.01 0.04<br />
+ala_cutoff 4.4<br />
+ala_shrink 10 10 10<br />
+ala_processor 4<br />
+#<br />
+botwobody<br />
+Si core Si core 1830.8 471.18 2.4799 1.7322 2.70 3.00<br />
+borepulsive<br />
+Si core Si core 0.0 3 0.78734 1.7322 2.70 3.00<br />
+boattractive theta<br />
+Si core Si core 0.00000109999 3 0.78734 1.7322 100390.0 16.218 -0.59826 2.70 3.00<br />
+-----<br />
+4. ~/gulp-5.1/Src/gulp &lt; Si.gin | tee Si.got<br />
+5. gedit Si_anphon.in<br />
+-----before<br />
+TMAX = &nbsp; &nbsp;0.0<br />
+-----after<br />
+TMAX = 1500.0<br />
+-----<br />
+6. ~/alamode/anphon/anphon Si_anphon.in<br />
+7. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;Si_rta.kl&quot; usi 1:2 w lp<br />
+8. quit<br />
+9. gedit si_phband.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = Si<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = Si_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+10. ~/alamode/anphon/anphon si_phband.in<br />
+11. python ~/alamode/tools/plotband.py Si.bands<br />
+12. cp si_phband.in si_phdos.in<br />
+13. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+14. ~/alamode/anphon/anphon si_phdos.in<br />
+15. python ~/alamode/tools/plotdos.py --emax 550 --nokey Si.dos<br />
+<br />
+◇ Examples (thermal conductivity calcultion for Si by using ALAMODE code)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. cp example67.gin Si.gin<br />
+3. gedit Si.gin<br />
+-----<br />
+opti conp phon noden nosym full shopt num3<br />
+name Si<br />
+cell<br />
+5.437 5.437 5.437 90 90 90<br />
+frac<br />
+Si core 0.000000 0.000000 0.000000<br />
+space<br />
+227<br />
+origin choice 1<br />
+# ShengBTE<br />
+super 2 2 2<br />
+output shengbte<br />
+#<br />
+botwobody<br />
+Si core Si core 1830.8 471.18 2.4799 1.7322 2.70 3.00<br />
+borepulsive<br />
+Si core Si core 0.0 3 0.78734 1.7322 2.70 3.00<br />
+boattractive theta<br />
+Si core Si core 0.00000109999 3 0.78734 1.7322 100390.0 16.218 -0.59826 2.70 3.00<br />
+-----<br />
+4. ~/gulp-5.1/Src/gulp &lt; Si.gin | tee Si.got<br />
+5. gedit CONTROL<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ngrid(:)=4 4 4<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; T=300.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; scalebroad=1.0<br />
+-----<br />
+6. ~/ShengBTE/ShengBTE<br />
+※ in order to get every temperature, you should repeat 4. and 5.&nbsp;<br />
+◇ phonon DOS<br />
+7. gnuplot<br />
+&nbsp; plot &quot;BTE.dos&quot; w l<br />
+8. quit<br />
+◇ phonon PDOS<br />
+7. gnuplot<br />
+&nbsp; plot &quot;BTE.pdos&quot; w l<br />
+8. quit<br />
+◇ kappa<br />
+7. cd T300K<br />
+8. gedit BTE.kappa_scalar<br />
+※ final overall thermal conductivity will be given in the file BTE.kappa_scalar as the last line (converged value from final iteration).<br />
+※ keyword: thermalconductivity (https://nanochemistry.curtin.edu.au/gulp/help/help_51_txt.html)<br />
+<br />
+◇ xtalopt<br />
+1. gedit gin1<br />
+-----<br />
+opti conj conp<br />
+switch_minimiser bfgs gnorm 0.5<br />
+cell<br />
+&nbsp; %a% %b% %c% %alphaDeg% %betaDeg% %gammaDeg%<br />
+frac<br />
+%coordsFrac%<br />
+species<br />
+Ti 2.196<br />
+O -1.098<br />
+buck<br />
+Ti Ti 31120.1 0.1540 5.25 &nbsp;15<br />
+O &nbsp;O &nbsp;11782.7 0.2340 30.22 15<br />
+Ti O &nbsp;16957.5 0.1940 12.59 15<br />
+lennard 12 6<br />
+Ti Ti 1 0 15<br />
+O &nbsp;O &nbsp;1 0 15<br />
+Ti O &nbsp;1 0 15<br />
+-----<br />
+<br />
+◇ manual<br />
+0. sudo apt install evince<br />
+1. evince ~/gulp-5.1/Docs/gulp5.1_manual.pdf<br />
+※ https://nanochemistry.curtin.edu.au/gulp/help/help_51_txt.html<br />
+------------------------------------------------------------------------------<br />
+■ IR and Raman<br />
+<br />
+・Example 53: Example of a calculation of the Raman intensities for quartz<br />
+□ Raman (quartz, example 53)<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. ~/gulp-5.1/Src/gulp &lt; example53.gin &gt; example53.got<br />
+&nbsp; (~/gulp-5.1/Src/gulp &lt; example53.gin | tee example53.got)<br />
+3. cat example53.got<br />
+-----<br />
+&nbsp; Phonon Calculation :<br />
+<br />
+&nbsp; Directions for Raman intensities: Type &nbsp;= &nbsp;Fractional<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; In &nbsp; &nbsp;= &nbsp;1.00000 &nbsp;0.00000 &nbsp;0.00000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; Out &nbsp; = &nbsp;0.00000 &nbsp;0.00000 &nbsp;1.00000<br />
+<br />
+&nbsp; Number of k points for this configuration = &nbsp; &nbsp; &nbsp; &nbsp;1<br />
+<br />
+--------------------------------------------------------------------------------<br />
+&nbsp; K point &nbsp; &nbsp; &nbsp;1 = &nbsp; 0.000000 &nbsp;0.000000 &nbsp;0.000000 &nbsp;Weight = &nbsp; &nbsp;1.000<br />
+--------------------------------------------------------------------------------<br />
+<br />
+&nbsp; Frequencies (cm-1) and IR/Raman Intensities :<br />
+<br />
+&nbsp; Frequency &nbsp; &nbsp; &nbsp;-0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp;146.5854 &nbsp;146.5854 &nbsp;231.6449<br />
+&nbsp; IR Intensity &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0002 &nbsp; &nbsp;0.0002 &nbsp; &nbsp;0.0000<br />
+&nbsp; &nbsp; &nbsp;in X &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0001 &nbsp; &nbsp;0.0002 &nbsp; &nbsp;0.0000<br />
+&nbsp; &nbsp; &nbsp;in Y &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0002 &nbsp; &nbsp;0.0001 &nbsp; &nbsp;0.0000<br />
+&nbsp; &nbsp; &nbsp;in Z &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000<br />
+&nbsp; Raman Intsty &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0409 &nbsp; &nbsp;0.0137 &nbsp; &nbsp;0.0000<br />
+<br />
+&nbsp; Frequency &nbsp; &nbsp; 271.5111 &nbsp;271.5111 &nbsp;326.8966 &nbsp;339.7305 &nbsp;398.1175 &nbsp;398.1175<br />
+&nbsp; IR Intensity &nbsp; &nbsp;0.0252 &nbsp; &nbsp;0.0252 &nbsp; &nbsp;0.2330 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0714 &nbsp; &nbsp;0.0714<br />
+&nbsp; &nbsp; &nbsp;in X &nbsp; &nbsp; &nbsp; &nbsp; 0.0063 &nbsp; &nbsp;0.0189 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0178 &nbsp; &nbsp;0.0536<br />
+&nbsp; &nbsp; &nbsp;in Y &nbsp; &nbsp; &nbsp; &nbsp; 0.0189 &nbsp; &nbsp;0.0063 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0536 &nbsp; &nbsp;0.0178<br />
+&nbsp; &nbsp; &nbsp;in Z &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.2330 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000<br />
+&nbsp; Raman Intsty &nbsp; &nbsp;0.0505 &nbsp; &nbsp;0.0169 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;1.5083 &nbsp; &nbsp;0.5025<br />
+<br />
+&nbsp; Frequency &nbsp; &nbsp; 440.4129 &nbsp;440.4129 &nbsp;467.7397 &nbsp;508.9876 &nbsp;718.7582 &nbsp;718.7582<br />
+&nbsp; IR Intensity &nbsp; &nbsp;0.5133 &nbsp; &nbsp;0.5133 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.4491 &nbsp; &nbsp;0.0121 &nbsp; &nbsp;0.0121<br />
+&nbsp; &nbsp; &nbsp;in X &nbsp; &nbsp; &nbsp; &nbsp; 0.3847 &nbsp; &nbsp;0.1286 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0091 &nbsp; &nbsp;0.0030<br />
+&nbsp; &nbsp; &nbsp;in Y &nbsp; &nbsp; &nbsp; &nbsp; 0.1286 &nbsp; &nbsp;0.3847 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0030 &nbsp; &nbsp;0.0091<br />
+&nbsp; &nbsp; &nbsp;in Z &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.4491 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000<br />
+&nbsp; Raman Intsty &nbsp; &nbsp;0.0149 &nbsp; &nbsp;0.0444 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0056 &nbsp; &nbsp;0.0168<br />
+<br />
+&nbsp; Frequency &nbsp; &nbsp; 816.3525 &nbsp;823.8701 &nbsp;823.8701 &nbsp;888.3889 &nbsp;888.4996 &nbsp;888.4996<br />
+&nbsp; IR Intensity &nbsp; &nbsp;0.5366 &nbsp; &nbsp;0.2932 &nbsp; &nbsp;0.2932 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;1.4521 &nbsp; &nbsp;1.4521<br />
+&nbsp; &nbsp; &nbsp;in X &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0735 &nbsp; &nbsp;0.2197 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;1.0875 &nbsp; &nbsp;0.3646<br />
+&nbsp; &nbsp; &nbsp;in Y &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.2197 &nbsp; &nbsp;0.0735 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.3646 &nbsp; &nbsp;1.0875<br />
+&nbsp; &nbsp; &nbsp;in Z &nbsp; &nbsp; &nbsp; &nbsp; 0.5366 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000<br />
+&nbsp; Raman Intsty &nbsp; &nbsp;0.0000 &nbsp; &nbsp;1.9793 &nbsp; &nbsp;0.6619 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0999 &nbsp; &nbsp;0.2978<br />
+<br />
+&nbsp; Frequency &nbsp; &nbsp; 903.4689 1017.0432 1017.0432<br />
+&nbsp; IR Intensity &nbsp; &nbsp;1.3149 &nbsp; &nbsp;0.0404 &nbsp; &nbsp;0.0404<br />
+&nbsp; &nbsp; &nbsp;in X &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0101 &nbsp; &nbsp;0.0302<br />
+&nbsp; &nbsp; &nbsp;in Y &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; &nbsp;0.0302 &nbsp; &nbsp;0.0101<br />
+&nbsp; &nbsp; &nbsp;in Z &nbsp; &nbsp; &nbsp; &nbsp; 1.3149 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000<br />
+&nbsp; Raman Intsty &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0127 &nbsp; &nbsp;0.0042<br />
+-----<br />
+<br />
+□ Phonon dispersion (MgH2) (shell model)<br />
+1. gedit mgh2.gin<br />
+-----<br />
+opti conp prop phon inten noden dispersion<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;1.836<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -0.409<br />
+H &nbsp;shel &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -0.509<br />
+space<br />
+136<br />
+buck<br />
+H shel Mg core 1012.0 0.24675 &nbsp;0.00 0.0 12.800<br />
+buck<br />
+H shel H &nbsp;shel 5558.0 0.23258 22.12 0.0 12.800<br />
+buck<br />
+H core Mg core 1012.0 0.24675 &nbsp;0.00 0.0 12.800<br />
+spring<br />
+0 74.92 0<br />
+dispersion 1 500<br />
+0.0 0.0 0.0 to 0.0 0.5 0.0 to 0.5 0.5 0.0 to 0.0 0.0 0.0 to 0.0 0.0 0.5<br />
+output phon mgh2<br />
+-----<br />
+2. ~/gulp-5.1/Src/gulp &lt; mgh2.gin | tee mgh2.got<br />
+3. gnuplot<br />
+&nbsp; set xzeroaxis<br />
+&nbsp; set yrange[-50:1500]<br />
+&nbsp; set arrow from 100,-50 to 100,1500 nohead<br />
+&nbsp; set arrow from 200,-50 to 200,1500 nohead<br />
+&nbsp; set arrow from 300,-50 to 300,1500 nohead<br />
+&nbsp; set arrow from 400,-50 to 400,1500 nohead<br />
+&nbsp; plot &quot;mgh2.disp&quot; w p pt 7 ps 0.1<br />
+4. q<br />
+5. gnuplot<br />
+&nbsp; plot &quot;mgh2.dens&quot; w i<br />
+6. q<br />
+[PM1] Shell-model description of lattice dynamical properties of MgH2<br />
+&nbsp; https://www.researchgate.net/publication/230973972_Shell-model_description_of_lattice_dynamical_properties_of_MgH2<br />
+※ Gamma - X - M - Gamma - Z - R - A<br />
+&nbsp; 0.0 0.0 0.0 to 0.0 0.5 0.0 to 0.5 0.5 0.0 to 0.0 0.0 0.0 to 0.0 0.0 0.5 to 0.0 0.5 0.5 to 0.5 0.5 0.5<br />
+[PM2] https://materialsproject.org/materials/mp-23710/ (MgH2)<br />
+[PM3] http://www.cryst.ehu.es/cgi-bin/cryst/programs/nph-kv-list<br />
+<br />
+□ IR (MgH2) (underconstructing)<br />
+&nbsp;(Raman calculation need shell model (= shel))<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. cp example53.gin mgh2.gin<br />
+3. gedit mgh2.gin<br />
+-----<br />
+opti conp prop phon inten raman<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;2.00000 1.0 0.0<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -1.00000 1.0 0.0<br />
+space<br />
+136<br />
+rdirection 1.0 1.0 1.0 &nbsp;1.0 -0.5 1.0<br />
+library reaxff_general<br />
+-----<br />
+(※ opti conp prop phon msd noden inten raman)<br />
+4. ~/gulp-5.1/Src/gulp &lt; mgh2.gin | tee mgh2.got<br />
+5. cat mgh2.got<br />
+※ buck = buckingham<br />
+atom1 core atom2 shel A[eV] row[A] C[eVA^6] 0.0 12.0<br />
+(from 0.0 to 12.0 A)(A=Angstrom)<br />
+<br />
+□ Phonon dispersion (MgH2) (underconstructing)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. cp example53.gin mgh2.gin<br />
+3. gedit mgh2.gin<br />
+-----<br />
+opti conp prop phon dispersion<br />
+#fc_supercell 2 2 2<br />
+finite 0.01<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;2.00000 1.0 0.0<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -1.00000 1.0 0.0<br />
+space<br />
+136<br />
+#super 2 2 2<br />
+#ghostcell 1 1 1<br />
+library reaxff_general<br />
+shrink<br />
+4 4 4<br />
+kpoints<br />
+8 8 8<br />
+dispersion 1 20<br />
+0.0 0.0 0.0 to 0.0 0.5 0.0 to 0.5 0.5 0.0 to 0.0 0.0 0.0<br />
+output phon mgh2<br />
+-----<br />
+4. ~/gulp-5.1/Src/gulp &lt; mgh2.gin | tee mgh2.got<br />
+5. cat mgh2.got<br />
+6. gnuplot<br />
+&nbsp; plot &quot;mgh2.disp&quot; w p<br />
+&nbsp; plot &quot;mgh2.dens&quot; w i<br />
+7. q<br />
+※ Gamma - X - M - Gamma<br />
+&nbsp; 0.0 0.0 0.0 to 0.0 0.5 0.0 to 0.5 0.5 0.0 to 0.0 0.0 0.0<br />
+※ buck = buckingham<br />
+atom1 core atom2 shel A[eV] row[A] C[eVA^6] 0.0 12.0<br />
+(from 0.0 to 12.0 A)(A=Angstrom)<br />
+<br />
+□ library (potentials)<br />
+・library reaxff_general.lib<br />
+・library reaxff.lib<br />
+・library uff4mof.lib<br />
+・library uff.lib<br />
+・library meam_2nn.lib<br />
+・library tersoff.lib<br />
+・library finnissinclair.lib<br />
+・library catlow.lib<br />
+※ cd $HOME/gulp-5.1/Libraries | ls<br />
+※ removing &quot;.lib&quot; is OK.<br />
+※ export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; before ~/gulp-5.1/Src/gulp &lt; *.gin | tee *.got<br />
+※ buck = buckingham<br />
+atom1 core atom2 shel A[eV] row[A] C[eVA^6] 0.0 12.0<br />
+(from 0.0 to 12.0 A)(A=Angstrom)<br />
+<br />
+□ IR (Mg1-xNixH2)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. cp example53.gin mgnih2.gin<br />
+3. gedit mgnih2.gin<br />
+-----<br />
+defect regi conp prop phon inten raman<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;2.00000 1.0 0.0<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -1.00000 1.0 0.0<br />
+space<br />
+136<br />
+#<br />
+species<br />
+Ni core 2.0<br />
+centre Mg<br />
+size 6.0 12.0<br />
+#<br />
+rdirection 1.0 1.0 1.0 &nbsp;1.0 -0.5 1.0<br />
+library uff4mof<br />
+-----<br />
+(※ opti conp prop phon msd noden inten rampoan)<br />
+4. ~/gulp-5.1/Src/gulp &lt; mgnih2.gin | tee mgnih2.got<br />
+5. cat mgh2.got<br />
+※ defect: vacancy, interstitial, impurity<br />
+<br />
+□ IR (MgH2, 298 K, 0.1 MPa) (underconstructing)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. cp example53.gin mgh2.gin<br />
+3. gedit mgh2.gin<br />
+-----<br />
+opti conp prop phon inten raman<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;2.00000 1.0 0.0<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -1.00000 1.0 0.0<br />
+space<br />
+136<br />
+rdirection 1.0 1.0 1.0 &nbsp;1.0 -0.5 1.0<br />
+temperature 298 K<br />
+pressure 0.0001 GPa<br />
+library reaxff_general<br />
+-----<br />
+(※ opti conp prop phon msd noden inten raman)<br />
+4. ~/gulp-5.1/Src/gulp &lt; mgh2.gin | tee mgh2.got<br />
+5. cat mgh2.got<br />
+※ ensemble, temperature, pressure<br />
+<br />
+□ Raman (MgH2, 298 K, 0.1 MPa) [3] (underconstracting)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. cp example53.gin mgh2.gin<br />
+3. gedit mgh2.gin<br />
+-----<br />
+prop phon inten raman<br />
+cell<br />
+4.5119 4.5119 3.0157 90.0 90.0 90.0<br />
+frac<br />
+Mg core &nbsp;0.000000 &nbsp; 0.000000 &nbsp; 0.500000 &nbsp;1.836<br />
+H &nbsp;core &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -0.418<br />
+H &nbsp;shel &nbsp;0.195920 &nbsp; 0.195920 &nbsp; 0.000000 -0.5<br />
+space<br />
+136<br />
+rdirection 1.0 1.0 1.0 &nbsp;1.0 -0.5 1.0<br />
+temperature 298 K<br />
+pressure 0.0001 GPa<br />
+library uff4mof<br />
+-----<br />
+(※ opti conp prop phon msd noden inten raman)<br />
+4. ~/gulp-5.1/Src/gulp &lt; mgh2.gin | tee mgh2.got<br />
+5. cat mgh2.got<br />
+※ ensemble, temperature, pressure<br />
+<br />
+[1] Database of Published Interatomic Potential Parameters<br />
+&nbsp; https://www.ucl.ac.uk/klmc/Potentials/<br />
+[2] lammps potential<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Mg/#H-Mg<br />
+[3] J Lasave et al., J. Phys.: Condens. Matter 17 (2005) 7133?7141.<br />
+------------------------------------------------------------------------------<br />
+■ Potential Libraries (GULP)<br />
+<br />
+□ ReaxFF<br />
+-----<br />
+・reaxff_general.lib<br />
+&nbsp; H<br />
+&nbsp; C,N,O,F<br />
+&nbsp; Na,Mg,Al,Si,P,S,Cl<br />
+&nbsp; Fe,Ni,Cu,Zn<br />
+&nbsp; Y,Zr<br />
+&nbsp; Ba,Au<br />
+<br />
+・reaxff.lib<br />
+&nbsp; H<br />
+&nbsp; C,N,O<br />
+&nbsp; Si,S<br />
+&nbsp; Co,Ni,Cu<br />
+&nbsp; Zr<br />
+&nbsp; Pt<br />
+<br />
+・reaxff_ausch.lib<br />
+&nbsp; Au,S,C,H<br />
+<br />
+・reaxff_auoh.lib<br />
+&nbsp; Au,O,H<br />
+<br />
+・reaxff_sio2.lib<br />
+&nbsp; Si,O<br />
+&nbsp; C,H,N,S,Pt,Zr,Ni,Cu,Co<br />
+<br />
+・reaxff_sicho.lib<br />
+&nbsp; Si,C,H,O<br />
+<br />
+・reaxff_siohna.lib<br />
+&nbsp; Si,O,H,Na<br />
+&nbsp; C,N,S<br />
+<br />
+・reaxff_bazro3.lib<br />
+&nbsp; Ba,Zr,O<br />
+&nbsp; C,H,N,Ys<br />
+<br />
+・reaxff_zno.lib<br />
+&nbsp; Zn,O<br />
+&nbsp; C,H,N,S,Si,Pt,Zr,Ni,Au,V,Bi,Ti,Cu<br />
+<br />
+・reaxff_hobn.lib<br />
+&nbsp; H,O,B,N<br />
+<br />
+・reaxff_oxidative.lib<br />
+&nbsp; C,H,O<br />
+<br />
+・reaxff_lg.lib<br />
+&nbsp; C,H,O,N,S,Si<br />
+<br />
+・reaxff_cohnsli.lib<br />
+&nbsp; C,O,H,N,S,Li<br />
+&nbsp; Mo,Ni,B,F,P<br />
+<br />
+・reaxff_lic.lib<br />
+&nbsp; Li,C<br />
+&nbsp; H,O,Vi,Gl<br />
+<br />
+・reaxff_lisi.lib<br />
+&nbsp; Li,Si<br />
+<br />
+・reaxff_feoh.lib<br />
+&nbsp; Fe,O,H<br />
+&nbsp; C,Cl<br />
+-----<br />
+<br />
+□ MEAM (Modified Embedded Atom Model)<br />
+-----<br />
+・meam_1nn.lib<br />
+&nbsp; M.I. Baskes, Phys. Rev. B, 46, 2727 (1992)<br />
+&nbsp; H<br />
+&nbsp; Li,C,N,O<br />
+&nbsp; Na,Al,Si<br />
+&nbsp; K,V,Cr,Fe,Ni,Cu,Ge<br />
+&nbsp; Nb,Mo,Rh,Pd,Ag<br />
+&nbsp; Ta,W,Ir,Pt,Au,Pb<br />
+<br />
+・meam_2nn.lib<br />
+&nbsp; Modified Embedded Atom Model parameters: MEAM-2NN version<br />
+&nbsp; H<br />
+&nbsp; Li,C,N,O<br />
+&nbsp; Mg,Al,Si,P<br />
+&nbsp; Ca,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Ga,Ge<br />
+&nbsp; Y,Zr,Nb,Mo,Pd,Ag,In,Sn<br />
+&nbsp; Ta,W,Pt,Au,Pb<br />
+<br />
+・meam_2nn_qeq.lib<br />
+&nbsp; This library contains parameters for the combination of MEAM-2NN with charge equilibration via QEq.<br />
+&nbsp; E. Lee, K.-R. Lee and B.-J. Lee, J. Phys. Chem. C, 121, 13008 (2017)<br />
+&nbsp; Li,O,Mn<br />
+-----<br />
+<br />
+□ EAM (Embedded Atom Model)<br />
+-----<br />
+・belashchenko.lib<br />
+&nbsp; Belashchenko EAM potential for Na<br />
+<br />
+・clerirosato.lib<br />
+&nbsp; Cleri-Rosato - library of potentials for GULP<br />
+&nbsp; F. Cleri and V. Rosato, Phys. Rev. B., 48, 22 (1993)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,cu,Rh,Pd,Ag,Ir,Pt,Au,Al,Pb<br />
+<br />
+・meidavenport.lib<br />
+&nbsp; Mei-Davenport - library of potentials for GULP<br />
+&nbsp; J. Mei and J.W. Davenport, &nbsp;Phys. Rev. B, 46, 21 (1992)<br />
+&nbsp; These potentials use the Embedded Atom Model for Al<br />
+&nbsp; Al<br />
+<br />
+・suttonchen.lib<br />
+&nbsp; SUTTON-CHEN - library of potentials for GULP<br />
+&nbsp; A.P. Sutton and J. Chen, Phil. Mag. Lett., 61, 139 (1990)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,Cu,Rh,Pd,Ag,Ir,Pt,Au,Pb,Al<br />
+<br />
+・suttonchen_alloy.lib<br />
+&nbsp; SUTTON-CHEN - library of potentials for GULP<br />
+&nbsp; A.P. Sutton and J. Chen, Phil. Mag. Lett., 61, 139 (1990)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,Cu,Rh,Pd,Ag,Ir,Pt,Au,Pb,Al<br />
+<br />
+・glue.lib<br />
+&nbsp; GLUE - library of potentials for GULP<br />
+&nbsp; F. Ercolessi, M. Parrinello and E. Tosati,Phil. Mag. A, 58, 213 (1988)<br />
+&nbsp; Glue model for Au<br />
+&nbsp; EAM functional<br />
+-----<br />
+・finnissinclair.lib<br />
+&nbsp; Finnis-Sinclair - library of potentials for GULP<br />
+&nbsp; M.W. Finnis and J.E. Sinclair, Philosophical Magazine A, Vol. 50, No. 1, 45-55 (1984)<br />
+&nbsp; V,Nb,Ta,Cr,Mo,W,Fe<br />
+<br />
+□ Tersoff<br />
+-----<br />
+・kumagai_elast.lib<br />
+&nbsp; Tersoff bond order potentials for Si from the work of Kumagai et al, Comp. Mat. Sci., 39, 457 (2007)<br />
+&nbsp; Si<br />
+<br />
+・tersoff.lib<br />
+&nbsp; H,C,N,O,Si,Ge<br />
+<br />
+・tersoff_zrl.lib<br />
+&nbsp; Tersoff bond order potentials - ZRL variant<br />
+&nbsp; S.R. Billeter, A. Curioni, D. Fischer and W. Andreoni, Phys. Rev. B, 73, 155329 (2006)<br />
+&nbsp; H,O,N,Si<br />
+-----<br />
+<br />
+□ SW (Stillinger-Webe)<br />
+-----<br />
+・stillinger_weber.lib<br />
+&nbsp; Stillinger-Weber potential for silicon<br />
+&nbsp; Phys. Rev. B, 31, 5262 (1985)<br />
+&nbsp; Si<br />
+-----<br />
+<br />
+□ UFF (Universal Force Field)<br />
+-----<br />
+・uff.lib<br />
+&nbsp; Universal Force Field<br />
+&nbsp;&nbsp;<br />
+・uff4mof.lib<br />
+&nbsp; Universal Force Field for MOFs<br />
+-----<br />
+<br />
+□ buckingham<br />
+-----<br />
+・ffsioh.lib<br />
+&nbsp; FFSiOH force field library<br />
+&nbsp; A. Pedone, G. Malavasi, M.C. Menziani, U. Segre, F. Musso, M. Corno, B. Civalleri and P. Ugliengo, Chem. Mater., 20, 2522-2531 (2008)<br />
+&nbsp; Si,O,H<br />
+&nbsp; buckingham, morse<br />
+<br />
+・carbonate.lib<br />
+&nbsp; POTENTIALS FOR CALCITE<br />
+&nbsp; Rohl, Wright and Gale, Am. Miner., 88, 921-925 (2003)<br />
+&nbsp; Fisler, Gale and Cygan, Am. Miner., 85, 217-224 (2000)<br />
+&nbsp; Austen, Wright, Slater and Gale, PCCP, 7, 4150 - 4156 (2005)<br />
+&nbsp; Ca,Mg,Fe,Cd,Mn,Ni,Zn,Co,C,O<br />
+&nbsp; buckingham, morse, three, outofplane<br />
+<br />
+・bush.lib<br />
+&nbsp; BUSH -library of potentials for GULP<br />
+&nbsp; T.S.Bush, J.D.Gale, C.R.A.Catlow and P.D. Battle, J. Mater Chem., 4, 831-837 (1994)<br />
+&nbsp; Li,Na,K,Mg,Ca,Sr,Ba,Fe,Ti,Al,Ga,Y,La,Pr,Nd,Gd,Eu,Tb,Yb,O<br />
+&nbsp; buckingham<br />
+<br />
+・catlow.lib<br />
+&nbsp; K.P.Schroder, J.Sauer, M.Leslie, C.R.A.Catlow and J.M.Thomas, Chem. Phys. Lett., 188 (1992) 320.<br />
+&nbsp; J.D.Gale and N.J.Henson, JCS Faraday Trans., 90 (1994) 3175.<br />
+&nbsp; the Catlow oxygen-oxygen potential<br />
+&nbsp; Na,Mg,Al,Si,P,O,H<br />
+&nbsp; buckingham, morse, three<br />
+<br />
+・matsui-akaogi.lib<br />
+&nbsp; MATSUI AKAOGI-library of potentials for GULP<br />
+&nbsp; Matsui and Akaogi, Mol. Simul. 6, 239 (1991)<br />
+&nbsp; Ti,O<br />
+&nbsp; buckingham<br />
+<br />
+・bks.lib<br />
+&nbsp; BKS library - rigid ion potentials for silica<br />
+&nbsp; B.W.H. van Beest et al, Phys. Rev. Lett., 64, 1955 (1990)<br />
+&nbsp; Al,Si,P,O<br />
+&nbsp; buckingham<br />
+<br />
+・johnson.lib<br />
+&nbsp; JOHNSON - library of potentials for GULP<br />
+&nbsp; R.A. Johnson, Phys. Rev. B, 39, 12554 (1989)<br />
+&nbsp; Cu,Ag,Au,Ni,Pd,Pt<br />
+&nbsp; buckingham<br />
+<br />
+・lewis.lib<br />
+&nbsp; LEWIS library - collection of potentials around the Catlow oxygen-oxygen potential<br />
+&nbsp; G.V. Lewis and C.R.A. Catlow, J. Phys. C: Solid, State Phys., 18, 1149-1161 (1985)<br />
+&nbsp; Ca,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Zn,Zr,Cd,Hf,Ce,Eu,Tb,Th,U<br />
+&nbsp; Sc,Mn,Y,La,Nd,Eu,Gd,Ho,Yb,Lu,Pu<br />
+&nbsp; O<br />
+&nbsp; buckingham<br />
+----<br />
+<br />
+□ Lennard-Jones<br />
+-----<br />
+・clayFF.lib<br />
+&nbsp; ClayFF force field<br />
+&nbsp; R.T. Cygan, J.-J. Liang and A.G. Kalinichev, J. Phys. Chem. B, 108, 1255-1266 (2004)<br />
+&nbsp; H,O,Si,Al,Mg,Ca,Fe,Li,Na,K,Cs,Ba,Cl<br />
+&nbsp; Lennard-Jones potentials, harm, three<br />
+<br />
+・old-clayFF.lib<br />
+&nbsp; ClayFF force field<br />
+&nbsp; R.T. Cygan, J.-J. Liang and A.G. Kalinichev, J. Phys. Chem. B, 108, 1255-1266 (2004)<br />
+&nbsp; H,O,Si,Al,Mg,Ca,Fe,Li,Na,K,Cs,Ba,Cl<br />
+&nbsp; Lennard-Jones potentials, harm, three<br />
+<br />
+・kornyshev.lib<br />
+&nbsp; Potentials for proton transport in water from the group of Alexei Kornyshev<br />
+&nbsp; S. Walbran and A.A. Kornyshev, J. Chem. Phys. 114, 10039 (2001)<br />
+&nbsp; H,O<br />
+&nbsp; Intermolecular L-J<br />
+-----<br />
+<br />
+□ other potentials (mix)<br />
+-----<br />
+・mox.lib<br />
+&nbsp; Potentials for MOX fuels from the following papers:<br />
+&nbsp; Tiwary, van de Walle, Jeon and Gronbech-Jensen, Phys. Rev. B 83, 094104 (2011)<br />
+&nbsp; Tiwary, van de Walle and Gronbech-Jensen, Phys. Rev. B 80, 174302 (2009)<br />
+&nbsp; U,Np,Pu,O<br />
+<br />
+・vbo.lib<br />
+&nbsp; Valence-Bond Order (VBO) Potential Library<br />
+&nbsp; M. Zhao, et al., J. Chem. Theory Comput. 5, 594-604 (2009)<br />
+&nbsp; Al,H<br />
+<br />
+・dreiding.lib<br />
+&nbsp; DREIDING forcefield library<br />
+&nbsp; Torsions modified to handle different bond types April 2007 by JDG<br />
+&nbsp; Mayo, S.L., Olafson, B.D. and Goddard III, W. A., J. Phys. Chem. 1990, 94, 8897-8909<br />
+&nbsp; H,B,C,N,O,F,Cl,Br,I,Al,Si,P,S,Ga,Ge,As,Se,In,Sn,Sb,Te,Na,Ca,Fe,Zn,Ti,Tc,Ru<br />
+<br />
+・dreiding_paper.lib<br />
+&nbsp; DREIDING forcefield library<br />
+&nbsp; Torsions modified to handle different bond types April 2007 by JDG<br />
+&nbsp; Mayo, S.L., Olafson, B.D. and Goddard III, W. A., J. Phys. Chem. 1990, 94, 8897-8909<br />
+&nbsp; H,B,C,N,O,F,Cl,Br,I,Al,Si,P,S,Ga,Ge,As,Se,In,Sn,Sb,Te,Na,Ca,Fe,Zn,Ti,Tc,Ru<br />
+<br />
+・edip_marks.lib<br />
+&nbsp; EDIP potential for carbon from Nigel Marks (Curtin University)<br />
+&nbsp; J. Phys. Conden. Matter, 14, 2901-2927 (2002)<br />
+&nbsp; C<br />
+<br />
+・garofalini.lib<br />
+&nbsp; Library of potentials for modelling glass systems<br />
+&nbsp; D.A. Litton and S.H. Garofalini,J. Appl. Phys., 89, 6013 (2001)<br />
+&nbsp; Ca,Al,Si,O,H,Na<br />
+&nbsp; buckingham, fermi, sw3<br />
+<br />
+・bresme_water.lib<br />
+&nbsp; Central Force Model for water by Fernando Bresme.<br />
+&nbsp; F. Bresme, J. Chem. Phys., 115, 7564 (2001)<br />
+<br />
+・edip_si.lib<br />
+&nbsp; EDIP Potential Library for silicon<br />
+&nbsp; J. F. Justo, M. Z. Bazant, E. Kaxiras, V. V. Bulatov, and S. Yip, Physical Review B 58, 2539 (1998)<br />
+&nbsp; Si<br />
+<br />
+・streitzmintmire.lib<br />
+&nbsp; Parameters for the Streitz and Mintmire variable charge model for alumina<br />
+&nbsp; Phys. Rev. B, 50, 11996 (1994)<br />
+&nbsp; Al,O<br />
+&nbsp; buck, rydberg, manybody, eam_functional, eam_density<br />
+<br />
+・vashishta.lib<br />
+&nbsp; Potentials for silica from the following paper:<br />
+&nbsp; Vashishta et al, Phys. Rev. B, 41, 12197 (1990)<br />
+&nbsp; Si,O<br />
+&nbsp; lennard, sw3<br />
+<br />
+・tsuneyuki.lib<br />
+&nbsp; Potentials for silica from paper of Tsuneyuki et al, Phys. Rev. Lett., 61, 869 (1988)<br />
+&nbsp; Si,O<br />
+-----<br />
+<br />
+・eledata<br />
+------------------------------------------------------------------------------<br />
+■ DL Visualize<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+[1] Calculating the phonon modes of MgO<br />
+&nbsp; https://www.ch.ic.ac.uk/harrison/Teaching/Thermal_Expansion/phonons.html<br />
+&nbsp; http://www.ch.ic.ac.uk/harrison/Teaching/Thermal_Expansion/index.html<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.1.0<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit)<br />
+・alamode-v.1.1.0.tar.gz<br />
+0. wget wget https://github.com/ttadano/alamode/archive/v.1.1.0.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.1.0.tar.gz<br />
+2. cd ~/alamode-v.1.1.0<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -qopenmp -std=c++11<br />
+INCLUDE = -I../include -I$(HOME)/include -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl -L$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+SPGLIB_ROOT = ${HOME}/spglib<br />
+INCLUDE = -I../include -I$(HOME)/include -I/usr/include/eigen3 -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -L$(SPGLIB_ROOT)/lib -Wl,--rpath=$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} -o $@ ${OBJS} ${LIBS} ${LDFLAGS}<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. gedit Makefile<br />
+-----before<br />
+# OSX (gcc)<br />
+CXX = g++-8<br />
+-----<br />
+-----after<br />
+# OSX (gcc)<br />
+#CXX = g++-8<br />
+<br />
+#gfortran compiler<br />
+CXX = mpicxx<br />
+-----<br />
+15. make -j<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.1.0/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----before<br />
+LAMMPS=/usr/local/bin/lmp<br />
+ALAMODE_ROOT=${HOME}/Work/alamode/<br />
+-----<br />
+-----after<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.1.0<br />
+-----s<br />
+3. chmod +x run_all.sh<br />
+&nbsp; sed -i 's/\r//g' run_all.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run_all.sh)<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.1.0/tools/plotband.py si222.bands<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.0.2&nbsp;<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit)<br />
+・alamode-v.1.0.2.tar.gz<br />
+0. wget https://github.com/ttadano/alamode/archive/v.1.0.2.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.0.2.tar.gz<br />
+2. cd ~/alamode-v.1.0.2<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/bin/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. make<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.0.2/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.0.2<br />
+-----s<br />
+3. chmod +x run_all.sh<br />
+&nbsp; sed -i 's/\r//g' run_all.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run_all.sh)<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.0.2/tools/plotband.py si222.bands<br />
+------------------------------------------------------------------------------<br />
+■ ALAMODE 1.0.1&nbsp;<br />
+(https://github.com/ttadano/alamode/releases)<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit)<br />
+・alamode-v.1.0.1.tar.gz<br />
+0. wget https://github.com/ttadano/alamode/archive/v.1.0.1.tar.gz<br />
+&nbsp; sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. tar zxvf v.1.0.0.tar.gz<br />
+2. cd ~/alamode-v.1.0.1<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc<br />
+CXXFLAGS = -O2 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK =<br />
+LIBS = ${LAPACK}<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/bin/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. make<br />
+<br />
+□ test<br />
+1. cd ~/alamode-v.1.0.1/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode-v.1.0.1<br />
+-----s<br />
+3. chmod +x run_all.sh<br />
+&nbsp; sed -i 's/\r//g' run_all.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run_all.sh)<br />
+4. ./run_all.sh<br />
+5. python ~/alamode-v.1.0.1/tools/plotband.py si222.bands<br />
+------------------------------------------------------------------------------<br />
+■ ShengBTE<br />
+(http://www.shengbte.org/home)<br />
+<br />
+□ ShengBTE<br />
+◇ Install<br />
+(http://www.shengbte.org/downloads)<br />
+1. tar xvf ShengBTE-v1.1.1-8a63749.tar.bz2<br />
+2. cd ShengBTE<br />
+3. cd Src<br />
+3. cp ../arch.make.example arch.make<br />
+4. gedit arch.make<br />
+-----<br />
+export FFLAGS=-O2<br />
+export LDFLAGS=-L$(HOME)/spglib/lib -Wl,--rpath=$(HOME)/spglib/lib -lsymspg<br />
+export MPIFC=mpif90<br />
+export LAPACK=-L/usr/lib/x86_64-linux-gnu<br />
+export LIBS=$(LAPACK) -llapack -lblas<br />
+-----<br />
+◇ Usage<br />
+1. ~/ShengBTE/ShengBTE input_file<br />
+<br />
+□ thirdorder.py<br />
+◇ Install<br />
+(http://www.shengbte.org/downloads)<br />
+0. cd ~/spglib/include<br />
+&nbsp; mkdir spglib<br />
+&nbsp; cp spglib.h ./spglib/spglib.h<br />
+1. tar xvf thirdorder-v1.1.1-8526f47.tar.bz2<br />
+2. cd thirdorder<br />
+3. gedit setup.py<br />
+-----(please, change &quot;username&quot;)<br />
+INCLUDE_DIRS = [&quot;/home/username/spglib/include&quot;]<br />
+<br />
+LIBRARY_DIRS = [&quot;/home/username/spglib/lib&quot;]<br />
+-----<br />
+4. ./compile.sh<br />
+(You can get thirdorder_core.so)<br />
+<br />
+□ almaBTE<br />
+(http://www.almabte.eu/)<br />
+◇ Install<br />
+(http://www.almabte.eu/index.php/downloads/)<br />
+0. sudo apt-get install cmake libboost-all-dev libhdf5-dev<br />
+1. wget http://www.almabte.eu/wp-content/uploads/2018/10/almabte-v1.3.2.tar.gz<br />
+2. tar zxvf almabte-v1.3.2.tar.gz<br />
+3. cd almabte-v1.3.2<br />
+4. mkdir build<br />
+&nbsp; cd build<br />
+&nbsp; cmake ..<br />
+5. make -j 4 all<br />
+6. make test<br />
+◇ Settings<br />
+1. gedit ~/.bashrc<br />
+&nbsp; export PATH=$PATH:$HOME/almabte-v1.3.2/build/src<br />
+2. source ~/.bashrc<br />
+------------------------------------------------------------------------------<br />
+■ BFGS or other minimization<br />
+<br />
+□ L-BFGS-B<br />
+0. wget http://users.iems.northwestern.edu/~nocedal/Software/Lbfgsb.3.0.tar.gz<br />
+1. tar zxvf Lbfgsb.3.0.tar.gz<br />
+2. cd Lbfgsb.3.0<br />
+3. make<br />
+[B1] http://users.iems.northwestern.edu/~nocedal/lbfgsb.html<br />
+[B2] http://hackage.haskell.org/package/l-bfgs-b<br />
+<br />
+□ libLBFGS: a library of Limited-memory Broyden-Fletcher-Goldfarb-Shanno (L-BFGS)&nbsp;<br />
+0. wget http://users.iems.northwestern.edu/~nocedal/Software/lbfgs_um.tar.gz<br />
+1. tar zxvf lbfgs_um.tar.gz<br />
+2. cd lbfgs_um<br />
+3. sed -i 's/f77/gfortran -O2/g' makefile<br />
+4. make<br />
+[B3] http://www.chokkan.org/software/liblbfgs/<br />
+[B4] http://users.iems.northwestern.edu/~nocedal/lbfgs.html<br />
+<br />
+□ scipy (Powell) (python code) (underconstructing)<br />
+1. powell.py<br />
+----------<br />
+from scipy import optimize<br />
+import numpy as np<br />
+import commands<br />
+<br />
+file_tmp = 'mgh2_tmp.gin'<br />
+file_inp = 'mgh2.gin'<br />
+file_out = 'mgh2.got'<br />
+<br />
+gulp_adress = &quot;$HOME/gulp-5.1/Src/gulp&quot;<br />
+<br />
+keyword = &quot;Frequency&quot;<br />
+target = 180.65<br />
+x0 = [1435.38]<br />
+b1 = np.array([1000,1600])<br />
+<br />
+def f(x):<br />
+<br />
+&nbsp; fi = open(file_tmp,'r')<br />
+&nbsp; text = fi.read().replace('XXXX',str(x[0]).replace(&quot;[&quot;,&quot;&quot;).replace(&quot;]&quot;,&quot;&quot;))<br />
+&nbsp; fi.close<br />
+<br />
+&nbsp; with open(file_inp,'w') as f:<br />
+&nbsp; &nbsp; print &gt;&gt; f, text<br />
+<br />
+&nbsp; commands.getoutput(gulp_adress+&quot; &lt; &quot;+file_inp+&quot; &gt; &quot;+file_out)<br />
+<br />
+&nbsp; get_data = &quot;awk '{if($1==\&quot;&quot;+keyword+&quot;\&quot; &amp;&amp; NR&lt;=420){printf($5)}else{}}' mgh2.got&quot;<br />
+&nbsp; y_str = commands.getoutput(get_data)<br />
+<br />
+&nbsp; y = ((float(y_str)-target)/target)**2<br />
+&nbsp; print y, x[0]<br />
+<br />
+&nbsp; return y<br />
+<br />
+res = optimize.minimize(f,x0,method='Powell',bounds=b1)<br />
+#res = optimize.fmin_bfgs(f,x0)<br />
+#res = optimize.fmin_cg(f,x0)<br />
+----------<br />
+2. sed -i 's/\r//g' powell.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu powell.py)<br />
+3. python powell.py<br />
+<br />
+[P1] Shel Model に基づく Pb (Zr, Ti) O3 の原子間ポテンシャルの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia1979/72/718/72_718_817/_pdf<br />
+------------------------------------------------------------------------------<br />
+■ Appendix (ALAMODE 1.1.0) (failed)<br />
+(https://alamode.readthedocs.io/en/latest/index.html)<br />
+(https://github.com/ttadano/alamode/tree/master) (github)<br />
+(https://sourceforge.net/projects/alamode/) (sourceforge)<br />
+<br />
+<br />
+□ Install (spglib)<br />
+1. git clone https://github.com/atztogo/spglib.git<br />
+2. cd spglib<br />
+3. cd _build<br />
+4. cmake -DCMAKE_INSTALL_PREFIX=&quot;&quot; ..<br />
+5. make<br />
+6. make DESTDIR=$HOME/spglib install<br />
+<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+0. sudo apt-get update<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libboost-all-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+1. git clone http://github.com/ttadano/alamode.git<br />
+2. cd alamode<br />
+3. cd alm<br />
+4. cp Makefile.linux Makefile<br />
+5. gedit Makefile<br />
+-----before<br />
+CXX = icpc&nbsp;<br />
+CXXFLAGS = -O2 -xHOST -qopenmp -std=c++11<br />
+INCLUDE = -I../include -I$(HOME)/include -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -mkl -L$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK =&nbsp;<br />
+LIBS = ${LAPACK}<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} ${LDFLAGS} -o $@ ${OBJS} ${LIBS}<br />
+-----<br />
+-----after<br />
+CXX = mpicxx<br />
+CXXFLAGS = -O2 -std=c++11<br />
+SPGLIB_ROOT = ${HOME}/spglib<br />
+INCLUDE = -I../include -I/usr/local/include -I/usr/include/eigen3 -I$(SPGLIB_ROOT)/include<br />
+<br />
+CXXL = ${CXX}<br />
+LDFLAGS = -L$(SPGLIB_ROOT)/lib -Wl,--rpath=$(SPGLIB_ROOT)/lib -lsymspg<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+<br />
+alm: ${OBJS}<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ${CXXL} -o $@ ${OBJS} ${LIBS} ${LDFLAGS}<br />
+-----<br />
+6. make -j<br />
+7. cd ..<br />
+8. cd anphon<br />
+9. cp Makefile.linux Makefile<br />
+10. gedit Makefile<br />
+-----before<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -xHOST -openmp -std=c++11<br />
+INCLUDE = -I../include<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS = -mkl<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas -lfftw3<br />
+-----<br />
+-----after<br />
+MPICXX = mpicxx<br />
+CXXFLAGS = -O3 -std=c++11<br />
+INCLUDE = -I../include -I/usr/include/eigen3<br />
+<br />
+LINKER = ${MPICXX}<br />
+LDFLAGS =<br />
+<br />
+LAPACK = -L/usr/lib/x86_64-linux-gnu<br />
+LIBS = ${LAPACK} -llapack -lblas<br />
+-----<br />
+11. make -j<br />
+12. cd ..<br />
+13. cd tools<br />
+14. gedit Makefile<br />
+-----before<br />
+# OSX (gcc)<br />
+CXX = g++-9<br />
+-----<br />
+-----after<br />
+#gfortran<br />
+CXX = mpicxx<br />
+<br />
+# OSX (gcc)<br />
+#CXX = g++-9<br />
+-----<br />
+15. make -j<br />
+※ If you set &quot;LDFLAGS = -L$(SPGLIB_ROOT)/lib -lsymspg&quot;, should to input following command.<br />
+&nbsp; export LD_LIBRARY_PATH=$HOME/spglib/lib/:$LD_LIBRARY_PATH<br />
+<br />
+<br />
+□ Tutorial (Si_LAMMPS)<br />
+(files: Si.sw, Si222.lammps, in.sw, run_all.sh)<br />
+1. cd ~/alamode/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----before<br />
+#LAMMPS=${HOME}/src/lammps/src/lmp_serial<br />
+LAMMPS=/usr/local/bin/lmp<br />
+ALAMODE_ROOT=${HOME}/Work/alamode/<br />
+-----<br />
+-----after<br />
+#LAMMPS=${HOME}/src/lammps/src/lmp_serial<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode/<br />
+-----<br />
+3. chmod +x run_all.sh<br />
+&nbsp; sed -i 's/\r//g' run_all.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run_all.sh)<br />
+4. ./run_all.sh<br />
+5. python ~/alamode/tools/plotband.py si222.bands<br />
+6. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222_10.kl&quot; usi 1:2 w lp<br />
+7. quit<br />
+8. python ~/alamode/tools/analyze_phonons.py --calc kappa_boundary --size 1.0e+6 si222_10.result &gt; &nbsp;si222_boundary_1mm.kl<br />
+9. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;si222_10.kl&quot; usi 1:2 w lp, &quot;si222_boundary_1mm.kl&quot; usi 1:2 w lp<br />
+10. quit<br />
+11. python ~/alamode/tools/analyze_phonons.py --calc tau --temp 300 si222_10.result &gt; tau300K_10.dat<br />
+12. gnuplot<br />
+&nbsp; set xrange [1:]<br />
+&nbsp; set logscale y<br />
+&nbsp; set xlabel &quot;Phonon frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Phonon lifetime (ps)&quot;<br />
+&nbsp; plot &quot;tau300K_10.dat&quot; using 3:4 w p<br />
+13. quit<br />
+14. python ~/alamode/tools/analyze_phonons.py --calc cumulative --temp 300 --length 10000:5 si222_10.result &gt; cumulative_300K_10.dat<br />
+15. gnuplot<br />
+&nbsp; set logscale x<br />
+&nbsp; set xlabel &quot;L (nm)&quot;<br />
+&nbsp; set ylabel &quot;Cumulative kappa (W/mK)&quot;<br />
+&nbsp; plot &quot;cumulative_300K_10.dat&quot; using 1:2 w lp<br />
+16. quit<br />
+17. gedit si_RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+<br />
+&nbsp; EMIN = 0; EMAX = 550; DELTA_E = 1.0 # &lt;-- frequency range<br />
+/<br />
+<br />
+&amp;cell<br />
+10.203<br />
+&nbsp;0.0 0.5 0.5<br />
+&nbsp;0.5 0.0 0.5<br />
+&nbsp;0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp;2<br />
+&nbsp;10 10 10<br />
+/<br />
+<br />
+&amp;analysis<br />
+&nbsp;KAPPA_SPEC = 1 # compute spectrum of kappa<br />
+/<br />
+-----<br />
+18. ~/alamode/anphon/anphon si_RTA.in &gt; si_RTA2.log<br />
+19. awk '{if ($1 == 300.0) print $0}' si222.kl_spec &gt; si222_300K_10.kl_spec<br />
+20. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Spectrum of kappa (W/mK/cm^{-1})&quot;<br />
+&nbsp; plot &quot;si222_300K_10.kl_spec&quot; using 2:3 w l lt 2 lw 2<br />
+21. quit<br />
+※ units<br />
+&nbsp;--unit=kayser<br />
+&nbsp;--unit=meV<br />
+&nbsp;--unit=THz<br />
+※ plotband.py convert cm^-1 to other units.<br />
+※ These resuts are 24 times larger than HP.<br />
+Force: (Ref: http://greif.geo.berkeley.edu/~driver/conversions.html)<br />
+1 Ry/Bohr = 25.7110 eV/Angstrom = 6216.90 THz/Angstrom = 11752.179 THz/Bohr<br />
+1 Ha/Bohr = 51.4220 eV/Angstrom<br />
+※ gedit ~/alamode/tools/interface/LAMMPS.py<br />
+------<br />
+&nbsp; &nbsp; force_conv_factor = energy_conv_factor / disp_conv_factor<br />
+&nbsp; &nbsp; #force_conv_factor = &nbsp;1.0 / 11752.179<br />
+------<br />
+※ Maybe, XFSET.harm* and XFSET.cubic* use Angstrom and eV/Angstrom units.<br />
+&nbsp;but, DFSET_harmonic and DFSET_cubic use bohr and Ry/bohr units.<br />
+<br />
+※ phonolammps<br />
+unit_factors = {'real': 4.336410389526464e-2,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'metal': 1.0,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'si': 624150636.3094}<br />
+※ 27.2116/627.509 = 0.04336<br />
+<br />
+□ Tutorial (Si_LAMMPS)<br />
+◇(1. Get displacement patterns by alm)<br />
+1. cd ~/alamode/example/Si_LAMMPS<br />
+2. cp ../Si/si_alm.in ./<br />
+3. ~/alamode/alm/alm si_alm.in &gt; si_alm.log1<br />
+◇(2. Calculate atomic forces for the displaced configurations)<br />
+4. python ~/alamode/tools/displace.py --LAMMPS=Si222.lammps --mag=0.01 --prefix harm &nbsp;si222.pattern_HARMONIC<br />
+5. cp si_alm.in si_alm2.in<br />
+◇(5. Estimate cubic IFCs for thermal conductivity)<br />
+6. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 1 &nbsp;# 1: harmonic, 2: cubic, ..<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 20.406 # factor in Bohr unit<br />
+&nbsp; 1.0 0.0 0.0 # a1<br />
+&nbsp; 0.0 1.0 0.0 # a2<br />
+&nbsp; 0.0 0.0 1.0 # a3<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;interaction<br />
+&nbsp; NORDER = 2<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 20.406 # factor in Bohr unit<br />
+&nbsp; 1.0 0.0 0.0 # a1<br />
+&nbsp; 0.0 1.0 0.0 # a2<br />
+&nbsp; 0.0 0.0 1.0 # a3<br />
+/<br />
+<br />
+&amp;cutoff<br />
+&nbsp; Si-Si None 7.3<br />
+/<br />
+-----<br />
+7. ~/alamode/alm/alm si_alm2.in &gt; si_alm2.log<br />
+8. python ~/alamode/tools/displace.py --LAMMPS=Si222.lammps --mag=0.04 --prefix cubic si222_cubic.pattern_ANHARM3<br />
+9. gedit lammps_run.sh<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+cp harm1.lammps tmp.lammps<br />
+$HOME/lammps/src/lmp_serial &lt; in.sw &gt; log.lammps<br />
+cp XFSET XFSET.harm1<br />
+<br />
+for ((i=1;i&lt;=20;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk '{printf(&quot;%02d&quot;,$1)}'`<br />
+&nbsp; cp cubic${num}.lammps tmp.lammps<br />
+&nbsp; $HOME/lammps/src/lmp_serial &lt; in.sw &gt; log.lammps<br />
+&nbsp; cp XFSET XFSET.cubic${num}<br />
+done<br />
+-----<br />
+10. chmod +x lammps_run.sh<br />
+&nbsp; sed -i 's/\r//g' lammps_run.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu lammps_run.sh)<br />
+11. ./lammps_run.sh<br />
+12. gedit si_alm2.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222_cubic<br />
+&nbsp; MODE = optimize<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;optimize<br />
+&nbsp; DFSET = DFSET_cubic<br />
+&nbsp; FC2XML = si222.xml # Fix harmonic IFCs<br />
+/<br />
+-----<br />
+13. ~/alamode/alm/alm si_alm2.in &gt; si_alm2.log<br />
+14. python ~/alamode/tools/extract.py --LAMMPS=Si222.lammps XFSET.harm1 &gt; DFSET_harmonic<br />
+15. python ~/alamode/tools/extract.py --LAMMPS=Si222.lammps XFSET.cubic* &gt; DFSET_cubic<br />
+◇ (3. Estimate force constants by fitting)<br />
+16. gedit si_alm.in<br />
+-----before<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = suggest<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE = optimize &nbsp; # &lt;-- here<br />
+&nbsp; NAT = 64; NKD = 1<br />
+&nbsp; KD = Si<br />
+/<br />
+<br />
+&amp;fitting<br />
+&nbsp; DFSET = DFSET_harmonic<br />
+/<br />
+-----<br />
+17. ~/alamode/alm/alm si_alm.in &gt; si_alm.log2<br />
+◇(4. Calculate phonon dispersion and phonon DOS)<br />
+18. cp ../Si/si_phband.in ./<br />
+19. ~/alamode/anphon/anphon si_phband.in &gt; si_phband.log<br />
+20. python ~/alamode/tools/plotband.py si222.bands<br />
+&nbsp; (python ~/alamode/tools/plotband.py -h)<br />
+21. cp si_phband.in si_phdos.in<br />
+22. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 &nbsp;# KPMODE = 2: uniform mesh mode<br />
+&nbsp; 20 20 20<br />
+/<br />
+-----<br />
+23. ~/alamode/anphon/anphon si_phdos.in &gt; si_phdos.log<br />
+24. python ~/alamode/tools/plotdos.py --emax 500 --nokey si222.dos<br />
+◇ (6. Calculate thermal conductivity)<br />
+(24.5 cp si_phdos.in si_RTA.in)<br />
+25. gedit RTA.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = si222<br />
+&nbsp; MODE &nbsp; = RTA<br />
+&nbsp; FCSXML = si222_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 2 # KPMODE = 1: line mode<br />
+&nbsp; 10 10 10<br />
+/<br />
+-----<br />
+26. ~/alamode/anphon/anphon si_RTA.in &gt; si_RTA.log &amp;<br />
+※ These resuts are 24 times larger than HP.<br />
+# define the force unit conversion factors to LAMMPS metal style (eV/Angstrom)<br />
+※ phonolammps<br />
+unit_factors = {'real': 4.336410389526464e-2,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'metal': 1.0,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 'si': 624150636.3094}<br />
+------------------------------------------------------------------------------<br />
+■ Test (trials and errors) (failed)<br />
+<br />
+□ Tutorial (Si_LAMMPS)<br />
+(files: Si.sw, Si222.lammps, in.sw, run_all.sh)<br />
+1. cd ~/alamode/example/Si_LAMMPS<br />
+2. gedit run_all.sh<br />
+-----before<br />
+#LAMMPS=${HOME}/src/lammps/src/lmp_serial<br />
+LAMMPS=/usr/local/bin/lmp<br />
+ALAMODE_ROOT=${HOME}/Work/alamode/<br />
+<br />
+# Run LAMMPS<br />
+for ((i=1; i&lt;=1; i++))<br />
+do<br />
+&nbsp; &nbsp;cp harm${i}.lammps tmp.lammps<br />
+&nbsp; &nbsp;$LAMMPS &lt; in.sw &gt;&gt; run.log<br />
+&nbsp; &nbsp;mv XFSET XFSET.harm${i}<br />
+done<br />
+<br />
+for ((i=1; i&lt;=20; i++))<br />
+do<br />
+&nbsp; &nbsp;suffix=`echo ${i} | awk '{printf(&quot;%02d&quot;, $1)}'`<br />
+&nbsp; &nbsp;cp cubic${suffix}.lammps tmp.lammps<br />
+&nbsp; &nbsp;$LAMMPS &lt; in.sw &gt;&gt; run.log<br />
+&nbsp; &nbsp;mv XFSET XFSET.cubic${suffix}<br />
+done<br />
+-----<br />
+-----after<br />
+#LAMMPS=${HOME}/src/lammps/src/lmp_serial<br />
+LAMMPS=${HOME}/lammps/src/lmp_serial<br />
+ALAMODE_ROOT=${HOME}/alamode/<br />
+<br />
+# Run LAMMPS<br />
+for ((i=1; i&lt;=1; i++))<br />
+do<br />
+&nbsp; &nbsp;cp harm${i}.lammps tmp.lammps<br />
+&nbsp; &nbsp;$LAMMPS &lt; in.sw &gt;&gt; run.log<br />
+&nbsp; &nbsp;sed -i s/&quot;v_mfx v_mfy v_mfz&quot;/&quot;fx fy fz&quot;/g XFSET<br />
+&nbsp; &nbsp;mv XFSET XFSET.harm${i}<br />
+done<br />
+<br />
+for ((i=1; i&lt;=20; i++))<br />
+do<br />
+&nbsp; &nbsp;suffix=`echo ${i} | awk '{printf(&quot;%02d&quot;, $1)}'`<br />
+&nbsp; &nbsp;cp cubic${suffix}.lammps tmp.lammps<br />
+&nbsp; &nbsp;$LAMMPS &lt; in.sw &gt;&gt; run.log<br />
+&nbsp; &nbsp;sed -i s/&quot;v_mfx v_mfy v_mfz&quot;/&quot;fx fy fz&quot;/g XFSET<br />
+&nbsp; &nbsp;mv XFSET XFSET.cubic${suffix}<br />
+done<br />
+-----<br />
+3. chmod +x run_all.sh<br />
+&nbsp; sed -i 's/\r//g' run_all.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run_all.sh)<br />
+4. gedit in.sw<br />
+-----<br />
+units &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; metal<br />
+atom_style &nbsp; &nbsp; &nbsp;atomic<br />
+boundary &nbsp; &nbsp; &nbsp; &nbsp;p p p<br />
+<br />
+read_data &nbsp; &nbsp; &nbsp; tmp.lammps<br />
+<br />
+#pair_style &nbsp; &nbsp; &nbsp;sw<br />
+pair_style &nbsp; &nbsp; &nbsp;tersoff<br />
+#pair_style &nbsp; &nbsp; &nbsp;meam/c<br />
+#pair_coeff &nbsp; &nbsp; * * Si.sw Si<br />
+pair_coeff &nbsp; &nbsp; * * SiCGe.tersoff Si(C)<br />
+#pair_coeff &nbsp; &nbsp; &nbsp;* * library.meam Si C SiC.meam Si<br />
+<br />
+#variable mfx atom fx/23.0605/23.0605<br />
+#variable mfy atom fy/25.0605/23.0605<br />
+#variable mfz atom fz/25.0605/23.0605<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 all custom 1 XFSET id xu yu zu fx fy fz<br />
+#dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1 all custom 1 XFSET id xu yu zu v_mfx v_mfy v_mfz<br />
+dump_modify &nbsp; &nbsp; 1 format float &quot;%20.15f&quot;<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+-----<br />
+5. ./run_all.sh<br />
+6. python ~/alamode/tools/plotband.py si222.bands<br />
+※ 1/4.336410389526464e-2 = 23.0605<br />
+------------------------------------------------------------------------------

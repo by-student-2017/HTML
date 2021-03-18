@@ -1,0 +1,229 @@
+------------------------------------------------------------------------------<br />
+Å° DFTBaby<br />
+&nbsp;(http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/main_page.md)<br />
+&nbsp;(Debian 10.0 or ubuntu 18.04 LTS on windows10 (64 bit))<br />
+&nbsp;(Edit: 12/Aug/2020)<br />
+<br />
+Å† Install DFTBaby<br />
+(http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/RELEASES/)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y gfortran<br />
+&nbsp; sudo apt install -y gcc g++ build-essential<br />
+&nbsp; sudo apt install -y libopenmpi-dev<br />
+&nbsp; sudo apt install -y libscalapack-openmpi-dev libscalapack-openmpi2.0<br />
+&nbsp; sudo apt install -y libblas-dev liblapack-dev libopenblas-dev libarpack2-dev<br />
+&nbsp; sudo apt install -y libfftw3-dev<br />
+&nbsp; sudo apt install -y libxc-dev<br />
+&nbsp; sudo apt install -y git wget make cmake<br />
+&nbsp; sudo apt install -y python-dev python-distutils &nbsp;python-setuptools<br />
+&nbsp; sudo apt install -y python-numpy python-scipy python-f2py<br />
+&nbsp; sudo apt install -y python-mpmath python-matplotlib<br />
+&nbsp; sudo apt install -y python-sympy<br />
+&nbsp; sudo apt install -y grace jmol gnuplot<br />
+1. wget http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/RELEASES/31_07_2019/DFTBaby-0.1.0.tar.gz<br />
+2. tar -xvf DFTBaby-0.1.0.tar.gz<br />
+3. cd DFTBaby-0.1.0<br />
+4. gedit setup.py<br />
+-----(before)<br />
+compiler_kwds = {&quot;extra_f90_compile_args&quot;: [&quot;-fopenmp -lgomp -fexternal-blas -lblas&quot;],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;extra_link_args&quot;: [&quot;-lgomp -lblas&quot;]}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #package_data={'DFTB': ['hotbit_parameters/*', 'dftbaby.cfg']},<br />
+-----<br />
+-----(after)<br />
+compiler_kwds = {&quot;extra_f90_compile_args&quot;: ['-fopenmp','-lgomp','-fexternal-blas','-lblas'],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;extra_link_args&quot;: ['-lgomp','-lblas']}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zip_safe=False,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #package_data={'DFTB': ['hotbit_parameters/*', 'dftbaby.cfg']},<br />
+-----<br />
+5. python setup.py install --user<br />
+<br />
+Å† help<br />
+1. ~/DFTBaby-0.1.0/DFTB/DFTB2.py --help<br />
+<br />
+Å† extensions<br />
+1. cd ~/DFTBaby-0.1.0/DFTB/extensions<br />
+2. make clean<br />
+3. make<br />
+4. cd -<br />
+<br />
+Å† the rudimentary DREIDING force field for QM/MM calculation<br />
+1. cd ~/DFTBaby-0.1.0/DFTB/ForceField/src/<br />
+2. make clean<br />
+3. make<br />
+4. cd -<br />
+<br />
+Å† help<br />
+1. ~/DFTBaby-0.1.0/DFTB/LR_TDDFTB.py --help<br />
+<br />
+Å† example<br />
+1. cd ~/DFTBaby-0.1.0/examples/NAMD<br />
+2. ~/DFTBaby-0.1.0/DFTB/Dynamics/SurfaceHopping.py<br />
+------------------------------------------------------------------------------<br />
+Å° GUI (Canopy) [1]<br />
+<br />
+[1] https://docs.enthought.com/canopy/2.1/quick-start/install_linux.html<br />
+------------------------------------------------------------------------------<br />
+Å° Parametrization (making *.skf parameters)<br />
+(Debian 10.0 on windows10 (64 bit))<br />
+(http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md)<br />
+<br />
+Å† Generation of Pseudo-Atoms<br />
+1. cd ~/DFTBaby-0.1.0<br />
+2. python DFTB/Parameters.py<br />
+3. cd DFTB/SlaterKoster/confined_pseudo_atoms<br />
+4. ls<br />
+5. cd ~/DFTBaby-0.1.0<br />
+6. python DFTB/SlaterKoster/generate_confined_pseudoatoms.py<br />
+7. cd ./DFTB/SlaterKoster/confined_pseudo_atoms<br />
+8. ls<br />
+9. cd ~/DFTBaby-0.1.0<br />
+10. python DFTB/SlaterKoster/generate_free_pseudoatoms.py<br />
+11. python DFTB/SlaterKoster/plot_pseudoatoms.py DFTB/SlaterKoster/confined_pseudo_atoms/c.py<br />
+Å¶ Parameters.py calls AtomicData.py<br />
+&nbsp; atom_names: all elements<br />
+&nbsp; atom_masses: all elements<br />
+&nbsp; covalent_radii: bohr units<br />
+&nbsp; slater_radii: all elements<br />
+&nbsp; vdw_radii: bohr units<br />
+&nbsp; ionization_energies_eV: all elements (except At)<br />
+&nbsp; electron_affiities_eV: EA = Etot(A) - Etot(A-)<br />
+&nbsp; static_polarizabilities_au: all elements<br />
+&nbsp; valence_occ_numbers:&nbsp;<br />
+&nbsp; Grime_C6:<br />
+&nbsp; Grime_R0:<br />
+<br />
+Å† Slater-Koster Integrals<br />
+1. cd ~/DFTBaby-0.1.0<br />
+2. python DFTB/SlaterKoster/generate_ptcgrid.py<br />
+3. cd DFTB/SlaterKoster/slako_tables/<br />
+4. ls<br />
+5. cd ~/DFTBaby-0.1.0<br />
+6. python DFTB/SlaterKoster/generate_slakotables.py<br />
+7. python DFTB/SlaterKoster/plot_slakofile.py DFTB/SlaterKoster/slako_tables/c_c.py<br />
+<br />
+Å† Repulsive Potential<br />
+1. cd ~/DFTBaby-0.1.0<br />
+2. cd DFTB/RepulsivePotential/<br />
+3. ls<br />
+4. cd ~/DFTBaby-0.1.0<br />
+5. wget http://www.dftb.org/fileadmin/DFTB/public/slako/hyb/hyb-0-2.tar.xz<br />
+6. tar xvf hyb-0-2.tar.xz<br />
+7. cp hyb-0-2/Ag-Ag.skf ./<br />
+8. python DFTB/RepulsivePotential/convert_reppotfile.py Ag-Ag.skf DFTB/RepulsivePotential/reppot_tables/ag_ag.py --scaling=1.08<br />
+<br />
+Å† Information<br />
+Å¶ The confinement radius r_0 is an empirical parameter that influences all subsequent steps in the parametrization.<br />
+Å¶ The Hubbard parameter U = IE-EA, which models the reaction of atoms to partial charges, can be estimated from experimental or theoretical atomic ionization potentials and electron affinities.<br />
+<br />
+Å† XLaunch<br />
+1. sudo apt install -y x11-apps<br />
+2. export DISPLAY=:0.0<br />
+&nbsp; or<br />
+&nbsp; echo 'export DISPLAY=:0.0' &gt;&gt; ~/.bashrc<br />
+------------------------------------------------------------------------------<br />
+Å° DFTBaby<br />
+&nbsp;(http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/main_page.md)<br />
+&nbsp;(ubuntu 18.04 LTS on windows10 (64 bit))<br />
+&nbsp;(Edit: 25/Aug/2020)<br />
+<br />
+Å† Install (DFTBaby)<br />
+1.&nbsp;git clone https://github.com/by-student-2017/DFTBaby-0.1.0-31Jul2019.git<br />
+2.&nbsp;mv DFTBaby-0.1.0-31Jul2019 DFTBaby-0.1.0<br />
+3.&nbsp;cd DFTBaby-0.1.0<br />
+4.&nbsp;chmod +x install.sh<br />
+5.&nbsp;./install.sh<br />
+(Å† libxc.so.5 (OK ???)<br />
+6. sudo cp&nbsp;/usr/lib/x86_64-linux-gnu/libxc.so.4&nbsp;/usr/lib/x86_64-linux-gnu/libxc.so.5)<br />
+(Memo:&nbsp;No eigenvalue, despite sign change???)<br />
+<br />
+Å† Install (libxc.so.5)<br />
+1. sudo apt install -y gdebi<br />
+2. wget http://archive.ubuntu.com/ubuntu/pool/universe/libx/libxc/libxc5_4.3.4-1build1_amd64.deb<br />
+3. sudo gdebi&nbsp;libxc5_4.3.4-1build1_amd64.deb<br />
+4.&nbsp;Do you want to install the software package? [y/N]:y<br />
+(Memo:&nbsp;No eigenvalue, despite sign change???)<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Parametrization<br />
+&nbsp; http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md<br />
+[2] Format of the v1.0 Slater-Koster files<br />
+&nbsp; https://www.dftb.org/fileadmin/DFTB/public/misc/slakoformat.pdf<br />
+[3] Ionization energies of the elements (data page)<br />
+&nbsp; https://en.wikipedia.org/wiki/Ionization_energies_of_the_elements_(data_page)<br />
+[4] Electron affinity (data page)<br />
+&nbsp; https://en.wikipedia.org/wiki/Electron_affinity_(data_page)<br />
+[5] covalent radius<br />
+&nbsp;&nbsp;<a href="https://en.wikipedia.org/wiki/Covalent_radius">https://en.wikipedia.org/wiki/Covalent_radius</a><br />
+&nbsp;&nbsp;<a href="https://www.convertunits.com/from/pm/to/bohr">https://www.convertunits.com/from/pm/to/bohr</a>&nbsp;(pm -&gt; bohr)<br />
+[6] Density-Functional Tight-Binding (DFTB) as fast approximate DFT method<br />
+&nbsp; https://www.stonybrook.edu/commcms/iacs/_archived/sites/iacs.stonybrook.edu/files/dftb-talk.parti_.pdf<br />
+[7] Long-range correction for tight-binding TD-DFT<br />
+&nbsp; https://arxiv.org/pdf/1503.01714.pdf%3B<br />
+[8] Density-functional tight-binding for beginners<br />
+&nbsp; http://users.jyu.fi/~pekkosk/resources/pdf/koskinen_CMS_09.pdf<br />
+[9] Calculating the Hubbard U<br />
+&nbsp; http://hjkgrp.mit.edu/content/calculating-hubbard-u<br />
+------------------------------------------------------------------------------<br />
+Å° libxc-5.0.0<br />
+(<a href="https://www.tddft.org/programs/libxc/download/">https://www.tddft.org/programs/libxc/download/</a>)<br />
+(ubuntu 18.04 LTS on windows10 (64 bit))<br />
+<br />
+Å† Install (libxc.so.9)<br />
+1. wget&nbsp;https://www.tddft.org/programs/libxc/down/5.0.0/libxc-5.0.0.tar.gz<br />
+2. tar zxvf&nbsp;libxc-5.0.0.tar.gz<br />
+3.&nbsp;cd libxc-5.0.0<br />
+4. cmake -H. -Bobjdir&nbsp;-DBUILD_SHARED_LIBS=yes
+<div>5. cd objdir &amp;&amp; make</div>
+
+<div>6. make test</div>
+
+<div>7. sudo make install<br />
+&nbsp;</div>
+Å† Install (libxc.a)<br />
+1. wget&nbsp;https://www.tddft.org/programs/libxc/down/5.0.0/libxc-5.0.0.tar.gz<br />
+2. tar zxvf&nbsp;libxc-5.0.0.tar.gz<br />
+3.&nbsp;cd libxc-5.0.0<br />
+4.&nbsp;./configure
+<div>5. make</div>
+
+<div>6. make check</div>
+
+<div>7. sudo make install<br />
+8.&nbsp;echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo '# libxc-5.0.0' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo 'export PATH=$PATH:/opt/etsf/lib' &gt;&gt; ~/.bashrc<br />
+&nbsp; bash</div>
+------------------------------------------------------------------------------<br />
+Å† Install DFTBaby (gfortran + MKL) (failed)<br />
+(https://software.intel.com/content/www/us/en/develop/articles/installing-intel-free-libs-and-python-apt-repo.html)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget gnupg gnupg1 gnupg2 csh gcc<br />
+&nbsp; wget https://apt.repos.intel.com/intel-gpg-keys/GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB<br />
+&nbsp; sudo apt-key add GPG-PUB-KEY-INTEL-SW-PRODUCTS-2019.PUB<br />
+&nbsp; sudo wget https://apt.repos.intel.com/setup/intelproducts.list -O /etc/apt/sources.list.d/intelproducts.list<br />
+&nbsp; sudo apt update<br />
+&nbsp; sudo apt install -y intel-mkl-2020.2-108<br />
+&nbsp; echo 'source /opt/intel/parallel_studio_xe_2020/compilers_and_libraries_2020/linux/mkl/bin/mklvars.sh intel64' &gt;&gt; ~/.bashrc<br />
+&nbsp; bash<br />
+1. wget http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/RELEASES/31_07_2019/DFTBaby-0.1.0.tar.gz<br />
+2. tar -xvf DFTBaby-0.1.0.tar.gz<br />
+3. cd DFTBaby-0.1.0<br />
+4. gedit setup.py<br />
+-----(before)<br />
+compiler_kwds = {&quot;extra_f90_compile_args&quot;: [&quot;-fopenmp -lgomp -fexternal-blas -lblas&quot;],<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot;extra_link_args&quot;: [&quot;-lgomp -lblas&quot;]}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #package_data={'DFTB': ['hotbit_parameters/*', 'dftbaby.cfg']},<br />
+-----<br />
+-----(after)<br />
+MKLROOT=&quot;/opt/intel/compilers_and_libraries_2020.2.254/linux/mkl&quot;<br />
+compiler_kwds = {&quot;extra_f90_compile_args&quot;: ['-fopenmp','-fexternal-blas','-fdefault-integer-8','-m64','-I'+MKLROOT+'/include','-DPARALLEL_OMP','-L'+MKLROOT+'/lib/intel64','-Wl,--no-as-needed','-lmkl_gf_ilp64','-lmkl_gnu_thread','-lmkl_core','-lgomp','-lpthread','-lm','-ldl'], &quot;extra_link_args&quot;: ['-fopenmp','-fdefault-integer-8','-m64','-I'+MKLROOT+'/include','-DPARALLEL_OMP','-L'+MKLROOT+'/lib/intel64','-Wl,--no-as-needed','-lmkl_gf_ilp64','-lmkl_gnu_thread','-lmkl_core','-lgomp','-lpthread','-lm','-ldl']}<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; zip_safe=False,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #package_data={'DFTB': ['hotbit_parameters/*', 'dftbaby.cfg']},<br />
+-----(https://software.intel.com/content/www/us/en/develop/articles/intel-mkl-link-line-advisor.html)<br />
+5. python setup.py install --user<br />
+------------------------------------------------------------------------------

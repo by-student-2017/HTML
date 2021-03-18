@@ -1,0 +1,238 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：<br />
+基本的な使い方： <a href="https://www.youtube.com/watch?v=BEPQZHxCKKk">https://www.youtube.com/watch?v=BEPQZHxCKKk</a><br />
+------------------------------------------------------------------------------<br />
+■ setting<br />
+1. chmod +x vasp_boltztrap_run<br />
+2. gedit vasp_boltztrap_run<br />
+change<br />
+------<br />
+set vasp_adress = $HOME'/vasp/vasp.5.4.1/bin/vasp_std'<br />
+#set vasp_adress = $HOME'/vasp/vasp.5.3/vasp'<br />
+------<br />
+3. gedit vasp_boltztrap_run<br />
+If you get libraries form Ubuntu Software center, I reccommend below,<br />
+------before<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------after<br />
+#set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+0. calculate optimized structure (for example, vasp_run)<br />
+&nbsp; If you want to get more precise data, you must increase k point in KPOINTS file after SCF cycle.<br />
+1. vasp_boltztrap_run<br />
+2. gedit *.intrans<br />
+3. vasp_boltztrap_run<br />
+------------------------------------------------------------------------------<br />
+■ vasp_boltztrap_run<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+# user settting<br />
+set vasp_adress = $HOME'/vasp/vasp.5.4.1/bin/vasp_std'<br />
+set pseudo_potential_adress = $HOME'/vasp/potpaw_PBE'<br />
+#set vasp_adress = $HOME'/vasp/vasp.5.3/vasp'<br />
+set boltztrap_adress = $HOME'/boltztrap-1.2.5'<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+# Automatically setting<br />
+set num_core = `grep 'core id' /proc/cpuinfo | sort -u | wc -l`<br />
+setenv OMP_NUM_THREADS 1<br />
+#<br />
+# boltztrap input making<br />
+if ( -f ${file}.py ) then<br />
+&nbsp; echo &quot;already &quot;${file}&quot;.py&quot;<br />
+else<br />
+cp ${boltztrap_adress}/util/vasp2boltz.py vasp2boltz.py<br />
+cat &lt;&lt; EOF &gt; ${file}.py<br />
+from ase import io<br />
+from ase.lattice.spacegroup import Spacegroup<br />
+import vasp2boltz<br />
+<br />
+ao = io.read('POSCAR')<br />
+# If you do not have spglib installed, you need to add the spacegroup no.<br />
+# e.g. sg = Spacegroup(216) for the 'F -4 3 m' space group<br />
+# If you use the conventional cell rather than the primitive unit cell in your<br />
+# POSCAR file for e.g. I or F spacegroups, you need to add this information.<br />
+<br />
+# Example 1:<br />
+#sg = Spacegroup(1)<br />
+#ao.info = {'spacegroup': sg}<br />
+<br />
+# Example 2. Here the unit cell in the POSCAR file is cubic (conventional):<br />
+#sg = Spacegroup(225)<br />
+#ao.info = {'spacegroup': sg, 'unit_cell': 'conventional'}<br />
+<br />
+# Read number of electrons from OUTCAR.<br />
+foundnelect = False<br />
+try:<br />
+&nbsp;&nbsp;&nbsp; for line in open('OUTCAR', 'r'):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if 'NELECT' in line:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nelect = float(line.split()[2])<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; foundnelect = True<br />
+except:<br />
+&nbsp;&nbsp;&nbsp; pass<br />
+if not foundnelect:<br />
+&nbsp;&nbsp;&nbsp; print 'Number of electrons not found. Please set the number manually in hte.intrans.'<br />
+&nbsp;&nbsp;&nbsp; nelect = 1.0<br />
+<br />
+# The remaining part takes care of writing the files required by BoltzTraP.<br />
+bs = vasp2boltz.get_vasp_bandstructure()<br />
+vasp2boltz.write_bandstructure_boltztrap(bs)<br />
+vasp2boltz.write_structure_boltztrap(ao)<br />
+vasp2boltz.write_intrans_boltztrap(n_electrons = nelect)<br />
+EOF<br />
+python ${file}.py<br />
+mv energies.boltztrap ${file}.energy<br />
+mv hte.intrans ${file}.intrans<br />
+mv hte.struct ${file}.struct<br />
+cp ${file}.intrans ${file}_temp.intrans<br />
+sed -e 's/800. 50./800. 10./g' ${file}_temp.intrans &gt; ${file}.intrans<br />
+endif<br />
+#<br />
+# run boltztrap<br />
+$boltztrap_adress/src/x_trans BoltzTraP<br />
+#<br />
+# boltztrap plot<br />
+# get data for every K<br />
+awk '{if($1==&quot;#&quot;){print $1,$2,$3,$4,$5,$6,$7,$8,$9,$10}else{print ($1*13.606),$2,$3,$4,($5*1000*1000),$6,(1.0/$7),$8,$9,$10}}' ${file}.trace &gt; ${file}_eV.trace<br />
+grep ' 10.0000'&nbsp; ${file}_eV.trace &gt; output_eV_10K.txt<br />
+grep ' 300.0000' ${file}_eV.trace &gt; output_eV_300K.txt<br />
+grep ' 600.0000' ${file}_eV.trace &gt; output_eV_600K.txt<br />
+# sigxx<br />
+cp ${file}.sigxx ${file}_temp.sigxx<br />
+awk '{print ($1*13.606),$2,$3,$4,$5,$6,$7,$8,$9,$10}' ${file}_temp.sigxx &gt; sigxx_eV.txt<br />
+#<br />
+# seebeck coefficient (microV/K vs. eV)<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_seebeck.ps&quot;<br />
+set epsformat = &quot;_seebeck.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Seebeck coefficient, {/Italic S} ({/Symbol m}VK^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:5 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:5 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:5 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# conductivity/lifetime vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_sigma.ps&quot;<br />
+set epsformat = &quot;_sigma.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical conductivity, {/Symbol s} / {/Symbol t} ({/Symbol W}^-^1m^-^1s^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:6 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:6 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:6 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# Electronic thermal conductivity vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_kel.ps&quot;<br />
+set epsformat = &quot;_kel.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical thermal conductivity, {/Symbol k}^0 (Wm^-^1K^-^1s^-^1)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 1:8 w l t &quot;10 K&quot;, &quot;output_eV_300K.txt&quot; u 1:8 w l t &quot;300 K&quot;, &quot;output_eV_600K.txt&quot; u 1:8 w l t &quot;600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# eV vs. inverse Hall coefficient<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_n.ps&quot;<br />
+set epsformat = &quot;_n.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Inverse Hall coefficient, {/Italic R_H}^-^1} (e.unitcell^-^1)&quot;<br />
+#set xlabel &quot;Inverse Hall coefficient and number of carriers n (density of states), {/Italic R_H}^-^1} and {/Italic n} (e.unitcell^-^1)&quot;<br />
+set ylabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+p &quot;output_eV_10K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 600 K&quot;<br />
+#p &quot;output_eV_10K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 7:1 w l t &quot;R_H^-^1 at 600 K&quot;, &quot;output_eV_10K.txt&quot; u 4:1 w l t &quot;n at 10 K&quot;, &quot;output_eV_300K.txt&quot; u 4:1 w l t &quot;n at 300 K&quot;, &quot;output_eV_600K.txt&quot; u 4:1 w l t &quot;n at 600 K&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+# sigxx vs. eV<br />
+set file&nbsp;&nbsp;&nbsp;&nbsp; = `pwd`<br />
+set filename = $file:t<br />
+set psformat = &quot;_sigxx.ps&quot;<br />
+set epsformat = &quot;_sigxx.eps&quot;<br />
+gnuplot -persist &lt;&lt; EOF<br />
+set title &quot;$filename&quot;<br />
+set zeroaxis<br />
+set xlabel &quot;Chemical Potential, {/Symbol-Italic m} (eV)&quot;<br />
+set ylabel &quot;Electrical conductivity, {/Symbol s} / {/Symbol t} ({/Symbol W}^-^1m^-^1s^-^1)&quot;<br />
+p &quot;sigxx_eV.txt&quot; u 1:2 w l t &quot;xx&quot;, &quot;sigxx_eV.txt&quot; u 1:3 w l t &quot;xy&quot;, &quot;sigxx_eV.txt&quot; u 1:4 w l t &quot;xz&quot;, &quot;sigxx_eV.txt&quot; u 1:5 w l t &quot;yx&quot;, &quot;sigxx_eV.txt&quot; u 1:6 w l t &quot;yy&quot;, &quot;sigxx_eV.txt&quot; u 1:7 w l t &quot;yz&quot;, &quot;sigxx_eV.txt&quot; u 1:8 w l t &quot;zx&quot;, &quot;sigxx_eV.txt&quot; u 1:9 w l t &quot;zy&quot;, &quot;sigxx_eV.txt&quot; u 1:10 w l t &quot;zz&quot;<br />
+<br />
+#set size 1.0,1.0<br />
+#set terminal postscript color enhanced &quot;Arial&quot; 30<br />
+#set out &quot;$filename$psformat&quot;<br />
+<br />
+set size 1.5,2.1<br />
+set terminal postscript eps color enhanced &quot;Arial&quot; 30<br />
+set out &quot;$filename$epsformat&quot;<br />
+<br />
+replot<br />
+set terminal x11<br />
+EOF<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------

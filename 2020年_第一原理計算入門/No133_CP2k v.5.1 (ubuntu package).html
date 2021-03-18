@@ -1,0 +1,144 @@
+------------------------------------------------------------------------------<br />
+■ CP2k v.5.1 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(Edit: 30/May/2020)<br />
+<br />
+□ Install<br />
+1. cd /etc/apt/sources.list.d<br />
+2. sudo wget http://packages.mccode.org/debian/mccode-bionic.list<br />
+3. sudo apt update<br />
+4. sudo apt install -y cp2k<br />
+<br />
+□ check<br />
+1. which cp2k<br />
+<br />
+□ help<br />
+1. cp2k --help<br />
+<br />
+□ example settings<br />
+1.&nbsp;cd $HOME<br />
+2. mkdir cp2k<br />
+3. cd cp2k<br />
+4. cp -r /usr/share/doc/cp2k/examples ./<br />
+5. cd examples<br />
+<br />
+□ jmol<br />
+1. sudo apt install -y jmol<br />
+<br />
+□ Data directory path<br />
+&nbsp; /usr/share/cp2k<br />
+<br />
+□ version<br />
+1. cp2k --version<br />
+&nbsp;CP2K version 5.1<br />
+&nbsp;SVN source code revision svn:18091<br />
+&nbsp;cp2kflags: libint fftw3 libxc parallel mpi3 scalapack libderiv_max_am1=5 libint_max_am=6<br />
+<br />
+□ XLaunch (WSL case)<br />
+・ubuntu side<br />
+1. sudo apt-get update<br />
+2. sudo apt-get install -y xfce4-terminal<br />
+3. sudo apt-get install -y xfce4<br />
+・windows side<br />
+1. get VcXsrv Windows X Server from<br />
+&nbsp; https://sourceforge.net/projects/vcxsrv/<br />
+------------------------------------------------------------------------------<br />
+■ examples<br />
+<br />
+□ SCF [DIIS (<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 16px; font-style: italic; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Activate the DIIS based optimization procedure for BAND)</span>]<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i C.inp | tee C.out<br />
+<br />
+□ MD (NVE) (H2O)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i H2O.inp | tee H2O.out<br />
+4. jmol&nbsp;H2O_OT-pos-1.xyz<br />
+<br />
+□ MD (NVE) (Ar)<br />
+1. cd ~/cp2k/examples<br />
+2.&nbsp;gzip -dc argon.inp.gz &gt; argon.inp<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i&nbsp;argon.inp | tee argon.out<br />
+5. jmol&nbsp;ar108-pos-1.xyz<br />
+<br />
+□ TDDFPT<br />
+1. cd ~/cp2k/examples<br />
+2.&nbsp;set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i H2O_tddfpt-s-1.inp | tee H2O_tddfpt-s-1.out<br />
+<br />
+□ QMMM (H2O)<br />
+1. cd ~/cp2k/examples<br />
+2. gedit&nbsp;H2O-qmmm-gauss-10.inp<br />
+-----(before)<br />
+&nbsp; &nbsp; BASIS_SET_FILE_NAME ../GTH_BASIS_SETS<br />
+&nbsp; &nbsp; POTENTIAL_FILE_NAME ../POTENTIAL<br />
+<br />
+&nbsp; &nbsp; MM_POTENTIAL_FILE_NAME ../MM_POTENTIAL<br />
+-----<br />
+-----(after)<br />
+&nbsp; &nbsp; BASIS_SET_FILE_NAME ./GTH_BASIS_SETS<br />
+&nbsp; &nbsp; POTENTIAL_FILE_NAME ./POTENTIAL<br />
+<br />
+&nbsp; &nbsp; MM_POTENTIAL_FILE_NAME ./MM_POTENTIAL<br />
+-----<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i&nbsp;H2O-qmmm-gauss-10.inp | tee&nbsp;H2O-qmmm-gauss-10.out<br />
+5. jmol&nbsp;H2O-qmmm-gauss-10-pos-1.xyz<br />
+<br />
+□ QMMM (Ar)<br />
+1. cd ~/cp2k/examples<br />
+2.&nbsp;gzip -dc Ar-qmmm.inp.gz &gt; Ar-qmmm.inp<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i&nbsp;Ar-qmmm.inp | tee Ar-qmmm.out<br />
+5.&nbsp;jmol&nbsp;ar108-pos-1.xyz<br />
+<br />
+□ Ewald (<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 16px; font-style: italic; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ewald parameters controlling electrostatic only for CLASSICAL MM</span>)<br />
+1. cd ~/cp2k/examples<br />
+2.&nbsp;gzip -dc H2O-32_ewald.inp.gz &gt; H2O-32_ewald.inp<br />
+3. set OMP_NUM_THREADS=1&nbsp;<br />
+4. mpirun -np 4 cp2k -i&nbsp;H2O-32_ewald.inp | tee&nbsp;H2O-32_ewald.out<br />
+5. jmol&nbsp;H2O-32_ewald-pos-1.xyz<br />
+<br />
+□ PINT (<em style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 16px; font-style: italic; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">path integral run</em>) + Nose (<em style="color: rgb(0, 0, 0); font-family: Times New Roman; font-size: 16px; font-style: italic; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Nose-Hoover thermostats</em>)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i&nbsp;h2o_pint_qs_nose.inp | tee h2o_pint_qs_nose.out<br />
+<br />
+□ HFX (<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(51, 51, 51); font-family: Arial,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Hartree-Fock exchange</span>) (failed)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. gedit&nbsp;H2O-hfx-1.inp<br />
+-----(before)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MAX_MEMORY &nbsp;10<br />
+-----<br />
+-----(after)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MAX_MEMORY&nbsp; 3500<br />
+-----<br />
+4.&nbsp;mpirun -np 4 cp2k -i H2O-hfx-1.inp | tee H2O-hfx-1.out<br />
+※ HFX_MEM_INFO| Est. max. program size before HFX [MiB]: 56<br />
+&nbsp; Program received signal SIGSEGV: Segmentation fault - invalid memory reference.<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1]&nbsp;Exercises<br />
+&nbsp;&nbsp;https://www.cp2k.org/exercises<br />
+[2]&nbsp;Gaussian and Augmented Plane Wave Method<br />
+&nbsp;&nbsp;https://pc2.uni-paderborn.de/fileadmin/pc2/cp2k_workshop/Tutorial_AIMD-XAS_and_NMR.pdf<br />
+------------------------------------------------------------------------------<br />
+■ DebiChem packages (ubuntu 18.04 LTS and Ubuntu 20.04 LTS)<br />
+&nbsp; (https://packages.ubuntu.com/search?keywords=debichem&amp;searchon=names)<br />
+・sudo apt install debichem-crystallography<br />
+・sudo apt install debichem-molecular-abinitio<br />
+・sudo apt install debichem-periodic-abinitio<br />
+・sudo apt install debichem-molecular-dynamics<br />
+・sudo apt install debichem-semiempirical<br />
+・sudo apt insatll debichem-cheminformatics<br />
+・sudo apt insatll debichem-analytical-biochemistry<br />
+・sudo apt insatll debichem-development<br />
+・sudo apt insatll debichem-input-generation-output-processing<br />
+・sudo apt insatll debichem-molecular-modelling<br />
+・sudo apt insatll debichem-tasks<br />
+・sudo apt insatll debichem-view-edit-2d<br />
+・sudo apt insatll debichem-visualisation<br />
+------------------------------------------------------------------------------&nbsp;

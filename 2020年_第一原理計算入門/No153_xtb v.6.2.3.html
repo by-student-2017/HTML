@@ -1,0 +1,396 @@
+------------------------------------------------------------------------------<br />
+■ xtb v.6.2.3 (ubuntu 18.04 on windows10 (64 bit)) (Edit: 3/Jun/2020)<br />
+&nbsp; (https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/xtb/xtb)<br />
+<br />
+□ download and unpack xtb binary<br />
+(https://github.com/grimme-lab/xtb/tags)<br />
+1. wget https://github.com/grimme-lab/xtb/releases/download/v6.2.3/xtb-200316.tar.xz<br />
+2. tar xf xtb-2*.tar.xz<br />
+<br />
+◇ environment settings<br />
+1. gedit ~/.bashrc<br />
+#----------<br />
+# xtb settings<br />
+export XTBHOME=$HOME/xtb_6.2.3<br />
+export XTBPATH=${XTBHOME}/share/xtb:${XTBHOME}:${HOME}<br />
+export MANPATH=${MANPATH}:${XTBHOME}/share/man<br />
+export PATH=${PATH}:${XTBHOME}/bin<br />
+export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XTBHOME}/lib<br />
+export PYTHONPATH=${PYTHONPATH}:${XTBHOME}/python<br />
+#----------<br />
+※ 上記を ~/.bashrc の最後に書き加えればよい。(Add the above to the end of &quot;~ / .bashrc&quot;.)<br />
+2. bash<br />
+----------<br />
+※ xtb-6.3.1 case (change part)<br />
+&nbsp;&nbsp;export XTBHOME=$HOME/xtb-6.3.1<br />
+&nbsp;&nbsp;export PATH=${PATH}:${XTBHOME}/bin:${XTBPATH}<br />
+----------<br />
+<br />
+◇ version check<br />
+1. xtb --version<br />
+<br />
+◇ help<br />
+1. xtb -h<br />
+2. xtb --help<br />
+<br />
+◇ parallel calculation settings before run<br />
+1. (ulimit -s unlimited)<br />
+2.&nbsp;export OMP_STACKSIZE=1G<br />
+3.&nbsp;export OMP_NUM_THREADS=2,1<br />
+&nbsp; (above command for 2 cpus)<br />
+&nbsp; (e.g., &quot;export OMP_NUM_THREADS=4,1&quot; for 4 cpus)<br />
+&nbsp; (export OMP_MAX_ACTIVE_LEVELS=1) (default 4)<br />
+4.&nbsp;export MKL_NUM_THREADS=2<br />
+&nbsp; (above command for 2 cpus)<br />
+&nbsp; (e.g., &quot;export MKL_NUM_THREADS=4&quot; for 4 cpus)<br />
+<br />
+◇ docs<br />
+&nbsp; https://xtb-docs.readthedocs.io/en/latest/contents.html<br />
+<br />
+◇ ORCA 4.2 (no check)<br />
+&nbsp; https://orcaforum.kofo.mpg.de/app.php/portal<br />
+1.&nbsp;ln -s $(which xtb) otool_xtb<br />
+2. write Orca input file<br />
+-----<br />
+! XTB1 # for GFN1-xTB<br />
+! XTB2 # for GFN2-xTB<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ xtb v.6.3.0 (ubuntu 18.04 on windows10 (64 bit))<br />
+(Edit: 29/Jun/2020)<br />
+<br />
+□ Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y gcc g++ build-essential gfortran cmake liblapack-dev libblas-dev libopenblas-dev<br />
+1. git clone https://github.com/grimme-lab/xtb.git<br />
+2. cd xtb<br />
+3. export FC=&quot;gfortran -O2 -mtune=native&quot; CC=gcc<br />
+&nbsp; mkdir build<br />
+&nbsp; pushd build<br />
+&nbsp; cmake -DCMAKE_BUILD_TYPE=Release ..<br />
+&nbsp; make<br />
+&nbsp; ctest<br />
+&nbsp; popd<br />
+4. sudo make -C build install<br />
+----------<br />
+-- Install configuration: &quot;Release&quot;<br />
+-- Installing: /usr/local/include/xtb/xtb.h<br />
+-- Installing: /usr/local/share/xtb/param_gfn0-xtb.txt<br />
+-- Installing: /usr/local/share/xtb/param_gfn1-xtb.txt<br />
+-- Installing: /usr/local/share/xtb/param_gfn2-xtb.txt<br />
+-- Installing: /usr/local/share/xtb/param_ipea-xtb.txt<br />
+-- Installing: /usr/local/share/xtb/.param_gfnff.xtb<br />
+-- Installing: /usr/local/lib/libxtb.a<br />
+-- Installing: /usr/local/lib/libxtb.so<br />
+-- Installing: /usr/local/bin/xtb<br />
+-- Installing: /usr/local/share/cmake/xtb/xtbConfig.cmake<br />
+-- Installing: /usr/local/share/cmake/xtb/xtbConfigVersion.cmake<br />
+-- Installing: /usr/local/share/cmake/xtb/xtbTargets.cmake<br />
+-- Installing: /usr/local/share/cmake/xtb/xtbTargets-release.cmake<br />
+----------<br />
+<br />
+◇ version check<br />
+1. xtb --version<br />
+<br />
+◇ help<br />
+1. xtb -h<br />
+2. xtb --help<br />
+<br />
+◇ environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo '# xtb settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBHOME=$HOME/xtb' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBPATH=${XTBHOME}/build:${XTBHOME}:${HOME}' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export MANPATH=${MANPATH}:${XTBHOME}/man' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=${PATH}:${XTBHOME}/build' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XTBHOME}/include:${XTBHOME}/scripts' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PYTHONPATH=${PYTHONPATH}:${XTBHOME}/python' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+■ Examples (github)<br />
+・https://github.com/by-student-2017/xtb_6.2.3-recipes<br />
+・<a href="https://xtb-docs.readthedocs.io/en/latest/contents.html" style="background-attachment: scroll; background-clip: border-box; background-color: transparent; background-image: url(&quot;https://www.chemie.uni-bonn.de/html.png&quot;); background-origin: padding-box; background-position-x: 0px; background-position-y: 1px; background-repeat: no-repeat; background-size: auto; border-bottom-color: rgb(0, 65, 145); border-bottom-style: solid; border-bottom-width: 1px; color: rgb(78, 96, 118); font-family: Arial,&quot;lucida grande&quot;,verdana,lucida,helvetica,arial,sans-serif; font-size: 12.2px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; padding-bottom: 1px; padding-left: 22px; padding-right: 0px; padding-top: 1px; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Online User Guide</a><br />
+&nbsp; https://xtb-docs.readthedocs.io/en/latest/contents.html<br />
+------------------------------------------------------------------------------<br />
+■ Examples<br />
+&nbsp; (https://xtb-docs.readthedocs.io/en/latest/basics.html)<br />
+<br />
+--------------------<br />
+□ Singlepoint Calculation<br />
+<br />
+◇ H2O<br />
+1. cat &lt;&lt; EOF &gt; coord<br />
+\$coord<br />
+&nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; -0.73578586109551 &nbsp; &nbsp; &nbsp;o<br />
+&nbsp;1.44183152868459 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.36789293054775 &nbsp; &nbsp; &nbsp;h<br />
+-1.44183152868459 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.36789293054775 &nbsp; &nbsp; &nbsp;h<br />
+\$end<br />
+EOF<br />
+2. xtb coord<br />
+&nbsp; (e.g., 4 cups case: xtb coord --parallel=4)<br />
+&nbsp;&nbsp;(You can get &quot;charge&quot;)<br />
+<br />
+◇ MgO (periodic bundary and fractional coordinates)<br />
+1. cat &lt;&lt; EOF &gt; coord<br />
+\$coord frac<br />
+&nbsp; &nbsp; 0.00 &nbsp; &nbsp; &nbsp;0.00 &nbsp; &nbsp; &nbsp;0.00 &nbsp; &nbsp; &nbsp;mg<br />
+&nbsp; &nbsp; 0.50 &nbsp; &nbsp; &nbsp;0.50 &nbsp; &nbsp; &nbsp;0.50 &nbsp; &nbsp; &nbsp;o<br />
+\$periodic 3<br />
+\$cell<br />
+&nbsp;5.798338236 5.798338236 5.798338236 60. 60. 60.<br />
+\$end<br />
+EOF<br />
+2.&nbsp;xtb coord --periodic<br />
+&nbsp; (e.g., 4 cups case: xtb coord --parallel=4)<br />
+--------------------<br />
+□ Structure optimization<br />
+<br />
+◇ TiO2 (periodic bundary and fractional coordinates)<br />
+1. *.cif -&gt; VESTA -&gt; tio2.vasp (Cartesian)<br />
+2. mv tio2.vasp tio2.poscar<br />
+3. xtb tio2.poscar --periodic --opt<br />
+&nbsp; (e.g., add other options: xtb tio2.poscar --periodic --opt --iteration=250 --cycles=250 -acc=1.0 --parallel=4)<br />
+4. jmol xtbopt.poscar<br />
+5. jmol xtbopt.log<br />
+<br />
+◇ TiO2 (periodic bundary and fractional coordinates with xcontrol)<br />
+1. *.cif -&gt; VESTA -&gt; tio2.vasp (Cartesian)<br />
+2. mv tio2.vasp tio2.poscar<br />
+3.&nbsp;cat &lt;&lt; EOF &gt; xcontrol<br />
+\$opt<br />
+&nbsp; &nbsp; engine=inertial<br />
+\$end<br />
+EOF<br />
+4. xtb tio2.poscar --periodic --opt --input&nbsp;xcontrol<br />
+&nbsp; (e.g., add other options: xtb tio2.poscar --periodic --opt --input&nbsp;xcontrol --iteration=250 --cycles=250 -acc=1.0 --parallel=4)<br />
+4. jmol xtbopt.poscar<br />
+5. jmol xtbopt.log<br />
+<br />
+◇ TiO2 (cluster)<br />
+1. *.cif -&gt; VESTA -&gt; tio2.xyz<br />
+2. xtb tio2.xyz --opt<br />
+&nbsp; (e.g., 4 cups case: xtb tio2.xyz --opt --parallel=4)<br />
+3. jmol xtbopt.xyz<br />
+4. jmol xtbopt.log<br />
+<br />
+※ PDB file: *.cif -&gt; VESTA -&gt; tio2.pdb -&gt; xtb tio2.pdb (failed in my case)<br />
+※ 構造のファイル（coord, xyz, poscar）は xtb の直後か一番最後に記述する<br />
+※ *.poscar では --hess が上手くいかなかった<br />
+--------------------<br />
+□ Vibration (IR and Raman spectrum and hessian)<br />
+<br />
+◇ H2O<br />
+1. cat &lt;&lt; EOF &gt; coord<br />
+\$coord<br />
+&nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; -0.73578586109551 &nbsp; &nbsp; &nbsp;o<br />
+&nbsp;1.44183152868459 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.36789293054775 &nbsp; &nbsp; &nbsp;h<br />
+-1.44183152868459 &nbsp; &nbsp; &nbsp;0.00000000000000 &nbsp; &nbsp; &nbsp;0.36789293054775 &nbsp; &nbsp; &nbsp;h<br />
+\$end<br />
+EOF<br />
+2. xtb coord --opt&nbsp;--parallel=2<br />
+3. xtb xtbopt.coord --hess&nbsp;--parallel=2<br />
+(above 2.+3. case:&nbsp;xtb coord --opt&nbsp;--parallel=2 &amp;&amp;&nbsp;xtb xtbopt.coord --hess&nbsp;--parallel=2)<br />
+(You can get &quot;vibspectrum&quot;, &quot;hessian&quot; and &quot;g98.out.&quot;)<br />
+--------------------<br />
+□ Molecular dynamics (MD)<br />
+<br />
+◇ Geometory optimization -&gt; MD<br />
+1. xtb coord --omd<br />
+&nbsp;&nbsp; (xtb case.poscar --periodic --omd)&nbsp;<br />
+<br />
+◇ Restart MD<br />
+1. cat &lt;&lt; EOF &gt; restart.inp<br />
+\$md<br />
+&nbsp; restart=true<br />
+EOF<br />
+2. cp scoord.XX coord_last<br />
+&nbsp; (XX=number, e.g., last number)<br />
+3. mkdir 1st_run<br />
+&nbsp; mv scoord.* ./1st_run<br />
+&nbsp;&nbsp;mv xtb.trj ./1st_run<br />
+4. xtb coord_last --input restart.inp --md<br />
+&nbsp; (xtb coord_last --periodic --input restart.inp --md)&nbsp;<br />
+<br />
+◇ TiO2 (periodic bundary and fractional coordinates)<br />
+&nbsp; (Constrained MD/MTD simulations)<br />
+1. *.cif -&gt; VESTA -&gt; tio2.vasp (Cartesian)<br />
+2. mv tio2.vasp tio2.poscar<br />
+3. cat &lt;&lt; EOF &gt; metadyn.inp<br />
+\$md<br />
+&nbsp; &nbsp;time=10<br />
+&nbsp; &nbsp;step=1<br />
+&nbsp; &nbsp;temp=298<br />
+\$end<br />
+\$metadyn<br />
+&nbsp; &nbsp;atoms: 1-3<br />
+&nbsp; &nbsp;save=10<br />
+&nbsp; &nbsp;kpush=0.02<br />
+&nbsp; &nbsp;alp=1.2<br />
+\$end<br />
+EOF<br />
+4. xtb&nbsp;tio2.poscar --md --input metadyn.in --periodic<br />
+&nbsp; (e.g., 4 cups case:&nbsp;xtb tio2.poscar --md --input metadyn.in --periodic --parallel=4)<br />
+5. jmol xtb.trj<br />
+※ restart する場合には $md に restart=true を追加する<br />
+--------------------<br />
+□ restart<br />
+1.&nbsp;xtb coord --periodic --md<br />
+2. xtb coord --periodic --restart --grad<br />
+&nbsp; (you can get gradient and gradlatt)<br />
+3. xtb coord --periodic --md --restart<br />
+<br />
+□ output file including error<br />
+xtb Al_3x3x3.xyz --periodic 2&gt;&amp;1 | tee Al_3x3x3.out<br />
+<br />
+□ force<br />
+1. git clone&nbsp;https://github.com/by-student-2017/csh.git<br />
+2. cd csh/potfit/xtb<br />
+3. ls<br />
+&nbsp; (you can see run.csh, xtb2potfit and README, etc)<br />
+------------------------------------------------------------------------------<br />
+■ xtb v.6.2.3 (Debian 10.0 on windows10 (64 bit))<br />
+(Edit: 24/Jun/2020)<br />
+&nbsp; (https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/xtb/xtb)<br />
+<br />
+□ download and unpack xtb binary<br />
+(https://github.com/grimme-lab/xtb/tags)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget<br />
+&nbsp; sudo apt install -y xz-utils<br />
+1. wget https://github.com/grimme-lab/xtb/releases/download/v6.2.3/xtb-200316.tar.xz<br />
+2. tar xf xtb-2*.tar.xz<br />
+<br />
+◇ environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+echo '# xtb settings' &gt;&gt; ~/.bashrc<br />
+echo 'export XTBHOME=$HOME/xtb_6.2.3' &gt;&gt; ~/.bashrc<br />
+echo 'export XTBPATH=${XTBHOME}/share/xtb:${XTBHOME}:${HOME}' &gt;&gt; ~/.bashrc<br />
+echo 'export MANPATH=${MANPATH}:${XTBHOME}/share/man' &gt;&gt; ~/.bashrc<br />
+echo 'export PATH=${PATH}:${XTBHOME}/bin' &gt;&gt; ~/.bashrc<br />
+echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XTBHOME}/lib' &gt;&gt; ~/.bashrc<br />
+echo 'export PYTHONPATH=${PYTHONPATH}:${XTBHOME}/python' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+■ xtb (cygwin on windows10 (64 bit))<br />
+(Edit: 29/Jun/2020)<br />
+<br />
+□ install (version 6.3.0)<br />
+1. git clone https://github.com/grimme-lab/xtb.git<br />
+2. cd xtb<br />
+3. export FC=&quot;gfortran -O2 -mtune=native&quot; CC=gcc<br />
+&nbsp; mkdir build<br />
+&nbsp; pushd build<br />
+&nbsp; cmake -DCMAKE_BUILD_TYPE=Release ..<br />
+&nbsp; make<br />
+&nbsp; ctest<br />
+&nbsp; popd<br />
+4. cygcheck ./xtb.exe<br />
+&nbsp; (0 tests failed out of 83)<br />
+5.&nbsp;make -C build install<br />
+(6. ~/xtb/build/xtb.exe --help)<br />
+<br />
+◇ environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo '# xtb settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBHOME=$HOME/xtb' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBPATH=${XTBHOME}/build:${XTBHOME}:${HOME}' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export MANPATH=${MANPATH}:${XTBHOME}/man' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=${PATH}:${XTBHOME}/build' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XTBHOME}/include:${XTBHOME}/scripts' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PYTHONPATH=${PYTHONPATH}:${XTBHOME}/python' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+<br />
+□ example<br />
+1. cd ~/xtb<br />
+2. mkdir example<br />
+3.&nbsp;../build/xtb.exe Al_3x3x3.poscar --gfn 0&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] xtb<br />
+&nbsp; https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/xtb/xtb<br />
+[2] Semiempirical Extended Tight-Binding Program Package<br />
+&nbsp; https://github.com/grimme-lab/xtb/<br />
+[3] binaries<br />
+&nbsp; https://github.com/grimme-lab/xtb/releases/tag/v6.2.3<br />
+[4] Online user guide<br />
+&nbsp; https://xtb-docs.readthedocs.io/en/latest/contents.html<br />
+----- accuracy comparing other methods, Ref. 5-9. -----<br />
+[5] P. Prachit et al., universitat bonn, preprint (2019) 1-19.<br />
+&nbsp;&nbsp;DOI: 10.26434/chemrxiv.8326202.v1<br />
+&nbsp;&nbsp;https://www.researchgate.net/publication/334099237_A_Robust_Non-Self-Consistent_Tight-Binding_Quantum_Chemistry_Method_for_large_Molecules<br />
+[6] B. Hourahine et al., J. Chem. Phys. 152 (2020) 124101.<br />
+&nbsp;&nbsp;https://aip.scitation.org/doi/10.1063/1.5143190<br />
+[7] C. Bannwarth et al., J. Chem. Theory Comput. 3 (2019) 1652-1671.<br />
+&nbsp;&nbsp;https://pubs.acs.org/doi/10.1021/acs.jctc.8b01176<br />
+[8] J. C. Kromann et al., ACS Omega 3 (2018) 4372-4377.<br />
+&nbsp;&nbsp;https://www.researchgate.net/publication/324671456_Random_versus_Systematic_Errors_in_Reaction_Enthalpies_Computed_Using_Semiempirical_and_Minimal_Basis_Set_Methods<br />
+&nbsp;&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: arial,helvetica,clean,sans-serif; font-size: 13.46px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: nowrap; word-spacing: 0px;">doi:&nbsp;</span><a href="https://dx.doi.org/10.1021%2Facsomega.8b00189" ref="reftype=other&amp;article-id=6641226&amp;issue-id=338633&amp;journal-id=3686&amp;FROM=Article%7CFront%20Matter&amp;TO=Content%20Provider%7CCrosslink%7CDOI" style="color: rgb(47, 74, 139); font-family: arial,helvetica,clean,sans-serif; font-size: 13.46px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: underline; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: nowrap; word-spacing: 0px;" target="pmc_ext">10.1021/acsomega.8b00189</a><br />
+&nbsp;&nbsp;https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6641226/<br />
+[9] S. Grimme et al., J. Chem. Theory Comput. 13 (2017) 1989-2009.<br />
+&nbsp;&nbsp;https://pubs.acs.org/doi/10.1021/acs.jctc.7b00118<br />
+----- excitation spectra (TDA), Ref. 10-11. -----<br />
+[10]&nbsp;sTDA - A simplified Tamm-Dancoff density functional approach for electronic excitation spectra&nbsp;<br />
+&nbsp;&nbsp;https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/stda/stda<br />
+&nbsp;&nbsp;https://github.com/grimme-lab/stda<br />
+[11] S. Grimme et al., J. Chem. Phys. 145 (2016) 054103.<br />
+&nbsp;&nbsp;https://doi.org/10.1063/1.4959605<br />
+----- QCEIMS, Ref. 12-15. -----<br />
+[12]&nbsp;QCEIMS and movies from QCEIMS trajectories&nbsp;<br />
+&nbsp;&nbsp;https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/movies_grimme/qceims<br />
+[13] V. Asgeirsson et al., Chem. Sci. 8 (2017) 4879-4895.<br />
+[14] J. Koopman et al,&nbsp;ACS Omega 4 (2019) 15120&ndash;15133.<br />
+&nbsp;&nbsp;https://doi.org/10.1021/acsomega.9b02011<br />
+[15] QCEIMS 4.0 Installation Guide &amp; Manual<br />
+&nbsp;&nbsp;https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/movies_grimme/QCEIMS.v.4.0_manual.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Intel Math Kernel Library (MKL)<br />
+<br />
+□ Install (ubuntu 18.04) (Customizable Package)<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html)<br />
+1. (click) Choose &amp; Download<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library/choose-download.html)<br />
+2. Register &amp; Download<br />
+3. Intel(R)Math Kernel Library for Linux<br />
+&nbsp; 2020 Update 1<br />
+4. Customizable Package<br />
+5. tar xvf l_mkl_2020.1.217_online.tgz<br />
+6. cd l_mkl_2020.1.217_online<br />
+7.&nbsp;(under constrcting)<br />
+<br />
+□ Install (ubuntu 18.04) (Full Package)<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html)<br />
+1. (click) Choose &amp; Download<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library/choose-download.html)<br />
+2. Register &amp; Download<br />
+3. Intel(R)Math Kernel Library for Linux<br />
+&nbsp; 2020 Update 1<br />
+4. Full Package<br />
+5. tar xvf l_mkl_2020.1.217.tgz<br />
+6. cd l_mkl_2020.1.217<br />
+7. (under constrcting)<br />
+<br />
+□ Install (windows 10) (Customizable Package)<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html)<br />
+1. (click) Choose &amp; Download<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library/choose-download.html)<br />
+2. Register &amp; Download<br />
+3. Intel(R)Math Kernel Library for windows<br />
+&nbsp; 2020 Update 1<br />
+4. Customizable Package<br />
+5. tar xvf w_mkl_2020.1.216_online.exe<br />
+6. [次へ（N）]と[インストール]をクリックし続ける<br />
+(C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\mkl\lib\intel64_win)<br />
+<br />
+□ Install (windows 10) (Full Package)<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library.html)<br />
+1. (click) Choose &amp; Download<br />
+&nbsp; (https://software.intel.com/content/www/us/en/develop/tools/math-kernel-library/choose-download.html)<br />
+2. Register &amp; Download<br />
+3. Intel(R)Math Kernel Library for windows<br />
+&nbsp; 2020 Update 1<br />
+4. Full Package<br />
+5. tar xvf w_mkl_2020.1.216.exe<br />
+6. [次へ（N）]と[インストール]をクリックし続ける<br />
+(C:\Program Files (x86)\IntelSWTools\compilers_and_libraries_2020.1.216\windows\mkl\lib\intel64_win)<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,112 @@
+------------------------------------------------------------------------------<br />
+■ DFTB+ (version 17.1) (Edit: 23/April/2020) (windows10 (64 bit))<br />
+<br />
+□ DFTB+ 17.1 (Windows Binary)<br />
+(https://sites.google.com/view/djmolplatform/get-dftb-17-1-windows)<br />
+1.Get DFTB+17.1WindowsBinaries &gt; ダウンロード &gt; ダウンロード<br />
+2.DFTB17.1Windows.zip を解凍<br />
+3.DFTB17.1Windows-CygWin を Windows(C:)にドラッグ&amp;ドロップ<br />
+<br />
+□ Test<br />
+1.C:\DFTB17.1Windows\DFTB17.1Windows-CygWin<br />
+2.dftb_in.hsd をメモ帳などで開く<br />
+---------(before)<br />
+Prefix = &quot;C:\Users\staff\Downloads\mio-1-1\mio-1-1\<br />
+---------<br />
+---------(after)<br />
+#Prefix = &quot;C:\Users\staff\Downloads\mio-1-1\mio-1-1\<br />
+---------<br />
+3.dftb+.exeをクリック<br />
+&quot;*** &nbsp;Geometry step:&quot;の右に記載されている数が増加していけばテストは成功<br />
+<br />
+□ Example (H2O)<br />
+1.C:\DFTB17.1Windows\DFTB17.1Windows-CygWin\H2O のファイルを開く<br />
+2.dftb_in.hsd をメモ帳などで開いて下記のように書き換える<br />
+---------<br />
+#Driver = Socket {<br />
+# &nbsp; &nbsp;File = &quot;dftb&quot;<br />
+# &nbsp; &nbsp;Verbosity = 0 # quiet<br />
+# &nbsp; &nbsp;Protocol = i-PI {} # i-PI interface<br />
+# &nbsp; &nbsp;MaxSteps = 1 # Terminate this instance fairly quickly<br />
+#}<br />
+Driver = ConjugateGradient {<br />
+&nbsp; MovedAtoms = 1:-1<br />
+&nbsp; MaxForceComponent = 1E-14<br />
+&nbsp; MaxSteps = 1000<br />
+&nbsp; OutputPrefix = &quot;geom.out&quot;<br />
+}<br />
+---------<br />
+3.[Shift] + 右クリック &gt; PowerShellウィンドウをここで開く<br />
+4.C:\DFTB17.1Windows\DFTB17.1Windows-CygWin\dftb+.exe<br />
+------------------------------------------------------------------------------<br />
+□ MoCalc2012 (Version 4.2.0.3) (Windows10)<br />
+(https://sourceforge.net/projects/mocalc2012/)&nbsp;<br />
+(MoCalc2012-setup4203-win64.exe)<br />
+1.Options &gt; Settings...<br />
+2.DFTB+:[C:\DFTB17.1Windows\DFTB17.1Windows-CygWin] &gt; Save<br />
+<br />
+□ Example (H2O on MoCalc2012)<br />
+1. MoCalc2012 &gt; Start &gt; Open Structure File...<br />
+&nbsp; [All Files (*.*)] &gt; ice.gen &gt; [開く]<br />
+&nbsp; (C:\DFTB17.1Windows\DFTB17.1Windows-CygWin\H2O\ice.gen)<br />
+2. Job Type: [Optimize + Vibrational Frequency]<br />
+&nbsp; Driver: [LBFGS] または [Conjugate Gradient]&nbsp;<br />
+&nbsp; Dispersion: [Slater Kirkwood]&nbsp;<br />
+3. Start &gt; Create Input File<br />
+4. [Run DFTB+]<br />
+5.[Structure]<br />
+6.[Energy level] &gt; [Densit of]<br />
+※ *.skfはDFTB+:[C:\DFTB17.1Windows\DFTB17.1Windows-CygWin]で指定してたファイルが用いられる。他の*.skfを用いたい場合はファイルを入れ替える。<br />
+<br />
+□ Example (diamond on MoCalc2012)<br />
+1. MoCalc2012 &gt; Start &gt; Open Structure File...<br />
+&nbsp; [All Files (*.*)] &gt; diamond.gen &gt; [開く]<br />
+&nbsp; (C:\DFTB17.1Windows\DFTB17.1Windows-CygWin\diamond\diamond.gen)<br />
+2.Job Type: [Optimize + Vibrational Frequency]<br />
+&nbsp; Driver: [LBFGS] または [Conjugate Gradient]&nbsp;<br />
+&nbsp; Dispersion: [Slater Kirkwood]&nbsp;<br />
+3.Start &gt; Create Input File<br />
+4.[Run DFTB+]<br />
+5.[Structure]<br />
+6.[Energy level] &gt; [Densit of]<br />
+※ *.skfはDFTB+:[C:\DFTB17.1Windows\DFTB17.1Windows-CygWin]で指定してたファイルが用いられる。他の*.skfを用いたい場合はファイルを入れ替える。<br />
+------------------------------------------------------------------------------<br />
+■ jmol<br />
+<br />
+□ Java (AdoptOpenJDK)<br />
+1.[OpenJDK 8 (LTS)], [HotSpot] &gt; [Latest release]<br />
+2.OpenJDK8U-jdk_x64_windows_hotspot_8u252b09.msi<br />
+<br />
+□ jmol (Jmol-14.30.2-binary.zip)<br />
+(https://sourceforge.net/projects/jmol/)<br />
+1.Jmol-14.30.2-binary.zip を解凍する<br />
+2.jmol.bat をクリック<br />
+※ jmol-14.30.2 のフォルダはCドライブなどに置いておくと便利<br />
+(2.C:\jmol-14.30.2\jmol.jar geo_end.xyz)<br />
+(jmol: Tools &gt; animate... &gt; Loop &gt; click arrow icon)<br />
+※ Javaが必要。AdoptOpenJDK か Amazon Correto を用いる<br />
+------------------------------------------------------------------------------<br />
+■ gnuplot<br />
+(https://sourceforge.net/projects/gnuplot/files/gnuplot/5.2.4/)<br />
+<br />
+□ Install (日本語でインストールする場合)<br />
+1. gp528-win64-mingw.exe<br />
+2. 日本語対応<br />
+3. 実行ファイルのディレクトリをPATH環境変数に追加する<br />
+※ 全て[次へ&gt;]、[インストール], [完了]<br />
+<br />
+□ Install (in English)<br />
+1. gp528-win64-mingw.exe<br />
+2. [I accept the agreement]<br />
+3. (check [Japanese Language support])<br />
+4. check [Add application directory to your PATH environment variable]<br />
+5. All [Next &gt;], [Install] and [Finish]<br />
+------------------------------------------------------------------------------<br />
+■ Support files<br />
+<br />
+□ Examples<br />
+&nbsp; https://github.com/by-student-2017/DFTBplus_ver17_recipes_win<br />
+<br />
+□ parameters<br />
+&nbsp;&nbsp;https://github.com/by-student-2017/potentials<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,423 @@
+<div><span style="font-size:14px">(Edit: Mar/11/2021)</span></div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 全散乱と小角散乱（SAXS）、広角散乱（WAXS）の違い</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 全散乱 (Total scattering)</span></div>
+
+<div><span style="font-size:14px">&nbsp;「全部の散乱をとる」測定領域と考えられていたりする。液体やアモルファスが代表的な研究対象となる（原子間距離 0.1から1 nm程度での構造）。全散乱が取り扱える装置で測定されたデータを用いて二対分布関数（PDF）での解析が行われる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 小角散乱 (SAXS)</span></div>
+
+<div><span style="font-size:14px">&nbsp; 大きな距離スケール（数から数十 nm）の構造（例えば、ミセルの大きさ、ゲルの網目サイズ、液晶ドメインのサイズ、高分子の結晶相と非晶相の周期構造（長周期構造））などを調べることができる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 広角散乱 (WAXS)</span></div>
+
+<div><span style="font-size:14px">&nbsp; 結晶や液体の原子間距離（0.1から1 nm程度）での構造（例えば、結晶格子構造や液体中の原子間距離）を調べることができる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">[1] 野瀬卓平ら『若手研究者のための有機・高分子測定ラボガイド』講談社サイエンティフィック</span></div>
+
+<div><span style="font-size:14px">[2] X線散乱<br />
+&nbsp; <a href="https://www.malvernpanalytical.com/jp/products/technology/xray-analysis/xray-scattering/">https://www.malvernpanalytical.com/jp/products/technology/xray-analysis/xray-scattering/</a></span></div>
+
+<div><span style="font-size:14px">※ 中性子線を用いた方法だとr = 10 nm = 100 Angstromまでデータをフィットしたものがある<br />
+------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 理論</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">・左欄の「モンテカルロ（RMC）法」を参照ください</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ ポイント</span></div>
+
+<div><span style="font-size:14px">・非晶質（ガラス）の構造解析に用いられる二対分布関数は、X線散乱強度を散乱ベクトルQの関数として測定し、原子1個あたりの強度に規格化することで得られる構造因子S(Q)とフーリエ変換によって結び付けられる</span></div>
+
+<div><span style="font-size:14px">・2種類以上の原子によって構成される系において構造因子S(Q)は各原子の濃度と散乱能を反映した重み（この重みの総和は1）が付いた部分構造因子の和となり、二対分布関数における各原子相関も同様の重みを持って観測される</span></div>
+
+<div><span style="font-size:14px">・原子による散乱能が異なるX線と中性子を併用することで原子散乱能のコントラストを生かした構造解析が可能となる</span></div>
+
+<div><span style="font-size:14px">・二対分布関数の実空間分解能はフーリエ変換する際のQの最大値（Qmax）に依存する。すなわち、高い実空間分解能で構造解析を行うためには、高いエネルギーのX線を用いて広いQ領域でデータを測定する必要がある</span></div>
+
+<div><span style="font-size:14px">・多種類の原子から構成される系の場合、Faber-Ziman型構造因子S(Q)が用いられる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">※ 窓関数 M(Q)にはLorch</span>=sin(<span style="font-family: times new roman,times,serif;">&pi;</span>Q/Q<sub>max</sub>)/(<span style="font-family: times new roman,times,serif;">&pi;</span>Q/Q<sub>max</sub>)が用いられたりする。M(Q)はXAFSのハミング関数と同様の考え方。高いQ側をダンプさせ、打切り誤差の影響を取り除いて滑らかなスペクトルにする。M(Q)は&quot;エムキュー&quot;と呼ぶ</div>
+
+<div><span style="font-size:14px">※ RMCでの分析では、他の測定方法（XAFS）などのデータを含めて解析されたりする。こういったデータはあればあるほど良い</span></div>
+
+<div><span style="font-size:14px">※ 専門家からXAFSなどのデータを含めた解析は特殊ではなく当然だよという顔をされた。数多くの解析ソフトを調べてXAFSのデータなどを入力に入れたRMC解析の導入を検討してみるとわかるが、それは専門家以外には容易ではない</span></div>
+
+<div><span style="font-size:14px">※ 構造因子S(Q)はエスキューと呼ぶ</span></div>
+
+<div><span style="font-size:14px">[3] T. E. Faber and J. M. Ziman, Pilos. Mog. 11 (1965) 153.</span></div>
+
+<div><span style="font-size:14px">[4] SPring-8 秋の学校 (2020)</span></div>
+
+<div><span style="font-size:14px">[5] </span>Neutron and X-ray Scattering Studies of Glass<br />
+&nbsp;&nbsp;-The Experiments and Data Mining-<br />
+<span style="font-size:14px">&nbsp; <a href="https://www.lehigh.edu/imi/teched/GlassCSC/Lecture16_Clare.pdf">https://www.lehigh.edu/imi/teched/GlassCSC/Lecture16_Clare.pdf</a></span></div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 実空間関数</span></div>
+
+<div><span style="font-size:14px">&nbsp; 以下の4つが主に使われる<br />
+<br />
+□&nbsp;g(r): 二対分布関数（Pair distribution function）</span></div>
+
+<div><span style="font-size:14px">・一般的に使われる<br />
+・液体やアモルファスで用いられる<br />
+・物理屋さんが比較的よく使う<br />
+・&quot;スモールジーアール&quot;と呼ぶ</span><br />
+・これがPDFとなる</div>
+
+<div><br />
+<span style="font-size:14px">□&nbsp;G(r): 減衰二対分布関数（Reduced Pair distribution function）</span></div>
+
+<div><span style="font-size:14px">・密度が不明であっても算出できる<br />
+・原点から第一近接前後まで-4<span style="font-family: times new roman,times,serif;">&pi;</span>r&rho;の線でフィットさせると密度が得られる<br />
+（あまり精度よく求められない）<br />
+・長距離が知りたいときに用いられる<br />
+・原子間距離が大きいときの振動が強調される<br />
+・結晶で用いられる<br />
+・材料屋さんが比較的よく使う<br />
+・&quot;ラージジーアール&quot;と呼ぶ<br />
+・数学的には&rdquo;簡約&rdquo;二体分布関数と呼ぶのが良いとされる<br />
+・差分相関関数(Differential correlation function): D(r)とも呼ばれる<br />
+・PDFFITではG(r)が用いられる</span><br />
+<span style="font-size:14px">※ 配位数はG(r)の結果ではなくT(r)の結果を並べて比較する</span>
+
+<div><br />
+<span style="font-size:14px">□&nbsp;T(r): 全相関関数（Radial distribution function）<br />
+・化学反応などで用いられる<br />
+・化学屋さんが比較的よく使う<br />
+・理想的なピークは数学的にガウス分布となる<br />
+・T(r)でピークをガウス分布でフィットさせ、RDF(r)に変換して配位数を求めることが行われる<br />
+※ 非対称なピークが得られた場合は結晶中のような理想的な構造ではなく配位数が整数でない可能性が考えられる（例えば、局所的にある元素間の配位が結晶中の6配位ではなく4.2配位である場合など）<br />
+※ 実空間で解釈が難しい場合は[S(Q) vs. Q]でも比較してみる</span></div>
+</div>
+
+<div><br />
+<span style="font-size:14px">□&nbsp;RDF(r): 動径分布関数（Radial distribution function）</span></div>
+
+<div><span style="font-size:14px">・配位数を知りたいときに用いられる<br />
+（液体やアモルファスでは配位数は整数でなくてもよい）</span><br />
+<br />
+※ 配位数は精度よく測定してプロが解析してもエラーが5%程度となる（ノーマリゼーションエラーが主）（エラーが3%を切ることはないと思ってください）。配位数の精密な値を求めるよりも配位形態を求めることが大事<br />
+<span style="font-size:14px">※ 基本的に解析には試料の[組成、密度、厚み]の情報が必要<br />
+（厚みは必ずしも厳密でなくてもそれなりのデータが得られる。密度はG(r)から求められるが精度よく求めることは難しい。そのため他の手法などで密度が分かっている方が良い。組成は誤っていると高いQ値側でS(Q)が1のまわりで振動しない。その場合は想定している組成の見直しが必要）<br />
+※ rが0から1Å程度の範囲においてT(r)が綺麗に0となることはない（綺麗に0とならないのは、S(Q)が曲がっていたり、X線では原子散乱因子[f(Q,E)]でのQ<sub>max</sub>で打ち切られることで誤差が生じるため。そのためX線では綺麗に0とならない。そうなっていたら何かの処理がなされている）。元のデータがしっかりと規格化されていることも必要。エキスパートだとrが0から1程度の範囲を消して再びQ空間に戻すなどの処理がなされることもある（豊富な経験が必要）<br />
+※ ORNLやDiamondの施設関連のYoutube動画でG(r)を&quot;PDF&quot;と呼んでいる。全散乱を取り扱っている研究者が&quot;一語一意&quot;を乱していると頭が痛くなる。どうしたものか</span></div>
+
+<div><span style="font-size:14px">[4] Autumn school, SPring-8 (2020).</span></div>
+
+<div><span style="font-size:14px">[6] D. A. Keen, J. Appl. Cryst. 34 (2001) 172.</span>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ X線での測定や解析に対する注意点</span></div>
+<br />
+□ X線と中性子線<br />
+・X線よりも中性子線の方が原理的に高いQ側で統計精度が高まりやすい<br />
+・X線は重み因子がQ値によって変化する。一方で、中性子はQ値に依存せず一定の値<br />
+&nbsp; X線はQ値の打切りによる重み因子の影響も出ることは覚えておく必要がある<br />
+・X線での測定において、軽元素では高いQ値側でコンプトン散乱の成分が多くなるため、精度よく測定したように見えても必要なデータに対して統計精度が取れていないことがあるので注意<br />
+<br />
+□ 小さいQ値側でのS(Q)<br />
+・小さいQ値（0.2程度）を測定していないと配位数が高く出る<br />
+・伝統的には小さいQ値でS(Q)=0となるように外挿することが行われる<br />
+（干渉性散乱強度I(Q)=0がどこになるかを知ってS(Q)=0を外挿することが大切）<br />
+・Q=0でS(Q)=0には必ずしもならないので注意<br />
+&nbsp;&nbsp;原子散乱因子の二乗平均と平均自乗が似ていないと小さいQ値側でS(Q)が負になる<br />
+&nbsp;&nbsp;散乱能が違う原子が混ざると二乗平均と平均自乗で必ず差が出る（例えば水素や鉛が入っていると小さいQ値側でS(Q)が負になる）<br />
+　単原子では二乗平均と平均自乗で差が無いが等温圧縮により小さいQ値側でS(Q)が負になる<br />
+<br />
+□ 高いQ値側でS(Q)が1の周りで振動しない場合<br />
+・試料の組成がズレている<br />
+・ピーク強度が変化する<br />
+（微妙な変化を議論したいときには 高いQ値側でS(Q)が1の周りで振動するようにする。もし、可能であれば中性子線による解析結果とも比較する）<br />
+・S(Q)が1より上で振動しているとT(r)でrが1Å以下で最初に正側から振動するゴーストピークが出る<br />
+・S(Q)が1より下で振動しているとT(r)でrが1Å以下で最初に負側から振動するゴーストピークが出る</div>
+
+<div><br />
+<span style="font-size:14px">□ エネルギー分散<br />
+・</span>エネルギー分散の測定は、&quot;角度を変えながらの測定（角度分散の測定）&quot;ができない高圧の実験などで用いられる<br />
+<br />
+□ X線の強度とエネルギー<br />
+・高強度：高いQ値まで統計精度の良いデータが短時間で可能<br />
+・高いエネルギー：高いQ値まで前方散乱で測定ができるため、角度に依存した補正項の影響を小さくできる。透過法が使えるようになるため補正も簡単になる。ただし、Q空間での分解能は悪くなる（そのため結晶のときは高いエネルギーで良いかは一度は考えて欲しい）<br />
+<br />
+□ 薄膜試料<br />
+<span style="font-size:14px">・通常、&quot;全散乱（Total Scattering）&quot;ではなく、他の手法である&quot;斜入射による全反射（XRR）&quot;をオススメする<br />
+------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 各種の補正</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">・偏光因子での補正</span></div>
+
+<div><span style="font-size:14px">・吸収補正</span></div>
+
+<div><span style="font-size:14px">・コンプトン散乱<br />
+・多重散乱</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">※ 各検出器でBG（バックグラウンド）の測定も行い、イオンチェンバーで得られる入射強度で規格化した後、試料の測定強度から差し引いて、本来の試料の強度を得る</span></div>
+
+<div><span style="font-size:14px">※ 高いQ値で「原子散乱因子+コンプトン散乱」と測定強度が一致するように規格化定数&beta;を決める。そうすることで、原子1個あたりの散乱強度へと変換することができる<br />
+※ 原子1個あたりの散乱強度に変換した後、コンプトン散乱の部分を除けば、原子散乱因子の二乗平均のまわりで振動するスペクトルとなる<br />
+※&nbsp;</span><span style="font-size:14px">コンプトン散乱は</span>Qが大きくなると弾性散乱に対する寄与が大きくなり、低いエネルギー側へシフトする<br />
+※ 多重散乱は、高エネルギーでのX線の場合、試料が薄いことも関係して、中性子線と比べてほとんど起こらないため無視できる</div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ SmartLab (Rigaku)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Q<sub>max</sub>値<br />
+・6.91 Å<sup>-1</sup> (Co K&alpha;, &lambda;=1.790 Å) (2&theta;=160度まで測定)</span></div>
+
+<div><span style="font-size:14px">・8.03 Å<sup>-1</sup> (Cu K&alpha;, &lambda;=1.541 Å) (2&theta;=160度まで測定)</span></div>
+
+<div><span style="font-size:14px">・17.43 Å<sup>-1</sup> (Mo K&alpha;, &lambda;=0.710 Å) (2&theta;=160度まで測定)</span></div>
+
+<div><span style="font-size:14px">・22.00 Å<sup>-1</sup> (Ag K&alpha;, &lambda;=0.560 Å) (2&theta;=160度まで測定)<br />
+※ 計算式：q = </span>4*PI()*SIN(PI()/180*<span style="font-size:14px">2&theta;</span>/2)/<span style="font-size:14px">&lambda;</span><br />
+<br />
+[7]&nbsp;X線散乱パターンを用いたPDF解析<br />
+&nbsp; <a href="https://www.rigaku.co.jp/members/rj/1904_No111/J0501001TN1R.pdf">https://www.rigaku.co.jp/members/rj/1904_No111/J0501001TN1R.pdf</a></div>
+
+<div><span style="font-size:14px">[8]&nbsp;実験室系X線回折装置SmartLabを用いたリチウムイオン電池材料の評価<br />
+&nbsp;&nbsp;<a href="https://www.rigaku.co.jp/members/rj/1910_No112/J0502001TN1.pdf">https://www.rigaku.co.jp/members/rj/1910_No112/J0502001TN1.pdf</a></span>&nbsp;</div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ BL04B2 (SPring-8)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Q<sub>max</sub>値</span></div>
+
+<div><span style="font-size:14px">・25 - 31.2 Å<sup>-1</sup></span></div>
+
+<div><span style="font-size:14px">※ 例えば、31.1 Å<sup>-1</sup>だと61.7 keV (&lambda;=0.2014 Å)で2&theta;=60度まで測定した場合</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 解析ソフト</span></div>
+
+<div><span style="font-size:14px">・Koji Ohara (<a href="http://rud.spring8.or.jp/member/0020758.html">http://rud.spring8.or.jp/member/0020758.html</a>)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (<a href="http://rud.spring8.or.jp/member/0020758/distrbution.html">http://rud.spring8.or.jp/member/0020758/distrbution.html</a>)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp; &gt; PDF解析ソフト (<a href="http://rud.spring8.or.jp/member/0020758/CdTe7_Igor8only2theta.pxt.zip">http://rud.spring8.or.jp/member/0020758/CdTe7_Igor8only2theta.pxt.zip</a>)</span></div>
+
+<div>・練習用データ：&nbsp;<a href="https://github.com/by-student-2017/Total-scattering-data.git">https://github.com/by-student-2017/Total-scattering-data.git</a><br />
+※ このソフトは他の装置のデータでも解析できるように作られている。Igorのデモ版で色々と試してみると良い<br />
+※ マニュアルや関連情報は<span style="font-size:14px">(<a href="http://rud.spring8.or.jp/member/0020758/distrbution.html">http://rud.spring8.or.jp/member/0020758/distrbution.html</a>)にある</span></div>
+
+<div><br />
+<span style="font-size:14px">◇ 検出器</span></div>
+
+<div><span style="font-size:14px">・低角：CdTe検出器</span></div>
+
+<div><span style="font-size:14px">・高角：Ge検出器</span></div>
+
+<div><span style="font-size:14px">※ SPring-8 BL04B2では、地面に平行に検出器が配置され、検出器は地面に平行方向に動く。そのため偏光補正が必要となる（理論的には地面に垂直方向に検出器が配置される装置ではこの補正の問題がなくなる）。偏光因子(P(&theta;))の値は0.05から0.1の定数となる<br />
+<br />
+◇ ビームサイズ<br />
+・一般的なビームサイズ：0.7 mm (幅) x 2 mm (高さ)<br />
+&nbsp; さらに小さいビームサイズが必要な場合は管理者に相談<br />
+<br />
+◇ 試料の容器<br />
+・液体や粉末はシリカガラスキャピラリー<br />
+（内径 2 mm, 肉厚 0.01 mm）<br />
+・板ガラス<br />
+<br />
+◇ 測定時間<br />
+・一般的な1試料の測定時間：30分から2時間程度<br />
+（昔は1試料で4時間程度。装置改良の努力で測定時間が短縮）<br />
+<br />
+※ BL04B2では浮遊法で試料を浮かせる方法もある<br />
+※ PDFが可能な共用ビームラインはBL04B2以外にもBL04B1, 08W, BL10XU, BL13XUが考えられる&nbsp;。協力が得られれば原研のBL14B1とBL22XU, 理研のBL44B2が考えられる</span></div>
+
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ </span>BL13XU&nbsp;<span style="font-size:14px">(SPring-8)</span><br />
+&nbsp;</div>
+<span style="font-size:14px">□ X線異常散乱（Anomalous X-ray Scattering）<br />
+・注目している元素の吸収端近傍で原子散乱因子が急激に減少して散乱能が低下する<br />
+・注目する元素の吸収端から200 eV離れたところでのスペクトルから注目する元素での異常散乱のスペクトルを差し引くことで注目する元素まわりの局所構造が得られる<br />
+・第一近接を超えた長距離（第2近接や第3近接）の情報が得られる<br />
+※ 吸収端に近いときに出てくる蛍光X線にも注意<br />
+※&nbsp;X線異常散乱を利用するときに、どうしてもQ値が高くできない場合は、XAFSなどの助けもかりることを検討する<br />
+------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ BL44B2 (SPring-8)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">・理研のビームライン</span></div>
+
+<div><span style="font-size:14px">※ 私が講習会に参加できていないため詳細は不明</span></div>
+
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■&nbsp;MLF BL21 (NOVA) (J-PARC) (中性子)</span><br />
+&nbsp;</div>
+<span style="font-size:14px">[MLF1]&nbsp;中性子産業利用推進協議会 季報 「 四季 」<br />
+&nbsp;&nbsp;</span><a href="http://www.j-neutron.com/pdf/Vol49.pdf">Vol49.pdf (j-neutron.com)</a><br />
+&nbsp; これらの関連文献から情報が得られる。Rietveld解析結果を初期構造として回折曲線と二体分布関数を再現するように原子を移動させて作成したRMCProfileによるモデリングが行われている
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■&nbsp;</span>References<br />
+<br />
+[1]&nbsp;Neutron and X-ray Scattering School, 2018<br />
+&nbsp;&nbsp;<a href="https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf">https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf</a><br />
+[2]&nbsp;Total scattering and atomic pair distribution function analysis: overview and applications<br />
+&nbsp;&nbsp;<a href="https://www.bnl.gov/pdfschool2018/files/2018-talks/Billinge.pdf">https://www.bnl.gov/pdfschool2018/files/2018-talks/Billinge.pdf</a><br />
+[3]&nbsp;Complex Modeling: towards more robust nanostructure refinement<br />
+&nbsp;&nbsp;<a href="https://www.nist.gov/system/files/documents/mml/9-1_SBillinge_APD_IV.pdf">https://www.nist.gov/system/files/documents/mml/9-1_SBillinge_APD_IV.pdf</a><br />
+[4]&nbsp;Atomic pair distribution function (PDF) analysis: What, When, Why, How?<br />
+&nbsp;&nbsp;<a href="https://www.iucr.org/__data/assets/pdf_file/0017/7019/20_07_billinge_pdf.pdf">https://www.iucr.org/__data/assets/pdf_file/0017/7019/20_07_billinge_pdf.pdf</a><br />
+[5]&nbsp;LECTURE 7 : CALCULATING PROPERTIES<br />
+&nbsp; Space correlation functions<br />
+&nbsp;&nbsp;<a href="https://www.lehigh.edu/imi/teched/AtModel/Lecture_5_Micoulaut_Atomistics_Glass_Course.pdf">https://www.lehigh.edu/imi/teched/AtModel/Lecture_5_Micoulaut_Atomistics_Glass_Course.pdf</a><br />
+[6]&nbsp;X-ray Pair Distribution Function Studies of Nanosize Minerals<br />
+&nbsp;&nbsp;<a href="http://www.ehu.eus/sem/macla_pdf/macla9/macla9_99.pdf">http://www.ehu.eus/sem/macla_pdf/macla9/macla9_99.pdf</a><br />
+[7]&nbsp;Elizabeth R et al., J. Appl. Cryst. 40 (2007) 589&ndash;594.<br />
+&nbsp;&nbsp;<a href="https://core.ac.uk/download/pdf/51375698.pdf">https://core.ac.uk/download/pdf/51375698.pdf</a><br />
+[8]&nbsp;SUePDF: a program to obtain quantitative pair distribution function from&nbsp;electron diffraction data<br />
+&nbsp;&nbsp;<a href="https://arxiv.org/ftp/arxiv/papers/1602/1602.09034.pdf">https://arxiv.org/ftp/arxiv/papers/1602/1602.09034.pdf</a><br />
+[9]&nbsp;J. D. Zea-Garcia et al., Materials (Basel). 2019 Apr; 12(8): 1347.<br />
+&nbsp;&nbsp;<a href="https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6515447/">https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6515447/</a><br />
+[10]&nbsp;R. B. Neder et al., J. Appl. Cryst. 53 (2020) 710-721.<br />
+&nbsp;&nbsp;<a href="https://onlinelibrary.wiley.com/iucr/doi/10.1107/S1600576720004616">https://onlinelibrary.wiley.com/iucr/doi/10.1107/S1600576720004616</a><br />
+[11]&nbsp;A. S Masadeh, J. Exp. Nanosci. 11 (2016) 951-974.<br />
+&nbsp;&nbsp;<a href="https://www.tandfonline.com/doi/pdf/10.1080/17458080.2016.1184769">https://www.tandfonline.com/doi/pdf/10.1080/17458080.2016.1184769</a><br />
+[12]&nbsp;Pair Distribution Function (PDF) Analysis<br />
+&nbsp; - Practical Electron Microscopy and Database - - An Online Book -<br />
+&nbsp;&nbsp;<a href="https://www.globalsino.com/EM/page3097.html">Pair Distribution Function (PDF) analysis (globalsino.com)</a><br />
+[13] D. L. Price et al., J. Phys. C: Solid State Phys., 21 (1988) L1069-L1072.<br />
+&nbsp;&nbsp;<a href="https://iopscience.iop.org/article/10.1088/0022-3719/21/32/001/meta">https://iopscience.iop.org/article/10.1088/0022-3719/21/32/001/meta</a><br />
+&nbsp; 中距離構造（Intermediate-Range Order: IRO or Medium-Rage Order: MRO)<br />
+&nbsp; FSDP (First Sharp Diffraction Peak)<br />
+[14] P. A. Egelstaff, Adv. Chem. Phys. 53 (1983) 1.<br />
+[15] P. Debye et al., Nach. Gesell. Wissen. Gottingen, Math. Physk. Klasse (1916) 1.<br />
+[16] C. W. Hewlett, Phys. Rev. 20 (1922) 688.<br />
+[17] F. Zernike et al.,&nbsp;Zeit fur Phys., 41 (1927) 184.<br />
+&nbsp; (other ref.&nbsp;<a href="https://www.jstage.jst.go.jp/article/jcrsj/60/4/60_159/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/60/4/60_159/_pdf/-char/ja</a>)<br />
+<br />
+□ movie<br />
+[M1]&nbsp;Tuesday at ORNL - Kate Page PDF Analysis<br />
+&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=Zvq5SskglD4">https://www.youtube.com/watch?v=Zvq5SskglD4</a><br />
+[M2]&nbsp;Dr. Adam H. Clark<br />
+&nbsp;&nbsp;X-ray Total Scattering: A tool for multi-length scale atomic characterisation<br />
+&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=8S8NFIrYPvc">https://www.youtube.com/watch?v=8S8NFIrYPvc</a><br />
+[M3]&nbsp;How to View and Analyze Total Scattering Patterns with ADDIE<br />
+&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=DiR8Dzik_lM">https://www.youtube.com/watch?v=DiR8Dzik_lM</a><br />
+[M4]&nbsp;Introduction to pair distribution function<br />
+&nbsp;&nbsp;<a href="https://www.youtube.com/watch?v=NyAG_MU3jJs&amp;t=600s">https://www.youtube.com/watch?v=NyAG_MU3jJs&amp;t=600s</a><br />
+<br />
+(Japanese)<br />
+[J1] Autumn school, SPring-8, 2020.</div>
+[J2]&nbsp;S. Kohara et al., J. Jpn. Soc. Synch. Rad. Res., 14 (2001) 365-375.&nbsp;<br />
+&nbsp;&nbsp;<a href="http://www.jssrr.jp/journal/pdf/14/p365.pdf">http://www.jssrr.jp/journal/pdf/14/p365.pdf</a><br />
+<span style="font-size:14px">[J3]&nbsp;</span>S. Kohara et al.<span style="font-size:14px">, J. Cryst. Soc. Jpn, 47 (2005) 123-129.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/jcrsj1959/47/2/47_2_123/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj1959/47/2/47_2_123/_pdf/-char/ja</a><br />
+[J4]&nbsp;</span>S. Kohara et al.,<span style="font-size:14px"> J. Cryst. Soc. Jpn, 55 (2013) 356-361.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/jcrsj/55/6/55_356/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/55/6/55_356/_pdf/-char/ja</a><br />
+[J5]&nbsp;</span>S. Kohara et al.,<span style="font-size:14px"> J. Cryst. Soc. Jpn, 59 (2017) 159-165.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/jcrsj/59/4/59_159/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/59/4/59_159/_pdf/-char/ja</a><br />
+[J6]&nbsp;</span>S. Kohara et al.,<span style="font-size:14px"> </span><span style="font-size:14px"> J. Cryst. Soc. Jpn, 62 (2020) 43-50.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/jcrsj/62/1/62_43/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/62/1/62_43/_pdf/-char/ja</a></span><br />
+[J7]&nbsp;K. Suzuya, Hamon, 5 (1995) 11-14.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/hamon1991/5/1/5_1_11/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon1991/5/1/5_1_11/_pdf/-char/ja</a><br />
+[J8]&nbsp;K. Suzuya et al, Materia Japan, 41 (2002) 206-215.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/materia1994/41/3/41_3_206/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/materia1994/41/3/41_3_206/_pdf/-char/ja</a><br />
+[J9]&nbsp;K. Suzuya, Hamon, 13 (2003) 51-55.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/hamon1991/13/1/13_1_51/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon1991/13/1/13_1_51/_pdf/-char/ja</a><br />
+[J10]&nbsp;K. Suzuya, Hamon, 20 (2010) 70-72.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/hamon/20/1/20_70/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon/20/1/20_70/_pdf/-char/ja</a><br />
+[J12]&nbsp;K. Suzuya, RADIOISOTOPES. 60 (2011) 63-87.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/radioisotopes/60/2/60_2_63/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/radioisotopes/60/2/60_2_63/_pdf/-char/ja</a><br />
+<span style="font-size:14px">[J13]&nbsp;T. Otomo et al., Materia Japan, 52 (2013) 346-349.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/materia/52/7/52_346/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/materia/52/7/52_346/_pdf/-char/ja</a></span><br />
+[J14]&nbsp;T. Otomo et al., J. Cryst. Soc. Jpn, 50（2008）29-34.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/jcrsj1959/50/1/50_1_29/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj1959/50/1/50_1_29/_pdf/-char/ja</a><br />
+[J15]&nbsp;Y. Yoneda, J. Cryst. Soc. Jpn,&nbsp;54 (2012) 155-158.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/jcrsj/54/3/54_155/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/54/3/54_155/_pdf/-char/ja</a><br />
+[J16]&nbsp;Y. Yoneda,&nbsp; J. Jpn. Soc. Synch. Rad. Res., 28 (2015) 117-123.&nbsp;<br />
+&nbsp; <a href="http://www.jssrr.jp/journal/pdf/28/p117.pdf">http://www.jssrr.jp/journal/pdf/28/p117.pdf</a><br />
+<span style="font-size:14px">[J17]&nbsp;K. Mori et al., Hamon, 24 (2014) 267-272.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/hamon/24/4/24_267/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon/24/4/24_267/_pdf/-char/ja</a></span><br />
+[J18]&nbsp;K. Mori, Materia Japan, 56 (2017) 443-447.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/materia/56/7/56_56.443/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/materia/56/7/56_56.443/_pdf/-char/ja</a><br />
+[J19]&nbsp;K. Mori, Materia Japan, 59 (2017) 230-237.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/jcrsj/59/5/59_230/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj/59/5/59_230/_pdf/-char/ja</a><br />
+[J20]&nbsp;J. Mizuki et al., J. Cryst. Soc. Jpn, 42（2000）68-75.<br />
+&nbsp; <a href="https://www.jstage.jst.go.jp/article/jcrsj1959/42/1/42_1_68/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/jcrsj1959/42/1/42_1_68/_pdf/-char/ja</a><br />
+<span style="font-size:14px">[J21]&nbsp;S. Shamoto,K et al., Hamon, 18 (2008) 203-207.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/hamon1991/18/4/18_4_203/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon1991/18/4/18_4_203/_pdf/-char/ja</a><br />
+[J22]&nbsp;K. Ikeda et al., Hamon, 25 (2015) 161-165.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/hamon/25/2/25_161/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon/25/2/25_161/_pdf/-char/ja</a><br />
+[J23]&nbsp;S. Takata et al., Hamon, 24 (2014) 281-287.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/hamon/24/4/24_281/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/hamon/24/4/24_281/_pdf/-char/ja</a><br />
+[J24]&nbsp;H. Akihiko et al., Materia, 55 (2016) 8-14.<br />
+&nbsp;&nbsp;<a href="https://www.jstage.jst.go.jp/article/materia/55/1/55_55.8/_pdf/-char/ja">https://www.jstage.jst.go.jp/article/materia/55/1/55_55.8/_pdf/-char/ja</a><br />
+[J25]&nbsp;</span>原子対相関関数（atomic Pair Distribution Function : PDF）を用いた 結晶性物質の局所構造解析<br />
+&nbsp;&nbsp;<a href="http://pfwww.kek.jp/pf-seminar/powder4_abst/kodama.pdf">Microsoft Word - proceeding樹神.doc (kek.jp)</a><br />
+[J26]&nbsp;SPring-8/SACLA先端利用セミナー<br />
+[J27] Y. Onodera et al., NPG Asia Mater., 12 (2020) 85.<br />
+<br />
+<span style="font-size:14px">・高角度傾斜法<br />
+[H1] H. Ohno et al., Molten Salt Forum 3 (1994).<br />
+<br />
+・Krogh-Moe-Norman法<br />
+[K1] J. Krogh-Moe, Acta, Cryst. 9 (1956) 351.<br />
+[K2] N. Norman, Acta, Cryst. 10 (1957) 370.<br />
+[K3] 早稲田嘉夫、まてりあ、35 (1996) 48.<br />
+<br />
+・原子の線吸収係数<br />
+[AI1] 佐々木研究室:&nbsp;</span><a href="http://www.sasakiken.net/">Sasaki Lab. Home Page (sasakiken.net)</a><br />
+<span style="font-size:14px">[AI2]&nbsp;</span>S. Sasaki (1990) KEK Report 90-16, 1-143.<br />
+<span style="font-size:14px">&nbsp;&nbsp;</span><a href="http://www.sasakiken.net/reports/reports.html">www.sasakiken.net/reports/reports.html</a><br />
+[AI3] NIST:&nbsp;<a href="https://www.nist.gov/pml/x-ray-mass-attenuation-coefficients">X-Ray Mass Attenuation Coefficients | NIST</a><br />
+<br />
+<span style="font-size:14px">・原子散乱因子 (異常散乱項)<br />
+[AA1] 佐々木研究室:&nbsp;</span><a href="http://www.sasakiken.net/">Sasaki Lab. Home Page (sasakiken.net)</a><br />
+<span style="font-size:14px">[AA2]&nbsp;</span>S. Sasaki (1989) KEK Report 88-14, 1-136.<br />
+<span style="font-size:14px">&nbsp;&nbsp;</span><a href="http://www.sasakiken.net/reports/reports.html">www.sasakiken.net/reports/reports.html</a><br />
+<br />
+<span style="font-size:14px">・原子散乱因子 (水素原子)<br />
+[AH1] International Tables for Crystallography<br />
+&nbsp;&nbsp;</span><a href="https://it.iucr.org/Cb/ch6o1v0001/">(International Tables) Access requires a licence (iucr.org)</a><br />
+<br />
+<span style="font-size:14px">・原子散乱因子 (水素原子以外)<br />
+[ANH1] D. Waasmaier et al, Acta. Cryst. A 51 (1995) 416.<br />
+&nbsp;&nbsp;<a href="http://scripts.iucr.org/cgi-bin/paper?sh0059">http://scripts.iucr.org/cgi-bin/paper?sh0059</a><br />
+<br />
+・コンプトン散乱因子<br />
+[C1] D. T. Comer et al., J. Chem. Phys., 47 (1967) 1892.<br />
+[C2] D. T. Comer, J. Chem. Phys., 50 (1969) 4857.<br />
+[C3] J. H. Hubbell et al., J. Phys. Chem. Ref. Data, 4 (1975) 471.&nbsp;<br />
+[C4] 早稲田嘉夫ら「X線構造解析」内田老鶴圃、2002.<br />
+------------------------------------------------------------------------------</span></div>

@@ -1,0 +1,458 @@
+-------------------------------------------------------------------------------<br />
+■ github: <a href="https://github.com/by-student-2017/conversion">https://github.com/by-student-2017/conversion</a><br />
+-------------------------------------------------------------------------------<br />
+■ PWscf&nbsp;用 バンド図プロット F77 プログラム<br />
+-------------------------------------------------------------------------------<br />
+下記はSpin を入れた系に対するバンド図プロット用 Fortran77コードの例です。<br />
+<br />
+□ コンパイルの仕方<br />
+1. テキストファイルに下記のプログラムをコピー&amp;ペーストし、例えば pwscf_band2plot.f という名称でSAVEします。<br />
+2. 6100 continue などど 数値と continue のある行の最初に空白を入れてください。<br />
+3. Terminal を開いて、cd で pwscf_band2plot.f&nbsp; のあるディレクトリをカレントディレクトにします。<br />
+4. gfortran pwscf_band2plot.f&nbsp; -o pwscf_band2plot と入力します。そうすると、実行ファイルが作成されます。<br />
+<br />
+□ 使い方<br />
+1. case.pw.out をコピーしてf01というファイル名にします。<br />
+2. 上記でコンパイルして作成された実行ファイル pwscf_band2plot を実行します。<br />
+3. 出力されたf10とf20がそれぞれupとdownの結果になります（non spinの場合 f10に結果が出力される）。プロットはWIEN2kと同じように、最後の2列をxとyに指定すれば良いです。<br />
+※ case.pw.outの結果を並べ替えただけですので、EFを0としたい場合はご自身で計算してください。<br />
+<br />
+c=======================================================================<br />
+c&nbsp; pwscf_band2plot.f<br />
+c&nbsp;&nbsp;&nbsp; 2012. 8.12&nbsp; Version 1.00&nbsp; written by ***<br />
+c=======================================================================<br />
+c&nbsp; process<br />
+c --------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IMPLICIT NONE<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 kpoint_num_para<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter (kpoint_num_para = 999)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 eigen_num_para<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter (eigen_num_para = 9999)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*130 READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c spin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 spin<br />
+c do loop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 i, j, m, n<br />
+c number of kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_kpoint<br />
+c number of eigen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_eigen<br />
+c read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c EF_eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 EF_eV<br />
+c kpoint, h, k, l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 h(kpoint_num_para), k(kpoint_num_para), l(kpoint_num_para)<br />
+c temp_delta_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 temp_delta_kpoint<br />
+c deltal_kpoint_length = sqrt( temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 delta_kpoint_length(kpoint_num_para)<br />
+c total_kpoint_length<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 total_kpoint_length(kpoint_num_para)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c up spin<br />
+c eigenvalue(eigenvalue, kpoint, spin)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue_up(eigen_num_para, kpoint_num_para)<br />
+c eigenvalue_ef = eigenvalue - EF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue_up_sub_ef(eigen_num_para, kpoint_num_para)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c down spin<br />
+c eigenvalue(eigenvalue, kpoint, spin)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue_down(eigen_num_para, kpoint_num_para)<br />
+c eigenvalue_ef = eigenvalue - EF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue_down_sub_ef(eigen_num_para, kpoint_num_para)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c read line start number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_kpoint_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 1<br />
+<br />
+c f01 : read *.pw.out data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open( 1, file = 'f01' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c read basic data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = i + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:32) .eq. '&nbsp;&nbsp;&nbsp;&nbsp; number of Kohn-Sham states=' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_eigen_line = i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:24) .eq. '&nbsp;&nbsp;&nbsp;&nbsp; number of k points=' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_kpoint_line = i - 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+6100 continue<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = i + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( num_eigen_line .eq. i ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 32x,i13 )' ) num_eigen<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6,'( 32x,i13 )' ) num_eigen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( num_kpoint_line .eq. i ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 24x,i8 )' ) num_kpoint<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6,'( 24x,i8 )' ) num_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6200<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+6200 continue<br />
+<br />
+c read eigenvalue data<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) 'OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:28) .eq. ' ------ SPIN UP ------------' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(1) = 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 13x, 3f7.4 )' ) h(j), k(j), l(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. 2 ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp_delta_kpoint =<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (h(j) - h(j-1))**2 + (k(j) - k(j-1))**2 + (l(j) -l(j-1))**2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delta_kpoint_length(j) = sqrt(temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(j) = total_kpoint_length(j-1) +<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( mod(num_eigen,8) .gt. 0)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8) + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do n = 1, read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1, '( 2x, 8(1x,f8.4) )' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_up((m+(n-1)*8), j), m=1, 8)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6, '( 2x, 8(1x,f8.4) )' )<br />
+c&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_up((m+(n-1)*8), j), m=1, 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. (num_kpoint/spin) ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6300<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6, *) 'SPIN UP OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+6300 continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:28) .eq. ' ------ SPIN DOWN ----------' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(1) = 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 13x, 3f7.4 )' ) h(j), k(j), l(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. 2 ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp_delta_kpoint =<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (h(j) - h(j-1))**2 + (k(j) - k(j-1))**2 + (l(j) -l(j-1))**2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delta_kpoint_length(j) = sqrt(temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(j) = total_kpoint_length(j-1) +<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( mod(num_eigen,8) .gt. 0)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8) + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do n = 1, read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1, '( 2x, 8(1x,f8.4) )' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_down((m+(n-1)*8), j), m=1, 8)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6, '( 2x, 8(1x,f8.4) )' )<br />
+c&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_down((m+(n-1)*8), j), m=1, 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. (num_kpoint/spin) ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6400<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6, *) 'SPIN DOWN OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+6400 continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( (READOR(1:12) .eq. '&nbsp;&nbsp; JOB DONE.') .and.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (spin .eq. 2) ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6500<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( (READOR(1:12) .eq. '&nbsp;&nbsp; JOB DONE.') .and.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (spin .eq. 1)) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:38) .eq.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; '&nbsp;&nbsp;&nbsp;&nbsp; End of band structure calculation' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(1) = 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = j + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 13x, 3f7.4 )' ) h(j), k(j), l(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. 2 ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp_delta_kpoint =<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (h(j) - h(j-1))**2 + (k(j) - k(j-1))**2 + (l(j) -l(j-1))**2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delta_kpoint_length(j) = sqrt(temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(j) = total_kpoint_length(j-1) +<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( mod(num_eigen,8) .gt. 0)then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8) + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(num_eigen / 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do n = 1, read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1, '( 2x, 8(1x,f8.4) )' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_up((m+(n-1)*8), j), m=1, 8)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6, '( 2x, 8(1x,f8.4) )' )<br />
+c&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue_up((m+(n-1)*8), j), m=1, 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. (num_kpoint/spin) ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6, *) 'NON SPIN OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6500<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+6500 continue<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c write output data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c f05 : band2igor up spin output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open(10, file = 'f10' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i = 1, num_eigen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 10, '( i6 )' ) i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, (num_kpoint/spin)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 10, '( 6(1x,f8.4) )' ) h(j),k(j),l(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j), total_kpoint_length(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; eigenvalue_up(i, j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(10)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c f06 : band2igor down spin output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open(20, file = 'f20' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i = 1, num_eigen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 20, '( i6 )' ) i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, (num_kpoint/spin)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 20, '( 6(1x,f8.4) )' ) h(j),k(j),l(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j), total_kpoint_length(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; eigenvalue_down(i, j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(20)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+-------------------------------------------------------------------------------<br />
+<br />
+<br />
+-------------------------------------------------------------------------------<br />
+■ abinit用バンド図プロット F77 プログラム<br />
+-------------------------------------------------------------------------------<br />
+&nbsp;バンド図プロット用 Fortran77コードの例です。<br />
+<br />
+□ コンパイルの仕方<br />
+1. テキストファイルに下記のプログラムをコピー&amp;ペーストし、例えば abinit_band2plot.f という名称でSAVEします。<br />
+2. 6100 continue などど 数値と continue のある行の最初に空白を入れてください。<br />
+3. Terminal を開いて、cd で abinit_band2plot.f&nbsp; のあるディレクトリをカレントディレクトにします。<br />
+4. gfortran abinit_band2plot.f&nbsp; -o abinit_band2plot と入力します。そうすると、実行ファイルが作成されます。<br />
+<br />
+□ 使い方<br />
+1. case.out をコピーしてf01というファイル名にします。<br />
+2. 上記でコンパイルして作成された実行ファイルabinit_band2plot を実行します。<br />
+3. 出力されたf10とf20がそれぞれupとdownの結果になります（non spinの場合 f10に結果が出力される）。プロットはWIEN2kと同じように、最後の2列をxとyに指定すれば良いです。<br />
+※ case.outの結果を並べ替えただけですので、EFを0としたい場合はご自身で計算してください。<br />
+-------------------------------------------------------------------------------<br />
+c=======================================================================<br />
+c&nbsp; abinit_band2plot.f<br />
+c&nbsp;&nbsp;&nbsp; 2012. 8.11&nbsp; Version 1.00&nbsp; written by ***<br />
+c=======================================================================<br />
+c&nbsp; process<br />
+c --------------------------------------------------------------------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; IMPLICIT NONE<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 band_num_para<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter (band_num_para = 999)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 kpoint_num_para<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter (kpoint_num_para = 999)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 eigen_num_para<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; parameter (eigen_num_para = 9999)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*130 READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; character*7 CSPIN<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c spin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 spin<br />
+c spin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 nband_const<br />
+c do loop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 i, j, m, n, p, q<br />
+c number of kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 nband(band_num_para)<br />
+c number of kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_kpoint<br />
+c number of kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 now_kpoint(kpoint_num_para)<br />
+c number of eigen<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_eigen<br />
+c read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c EF_eV<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 EF_eV<br />
+c kpoint, h, k, l<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 h(kpoint_num_para), k(kpoint_num_para), l(kpoint_num_para)<br />
+c temp_delta_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 temp_delta_kpoint<br />
+c deltal_kpoint_length = sqrt( temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 delta_kpoint_length(kpoint_num_para)<br />
+c total_kpoint_length<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 total_kpoint_length(kpoint_num_para)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c up and down spin<br />
+c eigenvalue(eigenvalue, kpoint, spin)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue(eigen_num_para, kpoint_num_para, 2)<br />
+c eigenvalue_ef = eigenvalue - EF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; real*8 eigenvalue_sub_ef(eigen_num_para, kpoint_num_para, 2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c read line start number<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; integer*4 num_kpoint_line<br />
+<br />
+c f01 : read *.out data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open( 1, file = 'f01' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c read basic data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = i + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) READOR(1:32)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( READOR(1:32) .eq. ' Eigenvalues (&nbsp;&nbsp; eV&nbsp; ) for nkpt=' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; num_eigen_line = i - 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6100<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+6100 continue<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rewind(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i = i + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) READOR(1:32)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( num_eigen_line .eq. i ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 32x,i4, 12x, a7 )' ) num_kpoint, CSPIN<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6,'(i4, a7, i4)' ) num_kpoint, CSPIN, i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; goto 6200<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+6200 continue<br />
+<br />
+c read eigenvalue data<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) 'OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( CSPIN .eq. 'SPIN UP' ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; spin = 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; j = 0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delta_kpoint_length(1) = 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(1) = 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do p=1, spin<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, num_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( 5x, i4, 8x, i3, 21x, 3f8.4 )' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; now_kpoint(j), nband(j), h(j), k(j), l(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( j .ge. 2 ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; temp_delta_kpoint =<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; (h(j) - h(j-1))**2 + (k(j) - k(j-1))**2 + (l(j) -l(j-1))**2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; delta_kpoint_length(j) = sqrt(temp_delta_kpoint)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; total_kpoint_length(j) = total_kpoint_length(j-1) +<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if( mod(nband(j),8) .gt. 0 )then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(nband(j)/8) + 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read_eigen_line = int(nband(j)/8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do n = 1, read_eigen_line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1, '( 8(f10.5) )' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue((m+(n-1)*8), j, p), m=1, 8)<br />
+c&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 6, '( 8(f10.5) )' )<br />
+c&nbsp;&nbsp;&nbsp;&nbsp; &amp; ( eigenvalue((m+(n-1)*8), j, p), m=1, 8)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+c ----<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read( 1,'( a130 )' ) READOR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6, *) 'read OK'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(01)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c write output data<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; nband_const = nband(1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c f05 : band2igor up spin output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open(10, file = 'f10' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i = 1, nband_const<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 10, '( i6 )' ) i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, num_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 10, '( 6(1x,f8.4) )' ) h(j),k(j),l(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j), total_kpoint_length(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; eigenvalue(i, j, 1)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(10)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+c f06 : band2igor down spin output<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; open(20, file = 'f20' )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do i = 1, nband_const<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 20, '( i6 )' ) i<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; do j = 1, num_kpoint<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write( 20, '( 6(1x,f8.4) )' ) h(j),k(j),l(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; delta_kpoint_length(j), total_kpoint_length(j),<br />
+&nbsp;&nbsp;&nbsp;&nbsp; &amp; eigenvalue(i, j, 2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end do<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; close(20)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; stop<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end<br />
+-------------------------------------------------------------------------------

@@ -1,0 +1,94 @@
+　私はタンパクの専門家ではないので、私が第一原理計算を勉学する上で見つけたタンパクに関連する情報を列挙しておきます。書籍には計算方法もかなり詳しく書かれています。下記の文献に書かれていないことは、相談窓口や教官に相談する必要があります。大規模な分子をGaussianで計算するとスーパーコンピュータを用いても6ヶ月（岐阜大 教授 和佐田 先生がおっしゃっておりました）かかることがありますので、早めの相談が大切です。<br />
+　基底関数の選択に困ることも多いでしょうから、書籍を参考にしたり、早めに相談したりしておきましょう。初めての計算で相談できる人がいない場合は、必ずと言っていいほど超えられない壁に直面します。計算は（実験と同じように大変なので）それほど甘くないので、相談できる体制を必ず作って貰ってください。<br />
+※ 最近では下記の「巨大な分子を計算する方法」にあるように、大きな系を計算できるようになってきています。<br />
+※ 神戸大学の遠隔講義（<a href="http://www.eccse.kobe-u.ac.jp/distance_learning/">http://www.eccse.kobe-u.ac.jp/distance_learning/</a>）を拝聴するのも良い方法です<br />
+------------------------------------------------------------------------------<br />
+■ 参考図書 (下記の文献は大まかで良いので目を通しておきましょう)<br />
+・神谷成敏ら『タンパク質計算科学：基礎と創薬への応用』共立出版株式会社<br />
+・佐藤文俊ら『プログラムで実践する生体分子量子化学計算』森北出版株式会社<br />
+・長岡正隆『すぐできる分子シミュレーション ビギナーズマニュアル』講談社サイエンティフィック<br />
+・平尾公彦ら『すぐできる量子化学計算 ビギナーズマニュアル』講談社サイエンティフィック<br />
+・山口兆ら『錯体化学会選書10 金属錯体の量子・計算化学』三共出版<br />
+・山口兆ら『物性量子化学入門』講談社サイエンティフィック<br />
+・堀憲次ら『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から実験値との比較まで 』丸善株式会社<br />
+------------------------------------------------------------------------------<br />
+■ 相談窓口（Gaussian &amp; Amber）<br />
+・ 名古屋大学：<a href="http://www.icts.nagoya-u.ac.jp/ja/center/service/it.html">http://www.icts.nagoya-u.ac.jp/ja/center/service/it.html</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ 巨大な分子を計算する方法 [B2]<br />
+<br />
+　基底関数の数Mに対する依存性を1乗（線形）程度まで減らす方法（リニアスケーリング法）の開発が盛んに進められています。<br />
+　GaussianやGAMESSには、クーロン項と交換項のリニアスケーリング計算法である高速多重極展開法（FMM）が実装されています。Gaussianでは原子数が60以上の場合には自動的にFMMを用いるように設定されています。しかし基底関数の数が多くなると、もう1つの計算上のボトルネックである対角化のコストが大きくなってきます。また、電子相関の計算時間をFMMによって削減することはできません。<br />
+　大きな分子を計算する他の方法に、系全体を分割して計算し、その結果を足し合わせる分割計算法があります。（省略）FMO法は、分割したフラグメントやフラグメントペアについて分子軌道計算を行い、それらの結果から分子全体のエネルギーや電子密度を見積もる方法で、特にタンパク質のような生体分子を計算するのに有効です。Facio([GU1])やfu([GU1])などGUIを用いてpdbファイルなどからGAMESSによるFMO計算のインプットファイルを作成することが可能です。分割統治（DC）法はバッファ領域という考え方を利用することにより、FMO法では計算に工夫が必要な非局在化した電子状態も高精度に取り扱うことができます。バッファ領域の大きさについては、実際の計算を行う前に十分に検証する必要がありますが、GAMESSでは次の1行を追加するだけでDC法による計算が可能です。<br />
+　$DANDC DCFLG=.T. SUBTYP=AUTO BUFRAD=8.0 $END<br />
+[B2] 「新版 すぐできる 量子化学計算ビギナーズマニュアル」 KS化学専門書<br />
+[GU1] Facio (<a href="http://www.cbi.or.jp/cbi/jigyou/GAMESS_FMO_workshop/FMO_Exercises_Guide.2011.301.pdf">http://www.cbi.or.jp/cbi/jigyou/GAMESS_FMO_workshop/FMO_Exercises_Guide.2011.301.pdf</a>)<br />
+[GU2] fu (<a href="https://www.slideshare.net/cms_initiative/fu-37113751">https://www.slideshare.net/cms_initiative/fu-37113751</a>)<br />
+　この他に、(<a href="http://cbi-society.org/taikai/taikai13/TS-1.html">http://cbi-society.org/taikai/taikai13/TS-1.html</a>)、（<a href="http://cbi-society.org/home/documents/FU.html">http://cbi-society.org/home/documents/FU.html</a>）<br />
+<br />
+※ 高速量子化学計算ソフト FMO in GAMESS (<a href="http://tcci.ims.ac.jp/tcci/software/fmo.html">http://tcci.ims.ac.jp/tcci/software/fmo.html</a>)<br />
+・ 巨大分子を10から数10原子程度のサイズのフラグメントに分割して計算するab initio MO法の近似法で、並列計算に適している。<br />
+・ PC（4コア）1台で、1,600原子系のHF/STO-3Gの1点計算が2.4 時間で計算できる。<br />
+・ PCクラスター（Linux）、100コアあれば、1,000原子のHF/6-31Gレベルでの 構造最適化が1週間から10日程度で計算できる。<br />
+------------------------------------------------------------------------------<br />
+■ Gaussianのテキスト (その10程度まで存在する)<br />
+[1] <a href="http://ir.nul.nagoya-u.ac.jp/jspui/bitstream/2237/6476/1/169_185kouza.pdf#search=%27Gaussian+%E5%92%8C%E4%BD%90%E7%94%B0%27">分子軌道法計算プログラム <b>Gaussian</b> 03 &minus;その 1</a><br />
+<a href="http://ir.nul.nagoya-u.ac.jp/jspui/bitstream/2237/6476/1/169_185kouza.pdf#search=%27Gaussian+%E5%92%8C%E4%BD%90%E7%94%B0%27">http://ir.nul.nagoya-u.ac.jp/jspui/bitstream/2237/6476/1/169_185kouza.pdf#search=%27Gaussian+%E5%92%8C%E4%BD%90%E7%94%B0%27</a><br />
+-----------------------------------------------------------------------&nbsp;<br />
+■ ドッキングシミュレーション<br />
+　文献[AD7とAD8]は読んでおくと良いだろう<br />
+<br />
+◇ MDとドッキングシミュレーション [LC1]<br />
+・目的によって次ような方法が用いられる。<br />
+A1. MDシミュレーションで構造サンプリングして、複数の鋳型に対してドッキングシミュレーションを行う<br />
+A2. ドッキングシミュレーションで求めたリガンドの確かさの確認や結合自由エネルギーを求めるためにMDシミュレーションを行う<br />
+<br />
+◇ ドッキングシミュレーションのソフト [LC1, AD8]<br />
+・モンテカルロ法<br />
+&nbsp; 無償： LigandFit<br />
+&nbsp; 有償： Glide<br />
+・遺伝的アルゴリズム<br />
+&nbsp; 無償： AutoDock (and AutoDock Tools)<br />
+&nbsp; 有償： Gold<br />
+・リガンドをフラグメントに分割して探査する方法<br />
+&nbsp; 有償: Surflex, eHiTS, FlexX<br />
+<br />
+◇ ドッキングシミュレーションのソフトの特徴 [AD8]<br />
+※ rotatable bondの数が多いリガンドに対する結合構造の探索は困難で、ドッキング計算の成功率は低下する傾向にある<br />
+※ AutoDockの標準設定では1つのリガンドに対して行われる探査の回数は10回であり、標準設定のままドッキング計算を行うと、系によっては得られる結果が大きくばらつく<br />
+※ 比較的硬いリガンド(samll)に対しては結合構造の探査は十分に行われていると考えられるため、結合構造予測の性能向上のためにはスコア関数の更なる改善が求められる<br />
+※ rotatable bondの数に対する成功率の差は、ドッキングプログラムの探査アルゴリズムの性能の差に大きく影響されていることが予想される。十分な計算時間をかけることができれば探査アルゴリズムの性能による影響は小さくなる<br />
+※ 溶媒分子や金属イオンを適切に扱うことによってドッキングの成功率が向上することが多数の研究によって示されている<br />
+※ 特にWindows環境では、CgwinやPythonを別途インストールする必要があり、またコンピュータ環境によってはアプリケーションが起動しない、計算が完遂しないなどといった多くの不具合を経験した [AD7]<br />
+※ AutoDock Vina (, MGL tools and Pymol) [ADV1]<br />
+<br />
+■ References<br />
+[DLP1]&nbsp;https://cometscome.github.io/DLAP2020/<br />
+&nbsp;&nbsp;https://github.com/cometscome/DLAP2020<br />
+[SM1] スパースモデリング入門<br />
+&nbsp; https://www.slideshare.net/hideoterada5/ss-55178990<br />
+[SM2] 今日から分かるスパースモデリング<br />
+&nbsp;&nbsp;http://www-adsys.sys.i.kyoto-u.ac.jp/mohzeki/Presentation/Tokyodat20160218_web.pdf<br />
+[LC1] http://www.eccse.kobe-u.ac.jp/distance_learning/life_science7/<br />
+[AD1] AutoDock: http://autodock.scripps.edu/<br />
+&nbsp; GUI: AutoDockTools (ADT)<br />
+&nbsp; Windows (Cygwin and Python)<br />
+[AD2] AutoDock使用マニュアル<br />
+&nbsp; http://www.iam.u-tokyo.ac.jp/chem/IMCB-8ken-HP/Lab_Manuals/entori/2011/3/11_Dockingmanyuaru_%28AutoDock%29_files/Autodock%20manual.pdf<br />
+[AD3] Molecular_dockingについて<br />
+&nbsp; https://home.hiroshima-u.ac.jp/naka/wiki/wiki.cgi?Molecular_docking%A4%CB%A4%C4%A4%A4%A4%C6<br />
+[AD4] Docking simulation<br />
+&nbsp; https://www.ag.kagawa-u.ac.jp/charlesy/memo/docking-simulation/<br />
+[AD5] SBVSしようとする話<br />
+&nbsp; https://magattaca.hatenablog.com/entry/2019/04/04/003557<br />
+[AD6] ドッキング解析<br />
+&nbsp; https://keio-bioinformatics.github.io/jikken/slides/3-3-autodock.pdf<br />
+&nbsp; https://keio-bioinformatics.github.io/jikken/docs/3-3-autodock/<br />
+[AD7] 薬学教育におけるドッキングシミュレーションソフトの活用<br />
+&nbsp; https://u-lab.my-pharm.ac.jp/~joho/mbi/document/mbi12/mbi12_uesawa.pdf<br />
+[AD8] タンパク質?リガンドドッキングの現状と課題<br />
+&nbsp; https://www.jstage.jst.go.jp/article/cicsj/34/1/34_10/_pdf<br />
+[ADV1] ドッキングシミュレーションのやり方 [AutoDock vina]<br />
+&nbsp; https://computational-chemistry.com/top/blog/2017/04/26/autodock-vina/<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

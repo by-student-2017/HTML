@@ -1,0 +1,252 @@
+<p>　ここでは、無料のコンパイラの利用方法を解説していく<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+&nbsp;（バージョンが変わっても基本的な操作や考え方は同じです）<br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+------------------------------------------------------------------------------<br />
+ifortの場合は「<a href="http://d.hatena.ne.jp/cmphys/20140501/1398925683">http://d.hatena.ne.jp/cmphys/20140501/1398925683</a>」を参照するとよい。<br />
+オススメHP：<a href="http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/lecture/f90-enshu/index.html">http://www-aos.eps.s.u-tokyo.ac.jp/~takagi/lecture/f90-enshu/index.html</a><br />
+<a href="http://www.komoto.org/hpc/fortran.html">http://www.komoto.org/hpc/fortran.html</a><br />
+<a href="http://www.hpc.cmc.osaka-u.ac.jp/system/manual/vcc/intel_compiler/">http://www.hpc.cmc.osaka-u.ac.jp/system/manual/vcc/intel_compiler/</a><br />
+------------------------------------------------------------------------------<br />
+■ Windows OS<br />
+<br />
+□ Watcom Fortran : <a href="http://downloads.openwatcom.org/ftp/">http://downloads.openwatcom.org/ftp/</a>　<br />
+利用方法 :<br />
+<a href="http://www.toyama-cmt.ac.jp/~mkawai/almanac/nadown/watcom/watcom.html">http://www.toyama-cmt.ac.jp/~mkawai/almanac/nadown/watcom/watcom.html</a><br />
+<br />
+□ GUN Fortran :&nbsp;<a href="http://www.mingw.org/download.shtml">http://www.mingw.org/download.shtml</a>　<br />
+利用方法 :<br />
+<a href="http://www.toyama-cmt.ac.jp/~mkawai/almanac/nadown/watcom/mingw/mingw.html">http://www.toyama-cmt.ac.jp/~mkawai/almanac/nadown/watcom/mingw/mingw.html</a>&nbsp;<br />
+https://wiki.gentoo.org/wiki/GCC_optimization/ja#-march も参考にされるとよい<br />
+<br />
+□ MinGW-w64 :　<a href="http://sourceforge.net/projects/mingw-w64/">http://sourceforge.net/projects/mingw-w64/</a>　<br />
+<a href="http://d.hatena.ne.jp/arakik10/20120214/1329167074">http://d.hatena.ne.jp/arakik10/20120214/1329167074</a><br />
+<br />
+□ g95 : <a href="http://www.g95.org/">http://www.g95.org/</a><br />
+<a href="http://d.hatena.ne.jp/arakik10/20090213/p1">http://d.hatena.ne.jp/arakik10/20090213/p1</a><br />
+------------------------------------------------------------------------------<br />
+■ Linux OS<br />
+<br />
+□ gfortran : <a href="http://gcc.gnu.org/wiki/GFortran">http://gcc.gnu.org/wiki/GFortran</a><br />
+gfortran&nbsp;で利用可能なオプションを調べたい場合は、<br />
+gfortran -v&nbsp;--help &gt; manual.txt<br />
+として調べてみるとよい。<br />
+ちなみにgccでは　gcc -v --help &gt; manual.txt　となる。<br />
+<br />
+デバッグ用のコンパイルオプション<br />
+※ <a href="http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3">http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3</a>&nbsp;のHPが纏められていて大変オススメ。<br />
+----------------------------------<br />
+gfortran -Wall -pedantic -std=f95 -fbounds-check -Wuninitialized -ffpe-trap=invalid, zero, overflow -fbacktrace -g case.f90<br />
+-Wall : コンパイル時に全ての警告メッセージを有効<br />
+-pedantic -std=f95: 標準外機能の利用を報告<br />
+-fbounds-check : 配列の領域外参照を検出してくれる<br />
+-Wuninitialized : 初期化されていない変数を検出<br />
+-ffpe-trap=invalid, zero, overflow: 浮動小数点例外発生時に異常終了<br />
+-fbacktrace : 異常終了時にソースコードの行番号を表示（ver 4.3以後）<br />
+-g : デバッグデータの生成<br />
+参考HP<br />
+[1] <a href="http://www.damp.tottori-u.ac.jp/~hoshi/edu/doc/nm2007-12_07b_option.pdf">http://www.damp.tottori-u.ac.jp/~hoshi/edu/doc/nm2007-12_07b_option.pdf</a><br />
+[2] <a href="http://linux.die.net/man/1/gfortran">http://linux.die.net/man/1/gfortran</a><br />
+[3] <a href="http://gcc.gnu.org/onlinedocs/gfortran/Option-Summary.html">http://gcc.gnu.org/onlinedocs/gfortran/Option-Summary.html</a><br />
+[4] <a href="http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html">http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html</a><br />
+[5] <a href="http://seismon.blog85.fc2.com/blog-entry-80.html">http://seismon.blog85.fc2.com/blog-entry-80.html</a><br />
+----------------------------------<br />
+<br />
+□ g95 : <a href="http://ftp.g95.org/">http://ftp.g95.org/</a><br />
+&nbsp;&nbsp;gcc-4.0にもとづいたコンパイラ<br />
+[1] 藤井文夫ら『Fortran90/95 による有限要素法プログラミング』丸善出版<br />
+<br />
+□ x86 Open64 Compiler&nbsp;Suite&nbsp;:&nbsp;<a href="http://developer.amd.com/tools-and-sdks/cpu-development/x86-open64-compiler-suite/">http://developer.amd.com/tools-and-sdks/cpu-development/x86-open64-compiler-suite/</a><br />
+<br />
+□ Open64 : <a href="http://www.open64.net/">http://www.open64.net/</a><br />
+&nbsp; GPLライセンスのコンパイラ<br />
+[1] 藤井文夫ら『Fortran90/95 による有限要素法プログラミング』丸善出版<br />
+<br />
+□ Intel Fortran :<br />
+※ 最適化については、<a href="http://www.hpc-sol.co.jp/support/intel_compiler_recipes/20121212_optimization.html"><font color="#0000ff">http://www.hpc-sol.co.jp/support/intel_compiler_recipes/20121212_optimization.html</font></a>&nbsp;や <a href="http://web.kudpc.kyoto-u.ac.jp/manual/ja/compiler/intel">http://web.kudpc.kyoto-u.ac.jp/manual/ja/compiler/intel</a>&nbsp;, <a href="http://www.j-focus.jp/user_guide/ug0003010000.html">http://www.j-focus.jp/user_guide/ug0003010000.html</a>&nbsp;がオススメ。<br />
+libstdc++.so.5 のインストールが事前に必要(最近のもの｛例えば2013以降など｝はもう必要ない)。インストールが済めば、下記のコマンドを入力すればよい。xxxxはダウンロードしたファイルの名前。<br />
+1) tar zxvf xxxx.tgz<br />
+2) cd&nbsp;で解凍されたファイルに入る。<br />
+（分からなければ、cd の後にスペースを入れて、その後ろに解凍されたファイルをドラッグしてpasteを指定し、Enterを押せばよい）<br />
+3) ./install.sh<br />
+4) この後は、acceptの後にEnterやライセンスファイルの場所を指定すればよい。<br />
+5) .bashrcの一番下に下記の例を参考に書き加える。<br />
+（下記は64bitの場合、/yy.y/yyy/はバージョンで変わる）<br />
+&nbsp; source /opt/intel/Compiler/yy.y/yyy/bin/ifortvars.sh intel64<br />
+&nbsp; source /opt/intel/Compiler/yy.y/yyy/mkl/tools/environment/mklvarsem64t.sh intel64<br />
+6) Intel Fortran Compilerでオプションを調べたい場合は、<br />
+&nbsp; ifort -help &gt; manual.txt<br />
+&nbsp; として調べてみるとよい。<br />
+7) which ifort などとすれば、参照先が分かる。<br />
+8) ifort -v などとすればヴァージョンが分かる。<br />
+参考HP<br />
+[1] <a href="http://software.intel.com/en-us/articles/non-commercial-software-download/"><font color="#0000ff">http://software.intel.com/en-us/articles/non-commercial-software-download/</font></a>　<br />
+[2] <a href="https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190">https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190</a><br />
+<br />
+デバッグ用のコンパイルオプション<br />
+※ <a href="http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3"><font color="#0000ff">http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3</font></a>&nbsp;のHPが纏められていて大変オススメ。<br />
+&nbsp; 下記のHPが参考になる。筆者が良くやるのが、ファイル処理を伴った0での割り算。Nanと表示される。下記のオプションを入れることでエラーが出るようにもなるので、時間の無い、最悪の場合には、オプション無しでコンパイル及びrunすることも考えてみるとよい。<br />
+※ 初期化は必要ないように思えるが、前の計算で配列がオーバーフローした場合などで、続いて正常な範囲での計算を行っても、誤った値が出力されることがある。この場合、PCを再起動する方法もあるが、初期化をしっかりと行っておけばPCを再起動しなくても良くなる。PCやプログラミングを詳しく知らない外部の方と共同研究する場合には、初期化を徹底しておくとトラブルが少なくできる。<br />
+<br />
+----------------------------------<br />
+ifort -check all -warn all -std -fpe0 -traceback -g case.f<br />
+-warn all : コンパイル時に全ての警告メッセージを有効<br />
+-warn declarations : 暗黙の型宣言を警告<br />
+-std : 標準外機能の利用を警告<br />
+-CB : 配列の領域外参照を検出してくれる<br />
+-check uninit : 初期化されていない変数を検出<br />
+-check all : 全ての実行時診断機能を有効<br />
+-fpe0 : オーバーフロー、ゼロ割り、不正な処理で終了、アンダーフローはゼロで実行<br />
+-fpe1 : オーバーフロー、ゼロ割り、不正な処理でも続行、アンダーフローはゼロで実行<br />
+-fpe3 : 浮動小数点演算の例外処理を検出しても処理続行<br />
+-traceback : エラーを起こしたプログラム中の行番号を表示<br />
+-g : デバッグ用の実行ファイルを作る<br />
+参考HP<br />
+[1] <a href="http://www.bk.tsukuba.ac.jp/~ishii/index.html#cmpmemo">http://www.bk.tsukuba.ac.jp/~ishii/index.html#cmpmemo</a><br />
+[2] <a href="http://wwweic.eri.u-tokyo.ac.jp/computer/manual/altix/prog/prog2.html">http://wwweic.eri.u-tokyo.ac.jp/computer/manual/altix/prog/prog2.html</a>　<br />
+[3] <a href="https://www.cc.kyushu-u.ac.jp/scp/doc/users/lecture/2016/event0602_1.pdf">https://www.cc.kyushu-u.ac.jp/scp/doc/users/lecture/2016/event0602_1.pdf</a> （オプションについての説明がある。非常に良い）<br />
+<br />
+mpiifort (intel mpi)<br />
+source /opt/intel/impi/X.X.X.XXX/bin64/mpivars.sh (.bashrc に書き込む。これで環境設定がなされる。Xはヴァージョンの数値）<br />
+<a href="http://www-lab.imr.tohoku.ac.jp/~hitachi/app/compiler/usage_ifort_mpi.html">http://www-lab.imr.tohoku.ac.jp/~hitachi/app/compiler/usage_ifort_mpi.html</a><br />
+<a href="https://web.kudpc.kyoto-u.ac.jp/manual/ja/library/intelmpi#modules">https://web.kudpc.kyoto-u.ac.jp/manual/ja/library/intelmpi#modules</a><br />
+<a href="https://www.isus.jp/products/fortran-compilers/sigsegv-or-sigbus-errors/">https://www.isus.jp/products/fortran-compilers/sigsegv-or-sigbus-errors/</a><br />
+<br />
+□ python 2.7.6<br />
+1. download: <a href="http://www.python.jp/download/">http://www.python.jp/download/</a><br />
+2. tar zxvf&nbsp;<a class="reference external" href="http://www.python.org/ftp/python/2.7.6/Python-2.7.6.tgz"> </a>Python-2.7.6<br />
+3. CC=&quot;gcc -pg&quot; ./configure<br />
+4. sudo make install<br />
+----------------------------------<br />
+<br />
+------------------------------------------------------------------------------<br />
+Fortranデバッグ用オプション (その他、ライブラリーのベンチマークなど有用な情報がある）<br />
+※ <a href="http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3">http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=Fortran%A5%C7%A5%D0%A5%C3%A5%B0%CD%D1%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3</a>&nbsp;がオススメ。<br />
+------------------------------------------------------------------------------<br />
+■ ubnutu10.04 以降ではlibstdc++.so.5がダウンロードされない。そのため、下記のプロセスが必要となる。（下記は調査中）<br />
+1)&nbsp;cd /etc/apt<br />
+2) sudo vi sources.list<br />
+3) 最後の行までカーソルを持っていったら o を入力<br />
+4)&nbsp;deb http://ftp.nara.wide.ad.jp/debian&nbsp; squeeze main を入力<br />
+5) ESC を押し、その後、:wq を入力<br />
+6) Applications を開いて、Ubuntu Software Center にて libstdc++5 を検索する<br />
+参考文献<br />
+[1] <a href="https://forums.ubuntulinux.jp/viewtopic.php?id=8578&amp;action=new">https://forums.ubuntulinux.jp/viewtopic.php?id=8578&amp;action=new</a><br />
+[2] <a href="http://packages.debian.org/stable/base/libstdc++5">http://packages.debian.org/stable/base/libstdc++5</a><br />
+[3] <a href="http://packages.debian.org/squeeze/i386/libstdc++5/download">http://packages.debian.org/squeeze/i386/libstdc++5/download </a><br />
+[4] https://wiki.gentoo.org/wiki/GCC_optimization/ja#-march<br />
+------------------------------------------------------------------------------<br />
+■ コンパイラオプション比較<br />
+□&nbsp;ifort compiler options (AkaiKKR)<br />
+-openmp: OpenMP* 宣言子に基づいてコンパイラーがマルチスレッド・コードを生成するようにします (-fopenmp と同じです)。<br />
+-openmp-stubs: シーケンシャル・モードで OpenMP* プログラムをコンパイルします。OpenMP* 宣言子は無視され、OpenMP* スタブ・ライブラリーがリンクされます。(シーケンシャル)<br />
+-pc80: 内部 FPU 精度を 64 ビットの仮数に設定します。(デフォルト)<br />
+-mp1: 浮動小数点の精度を上げます (速度に与える影響は -mp よりも少ないです)。<br />
+-mieee-fp: -mp と同じです。-mno-ieee-fp で無効にできます。<br />
+-i-dynamic: インテルが提供するライブラリーを動的にリンクします。-shared-intel を使用してください。<br />
+-mcmodel=medium: コードを最初の 2GB までに制限するようコンパイラーに指示します。データは制限されません。<br />
+-O2: 処理速度を最大限に最適化します。(デフォルト)<br />
+-[no-]ip&nbsp; ファイル内の単一ファイル IPO を有効 (デフォルト)/無効にします。<br />
+□&nbsp;ifort compiler options (WIEN2k)<br />
+-FR: &nbsp;<br />
+-mp1: 浮動小数点の精度を上げます (速度に与える影響は -mp よりも少ないです)。<br />
+-w: 警告メッセージを表示しません。<br />
+-prec_div: 浮動小数点除算の精度を上げます (速度に多少影響します)。(=-prec-div)<br />
+-pc80: 内部 FPU 精度を 64 ビットの仮数に設定します。(デフォルト)<br />
+-pad: 変数と配列のメモリーレイアウトの変更を有効/無効 (デフォルト) にします。<br />
+-ip: ファイル内の単一ファイル IPO を有効 (デフォルト)/無効にします。<br />
+-align: 変数と配列のメモリーレイアウトを分析し、変更します。<br />
+-DINTEL_VML:<br />
+-traceback: ランタイムエラーの際、16 進のトレースバックではなく、シンボリック・トレースバックの表示に使用する PC 関連付けデータを生成するかどうかを指定します。<br />
+-assume buffered_io: 最適化機構とコード・ジェネレーターによって行われる仮定をbuffered_ioに指定します。<br />
+-axAVX,SSE4.2,SSE4.1,SSSE3,SSE3: 指定されたプロセッサー固有のコードを生成するとともに、汎用 IA-32 命令も生成します。&lt;codes&gt; には、次の 1 つまたは複数の項目が指定できます。<br />
+□ その他<br />
+-xHost: コンパイルを行うホストマシンで利用可能な最上位の命令セットとプロセッサー向けの命令を生成します。<br />
+-ipo: ファイル間の複数ファイル IPO を有効にします。<br />
+-no-prec-div: 浮動小数点除算の精度を上げます (速度に多少影響します)をしない<br />
+-mp: -fp-model &lt;arg&gt; を使用してください。浮動小数点の精度を上げます (速度に与える影響は -mp1より大きいです）。<br />
+-funroll-loops: デフォルトのヒューリスティックに基づいてループをアンロールします。<br />
+-[no-]unroll-aggressive: より強力なアンロールのヒューリスティックを有効にします。<br />
+-----<br />
+□&nbsp;gfortran compiler options (AkaiKKR)<br />
+-mpc: Set 80387 floating-point precision (-mpc32, -mpc64, -mpc80)<br />
+-mieee-fp: 浮動小数点比較に IEEE 規格を使う<br />
+-Bdynamic, -dy, -call_shared: Link against shared libraries<br />
+-m64: Generate 64bit x86-64 code<br />
+-mavx: Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2 and AVX built-in functions and code generation<br />
+※ intel と似た機能のオプションは、gfortran ではmが最初に付いたものになっていることがある。<br />
+□&nbsp;gfortran compiler options&nbsp;(WIEN2k)<br />
+-ffree-form: Assume that the source file is free form<br />
+-O2: Set optimization level to &lt;number&gt;<br />
+-ffree-line-length-none: &nbsp;Allow arbitrary character line width in free mode<br />
+□ gfortran compiler options (OpenMX)<br />
+-O3: Set optimization level to &lt;number&gt;<br />
+-ffast-math: Project-Id-Version: gcc 3.0<br />
+-Dxt3:<br />
+-mavx: Support MMX, SSE, SSE2, SSE3, SSSE3, SSE4.1, SSE4.2 and AVX built-in functions and code generation<br />
+-fsignaling-nans: Disable optimizations observable by IEEE signaling NaNs<br />
+-funroll-all-loops: 全てのループでループ展開を行なう<br />
+-fopenmp: Enable OpenMP (implies -frecursive in Fortran)<br />
+-m64: Generate 64bit x86-64 code<br />
+-----<br />
+■ intel : gfortran options<br />
+-xHost : -march=native<br />
+-ipo : -flto<br />
+-no-prec-div : -ffast-math<br />
+-mp (=-mieee-fp) : -mieee-fp<br />
+-assume noprotect_parens : -fno-protect-parens<br />
+(default) : -fstack-arrays<br />
+-fast (=-xHOST -O3 -ipo -no-prec-div -static) : -march=native -O3 -flto -ffast-math&nbsp; -static<br />
+-funroll-loops: -funroll-loops<br />
+-unroll-aggressive : -funroll-all-loops<br />
+□ ifort : gfortran options<br />
+ifort ≒ gfortran -O2 -ffast-math -mpc80 -fstack-arrays -m64&nbsp;<code>-ftree-vectorize -mtune=native </code>-fno-protect-parens<code>&nbsp;</code>-flto<br />
+※ -flto は &gt;= 4.9.0 で可能<br />
+□&nbsp;icc&nbsp;: gcc&nbsp;options<br />
+icc ≒ gcc -O2 -ffast-math -mpc80 -m64 -ftree-vectorize <code>-mtune=native</code><br />
+※ -flto は &gt;= 4.9.0 で可能<br />
+[1] <a href="http://thatcadguy.blogspot.jp/2011/03/gnu-fortran-gfortran-vs-intel-fortran.html">http://thatcadguy.blogspot.jp/2011/03/gnu-fortran-gfortran-vs-intel-fortran.html</a>　<br />
+[2] <a href="http://www.hpc-sol.co.jp/support/intel_compiler_recipes/20121212_optimization.html">http://www.hpc-sol.co.jp/support/intel_compiler_recipes/20121212_optimization.html</a>　<br />
+[3] <a href="http://www.softek.co.jp/SPG/Pgi/TIPS/option_for_PDF.html">http://www.softek.co.jp/SPG/Pgi/TIPS/option_for_PDF.html</a>　<br />
+[4] <a href="http://www.cqpub.co.jp/interface/column/freesoft/2002/200208/08-4.htm">http://www.cqpub.co.jp/interface/column/freesoft/2002/200208/08-4.htm</a>　<br />
+[5] <a href="http://www.isus.jp/article/compileroptimization/intel-compilers-101/">http://www.isus.jp/article/compileroptimization/intel-compilers-101/</a>　<br />
+[6] <a href="http://www.isus.jp/article/compileroptimization/performance-tools-for-software-developers-intel-compiler-options/">http://www.isus.jp/article/compileroptimization/performance-tools-for-software-developers-intel-compiler-options/</a> (core, sse)<br />
+[7] <a href="http://gcc.gnu.org/ml/fortran/2009-05/msg00351.html">http://gcc.gnu.org/ml/fortran/2009-05/msg00351.html</a><br />
+[8] <a href="http://stackoverflow.com/questions/21050913/will-gfortran-or-ifort-compilers-wisely-use-simd-instructions-when-summing-the-p">http://stackoverflow.com/questions/21050913/will-gfortran-or-ifort-compilers-wisely-use-simd-instructions-when-summing-the-p</a><br />
+[9] <a href="http://users.physik.fu-berlin.de/~tburnus/gcc-trunk/benchmark/">http://users.physik.fu-berlin.de/~tburnus/gcc-trunk/benchmark/</a> &nbsp;(important!)<br />
+[10] http://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html (gcc)<br />
+[11] http://stackoverflow.com/questions/1733627/anyone-here-has-benchmarked-intel-c-compiler-and-gcc (gcc)<br />
+[12] http://www.ijitee.org/attachments/File/v4i7/G1915124714.pdf (gcc)<br />
+[13] https://wiki.duke.edu/display/SCSC/Using+the+Intel+Compiler (gcc)<br />
+[14] http://wiki.gentoo.org/wiki/GCC_optimization/ja<br />
+[15] http://cpplover.blogspot.jp/2013/07/gcc.html<br />
+[16] http://qiita.com/_dozen_/items/9c54eb45341af6137442<br />
+[17] http://wiki.gentoo.org/wiki/CFLAGS<br />
+[18] https://wiki.archlinux.org/index.php/Makepkg_%28%E6%97%A5%E6%9C%AC%E8%AA%9E%29<br />
+[19] http://oku.edu.mie-u.ac.jp/~okumura/linux/?GCC<br />
+-----<br />
+□ ifort<br />
+-Wl,&lt;o1&gt;[,&lt;o2&gt;,...]: リンカーに o1、o2、その他のオプションを渡します。<br />
+□ gfortran<br />
+-Wl,&lt;options&gt;: カンマ区切りの &lt;options&gt; をリンカに渡す<br />
+-rpath=PATH: Set runtime shared library search path<br />
+-rpath-link=PATH: Set link time shared library search path<br />
+[1] https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/<br />
+[2] https://wiki.fysik.dtu.dk/niflheim/Compilers<br />
+[3] http://wiki.crc.nd.edu/wiki/index.php/ACML<br />
+□ ifort (Linux)<br />
+&nbsp; $(MKLROOT)/lib/intel64/libmkl_blas95_lp64.a $(MKLROOT)/lib/intel64/libmkl_lapack95_lp64.a $(MKLROOT)/lib/intel64/libmkl_scalapack_lp64.a -Wl,--start-group $(MKLROOT)/lib/intel64/libmkl_intel_lp64.a $(MKLROOT)/lib/intel64/libmkl_core.a $(MKLROOT)/lib/intel64/libmkl_intel_thread.a -Wl,--end-group $(MKLROOT)/lib/intel64/libmkl_blacs_openmpi_lp64.a -lpthread -lm<br />
+&nbsp; -openmp -I$(MKLROOT)/include/intel64/lp64 -I$(MKLROOT)/include<br />
+□ ifort (Mac)<br />
+&nbsp; $(MKLROOT)/lib/libmkl_blas95_lp64.a $(MKLROOT)/lib/libmkl_lapack95_lp64.a $(MKLROOT)/lib/libmkl_scalapack_lp64.a $(MKLROOT)/lib/libmkl_intel_lp64.a $(MKLROOT)/lib/libmkl_core.a $(MKLROOT)/lib/libmkl_intel_thread.a $(MKLROOT)/lib/libmkl_blacs_ _lp64.a -lpthread -lm &nbsp;<br />
+&nbsp; -openmp -I$(MKLROOT)/include/lp64 -I$(MKLROOT)/include<br />
+<br />
+-rpath: 実行形式ファイルに埋め込まれる<br />
+-Wl,-rpath の方が -L/ でリンクするよりも計算速度が早くなる？<br />
+[1] <a href="http://dayafterneet.blogspot.jp/2011/06/ld-rpath-rpath-link.html">http://dayafterneet.blogspot.jp/2011/06/ld-rpath-rpath-link.html</a><br />
+[2] <a href="http://unix.stackexchange.com/questions/22926/where-do-executables-look-for-shared-objects-at-runtime">http://unix.stackexchange.com/questions/22926/where-do-executables-look-for-shared-objects-at-runtime</a><br />
+[3] <a href="http://vega.sra-tohoku.co.jp/~kabe/vsd/dynald.html">http://vega.sra-tohoku.co.jp/~kabe/vsd/dynald.html</a><br />
+[4] <a href="http://d.hatena.ne.jp/tomohikoseven/20120909/1347175783">http://d.hatena.ne.jp/tomohikoseven/20120909/1347175783</a></p>

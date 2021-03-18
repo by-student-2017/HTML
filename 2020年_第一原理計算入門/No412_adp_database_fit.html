@@ -1,0 +1,725 @@
+<div>------------------------------------------------------------------------------<br />
+■ adp_database_fit</div>
+
+<div>(Ubuntu 18.04 LTS or Debian 10.0)<br />
+(Edit: 1/Oct/2020)<br />
+&nbsp;</div>
+
+<div>□ Install (cif2cell-informal)</div>
+
+<div>1. sudo apt install -y git python python-setuptools python-dev gcc</div>
+
+<div>2. git clone https://github.com/by-student-2017/cif2cell-informal.git</div>
+
+<div>3. cd cif2cell-informal</div>
+
+<div>4. tar zxvf PyCifRW-3.3.tar.gz</div>
+
+<div>5. cd PyCifRW-3.3</div>
+
+<div>6. sudo python setup.py install</div>
+
+<div>7. cd ..</div>
+
+<div>8. sudo python setup.py install</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (lammps)</div>
+
+<div>1. cd ~</div>
+
+<div>2. sudo apt update</div>
+
+<div>3. sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</div>
+
+<div>4. wget https://lammps.sandia.gov/tars/lammps-3Mar20.tar.gz</div>
+
+<div>5. tar zxvf lammps-3Mar20.tar.gz</div>
+
+<div>6. cd lammps-3Mar20</div>
+
+<div>7. mkdir build ; cd build&nbsp;</div>
+
+<div>8. cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake</div>
+
+<div>9. cmake --build .</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Environment settings (lammps)</div>
+
+<div>1. echo ' ' &gt;&gt; ~/.bashrc</div>
+
+<div>2. echo '# lammps environment settings' &gt;&gt; ~/.bashrc</div>
+
+<div>3. echo 'export PATH=$PATH:$HOME/lammps-3Mar20/build' &gt;&gt; ~/.bashrc</div>
+
+<div>4. bash</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (PWscf)</div>
+
+<div>1. cd ~</div>
+
+<div>2. sudo apt update</div>
+
+<div>3. sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</div>
+
+<div>4. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz</div>
+
+<div>5. tar zxvf qe-6.4.1.tar.gz</div>
+
+<div>6. cd q-e-qe-6.4.1</div>
+
+<div>7. wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff</div>
+
+<div>8. patch -p1 --merge &lt; backports-6.4.1.diff</div>
+
+<div>9. ./configure</div>
+
+<div>10. make pw</div>
+
+<div>11. sudo make install</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;set fitting&nbsp;</div>
+
+<div>
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. sudo apt update</span></div>
+
+<div><span style="font-size:14px">3. sudo apt install -y git python-pip python-scipy csh gfortran gnuplot</span></div>
+
+<div><span style="font-size:14px">4. git clone https://github.com/by-student-2017/adp_database_fit.git</span></div>
+
+<div><span style="font-size:14px">5. cd ~/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">6. gfortran -o Zhou04_ADP_1 Zhou04_create_adp.f<br />
+&nbsp;&nbsp;</span>gfortran -o Zhou04_ADP_EW&nbsp;Zhou04_create_adp_ew.f</div>
+
+<div><span style="font-size:14px">7. gfortran -o plot_adp plot_adp.f</span></div>
+
+<div>&nbsp;
+<div>□&nbsp;fit parameters by Nelder-Mead (NM) methods</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">1. cd ~/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">2. cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">3. sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">4. python nm_v5_debian.py<br />
+&nbsp; or&nbsp;</span>python nm_v5_debian_ew.py</div>
+</div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;fit parameters by genetic algorithm</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">1. cd ~/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">2. pip install -U deap --user</span></div>
+
+<div><span style="font-size:14px">3. cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">4. sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">5. python ga_v6_debian.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;fit parameters by baysian method</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">1. cd ~/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">2. pip install bayesian-optimization==1.1.0</span></div>
+
+<div><span style="font-size:14px">3. cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">4. sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">5. python baysian_v6_debian.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;&nbsp;</div>
+
+<div>You could get config data (config_potfit) for potfit ( https://www.potfit.net/wiki/doku.php ).</div>
+
+<div><br />
+□&nbsp;clean config_potfit</div>
+
+<div>1. echo -n &gt; config_potfit<br />
+&nbsp;
+<div>□&nbsp;plot F, rho, rphi, u and w.</div>
+
+<div>1. ./plot_adp<br />
+2.&nbsp;gnuplot png_adp.gp</div>
+</div>
+
+<div>------------------------------------------------------------------------------<br />
+■ adp_database_fit</div>
+
+<div>(Google Colaboratory)<br />
+?(Edit: 1/Oct/2020)</div>
+
+<div><br />
+□&nbsp;Install (cif2cell-informal)</div>
+
+<div>!apt update</div>
+
+<div>!apt install -y git python python-setuptools python-dev</div>
+
+<div>%cd /content</div>
+
+<div>!git clone https://github.com/by-student-2017/cif2cell-informal.git</div>
+
+<div>%cd cif2cell-informal</div>
+
+<div>!tar zxvf PyCifRW-3.3.tar.gz</div>
+
+<div>%cd PyCifRW-3.3</div>
+
+<div>!python2 setup.py install</div>
+
+<div>%cd /content/cif2cell-informal</div>
+
+<div>!python2 setup.py install</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (lammps)</div>
+
+<div>!apt update</div>
+
+<div>!apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</div>
+
+<div>%cd /content</div>
+
+<div>!wget https://lammps.sandia.gov/tars/lammps-3Mar20.tar.gz</div>
+
+<div>!tar zxvf lammps-3Mar20.tar.gz</div>
+
+<div>%cd lammps-3Mar20</div>
+
+<div>!mkdir build</div>
+
+<div>%cd build&nbsp;</div>
+
+<div>!cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake</div>
+
+<div>!cmake --build .</div>
+
+<div>import os</div>
+
+<div>os.environ['PATH'] = &quot;/content/lammps-3Mar20/build:&quot;+os.environ['PATH']</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (PWscf)</div>
+
+<div>!apt update</div>
+
+<div>!apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</div>
+
+<div>%cd /content</div>
+
+<div>!wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz</div>
+
+<div>!tar zxvf qe-6.4.1.tar.gz</div>
+
+<div>%cd q-e-qe-6.4.1</div>
+
+<div>!wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff</div>
+
+<div>!patch -p1 --merge &lt; backports-6.4.1.diff</div>
+
+<div>!./configure</div>
+
+<div>!make pw</div>
+
+<div>import os</div>
+
+<div>os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;set fitting</div>
+
+<div>
+<div><span style="font-size:14px">!apt update</span></div>
+
+<div><span style="font-size:14px">!apt install -y git python-pip python-scipy csh gfortran gnuplot</span></div>
+
+<div><span style="font-size:14px">%cd /content</span></div>
+
+<div><span style="font-size:14px">!git clone https://github.com/by-student-2017/adp_database_fit.git</span></div>
+
+<div><span style="font-size:14px">%cd /content/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">!gfortran -o Zhou04_ADP_1 Zhou04_create_adp.f</span><br />
+!gfortran -o Zhou04_ADP_EW&nbsp;Zhou04_create_adp_ew.f</div>
+
+<div><span style="font-size:14px">!gfortran -o plot_adp plot_adp.f</span></div>
+
+<div>&nbsp;
+<div>□&nbsp;fit parameters by Nelder-Mead (NM)&nbsp;methods</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">%cd /content/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div><span style="font-size:14px">!cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">!python2 nm_v5_gc.py</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;fit parameters by genetic algorithm</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">!pip2 install -U deap --user</span></div>
+
+<div><span style="font-size:14px">%cd /content/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div><span style="font-size:14px">!cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">!python2 ga_v6_gc.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;fit parameters by baysian method</div>
+
+<div>
+<div>
+<div><span style="font-size:14px">!pip2 install bayesian-optimization==1.1.0</span></div>
+
+<div><span style="font-size:14px">%cd /content/adp_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div><span style="font-size:14px">!cp ADP.input_temp ADP.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cr/g' ADP.input</span></div>
+
+<div><span style="font-size:14px">!python2 baysian_v6_gc.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>You could get config data (config_potfit) for potfit ( https://www.potfit.net/wiki/doku.php ).</div>
+
+<div><br />
+□&nbsp;clean config_potfit</div>
+
+<div>!echo -n &gt; config_potfit<br />
+------------------------------------------------------------------------------<br />
+□ Information<br />
+<br />
+・G. Wang et al., Comp. Mater. Sci., 186 (2021) 110002.<br />
+(&nbsp;<a href="https://www.sciencedirect.com/science/article/pii/S0927025620304936">https://www.sciencedirect.com/science/article/pii/S0927025620304936</a>&nbsp;)<br />
+&nbsp;&nbsp;<span style="font-size:14px">Since Purja Pun et al. proposed that the dipole function can not effectively improve the quality of the potential [28], we did not use the dipole term. Because the Cauchy discrepancy of the bulk Au is positive [23], the EAM potential can be used to accurately describe its elastic constants and other properties, so for the pure element potential of Au, we only take the first two terms of Eq. (1).&nbsp;<br />
+※ &quot;T</span>he first two terms of Eq. (1)&quot; mean to use EAM potential form only.&nbsp;<br />
+<span style="font-size:14px">[28]&nbsp;G.P. Purja Pun et al.,&nbsp;Acta Mater., 100 (2015) 377-391.: 10.1016/j.actamat.2015.08.052<br />
+[23]&nbsp;&nbsp;</span>G. Simmons, H. Wang, &quot;Single Crystal Elastic Constants and Calculated Aggregate Properties: A handbook&quot;&nbsp;
+
+<div><span style="font-size:14px">(2nd ed.), MIT Press, Cambridge (1971).</span><br />
+<br />
+・<a href="https://www.sciencedirect.com/science/article/pii/S2213956714000425">https://www.sciencedirect.com/science/article/pii/S2213956714000425</a><br />
+&nbsp;&nbsp;A positive Cauchy pressure reveals ductility of crystal, while a negative value demonstrates brittleness.<br />
+<br />
+・<a href="https://arxiv.org/pdf/1704.01752.pdf">https://arxiv.org/pdf/1704.01752.pdf</a><br />
+<span style="font-size:14px">&nbsp;&nbsp;Pettifor proposed the criterion that a positive Cauchy pressure indicates metallic bonds whereas negative Cauchy pressures are typical in the case of covalent bonds.<br />
+<br />
+・A. A. Oni-Ojo et al.,&nbsp;JONAMP 11 (2007) 509-515.<br />
+&nbsp; Sr:&nbsp;negative Cauchy discrepancy</span><br />
+<br />
+・<a href="https://euler.phys.cmu.edu/widom/pubs/PDF/JPCM25_2013_075402.pdf">https://euler.phys.cmu.edu/widom/pubs/PDF/JPCM25_2013_075402.pdf</a><br />
+&nbsp; Cr:&nbsp;negative Cauchy pressure<br />
+<br />
+・<a href="https://www.researchgate.net/publication/232025597_Negative_Cauchy_Pressure_within_the_Tight-Binding_Approximation">https://www.researchgate.net/publication/232025597_Negative_Cauchy_Pressure_within_the_Tight-Binding_Approximation</a><br />
+&nbsp; Ir, Ti3Al, TiAl, TiAl3:&nbsp;negative Cauchy pressure<br />
+<br />
+・<a href="https://www.researchgate.net/publication/225346905_Modeling_the_dislocation_properties_and_mechanical_behavior_of_Ir_Rh_and_their_refractory_alloys">https://www.researchgate.net/publication/225346905_Modeling_the_dislocation_properties_and_mechanical_behavior_of_Ir_Rh_and_their_refractory_alloys</a><br />
+&nbsp; Rh:&nbsp;negative Cauchy pressure&nbsp;<br />
+<br />
+・<span style="font-size:14px"><a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/pssb.200743075">https://onlinelibrary.wiley.com/doi/abs/10.1002/pssb.200743075</a><br />
+&nbsp;&nbsp;Ce, Yb, Th, U, Pu:&nbsp;</span>negative Cauchy pressure<br />
+&nbsp; La: positive&nbsp;Cauchy pressure<br />
+<br />
+<span style="font-size:14px">・J. David Schall et al., Phys. Rev. B 77 (2008) 115209.<br />
+&nbsp; Silicon has as negative Cauchy discrepancy (C<sub>12</sub>-C<sub>44</sub>)</span><br />
+<br />
+・<a href="https://aip.scitation.org/doi/pdf/10.1063/1.4928208">https://aip.scitation.org/doi/pdf/10.1063/1.4928208</a><br />
+&nbsp; CrFe<sub>2</sub>C: negative Cauchy pressure (C<sub>12</sub>-C<sub>66</sub>)<br />
+<br />
+・D. J. Srolovitz et al., &quot;<span style="font-size:14px">Atomistic Simulation of Materials: Beyond Pair Potentials&quot;<br />
+&nbsp;&nbsp;The embedding function and pair interaction can be obtained from first principles, as is demonstrated in Ref. 28 with a model density functional for nickel (also see Ref. 22, for a different treatment).&nbsp;These first principles functions do resonably well in describing the properties of nickel.&nbsp;However, in practice, we have taken a semi-empirical approach, where the fundamental theory has guided the fitting of the embedding function and pair interaction to basic bulk properties.&nbsp;In general, we have fittied to lattice constant, cohesive energy, elastice constants, and vacancy formation energy.&nbsp;We have also found it useful to require that the cohesive energy as a function of lattice constant follow the &quot;universal binding curve&quot; of Ref. 30.&nbsp;In one paper, we have also fitted to the dilute heats of alloying for binary alloys. In general, the fits are overdeermined, and the fact that we can achieve any kind of fit is in some sense a check of self-consistency.&nbsp;Functional forms have varied: in some cases, the functions are determined by general splines, in other cases, we have found it more useful to use analytic functions.&nbsp;<br />
+&nbsp;&nbsp;There is one fact to be aware of in doing the fitting. The following transformation does not change the total energy:<br />
+&nbsp; F<sub>i</sub>(&rho;) -&gt;&nbsp;</span>F<sub>i</sub>(&rho;)&nbsp;- c<sub>i</sub>&rho;<br />
+&nbsp; &Phi;<sub>ij</sub>(R) -&gt;&nbsp;&Phi;<sub>ij</sub>(R) +&nbsp;c<sub>i</sub>&rho;<sub>j</sub><sup>a</sup>(R)&nbsp;+ c<sub>j</sub>&rho;<sub>i</sub><sup>a</sup>(R)<br />
+&nbsp;&nbsp;<span style="font-size:14px">Therefore, the embedding function cannot be determined to within a linear function. This is related to the fact that some of the electrostatic interaction can be grouped either as part of the pair term or as part of the embedding energy:&nbsp;the choice is arbitrary. This ambiguity also confuses the comparison of functions obtained by different workers.&nbsp;Some workers have required that &Phi;(R) be positive definite, which amounts to a particular choice of the constants in the transformation.&nbsp;Other workers have required that the embedding functions correspond to those obtained from atom-in-jellium calculations, which amounts to a different choice of the constants.&nbsp;However, the different choice of constants are arbitrary: very different looking sets of EAM functions may in fact give exactly the same energies.&nbsp;Insted of comparing embedding functions and pair interactions directly, one should compare the effective pair and trio interactions (Eqs. 9a and b). These effective interactions are unaffected by the transfromation, and therefore provide a way of comparing rather different looking sets of EAM functions.<br />
+&nbsp;&nbsp;In obtaining new functions, or in applying existing ones, there are several traps to avoid:&nbsp;<br />
+1)&nbsp;The functions should be smooth.<br />
+2)&nbsp;The embedding function should have positive curvature. This ensures that the bound strength decreases with incresing coordination (see the section on many-atom interactions). This is a basic property of embedding functions, as can be demonstrated from fundamental principles.<br />
+3)&nbsp;A direct consequence of the previous point is that metals with negative Cauchy discrepancy evidently have some basic properties which are neglected in the EAM.&nbsp;The approximations used in justifying the EAM break down in these cases.</span><br />
+4)&nbsp;<span style="font-size:14px">Several workers have used the restriction of </span>&Phi;<sub>ij&nbsp;</sub><span style="font-size:14px">= &radic;(</span>&Phi;<sub>ii</sub>&Phi;<sub>jj</sub><span style="font-size:14px">). This was used only to restrict the number of free parameters and is generally not a good approximation.<br />
+5)&nbsp;Functions which have been fitted to the properties of two elemental metals with no regard for the alloying properties will be very lucky to describe the alloy properly.&nbsp;For example, Daw and Baskes give functions for Ni and functions for Pd. These functions were fitted to the elemental properties but do not describe the Ni-Pd system well. On the other hand, Foiles Baskes and Daw fitted the dilute heats of alloying and do well for Ni-Pd.<br />
+6)&nbsp;Avoid covalent materials, or ones with negative Cauchy discrepancy. The EAM does not describe the basic physics related to these properties.</span></div>
+------------------------------------------------------------------------------<br />
+□ Zhou04_ADP_EW (Results)<br />
+<br />
+・nm_v5_debian_ew.py (EAM + w function) (u = 0.0)
+<div><span style="font-size:14px">------------------------</span></div>
+
+<div><span style="font-size:14px">7400</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">Temperature: 298.0 [K]</span></div>
+
+<div><span style="font-size:14px">number of atoms: 2</span></div>
+
+<div><span style="font-size:14px">lammps: -0.00004400, -0.00004348, -0.00004394, 0.00000004, 0.00000017, -0.00000003 [eV/A^3]</span></div>
+
+<div><span style="font-size:14px">PWscf:&nbsp; -0.00001232, -0.00001238, -0.00001232, 0.00000000, -0.00000000, 0.00000005 [eV/A^3]</span></div>
+
+<div><span style="font-size:14px">P diff (%): 172.037424224</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">lammps: -0.2375194 : 0.04768272 : 0.22478122 [eV/A]</span></div>
+
+<div><span style="font-size:14px">PWscf: -0.22487098 : 0.04322662 : 0.21150948 [eV/A]</span></div>
+
+<div><span style="font-size:14px">force diff (%): 7.40273750539</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">lammps: -17.4725381057&nbsp; &nbsp; &nbsp; &nbsp;[eV]</span></div>
+
+<div><span style="font-size:14px">PWscf:&nbsp; -17.4689433666 [eV]</span></div>
+
+<div><span style="font-size:14px">diff: 0.0035947391 [eV]</span></div>
+
+<div><span style="font-size:14px">diff/atom: 0.00179736955 [eV/atom]</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">Temperature: 2128.0 [K]</span></div>
+
+<div><span style="font-size:14px">number of atoms: 2</span></div>
+
+<div><span style="font-size:14px">lammps: -0.00004199, -0.00004383, -0.00004348, 0.00000019, 0.00000017, -0.00000061 [eV/A^3]</span></div>
+
+<div><span style="font-size:14px">PWscf:&nbsp; -0.00000319, -0.00000349, -0.00000344, -0.00000001, 0.00000002, -0.00000001 [eV/A^3]</span></div>
+
+<div><span style="font-size:14px">P diff (%): 774.773466865</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">lammps: -0.14394294 : 0.47225079 : 0.43303775 [eV/A]</span></div>
+
+<div><span style="font-size:14px">PWscf: -0.17270362 : 0.58534434 : 0.53139238 [eV/A]</span></div>
+
+<div><span style="font-size:14px">force diff (%): 18.1609702703</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">lammps: -17.4410807307&nbsp; &nbsp; &nbsp; &nbsp;[eV]</span></div>
+
+<div><span style="font-size:14px">PWscf:&nbsp; -17.4632702922 [eV]</span></div>
+
+<div><span style="font-size:14px">diff: -0.0221895615 [eV]</span></div>
+
+<div><span style="font-size:14px">diff/atom: -0.01109478075 [eV/atom]</span></div>
+
+<div><span style="font-size:14px">F, u and w boundary, diff:&nbsp; &nbsp; 1.0255059969360020E-004</span></div>
+
+<div><span style="font-size:14px">---------------</span></div>
+
+<div><span style="font-size:14px">Evaluate:&nbsp; 0.180040634333</span></div>
+
+<div><span style="font-size:14px">Parameters: z0 = [ 2.6260629814691336,1.642717938330459,20.41438608763841,19.447614836836276,9.372499562065624,4.540554551280313,0.2351531339404917,0.9578586723232746,0.15665673154900595,0.36241106185785066,-2.5426778663480127,-0.0582824192731219,0.19354359800950774,-2.3837012929198536,-3.753776553136791,1.3946794903736642e-05,0.20302824588487733,-0.14667633970193117,0.40033628329048593,-2.579221839080889,-0.15420864731617748,0.7416435711846066,1.1403755684528676,-0.04275054802094908,-0.11130016792291453,7.087032206756572,4.235844630467108,-0.0649803135291536,0.007536600445076719,-0.09412482703026182,0.01904435874240642,-2.365466837902734,0.008110604888321958,0.058830007032218204,-0.02926321873722381,0.7469805227488252,1.8688499717041243 ]</span><br />
+------------------------<br />
+<br />
+・ADP_code<br />
+------------------------</div>
+
+<div><span style="font-size:14px">Cr</span></div>
+
+<div><span style="font-size:14px">2.62606298147</span></div>
+
+<div><span style="font-size:14px">1.64271793833</span></div>
+
+<div><span style="font-size:14px">20.4143860876</span></div>
+
+<div><span style="font-size:14px">19.4476148368</span></div>
+
+<div><span style="font-size:14px">9.37249956207</span></div>
+
+<div><span style="font-size:14px">4.54055455128</span></div>
+
+<div><span style="font-size:14px">0.23515313394</span></div>
+
+<div><span style="font-size:14px">0.957858672323</span></div>
+
+<div><span style="font-size:14px">0.156656731549</span></div>
+
+<div><span style="font-size:14px">0.362411061858</span></div>
+
+<div><span style="font-size:14px">-2.54267786635</span></div>
+
+<div><span style="font-size:14px">-0.0582824192731</span></div>
+
+<div><span style="font-size:14px">0.19354359801</span></div>
+
+<div><span style="font-size:14px">-2.38370129292</span></div>
+
+<div><span style="font-size:14px">-3.75377655314</span></div>
+
+<div><span style="font-size:14px">1.39467949037e-05</span></div>
+
+<div><span style="font-size:14px">0.203028245885</span></div>
+
+<div><span style="font-size:14px">-0.146676339702</span></div>
+
+<div><span style="font-size:14px">0.40033628329</span></div>
+
+<div><span style="font-size:14px">-2.57922183908</span></div>
+
+<div><span style="font-size:14px">24</span></div>
+
+<div><span style="font-size:14px">51.9961</span></div>
+
+<div><span style="font-size:14px">-0.154208647316</span></div>
+
+<div><span style="font-size:14px">4.54055455128</span></div>
+
+<div><span style="font-size:14px">0.362411061858</span></div>
+
+<div><span style="font-size:14px">0.741643571185</span></div>
+
+<div><span style="font-size:14px">1.15</span></div>
+
+<div><span style="font-size:14px">3.5</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">8.0437</span></div>
+
+<div><span style="font-size:14px">0.0</span></div>
+
+<div><span style="font-size:14px">0.751429</span></div>
+
+<div><span style="font-size:14px">1.28571</span></div>
+
+<div><span style="font-size:14px">1.14037556845</span></div>
+
+<div><span style="font-size:14px">-0.0427505480209</span></div>
+
+<div><span style="font-size:14px">-0.111300167923</span></div>
+
+<div><span style="font-size:14px">7.08703220676</span></div>
+
+<div><span style="font-size:14px">4.23584463047</span></div>
+
+<div><span style="font-size:14px">-0.0649803135292</span></div>
+
+<div><span style="font-size:14px">0.00753660044508</span></div>
+
+<div><span style="font-size:14px">-0.0941248270303</span></div>
+
+<div><span style="font-size:14px">0.0190443587424</span></div>
+
+<div><span style="font-size:14px">-2.3654668379</span></div>
+
+<div><span style="font-size:14px">0.00811060488832</span></div>
+
+<div><span style="font-size:14px">0.0588300070322</span></div>
+
+<div><span style="font-size:14px">-0.0292632187372</span></div>
+
+<div><span style="font-size:14px">0.746980522749</span></div>
+
+<div><span style="font-size:14px">1.8688499717</span><br />
+------------------------<br />
+------------------------------------------------------------------------------
+<div>■ Memo<br />
+・Zhou04でのEAMの関数の形状でADPに拡張してみたが、Crは上手く行き過ぎた。他の元素はかなり苦労している。</div>
+・RhのADPをEAM項とw項に対してNelder-Mead法でフィットしていたとき、forceを合わせてからエネルギーを合わせた方が良いかもしれないと思った。Nelder-Mead法の前にGAやBaysianで候補を探した。<br />
+・DFTの形成エネルギーの精度が 0.1 [eV/atom]程度なので、MDではDFTから 0.07 [eV/atom]程度までズレていても良いとしてフィットしている。<br />
+------------------------------------------------------------------------------
+<div><span style="font-size:14px">■ high entropy alloys (HEA)<br />
+<br />
+□ Information<br />
+・every element: 5 - 35 at.%<br />
+・simple solid solution phase<br />
+・The mixing entropy &Delta;</span><em>S</em><span style="font-size:14px"><sub>mix</sub> = -<em>R</em> * &Sigma;<sup>N</sup><sub>i=1</sub> c<sub>i</sub>*ln(c<sub>i</sub>)<br />
+&nbsp; where R is the ideal gas constant, N is the number of components, and c<sub>i</sub> is the atomic fraction of component i.</span></div>
+
+<div>&nbsp; equiatomic alloy (5 component): 1.6*<em>R</em>&nbsp;= 1.6*8.617*10<sup>-5</sup> eV/K<br />
+&nbsp;&nbsp;= 0.04 eV (300 K), 0.09 eV (673 K), 0.12&nbsp;eV (873 K), 0.148 eV (1073 K), 0.175 eV (1273 K)<br />
+・The enthalpy of mixing &Delta;H<sub>mix</sub> =&nbsp;&Sigma;<sup>N</sup><sub>i=1,i&ne;j</sub>&nbsp;4*&Delta;H<sup>mix</sup><sub>AB</sub>*c<sub>i</sub>*c<sub>j</sub><br />
+&nbsp; where &Delta;H<sup>mix</sup><sub>AB&nbsp;</sub>is the binary enthalpy of mixing for A and B.<br />
+&nbsp; &Delta;H<sub>mix</sub>&nbsp;= about -10 - 5 kJ/mol = about&nbsp;<span style="font-size:14px">-0.1036 -&nbsp;0.052 eV</span><br />
+・unitless parameter &Omega; = T<sub>m</sub>*&Delta;S<sub>mix</sub>/|&Delta;H<sub>mix</sub>|<br />
+&nbsp; where T<sub>m&nbsp;</sub>is the average melting point of the elements in the alloy.&nbsp;<br />
+&nbsp; &Omega; &gt;= 1.1: promote solid solution development.<br />
+・&delta; = [&Sigma;<sup>N</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*(1-r<sub>i</sub>/r<sub>avg</sub>)]<sup>0.5</sup><br />
+&nbsp; where r<sub>i</sub>&nbsp;is the atomic radius of element i.<br />
+&nbsp; r<sub>avg</sub>&nbsp;=&nbsp;&Sigma;<sup>N</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*r<sub>i</sub><br />
+&nbsp; &delta; =&lt; 6.6 %: Formation of a solid solution phase.<br />
+&nbsp; 4% &lt; &delta; =&lt; 6.6%: intermetallics (some alloys)<br />
+・VEC: BCC &lt; 6.87 &lt; mix (BCC and FCC) &lt; 8 &lt;= FCC<br />
+<br />
+・The high concentrations of multiple elements leads to slow diffusion (higher activation energy than pure metal and stainless steels).<br />
+<br />
+・HEA (BCC): high yield strength, low ductility.<br />
+・HEA (FCC): low yield strength, high ductility.<br />
+<br />
+・FeCrMnNiCo (FCC): high fracture toughness (low temperature)<br />
+・VNbMoTaW (BCC): high yield strength (&gt; 600 MPa) at about&nbsp;1673&nbsp;K.<br />
+・AlCoCrFeNi (BCC): No ductile to brittle transition (about 77 K).<br />
+・Al<sub>0.5</sub>CoCrCuFeNi: high fatigue life and endurance limit.</div>
+
+<div>・Al<sub>20</sub>Li<sub>20</sub>Mg<sub>10</sub>Sc<sub>20</sub>Ti<sub>30</sub>: density 2.67 g/cm<sup>3</sup>, microhardness of 4.9 - 5.8 GPa.<br />
+・<span style="font-size:14px">Al<sub>5</sub>Ti<sub>5</sub>Co<sub>35</sub>Ni<sub>35</sub>Fe<sub>20</sub><br />
+・HfMoTaTiZr (BCC)<br />
+&nbsp; The yield strength of HfMoNbTaTiZr had a yield strength 6 times greater than HfNbTaTiZr at 1200&deg;C with a fracture strain of 12% retained in the alloy at room temperature. [2]</span><br />
+<span style="font-size:14px">・CoCrCuFeNi (FCC):&nbsp;paramagnetic<br />
+&nbsp;&nbsp;But upon adding titanium, it forms a complex microstructure consisting of fcc solid solution, amorphous regions and nanoparticles of Laves phase, resulting in superparamagnetic behavior. [2]<br />
+・BiFeCoNiMn:&nbsp;High magnetic coercivity<br />
+・TaNbHfZrTi:&nbsp;Superconductivity (5.0 - 7.3 K)</span><br />
+・AlTiVCr<sub>1-x</sub>Nb<sub>x</sub><br />
+<span style="font-size:14px">・MoPdRhRuTc<br />
+<br />
+[1]&nbsp;<a href="http://t-nagase.sakura.ne.jp/index.php?%E3%83%8F%E3%82%A4%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E5%90%88%E9%87%91">ハイエントロピー合金</a></span></div>
+</div>
+[2] wikipedia (<a href="https://en.wikipedia.org/wiki/High_entropy_alloys">https://en.wikipedia.org/wiki/High_entropy_alloys</a>)<br />
+------------------------------------------------------------------------------<br />
+□ VEC (Valence electron concentration)<br />
+　水谷宇一郎ら「<span style="font-size:14px">ヒューム・ロザリー電子濃度則の物理学」が詳しいため興味がある場合は参照してみるとよい。e/aやVECなどを正しく理解するために必要となる。水谷らの仕事は周期表に新しい情報を追加するという意味で重要である。蔡らの材料の探索においてもe/aやVECが重要であったことは覚えておいて損はないだろう。<br />
+　私の経験としては最外殻の電子（s,p,d）を持つ原子の比率が同じでVECが同じであれば似た電子構造になりやすい。そのため安定な構造は特定のVECになりやすく、VECが増減すると不安定になる。理由は、最安定のVECからVECが増えると反結合軌道に電子が入り不安定に、最安定のVECから電子が減ると結合軌道の電子が減り不安定になるためである。元素の組み合わせによってVECで最安定のグループがいくつかできるのは</span>最外殻の電子（s,p,d）を持つ原子の比率<span style="font-size:14px">が異なることが理由の一つにあげられる。似たものは似たものに溶けやすいため族が離れていくと混ざりにくくなる可能性が高くなることも頭に入れておくとよい。原子の周囲に配置できる原子の数も限られるため族が離れすぎると目的のVECにするのが難しくなるのも理由としてあげられる。</span><br />
+<br />
+・VEC [1]<br />
+&nbsp; VEC&nbsp;= &Sigma;<sup>n</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*(VEC)<sub>i</sub><br />
+where c<sub>i</sub>&nbsp;is atomic percentage of the&nbsp;<em>i</em>th component.<br />
+<br />
+・VEC [1,2]<br />
+----------<br />
+Li 1, Na 1, K 1, Rb 1<br />
+Be 2, Mg 2, Ca 2, Sr 2<br />
+Sc 3, Y 3, La 3, Sm 3, Yb 3
+<div><span style="font-size:14px">Ti 4, Zr 4, Hf 4</span></div>
+
+<div><span style="font-size:14px">V&nbsp; 5, Nb 5, Ta 5</span></div>
+
+<div><span style="font-size:14px">Cr 6, Mo 6, W&nbsp; 6</span></div>
+
+<div><span style="font-size:14px">Mn 7, Tc 7, Re 7</span></div>
+
+<div><span style="font-size:14px">Fe 8, Ru 8, Os 8</span></div>
+
+<div><span style="font-size:14px">Co 9, Rh 9, Ir 9</span></div>
+
+<div><span style="font-size:14px">Ni 10, Pd 10, Pt 10</span></div>
+
+<div><span style="font-size:14px">Cu 11, Ag 11, Au 11</span></div>
+
+<div><span style="font-size:14px">Zn 12, Cd 12</span><br />
+B&nbsp; &nbsp;3,&nbsp;Al 3, Ga 3, In 3<br />
+C&nbsp; &nbsp;4, Si 4, Ge 4, Sn 4</div>
+?----------<br />
+※ 文献[2]に周期律表として情報がある。<br />
+<br />
+・e/a [1]<br />
+&nbsp; e/a = &Sigma;<sup>n</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*(e/a)<sub>i</sub><br />
+where c<sub>i</sub>&nbsp;is atomic percentage of the&nbsp;<em>i</em>th component.<br />
+&nbsp; 文献[3]のFigure 18にe/aの値が記載されている。<br />
+--------------------<br />
+Li: 1.02, Na: 1.00, K: 1.00, Rb: 1.00, Cs: 1.05<br />
+Be: 2.19, Mg: 2.02, Ca: 2.00, Sr: 1.89, Ba: 2.10<br />
+Sc: 2.94, Y: 3.15, La: 2.90<br />
+Ti: 0.92, Zr: 0.81, Hf: 1.23<br />
+V: 0.76, Nb: 0.51, Ta: 0.99<br />
+Cr: 0.92, Mo: 0.83, W: 1.29<br />
+Mn: 1.05, Tc: 0.88, Re: 1.31<br />
+Fe: 1.05, Ru: 1.00, Os: 1.49<br />
+Co: 1.11, Rh: 0.92, Ir: 1.58<br />
+Ni: 1.16, Pd: 0.0, Pt: 0.0<br />
+Cu: 1.00, Ag: 1.00, Au: 1.00<br />
+Zn: 2.04, Cd: 2.02, Hg: 1.87<br />
+Al: 3.01, Ga: 3.00, In: 3.00, Tl: 3.00<br />
+Si: 4.00, Ge: 4.00, Sn: 4.00, Pb 4.00<br />
+P: 5.12, As: 4.92, Sb: 5.00, Bi: 4.97<br />
+--------------------<br />
+<br />
+[1] S. Guo et al., J. Appl. Phys. 109 (2011) 103505.<br />
+&nbsp;&nbsp;<a href="https://aip.scitation.org/doi/abs/10.1063/1.3587228">https://aip.scitation.org/doi/abs/10.1063/1.3587228</a><br />
+[2]&nbsp;<span style="font-size:14px">Figure 3- available via license: Creative Commons Attribution 4.0 International</span><br />
+&nbsp;&nbsp;<a href="https://www.researchgate.net/figure/The-periodic-table-of-pure-elements-51-with-the-corresponding-EWF-63-and-VEC-64_fig1_339571155">https://www.researchgate.net/figure/The-periodic-table-of-pure-elements-51-with-the-corresponding-EWF-63-and-VEC-64_fig1_339571155</a><br />
+[3] U. Mizutani et al., <em>Inorg. Chem.</em> 54 (2015) 930&ndash;946. (open access)<br />
+&nbsp; <a href="https://pubs.acs.org/doi/10.1021/ic502286q">https://pubs.acs.org/doi/10.1021/ic502286q</a><br />
+------------------------------------------------------------------------------</div>

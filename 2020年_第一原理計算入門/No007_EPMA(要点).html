@@ -1,0 +1,539 @@
+------------------------------------------------------------------------------<br />
+■ EPMAの概要<br />
+・微小領域（?数&mu;m以上）の元素分析<br />
+・B以上の原子番号の元素<br />
+&nbsp; Be K&alpha;線を検出できる分光素子を備えている場合はBeを測定可能<br />
+・一般に波長分散型のX線検出器を有する<br />
+------------------------------------------------------------------------------<br />
+■ EPMAを用いて得られる情報<br />
+・反射電子（弾性散乱した電子）：試料の組成や凹凸の観察<br />
+・二次電子（非弾性散乱した電子）：試料の形態<br />
+・特性X線；元素分析（元素の濃度分布や元素濃度）<br />
+※ 反射電子は原子番号が高くなると発生率が高くなる<br />
+&nbsp; (後方散乱係数＝反射電子数/入射電子数)<br />
+※ 二次電子は入射するエネルギーにもよるが、おおむね?10 nmの深さくらいまでなら表面の外に出てくる<br />
+------------------------------------------------------------------------------<br />
+■ 空間分解能<br />
+&nbsp; CastainはX線の発生領域の深さD（&mu;m単位）に関して次のような式を提案している<br />
+&nbsp; D = 0.033*(Va<sup>1.7</sup>-Ve<sup>1.7</sup>)*A/(&rho;*Z)<br />
+ここで、Vaは加速電圧（kV）, Veは励起電圧（kV）、Aは分析箇所の平均原子量、Zは平均原子番号、&rho;は平均密度（g/cm<sup>3</sup>）である。<br />
+加えて、発生領域の最大径&delta;（&mu;m単位）は次式で与えられる。<br />
+&nbsp; &delta; = d + D<br />
+ここでdはプローブ径である。<br />
+※ 通常の測定条件では分析領域は0.5 ? 5 &mu;m程度となる。<br />
+※ （磁界型）レンズの収差がない場合のプローブ径 = d<sub>0</sub> * 集束レンズ * 対物レンズ<br />
+※ d<sub>0</sub>は電子銃での電子線の径<br />
+------------------------------------------------------------------------------<br />
+■ WDSとEDSの比較<br />
+・X線強度が高く分布がはっきりしている元素についてはWDSとEDSで大差はない<br />
+・WDSではわずかな濃度差の変化が明瞭<br />
+・WDSは感度やP/B比が良く、軽元素でも分布が明瞭<br />
+・EDSは分解能が悪くX線が重なるため誤った元素分布をより示すことも<br />
+&nbsp;
+<table border="1" cellpadding="1" cellspacing="1" style="width: 550px;">
+	<tbody>
+		<tr>
+			<td style="width: 189px;">&nbsp;</td>
+			<td style="width: 175px; text-align: center;">WDE</td>
+			<td style="width: 174px; text-align: center;">EDS</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">全元素定性分析時間</td>
+			<td style="width: 175px; text-align: center;">約3分<br />
+			（分光器の構成と測定条件による）</td>
+			<td style="width: 174px; text-align: center;">約30秒<br />
+			（測定条件による）</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">多元素同時分析</td>
+			<td style="width: 175px; text-align: center;">分光器の数</td>
+			<td style="width: 174px; text-align: center;">全元素</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">エネルギー分解能（Mn K&alpha;）</td>
+			<td style="width: 175px; text-align: center;">約 10 eV<br />
+			（?10 eV）</td>
+			<td style="width: 174px; text-align: center;">約 130 eV<br />
+			（?138 eV）</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">P/B比</td>
+			<td style="width: 175px; text-align: center;">約300 ? 1000</td>
+			<td style="width: 174px; text-align: center;">約100</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">検出限界</td>
+			<td style="width: 175px; text-align: center;">約 0.01%<br />
+			（測定条件と元素による）</td>
+			<td style="width: 174px; text-align: center;">約 0.2%<br />
+			（測定条件と元素による）</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">分析元素</td>
+			<td style="width: 175px; text-align: center;">B以上<br />
+			Be以上（対応する分光素子がある場合）</td>
+			<td style="width: 174px; text-align: center;">Be以上（UTW）<br />
+			Na以上（Be Win.）</td>
+		</tr>
+		<tr>
+			<td style="width: 189px; text-align: center;">面分析</td>
+			<td style="width: 175px; text-align: center;">1000 倍?</td>
+			<td style="width: 174px; text-align: center;">40 倍?</td>
+		</tr>
+	</tbody>
+</table>
+※ P/B比=ピーク強度/バックグラウンド強度<br />
+※ L/B比=(P-B)/B<br />
+------------------------------------------------------------------------------<br />
+■ EPMAでの試料が備えておくべき条件<br />
+・固体である<br />
+・真空中で収縮、変形しない<br />
+・電子線の照射に物理的、化学的に安定である<br />
+・導電性がある<br />
+&nbsp; （非導電性の試料では導電処理を行う）<br />
+・試料台に設置可能な大きさである<br />
+・試料表面はできるだけ平滑で水平であること<br />
+&nbsp; （特に定量分析で重要になる）<br />
+・磁性を持っていないこと<br />
+&nbsp; （コンパスの針が反応するような試料は測定を行わない。どうしても測定が必要であれば装置の管理者に相談する）<br />
+------------------------------------------------------------------------------<br />
+■ 後方散乱係数
+<table border="1" cellpadding="1" cellspacing="1" style="width: 274px;">
+	<tbody>
+		<tr>
+			<td style="width: 95px; text-align: center;">原子番号</td>
+			<td style="width: 166px; text-align: center;">後方散乱係数（概算値）</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">0</td>
+			<td style="width: 166px; text-align: center;">0</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">10</td>
+			<td style="width: 166px; text-align: center;">0.1</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">20</td>
+			<td style="width: 166px; text-align: center;">0.25</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">30</td>
+			<td style="width: 166px; text-align: center;">0.3</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">45</td>
+			<td style="width: 166px; text-align: center;">0.4</td>
+		</tr>
+		<tr>
+			<td style="width: 95px; text-align: center;">70</td>
+			<td style="width: 166px; text-align: center;">0.5</td>
+		</tr>
+	</tbody>
+</table>
+------------------------------------------------------------------------------<br />
+■ 臨界励起電圧<br />
+&nbsp; 通常、EPMAの分析では、臨界励起電圧の1.5?2倍以上の加速電圧での測定が望まれる<br />
+------------------------------------------------------------------------------<br />
+■ 定性分析での一般的な加速電圧<br />
+・軽元素（原子番号&lt;10）の元素のみ： 10 kV<br />
+・軽元素?重元素： 15 kV<br />
+・重元素（原子番号&gt;20）： 20 ? 25 kV<br />
+※ 加速電圧が高くなると軽元素はX線強度が低下する。一方、重元素では逆に加速電圧が高くなるとX線強度が大きくなる<br />
+------------------------------------------------------------------------------<br />
+■ 定性分析の一般的な照射電流（プローブ電流）<br />
+・50 nA ? 200 nA（=5*10<sup>-8</sup> A ? 2*10<sup>-7</sup> A）程度が用いられる<br />
+※ 照射電流が大きくなると信号量（=X線強度）やプローブ径、試料のダメージは大きくなる<br />
+------------------------------------------------------------------------------<br />
+■ 検出限界の目安
+<table border="1" cellpadding="1" cellspacing="1" style="width: 560px;">
+	<tbody>
+		<tr>
+			<td style="width: 216px; text-align: center;">分析条件</td>
+			<td style="width: 163px; text-align: center;">検出限界<br />
+			（軽元素: Z&lt;10）</td>
+			<td style="width: 167px; text-align: center;">検出限界<br />
+			（重元素: Z&gt;10）</td>
+		</tr>
+		<tr>
+			<td style="width: 216px; text-align: center;">EDS（1分）</td>
+			<td style="width: 163px; text-align: center;">0.5?1.1 mass%程度</td>
+			<td style="width: 167px; text-align: center;">0.3?0.8 mass%程度</td>
+		</tr>
+		<tr>
+			<td style="width: 216px; text-align: center;">全元素定性（通常の条件）<br />
+			（100 nA, 5分）</td>
+			<td style="width: 163px; text-align: center;">0.08?0.5 mass%程度</td>
+			<td style="width: 167px; text-align: center;">0.1?0.3 mass%程度</td>
+		</tr>
+		<tr>
+			<td style="width: 216px; text-align: center;">単元素定性（測定範囲を限定して照射電流と測定時間を上げる）<br />
+			（100 nA, 1分）</td>
+			<td style="width: 163px; text-align: center;">0.05?0.11 mass%程度</td>
+			<td style="width: 167px; text-align: center;">0.02?0.05 mass%程度<br />
+			（0.0数 mass%以下）</td>
+		</tr>
+		<tr>
+			<td style="width: 216px; text-align: center;">定量（P: 20 s, BG: 10 s）<br />
+			（50 nA, 1分）</td>
+			<td style="width: 163px; text-align: center;">0.05?0.11 mass%程度</td>
+			<td style="width: 167px; text-align: center;">0.02?0.05 mass%程度<br />
+			（0.0数 mass%以下）</td>
+		</tr>
+		<tr>
+			<td style="width: 216px; text-align: center;">微量定量（500 nA, 1分）</td>
+			<td style="width: 163px; text-align: center;">&nbsp;</td>
+			<td style="width: 167px; text-align: center;">0.01?0.03 mass%程度</td>
+		</tr>
+	</tbody>
+</table>
+※ EPMA表面分析ユーザーズミーティング（2006）<br />
+※ 原子番号（Z）が約10以下では検出限界が0.5桁程度大きく（悪く）なる<br />
+※ スペクトルの重畳の影響を考慮するとEDSでは2?11 mass%程度の検出限界となる<br />
+※ 電流と測定時間を大きくするとより小さなmass%を検出できる可能性がある<br />
+------------------------------------------------------------------------------<br />
+■ ビーム径（通常）<br />
+&nbsp; 0 &mu;m&phi; (Just focus)?200 &mu;m&phi;<br />
+------------------------------------------------------------------------------<br />
+■ 検出器<br />
+・ガスフロー型計数管：低いエネルギー用<br />
+・Xe封入型比例計数管：高いエネルギー用<br />
+------------------------------------------------------------------------------<br />
+■ L値<br />
+&nbsp; L値を知ることで検出している波長を知ることができる（=元素を知ることができる）<br />
+・L値が小さい=低角: 波長の短いX線を検出<br />
+・L値が大きい=高角: 波長の長いX線を検出<br />
+※ 装置の制限: 60 mm &lt; L &lt; 260 mm<br />
+&nbsp; 2d以上の波長のX線は回折できない（d=(湾曲)分光結晶の面間隔）ため、これらの制限から、広いX線の波長領域をカバーするために様々な面間隔の分光結晶を用いる（4?5枚の分光結晶でほぼ全元素範囲をカバーできる）<br />
+------------------------------------------------------------------------------<br />
+■ 分光結晶の面間隔（d値）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 418px;">
+	<tbody>
+		<tr>
+			<td style="width: 75px;">&nbsp;</td>
+			<td style="width: 70px; text-align: center;">LDE2</td>
+			<td style="width: 63px; text-align: center;">LDE1</td>
+			<td style="width: 60px; text-align: center;">TAP</td>
+			<td style="width: 64px; text-align: center;">PET</td>
+			<td style="width: 64px; text-align: center;">LIF</td>
+		</tr>
+		<tr>
+			<td style="width: 75px; text-align: center;">2d(nm)</td>
+			<td style="width: 70px; text-align: center;">約10</td>
+			<td style="width: 63px; text-align: center;">約6</td>
+			<td style="width: 60px; text-align: center;">2.5757</td>
+			<td style="width: 64px; text-align: center;">0.8742</td>
+			<td style="width: 64px; text-align: center;">0.4027</td>
+		</tr>
+	</tbody>
+</table>
+※ LDE2 から LIFに向かうほど測定対象のX線エネルギーは高い方に向かっていく<br />
+※ PETJ = PET<br />
+------------------------------------------------------------------------------<br />
+■ 分光結晶の選択<br />
+・PET<br />
+&nbsp; 測定時間（Dwell time）は1点あたり通常50?100 ms, 間隔（Step）は通常50 &mu;m<br />
+・LDE（=多層膜分光素子）（軽元素の測定でよく用いられる）<br />
+&nbsp; 間隔（Step）は通常100?200 &mu;m（ピーク幅が広いため）<br />
+※ FCS分光器： 結晶4枚装着分光器でのLDE2は酸素が範囲外となる（そのため、酸素の有無を確認するには、LDE1にして測定することも必要となる）。<br />
+------------------------------------------------------------------------------<br />
+■&nbsp; 分光器の設定例<br />
+&nbsp; チャンネルは5チャンネルのタイプでの例なので、他のチャンネル数の装置（4チャンネルタイプのEPMAの装置など）の場合はチャンネルの項目は気にせずに結晶を気にしてください。<br />
+<br />
+・C?（約3分）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 475px;">
+	<tbody>
+		<tr>
+			<td style="width: 88px; text-align: center;">チャンネル</td>
+			<td style="width: 91px; text-align: center;">1</td>
+			<td style="width: 97px; text-align: center;">3</td>
+			<td style="width: 90px; text-align: center;">4</td>
+			<td style="width: 88px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">結晶</td>
+			<td style="width: 91px; text-align: center;">LDE1</td>
+			<td style="width: 97px; text-align: center;">TAP</td>
+			<td style="width: 90px; text-align: center;">PETH</td>
+			<td style="width: 88px; text-align: center;">LIFH</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">始点</td>
+			<td style="width: 91px; text-align: center;">70 mm</td>
+			<td style="width: 97px; text-align: center;">65 mm</td>
+			<td style="width: 90px; text-align: center;">88 mm</td>
+			<td style="width: 88px; text-align: center;">88 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">終点</td>
+			<td style="width: 91px; text-align: center;">220 mm</td>
+			<td style="width: 97px; text-align: center;">220 mm</td>
+			<td style="width: 90px; text-align: center;">235 mm</td>
+			<td style="width: 88px; text-align: center;">235 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">間隔</td>
+			<td style="width: 91px; text-align: center;">100 &mu;m</td>
+			<td style="width: 97px; text-align: center;">50 &mu;m</td>
+			<td style="width: 90px; text-align: center;">50 &mu;m</td>
+			<td style="width: 88px; text-align: center;">50 &mu;m</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">時間</td>
+			<td style="width: 91px; text-align: center;">100 ms</td>
+			<td style="width: 97px; text-align: center;">50 ms</td>
+			<td style="width: 90px; text-align: center;">50 ms</td>
+			<td style="width: 88px; text-align: center;">50 ms</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">測定時間</td>
+			<td style="width: 91px; text-align: center;">150 s</td>
+			<td style="width: 97px; text-align: center;">155 s</td>
+			<td style="width: 90px; text-align: center;">147 s</td>
+			<td style="width: 88px; text-align: center;">147 s</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+・B?（約3分）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 475px;">
+	<tbody>
+		<tr>
+			<td style="width: 88px; text-align: center;">チャンネル</td>
+			<td style="width: 91px; text-align: center;">3</td>
+			<td style="width: 97px; text-align: center;">1</td>
+			<td style="width: 90px; text-align: center;">4</td>
+			<td style="width: 88px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">結晶</td>
+			<td style="width: 91px; text-align: center;">LDE2</td>
+			<td style="width: 97px; text-align: center;">TAP</td>
+			<td style="width: 90px; text-align: center;">PETH</td>
+			<td style="width: 88px; text-align: center;">LIFH</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">始点</td>
+			<td style="width: 91px; text-align: center;">62 mm</td>
+			<td style="width: 97px; text-align: center;">65 mm</td>
+			<td style="width: 90px; text-align: center;">88 mm</td>
+			<td style="width: 88px; text-align: center;">88 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">終点</td>
+			<td style="width: 91px; text-align: center;">220 mm</td>
+			<td style="width: 97px; text-align: center;">220 mm</td>
+			<td style="width: 90px; text-align: center;">235 mm</td>
+			<td style="width: 88px; text-align: center;">235 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">間隔</td>
+			<td style="width: 91px; text-align: center;">200 &mu;m</td>
+			<td style="width: 97px; text-align: center;">50 &mu;m</td>
+			<td style="width: 90px; text-align: center;">50 &mu;m</td>
+			<td style="width: 88px; text-align: center;">50 &mu;m</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">時間</td>
+			<td style="width: 91px; text-align: center;">200 ms</td>
+			<td style="width: 97px; text-align: center;">50 ms</td>
+			<td style="width: 90px; text-align: center;">50 ms</td>
+			<td style="width: 88px; text-align: center;">50 ms</td>
+		</tr>
+		<tr>
+			<td style="width: 88px; text-align: center;">測定時間</td>
+			<td style="width: 91px; text-align: center;">158 s</td>
+			<td style="width: 97px; text-align: center;">155 s</td>
+			<td style="width: 90px; text-align: center;">147 s</td>
+			<td style="width: 88px; text-align: center;">147 s</td>
+		</tr>
+	</tbody>
+</table>
+※ LDE2の始点は O K&alpha;対策のため（注意：結晶4枚装着分光器（FCS分光器）でのLDE2は酸素が範囲外となるため、酸素の有無を確認するには、LDE1にして測定することも必要となる）<br />
+※ LDE1とLDE2、TAPの終点は 220 mm程度で十分<br />
+<br />
+・B?（O重視）（約4分）
+<table border="1" cellpadding="1" cellspacing="1" style="width: 533px;">
+	<tbody>
+		<tr>
+			<td style="width: 92px; text-align: center;">チャンネル</td>
+			<td style="width: 83px; text-align: center;">3</td>
+			<td style="width: 80px; text-align: center;">1</td>
+			<td style="width: 84px; text-align: center;">3</td>
+			<td style="width: 87px; text-align: center;">4</td>
+			<td style="width: 87px; text-align: center;">5</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">結晶</td>
+			<td style="width: 83px; text-align: center;">LDE2</td>
+			<td style="width: 80px; text-align: center;">LDE1</td>
+			<td style="width: 84px; text-align: center;">TAP</td>
+			<td style="width: 87px; text-align: center;">PETH</td>
+			<td style="width: 87px; text-align: center;">LIFH</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">始点</td>
+			<td style="width: 83px; text-align: center;">170 mm</td>
+			<td style="width: 80px; text-align: center;">70 mm</td>
+			<td style="width: 84px; text-align: center;">65 mm</td>
+			<td style="width: 87px; text-align: center;">88 mm</td>
+			<td style="width: 87px; text-align: center;">88 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">終点</td>
+			<td style="width: 83px; text-align: center;">220 mm</td>
+			<td style="width: 80px; text-align: center;">220 mm</td>
+			<td style="width: 84px; text-align: center;">220 mm</td>
+			<td style="width: 87px; text-align: center;">235 mm</td>
+			<td style="width: 87px; text-align: center;">235 mm</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">間隔</td>
+			<td style="width: 83px; text-align: center;">200 &mu;m</td>
+			<td style="width: 80px; text-align: center;">100 &mu;m</td>
+			<td style="width: 84px; text-align: center;">50 &mu;m</td>
+			<td style="width: 87px; text-align: center;">50 &mu;m</td>
+			<td style="width: 87px; text-align: center;">50 &mu;m</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">時間</td>
+			<td style="width: 83px; text-align: center;">100 ms</td>
+			<td style="width: 80px; text-align: center;">100 ms</td>
+			<td style="width: 84px; text-align: center;">50 ms</td>
+			<td style="width: 87px; text-align: center;">50 ms</td>
+			<td style="width: 87px; text-align: center;">50 ms</td>
+		</tr>
+		<tr>
+			<td style="width: 92px; text-align: center;">測定時間</td>
+			<td style="width: 83px; text-align: center;">25 s</td>
+			<td style="width: 80px; text-align: center;">150 s</td>
+			<td style="width: 84px; text-align: center;">155 s</td>
+			<td style="width: 87px; text-align: center;">147 s</td>
+			<td style="width: 87px; text-align: center;">147 s</td>
+		</tr>
+	</tbody>
+</table>
+※ LDE2の始点は B K&alpha;の範囲のため<br />
+------------------------------------------------------------------------------<br />
+■ カラーマップの測定条件<br />
+・一般的な条件の目安
+<table border="1" cellpadding="1" cellspacing="1" style="width: 563px;">
+	<tbody>
+		<tr>
+			<td style="width: 112px;">&nbsp;</td>
+			<td style="width: 244px; text-align: center;">考慮すべき点</td>
+			<td style="width: 191px; text-align: center;">目安</td>
+		</tr>
+		<tr>
+			<td style="width: 112px; text-align: center;">ピクセルサイズ<br />
+			（&mu;m）</td>
+			<td style="width: 244px; text-align: center;">分析したい対象物の大きさ<br />
+			（介在物、合金層、粒径等）</td>
+			<td style="width: 191px; text-align: center;">分析範囲/ピクセル数<br />
+			（通常XとYは同じ数にする）<br />
+			0.02 &mu;mの倍数</td>
+		</tr>
+		<tr>
+			<td style="width: 112px; text-align: center;">ピクセル数<br />
+			（点）</td>
+			<td style="width: 244px; text-align: center;">解像度、測定時間</td>
+			<td style="width: 191px; text-align: center;">200 ? 400程度<br />
+			256（ビームスキャン）</td>
+		</tr>
+		<tr>
+			<td style="width: 112px; text-align: center;">測定時間<br />
+			（ms）</td>
+			<td style="width: 244px; text-align: center;">測定時間、検出感度<br />
+			試料ダメージ</td>
+			<td style="width: 191px; text-align: center;">5 ? 50 ms</td>
+		</tr>
+		<tr>
+			<td style="width: 112px; text-align: center;">照射電流<br />
+			（A）</td>
+			<td style="width: 244px; text-align: center;">検出感度<br />
+			試料ダメージ<br />
+			プローブの太さ<br />
+			X線強度（20万cps以下）</td>
+			<td style="width: 191px; text-align: center;">10<sup>-6</sup> ? 10<sup>-8</sup> A</td>
+		</tr>
+		<tr>
+			<td style="width: 112px; text-align: center;">ビーム径<br />
+			（&mu;m）</td>
+			<td style="width: 244px; text-align: center;">ピクセルサイズ<br />
+			試料ダメージ</td>
+			<td style="width: 191px; text-align: center;">ピクセルサイズと同じかそれ以下（数&mu;m程度では0 &mu;m（Focus）にする場合が多い）<br />
+			ビームスキャンでは0 &mu;m</td>
+		</tr>
+	</tbody>
+</table>
+※ JXA-8600ではピクセルサイズは1&mu;mの倍数のみ<br />
+------------------------------------------------------------------------------<br />
+■ 定性分析の一般的な照射電流（プローブ電流）<br />
+・50 nA ? 200 nA（=5*10<sup>-8</sup> A ? 2*10<sup>-7</sup> A）程度が用いられる<br />
+・高倍率のマップの場合： 5.5*10<sup>-8</sup> A ? 6*10<sup>-7</sup> A<br />
+・金属試料の微量元素：1.8*10<sup>-7</sup> A ? 1.5*10<sup>-6</sup> A<br />
+※ 照射電流が大きくなると信号量（=X線強度）やプローブ径、試料のダメージは大きくなる<br />
+------------------------------------------------------------------------------<br />
+■ スキャン方法の選択（一般的な目安）<br />
+・ステージスキャン（試料を動かして測定する方法）：3000倍以下（低倍率）<br />
+・ビームスキャン（電子線を動かして測定する方法）：3000倍以上（高倍率）<br />
+※&nbsp;ビームスキャンでは低倍率の場合、焦点の条件を合わせた中央から外に向かうことでローランド円の集光条件から外れていくことになるためX線の強度が低下する。<br />
+※ 分光結晶にもよるが焦点を合わせた位置からX, Y, Z方向でそれぞれ&plusmn;20 &mu;m離れるとX線強度は約0.95倍に減少する。&plusmn;40 &mu;mでは約0.85倍になる。焦点を合わせた位置から離れることによるX線強度の減少はTAPが一番大きく、次いでLIF、最後にPETとなる傾向にある。<br />
+※ JXA-8600の場合は1000倍程度が切り替えの目安となる（最小ピクセルサイズが1 &mu;mのため）&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ EPMAとは<br />
+&nbsp; EPMAは細く絞った高エネルギーの電子線を試料に照射して、試料から出てくる各種の信号を検出し、分析する装置です。<br />
+&nbsp; 試料に電子線を照射すると入射電子のエネルギーの大部分は熱に変わりますが、多くの信号が試料から発生します。<br />
+&nbsp; EPMAは二次電子、反射電子の信号を利用いて試料の形態、組成の差を観察し、光学顕微鏡を通して分析視野を決定し、特性X線の信号を検出することによってその箇所の組成や元素の分布を調べる装置です。<br />
+------------------------------------------------------------------------------<br />
+■ EPMAの原理<br />
+&nbsp; 加速された電子が試料に照射されるとその一部はエネルギーをあまり失わず、後方に散乱され反射電子となる。残りの電子は試料中の原子と衝突や散乱を繰り返しながら試料に拡散・浸透していきます。この散乱の過程の中で試料中の電子がたたき出され二次電子が発生します。<br />
+&nbsp; 試料から発生する二次電子は数十 keV以下と低いエネルギーであり、反射電子は高いエネルギーに分布しています。<br />
+&nbsp; 試料から発生する二次電子の量は主に電子線と試料表面のなす角度に依存し、、電子線と試料面が平行になるほど多くなり、特に試料のエッジ部分からの発生量が多くなります。このエッジ部分で明るいコントラストを生じる効果をエッジ効果と呼ばれます。この二次電子の試料からの発生は、光の反射や散乱と似たところがあるため、試料の形態の観察に適しているといえます。一方で、反射電子の発生量は試料の原子番号に依存し、構成元素の平均原子番号が大きいほど多く、原子番号が小さいほど少なくなります。つまり、反射電子線は原子番号が大きい箇所ほど明るく、原子番号が小さいほど暗く表示され、これを利用した組成像は分析の補助手段として用いれます。<br />
+------------------------------------------------------------------------------<br />
+■ X線<br />
+&nbsp; 加速された電子が試料に照射されると、試料中の原子との衝突の過程でX線が発生します。このX線は元素固有の波長（エネルギー）を持った特性X線と波長が連続的に分布する連続X線に分けられます。特性X線を測定することにより試料に含まれる元素を知ることができ（定性分析）、その強度を測定することにより元素の量を知ることができます（定量分析）。連続X線はEPMA分析ではバックグラウンドとして処理します。一般に、連続X線の強度は加速電圧が高いほど、重元素の物質ほど強くなる傾向があります。<br />
+------------------------------------------------------------------------------<br />
+■ EPMAの基本構成<br />
+<br />
+□ 電子銃<br />
+&nbsp; EPMAで使用する電子銃は、熱電子銃とショットキー電界放射電子銃（FE）があります。<br />
+&nbsp; 熱電子放出型ではヘアピン型タングステン（W）フィラメントまたはホウ化ランタン（LB<sub>6</sub>）単結晶チップが陰極材料として使用されており、これらを真空中で加熱して電子を放出させています。フィラメントから放出された電子は、フィラメントと陽極の間にかけられた高電圧により加速されて高エネルギーを持つようになります。フィラメント・アノード間には、ウェネルトと呼ばれる電極を設け、バイアス電圧を変えることによって電子の発生量を抑制し、小さな点光源（クロスオーバーポイント）が得られるようにしています。<br />
+&nbsp; ショットキー電界放射電子銃では、先端を先鋭化した表面にジルコニウムを塗布したタングステンチップ（ZrO/W）が陽極として使用されます。タングステンチップを加熱し、陽極である引き出し電極との間に高電圧をかけてチップ表面に高電界を加えるとショットキー効果によって電子が引き出されます。<br />
+&nbsp; 実効的な電子源の大きさ（クロスオーバー）、電子源の明るさ（輝度）などは電界放出型電子銃の方が熱電子銃に比べて優れていますが、電界放出型電子銃で安定した動作を得るには超高真空環境が必要となります。<br />
+<br />
+□ レンズ<br />
+&nbsp; レンズは電子線を細く絞り、試料に照射される電子線の量を調整する役目をもっています。EPMAの電子レンズには、磁界型レンズを用いていますが、働きは光学レンズと同じように考えることができます。<br />
+&nbsp; 電子銃で作られた点光源は集束レンズでM<sub>1</sub>倍、対物レンズでM<sub>2</sub>倍に縮小され、レンズの収差がなければ試料上のビーム径は&delta;=d<sub>0</sub>*M<sub>1</sub>*M<sub>2</sub>となります。磁界型レンズは磁場の強さを変えれば焦点距離を変えることができます。集束レンズの焦点距離を短くしたときを強励磁、長くしたときを弱励磁と呼びます。また、集束レンズと対物レンズの間に球面収差を小さくするために絞りがあります。このため、強励磁では弱励磁に比べビーム径は小さくなりますが、試料照射電流も小さくなります。EPMAで扱う各種信号の検出効率は異なりますので、これにあわせて照射電流を選択します。<br />
+※ d<sub>0</sub>は電子銃での電子線の径<br />
+<br />
+□ 偏向コイル<br />
+&nbsp; EPMAで二次電子像、反射電子像、X線像などの走査像が得られるのは偏向コイルがあるからです。テレビと同じように、電子線を振り（走査）させながら試料にあてます。この電子線の走査と観察用CRTの走査を同期させ、試料から発生した各種の信号をCRTの明るさに変換することにより像を形成することができます。この時の像の倍率は、試料上の電子線の振れ幅とCRT上を振れ幅の比となります。この走査方法は、通常、二次電子像、反射電子像の観察に使用します（[PICTURE MODE]）。一方、EPMAの点分析では、通常スキャンコイルをOFFにして行う場合や、電子線を指定した箇所に照射する[SPOT MODE]を使用します。この他にも走査範囲を限定する[AREA MODE]があります。<br />
+<br />
+□ 二次電子検出器<br />
+&nbsp; 二次電子検出器は、シンチレーターと光電子増倍管（Photomultiplier tube: PMT）を組み合わせたものが多く使用されています。試料から発生した二次電子はエネルギーが低いたえシンチレーターの表面に印加した10 kVの高圧で加速されて光に変換されます。この光はライトパイプを通って光電子増倍管で電流として増幅されてブラウン管のグリッドに導かれます。シンチレーターの前面には200?300 Vの電圧をかけたコレクターがあり、二次電子を効率よく集めています。<br />
+<br />
+□ 反射電子検出器<br />
+&nbsp; 反射電子の検出器には、対物レンズ直下に配置されている環状の半導体検出器が使われています。検出器に到達した反射電子は電気信号に変換されます。反射電子は試料を構成する原子番号が増えるとその強度も高くなるため、試料の組成を反映したコントラストを得ることができます。また、反射電子は散乱や吸収により一般に試料面に垂直な方向に最も強度が高くなります。そのため検出器方向に傾斜した試料面は強度が増し、凹凸の情報が得られます。検出器は2分割されており、それぞれの検出器の信号を演算（加算、減算）することにより、試料表面の凹凸像（TOPO）と組成像（COMP）が得られます。<br />
+※ 2分割されたAとBの検出器を用いることで、A+Bの信号で組成像（COMP）、A-Bの信号で凹凸像（TOPO）を得ることができあす。<br />
+<br />
+□ X線分光器<br />
+&nbsp; EPMAのX線分光器には二種類あり、一つには波長分散型分光器（WDS）、もう一つはエネルギー分散型分光器（EDS）です。<br />
+&nbsp; WDSはブラッグ（Bragg）の回折条件を利用した分光器で、分光結晶には単結晶または多層膜分子素子（LDE）を使用します。<br />
+&nbsp; EDSは検出器にSi半導体を用い、これにマルチチャンネルの波高分析器を組み合わせています。<br />
+&nbsp; WDSは優れたエネルギー分解能と検出限界を有し、EDSはWDSよりも2桁小さいプローブ電流で分析することが可能です。この二種類の検出器の分光器はその特性が異なりますので、長所、短所を理解して使用することが重要です。<br />
+------------------------------------------------------------------------------<br />
+■ WDSとEDS<br />
+<br />
+□ WDS<br />
+&nbsp; WDSは試料より発生した特性X線の波長を知る方法で、分光結晶と検出器で構成されています。<br />
+&nbsp; ローランド円の半径の長さが短ければ特性X線の強度は強くなりますが波長分解能は悪くなります。<br />
+&nbsp; 分光結晶により分光されたX線は、比例計数管と呼ばれるX線検出器で電気信号に変換されます。検出器には比較的エネルギーの低い線用のガスフロー比例計数管（PRガス：Ar 90%, CH<sub>4</sub> 10%）と、高いエネルギーX線用のXe封入型比例計数管があります。比例計数管で電気信号に変換されたX線は、プリアンプ、リニアアンプで増幅され波高分析器を経てレートメーター、計数器（スケーラー）で計数されます。<br />
+<br />
+□ EDS<br />
+&nbsp; EDSはSi(Li)半導体検出器とマルチチャンネル波高分析器を組み合わせたもの。試料から発生した種々のエネルギーをもったX線は、検出器のBeウィンドウまたは有機膜（UTW）を透過した後、Si(Li)検出器で電子、正孔対を生成させ、電流パルスに変換されます。このパルス波高がX線エネルギーに比例しているので、この信号を増幅し、パルス波高ごとに振り分ければ、X線のエネルギースペクトルを得ることができ、そのエネルギー値から元素を知ることができます。<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] JEOL資料<br />
+[2]&nbsp;EPMA表面分析ユーザーズミーティング（2006）<br />
+------------------------------------------------------------------------------

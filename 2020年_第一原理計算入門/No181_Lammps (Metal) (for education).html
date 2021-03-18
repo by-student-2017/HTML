@@ -1,0 +1,594 @@
+<p>Lammps Metal for education (windows 10 (64 bit))<br />
+------------------------------------------------------------------------------<br />
+■ lammps<br />
+<br />
+□ インストール方法&nbsp;(Edit: Jun/27/2021)<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="https://rpm.lammps.org/windows/admin/64bit/LAMMPS-64bit-18Jun2019.exe">LAMMPS-64bit-18Jun2019.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[<span class="pl-s"><span class="pl-pds">&quot;</span>C:\Program Files\LAMMPS 64-bit 18Jun2019\bin\lmp_serial.exe<span class="pl-pds">&quot;</span></span> -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[<span class="pl-s">C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります</span><br />
+<br />
+□ 描画ソフト<br />
+&nbsp;・gnuplot（<a href="http://www.gnuplot.info/">http://www.gnuplot.info/</a>）<br />
+&nbsp; <a href="http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php">http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php</a><br />
+・Ovito（<a href="https://www.ovito.org/windows-downloads/">https://www.ovito.org/windows-downloads/</a>）<br />
+※ web上に情報がありますので、お手数をおかけしますが、そちらをご参照ください<br />
+※ gnuplotのインストールと環境設定 (Edit: Dec/11/2020)<br />
+1.&nbsp;<a href="https://sourceforge.net/projects/gnuplot/files/gnuplot/">gnuplot - Browse /gnuplot at SourceForge.net</a>&nbsp;から gp528-win64-mingw.exe を得る<br />
+&nbsp; gp528-win64-mingw.exe をダブルクリック。設定はディフォルトのままでよい<br />
+2.&nbsp;コントロール パネル &gt; システムとセキュリティ &gt; システム<br />
+3. システムの環境設定 &gt; 環境変数（N）... &gt; システム環境変数（S）のPath &gt; 編集（I）... &gt; 新規（N）&gt;&nbsp;C:\Program Files\gnuplot\bin を追加する &gt; OK &gt; OK<br />
+------------------------------------------------------------------------------<br />
+■ 分子動力学シミュレーション<br />
+<br />
+□ 入力ファイルのダウンロード<br />
+&nbsp; by-student-2017 の lammps_education_metal_win (<a href="https://github.com/by-student-2017/lammps_education_metal_win">https://github.com/by-student-2017/lammps_education_metal_win</a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
+&nbsp;&nbsp;<br />
+□ シミュレーションの実行<br />
+1. 各種のフォルダの中にある run.bat をダブルクリックすれば計算が走る<br />
+2. cfg を Ovito で開けば構造が得られる<br />
+3. plot と記載のあるファイルをダブルクリックすれば図が得られる<br />
+&nbsp; ※ 温度が目的の値になっているか、エネルギーが一定の値になっているかを確認してみてください<br />
+※ 以上の手順は、data.inにある原子の情報、そして、in.lmpのポテンシャルと出力の原子の情報を書きかえれば他の材料でも同様に計算が可能です（Avogadroなどのフリーソフトを用いて構造のファイル（data.in）を作られる方もいます）<br />
+※ HEA用のdata.inは、FCC構造のcif -&gt; VESTAでスーパーセルを作りvasp形式で出力 -&gt; vasp形式のファイルを原子と原子の個数を書き換えて等量や非等量にする -&gt; vasp形式のファイルをOvitoで読み込んでlammpsのdata形式に出力、とすれば作成できます。<br />
+※ plotから得られるG(r)はX線や中性子線による全散乱（Total scattering）の結果との比較に用いるものです。msdは自己拡散係数を求めるのに利用します（立ち上がり近辺から直線を引いて求める）。<br />
+※ 計算終了後の構造を用いたい場合は&quot;in.data&quot;において&quot;read_data data.in.restart&quot;と&quot;replicate 1 1 1&quot;とします<br />
+※ 歪と圧力の関係から弾性定数を求めるには、まず構造緩和（格子と原子）をして圧力の非常に小さい構造（体積）を得ます。そして、例えば、xの長さをわずかに変えて、原子だけ構造緩和し、出力される圧力 pxx, pyy, pxy (=-&sigma;<sub>xx</sub>, -&sigma;<sub>yy</sub>, -&sigma;<sub>xy</sub>) [bar]などを応力として用いて弾性定数を計算します。行列式は教科書やwikipediaを参照してください。1 bar = 0.1 MPaです。lammpsで出力される圧力は圧縮が正になります<br />
+<br />
+◇ data.inの作り方 (Edit: Feb/14/2021)<br />
+1. VESTAやAvogadroで構造を作成しvaspの形式で出力する<br />
+2. 作成したvasp形式のファイルをOvitoで読み込む<br />
+3. Ovito上で、Export File<br />
+&nbsp; -&gt; [LAMMPS Data File (*)] -&gt; data.in<br />
+&nbsp; -&gt; LAMMPS atom style: atomic -&gt; OK -&gt; OK<br />
+<br />
+◇ unit cell -&gt; 5x4x3&nbsp;supercell<br />
+1.&nbsp;VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell<br />
+2.&nbsp;Transform...<br />
+----------<br />
+Rotation matrix P | Origin shift p<br />
+5.0 0.0 0.0 | 0.0&nbsp;<br />
+&nbsp;0.0 4.0 0.0 | 0.0<br />
+&nbsp;0.0&nbsp; 0.0 3.0 | 0.0<br />
+----------<br />
+3. Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
+4. File &gt; Export Data... &gt; VASP (POSCAR;*.vasp) &gt; Cartesian coordinates<br />
+<br />
+□ 他の系（他の元素の組み合わせ）で計算したい場合<br />
+&nbsp; 例えば、ポテンシャルを&rdquo;Fe-Cr-W&rdquo;用から&rdquo;Fe-Ni-Cr&rdquo;用に変更するには以下のようにします。＃以降はコメントになります。&rdquo;Fe-Cr-W&rdquo;に関する行を＃を付けてコメントにし、コメントにされていた&rdquo;Fe-Ni-Cr&rdquo;の＃を除いて計算するようにします。加えて&rdquo;# ----- Output setting -----&rdquo;などでの元素記号は使用するポテンシャルの順番と名称に書き換えてください。元素の書き換えが必要なファイルは&rdquo;in.lmp&rdquo;と&rdquo;plot_msd.gpl&rdquo;の2つです。<br />
+----------(before)----------<br />
+# -----(Fe-Ni-Cr) (FCC)<br />
+#pair_style &nbsp; &nbsp; &nbsp;eam/fs<br />
+#pair_coeff &nbsp; &nbsp; &nbsp;* * ./eam/Fe-Ni-Cr_fcc.eam.fs Fe Ni Cr<br />
+# -----(Fe-Cr-W)<br />
+pair_style &nbsp; &nbsp; &nbsp;hybrid/overlay eam/alloy eam/fs<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * eam/alloy ./eam/FeCrW_d.eam.alloy Fe Cr W<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * eam/fs &nbsp; &nbsp;./eam/FeCrW_s.eam.fs Fe Cr W<br />
+---------------------------<br />
+----------(after)----------<br />
+# -----(Fe-Ni-Cr) (FCC)<br />
+pair_style &nbsp; &nbsp; &nbsp;eam/fs<br />
+pair_coeff &nbsp; &nbsp; &nbsp;* * ./eam/Fe-Ni-Cr_fcc.eam.fs Fe Ni Cr<br />
+# -----(Fe-Cr-W)<br />
+#pair_style &nbsp; &nbsp; &nbsp;hybrid/overlay eam/alloy eam/fs<br />
+#pair_coeff &nbsp; &nbsp; &nbsp;* * eam/alloy ./eam/FeCrW_d.eam.alloy Fe Cr W<br />
+#pair_coeff &nbsp; &nbsp; &nbsp;* * eam/fs &nbsp; &nbsp;./eam/FeCrW_s.eam.fs Fe Cr W<br />
+---------------------------<br />
+<br />
+□ Ovito<br />
+&nbsp; run.bat をダブルクリックした後（計算後）に得られる data.in.restart を data.in などの名称に変えて他の計算に移ることも良いでしょう。この他、cfg &gt; Ovito で最新の .cfg を開く &gt; File &gt; Export File &gt; POSCAR File (*)としてPOSCARという名称で保存 &gt; [Output reduced coordinates]にチェックを入れるとDirectになる。チェックなしだとCartesianになる &gt; OK &gt; VESTAで表示することが可能 &gt; 他のファイル形式にして次の工程へ（第一原理計算に移るなど）（※ VESTAでPOSCARとして出力するとOvitoのPOSCARよりも見やすくなります）<br />
+&nbsp; Ovito では右上の[Add modification]で[Polyhedral template maching]を選択することで右下にRMSDが表示されます。RMSD cutoffの値を0.01から大きくしていくとどれだけズレているかがわかります。<br />
+&nbsp; Ovito では右上の[Add modification]で[Coordination analysis]を選択することで右下にRDFが表示されます。Cutoff radiusの値を変えてrの表示範囲を変えたりできます。&quot;Compute partial RDFs&quot;にチェックを入れることで各元素のRDFを見ることができます。<br />
+※ OvitoはVESTAからのPOSCARを読み込めるので、第一原理計算から得られた構造をVESTAでPOSCAR形式にすることで、上記のOvitoによるRMSDやRDFの解析が可能です。第一原理計算は通常0 Kです（第一原理計算でMDを選択するとと有限温度での計算になる）。そのため、分子動力学計算で温度がいくつに設定されているかを調べて比較しましょう（例えば、第一原理計算は通常0 Kであるので、分子動力学（lammpsなど）ではそれに近い4 K （He）や15 K（He冷凍機で冷やしたときに到達しやすい物質の温度）、77 K（液体窒素での温度）など、第一原理計算に近くした温度での結果と比較すると両者の差が縮まるだろうと考える（それがかなり上手くいくとは限らないが））。<br />
+<br />
+□&nbsp;tutorial_1_Monte_Carlo<br />
+&nbsp; モンテカルロ（MC）法を用いて、入力ファイルで指定した温度に対して熱力学的（ボルツマン分布的）に許されるエネルギーの範囲で原子の最適な位置を計算します。LammpsのExampleにある2次元のMCを書き換えて3次元にしてあります。<br />
+&nbsp; &quot;time-stamped force-bias Monte Carlo&quot;法は&quot;tutorial_1_time-stamped_force-bias_Monte_Carlo&quot;のファイルになります。<br />
+&nbsp; swapと付いたファイルは2つの原子の入れ替えを行うタイプ（正しく動作しているかは不明。SQSを得るために作りました）。<br />
+&nbsp; 格子定数は手作業で徐々に値を変えてエネルギーが最も負の値となる構造を採用します。スクリプトを作成して自動化してもよいでしょう。<br />
+<br />
+□ tutorial_2_MSD_and_RDF<br />
+&nbsp; 平均自乗変位(MSD)と動径分布関数(RDF)を計算します<br />
+&nbsp; 入力ファイルを理解するには[https://amorphous.tf.chiba-u.jp/lecture.files/ms-workshop/molten.html]を参照すると良いでしょう。MSDは立ち上がりからある程度（timeやstepが）経過して、周期的に変動するようになったところから平均をとって比較してみてください。OvitoのRMSDと実験値との傾向を比較してみてもよいと思います。一方、MSDの立ち上がりの部分は、直線で近似することで自己拡散係数が得られます（大窪先生のHP「<a href="https://amorphous.tf.chiba-u.jp/lecture.files/ms-workshop/molten.html">https://amorphous.tf.chiba-u.jp/lecture.files/ms-workshop/molten.html</a>」を参照してください）<br />
+<br />
+□ tutorial_3_temp_and_press<br />
+&nbsp; 温度や圧力を変えたときの構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の 298.0の値を変えれば温度が、1.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 298.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 1.0 # 0.1 MPa (bar units)<br />
+<br />
+□ tutorial_4_strain<br />
+&nbsp; 歪ませたときの構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の 0.05の値を変えればx軸方向に単位胞が伸びます。縮める場合は負の小さな値にしてみてください。<br />
+&nbsp; variable &nbsp; &nbsp;Erate index 0.05 # 1/(1.0 fs), if Erate &lt; 0.0 (compress)<br />
+<br />
+□ tutorial_5_melt_and_cool<br />
+&nbsp; 温度を上げた後に冷やした場合の構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の2673.0や1273.0, 673.0の値を変えると温度が変化します。どこまでの温度が可能かは用いるポテンシャルに依存します。計算に用いているポテンシャルの論文を参照してください。かなり高い温度にしているのは、温度と時間が指数関数の関係にあるとして、計算時間を短くするためです。原子の動きが異常であれば温度を低くして計算時間を長くしてください。<br />
+&nbsp; variable &nbsp; &nbsp;tempm index 2673.0 # K (heat)<br />
+&nbsp; variable &nbsp; &nbsp;temph index 1273.0 # K (cool No.1)<br />
+&nbsp; variable &nbsp; &nbsp;tempc index &nbsp; 673.0 # K (cool No.2)<br />
+<br />
+□ tutorial_6_thermal<br />
+&nbsp; 熱伝導率の計算<br />
+&nbsp; in.lmpファイル中の下の 298.0の値を変えれば温度が、1.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 298.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 1.0 # 0.1 MPa (bar units)<br />
+&nbsp; log.lammpsファイルの最後の方に、熱伝導率（average conductivity）が記載されています。温度（K,）の後に記載されているのは数密度（Number density）です。log.lammpsでStep数が増えていくと、v_Jxやv_Jyやv_Jzは0、v_k11やv_k22やv_k33はおおむね一定の値になっているかも確認してみてください<br />
+※ これは定性的または半定量的な熱伝導率の評価として利用されます<br />
+<br />
+□ tutorial_7_viscosity<br />
+&nbsp; 粘性率（粘性係数、粘度とも呼ばれる）の計算<br />
+&nbsp; in.lmpファイル中の下の 1298.0の値を変えれば温度が、1.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 1298.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 1.0 # 0.1 MPa (bar units)<br />
+&nbsp; log.lammpsファイルの最後の方に、粘性率（average viscosity）が記載されています。温度（K,）の後に記載されているのは数密度（Number density）です。log.lammpsでStep数が増えていくと、&quot;v_pxy v_pxz v_pyz v_v11 v_v22 v_v33&quot;はおおむね一定の値になっているかも確認してみてください<br />
+※ これは定性的または半定量的な粘性率の評価として利用されます<br />
+<br />
+□ tutorial_8_elastic<br />
+&nbsp; 0 Kでの弾性定数の計算。計算後、python3が使える場合は下記のコマンドで弾性定数の一覧が表示されます。<br />
+&nbsp; [Shift+右クリック] &gt; [Linuxシェルをここに開く] &gt; python3&nbsp;compliance_python3.py<br />
+&nbsp; 異なった元素で計算する場合は、data.inで構造、init.modで質量、potential.modでポテンシャルの指定を書き換えてください<br />
+<br />
+□ tutorial_9_elastic_temp<br />
+&nbsp; 有限温度での弾性定数の計算。計算後、python3が使える場合は下記のコマンドで弾性定数の一覧が表示されます。<br />
+&nbsp; [Shift+右クリック] &gt; [Linuxシェルをここに開く] &gt; python3&nbsp;compliance_python3.py<br />
+&nbsp; 異なった元素で計算する場合は、data.inで構造、init.modで質量と温度、potential.modでポテンシャルの指定を書き換えてください<br />
+<br />
+□ tutorial_10_phonon<br />
+&nbsp; フォノン分散とフォノンDOSを計算します。しかし、FCCでのプリミティブセルやgrapheneにしか成功していません。プリミティブセルのみを対象に計算してみる価値はあるかもしれませんが、この部分の発展は後世に託したいと思います。<br />
+&nbsp; ボランティア精神にあふれた天才が登場してくれるのを待ちましょう。<br />
+<br />
+□ Reference_eam_database (Generalized EAM = GEAM)<br />
+&nbsp; (Cu, Ag, Au, Ni, Pd, Pt, Al, Pb, Fe, Mo, Ta, W, Mg, Co, Ti, Zr)<br />
+&nbsp; EAM形式のポテンシャルを作成するコードです。run.bat をクリックするとEAM形式のポテンシャル（*.<span style="font-size:14px">_Zhou04.eam.alloy</span>）が作成されます。入力ファイルは EAM.input で、既に記載されている記述と同じ形式にして元素だけ書き換えたり、記載する量を増やすことで幾つかの組み合わせのポテンシャルを作ることができます。References に lammps で実際に動かすときの in.lmp も追加しておきました。EAM_code にポテンシャル作成に必要な各元素のパラメーターの情報が記載されています。EAM_code において他の元素の記述を増やしたり、計算したい系により合うようにするのも良いでしょう。README をご参照ください。第一原理計算の結果とあうようにパラメータを遺伝的アルゴリズム（GA）などを用いながら最適化させていくことがよく行われます。第一原理計算と potfit などを用いて EAM や ADP形式のポテンシャルを作成することも行われています。EAM_code をほぼ全ての元素準備したり、特定の必要な分野に特化したものなどを作って無償配布してくれるようなプロジェクトはないのでしょうか？<br />
+&nbsp; PWscfを用いて77Kと300 Kで単体での凝集エネルギーとForceをフィットさせた元素をEAM_codeに暫定版ですが追加しておきました（V,Ca,Na,Cr,Mn,Nb,Ir,Sr,Rh,Ru,Os,Hf,Re,Zn。並びはForceの再現が悪くなる順番で、PWscfと比べてVで数%、Znで65%程度異なる。単体での凝集エネルギーの差は0.04 eV/atom以内となったがForceも含めてあまり高い期待は抱かないで欲しい。私のPCのスペックが低すぎてより広い範囲で十分な訓練データの作成とテストができないためである）。negative Cauchy pressure (or <span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">discrepancy)&nbsp;</span>を示す元素（Sr, Cr, Ir, Rh, Yb, U, 共有結合の元素）や合金はEAMでは利用が推奨されません。金属元素以外はフィットも悪くエネルギーの再現も良くないためhybridを用いてより精度を高めてください。予測される計算精度は「金属元素-金属元素の組み合わせ　＞　金属元素-金属元素以外の組み合わせ　＞　金属元素以外-金属元素以外の組み合わせ」となります。そのため、特に「金属元素以外-金属元素以外の組み合わせ」は、角度の影響も入れたadpやmeam, airebo, tersoff, sw、この他に&sigma;と&pi;結合を考慮したbopなどのポテンシャルとのhybridでの利用が推奨されます。hybridを利用した論文を最近（2019年）では見かけるでしょう。hybrid/overlayを用いて各軌道のポテンシャルを混ぜ合わせて用いる方法もあります（例えば、NISTにあるFe-Cr-Wのポテンシャル）。「金属元素-金属元素の組み合わせ」などでもNISTなどで公開されているMEAMポテンシャルが研究対象と一致していればそれを用いてください。追加部分はあくまでもポテンシャルの組み合わせの欠けた部分を少しでも補うためと理解していただければ幸いです（私の研究環境ではフィットして作成したポテンシャルを十分にテストすることもできないため）。第一原理計算のPWscfに結果をフィットさせたEAMポテンシャルのデータが揃えば、次に単体でのADPのポテンシャル、そして2元系でのADPのポテンシャルと研究対象を移行していけますが、私の研究環境では途方もない年月が必要になります。ポテンシャルのフィットに用いるPC（壊すといけないのでノートPC）を購入するために色々な財団の助成も探したが年齢で既に落ちていた。就職氷河期近辺の扱いは厳しい。<br />
+&nbsp; ボランティア精神にあふれた奇特な方と天才が登場してくれるのを待ちましょう。<br />
+&nbsp;<br />
+※ そこそこ定量的な結果を与える第一原理計算とは異なり、分子動力学は定性や半定量的な結果を与えます。一方で、第一原理計算では3ヶ月から半年もかかる類似の計算も、分子動力学ではOSがWindowsのノートPCを用いても数十分で計算できます（有限温度やナノ秒程度の計算も第一原理計算よりも容易です）。実験値と値は異なっていても、実験値と相関さえ出ていれば、多項式でフィットさせたり、機械学習などを用いて予測精度を高めることができます。最近では、分子動力学法でも第一原理計算に近い結果を与える手法も研究・開発が進んでおり、論文でその成果が報告されています。どのような用途にも利用可能な分子動力学用のポテンシャルを作ることはできませんが、目的の系に合うようなポテンシャルを作ることはできると思いますので、今後の発展とボランティア精神にあふれた奇特な方と天才が登場して&rdquo;無償で&rdquo;lammpsのポテンシャルが豊富になることを願いたいと思います。lammpsだけでなくDFTB+のパラメータやPWscfのVCAでPAWが可能になるなど&rdquo;無償で&rdquo;豊富になってくれると嬉しいのですが。食に困らず地位が安定して自由に研究できる環境があればよいのですが、ノーベル賞級の方でも研究資金に困る時代ですのであきらめるしかないのでしょうね。そういう意味では、東大教授に反発した北里柴三郎（ノーベル賞は受けていない）を助けた福沢諭吉は凄い方だと思います。<br />
+------------------------------------------------------------------------------<br />
+■ units and potential<br />
+&nbsp; 上記の入力ファイルはすべて&quot;units metal&quot;であるため、下記のポテンシャルが利用可能です。&quot;tutorial_1_Monte_Carlo_3element&quot;には各種のポテンシャルでの入力例を記載しておきましたので参考にしてください。&quot;tutorial_&quot;の2以降も同様に書きかえれば良いです。<br />
+<br />
+□ units metal<br />
+・Stillinger-Weber (SW)<br />
+・Tersoff<br />
+・EAM, FS<br />
+・MEAM<br />
+・ADP<br />
+・REBO, AIREBO<br />
+・COMB<br />
+・COMB3<br />
+・BOP<br />
+・EIM<br />
+・adiabatic core/shell model<br />
+・Streitz-Mintmire<br />
+・vashishta<br />
+<br />
+&nbsp; 下記のポテンシャルを用いる場合は、&quot;units real&quot;とする必要があります。上記の入力ファイルを大幅に書き換える必要があります。<br />
+□ units real<br />
+・OPLS<br />
+・OPLS &amp; Amber (<a href="https://github.com/agiliopadua/ilff">https://github.com/agiliopadua/ilff</a>)<br />
+・CHARMM(charmm22)<br />
+・dreiding<br />
+・ReaxFF<br />
+<br />
+[UP1] C:\Program Files\LAMMPS 64-bit 18Jun2019\Examples<br />
+------------------------------------------------------------------------------<br />
+■ potential files<br />
+&nbsp; 上記の入力ファイルの例にあるポテンシャル以外にも、下記のサイトから得られるポテンシャルを用いて利用することができます。利用するポテンシャルの論文やポテンシャルのファイルの中身を読んだり、実験や半経験的量子化学計算や第一原理計算などの結果と比較して定性的に結果が合うかどうかを確認してから本格的な研究に利用します。<br />
+<br />
+□ potentials<br />
+[1] NIST Interatomic Potential<br />
+&nbsp; <a href="https://www.ctcms.nist.gov/potentials/">https://www.ctcms.nist.gov/potentials/</a><br />
+&nbsp; <a href="https://www.ctcms.nist.gov/potentials/resources.html">https://www.ctcms.nist.gov/potentials/resources.html</a><br />
+[2] Database of Published Interatomic Potential Parameters<br />
+&nbsp; <a href="https://www.ucl.ac.uk/klmc/Potentials/">https://www.ucl.ac.uk/klmc/Potentials/</a><br />
+[3] EAM potentials<br />
+&nbsp; <a href="https://sites.google.com/site/eampotentials/Home">https://sites.google.com/site/eampotentials/Home</a><br />
+[4] JARVIS for Force-fields<br />
+&nbsp; <a href="https://www.ctcms.nist.gov/~knc6/periodic.html">https://www.ctcms.nist.gov/~knc6/periodic.html</a><br />
+[5] Embedded Atom Method (EAM) Tabulation<br />
+&nbsp; <a href="https://atsimpotentials.readthedocs.io/en/latest/potentials/eam_tabulation.html">https://atsimpotentials.readthedocs.io/en/latest/potentials/eam_tabulation.html</a><br />
+[6] Carbon Potentials<br />
+&nbsp; <a href="http://www.carbonpotentials.org/potentials">http://www.carbonpotentials.org/potentials</a><br />
+[7] XMD - Molecular Dynamics for Metals and Ceramics&nbsp;<br />
+&nbsp; <a href="http://xmd.sourceforge.net/eam.html">http://xmd.sourceforge.net/eam.html</a><br />
+[8] Potentials generated with potfit<br />
+&nbsp; <a href="https://www.potfit.net/wiki/doku.php?id=potentials:main">https://www.potfit.net/wiki/doku.php?id=potentials:main</a><br />
+[9] Interatomic Potential Generation<br />
+&nbsp; <a href="https://icme.hpc.msstate.edu/mediawiki/index.php/Interatomic_Potential_Generation">https://icme.hpc.msstate.edu/mediawiki/index.php/Interatomic_Potential_Generation</a><br />
+[10] Potentials<br />
+&nbsp; <a href="https://norman.jiht.ru/wiki/index.php/Potentials">https://norman.jiht.ru/wiki/index.php/Potentials</a><br />
+[11] Dr. Adri van Duin&nbsp;<br />
+&nbsp; <a href="https://www.engr.psu.edu/adri/">https://www.engr.psu.edu/adri/</a><br />
+[12] Welcome to the Knowledgebase of Interatomic Models! (OpenKIM)<br />
+&nbsp; <a href="https://openkim.org/">https://openkim.org/</a><br />
+[13] potential_LAMMPS Reference Records<br />
+&nbsp; <a href="https://github.com/usnistgov/iprPy/tree/master/library/potential_LAMMPS">https://github.com/usnistgov/iprPy/tree/master/library/potential_LAMMPS</a><br />
+[14] KIST Integrated Force Field Platform<br />
+&nbsp; <a href="http://kiff.vfab.org/">http://kiff.vfab.org/</a><br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[MC1] Monte Carlo simulations with LAMMPS<br />
+&nbsp; <a href="https://lammps.sandia.gov/workshops/Aug15/PDF/talk_Thompson1.pdf">https://lammps.sandia.gov/workshops/Aug15/PDF/talk_Thompson1.pdf</a><br />
+[MC2] fix tfmc command (amorphous -&gt; crystal)<br />
+&nbsp; <a href="https://lammps.sandia.gov/doc/fix_tfmc.html">https://lammps.sandia.gov/doc/fix_tfmc.html</a><br />
+&nbsp; <a href="https://lammps.sandia.gov/threads/msg69314.html">https://lammps.sandia.gov/threads/msg69314.html</a><br />
+&nbsp; <a href="https://lammps.sandia.gov/threads/msg69318.html">https://lammps.sandia.gov/threads/msg69318.html</a><br />
+&nbsp; <a href="https://lammps.sandia.gov/threads/msg69323.html">https://lammps.sandia.gov/threads/msg69323.html</a><br />
+&nbsp; <a href="https://lammps.sandia.gov/threads/msg69348.html">https://lammps.sandia.gov/threads/msg69348.html</a><br />
+&nbsp; <a href="https://lammps.sandia.gov/threads/msg69352.html">https://lammps.sandia.gov/threads/msg69352.html</a><br />
+[SGC1] vcsgc-lammps (semi-grandcanonical) (pair_style eam/cd, eam/alloy or&nbsp; eam/fs)<br />
+&nbsp; <a href="https://vcsgc-lammps.materialsmodeling.org/">https://vcsgc-lammps.materialsmodeling.org/</a><br />
+[GCMC1] fix gcmc command<br />
+&nbsp; <a href="https://lammps.sandia.gov/doc/fix_gcmc.html">https://lammps.sandia.gov/doc/fix_gcmc.html</a><br />
+[GCMC2] Grand canonical Monte Carlo simulations of gas uptake in microporous materials using LAMMPS<br />
+&nbsp; <a href="https://www.osti.gov/servlets/purl/1120653">https://www.osti.gov/servlets/purl/1120653</a><br />
+[GCMC3] pysimm<br />
+&nbsp; <a href="https://www.sciencedirect.com/science/article/pii/S2352711018300141">https://www.sciencedirect.com/science/article/pii/S2352711018300141</a> (paper)<br />
+&nbsp; <a href="https://pysimm.org/">https://pysimm.org/</a> (code)<br />
+[R1] Nanofluidics An Introduction<br />
+&nbsp; <a href="https://books.google.co.jp/books?id=VwqWDwAAQBAJ">https://books.google.co.jp/books?id=VwqWDwAAQBAJ</a><br />
+[P1]&nbsp;J. Koyanagi et al., Composites Part C: Open Access 2 (2020) 100041.<br />
+&nbsp; <a href="https://www.sciencedirect.com/science/article/pii/S2666682020300414">Molecular dynamics simulation for the quantitative prediction of experimental tensile strength of a polymer material - ScienceDirect</a></p>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">
+<p>------------------------------------------------------------------------------</p>
+
+<div>■ high entropy alloys (HEA)<br />
+<br />
+□ Information<br />
+・every element: 5 - 35 at.%<br />
+・simple solid solution phase<br />
+・The mixing entropy &Delta;<em>S</em><sub>mix</sub>&nbsp;= -<em>R</em>&nbsp;* &Sigma;<sup>N</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*ln(c<sub>i</sub>)<br />
+&nbsp; where R is the ideal gas constant, N is the number of components, and c<sub>i</sub>&nbsp;is the atomic fraction of component i.</div>
+
+<div>&nbsp; equiatomic alloy (5 component): 1.6*<em>R</em>&nbsp;= 1.6*8.617*10<sup>-5</sup>&nbsp;eV/K<br />
+&nbsp;&nbsp;= 0.04 eV (300 K), 0.09 eV (673 K), 0.12&nbsp;eV (873 K), 0.148 eV (1073 K), 0.175 eV (1273 K)<br />
+・The enthalpy of mixing &Delta;H<sub>mix</sub>&nbsp;=&nbsp;&Sigma;<sup>N</sup><sub>i=1,i&ne;j</sub>&nbsp;4*&Delta;H<sup>mix</sup><sub>AB</sub>*c<sub>i</sub>*c<sub>j</sub><br />
+&nbsp; where &Delta;H<sup>mix</sup><sub>AB&nbsp;</sub>is the binary enthalpy of mixing for A and B.<br />
+&nbsp; &Delta;H<sub>mix</sub>&nbsp;= about -10 - 5 kJ/mol = about&nbsp;-0.1036 -&nbsp;0.052 eV<br />
+・unitless parameter &Omega; = T<sub>m</sub>*&Delta;S<sub>mix</sub>/|&Delta;H<sub>mix</sub>|<br />
+&nbsp; where T<sub>m&nbsp;</sub>is the average melting point of the elements in the alloy.&nbsp;<br />
+&nbsp; &Omega; &gt;= 1.1: promote solid solution development.<br />
+・&delta; = [&Sigma;<sup>N</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*(1-r<sub>i</sub>/r<sub>avg</sub>)]<sup>0.5</sup><br />
+&nbsp; where r<sub>i</sub>&nbsp;is the atomic radius of element i.<br />
+&nbsp; r<sub>avg</sub>&nbsp;=&nbsp;&Sigma;<sup>N</sup><sub>i=1</sub>&nbsp;c<sub>i</sub>*r<sub>i</sub><br />
+&nbsp; &delta; =&lt; 6.6 %: Formation of a solid solution phase.<br />
+&nbsp; 4% &lt; &delta; =&lt; 6.6%: intermetallics (some alloys)<br />
+・VEC: BCC &lt; 6.87 &lt; mix (BCC and FCC) &lt; 8 &lt;= FCC<br />
+<br />
+・The high concentrations of multiple elements leads to slow diffusion (higher activation energy than pure metal and stainless steels).<br />
+<br />
+・HEA (BCC): high yield strength, low ductility.<br />
+・HEA (FCC): low yield strength, high ductility.<br />
+<br />
+・FeCrMnNiCo (FCC): high fracture toughness (low temperature)<br />
+・VNbMoTaW (BCC): high yield strength (&gt; 600 MPa) at about&nbsp;1673&nbsp;K.<br />
+・AlCoCrFeNi (BCC): No ductile to brittle transition (about 77 K).<br />
+・Al<sub>0.5</sub>CoCrCuFeNi: high fatigue life and endurance limit.</div>
+
+<div>・Al<sub>20</sub>Li<sub>20</sub>Mg<sub>10</sub>Sc<sub>20</sub>Ti<sub>30</sub>: density 2.67 g/cm<sup>3</sup>, microhardness of 4.9 - 5.8 GPa.<br />
+・Al<sub>5</sub>Ti<sub>5</sub>Co<sub>35</sub>Ni<sub>35</sub>Fe<sub>20</sub><br />
+・HfMoTaTiZr (BCC)<br />
+&nbsp; The yield strength of HfMoNbTaTiZr had a yield strength 6 times greater than HfNbTaTiZr at 1200&deg;C with a fracture strain of 12% retained in the alloy at room temperature. [2]<br />
+・CoCrCuFeNi (FCC):&nbsp;paramagnetic<br />
+&nbsp;&nbsp;But upon adding titanium, it forms a complex microstructure consisting of fcc solid solution, amorphous regions and nanoparticles of Laves phase, resulting in superparamagnetic behavior. [2]<br />
+・BiFeCoNiMn:&nbsp;High magnetic coercivity<br />
+・TaNbHfZrTi:&nbsp;Superconductivity (5.0 - 7.3 K)<br />
+・AlTiVCr<sub>1-x</sub>Nb<sub>x</sub><br />
+・MoPdRhRuTc<br />
+<br />
+□ Lattice constant
+<table border="1" cellpadding="1" cellspacing="1" style="width: 504.991px;">
+	<tbody>
+		<tr>
+			<td style="width: 172px; text-align: center;">Compsition</td>
+			<td style="width: 93px; text-align: center;">Structure</td>
+			<td style="width: 153px; text-align: center;">Lattice constant (A)</td>
+			<td style="width: 67px; text-align: center;">Reference</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center; height: 20px;">CrMnFeCoNi</td>
+			<td style="width: 93px; text-align: center; height: 20px;">FCC</td>
+			<td style="width: 153px; text-align: center; height: 20px;">3.598</td>
+			<td style="width: 67px; text-align: center; height: 20px;">L1</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">CoCrFeMnNi</td>
+			<td style="width: 93px; text-align: center;">FCC</td>
+			<td style="width: 153px; text-align: center;">3.59</td>
+			<td style="width: 67px; text-align: center;">L2</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center; height: 21px;">CoCrCuFeNi</td>
+			<td style="width: 93px; text-align: center; height: 21px;">FCC</td>
+			<td style="width: 153px; text-align: center; height: 21px;">3.579</td>
+			<td style="width: 67px; text-align: center; height: 21px;">L3</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center; height: 21px;">Al<sub>0.5</sub>CoCrCuFeNi</td>
+			<td style="width: 93px; text-align: center; height: 21px;">FCC</td>
+			<td style="width: 153px; text-align: center; height: 21px;">3.6</td>
+			<td style="width: 67px; text-align: center; height: 21px;">L4</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center; height: 21px;">Al<sub>20</sub>Li<sub>20</sub>Mg<sub>10</sub>Sc<sub>20</sub>Ti<sub>30</sub></td>
+			<td style="width: 93px; text-align: center; height: 21px;">FCC</td>
+			<td style="width: 153px; text-align: center; height: 21px;">4.323</td>
+			<td style="width: 67px; text-align: center; height: 21px;">L5</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">TiNbMoTaW</td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">3.240</td>
+			<td style="width: 67px; text-align: center;">L6</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">MoNbTaTiV</td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">3.224</td>
+			<td style="width: 67px; text-align: center;">L7</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">HfMoTaTiZr&nbsp;</td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">3.373</td>
+			<td style="width: 67px; text-align: center;">L8</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">HfMoNbTaTiZr</td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">3.361</td>
+			<td style="width: 67px; text-align: center;">L8</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">AlCoCrFeNi</td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">2.878</td>
+			<td style="width: 67px; text-align: center;">L9</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">AlTiVCr<sub>1-x</sub>Nb<sub>x</sub></td>
+			<td style="width: 93px; text-align: center;">BCC</td>
+			<td style="width: 153px; text-align: center;">3.06</td>
+			<td style="width: 67px; text-align: center;">L10</td>
+		</tr>
+		<tr>
+			<td style="width: 172px; text-align: center;">MoPdRhRuTc</td>
+			<td style="width: 93px; text-align: center;">HCP</td>
+			<td style="width: 153px; text-align: center;">&nbsp;</td>
+			<td style="width: 67px; text-align: center;">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+[L1]&nbsp;Z. Qiu et al., International Journal of Lightweight Materials and Manufacture, 1 (2018) 33-39.<br />
+[L2]&nbsp;E-Wen. Huang et al., Scientific Reports volume 9, Article number: 14788 (2019).<br />
+[L3]&nbsp;M.Y. Gutkin et al., Acta Mater., 54 (2006) 2489&ndash;2499.&nbsp;<br />
+[L4] M. A. Hemphill et al., Acta Materialia, 60 (2012) 5723-5734.<br />
+[L5]&nbsp;K. M. Youssef et al.,&nbsp;Mater. Res. Lett., 3 (2015) 95&ndash;99.<br />
+&nbsp;&nbsp;<a href="https://www.tandfonline.com/doi/pdf/10.1080/21663831.2014.985855">https://www.tandfonline.com/doi/pdf/10.1080/21663831.2014.985855</a><br />
+[L6]&nbsp;Z. D. Han et al., Intermetallics, 84 (2017) 153-157.<br />
+[L7]&nbsp;H.W. Yao et al.,:&nbsp;<a href="https://www.osti.gov/pages/servlets/purl/1482351">https://www.osti.gov/pages/servlets/purl/1482351</a>&nbsp;<br />
+[L8]&nbsp;Chien-Chang Juan et al.,&nbsp;Intermetallics 62 (2015) 76-83.<br />
+[L9] W-Ren Wang et al., Intermetallics 26 (2012) 44-51.<br />
+[L10]&nbsp;S. Huang et al., Acta Materialia, 199, (2020) 53-62.<br />
+&nbsp;&nbsp;<a href="https://www.sciencedirect.com/science/article/abs/pii/S1359645420305930?dgcid=rss_sd_all">https://www.sciencedirect.com/science/article/abs/pii/S1359645420305930?dgcid=rss_sd_all</a><br />
+[KKR-CPA1]&nbsp;A. Sharma et al.,&nbsp;Scientific Reports | 6:31028 | DOI: 10.1038/srep31028.<br />
+&nbsp;&nbsp;<a href="https://www.nature.com/articles/srep31028.pdf">https://www.nature.com/articles/srep31028.pdf</a><br />
+[EMTO-CPA1]&nbsp;A. J. Zaddach et al.,:<br />
+&nbsp;&nbsp;<a href="https://pdf.sciencedirectassets.com/271617/1-s2.0-S0966979515X00100/1-s2.0-S0966979515300704/Alexander_J_Zaddach_electron_microscopy_2015.pdf?X-Amz-Security-Token=IQoJb3JpZ2luX2VjENX%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FwEaCXVzLWVhc3QtMSJHMEUCIAYN%2BGBRccy%2FF4Yy2ruMKSNdzPBY8xKg1QiHxCfuygxaAiEAswIgy3Xo3KhQ2zEfSwPuVZd0%2FAHAcZbgNvuqavxFq%2B4qvQMI%2Fv%2F%2F%2F%2F%2F%2F%2F%2F%2F%2FARADGgwwNTkwMDM1NDY4NjUiDJr8qRo8SqwyEtPa9yqRA2wDqWBgh%2F%2FDsS8Ys24GSWRaUXliW77N2SRwo3%2F31Xrz5obUcVdNW5OSRwV4uYgq%2BjuOgzU%2BEWbyJKWv6MjoqcfDCGc%2BUjYxVF%2FqnxjzC7%2BE7i3m%2B119cSV1RiG5PzHwN8RHoUUZuUjX6XOVSb9TeLCjbK2fAmPUrx5%2Bedxh1OhvFrV5VxkAaZp%2FrsZcM0OQB6zEapLMyRq1OKRM3m61Osu8VsQ8PjGnY8f9Hpmmr2QxfSxkoiUAYWq%2Be3cV70tnkSnZZ8bsVJGL5nc2OvEvoB5cDS0wBM5tObwYbozRtYnjnUcF9lGh8T6966riYjbDUdg1sHve7D%2FWuIYEZax5JsYv893wYioWpcj1cVn49KjF9dJFYrZ%2BXW5oEnKGxbeaMEsSxAgECP4DKIFgxlLIrwrP7SBvI4VScy3efx2Nc%2BxWHZRYveV1ahcOZWIHwQ3WE%2FQ0H6KNq08CEPHtPRvklaeMaPVQOZwrDFq2jXAz7HeLwLX6UivFRvLZzzAqmwjY2JB%2FYGy1MFnOGz0xyWVokJXaMIf2wIIGOusBU1KzlZgBJ%2B1BBTqjcu%2BvCKLx4LJgVc4o9plJwZ49BklyHHjjzn0aGGu%2FmOraBYYHRx3IzFTGK8Ew8%2Bxcj6YpetlQdra7Xj2yCxD%2FERKr%2BdgX1O3QY%2F2dDJCeBnMLlXd2rw3KZnpZoLK7mDhzoTBfysUMh9IDtVX9Ykii%2F9fsl8AGSfd6hTenFPI3X0dg6Eq1cs%2BmOWqVTuAOt%2BRzeq8H6R2Wuug3jF0q0g2pq0F4fnvBIdlnDBJUswEBxv7BaO9umV8BN%2F4zcPomI17h7a2xwbeJ8xSi4SnBZtlNIb3UpohzLFj5oBv70DDJEg%3D%3D&amp;X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Date=20210316T062116Z&amp;X-Amz-SignedHeaders=host&amp;X-Amz-Expires=300&amp;X-Amz-Credential=ASIAQ3PHCVTY4JG4TJMG%2F20210316%2Fus-east-1%2Fs3%2Faws4_request&amp;X-Amz-Signature=d688ee226d86da1f00cc6b3b7d90a8c03f46e2eb03cfe7234e4580f4721835e1&amp;hash=319eec8c02aca080c979b24fcf63c5e055cb73b32dba39dfa452f39fc9eab97e&amp;host=68042c943591013ac2b2430a89b270f6af2c76d8dfd086a07176afe7c76c2c61&amp;pii=S0966979515300704&amp;tid=pdf-bb56cc15-fc43-4e26-bb3f-b49e508e84ad&amp;sid=ab51fd728ee45843078ab9e2c9832a690e0bgxrqa&amp;type=client">Alexander_J_Zaddach_electron_microscopy_2015.pdf (sciencedirectassets.com)</a><br />
+□ Recommend to see&nbsp;<br />
+・<a href="https://www.nature.com/articles/srep39803">The Effect of Electronic Structure on the Phases Present in High Entropy Alloys | Scientific Reports (nature.com)</a>&nbsp;&gt;&nbsp;<a href="https://www.nature.com/articles/srep39803.pdf">The Effect of Electr.onic Structure on the Phases Present in High Entropy Alloys (nature.com)</a>&nbsp;<br />
+・<a href="https://static.cambridge.org/content/id/urn:cambridge.org:id:article:S0884291417003661/resource/name/S0884291417003661sup001.pdf">https://static.cambridge.org/content/id/urn:cambridge.org:id:article:S0884291417003661/resource/name/S0884291417003661sup001.pdf</a><br />
+・<a href="https://egrove.olemiss.edu/cgi/viewcontent.cgi?article=2071&amp;context=etd">https://egrove.olemiss.edu/cgi/viewcontent.cgi?article=2071&amp;context=etd</a><br />
+<br />
+□ KKR-CPA method<br />
+・<a href="https://github.com/by-student-2017/Akai-KKR-HEA-examples.git">https://github.com/by-student-2017/Akai-KKR-HEA-examples.git</a><br />
+※ 第一原理計算コードであるAkai-KKRを用いたHEAの計算例を上記のURLに示しておきます。README.txtに使い方が記載されています。その他の情報は左欄の「Akai-KKR」をご参照ください<br />
+※&nbsp;MoPdRhRuTcでは格子定数のaだけでなくc/aも変更する必要があります。力尽きたのでお許しください。本来はnon-magnetic, ferromagnetic, anti-ferromagnetic&nbsp; (anti-ferromagneticはLMDの計算になります)の3つを計算して格子定数やエネルギーを検討します。論文や学会で示すときには、格子定数とエネルギーをマーナハンの状態方程式でフィットして議論を進めます（<a href="https://www.youtube.com/watch?v=AZpN-yKbhN8">マーナハンの状態方程式 - YouTube</a>）。通常、理論計算（LDAやGGA）での格子定数は実験値と比べて数%異なります<br />
+<br />
+[1]&nbsp;<a href="http://t-nagase.sakura.ne.jp/index.php?%E3%83%8F%E3%82%A4%E3%82%A8%E3%83%B3%E3%83%88%E3%83%AD%E3%83%94%E3%83%BC%E5%90%88%E9%87%91" style="color: rgb(102, 68, 0); text-decoration-line: none;">ハイエントロピー合金</a><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">[2] wikipedia (</span><a href="https://en.wikipedia.org/wiki/High_entropy_alloys" style="color: rgb(102, 68, 0); text-decoration-line: none; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">https://en.wikipedia.org/wiki/High_entropy_alloys</a><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">)</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">------------------------------------------------------------------------------</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">□ VEC (Valence electron concentration)</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">　水谷宇一郎ら「</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">ヒューム・ロザリー電子濃度則の物理学」が詳しいため興味がある場合は参照してみるとよい。e/aやVECなどを正しく理解するために必要となる。水谷らの仕事は周期表に新しい情報を追加するという意味で重要である。蔡らの材料の探索においてもe/aやVECが重要であったことは覚えておいて損はないだろう。<br />
+　私の経験としては最外殻の電子（s,p,d）を持つ原子の比率が同じでVECが同じであれば似た電子構造になりやすい。そのため安定な構造は特定のVECになりやすく、VECが増減すると不安定になる。理由は、最安定のVECからVECが増えると反結合軌道に電子が入り不安定に、最安定のVECから電子が減ると結合軌道の電子が減り不安定になるためである。元素の組み合わせによってVECで最安定のグループがいくつかできるのは</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">最外殻の電子（s,p,d）を持つ原子の比率が異なることが理由の一つにあげられる。似たものは似たものに溶けやすいため族が離れていくと混ざりにくくなる可能性が高くなることも頭に入れておくとよい。原子の周囲に配置できる原子の数も限られるため族が離れすぎると目的のVECにするのが難しくなるのも理由としてあげられる。<br />
+　ヒューム‐ロザリーの法則（wikipedia）にも目を通しておくと良い。</span><br />
+<br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">・VEC [1]</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp; VEC&nbsp;= &Sigma;</span><sup>n</sup><sub>i=1</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;c</span><sub>i</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">*(VEC)</span><sub>i</sub><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">where c</span><sub>i</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;is atomic percentage of the&nbsp;</span><em>i</em><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">th component.</span><br />
+<br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">・VEC [1,2]</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">----------</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Li 1, Na 1, K 1, Rb 1</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Be 2, Mg 2, Ca 2, Sr 2</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Sc 3, Y 3, La 3, Sm 3, Yb 3</span></div>
+</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Ti 4, Zr 4, Hf 4</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">V&nbsp; 5, Nb 5, Ta 5</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Cr 6, Mo 6, W&nbsp; 6</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Mn 7, Tc 7, Re 7</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Fe 8, Ru 8, Os 8</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Co 9, Rh 9, Ir 9</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Ni 10, Pd 10, Pt 10</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Cu 11, Ag 11, Au 11</div>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Zn 12, Cd 12<br />
+B&nbsp; &nbsp;3,&nbsp;Al 3, Ga 3, In 3<br />
+C&nbsp; &nbsp;4, Si 4, Ge 4, Sn 4</div>
+
+<p><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">?----------</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">※ 文献[2]に周期律表として情報がある。</span><br />
+<br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">・e/a [1]</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp; e/a = &Sigma;</span><sup>n</sup><sub>i=1</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;c</span><sub>i</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">*(e/a)</span><sub>i</sub><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">where c</span><sub>i</sub><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;is atomic percentage of the&nbsp;</span><em>i</em><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">th component.</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp; 文献[3]のFigure 18にe/aの値が記載されている。</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">--------------------</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Li: 1.02, Na: 1.00, K: 1.00, Rb: 1.00, Cs: 1.05</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Be: 2.19, Mg: 2.02, Ca: 2.00, Sr: 1.89, Ba: 2.10</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Sc: 2.94, Y: 3.15, La: 2.90</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Ti: 0.92, Zr: 0.81, Hf: 1.23</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">V: 0.76, Nb: 0.51, Ta: 0.99</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Cr: 0.92, Mo: 0.83, W: 1.29</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Mn: 1.05, Tc: 0.88, Re: 1.31</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Fe: 1.05, Ru: 1.00, Os: 1.49</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Co: 1.11, Rh: 0.92, Ir: 1.58</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Ni: 1.16, Pd: 0.0, Pt: 0.0</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Cu: 1.00, Ag: 1.00, Au: 1.00</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Zn: 2.04, Cd: 2.02, Hg: 1.87</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Al: 3.01, Ga: 3.00, In: 3.00, Tl: 3.00</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Si: 4.00, Ge: 4.00, Sn: 4.00, Pb 4.00</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">P: 5.12, As: 4.92, Sb: 5.00, Bi: 4.97</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">--------------------</span><br />
+<br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">[1] S. Guo et al., J. Appl. Phys. 109 (2011) 103505.</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;&nbsp;</span><a href="https://aip.scitation.org/doi/abs/10.1063/1.3587228" style="color: rgb(102, 68, 0); text-decoration-line: none; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">https://aip.scitation.org/doi/abs/10.1063/1.3587228</a><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">[2]&nbsp;</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">Figure 3- available via license: Creative Commons Attribution 4.0 International</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;&nbsp;</span><a href="https://www.researchgate.net/figure/The-periodic-table-of-pure-elements-51-with-the-corresponding-EWF-63-and-VEC-64_fig1_339571155" style="color: rgb(102, 68, 0); text-decoration-line: none; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">https://www.researchgate.net/figure/The-periodic-table-of-pure-elements-51-with-the-corresponding-EWF-63-and-VEC-64_fig1_339571155</a><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">[3] U. Mizutani et al.,&nbsp;</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif"><em>Inorg. Chem.</em></span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">54</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;(</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">2015</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">)&nbsp;</span><span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">930&ndash;946. (open access)</span><br />
+<span style="font-family:verdana,tahoma,ｍｓ ゴシック,ｍｓ ｐゴシック,ヒラギノ角ゴ pro w3,osaka?等幅,osaka,平成角ゴシック,sans-serif">&nbsp;&nbsp;</span><a href="https://pubs.acs.org/doi/10.1021/ic502286q" style="color: rgb(102, 68, 0); text-decoration-line: none; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">https://pubs.acs.org/doi/10.1021/ic502286q</a><br />
+[4]&nbsp;G. V. Raynor, Biographical Memoirs of Fellows of the Royal Society, 15 (1969) 109-139.<br />
+&nbsp;&nbsp;<a href="https://www.jstor.org/stable/769299?seq=1">William Hume-Rothery. 1899-1968 on JSTOR</a><br />
+&nbsp;&nbsp;<a href="https://www.jstor.org/stable/769299?seq=1">https://www.jstor.org/stable/769299?seq=1</a><br />
+[5]&nbsp;<a href="http://slideplayer.com/slide/7666224/">http://slideplayer.com/slide/7666224/</a><br />
+[6]&nbsp;<a href="http://slideplayer.com/slide/5866092/">http://slideplayer.com/slide/5866092/</a><br />
+------------------------------------------------------------------------------<br />
+■ lammps (並列計算)<br />
+(Edit: Mar/17/2021)<br />
+<br />
+□ MPICH2のインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a><br />
+2. <a href="http://www.mpich.org/static/tarballs/1.4.1p1/mpich2-1.4.1p1-win-x86-64.msi">mpich2-1.4.1p1-win-x86-64.msi</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+<br />
+□ 並列版のlammpsのインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="http://LAMMPS-64bit-18Jun2019-MPI.exe">LAMMPS-64bit-18Jun2019-MPI.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[<span class="pl-s"><span class="pl-pds">&quot;</span>C:\Program Files\LAMMPS 64-bit 18Jun2019</span>-MPI<span class="pl-s">\bin\lmp_mpi.exe<span class="pl-pds">&quot;</span></span> -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[<span class="pl-s">C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります<br />
+<br />
+□ Reference_TAD_Si</span><br />
+(temperature-accelerated dynamics: 温度加速動力学法)<br />
+1. set.batを[管理者として実行]します<br />
+2. run.batをダブルクリックして実行します<br />
+<br />
+□ Reference_NEB_Si<br />
+(nudged elastic band (NEB) calculation)<br />
+1. set.batを[管理者として実行]します<br />
+2. run.batをダブルクリックして実行します<br />
+（現在、最後に処理されるpythonが正常に動作しません。ご注意ください）<br />
+------------------------------------------------------------------------------<br />
+■ (Google Colaboratory)<br />
+(Edit: 15/Jul/2020)<br />
+<br />
+□ Install (lammps)<br />
+!wget https://lammps.sandia.gov/tars/lammps-3Mar20.tar.gz<br />
+!tar zxvf lammps-3Mar20.tar.gz<br />
+%cd lammps-3Mar20<br />
+!mkdir build<br />
+%cd build&nbsp;<br />
+!cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake<br />
+!cmake --build .<br />
+<br />
+□ environment settings<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/lammps-3Mar20/build:&quot;+os.environ['PATH']<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2,1&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+<br />
+□ Install (lammps_education_metal_win)<br />
+%cd /content<br />
+!git clone https://github.com/by-student-2017/lammps_education_metal_win.git<br />
+<br />
+□ tutorial_1_Monte_Carlo<br />
+%cd /content/lammps_education_metal_win/tutorial_1_Monte_Carlo_5element_swap<br />
+!mkdir cfg<br />
+!lmp &lt; in.lmp<br />
+<br />
+□ tutorial_1_Monte_Carlo (time stamped force-bias Monte Carlo)<br />
+%cd /content/lammps_education_metal_win/tutorial_1_time-stamped_force-bias_Monte_Carlo_5element_swap<br />
+!mkdir cfg<br />
+!lmp &lt; in.lmp<br />
+<br />
+□ plot<br />
+!sed 1,2d out_energy.txt &gt; energy.dat<br />
+import numpy as np<br />
+import matplotlib.pyplot as plt<br />
+x_list=[]<br />
+y_list=[]<br />
+f=open('energy.dat','rt')<br />
+for line in f:<br />
+&nbsp;&nbsp;&nbsp; data = line[:-1].split(' ')<br />
+&nbsp;&nbsp;&nbsp; x_list.append(float(data[0]))<br />
+&nbsp;&nbsp;&nbsp; y_list.append(float(data[1]))<br />
+plt.plot(x_list, y_list)<br />
+plt.plot(x_list, y_list,color='RED',linewidth=4.0)<br />
+plt.xlabel('Step')<br />
+plt.ylabel('Energy / eV')<br />
+plt.xticks(fontsize=7)<br />
+plt.yticks(fontsize=7)<br />
+plt.grid(True)<br />
+plt.show()<br />
+<br />
+□ tutorial_2_MSD_and_RDF<br />
+%cd /content/lammps_education_metal_win/tutorial_2_MSD_and_RDF_5element<br />
+!mkdir cfg<br />
+!lmp &lt; in.lmp<br />
+<br />
+□ plot<br />
+!sed 1,2d out_all_msd.txt &gt; msd.dat<br />
+import numpy as np<br />
+import matplotlib.pyplot as plt<br />
+x_list=[]<br />
+y_list=[]<br />
+f=open('msd.dat','rt')<br />
+for line in f:<br />
+&nbsp;&nbsp;&nbsp; data = line[:-1].split(' ')<br />
+&nbsp;&nbsp;&nbsp; x_list.append(float(data[0]))<br />
+&nbsp;&nbsp;&nbsp; y_list.append(float(data[1])*100*100)<br />
+plt.plot(x_list, y_list)<br />
+plt.plot(x_list, y_list,color='RED',linewidth=4.0)<br />
+plt.xlabel('Step')<br />
+plt.ylabel('r^2/pm^2')<br />
+plt.xticks(fontsize=7)<br />
+plt.yticks(fontsize=7)<br />
+plt.grid(True)<br />
+plt.show()<br />
+<br />
+□ tutorial_6_thermal_5element<br />
+%cd /content/lammps_education_metal_win/tutorial_6_thermal_5element<br />
+!mkdir cfg<br />
+!lmp &lt; in.lmp<br />
+<br />
+□ tutorial_7_viscosity_5element<br />
+%cd /content/lammps_education_metal_win/tutorial_7_viscosity_5element<br />
+!mkdir cfg<br />
+!lmp &lt; in.lmp<br />
+<br />
+□ tutorial_8_elastic<br />
+%cd /content/lammps_education_metal_win/tutorial_8_elastic_5element<br />
+!lmp &lt; in.elastic<br />
+!python3 compliance_python3.py<br />
+<br />
+□ tutorial_9_elastic_Temp<br />
+%cd /content/lammps_education_metal_win/tutorial_9_elastic_Temp_5element<br />
+!lmp &lt; in.elastic<br />
+!python3 compliance_python3.py<br />
+------------------------------------------------------------------------------</p>

@@ -1,0 +1,2003 @@
+<p>------------------------------------------------------------------------------<br />
+Å° DFTB+ (version 19.1) (Edit: 27/March/2020)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10 (64 bit))<br />
+<br />
+Å† Install (gfortran + OpenMPI) (git command case)<br />
+(http://www.dftbplus.org/about-dftb/)<br />
+ÅEDFTB+ Stable (latest stable version, release 19.1)<br />
+0. sudo apt install libarpack2-dev<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi2.0<br />
+&nbsp; sudo apt install libblas-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install git<br />
+&nbsp; sudo apt install make<br />
+&nbsp; sudo apt install cmake<br />
+&nbsp; sudo apt install python3-dev<br />
+&nbsp; sudo apt install python3-distutils<br />
+&nbsp; sudo apt install python3-numpy<br />
+&nbsp; sudo apt install python3-matplotlib<br />
+&nbsp; sudo apt install grace<br />
+&nbsp; sudo apt install jmol<br />
+&nbsp; sudo apt install gnuplot<br />
+1. git clone https://github.com/dftbplus/dftbplus.git<br />
+&nbsp; cd dftbplus<br />
+&nbsp; git submodule update --init --recursive<br />
+&nbsp; ./utils/get_opt_externals ALL<br />
+2. mkdir _build<br />
+&nbsp; cd _build<br />
+3. cmake -DWITH_DFTD3=true -DWITH_TRANSPORT=true -DFYPP_FLAGS=&quot;-DTRAVIS&quot; -DWITH_ARPACK=true -DCMAKE_TOOLCHAIN_FILE=../sys/gnu.cmake ..<br />
+&nbsp; (or simple compiling: cmake -DCMAKE_TOOLCHAIN_FILE=../sys/gnu.cmake ..)<br />
+4. make -j<br />
+5. make install<br />
+<br />
+Å† dptools setting<br />
+1. cd ~/dftbplus/tools/dptools<br />
+2. sudo python3 setup.py install<br />
+<br />
+Å† Test<br />
+1. cd ~/dftbplus/_build<br />
+2. ctest -j<br />
+----------<br />
+100% tests passed, 0 tests failed out of 200<br />
+<br />
+Total Test time (real) = 322.82 sec<br />
+----------<br />
+(cat /proc/cpuinfo<br />
+&nbsp; Intel(R) Core(TM) i5-8500 CPU @ 3.00GHz)<br />
+<br />
+Å† environment setting<br />
+1. echo 'export PATH=$PATH:$HOME/dftbplus/_build/_install/bin' &gt;&gt; ~/.bashrc<br />
+2. echo 'export PATH=$PATH:$HOME/dftbplus/tools/misc' &gt;&gt; ~/.bashrc<br />
+3. bash<br />
+<br />
+Å† manual<br />
+1. cd&nbsp;~/dftbplus/doc/dftb+/manual<br />
+2. make<br />
+3. evince manual.pdf<br />
+(dblatex)<br />
+<br />
+[I1] Compiling and installing DFTB+<br />
+&nbsp;https://github.com/dftbplus/dftbplus/blob/master/INSTALL.rst<br />
+------------------------------------------------------------------------------<br />
+Å° Example<br />
+(https://dftbplus-recipes.readthedocs.io/en/stable/)<br />
+<br />
+Å† example file<br />
+1. cd ~/dftbplus<br />
+2. wget&nbsp;https://dftbplus-recipes.readthedocs.io/en/stable/_downloads/b22f70990f75772e54ee0f8f771a3325/recipes.tar.bz2<br />
+3. tar jxvf&nbsp;recipes.tar.bz2<br />
+4. cd recipes<br />
+5. ./scripts/get_slakos<br />
+<br />
+Å† input file is &quot;dftb_in.hsd&quot;<br />
+&nbsp; &quot;waveplot&quot; need &quot;waveplot_in.hsd&quot;<br />
+<br />
+Å† Basic usage (First calculation with DFTB+)<br />
+1. cd ~/dftbplus/recipes/basics<br />
+2. cd firstcalc<br />
+3. dftb+ | tee output<br />
+----------<br />
+Another method<br />
+3. ./run.sh<br />
+----------<br />
+<br />
+Å† Basic usage (DOS and PDOS)<br />
+1. cd ~/dftbplus/recipes/basics/bandstruct/1_density<br />
+2. ./run.sh<br />
+3. xmgrace -nxy dos_total.dat -world -7 0 5 9<br />
+4. xmgrace -nxy dos_total.dat dos_ti.d.dat dos_ti.s.dat dos_o.p.dat -world -7 0 5 9<br />
+----------<br />
+Another method<br />
+2. dftb+ | tee output<br />
+&nbsp; dp_dos band.out dos_total.dat<br />
+&nbsp; dp_dos -w dos_ti.1.out dos_ti.s.dat<br />
+&nbsp; dp_dos -w dos_ti.3.out dos_ti.d.dat<br />
+&nbsp; dp_dos -w dos_o.2.out dos_o.p.dat<br />
+----------<br />
+<br />
+Å† Basic usage (band structure (with charges.bin file))<br />
+1. cd ~/dftbplus/recipes/basics/bandstruct/2_bands<br />
+2. ./run.sh<br />
+3. xmgrace -nxy band_tot.dat -mono -world 0 -7 76 5<br />
+----------<br />
+Another method<br />
+2. cp ../1_density/charges.bin .<br />
+&nbsp;&nbsp; dftb+ | tee output<br />
+----------<br />
+<br />
+Å† Basic usage (First steps with Waveplot)<br />
+1. cd ~/dftbplus/recipes/basics/waveplot<br />
+2. ./run.sh<br />
+3. (using VMD ver. 1.8.6 or later)<br />
+----------<br />
+Another method<br />
+2. dftb+ | tee output<br />
+&nbsp; waveplot &gt;&gt; output<br />
+----------<br />
+<br />
+Å† Molecular dynamics<br />
+1. cd ~/dftbplus/recipes/moleculardynamics<br />
+----- Preparing for an MD calculation<br />
+2. ~/dftbplus/recipes/moleculardynamics/initialstructre<br />
+3. dftb+<br />
+&nbsp; (output file: geo_end.gen)<br />
+4. cp geo_end.gen ../vibrations/geom.gen<br />
+----- Vibrational mode<br />
+5. cd ~/dftbplus/recipes/moleculardynamics/vibrations<br />
+6. dftb+<br />
+&nbsp; (output file: hessian.out)<br />
+7. modes<br />
+8. jmol mode_114.xyz<br />
+&nbsp; (jmol: Tools &gt; animate... &gt; Loop &gt; click arrow icon)<br />
+<br />
+Å† Molecular dynamics (Dynamics in the ground state)<br />
+1. cd ~/dftbplus/recipes/moleculardynamics/md<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp;Steps = 20000 # 10 ps total<br />
+-----<br />
+-----(after)<br />
+&nbsp;Steps = 1000 # 0.5 ps total<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5. jmol geo_end.xyz<br />
+<br />
+Å† Molecular dynamics (Thermalising a system)<br />
+1. cd ~/dftbplus/recipes/moleculardynamics/thermalise<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp; # total of 20 ps<br />
+&nbsp; Steps = 20000<br />
+-----<br />
+-----(after)<br />
+&nbsp; # total of 1 ps<br />
+&nbsp; Steps = 1000<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5. jmol geo_end.xyz<br />
+<br />
+Å† Molecular dynamics (Speeding up SCC MD)<br />
+1. cd ~/dftbplus/recipes/moleculardynamics/XLBOMD<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp;Steps = 20000<br />
+-----<br />
+-----(after)<br />
+&nbsp;Steps = 1000<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5. jmol geo_end.xyz<br />
+-----infomation<br />
+BO: Born-Oppenheimer<br />
+SCC: self consistent charge<br />
+MD: Molecular dynamics<br />
+-----<br />
+<br />
+Å† Molecular dynamics (Simulated annealing)<br />
+1. cd ~/dftbplus/recipes/moleculardynamics/annealSW<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+Hamiltonian = DFTB {<br />
+-----<br />
+-----(after)<br />
+Hamiltonian = DFTB {<br />
+<br />
+&nbsp; ForceEvaluation = Dynamics<br />
+&nbsp;<br />
+&nbsp; SCC = Yes<br />
+&nbsp; SCCTolerance = 0.8e-3<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5. jmol geo_end.xyz<br />
+&nbsp; (jmol: Tools &gt; animate... &gt; Loop &gt; click arrow icon)<br />
+<br />
+Å† Molecular dynamics (Annealing to multiple minima)<br />
+1. cd ~/dftbplus/recipes/moleculardynamics/annealV2<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+Hamiltonian = DFTB {<br />
+-----<br />
+-----(after)<br />
+Hamiltonian = DFTB {<br />
+<br />
+&nbsp; ForceEvaluation = Dynamics<br />
+&nbsp;<br />
+&nbsp; SCC = Yes<br />
+&nbsp; SCCTolerance = 0.8e-3<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5. jmol geo_end.xyz<br />
+&nbsp; (jmol: Tools &gt; animate... &gt; Loop &gt; click arrow icon)<br />
+<br />
+Å† Perfect graphene<br />
+1. cd ~/dftbplus/recipes/defect/carbon2d-elec/graphene/latopt<br />
+2. dftb+ | tee output<br />
+3. dp_dos band.out dos.dat<br />
+&nbsp; dp_dos -w pdos.C.1.out pdos.C.s.dat<br />
+&nbsp; dp_dos -w pdos.C.2.out pdos.C.p.dat<br />
+&nbsp; plotxy --xlabel &quot;Energy [eV]&quot; --ylabel &quot;DOS&quot; dos.dat pdos.C.s.dat pdos.C.p.dat<br />
+&nbsp; grep &quot;Fermi level&quot; detailed.out<br />
+4. cd ~/dftbplus/recipes/defect/carbon2d-elec/graphene/bands<br />
+5. cp ../latopt/geo_end.gen .<br />
+&nbsp; cp ../latopt/charges.bin .<br />
+6. dftb+ | tee output<br />
+&nbsp; dp_bands band.out band<br />
+&nbsp; grep &quot;Fermi level&quot; ../latopt/detailed.out<br />
+&nbsp; plotxy -L --xlabel &quot;K points&quot; --ylabel &quot;Energy [eV]&quot; band_tot.dat<br />
+<br />
+Å† Zigzag nanoribbon (DOS)<br />
+1. cd ~/dftbplus/recipes/defect/carbon2d-elec/zigzag/density<br />
+2. gen2xyz geo.gen<br />
+3. jmol geo.xyz<br />
+4. ./checkgeo.sh<br />
+&nbsp; (close jmol, then push &quot;Enter&quot; key)<br />
+5. ./run.sh<br />
+6. ./showdos.sh<br />
+<br />
+Å† Zigzag nanoribbon (Band structure)<br />
+1. cd ~/dftbplus/recipes/defect/carbon2d-elec/zigzag/bands<br />
+2. ./run.sh<br />
+3. ./showbands.sh<br />
+-----information<br />
+grep ReadInitialCharges dftb_in.hsd<br />
+grep MaxSCCIterations dftb_in.hsd<br />
+-----(then, you can see &quot;Yes&quot; and &quot;1&quot;)<br />
+<br />
+Å† Armchair nanoribbon with vacancy<br />
+1. cd ~/dftbplus/recipes/defect/carbon2d-elec/armchair<br />
+2. ./showgeom_v12.sh<br />
+3. ./run_v12.sh<br />
+-----before step 4<br />
+a1. cd ~/dftbplus/recipes/defect/carbon2d-elec/armchair/perfect_density<br />
+a2. ./checkgeo.sh<br />
+&nbsp; (close jmol, then push &quot;Enter&quot; key)<br />
+a3. ./run.sh<br />
+a4. ./showdos.sh<br />
+a5. cd ~/dftbplus/recipes/defect/carbon2d-elec/armchair<br />
+-----<br />
+4. ./showdos_perf_v12.sh<br />
+&nbsp; (then, you could use &quot;Zoom to rectangle&quot; icon around -4.4 eV)<br />
+5. cd ~/dftbplus/recipes/defect/carbon2d-elec/armchair/vacancy2_wf<br />
+6. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp; # Self-consistent<br />
+&nbsp; SCC = Yes<br />
+-----<br />
+-----(after) (Note: this setting is test !)<br />
+&nbsp; # Self-consistent<br />
+&nbsp; SCC = Yes<br />
+&nbsp; SccTolerance = 1.0e0<br />
+-----<br />
+7. ./run.sh<br />
+8. waveplot | tee output.waveplot<br />
+9. ./showdeflev1.sh<br />
+&nbsp; (jmol -L -s showdeflev1.js)<br />
+&nbsp; File &gt; Open &gt; File or URL [wp-1-1-742-real.cube]<br />
+&nbsp; (close jmol, then push &quot;Enter&quot; key)<br />
+10. ./showdeflev2.sh<br />
+&nbsp; (jmol -L -s showdeflev2.js)<br />
+&nbsp; File &gt; Open &gt; File or URL [wp-1-1-743-real.cube]<br />
+&nbsp; (close jmol, then push &quot;Enter&quot; key)<br />
+11. ./showdeflev3.sh<br />
+&nbsp; (jmol -L -s showdeflev3.js)<br />
+&nbsp; File &gt; Open &gt; File or URL [wp-1-1-744-real.cube]<br />
+&nbsp; (close jmol, then push &quot;Enter&quot; key)<br />
+<br />
+Å† Molecular Junction<br />
+(https://dftbplus-recipes.readthedocs.io/en/stable/transport/molecule-junction.html)<br />
+1. cd ~/dftbplus/recipes/transport/molecular-junction<br />
+2. ./job.sh c dftb+<br />
+3. ./job.sh t dftb+<br />
+4. xmgrace -nxy transmission.dat -log y<br />
+-----<br />
+Another method<br />
+4. gnuplot<br />
+5. set logscale y<br />
+&nbsp; set xlabel &quot;Energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;Transmission&quot;<br />
+&nbsp; plot &quot;transmission.dat&quot; w l<br />
+6. quit<br />
+7. gnuplot<br />
+8. set xlabel &quot;Energy (eV)&quot;<br />
+&nbsp; set ylabel &quot;DOS (arbitrary units)&quot;<br />
+&nbsp; plot &quot;localDOS.dat&quot; w l<br />
+9. quit<br />
+10. gnuplot<br />
+11. plot &quot;potential.dat&quot; w l<br />
+12. quit<br />
+-----<br />
+<br />
+[T1] DFTB+ Recipes<br />
+&nbsp;&nbsp;https://dftbplus-recipes.readthedocs.io/en/stable/<br />
+[T2] Usermanual<br />
+&nbsp;&nbsp;https://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/latest/manual.pdf<br />
+[T3] archive with all inputs.<br />
+&nbsp;&nbsp;https://dftbplus-recipes.readthedocs.io/en/stable/_downloads/b22f70990f75772e54ee0f8f771a3325/recipes.tar.bz2<br />
+------------------------------------------------------------------------------<br />
+Å° test data (input files)<br />
+(cd ~/dftbplus/test/prog/dftb+)<br />
+(https://github.com/dftbplus/dftbplus/tree/master/test/prog/dftb%2B)&nbsp;<br />
+<br />
+Å† DFTD3 (Van der Waals interaction (dispersion))<br />
+(cd ~/dftbplus/test/prog/dftb+/dispersion)<br />
+<br />
+Å† Casida (TD-DFTB) (in timedep directory)<br />
+(cd ~/dftbplus/test/prog/dftb+/timedep)<br />
+<br />
+Å† Transport (in transport directory)<br />
+(cd ~/dftbplus/test/prog/dftb+/transport)<br />
+<br />
+Å† spin, spinorbit, antiferromagnetic<br />
+Åû spin (~/dftbplus/test/prog/dftb+/spin)<br />
+ÅEFe4_noncolinear<br />
+Åû spinorbit (~/dftbplus/test/prog/dftb+/spinorbit) (<em>L</em>-<em>S</em> coupling)<br />
+ÅEFe2_dual_field<br />
+ÅEEuN_customU<br />
+ÅEAu13 (in onsite directory)<br />
+Åû antiferromagnetic (~/dftbplus/test/prog/dftb+/analysis)<br />
+ÅEFe2_antiferromagnetic&nbsp; (in analysis directory)<br />
+<br />
+Å† DFTB+U, pSIC, Onsite correction<br />
+Åû FLL (~/dftbplus/test/prog/dftb+/dftb+u)<br />
+ÅECH3<br />
+ÅEEuN_customU (in spinorbit directory)<br />
+Åû pSIC (~/dftbplus/test/prog/dftb+/dftb+u)<br />
+ÅEFe4<br />
+ÅEFe4_read<br />
+ÅEGaAs_2<br />
+ÅEAu13pSIC<br />
+Åû onsite correction (~/dftbplus/test/prog/dftb+/onsite)<br />
+ÅEH2O<br />
+<br />
+Å† Electric Field<br />
+ÅEH2O-extfield (in md directory)<br />
+ÅE10-0Ctube_Efield (in non-scc directory)<br />
+ÅE10-0Ctube-extfield (in scc directory)<br />
+ÅEFe2_dual_field (in spinorbit directory)<br />
+<br />
+Å† MD&nbsp;(~/dftbplus/test/prog/dftb+/md)<br />
+Åû&nbsp;XL-BOMD<br />
+ÅESiC64-xlbomdfast-T0<br />
+ÅESiC64-xlbomdfast<br />
+ÅEptcda-xlbomd-ldep<br />
+ÅEptcda-xlbomd<br />
+ÅEptcda-xlbomdfast-ldep<br />
+ÅEptcda-xlbomdfast<br />
+Åû Thermostat<br />
+ÅESi_8-thermostat<br />
+ÅESi_8-thermostat2<br />
+ÅEDNA_Berendsen2<br />
+----------<br />
+Åû using constant (grep -r constant *)<br />
+ÅEDNA<br />
+ÅEDNA_Brendsen2<br />
+ÅESi_8-tempprofile<br />
+----------<br />
+<br />
+Å† Geometry&nbsp;(~/dftbplus/test/prog/dftb+/geoopt)<br />
+ÅEGaAs_8_latconst<br />
+ÅEGaAs_8_latconst_lbfgs<br />
+ÅEVsi+O<br />
+ÅEVsi+O-nonscc<br />
+ÅEVsi+O_lbfgs<br />
+<br />
+Å† Electrostatic Potential (ESP) (~/dftbplus/test/prog/dftb+/analysis)<br />
+ÅEGa4As4_ESP<br />
+ÅEC60_ESP<br />
+ÅEGa4As4_ESP<br />
+ÅEH2O_ESP<br />
+ÅEH2O_mdESP<br />
+------------------------------------------------------------------------------<br />
+Å° pSIC (DFTB+19.1, DFTB+18.2)<br />
+<br />
+ÅEGaAs_2<br />
+1. cd ~/dftbplus/test/prog/dftb+/dftb+u/GaAs_2<br />
+2. gedit dftb_in.hsd<br />
+-----<br />
+Geometry = GenFormat {<br />
+2&nbsp; F<br />
+&nbsp;Ga As<br />
+&nbsp; &nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+&nbsp; &nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp; 0.25000000000E+00 &nbsp; 0.25000000000E+00 &nbsp; 0.25000000000E+00<br />
+&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.00000000000E+00<br />
+&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.27135460000E+01<br />
+&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.27135460000E+01<br />
+}<br />
+<br />
+#Driver = {}<br />
+Driver = ConjugateGradient {<br />
+&nbsp; LatticeOpt = Yes<br />
+&nbsp; MovedAtoms = {}<br />
+}<br />
+<br />
+#UJ = 0.05209025<br />
+UJ = 0.039462<br />
+<br />
+#UJ = 0.05209025<br />
+UJ = 0.039462<br />
+<br />
+#UJ = 0.068207<br />
+UJ = 0.090033<br />
+-----(Prefix # from &quot;Parallel&quot; to the last line for DFTB+18.2)<br />
+3. export OMP_NUM_THREADS=3<br />
+4. dftb+<br />
+5.&nbsp;gedit dftb_in.hsd<br />
+-----<br />
+#Geometry = GenFormat {<br />
+#2&nbsp; F<br />
+#&nbsp;Ga As<br />
+#&nbsp; &nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp; &nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp; 0.25000000000E+00 &nbsp; 0.25000000000E+00 &nbsp; 0.25000000000E+00<br />
+#&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.27135460000E+01<br />
+#&nbsp;&nbsp; 0.27135460000E+01&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.27135460000E+01<br />
+#}<br />
+Geometry = GenFormat {<br />
+&nbsp; &lt;&lt;&lt; &quot;geo_end.gen&quot;<br />
+}<br />
+<br />
+Driver = {}<br />
+#Driver = ConjugateGradient {<br />
+#&nbsp; LatticeOpt = Yes<br />
+#&nbsp; MovedAtoms = {}<br />
+#}<br />
+<br />
+&nbsp; #MaxSCCIterations = 1000<br />
+&nbsp; MaxSCCIterations = 1<br />
+&nbsp; ReadInitialCharges = Yes<br />
+<br />
+&nbsp; KPointsAndWeights = SupercellFolding {<br />
+&nbsp; 25 0 0<br />
+&nbsp;&nbsp; 0 25 0<br />
+&nbsp;&nbsp; 0 0 25<br />
+&nbsp;&nbsp; 0.5 0.5 0.5<br />
+&nbsp; }<br />
+-----<br />
+6. dftb+<br />
+7.&nbsp;grep &quot;Fermi level&quot; detailed.out | tail -1<br />
+&nbsp; (Fermi level:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.1351527685 H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -3.6777 eV)<br />
+8. dp_dos band.out dos_total.dat<br />
+9.&nbsp;plotxy --xlabel &quot;Energy [eV]&quot; --ylabel &quot;DOS&quot; dos_total.dat<br />
+10. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp; #KPointsAndWeights = SupercellFolding {<br />
+&nbsp; #25 0 0<br />
+&nbsp; # 0 25 0<br />
+&nbsp; # 0 0 25<br />
+&nbsp; # 0.5 0.5 0.5<br />
+&nbsp; #}<br />
+&nbsp; KPointsAndWeights = Klines {<br />
+&nbsp;&nbsp; 1 0.5&nbsp; 0.5&nbsp; 0.5&nbsp; #L<br />
+&nbsp; 19 0.0&nbsp; 0.0&nbsp; 0.0&nbsp; #G<br />
+&nbsp; 20 0.5&nbsp; 0.5&nbsp; 0.0&nbsp; #X<br />
+&nbsp; 10 0.75 0.375 0.375 # K<br />
+&nbsp; 20 0.0&nbsp; 0.0&nbsp; 0.0&nbsp; #G<br />
+&nbsp; 10 0.75&nbsp; 0.5 0.25 #W<br />
+&nbsp; }<br />
+-----<br />
+11. dftb+<br />
+12. dp_bands band.out band<br />
+13. plotxy -L --xlabel &quot;K points&quot; --ylabel &quot;Energy [eV]&quot; band_tot.dat&nbsp; --yshift 3.6777 --no-colors&nbsp; --title &quot;GaAs&quot; --ylimits -12.5 7 --xlimits 1 80<br />
+14. plotxy -L --xlabel &quot;K points&quot; --ylabel &quot;Energy [eV]&quot; band_tot.dat&nbsp; --yshift 3.6777 --no-colors&nbsp; --title &quot;GaAs&quot; --ylimits -12.5 7 --xlimits 1 80 --no-grid --zero-line<br />
+<br />
+Å† Information 1<br />
+ÅEgrep pbe *<br />
+As-As.skf: &lt;Functional&gt;pbe&lt;/Functional&gt;<br />
+As-Ga.skf: &lt;Functional&gt;pbe&lt;/Functional&gt;<br />
+Ga-As.skf: &lt;Functional&gt;pbe&lt;/Functional&gt;<br />
+Ga-Ga.skf: &lt;Functional&gt;pbe&lt;/Functional&gt;<br />
+These results mean GGA-PBE calculation.<br />
+------------------------------------------------------------------------------<br />
+Å° TD-DFTB<br />
+<br />
+Å†&nbsp;C4H6 (Singlet)<br />
+1.&nbsp;cd ~/dftbplus/test/prog/dftb+/timedep/C4H6-Singlet<br />
+2. gedit dftb_in.hsd<br />
+-----<br />
+#NrOfExcitations = 5<br />
+NrOfExcitations = 2<br />
+WriteSPTransitions = Yes<br />
+-----<br />
+3. dftb+<br />
+4. cat EXC.DAT<br />
+----------<br />
+&nbsp; The spectrum at the uncoupled DFTB level (i.e. the single-particle excitations).<br />
+5. awk '(NR&gt;5){print $2-0.0001, 0.0, &quot;\n&quot;, $2, $3, &quot;\n&quot;, $2+0.0001, 0.0}' SPX.DAT &gt; spx.dat<br />
+6. plotxy -L --xlabel &quot;Energy [eV]&quot; --ylabel &quot;Absorption [arb. unit]&quot; spx.dat --no-colors&nbsp; --title &quot;C4H6, excitation&quot; --no-grid<br />
+---------<br />
+<br />
+Å† Note (EXC.DAT for C4H6-Singlet) (DFTB+ 19.1, manual)<br />
+----------<br />
+&nbsp;&nbsp;Excitations data including the energies, oscillator strength, dominant Kohn-Sham transitions and the symmetry.<br />
+&nbsp;&nbsp;Example ?rst few transitions for C<sub>4</sub>H<sub>4</sub>:<br />
+(Abbreviate)<br />
+&nbsp;&nbsp;Two examples of singlet transitions with energies of 5.551 and 5.592 eV. The ?rst is dipole allowed, the second not. In both cases they are transitions primarily (weight of 1.000) to single particle state 12, and are of singlet character (&ldquo;S&rdquo;).&nbsp;<br />
+&nbsp;&nbsp;In the case of spin-polarised calculations, an additional column of values are given instead of the symmetry, showing the level of spin contamination in the state (labelled as D&lt;S*S&gt;), with typically states where a magnitude of less than 0.5 is usually considered reliable.<br />
+----------<br />
+ÅESymmetry<br />
+&nbsp; Speci?es the spin symmetry of the excited states being computed: &ldquo;singlet&rdquo;, &ldquo;triplet&rdquo; or &ldquo;both&rdquo;. This tag is only applicable for spin restricted calculation. For calculations in the &ldquo;triplet&rdquo; or &ldquo;both&rdquo; cases, SpinConstants must be supplied (see p. 34).<br />
+----------<br />
+------------------------------------------------------------------------------<br />
+Å°&nbsp;Van der Waals interaction (dispersion) (DFTB+ 19.1, manual)<br />
+<br />
+&nbsp; The Dispersion block controls whether DFTB interactions should be empirically corrected for van der Waals interactions, since DFTB (and SCC-DFTB) does not include these effects. Currently, three different dispersion correction schemes are implemented (for the detailed description of the methods see the following subsections):<br />
+<br />
+ÅELennard-Jones<br />
+&nbsp; Dispersion is included via a Lennard-Jones potential between each pair of atoms. The parameters for the potential can either be entered by the user or the program can automatically take the parameters from the Universal Force Field (UFF)&nbsp;<br />
+Example using UFF parameters:<br />
+----------<br />
+&nbsp; Dispersion = LennardJones {<br />
+&nbsp; &nbsp; Parameters = UFFParameters {}<br />
+&nbsp; }<br />
+----------<br />
+<br />
+ÅESlater-Kirkwood<br />
+&nbsp; The dispersion interaction between atoms is taken from a Slater-Kirkwood polarisable atomic model&nbsp;<br />
+<br />
+ÅEDFTD3<br />
+&nbsp; Dispersion is calculated as in the dftd3 code [18, 19] (see section 2.4.10). Modi?cation hydrogen bond interaction strengths&nbsp;(see section 2.4.12).<br />
+<br />
+Å† DNA_Berendsen2 (SlaterKirkwood)<br />
+1. cd ~/dftbplus/test/prog/dftb+/md/DNA_Berendsen2<br />
+2. dftb+<br />
+3. jmol geo_end.xyz<br />
+<br />
+Å† DNA_DFTD3_BJ<br />
+1. cd ~/dftbplus/test/prog/dftb+/dispersion/DNA_dftd3_bj<br />
+2. gen2xyz dna.gen<br />
+3. jmol dan.xyz&nbsp;<br />
+4. gedit dftb_in.hsd<br />
+-----<br />
+#Driver = {}<br />
+Driver = ConjugateGradient {<br />
+&nbsp; LatticeOpt = Yes<br />
+&nbsp; MovedAtoms = {}<br />
+}<br />
+-----<br />
+5. dftb+<br />
+6. jmol geo_end.xyz<br />
+------------------------------------------------------------------------------<br />
+Å° Molecular dynamics<br />
+<br />
+Å†&nbsp;XL-BOMD<br />
+Åû&nbsp; graphene<br />
+1.&nbsp;cd ~/dftbplus/test/prog/dftb+/md<br />
+2. cp DNA_Berendsen2 graphene_xlbomd<br />
+3. cd&nbsp;graphene_xlbomd<br />
+4. remove from &quot;Velocities [AA/ps] = {&quot; to &quot;}&quot; in dftb_in.hsd<br />
+&nbsp;&nbsp;Prefix # from &quot;Geometry = GenFormat {&quot; to &quot;}&quot; in dftb_in.hsd<br />
+5. gedit&nbsp;dftb_in.hsd<br />
+-----<br />
+Geometry = GenFormat {<br />
+&nbsp; &lt;&lt;&lt; graphene.gen<br />
+}<br />
+<br />
+&nbsp; Xlbomd {<br />
+&nbsp; &nbsp; PreSteps = 4<br />
+&nbsp; &nbsp; IntegrationSteps = 6<br />
+&nbsp; &nbsp; MinSccIterations = 2<br />
+&nbsp; &nbsp; MaxSccIterations = 200<br />
+&nbsp; &nbsp; SccTolerance = 160e-3 # 1e-3 x number of atoms<br />
+&nbsp; }<br />
+&nbsp; TimeStep [fs] = 0.5<br />
+&nbsp; #TimeStep [Femtosecond] = 1.0<br />
+<br />
+&nbsp; Steps = 200<br />
+&nbsp; Thermostat = None {<br />
+&nbsp; &nbsp; InitialTemperature [Kelvin] = 273<br />
+&nbsp; }<br />
+&nbsp; #Thermostat = Berendsen {<br />
+&nbsp; #&nbsp; TimeScale [fs] = 100<br />
+&nbsp; #&nbsp; AdaptFillingTemp = Yes<br />
+&nbsp; #&nbsp; Temperature [Kelvin] = {}<br />
+&nbsp; #&nbsp; Temperature [Kelvin] = TempertureProfile {}<br />
+&nbsp; # &nbsp;&nbsp; constant 100 600.0<br />
+&nbsp; # &nbsp;&nbsp; linear &nbsp; &nbsp; 100 700.0<br />
+&nbsp; # &nbsp;&nbsp; exponential 200 500.0<br />
+&nbsp; #&nbsp; }<br />
+&nbsp; #}<br />
+<br />
+&nbsp; SCCTolerance = 160e-3 # 1e-3 x number of atoms<br />
+&nbsp; ForceEvalulation = Dynamics<br />
+&nbsp; Filling = Fermi {<br />
+&nbsp; &nbsp; Temperature [Kelvin] = 873<br />
+&nbsp; }<br />
+&nbsp;&nbsp;KPointsAndWeights = SupercellFolding {<br />
+&nbsp; &nbsp; 1 0 0 #nkx<br />
+&nbsp; &nbsp; 0 1 0 #nky<br />
+&nbsp; &nbsp; 0 0 1 #nkz<br />
+&nbsp; &nbsp; 0.0 0.0 0.0 # k point shifts<br />
+&nbsp; }<br />
+-----<br />
+6. cp ~/dftbplus/recipes/moleculardynamics/annealSW/80_SW.gen graphene.gen<br />
+7. gedit graphene.gen<br />
+-----<br />
+&nbsp;&nbsp; 32 1&nbsp;&nbsp;&nbsp; 0.5030840382E+01&nbsp;&nbsp;&nbsp; 0.7039867946E+01&nbsp;&nbsp;&nbsp; 0.3096589887E-14<br />
+&nbsp;&nbsp; 49 1&nbsp;&nbsp;&nbsp; 0.5030840382E+01&nbsp;&nbsp;&nbsp; 0.8456655734E+01&nbsp;&nbsp;&nbsp; 0.5057325132E-14<br />
+-----<br />
+7. dftb+<br />
+8. jmol geo_end.xyz<br />
+<br />
+Åû ABA-stacked graphite<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-0.5)*2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; $1*2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708/2}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. gedit graphite.gen<br />
+-----(before)<br />
+&nbsp; 80&nbsp; S<br />
+<br />
+&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03<br />
+-----<br />
+-----(after)<br />
+&nbsp; 160&nbsp; S<br />
+<br />
+&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0670800000E+02<br />
+-----<br />
+11. gen2xyz&nbsp;graphite.gen<br />
+12. jmol graphite.xyz<br />
+13. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp; &lt;&lt;&lt; graphene.gen<br />
+-----<br />
+-----(after)<br />
+&nbsp; &lt;&lt;&lt; graphite.gen<br />
+-----<br />
+14. dftb+<br />
+15. jmol geo_end.xyz<br />
+<br />
+Åû Simulated annealing (defect)<br />
+16. cp graphite.gen&nbsp;defect_graphite.gen<br />
+17. change 160 to 159, and remove &quot;160 ... &quot; line in&nbsp;defect_graphite.gen<br />
+18. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp; #&lt;&lt;&lt; graphite.gen<br />
+&nbsp; &lt;&lt;&lt; defect_graphite.gen<br />
+<br />
+&nbsp; #Xlbomd {<br />
+&nbsp; #&nbsp; PreSteps = 4<br />
+&nbsp; #&nbsp; IntegrationSteps = 6<br />
+&nbsp; #&nbsp; MinSccIterations = 2<br />
+&nbsp; #&nbsp; MaxSccIterations = 200<br />
+&nbsp; #&nbsp; SccTolerance = 160e-3 # 1e-3 x number of atoms<br />
+&nbsp; #}<br />
+<br />
+&nbsp; #MovedAtoms = 1:-1<br />
+&nbsp; #Steps = 200<br />
+&nbsp; #Thermostat = None {<br />
+&nbsp; &nbsp; #InitialTemperature [Kelvin] = 273<br />
+&nbsp; #}<br />
+&nbsp; Thermostat = Anderson {<br />
+&nbsp; &nbsp; ReselectProbability = 0.2<br />
+&nbsp; &nbsp; ReselectIndividually = Yes<br />
+&nbsp; &nbsp; Temperature [Kelvin] = TemperatureProfile {<br />
+&nbsp; &nbsp; &nbsp; constant &nbsp; &nbsp;&nbsp; 1 &nbsp;&nbsp; 100.0<br />
+&nbsp; &nbsp; &nbsp; linear &nbsp; &nbsp;&nbsp; 499 &nbsp; 3800.0<br />
+&nbsp; &nbsp; &nbsp; constant&nbsp; 200 &nbsp; 3800.0<br />
+&nbsp; &nbsp; &nbsp; linear &nbsp; &nbsp;&nbsp; 500 &nbsp; &nbsp; 100.0<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; AdaptFillingTemp = Yes<br />
+&nbsp; }<br />
+<br />
+&nbsp; #Filling = Fermi {<br />
+&nbsp; #&nbsp; Temperature [Kelvin] = 873<br />
+&nbsp; #}<br />
+&nbsp; Filling = Fermi {}<br />
+-----<br />
+19. dftb+<br />
+20. jmol geo_end.xyz<br />
+<br />
+Å† DFTD3 (dispersion)<br />
+21. gedit&nbsp;dftb_in.hsd<br />
+-----<br />
+&nbsp; Dispersion = DftD3 {<br />
+&nbsp; &nbsp; Damping = BeckeJohnson {<br />
+&nbsp; &nbsp; &nbsp; a1 = 0.5719<br />
+&nbsp; &nbsp; &nbsp; a2 = 3.6017<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; s6 = 1.0<br />
+&nbsp; &nbsp; s8 = 0.5883<br />
+&nbsp; &nbsp; #Threebody = Yes<br />
+&nbsp; }<br />
+-----<br />
+22. Prefix # from &quot;Dispersion = Slaterkirkwood {&quot; to &quot;}&quot; in dftb_in.hsd<br />
+23. dftb+<br />
+24. jmol geo_end.xyz<br />
+Å¶ Note: &quot;Threebody = Yes&quot; need a long time for 1 cycle !<br />
+<br />
+Åû Berendsen barostat samples something like an NPH ensemble for MD (but without the correct ?uctuations).<br />
+25. gedit&nbsp;dftb_in.hsd<br />
+-----(Driver = VelocityVerlet {)<br />
+&nbsp; Barostat {<br />
+&nbsp; &nbsp; Pressure [Pa] = 1e5 # about 1 atm (0.1 MPa)<br />
+&nbsp; &nbsp; Timescale [ps] = 0.05 # about 0.01 - 0.1 ps<br />
+&nbsp; }<br />
+-----<br />
+26. dftb+<br />
+27. jmol geo_end.xyz<br />
+<br />
+Å† DftD3 dispersion constants</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 564px;">
+	<tbody>
+		<tr>
+			<td style="width: 118px; text-align: center;">Becke-Johnson damping</td>
+			<td style="width: 85px; text-align: center;">old default<br />
+			(DFTB3)</td>
+			<td style="width: 112px; text-align: center;">3OB<br />
+			(DFTB3-D3H5)</td>
+			<td style="width: 80px; text-align: center;">OB2(base)</td>
+			<td style="width: 79px; text-align: center;">OB2(shift)</td>
+			<td style="width: 72px; text-align: center;">OB2(split)</td>
+		</tr>
+		<tr>
+			<td style="width: 118px; text-align: center;">a1</td>
+			<td style="width: 85px; text-align: center;">0.5719</td>
+			<td style="width: 112px; text-align: center;">0.746</td>
+			<td style="width: 80px; text-align: center;">0.717</td>
+			<td style="width: 79px; text-align: center;">0.816</td>
+			<td style="width: 72px; text-align: center;">0.497</td>
+		</tr>
+		<tr>
+			<td style="width: 118px; text-align: center;">a2</td>
+			<td style="width: 85px; text-align: center;">3.6017</td>
+			<td style="width: 112px; text-align: center;">4.191</td>
+			<td style="width: 80px; text-align: center;">2.565</td>
+			<td style="width: 79px; text-align: center;">2.057</td>
+			<td style="width: 72px; text-align: center;">3.622</td>
+		</tr>
+		<tr>
+			<td style="width: 118px; text-align: center;">s6</td>
+			<td style="width: 85px; text-align: center;">1.0</td>
+			<td style="width: 112px; text-align: center;">1.0</td>
+			<td style="width: 80px; text-align: center;">1.0</td>
+			<td style="width: 79px; text-align: center;">1.0</td>
+			<td style="width: 72px; text-align: center;">1.0</td>
+		</tr>
+		<tr>
+			<td style="width: 118px; text-align: center;">s8</td>
+			<td style="width: 85px; text-align: center;">0.5883</td>
+			<td style="width: 112px; text-align: center;">3.209</td>
+			<td style="width: 80px; text-align: center;">0.011</td>
+			<td style="width: 79px; text-align: center;">0.010</td>
+			<td style="width: 72px; text-align: center;">0.010</td>
+		</tr>
+		<tr>
+			<td style="width: 118px; text-align: center;">&nbsp;</td>
+			<td style="width: 85px; text-align: center;">&nbsp;</td>
+			<td style="width: 112px; text-align: center;">HCorrection&nbsp; = H5 {}</td>
+			<td style="width: 80px; text-align: center;">&nbsp;</td>
+			<td style="width: 79px; text-align: center;">&nbsp;</td>
+			<td style="width: 72px; text-align: center;">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp;
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 321px;">
+	<tbody>
+		<tr>
+			<td style="width: 116px; text-align: center;">zero damping</td>
+			<td style="width: 87px; text-align: center;">old default<br />
+			(DFTB3)</td>
+			<td style="width: 113px; text-align: center;">DFTB3-D3H5</td>
+		</tr>
+		<tr>
+			<td style="width: 116px; text-align: center;">sr6</td>
+			<td style="width: 87px; text-align: center;">0.7461</td>
+			<td style="width: 113px; text-align: center;">1.25</td>
+		</tr>
+		<tr>
+			<td style="width: 116px; text-align: center;">alpha6</td>
+			<td style="width: 87px; text-align: center;">14.0</td>
+			<td style="width: 113px; text-align: center;">29.61</td>
+		</tr>
+		<tr>
+			<td style="width: 116px; text-align: center;">s6</td>
+			<td style="width: 87px; text-align: center;">1.0</td>
+			<td style="width: 113px; text-align: center;">1.0</td>
+		</tr>
+		<tr>
+			<td style="width: 116px; text-align: center;">s8</td>
+			<td style="width: 87px; text-align: center;">3.209</td>
+			<td style="width: 113px; text-align: center;">0.49</td>
+		</tr>
+		<tr>
+			<td style="width: 116px; text-align: center;">&nbsp;</td>
+			<td style="width: 87px; text-align: center;">&nbsp;</td>
+			<td style="width: 113px; text-align: center;">HHRepulsion&nbsp; = Yes</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>Å¶ 3OB: <font face="Arial,Verdana,Geneva,Helvetica,sans-serif"><font size="2">T<span style="text-align: justify; color: rgb(0, 0, 0); text-transform: none; text-indent: 0px; letter-spacing: normal; font-style: normal; font-variant: normal; font-weight: 400; text-decoration: none; word-spacing: 0px; display: inline !important; white-space: normal; orphans: 2; float: none; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">he Third-Order Parametrization for Organic and Biological Systems<br />
+Å¶&nbsp;</span></font></font><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">DFTB3: Third Order Density Functional Tight Binding<br />
+Å¶ You should click &quot;Name&quot; on &quot;https://www.dftb.org/parameters/download/&quot; and read text, e.g., 3ob (https://www.dftb.org/parameters/download/3ob/3ob-3-1-cc/) that show setting parameters.</span><br />
+<br />
+Å† Graphite + H2<br />
+28. cp graphite.gen graphite_h2.gen<br />
+29. gedit&nbsp;graphite_h2.gen<br />
+-----(before)<br />
+&nbsp; 160 S<br />
+&nbsp; C<br />
+<br />
+&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0670807844E+02<br />
+-----<br />
+-----(after)<br />
+&nbsp; 162 S<br />
+&nbsp; C H<br />
+<br />
+161&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.0845E+02&nbsp; 0.049E+02<br />
+162&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.0845E+02&nbsp; 0.049E+02<br />
+<br />
+&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1490007844E+02<br />
+-----<br />
+30. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp; #&lt;&lt;&lt; defect_graphite.gen<br />
+&nbsp; &lt;&lt;&lt; graphite_h2.gen<br />
+<br />
+&nbsp; H = &quot;s&quot;<br />
+-----<br />
+31. dftb+<br />
+32. jmol geo_end.xyz<br />
+<br />
+Å† DFTB3<br />
+33. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp; ThirdOrderFull = Yes<br />
+&nbsp; HubbardDerivs {<br />
+&nbsp; &nbsp; C = -0.1492<br />
+&nbsp; &nbsp; H = -0.1857<br />
+&nbsp; &nbsp; #O = -0.1575<br />
+&nbsp; }<br />
+&nbsp; DampXH = Yes<br />
+&nbsp; DampXHExponent = 4.00<br />
+-----<br />
+34. dftb+<br />
+35. jmol geo_end.xyz<br />
+<br />
+Å† DFTB3-D3H5 (graphite + H2O, H-{O,N,S} systems)<br />
+36. cp&nbsp;graphite_h2.gen graphite_h2o.gen<br />
+37. gedit&nbsp;graphite_h2o.gen<br />
+-----(before)<br />
+&nbsp; 162 S<br />
+&nbsp; C H<br />
+-----<br />
+-----(after)<br />
+&nbsp; 163 S<br />
+&nbsp; C H O<br />
+<br />
+161&nbsp; 2&nbsp; 0.0706E+02&nbsp; 0.0845E+02&nbsp; 0.049E+02<br />
+162&nbsp; 2&nbsp; 0.0550E+02&nbsp; 0.0845E+02&nbsp; 0.049E+02<br />
+163&nbsp; 3&nbsp; 0.0628E+02&nbsp; 0.0745E+02&nbsp; 0.049E+02<br />
+-----<br />
+38. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp; #&lt;&lt;&lt; graphite_h2.gen<br />
+&nbsp;&nbsp;&lt;&lt;&lt; graphite_h2o.gen<br />
+<br />
+&nbsp; O = &quot;p&quot;<br />
+<br />
+&nbsp; O = -0.1575<br />
+<br />
+&nbsp; #DampXH = Yes<br />
+&nbsp; #DampXHExponent = 4.05<br />
+&nbsp; HCorrection = H5 {}<br />
+&nbsp; Dispersion = DftD3 {<br />
+&nbsp; &nbsp; Damping = BeckeJohnson {<br />
+&nbsp; &nbsp; &nbsp; a1 = 0.746 #3OB<br />
+&nbsp; &nbsp; &nbsp; a2 = 4.191 #3OB<br />
+&nbsp; &nbsp; &nbsp; #a1 = 0.5719<br />
+&nbsp; &nbsp; &nbsp; #a2 = 3.6017<br />
+&nbsp; &nbsp; }<br />
+&nbsp; &nbsp; s6 = 1.0<br />
+&nbsp; &nbsp; s8 = 3.209 # 3OB<br />
+&nbsp; &nbsp; # s8 = 0.5883<br />
+&nbsp; &nbsp; #Threebody = Yes<br />
+&nbsp; }<br />
+-----<br />
+39. dftb+<br />
+40. jmol geo_end.xyz<br />
+<br />
+Å† Important information<br />
+----------<br />
+&nbsp; The velocity Verlet driver should have a time step on the scale of about 10 times the highest vibrational period in the system. 1 fs is a common choice.<br />
+----------<br />
+&nbsp;&nbsp;Fast XL-BOMD is potentially less stable, so should only be used for systems which show good SCC behaviour (molecules without degeneracies or solids with wide band gaps).<br />
+----------<br />
+&nbsp;&nbsp;In the special case of the electronic temperature of the system being set to be 0, there is a faster version of this correction which can be used:<br />
+&nbsp;&nbsp;ForceEvaluation = DynamicsT0<br />
+---------- (Simulated annealing)<br />
+&nbsp;&nbsp;The first example anneals away a Stone-Wales defect in a graphene sheet. This is acheived by heating the system up to a high (5000K) temperature where C-C bonds start to break, holding it at these temperatures for a while and then cooling to a low temperature. The high temperature is above the usual disociation temperature of graphene, but since only a relatively short (2.4 ps) time is computed, using a higher temperature accelerates the annealing.<br />
+----------<br />
+<br />
+Å† ABA-stacked graphite (2 layer)<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-0.5)*2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; $1*2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708/2}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. sed -i -e 's/80&nbsp; S/160&nbsp; S/g' graphite.gen<br />
+&nbsp;&nbsp;sed -i -e 's/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.06708000000E+02/g' graphite.gen<br />
+&nbsp; gen2xyz&nbsp;graphite.gen<br />
+&nbsp; jmol&nbsp;graphite.xyz<br />
+<br />
+Å† ABA-stacked graphite (3 layer)<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-1)*3+1 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; ($1-1)*3+2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(1/2) &quot;\n&quot; ($1-1)*3+3 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(2/2)}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. sed -i -e 's/80&nbsp; S/240&nbsp; S/g' graphite.gen<br />
+&nbsp;&nbsp;sed -i -e 's/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1341200000E+02/g' graphite.gen<br />
+&nbsp; gen2xyz&nbsp;graphite.gen<br />
+&nbsp; jmol&nbsp;graphite.xyz<br />
+<br />
+Å† ABA-stacked graphite (4 layer)<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-1)*4+1 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; ($1-1)*4+2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(1/2) &quot;\n&quot; ($1-1)*4+3 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(2/2) &quot;\n&quot; ($1-1)*4+4 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(3/2)}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. sed -i -e 's/80&nbsp; S/320&nbsp; S/g' graphite.gen<br />
+&nbsp;&nbsp;sed -i -e 's/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1681600000E+02/g' graphite.gen<br />
+&nbsp; gen2xyz&nbsp;graphite.gen<br />
+&nbsp; jmol&nbsp;graphite.xyz<br />
+<br />
+Å† ABA-stacked graphite (5 layer)<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-1)*5+1 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; ($1-1)*5+2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(1/2) &quot;\n&quot; ($1-1)*5+3 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(2/2) &quot;\n&quot; ($1-1)*5+4 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(3/2) &quot;\n&quot; ($1-1)*5+5 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(4/2)}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. sed -i -e 's/80&nbsp; S/400&nbsp; S/g' graphite.gen<br />
+&nbsp;&nbsp;sed -i -e 's/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.2022000000E+02/g' graphite.gen<br />
+&nbsp; gen2xyz&nbsp;graphite.gen<br />
+&nbsp; jmol&nbsp;graphite.xyz<br />
+<br />
+Å† ABA-stacked graphite (6 layer)<br />
+9. awk '{if(NR&gt;2 &amp;&amp; NR&lt;83){print ($1-1)*6+1 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5 &quot;\n&quot; ($1-1)*6+2 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(1/2) &quot;\n&quot; ($1-1)*6+3 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(2/2) &quot;\n&quot; ($1-1)*5+4 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(3/2) &quot;\n&quot; ($1-1)*6+5 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; $3 &quot;&nbsp; &quot; $4 &quot;&nbsp; &quot; $5+6.708*(4/2) &quot;\n&quot; ($1-1)*6+6 &quot;&nbsp; &quot; $2 &quot;&nbsp; &quot; ($3+1.4) &quot;&nbsp; &quot; ($4+1.4) &quot;&nbsp; &quot; $5+6.708*(5/2)}else{print $0}}' graphene.gen &gt; graphite.gen<br />
+10. sed -i -e 's/80&nbsp; S/480&nbsp; S/g' graphite.gen<br />
+&nbsp;&nbsp;sed -i -e 's/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.1000000000E+03/0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.0000000000E+00&nbsp;&nbsp;&nbsp; 0.2362400000E+02/g' graphite.gen<br />
+&nbsp; gen2xyz&nbsp;graphite.gen<br />
+&nbsp; jmol&nbsp;graphite.xyz<br />
+<br />
+Å†&nbsp; H2 for&nbsp;ABA-stacked graphite (6 layer)<br />
+-----<br />
+481&nbsp; 2&nbsp; 0.0400E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+482&nbsp; 2&nbsp; 0.0328E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+483&nbsp; 2&nbsp; 0.0400E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+484&nbsp; 2&nbsp; 0.0328E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+485&nbsp; 2&nbsp; 0.0400E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+486&nbsp; 2&nbsp; 0.0328E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+487&nbsp; 2&nbsp; 0.0400E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+488&nbsp; 2&nbsp; 0.0328E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+489&nbsp; 2&nbsp; 0.0400E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+490&nbsp; 2&nbsp; 0.0328E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+491&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+492&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+493&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+494&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+495&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+496&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+497&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+498&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+499&nbsp; 2&nbsp; 0.0700E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+500&nbsp; 2&nbsp; 0.0628E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+501&nbsp; 2&nbsp; 0.1000E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+502&nbsp; 2&nbsp; 0.0928E+02&nbsp; 0.0245E+02&nbsp; 0.2000E+02<br />
+503&nbsp; 2&nbsp; 0.1000E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+504&nbsp; 2&nbsp; 0.0928E+02&nbsp; 0.0545E+02&nbsp; 0.2000E+02<br />
+505&nbsp; 2&nbsp; 0.1000E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+506&nbsp; 2&nbsp; 0.0928E+02&nbsp; 0.0845E+02&nbsp; 0.2000E+02<br />
+507&nbsp; 2&nbsp; 0.1000E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+508&nbsp; 2&nbsp; 0.0928E+02&nbsp; 0.1145E+02&nbsp; 0.2000E+02<br />
+509&nbsp; 2&nbsp; 0.1000E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+510&nbsp; 2&nbsp; 0.0928E+02&nbsp; 0.1445E+02&nbsp; 0.2000E+02<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+Å° Long-range corrected hybrid functional (LC)&nbsp;<br />
+Å¶ Note! : Range separated functionality only works non-periodic structures at the moment.<br />
+1. gedit dftb_in.hsd<br />
+-----<br />
+&nbsp;&nbsp; Prefix = &quot;../../../../../external/slakos/origin/ob2-1-1/shift/&quot;<br />
+&nbsp; #Prefix = &quot;./&quot;<br />
+<br />
+&nbsp; &nbsp; RangeSeparated = LC {<br />
+&nbsp; &nbsp; &nbsp; Screening = Thresholded {<br />
+&nbsp; &nbsp; &nbsp; &nbsp; CutoffReduction [AA] = 3<br />
+&nbsp; &nbsp; &nbsp; &nbsp; Threshold = 5E-4<br />
+&nbsp; &nbsp; &nbsp; }<br />
+&nbsp; &nbsp; }<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+Å° Carbon nanotube<br />
+<br />
+Å† 10-0Ctube<br />
+1. cd&nbsp;~/dftbplus/test/prog/dftb+/non-scc/10-0Ctube<br />
+2. sed -n -e '1d' -e /}/q -e p dftb_in.hsd &gt;&nbsp;geom.gen<br />
+3. gen2xyz&nbsp;geom.gen<br />
+4. jmol geom.xyz<br />
+5. gedit dftb_in.hsd<br />
+-----<br />
+#40&nbsp; S<br />
+# C<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56339591000E+02&nbsp;&nbsp; 0.54893350000E+02&nbsp;&nbsp; 0.21079270000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.55561595000E+02&nbsp;&nbsp; 0.55853913000E+02&nbsp;&nbsp; 0.42341610000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.54524937000E+02&nbsp;&nbsp; 0.56527344000E+02&nbsp;&nbsp; 0.21079310000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.53330796000E+02&nbsp;&nbsp; 0.56847284000E+02&nbsp;&nbsp; 0.42341950000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.52096225000E+02&nbsp;&nbsp; 0.56782619000E+02&nbsp;&nbsp; 0.21079440000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.50942090000E+02&nbsp;&nbsp; 0.56339591000E+02&nbsp;&nbsp; 0.42341610000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49981527000E+02&nbsp;&nbsp; 0.55561595000E+02&nbsp;&nbsp; 0.21079270000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 8&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49308096000E+02&nbsp;&nbsp; 0.54524937000E+02&nbsp;&nbsp; 0.42341650000E+01<br />
+#&nbsp;&nbsp;&nbsp;&nbsp; 9&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.48988156000E+02&nbsp;&nbsp; 0.53330796000E+02&nbsp;&nbsp; 0.21079610000E+01<br />
+#&nbsp;&nbsp;&nbsp; 10&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49052821000E+02&nbsp;&nbsp; 0.52096225000E+02&nbsp;&nbsp; 0.42341780000E+01<br />
+#&nbsp;&nbsp;&nbsp; 11&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49495849000E+02&nbsp;&nbsp; 0.50942090000E+02&nbsp;&nbsp; 0.21079270000E+01<br />
+#&nbsp;&nbsp;&nbsp; 12&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.50273845000E+02&nbsp;&nbsp; 0.49981527000E+02&nbsp;&nbsp; 0.42341610000E+01<br />
+#&nbsp;&nbsp;&nbsp; 13&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.51310503000E+02&nbsp;&nbsp; 0.49308096000E+02&nbsp;&nbsp; 0.21079310000E+01<br />
+#&nbsp;&nbsp;&nbsp; 14&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.52504644000E+02&nbsp;&nbsp; 0.48988156000E+02&nbsp;&nbsp; 0.42341950000E+01<br />
+#&nbsp;&nbsp;&nbsp; 15&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.53739215000E+02&nbsp;&nbsp; 0.49052821000E+02&nbsp;&nbsp; 0.21079440000E+01<br />
+#&nbsp;&nbsp;&nbsp; 16&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.54893350000E+02&nbsp;&nbsp; 0.49495849000E+02&nbsp;&nbsp; 0.42341610000E+01<br />
+#&nbsp;&nbsp;&nbsp; 17&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.55853913000E+02&nbsp;&nbsp; 0.50273845000E+02&nbsp;&nbsp; 0.21079270000E+01<br />
+#&nbsp;&nbsp;&nbsp; 18&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56527344000E+02&nbsp;&nbsp; 0.51310503000E+02&nbsp;&nbsp; 0.42341650000E+01<br />
+#&nbsp;&nbsp;&nbsp; 19&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56847284000E+02&nbsp;&nbsp; 0.52504644000E+02&nbsp;&nbsp; 0.21079610000E+01<br />
+#&nbsp;&nbsp;&nbsp; 20&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56782619000E+02&nbsp;&nbsp; 0.53739215000E+02&nbsp;&nbsp; 0.42341780000E+01<br />
+#&nbsp;&nbsp;&nbsp; 21&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56339591000E+02&nbsp;&nbsp; 0.54893350000E+02&nbsp;&nbsp; 0.69248000000E+00<br />
+#&nbsp;&nbsp;&nbsp; 22&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.55561595000E+02&nbsp;&nbsp; 0.55853913000E+02&nbsp;&nbsp; 0.28187140000E+01<br />
+#&nbsp;&nbsp;&nbsp; 23&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.54524937000E+02&nbsp;&nbsp; 0.56527344000E+02&nbsp;&nbsp; 0.69247200000E+00<br />
+#&nbsp;&nbsp;&nbsp; 24&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.53330796000E+02&nbsp;&nbsp; 0.56847284000E+02&nbsp;&nbsp; 0.28186760000E+01<br />
+#&nbsp;&nbsp;&nbsp; 25&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.52096225000E+02&nbsp;&nbsp; 0.56782619000E+02&nbsp;&nbsp; 0.69246300000E+00<br />
+#&nbsp;&nbsp;&nbsp; 26&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.50942090000E+02&nbsp;&nbsp; 0.56339591000E+02&nbsp;&nbsp; 0.28187140000E+01<br />
+#&nbsp;&nbsp;&nbsp; 27&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49981527000E+02&nbsp;&nbsp; 0.55561595000E+02&nbsp;&nbsp; 0.69248000000E+00<br />
+#&nbsp;&nbsp;&nbsp; 28&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49308096000E+02&nbsp;&nbsp; 0.54524937000E+02&nbsp;&nbsp; 0.28187060000E+01<br />
+#&nbsp;&nbsp;&nbsp; 29&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.48988156000E+02&nbsp;&nbsp; 0.53330796000E+02&nbsp;&nbsp; 0.69244200000E+00<br />
+#&nbsp;&nbsp;&nbsp; 30&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49052821000E+02&nbsp;&nbsp; 0.52096225000E+02&nbsp;&nbsp; 0.28186970000E+01<br />
+#&nbsp;&nbsp;&nbsp; 31&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.49495849000E+02&nbsp;&nbsp; 0.50942090000E+02&nbsp;&nbsp; 0.69248000000E+00<br />
+#&nbsp;&nbsp;&nbsp; 32&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.50273845000E+02&nbsp;&nbsp; 0.49981527000E+02&nbsp;&nbsp; 0.28187140000E+01<br />
+#&nbsp;&nbsp;&nbsp; 33&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.51310503000E+02&nbsp;&nbsp; 0.49308096000E+02&nbsp;&nbsp; 0.69247200000E+00<br />
+#&nbsp;&nbsp;&nbsp; 34&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.52504644000E+02&nbsp;&nbsp; 0.48988156000E+02&nbsp;&nbsp; 0.28186760000E+01<br />
+#&nbsp;&nbsp;&nbsp; 35&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.53739215000E+02&nbsp;&nbsp; 0.49052821000E+02&nbsp;&nbsp; 0.69246300000E+00<br />
+#&nbsp;&nbsp;&nbsp; 36&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.54893350000E+02&nbsp;&nbsp; 0.49495849000E+02&nbsp;&nbsp; 0.28187140000E+01<br />
+#&nbsp;&nbsp;&nbsp; 37&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.55853913000E+02&nbsp;&nbsp; 0.50273845000E+02&nbsp;&nbsp; 0.69248000000E+00<br />
+#&nbsp;&nbsp;&nbsp; 38&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56527344000E+02&nbsp;&nbsp; 0.51310503000E+02&nbsp;&nbsp; 0.28187060000E+01<br />
+#&nbsp;&nbsp;&nbsp; 39&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56847284000E+02&nbsp;&nbsp; 0.52504644000E+02&nbsp;&nbsp; 0.69244200000E+00<br />
+#&nbsp;&nbsp;&nbsp; 40&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0.56782619000E+02&nbsp;&nbsp; 0.53739215000E+02&nbsp;&nbsp; 0.28186970000E+01<br />
+#&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp;&nbsp; 0.10583544000E+03&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.10583544000E+03&nbsp;&nbsp; 0.00000000000E+00<br />
+#&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.00000000000E+00&nbsp;&nbsp; 0.42524680000E+01<br />
+&nbsp; &lt;&lt;&lt; geom.gen<br />
+<br />
+#Driver = {}<br />
+Driver = VelocityVerlet {<br />
+&nbsp; # Using a thermostat, so conserved properties of dynamics are less #<br />
+&nbsp; # important<br />
+&nbsp; TimeStep [Femtosecond] = 2.0<br />
+&nbsp; Thermostat = Andersen {<br />
+&nbsp;&nbsp;&nbsp; # Probabalistically replaces atomic velocities from a<br />
+&nbsp;&nbsp;&nbsp; # Maxwell-Boltzmann distribution&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp; ReselectProbability = 0.2<br />
+&nbsp;&nbsp;&nbsp; ReselectIndividually = Yes<br />
+&nbsp;&nbsp;&nbsp; # Simulated annealing profile for the temperature<br />
+&nbsp;&nbsp;&nbsp; Temperature [Kelvin] = TemperatureProfile {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; constant&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 100.0 # Start<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; linear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 499 &nbsp; 2800.0 # Ramp up<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; constant&nbsp;&nbsp;&nbsp; 200 &nbsp; 2800.0 # 'cook'<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; linear&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 500&nbsp;&nbsp;&nbsp; 100.0 # Quench<br />
+&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; AdaptFillingTemp = Yes # Adjust electron temperature to match<br />
+&nbsp; }<br />
+&nbsp;&nbsp;&nbsp; Barostat { # Apply presure control<br />
+&nbsp;&nbsp;&nbsp; Pressure [Pa] = 1.0E5<br />
+&nbsp;&nbsp;&nbsp; Timescale [ps] = 0.1<br />
+&nbsp; }<br />
+&nbsp; MDRestartFrequency = 10 # Only write output every 10 steps<br />
+&nbsp; OutputPrefix = &quot;geo_end&quot;<br />
+}<br />
+<br />
+&nbsp; #SCC = No<br />
+&nbsp; SCC = Yes<br />
+&nbsp; SCCTolerance = 0.8e-3 # 1e-3 x number of atoms #&nbsp;<br />
+&nbsp; ForceEvaluation = Dynamics<br />
+<br />
+&nbsp; #Filling = Fermi {<br />
+&nbsp; #&nbsp; Temperature [Kelvin] = 0.000000000000000E+000<br />
+&nbsp; #}<br />
+&nbsp; Filling = Fermi {}<br />
+-----<br />
+3. dftb+<br />
+4. jmol geo_end.xyz<br />
+&nbsp; 4.1. Display &gt; [check] Axes &gt; [check] Bounding Box<br />
+&nbsp; 4.2. Tools &gt; Animate... &gt; Loop<br />
+&nbsp; 4.3. [click] &quot;-&gt;&quot; icon<br />
+------------------------------------------------------------------------------<br />
+Å° Charge<br />
+&nbsp; Total charge of the system in units of the electron charge. Negative values mean an excess of electrons. If the keyword FixedFermiLevel is present (see section 2.4.5), then value speci?ed here will be ignored.<br />
+------------------------------------------------------------------------------<br />
+Å° Feature<br />
+<br />
+ÅE TD-DFTB: Time-Dependent DFTB<br />
+&nbsp; the ARPACK [32] library or ARPACK-ng [1] is required<br />
+ÅE SCC-DFTB: Self-Consistent-Charge Density-Functional Tight-Binding<br />
+&nbsp; These are modified by a self-consistent redistribution of Mulliken charges (SCC).<br />
+ÅE pSIC: pseudo self interaction correction<br />
+ÅE DFTD3: vdW interaction<br />
+&nbsp; D3, D3-BJ, UFF<br />
+&nbsp; Dispersion corrections (van der Waals interactions)<br />
+ÅE DFTB3: Third-Order Self-Consistent Charge<br />
+&nbsp; Third-Order Expansion of Electron Density<br />
+&nbsp; Hydrogen bonds and charge fluctuations can be described more accurately.<br />
+ÅENEGF-DFTB: Non-Equilibrium Green Function DFTB<br />
+&nbsp; Electronic transport calculations<br />
+ÅEQM/MM coupling with external point charges (smoothing possible)<br />
+ÅELDA, GGA-PBE<br />
+------------------------------------------------------------------------------<br />
+Å° Parameter<br />
+<br />
+ÅE Download of Slater-Koster files<br />
+&nbsp; (https://www.dftb.org/parameters/download/)</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 551px;">
+	<tbody>
+		<tr>
+			<td style="width: 80px; text-align: center;">Name<br />
+			(Requires)</td>
+			<td style="width: 313px; text-align: center;">TargetÅielementÅj[SOC parameter]</td>
+			<td style="width: 144px; text-align: center;">Feature</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">CH</td>
+			<td style="width: 313px; text-align: center;">íYâªêÖëf</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">CHNO</td>
+			<td style="width: 313px; text-align: center;">íYëfÅAêÖëfÅAíÇëfÅAé_ëfÇä‹Çﬁï™éq</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">SiGeH</td>
+			<td style="width: 313px; text-align: center;">ÉVÉäÉRÉìÅAÉQÉãÉ}ÉjÉEÉÄÅAêÖëfÇä‹Çﬁîºì±ëÃ</td>
+			<td style="width: 144px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">3ob</td>
+			<td style="width: 313px; text-align: center;">3éüSCCñ@Ç…ÇÊÇÈê∂ëÃÇ®ÇÊÇ—óLã@ï™éq<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Br-C-Ca-Cl-F-H-I-K-Mg-N-Na-O-P-S-Zn</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">mio</td>
+			<td style="width: 313px; text-align: center;">ê∂ëÃÇ®ÇÊÇ—óLã@ï™éq<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">H - C - N - O - S - P</span>)<br />
+			[spin coupling constant: mio-1-1.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">AuOrg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">óLã@ï®Ç∆ã‡å≥ëfÇä‹Çﬁån<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Au - Au,H,C,N,O,S</span>)<br />
+			[spin coupling constant]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">borg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">ÉzÉEëfÇ®ÇÊÇ—ÉzÉEëfâªçáï®<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">B-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">chalc<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">ÉJÉãÉRÉQÉìâªï®<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">As-S-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">halorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">ÉnÉçÉQÉìå≥ëfÇä‹ÇﬁóLã@ï™éq<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(F,Cl,Br,I)-(C,N,O,H)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">hyb<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">óLã@ÅEñ≥ã@ÇÃç¨çáï®<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ag - O - C - H | Ga - As - S - H | Ga - S - O - C - H | Ag - Si | As - Si | Ga - Si | S - Si</span>)<br />
+			[spin coupling constant: hyb-0-2.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">matsci</td>
+			<td style="width: 313px; text-align: center;">óLã@ï®ÅEã‡ëÆé_âªï®ÅEÉ[ÉIÉâÉCÉgÇ»Ç«ÇÃån<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Al-O-H | Al-Si-O-H | Cu-Si-Al-Na-O-H | Ti-P-O-N-C-H | O-N-C-B-H | Al-O-C-H | Si-P-N-O-C-H</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA (Ceperly-Alder)</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">magsil<br />
+			(matsci)</td>
+			<td style="width: 313px; text-align: center;">ÉNÉäÉ\É^ÉCÉãÉiÉmÉ`ÉÖÅ[Éu<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Mg - Si,O,H,Mg</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA (Ceperly-Alder)</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">ob2</td>
+			<td style="width: 313px; text-align: center;">ê∂ëÃÇ®ÇÊÇ—óLã@ï™éqÇ…ëŒÇ∑ÇÈí∑ãóó£ï‚ê≥<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">H-C-N-O</span>)</td>
+			<td style="width: 144px; text-align: center;">pxchybrid (omega=0.3)</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">pbc</td>
+			<td style="width: 313px; text-align: center;">å≈ëÃÇ®ÇÊÇ—ï\ñ <br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Si - F - O - N - C - H&nbsp; | Fe</span>)<br />
+			[spin coupling constant: pbc-0-3.spinw.txt]</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">rare</td>
+			<td style="width: 313px; text-align: center;">GaNíÜÇÃEuïsèÉï®ÇÃåvéZóp<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Eu-Ga-N</span>)</td>
+			<td style="width: 144px; text-align: center;">LDA+U<br />
+			(LDA:Ceperly-Alder)</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">siband</td>
+			<td style="width: 313px; text-align: center;">ÉVÉäÉRÉìÇ®ÇÊÇ—ÉVÉäÉJÇÃìdéqèÛë‘åvéZóp<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Si-O-H</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">tiorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">É`É^ÉìíPã‡ëÆÅATiO<sub>2</sub>åãèªÇ®ÇÊÇ—ï\ñ Ç∆óLã@ï™éq<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ti-Ti | Ti - (C, H, N, O, S)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">trans3d<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">óLã@ï®íÜÇ…ëJà⁄ã‡ëÆÇä‹Çﬁån<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(Sc,Ti,Fe,Co,Ni) - (H,C,N,O) | Sc - Sc | Ti - Ti | Fe - Fe | Co - Co | Ni - Ni</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+		<tr>
+			<td style="width: 80px; text-align: center;">znorg<br />
+			(mio)</td>
+			<td style="width: 313px; text-align: center;">àüâîíPã‡ëÆÅAZnOåãèªÇ®ÇÊÇ—ï\ñ Ç∆óLã@ï™éq<br />
+			(<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: rgb(0, 0, 0); font-family: Arial,Verdana,Geneva,Helvetica,sans-serif; font-size: 13px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: justify; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Zn-Zn | Zn - (C,H,N,O,S)</span>)</td>
+			<td style="width: 144px; text-align: center;">PBE</td>
+		</tr>
+	</tbody>
+</table>
+Å¶&nbsp;CH,&nbsp;CHNO,&nbsp;SiGeHÇÕÇ«Ç±Ç…ë∂ç›Ç∑ÇÈÇ©Ç‹ÇæéÑÇ™ÇÊÇ≠ÇÌÇ©Ç¡ÇƒÇ¢Ç»Ç¢ÅB<br />
+Å¶ LC: long range correction<br />
+&nbsp; Slater-Koster parameters<br />
+1. cd ~/dftbplus/recipes/slakos<br />
+2. wget https://www.dftb.org/fileadmin/DFTB/public/slako-packed.tar<br />
+&nbsp; (wget https://www.dftb.org/fileadmin/DFTB/public/slako-unpacked.tar.xz)<br />
+3. tar xvf slako-packed.tar<br />
+<br />
+ÅE KIST Integrated Force Field Platform<br />
+&nbsp; (http://kiff.vfab.org/)<br />
+<br />
+[P1] DFTB Parameters for the Periodic Table: Part 1, Electronic Structure<br />
+&nbsp; https://pubs.acs.org/doi/suppl/10.1021/ct4004959<br />
+&nbsp; Quasinano 2013, DOS, UV/vis, NEGF<br />
+[P2] DFTB Parameters for the Periodic Table, Part 2: Energies and Energy Gradients from Hydrogen to Calcium<br />
+&nbsp; https://pubs.acs.org/doi/10.1021/acs.jctc.5b00702<br />
+&nbsp; Quasinano 2015, structure optimization, IR, MD<br />
+[P3] Parametrisations for testing DFTB+<br />
+&nbsp; (https://github.com/dftbplus/testparams)<br />
+&nbsp; NOTE: Those parameters should only be used for testing DFTB+. Some of them have been modified and may yield physically incorrect results. Never use these parameters for any production runs.<br />
+&nbsp; If you wish to obtain parameters for your research, please consult dftb.org for available parameters.<br />
+[P4] Generation of Pseudo-Atoms<br />
+&nbsp; http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md<br />
+[P5]&nbsp;https://www.3dsbiovia.jp/resource-center/datasheets/2-MSE/ms/2017_59_ms-dftb-jp-1001.pdf<br />
+[P6] [DFTB-Plus-User] Format of the Slater-Koster files<br />
+&nbsp; https://mailman.zfn.uni-bremen.de/pipermail/dftb-plus-user/2019/003079.html<br />
+------------------------------------------------------------------------------<br />
+Å° DFTBaby<br />
+(http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md)<br />
+------------------------------------------------------------------------------<br />
+Å° skpar<br />
+(https://skpar.readthedocs.io/en/latest/)<br />
+&nbsp; Optimisation of Slater-Koster files (.skf) for density functional-based tight binding (DFTB)<br />
+------------------------------------------------------------------------------<br />
+Å° hotbit<br />
+(https://github.com/pekkosk/hotbit/wiki/Parameters-and-parametrization)<br />
+------------------------------------------------------------------------------<br />
+Å° hotcent&nbsp;<br />
+(https://gitlab.com/mvdb/hotcent/)<br />
+&nbsp; Calculating one- and two-center Slater-Koster integrals, based on parts of the Hotbit code.<br />
+<br />
+[1] M. Van den Bossche, J. Chem. Phys. A. 2019, 123 (13), 3038-3045 (doi).<br />
+&nbsp; https://pubs.acs.org/doi/10.1021/acs.jpca.9b00927<br />
+------------------------------------------------------------------------------<br />
+Å° adpt_core<br />
+(https://bitbucket.org/solccp/adpt_core/src/master/)<br />
+------------------------------------------------------------------------------<br />
+Å° skopt<br />
+(https://bitbucket.org/stanmarkov/skopt/src/master/)<br />
+------------------------------------------------------------------------------<br />
+Å° older version link<br />
+<br />
+ÅEhttp://www.dftbplus.org/download/deprecated/<br />
+&nbsp; (DFTB+ &gt; Download &gt; Deprecated)<br />
+<br />
+ÅEWindows version (DFTB+ 17.1 (Windows Binary) (Win7-10) (HP of DJmol)<br />
+&nbsp;&nbsp;https://sites.google.com/view/djmolplatform/get-dftb-17-1-windows<br />
+&nbsp; ((DFTB+ &gt; Download &gt; Deprecated &gt; DFTB+ 17.1 &gt; djmol platform)<br />
+&nbsp; (You can also get Siesta-4.1) (Win7-10)<br />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">------------------------------------------------------------------------------</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">Å° Information</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">Å† Bremen university [I1]</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">1. ONECENT</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">2. TWOCENT</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">3. EREPFIT</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">Å† other methods</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">1. Hotcent [I3]</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">2. TANGO [I4]</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">Å† DFTB+ [I5]</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">-----</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">we plan to release the parameterisation tools in the autumn release 19.2 this year. As they were used mostly internally so far (or given away to colaboration partners), their user interface is not as robust as I would wish and I want to fix that before letting users to make parameters with it. Especially, they should be robust enough of preventing users from making trivial mistakes without noticing it.</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">For sure, Maximes way of using Hotbit to generate a parametrisation is a possible alternative, so you may give it a try, if you want to start immediately.</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">-----</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">[I1] [DFTB-Plus-User] slater koster parameters (skf files)</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">&nbsp; https://mailman.zfn.uni-bremen.de/pipermail/dftb-plus-user/2019/002959.html</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">[I2] https://github.com/pekkosk/hotbit</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">[I3] https://gitlab.com/mvdb/hotcent</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">[I4] https://gitlab.com/mvdb/tango</span><br style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">[I5] https://mailman.zfn.uni-bremen.de/pipermail/dftb-plus-user/2019/002961.html</span><br />
+------------------------------------------------------------------------------<br />
+Å° K point settings (Attention ! &quot;no check&quot; data)<br />
+<br />
+Å† FCC (Ref: <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">WIEN2k_FCC.klist_band)</span><br />
+&nbsp; KPointsAndWeights = Klines {<br />
+&nbsp; &nbsp; 1&nbsp; 0.25&nbsp; 0.5 &nbsp; &nbsp;&nbsp; 0.75&nbsp; #W<br />
+&nbsp; 19&nbsp; 0.5 &nbsp;&nbsp; 0.5 &nbsp; &nbsp;&nbsp; 0.5 &nbsp;&nbsp; #L<br />
+&nbsp; 20&nbsp; 0.0 &nbsp;&nbsp; 0.0 &nbsp; &nbsp;&nbsp; 0.0 &nbsp;&nbsp; #G<br />
+&nbsp; 40&nbsp; 0.0 &nbsp;&nbsp; 0.5 &nbsp; &nbsp;&nbsp; 0.5 &nbsp;&nbsp; #X<br />
+&nbsp; 20&nbsp; 0.25&nbsp; 0.5 &nbsp; &nbsp;&nbsp; 0.75&nbsp; #W<br />
+&nbsp; 10&nbsp; 0.375&nbsp; 0.375&nbsp; 0.75 # K<br />
+&nbsp; }<br />
+<br />
+Å† BCC (Ref: <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">WIEN2k_BCC.klist_band)</span><br />
+&nbsp; KPointsAndWeights = Klines {<br />
+&nbsp; &nbsp; 1&nbsp; 0.0 &nbsp;&nbsp; 0.0 &nbsp;&nbsp; 0.0&nbsp; #G<br />
+&nbsp; 39 -0.5 &nbsp;&nbsp; 0.5 &nbsp;&nbsp; 0.5&nbsp; #H<br />
+&nbsp; 20&nbsp; 0.0 &nbsp;&nbsp; 0.0 &nbsp;&nbsp; 0.5&nbsp; #N<br />
+&nbsp; 20&nbsp; 0.0 &nbsp;&nbsp; 0.0 &nbsp;&nbsp; 0.0&nbsp; #G<br />
+&nbsp; 20&nbsp; 0.25&nbsp; 0.25&nbsp; 0.25 #P<br />
+&nbsp; }<br />
+<br />
+Å† HCP (Ref: <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">WIEN2k_HCP.klist_band)</span><br />
+&nbsp; KPointsAndWeights = Klines {<br />
+&nbsp; &nbsp; 1&nbsp; 0.0 &nbsp; &nbsp; 0.0 &nbsp; &nbsp;&nbsp; 0.0 #G<br />
+&nbsp; 19&nbsp; 0.5 &nbsp; &nbsp; 0.0 &nbsp; &nbsp;&nbsp; 0.0 #M<br />
+&nbsp; 10&nbsp; 0.333&nbsp; 0.333&nbsp; 0.0 #K<br />
+&nbsp; 20&nbsp; 0.0 &nbsp; &nbsp; 0.0 &nbsp; &nbsp;&nbsp; 0.0 #G<br />
+&nbsp; 10&nbsp; 0.0 &nbsp; &nbsp; 0.0 &nbsp; &nbsp;&nbsp; 0.5 #A<br />
+&nbsp; }<br />
+<br />
+Å† SC (simple cubic or supercell case) (Ref: <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">WIEN2k_SC.klist_band)</span><br />
+&nbsp; KPointsAndWeights = Klines {<br />
+&nbsp; &nbsp; 1&nbsp; 0.5&nbsp; 0.5&nbsp; 0.5 #R<br />
+&nbsp; 19&nbsp; 0.0&nbsp; 0.0&nbsp; 0.0 #G<br />
+&nbsp; 20&nbsp; 0.5&nbsp; 0.0&nbsp; 0.0 #X<br />
+&nbsp; 10&nbsp; 0.5&nbsp; 0.0&nbsp; 0.5 #M<br />
+&nbsp; 10&nbsp; 0.0&nbsp; 0.0&nbsp; 0.0 #G<br />
+&nbsp; }<br />
+<br />
+Å† The k-vector types and Brillouin zones of the space groups<br />
+&nbsp; (https://www.cryst.ehu.es/cgi-bin/cryst/programs/nph-kv-list)<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Compile DFTB with lammps support<br />
+&nbsp; https://github.com/qzhu2017/CMS/wiki/Compile-DFTB--with-lammps-support<br />
+[2] DFTB+ Release 19.1<br />
+&nbsp; http://www.dftbplus.org/download/dftb-stable/<br />
+[3] DFTB+ The Fast Way of Doing Quantum Mechanics<br />
+&nbsp; https://warwick.ac.uk/fac/sci/wcpm/seminars/aradi-231117.pdf<br />
+[4] Harris functional<br />
+&nbsp; https://en.wikipedia.org/wiki/Harris_functional<br />
+[5] Introduc+on to the Density-Func+onal Tight-Binding (DFTB) Method<br />
+&nbsp; https://iacs.stonybrook.edu/_archived/sites/iacs.stonybrook.edu/files/dftb-talk.parti_.pdf<br />
+[6] First calculation with DFTB+<br />
+&nbsp; https://dftbplus-recipes.readthedocs.io/en/stable/basics/firstcalc.html<br />
+[7] Tutorial on Running DFTB via DFTB+ and Gaussian 09<br />
+&nbsp; http://ursula.chem.yale.edu/~batista/classes/tutorials/dftb/DFTB_forBatistaLab_Jan3_2017_withG09.pdf<br />
+[8] DFTBåvéZÉpÉâÉÅÅ[É^çÏê¨éËèá<br />
+&nbsp; https://www.aasri.jp/pub/spm/pdf/catalog/DFTBparameter_making_v1.2.pdf<br />
+[9] dftb.org the DFTB website<br />
+&nbsp; https://www.dftb.org/about-dftb/<br />
+[10] Introduction to DFTB+<br />
+&nbsp; https://www.techylib.com/en/view/californiamandrill/introduction_to_dftb<br />
+[11] Creating parameters for DFTB+<br />
+&nbsp; http://210.64.191.18/doc/content/tutorials/dftbtutorial/tut_dftb_para.htm<br />
+[12] Generation of Pseudo-Atoms<br />
+&nbsp; http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md<br />
+[13] Interface dftb<br />
+&nbsp; http://cuby4.molecular.cz/interface_dftb.html<br />
+[14] A Quick Guide To Running DFTB (With Available Parameters) In GAMESS-US<br />
+&nbsp; http://www.somewhereville.com/category/science/dftb/<br />
+&nbsp; &quot;You might consider giving Stefan Grimme&rsquo;s XTB serious consideration.&quot;<br />
+&nbsp; xtb - An extended tight-binding semi-empirical program package (https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/xtb/xtb), github(https://github.com/grimme-lab/xtb/)(GNU License)(but need Intel Parallel Studio 17 or later)<br />
+------------------------------------------------------------------------------<br />
+Å° Appendix 1 (DFTB+ 19.1, installation using wget command)<br />
+(if &quot;git command case&quot; does not work, please try bellow procedure.)<br />
+<br />
+Å† Install (gfortran + OpenMP, Ubuntu 18.04 LTS) (wget command case)<br />
+(http://www.dftbplus.org/about-dftb/)<br />
+ÅEDFTB+ Stable (latest stable version, release 19.1)<br />
+0. sudo apt install libarpack2-dev<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi2.0<br />
+&nbsp; sudo apt install libblas-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install python3-dev<br />
+&nbsp; sudo apt install make<br />
+&nbsp; sudo apt install git<br />
+&nbsp; sudo apt install cmake<br />
+&nbsp; sudo apt install python3-distutils<br />
+&nbsp; sudo apt install python3-numpy<br />
+&nbsp; sudo apt install python3-matplotlib<br />
+&nbsp; sudo apt install grace<br />
+&nbsp; sudo apt install jmol<br />
+&nbsp; sudo apt install gnuplot<br />
+1. tar -xf dftbplus-19.1.source.tar.xz<br />
+&nbsp; cd dftbplus-19.1<br />
+&nbsp; ./utils/get_opt_externals ALL<br />
+2. cp sys/make.x86_64-linux-gnu make.arch<br />
+3. gedit make.arch<br />
+-----before<br />
+FXXOPT = -O2 -funroll-all-loops -fopenmp -fall-intrinsics<br />
+CCOPT = -O2 -funroll-all-loops<br />
+<br />
+FXX = mpifort<br />
+<br />
+SCALAPACKDIR = $(PREFIX)/lib<br />
+LIB_SCALAPACK =&nbsp;-lscalapack<br />
+<br />
+LIB_LAPACK = -llapack -lblas<br />
+<br />
+OTHERLIBS = -lgomp -lpthread<br />
+<br />
+ARPACK_LIBS = -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK = 0<br />
+-----<br />
+-----after<br />
+FXXOPT = -O2 -funroll-all-loops -fopenmp -fall-intrinsics<br />
+CCOPT = -O2 -funroll-all-loops<br />
+<br />
+FXX = mpif90<br />
+<br />
+SCALAPACKDIR =&nbsp;<br />
+LIB_SCALAPACK =&nbsp;-lscalapack-openmpi<br />
+<br />
+LIB_LAPACK = -lopenblas<br />
+<br />
+OTHERLIBS = -lgomp -lpthread<br />
+<br />
+ARPACK_LIBS = -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK = 1<br />
+-----<br />
+4. gedit make.config<br />
+-----before<br />
+WITH_MPI :=0<br />
+<br />
+WITH_ARPACK := 0<br />
+<br />
+WITH_TRANSPORT := 0<br />
+<br />
+WITH_DFTD3 := 0<br />
+<br />
+ARPACK_LIBS := -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK := 0<br />
+-----<br />
+-----after<br />
+WITH_MPI :=1<br />
+<br />
+WITH_ARPACK := 1<br />
+<br />
+WITH_TRANSPORT := 1<br />
+<br />
+WITH_DFTD3 := 1<br />
+<br />
+ARPACK_LIBS := -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK := 1<br />
+-----<br />
+5. make -j4<br />
+6. make test&nbsp;TEST_MPI_PROC=2 TEST_OMP_THREADS=2<br />
+7. make install<br />
+(~/dftbplus-19.1/_install/bin/dftb+)<br />
+<br />
+Å† bug fix: 22/April/2020<br />
+--------------------------<br />
+Turned off mulliken analysis in non-scc runs produces garbage #447<br />
+<br />
+When the Mulliken analysis is explicitely turned of in non-scc runs, the resulting energy only contains the repulsive contribution. The electronic part is set to zero, resulting in invalid results.<br />
+<br />
+https://github.com/dftbplus/dftbplus/issues/447<br />
+--------------------------<br />
+(e.g, for ~/dftbplus-18.2/recipes/moleculardynamics/annealSW/dftb_in.hsd)<br />
+<br />
+As a workaround for the moment, turn on the&nbsp;<br />
+<br />
+MullikenAnalysis<br />
+<br />
+option in the&nbsp;<br />
+<br />
+Analyses<br />
+<br />
+block, and you should recover the old (correct) results.<br />
+--------------------------<br />
+------------------------------------------------------------------------<br />
+Å° Appendix 2 (DFTB+ 18.2, installation using wget command)<br />
+(for &quot;Introduction &mdash; DFTB+ Recipes 18.2 documentation&quot;)<br />
+<br />
+Å† Install (gfortran + OpenMP, Ubuntu 18.04 LTS) (wget command case)<br />
+(http://www.dftbplus.org/about-dftb/)<br />
+ÅEDFTB+ Stable (stable version, release 18.2)<br />
+0. sudo apt install libarpack2-dev<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi2.0<br />
+&nbsp; sudo apt install libblas-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install python3-dev tcsh make<br />
+&nbsp; sudo apt install git<br />
+&nbsp; sudo apt install cmake<br />
+&nbsp; sudo apt install python3-distutils<br />
+&nbsp; sudo apt install python3-numpy<br />
+&nbsp; sudo apt install python3-matplotlib<br />
+&nbsp; sudo apt install grace<br />
+&nbsp; sudo apt install jmol<br />
+&nbsp; sudo apt install gnuplot<br />
+1. wget https://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/18.2/dftbplus-18.2.tar.xz<br />
+&nbsp; tar -xf dftbplus-18.2.tar.xz<br />
+&nbsp; cd dftbplus-18.2<br />
+&nbsp; ./utils/get_opt_externals ALL<br />
+2. cp sys/make.x86_64-linux-gnu make.arch<br />
+3. gedit make.arch<br />
+-----before<br />
+SCALAPACKDIR = $(PREFIX)/lib<br />
+<br />
+LIB_LAPACK = -llapack -lblas<br />
+<br />
+OTHERLIBS =<br />
+-----<br />
+-----after<br />
+SCALAPACKDIR = /usr/lib/x86_64-linux-gnu<br />
+<br />
+LIB_LAPACK = -L/usr/lib/x86_64-linux-gnu -lopenblas<br />
+<br />
+OTHERLIBS = -lgomp -lpthread /usr/lib/x86_64-linux-gnu/libfftw3.a<br />
+-----<br />
+4. gedit make.config<br />
+-----before<br />
+WITH_DFTD3 := 0<br />
+<br />
+ARPACK_LIBS := -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK := 0<br />
+-----<br />
+-----after<br />
+WITH_DFTD3 := 1<br />
+<br />
+ARPACK_LIBS := -L/usr/lib/x86_64-linux-gnu -larpack<br />
+<br />
+ARPACK_NEEDS_LAPACK := 1<br />
+-----<br />
+5. make -j4<br />
+6. make test&nbsp;TEST_OMP_THREADS=2<br />
+7. make install<br />
+(~/dftbplus-18.2/_install/bin/dftb+)<br />
+<br />
+Å† example file<br />
+1. cd ~/dftbplus-18.2<br />
+2. wget&nbsp;https://dftbplus-recipes.readthedocs.io/en/stable/_downloads/b22f70990f75772e54ee0f8f771a3325/recipes.tar.bz2<br />
+3. tar jxvf&nbsp;recipes.tar.bz2<br />
+4. cd recipes<br />
+5. ./scripts/get_slakos<br />
+<br />
+Å† Molecular dynamics (Simulated annealing)<br />
+1. cd ~/dftbplus-18.2/recipes/moleculardynamics/annealSW<br />
+2. gedit dftb_in.hsd<br />
+-----(before)<br />
+&nbsp; ParserVersion = 7<br />
+-----<br />
+-----(after)<br />
+&nbsp; ParserVersion = 6<br />
+-----<br />
+3. export OMP_NUM_THREADS=3<br />
+4. ~/dftbplus-18.2/_install/bin/dftb+<br />
+5. jmol geo_end.xyz<br />
+&nbsp; (jmol: Tools &gt; animate... &gt; Loop &gt; click arrow icon)<br />
+------------------------------------------------------------------------------<br />
+Å° Zeolite Temprated Carbon (ZTC)<br />
+&nbsp; (similar to lammps fileÅj<br />
+<br />
+Å† geo_start.gen<br />
+----------<br />
+&nbsp; 360 S<br />
+&nbsp; C&nbsp; H<br />
+1 1 &nbsp;17.766067000000000 &nbsp;14.461256000000001 &nbsp;21.229740000000000&nbsp;<br />
+2 1 &nbsp; 2.840260000000000 &nbsp; 5.731066999999999 &nbsp;21.643744000000002&nbsp;<br />
+3 1 &nbsp; 3.177240000000003 &nbsp;15.626244000000000 &nbsp;11.748567000000000&nbsp;<br />
+4 1 &nbsp;21.229740000000000 &nbsp;17.766067000000000 &nbsp;14.461256000000001&nbsp;<br />
+5 1 &nbsp;21.643744000000002 &nbsp; 2.840260000000000 &nbsp; 5.731066999999999&nbsp;<br />
+6 1 &nbsp; 3.591244000000000 &nbsp; 0.286433000000001 &nbsp;20.892759999999999&nbsp;<br />
+7 1 &nbsp;14.461256000000001 &nbsp;21.229740000000000 &nbsp;17.766067000000000&nbsp;<br />
+8 1 &nbsp; 5.731066999999999 &nbsp;21.643744000000002 &nbsp; 2.840260000000000&nbsp;<br />
+9 1 &nbsp;15.626244000000000 &nbsp;11.748567000000000 &nbsp; 3.177240000000003&nbsp;<br />
+10 1 &nbsp; 6.303933000000001 &nbsp; 2.426256000000000 &nbsp;14.875260000000001&nbsp;<br />
+11 1 &nbsp;20.478756000000001 &nbsp;12.321433000000001 &nbsp;15.212240000000003&nbsp;<br />
+12 1 &nbsp;20.892759999999999 &nbsp; 3.591244000000000 &nbsp; 0.286433000000001&nbsp;<br />
+13 1 &nbsp;12.321433000000001 &nbsp;15.212240000000003 &nbsp;20.478756000000001&nbsp;<br />
+14 1 &nbsp;15.212240000000003 &nbsp;20.478756000000001 &nbsp;12.321433000000001&nbsp;<br />
+15 1 &nbsp; 8.443756000000000 &nbsp;23.783567000000001 &nbsp; 8.857760000000001&nbsp;<br />
+16 1 &nbsp;18.338933000000001 &nbsp; 9.608744000000000 &nbsp; 9.194740000000003&nbsp;<br />
+17 1 &nbsp; 9.608744000000000 &nbsp; 9.194740000000003 &nbsp;18.338933000000001&nbsp;<br />
+18 1 &nbsp;14.875260000000001 &nbsp; 6.303933000000001 &nbsp; 2.426256000000000&nbsp;<br />
+19 1 &nbsp; 2.426256000000000 &nbsp;14.875260000000001 &nbsp; 6.303933000000001&nbsp;<br />
+20 1 &nbsp;23.783567000000001 &nbsp; 8.857760000000001 &nbsp; 8.443756000000000&nbsp;<br />
+21 1 &nbsp; 8.857760000000001 &nbsp; 8.443756000000000 &nbsp;23.783567000000001&nbsp;<br />
+22 1 &nbsp;11.748567000000000 &nbsp; 3.177240000000003 &nbsp;15.626244000000000&nbsp;<br />
+23 1 &nbsp; 0.286433000000001 &nbsp;20.892759999999999 &nbsp; 3.591244000000000&nbsp;<br />
+24 1 &nbsp; 9.194740000000003 &nbsp;18.338933000000001 &nbsp; 9.608744000000000&nbsp;<br />
+25 1 &nbsp;18.940683000000000 &nbsp;14.636967000000000 &nbsp;20.420988000000001&nbsp;<br />
+26 1 &nbsp; 3.649011999999999 &nbsp; 6.905683000000004 &nbsp;21.468033000000002&nbsp;<br />
+27 1 &nbsp; 2.368488000000001 &nbsp;15.450533000000000 &nbsp;12.923183000000003&nbsp;<br />
+28 1 &nbsp;20.420988000000001 &nbsp;18.940683000000000 &nbsp;14.636967000000000&nbsp;<br />
+29 1 &nbsp;21.468033000000002 &nbsp; 3.649011999999999 &nbsp; 6.905683000000004&nbsp;<br />
+30 1 &nbsp; 3.415533000000001 &nbsp;23.181816999999999 &nbsp;21.701511999999997&nbsp;<br />
+31 1 &nbsp;14.636967000000000 &nbsp;20.420988000000001 &nbsp;18.940683000000000&nbsp;<br />
+32 1 &nbsp; 6.905683000000004 &nbsp;21.468033000000002 &nbsp; 3.649011999999999&nbsp;<br />
+33 1 &nbsp;15.450533000000000 &nbsp;12.923183000000003 &nbsp; 2.368488000000001&nbsp;<br />
+34 1 &nbsp; 5.129316999999999 &nbsp; 2.601966999999997 &nbsp;15.684011999999999&nbsp;<br />
+35 1 &nbsp;20.654467000000000 &nbsp;11.146816999999999 &nbsp;14.403488000000001&nbsp;<br />
+36 1 &nbsp;21.701511999999997 &nbsp; 3.415533000000001 &nbsp;23.181816999999999&nbsp;<br />
+37 1 &nbsp;11.146816999999999 &nbsp;14.403488000000001 &nbsp;20.654467000000000&nbsp;<br />
+38 1 &nbsp;14.403488000000001 &nbsp;20.654467000000000 &nbsp;11.146816999999999&nbsp;<br />
+39 1 &nbsp; 8.619466999999997 &nbsp; 0.888183000000004 &nbsp; 9.666511999999999&nbsp;<br />
+40 1 &nbsp;17.164317000000000 &nbsp; 9.433033000000000 &nbsp; 8.385988000000001&nbsp;<br />
+41 1 &nbsp; 9.433033000000000 &nbsp; 8.385988000000001 &nbsp;17.164317000000000&nbsp;<br />
+42 1 &nbsp;15.684011999999999 &nbsp; 5.129316999999999 &nbsp; 2.601966999999997&nbsp;<br />
+43 1 &nbsp; 2.601966999999997 &nbsp;15.684011999999999 &nbsp; 5.129316999999999&nbsp;<br />
+44 1 &nbsp; 0.888183000000004 &nbsp; 9.666511999999999 &nbsp; 8.619466999999997&nbsp;<br />
+45 1 &nbsp; 9.666511999999999 &nbsp; 8.619466999999997 &nbsp; 0.888183000000004&nbsp;<br />
+46 1 &nbsp;12.923183000000003 &nbsp; 2.368488000000001 &nbsp;15.450533000000000&nbsp;<br />
+47 1 &nbsp;23.181816999999999 &nbsp;21.701511999999997 &nbsp; 3.415533000000001&nbsp;<br />
+48 1 &nbsp; 8.385988000000001 &nbsp;17.164317000000000 &nbsp; 9.433033000000000&nbsp;<br />
+49 1 &nbsp;15.558847999999999 &nbsp;15.383137000000000 &nbsp;22.141993000000003&nbsp;<br />
+50 1 &nbsp; 1.928006999999999 &nbsp; 3.523847999999997 &nbsp;20.721862999999999&nbsp;<br />
+51 1 &nbsp; 4.089493000000004 &nbsp;14.704363000000001 &nbsp; 9.541347999999997&nbsp;<br />
+52 1 &nbsp;22.141993000000003 &nbsp;15.558847999999999 &nbsp;15.383137000000000&nbsp;<br />
+53 1 &nbsp;20.721862999999999 &nbsp; 1.928006999999999 &nbsp; 3.523847999999997&nbsp;<br />
+54 1 &nbsp; 2.669363000000000 &nbsp; 2.493652000000000 &nbsp;19.980506999999999&nbsp;<br />
+55 1 &nbsp;15.383137000000000 &nbsp;22.141993000000003 &nbsp;15.558847999999999&nbsp;<br />
+56 1 &nbsp; 3.523847999999997 &nbsp;20.721862999999999 &nbsp; 1.928006999999999&nbsp;<br />
+57 1 &nbsp;14.704363000000001 &nbsp; 9.541347999999997 &nbsp; 4.089493000000004&nbsp;<br />
+58 1 &nbsp; 8.511152000000001 &nbsp; 3.348137000000000 &nbsp;13.963006999999999&nbsp;<br />
+59 1 &nbsp;21.400637000000000 &nbsp;14.528652000000001 &nbsp;16.124493000000005&nbsp;<br />
+60 1 &nbsp;19.980506999999999 &nbsp; 2.669363000000000 &nbsp; 2.493652000000000&nbsp;<br />
+61 1 &nbsp;14.528652000000001 &nbsp;16.124493000000005 &nbsp;21.400637000000000&nbsp;<br />
+62 1 &nbsp;16.124493000000005 &nbsp;21.400637000000000 &nbsp;14.528652000000001&nbsp;<br />
+63 1 &nbsp; 9.365637000000000 &nbsp;21.576347999999999 &nbsp; 7.945506999999999&nbsp;<br />
+64 1 &nbsp;20.546151999999999 &nbsp; 8.686863000000001 &nbsp;10.106993000000005&nbsp;<br />
+65 1 &nbsp; 8.686863000000001 &nbsp;10.106993000000005 &nbsp;20.546151999999999&nbsp;<br />
+66 1 &nbsp;13.963006999999999 &nbsp; 8.511152000000001 &nbsp; 3.348137000000000&nbsp;<br />
+67 1 &nbsp; 3.348137000000000 &nbsp;13.963006999999999 &nbsp; 8.511152000000001&nbsp;<br />
+68 1 &nbsp;21.576347999999999 &nbsp; 7.945506999999999 &nbsp; 9.365637000000000&nbsp;<br />
+69 1 &nbsp; 7.945506999999999 &nbsp; 9.365637000000000 &nbsp;21.576347999999999&nbsp;<br />
+70 1 &nbsp; 9.541347999999997 &nbsp; 4.089493000000004 &nbsp;14.704363000000001&nbsp;<br />
+71 1 &nbsp; 2.493652000000000 &nbsp;19.980506999999999 &nbsp; 2.669363000000000&nbsp;<br />
+72 1 &nbsp;10.106993000000005 &nbsp;20.546151999999999 &nbsp; 8.686863000000001&nbsp;<br />
+73 1 &nbsp;19.217487999999999 &nbsp;19.980506999999999 &nbsp;17.985104000000000&nbsp;<br />
+74 1 &nbsp; 6.084896000000001 &nbsp; 7.182488000000000 &nbsp;16.124493000000001&nbsp;<br />
+75 1 &nbsp;24.002603999999998 &nbsp;10.106993000000001 &nbsp;13.199987999999999&nbsp;<br />
+76 1 &nbsp;17.985104000000000 &nbsp;19.217487999999999 &nbsp;19.980506999999999&nbsp;<br />
+77 1 &nbsp;16.124493000000001 &nbsp; 6.084896000000001 &nbsp; 7.182488000000000&nbsp;<br />
+78 1 &nbsp;22.141993000000003 &nbsp;22.905011999999999 &nbsp; 0.067396000000001&nbsp;<br />
+79 1 &nbsp;19.980506999999999 &nbsp;17.985104000000000 &nbsp;19.217487999999999&nbsp;<br />
+80 1 &nbsp; 7.182488000000000 &nbsp;16.124493000000001 &nbsp; 6.084896000000001&nbsp;<br />
+81 1 &nbsp;10.106993000000001 &nbsp;13.199987999999999 &nbsp;24.002603999999998&nbsp;<br />
+82 1 &nbsp; 4.852512000000000 &nbsp; 7.945506999999997 &nbsp;18.119896000000001&nbsp;<br />
+83 1 &nbsp; 1.928006999999996 &nbsp;10.870012000000001 &nbsp;11.967603999999996&nbsp;<br />
+84 1 &nbsp; 0.067396000000001 &nbsp;22.141993000000003 &nbsp;22.905011999999999&nbsp;<br />
+85 1 &nbsp;10.870012000000001 &nbsp;11.967603999999996 &nbsp; 1.928006999999996&nbsp;<br />
+86 1 &nbsp;11.967603999999996 &nbsp; 1.928006999999996 &nbsp;10.870012000000001&nbsp;<br />
+87 1 &nbsp;13.963006999999996 &nbsp; 1.164988000000000 &nbsp;12.102396000000001&nbsp;<br />
+88 1 &nbsp;16.887512000000001 &nbsp; 4.089493000000001 &nbsp; 5.950103999999997&nbsp;<br />
+89 1 &nbsp; 4.089493000000001 &nbsp; 5.950103999999997 &nbsp;16.887512000000001&nbsp;<br />
+90 1 &nbsp;18.119896000000001 &nbsp; 4.852512000000000 &nbsp; 7.945506999999997&nbsp;<br />
+91 1 &nbsp; 7.945506999999997 &nbsp;18.119896000000001 &nbsp; 4.852512000000000&nbsp;<br />
+92 1 &nbsp; 1.164988000000000 &nbsp;12.102396000000001 &nbsp;13.963006999999996&nbsp;<br />
+93 1 &nbsp;12.102396000000001 &nbsp;13.963006999999996 &nbsp; 1.164988000000000&nbsp;<br />
+94 1 &nbsp;13.199987999999999 &nbsp;24.002603999999998 &nbsp;10.106993000000001&nbsp;<br />
+95 1 &nbsp;22.905011999999999 &nbsp; 0.067396000000001 &nbsp;22.141993000000003&nbsp;<br />
+96 1 &nbsp; 5.950103999999997 &nbsp;16.887512000000001 &nbsp; 4.089493000000001&nbsp;<br />
+97 1 &nbsp;18.456876000000001 &nbsp;16.945280000000000 &nbsp;20.563001000000000&nbsp;<br />
+98 1 &nbsp; 3.506999000000001 &nbsp; 6.421875999999998 &nbsp;19.159720000000000&nbsp;<br />
+99 1 &nbsp; 2.510500999999996 &nbsp;13.142220000000002 &nbsp;12.439375999999998&nbsp;<br />
+100 1 &nbsp;20.563001000000000 &nbsp;18.456876000000001 &nbsp;16.945280000000000&nbsp;<br />
+101 1 &nbsp;19.159720000000000 &nbsp; 3.506999000000001 &nbsp; 6.421875999999998&nbsp;<br />
+102 1 &nbsp; 1.107220000000001 &nbsp;23.665624000000001 &nbsp;21.559499000000002&nbsp;<br />
+103 1 &nbsp;16.945280000000000 &nbsp;20.563001000000000 &nbsp;18.456876000000001&nbsp;<br />
+104 1 &nbsp; 6.421875999999998 &nbsp;19.159720000000000 &nbsp; 3.506999000000001&nbsp;<br />
+105 1 &nbsp;13.142220000000002 &nbsp;12.439375999999998 &nbsp; 2.510500999999996&nbsp;<br />
+106 1 &nbsp; 5.613123999999999 &nbsp; 4.910279999999999 &nbsp;15.541999000000001&nbsp;<br />
+107 1 &nbsp;22.962779999999999 &nbsp;11.630623999999999 &nbsp;14.545500999999996&nbsp;<br />
+108 1 &nbsp;21.559499000000002 &nbsp; 1.107220000000001 &nbsp;23.665624000000001&nbsp;<br />
+109 1 &nbsp;11.630623999999999 &nbsp;14.545500999999996 &nbsp;22.962779999999999&nbsp;<br />
+110 1 &nbsp;14.545500999999996 &nbsp;22.962779999999999 &nbsp;11.630623999999999&nbsp;<br />
+111 1 &nbsp;10.927779999999998 &nbsp; 0.404375999999998 &nbsp; 9.524499000000000&nbsp;<br />
+112 1 &nbsp;17.648123999999999 &nbsp; 7.124720000000001 &nbsp; 8.528000999999996&nbsp;<br />
+113 1 &nbsp; 7.124720000000001 &nbsp; 8.528000999999996 &nbsp;17.648123999999999&nbsp;<br />
+114 1 &nbsp;15.541999000000001 &nbsp; 5.613123999999999 &nbsp; 4.910279999999999&nbsp;<br />
+115 1 &nbsp; 4.910279999999999 &nbsp;15.541999000000001 &nbsp; 5.613123999999999&nbsp;<br />
+116 1 &nbsp; 0.404375999999998 &nbsp; 9.524499000000000 &nbsp;10.927779999999998&nbsp;<br />
+117 1 &nbsp; 9.524499000000000 &nbsp;10.927779999999998 &nbsp; 0.404375999999998&nbsp;<br />
+118 1 &nbsp;12.439375999999998 &nbsp; 2.510500999999996 &nbsp;13.142220000000002&nbsp;<br />
+119 1 &nbsp;23.665624000000001 &nbsp;21.559499000000002 &nbsp; 1.107220000000001&nbsp;<br />
+120 1 &nbsp; 8.528000999999996 &nbsp;17.648123999999999 &nbsp; 7.124720000000001&nbsp;<br />
+121 1 &nbsp;16.548124999999999 &nbsp;19.020114000000000 &nbsp;20.189916000000000&nbsp;<br />
+122 1 &nbsp; 3.880084000000000 &nbsp; 4.513125000000000 &nbsp;17.084886000000001&nbsp;<br />
+123 1 &nbsp; 2.137416000000000 &nbsp;11.067385999999999 &nbsp;10.530625000000001&nbsp;<br />
+124 1 &nbsp;20.189916000000000 &nbsp;16.548124999999999 &nbsp;19.020114000000000&nbsp;<br />
+125 1 &nbsp;17.084886000000001 &nbsp; 3.880084000000000 &nbsp; 4.513125000000000&nbsp;<br />
+126 1 &nbsp;23.102385999999999 &nbsp; 1.504375000000000 &nbsp;21.932584000000002&nbsp;<br />
+127 1 &nbsp;19.020114000000000 &nbsp;20.189916000000000 &nbsp;16.548124999999999&nbsp;<br />
+128 1 &nbsp; 4.513125000000000 &nbsp;17.084886000000001 &nbsp; 3.880084000000000&nbsp;<br />
+129 1 &nbsp;11.067385999999999 &nbsp;10.530625000000001 &nbsp; 2.137416000000000&nbsp;<br />
+130 1 &nbsp; 7.521875000000000 &nbsp; 6.985114000000000 &nbsp;15.915084000000000&nbsp;<br />
+131 1 &nbsp; 0.967614000000000 &nbsp;13.539375000000000 &nbsp;14.172416000000000&nbsp;<br />
+132 1 &nbsp;21.932584000000002 &nbsp;23.102385999999999 &nbsp; 1.504375000000000&nbsp;<br />
+133 1 &nbsp;13.539375000000000 &nbsp;14.172416000000000 &nbsp; 0.967614000000000&nbsp;<br />
+134 1 &nbsp;14.172416000000000 &nbsp; 0.967614000000000 &nbsp;13.539375000000000&nbsp;<br />
+135 1 &nbsp;13.002614000000001 &nbsp;22.565625000000001 &nbsp; 9.897584000000000&nbsp;<br />
+136 1 &nbsp;19.556875000000002 &nbsp; 5.049886000000000 &nbsp; 8.154916000000000&nbsp;<br />
+137 1 &nbsp; 5.049886000000000 &nbsp; 8.154916000000000 &nbsp;19.556875000000002&nbsp;<br />
+138 1 &nbsp;15.915084000000000 &nbsp; 7.521875000000000 &nbsp; 6.985114000000000&nbsp;<br />
+139 1 &nbsp; 6.985114000000000 &nbsp;15.915084000000000 &nbsp; 7.521875000000000&nbsp;<br />
+140 1 &nbsp;22.565625000000001 &nbsp; 9.897584000000000 &nbsp;13.002614000000001&nbsp;<br />
+141 1 &nbsp; 9.897584000000000 &nbsp;13.002614000000001 &nbsp;22.565625000000001&nbsp;<br />
+142 1 &nbsp;10.530625000000001 &nbsp; 2.137416000000000 &nbsp;11.067385999999999&nbsp;<br />
+143 1 &nbsp; 1.504375000000000 &nbsp;21.932584000000002 &nbsp;23.102385999999999&nbsp;<br />
+144 1 &nbsp; 8.154916000000000 &nbsp;19.556875000000002 &nbsp; 5.049886000000000&nbsp;<br />
+145 1 &nbsp;23.225142999999999 &nbsp;21.990351999999998 &nbsp;23.908731000000000&nbsp;<br />
+146 1 &nbsp; 0.161269000000001 &nbsp;11.190143000000003 &nbsp;14.114648000000001&nbsp;<br />
+147 1 &nbsp; 5.856231000000002 &nbsp; 8.097148000000001 &nbsp;17.207643000000001&nbsp;<br />
+148 1 &nbsp;23.908731000000000 &nbsp;23.225142999999999 &nbsp;21.990351999999998&nbsp;<br />
+149 1 &nbsp;14.114648000000001 &nbsp; 0.161269000000001 &nbsp;11.190143000000003&nbsp;<br />
+150 1 &nbsp;20.132148000000001 &nbsp;18.897357000000000 &nbsp;18.213769000000003&nbsp;<br />
+151 1 &nbsp;21.990351999999998 &nbsp;23.908731000000000 &nbsp;23.225142999999999&nbsp;<br />
+152 1 &nbsp;11.190143000000003 &nbsp;14.114648000000001 &nbsp; 0.161269000000001&nbsp;<br />
+153 1 &nbsp; 8.097148000000001 &nbsp;17.207643000000001 &nbsp; 5.856231000000002&nbsp;<br />
+154 1 &nbsp; 0.844857000000001 &nbsp; 9.955352000000000 &nbsp;12.196269000000001&nbsp;<br />
+155 1 &nbsp; 3.937851999999999 &nbsp; 6.862357000000000 &nbsp;17.891231000000001&nbsp;<br />
+156 1 &nbsp;18.213769000000003 &nbsp;20.132148000000001 &nbsp;18.897357000000000&nbsp;<br />
+157 1 &nbsp; 6.862357000000000 &nbsp;17.891231000000001 &nbsp; 3.937851999999999&nbsp;<br />
+158 1 &nbsp;17.891231000000001 &nbsp; 3.937851999999999 &nbsp; 6.862357000000000&nbsp;<br />
+159 1 &nbsp;15.972852000000000 &nbsp; 5.172643000000003 &nbsp; 6.178769000000001&nbsp;<br />
+160 1 &nbsp;12.879857000000001 &nbsp; 2.079648000000001 &nbsp;11.873731000000001&nbsp;<br />
+161 1 &nbsp; 2.079648000000001 &nbsp;11.873731000000001 &nbsp;12.879857000000001&nbsp;<br />
+162 1 &nbsp;12.196269000000001 &nbsp; 0.844857000000001 &nbsp; 9.955352000000000&nbsp;<br />
+163 1 &nbsp; 9.955352000000000 &nbsp;12.196269000000001 &nbsp; 0.844857000000001&nbsp;<br />
+164 1 &nbsp; 5.172643000000003 &nbsp; 6.178769000000001 &nbsp;15.972852000000000&nbsp;<br />
+165 1 &nbsp; 6.178769000000001 &nbsp;15.972852000000000 &nbsp; 5.172643000000003&nbsp;<br />
+166 1 &nbsp;17.207643000000001 &nbsp; 5.856231000000002 &nbsp; 8.097148000000001&nbsp;<br />
+167 1 &nbsp;18.897357000000000 &nbsp;18.213769000000003 &nbsp;20.132148000000001&nbsp;<br />
+168 1 &nbsp;11.873731000000001 &nbsp;12.879857000000001 &nbsp; 2.079648000000001&nbsp;<br />
+169 1 &nbsp;17.166723999999999 &nbsp;16.791232000000001 &nbsp;21.008296000000001&nbsp;<br />
+170 1 &nbsp; 3.061704000000000 &nbsp; 5.131724000000001 &nbsp;19.313768000000000&nbsp;<br />
+171 1 &nbsp; 2.955796000000000 &nbsp;13.296268000000000 &nbsp;11.149224000000002&nbsp;<br />
+172 1 &nbsp;21.008296000000001 &nbsp;17.166723999999999 &nbsp;16.791232000000001&nbsp;<br />
+173 1 &nbsp;19.313768000000000 &nbsp; 3.061704000000000 &nbsp; 5.131724000000001&nbsp;<br />
+174 1 &nbsp; 1.261268000000000 &nbsp; 0.885776000000001 &nbsp;21.114204000000001&nbsp;<br />
+175 1 &nbsp;16.791232000000001 &nbsp;21.008296000000001 &nbsp;17.166723999999999&nbsp;<br />
+176 1 &nbsp; 5.131724000000001 &nbsp;19.313768000000000 &nbsp; 3.061704000000000&nbsp;<br />
+177 1 &nbsp;13.296268000000000 &nbsp;11.149224000000002 &nbsp; 2.955796000000000&nbsp;<br />
+178 1 &nbsp; 6.903276000000002 &nbsp; 4.756232000000000 &nbsp;15.096703999999999&nbsp;<br />
+179 1 &nbsp;22.808731999999999 &nbsp;12.920776000000002 &nbsp;14.990796000000001&nbsp;<br />
+180 1 &nbsp;21.114204000000001 &nbsp; 1.261268000000000 &nbsp; 0.885776000000001&nbsp;<br />
+181 1 &nbsp;12.920776000000002 &nbsp;14.990796000000001 &nbsp;22.808731999999999&nbsp;<br />
+182 1 &nbsp;14.990796000000001 &nbsp;22.808731999999999 &nbsp;12.920776000000002&nbsp;<br />
+183 1 &nbsp;10.773732000000001 &nbsp;23.184224000000000 &nbsp; 9.079203999999999&nbsp;<br />
+184 1 &nbsp;18.938276000000002 &nbsp; 7.278768000000000 &nbsp; 8.973296000000001&nbsp;<br />
+185 1 &nbsp; 7.278768000000000 &nbsp; 8.973296000000001 &nbsp;18.938276000000002&nbsp;<br />
+186 1 &nbsp;15.096703999999999 &nbsp; 6.903276000000002 &nbsp; 4.756232000000000&nbsp;<br />
+187 1 &nbsp; 4.756232000000000 &nbsp;15.096703999999999 &nbsp; 6.903276000000002&nbsp;<br />
+188 1 &nbsp;23.184224000000000 &nbsp; 9.079203999999999 &nbsp;10.773732000000001&nbsp;<br />
+189 1 &nbsp; 9.079203999999999 &nbsp;10.773732000000001 &nbsp;23.184224000000000&nbsp;<br />
+190 1 &nbsp;11.149224000000002 &nbsp; 2.955796000000000 &nbsp;13.296268000000000&nbsp;<br />
+191 1 &nbsp; 0.885776000000001 &nbsp;21.114204000000001 &nbsp; 1.261268000000000&nbsp;<br />
+192 1 &nbsp; 8.973296000000001 &nbsp;18.938276000000002 &nbsp; 7.278768000000000&nbsp;<br />
+193 1 &nbsp;16.163004999999998 &nbsp;17.814207000000000 &nbsp;20.729084000000000&nbsp;<br />
+194 1 &nbsp; 3.340916000000001 &nbsp; 4.128005000000000 &nbsp;18.290793000000001&nbsp;<br />
+195 1 &nbsp; 2.676583999999999 &nbsp;12.273293000000001 &nbsp;10.145505000000000&nbsp;<br />
+196 1 &nbsp;20.729084000000000 &nbsp;16.163004999999998 &nbsp;17.814207000000000&nbsp;<br />
+197 1 &nbsp;18.290793000000001 &nbsp; 3.340916000000001 &nbsp; 4.128005000000000&nbsp;<br />
+198 1 &nbsp; 0.238293000000000 &nbsp; 1.889495000000000 &nbsp;21.393416000000002&nbsp;<br />
+199 1 &nbsp;17.814207000000000 &nbsp;20.729084000000000 &nbsp;16.163004999999998&nbsp;<br />
+200 1 &nbsp; 4.128005000000000 &nbsp;18.290793000000001 &nbsp; 3.340916000000001&nbsp;<br />
+201 1 &nbsp;12.273293000000001 &nbsp;10.145505000000000 &nbsp; 2.676583999999999&nbsp;<br />
+202 1 &nbsp; 7.906995000000000 &nbsp; 5.779207000000000 &nbsp;15.375916000000000&nbsp;<br />
+203 1 &nbsp;23.831707000000002 &nbsp;13.924495000000000 &nbsp;14.711584000000000&nbsp;<br />
+204 1 &nbsp;21.393416000000002 &nbsp; 0.238293000000000 &nbsp; 1.889495000000000&nbsp;<br />
+205 1 &nbsp;13.924495000000000 &nbsp;14.711584000000000 &nbsp;23.831707000000002&nbsp;<br />
+206 1 &nbsp;14.711584000000000 &nbsp;23.831707000000002 &nbsp;13.924495000000000&nbsp;<br />
+207 1 &nbsp;11.796707000000000 &nbsp;22.180505000000000 &nbsp; 9.358416000000000&nbsp;<br />
+208 1 &nbsp;19.941995000000002 &nbsp; 6.255793000000001 &nbsp; 8.694084000000000&nbsp;<br />
+209 1 &nbsp; 6.255793000000001 &nbsp; 8.694084000000000 &nbsp;19.941995000000002&nbsp;<br />
+210 1 &nbsp;15.375916000000000 &nbsp; 7.906995000000000 &nbsp; 5.779207000000000&nbsp;<br />
+211 1 &nbsp; 5.779207000000000 &nbsp;15.375916000000000 &nbsp; 7.906995000000000&nbsp;<br />
+212 1 &nbsp;22.180505000000000 &nbsp; 9.358416000000000 &nbsp;11.796707000000000&nbsp;<br />
+213 1 &nbsp; 9.358416000000000 &nbsp;11.796707000000000 &nbsp;22.180505000000000&nbsp;<br />
+214 1 &nbsp;10.145505000000000 &nbsp; 2.676583999999999 &nbsp;12.273293000000001&nbsp;<br />
+215 1 &nbsp; 1.889495000000000 &nbsp;21.393416000000002 &nbsp; 0.238293000000000&nbsp;<br />
+216 1 &nbsp; 8.694084000000000 &nbsp;19.941995000000002 &nbsp; 6.255793000000001&nbsp;<br />
+217 1 &nbsp;19.299326000000001 &nbsp;15.891014000000000 &nbsp;20.033461000000003&nbsp;<br />
+218 1 &nbsp; 4.036538999999999 &nbsp; 7.264326000000001 &nbsp;20.213985999999998&nbsp;<br />
+219 1 &nbsp; 1.980961000000001 &nbsp;14.196486000000000 &nbsp;13.281826000000002&nbsp;<br />
+220 1 &nbsp;20.033461000000003 &nbsp;19.299326000000001 &nbsp;15.891014000000000&nbsp;<br />
+221 1 &nbsp;20.213985999999998 &nbsp; 4.036538999999999 &nbsp; 7.264326000000001&nbsp;<br />
+222 1 &nbsp; 2.161486000000000 &nbsp;22.823174000000002 &nbsp;22.089039000000000&nbsp;<br />
+223 1 &nbsp;15.891014000000000 &nbsp;20.033461000000003 &nbsp;19.299326000000001&nbsp;<br />
+224 1 &nbsp; 7.264326000000001 &nbsp;20.213985999999998 &nbsp; 4.036538999999999&nbsp;<br />
+225 1 &nbsp;14.196486000000000 &nbsp;13.281826000000002 &nbsp; 1.980961000000001&nbsp;<br />
+226 1 &nbsp; 4.770674000000001 &nbsp; 3.856014000000003 &nbsp;16.071538999999998&nbsp;<br />
+227 1 &nbsp;21.908514000000000 &nbsp;10.788174000000001 &nbsp;14.015961000000001&nbsp;<br />
+228 1 &nbsp;22.089039000000000 &nbsp; 2.161486000000000 &nbsp;22.823174000000002&nbsp;<br />
+229 1 &nbsp;10.788174000000001 &nbsp;14.015961000000001 &nbsp;21.908514000000000&nbsp;<br />
+230 1 &nbsp;14.015961000000001 &nbsp;21.908514000000000 &nbsp;10.788174000000001&nbsp;<br />
+231 1 &nbsp; 9.873514000000004 &nbsp; 1.246826000000002 &nbsp;10.054039000000000&nbsp;<br />
+232 1 &nbsp;16.805674000000000 &nbsp; 8.178986000000000 &nbsp; 7.998461000000001&nbsp;<br />
+233 1 &nbsp; 8.178986000000000 &nbsp; 7.998461000000001 &nbsp;16.805674000000000&nbsp;<br />
+234 1 &nbsp;16.071538999999998 &nbsp; 4.770674000000001 &nbsp; 3.856014000000003&nbsp;<br />
+235 1 &nbsp; 3.856014000000003 &nbsp;16.071538999999998 &nbsp; 4.770674000000001&nbsp;<br />
+236 1 &nbsp; 1.246826000000002 &nbsp;10.054039000000000 &nbsp; 9.873514000000004&nbsp;<br />
+237 1 &nbsp;10.054039000000000 &nbsp; 9.873514000000004 &nbsp; 1.246826000000002&nbsp;<br />
+238 1 &nbsp;13.281826000000002 &nbsp; 1.980961000000001 &nbsp;14.196486000000000&nbsp;<br />
+239 1 &nbsp;22.823174000000002 &nbsp;22.089039000000000 &nbsp; 2.161486000000000&nbsp;<br />
+240 1 &nbsp; 7.998461000000001 &nbsp;16.805674000000000 &nbsp; 8.178986000000000&nbsp;<br />
+241 1 &nbsp;14.793422000000001 &nbsp;17.303923000000001 &nbsp;20.813329000000000&nbsp;<br />
+242 1 &nbsp; 3.256670999999999 &nbsp; 2.758422000000001 &nbsp;18.801076999999999&nbsp;<br />
+243 1 &nbsp; 2.760829000000001 &nbsp;12.783577000000001 &nbsp; 8.775922000000001&nbsp;<br />
+244 1 &nbsp;20.813329000000000 &nbsp;14.793422000000001 &nbsp;17.303923000000001&nbsp;<br />
+245 1 &nbsp;18.801076999999999 &nbsp; 3.256670999999999 &nbsp; 2.758422000000001&nbsp;<br />
+246 1 &nbsp; 0.748577000000000 &nbsp; 3.259077999999999 &nbsp;21.309170999999999&nbsp;<br />
+247 1 &nbsp;17.303923000000001 &nbsp;20.813329000000000 &nbsp;14.793422000000001&nbsp;<br />
+248 1 &nbsp; 2.758422000000001 &nbsp;18.801076999999999 &nbsp; 3.256670999999999&nbsp;<br />
+249 1 &nbsp;12.783577000000001 &nbsp; 8.775922000000001 &nbsp; 2.760829000000001&nbsp;<br />
+250 1 &nbsp; 9.276577999999999 &nbsp; 5.268923000000003 &nbsp;15.291670999999999&nbsp;<br />
+251 1 &nbsp;23.321422999999999 &nbsp;15.294077999999999 &nbsp;14.795829000000001&nbsp;<br />
+252 1 &nbsp;21.309170999999999 &nbsp; 0.748577000000000 &nbsp; 3.259077999999999&nbsp;<br />
+253 1 &nbsp;15.294077999999999 &nbsp;14.795829000000001 &nbsp;23.321422999999999&nbsp;<br />
+254 1 &nbsp;14.795829000000001 &nbsp;23.321422999999999 &nbsp;15.294077999999999&nbsp;<br />
+255 1 &nbsp;11.286423000000003 &nbsp;20.810922000000001 &nbsp; 9.274170999999999&nbsp;<br />
+256 1 &nbsp;21.311578000000001 &nbsp; 6.766077000000000 &nbsp; 8.778329000000001&nbsp;<br />
+257 1 &nbsp; 6.766077000000000 &nbsp; 8.778329000000001 &nbsp;21.311578000000001&nbsp;<br />
+258 1 &nbsp;15.291670999999999 &nbsp; 9.276577999999999 &nbsp; 5.268923000000003&nbsp;<br />
+259 1 &nbsp; 5.268923000000003 &nbsp;15.291670999999999 &nbsp; 9.276577999999999&nbsp;<br />
+260 1 &nbsp;20.810922000000001 &nbsp; 9.274170999999999 &nbsp;11.286423000000003&nbsp;<br />
+261 1 &nbsp; 9.274170999999999 &nbsp;11.286423000000003 &nbsp;20.810922000000001&nbsp;<br />
+262 1 &nbsp; 8.775922000000001 &nbsp; 2.760829000000001 &nbsp;12.783577000000001&nbsp;<br />
+263 1 &nbsp; 3.259077999999999 &nbsp;21.309170999999999 &nbsp; 0.748577000000000&nbsp;<br />
+264 1 &nbsp; 8.778329000000001 &nbsp;21.311578000000001 &nbsp; 6.766077000000000&nbsp;<br />
+265 1 &nbsp;16.880291000000000 &nbsp;15.477010000000000 &nbsp;21.487289000000001&nbsp;<br />
+266 1 &nbsp; 2.582710999999999 &nbsp; 4.845291000000000 &nbsp;20.627990000000000&nbsp;<br />
+267 1 &nbsp; 3.434789000000001 &nbsp;14.610490000000000 &nbsp;10.862791000000001&nbsp;<br />
+268 1 &nbsp;21.487289000000001 &nbsp;16.880291000000000 &nbsp;15.477010000000000&nbsp;<br />
+269 1 &nbsp;20.627990000000000 &nbsp; 2.582710999999999 &nbsp; 4.845291000000000&nbsp;<br />
+270 1 &nbsp; 2.575490000000000 &nbsp; 1.172208999999999 &nbsp;20.635210999999998&nbsp;<br />
+271 1 &nbsp;15.477010000000000 &nbsp;21.487289000000001 &nbsp;16.880291000000000&nbsp;<br />
+272 1 &nbsp; 4.845291000000000 &nbsp;20.627990000000000 &nbsp; 2.582710999999999&nbsp;<br />
+273 1 &nbsp;14.610490000000000 &nbsp;10.862791000000001 &nbsp; 3.434789000000001&nbsp;<br />
+274 1 &nbsp; 7.189709000000000 &nbsp; 3.442010000000000 &nbsp;14.617710999999998&nbsp;<br />
+275 1 &nbsp;21.494510000000002 &nbsp;13.207208999999999 &nbsp;15.469789000000002&nbsp;<br />
+276 1 &nbsp;20.635210999999998 &nbsp; 2.575490000000000 &nbsp; 1.172208999999999&nbsp;<br />
+277 1 &nbsp;13.207208999999999 &nbsp;15.469789000000002 &nbsp;21.494510000000002&nbsp;<br />
+278 1 &nbsp;15.469789000000002 &nbsp;21.494510000000002 &nbsp;13.207208999999999&nbsp;<br />
+279 1 &nbsp; 9.459510000000000 &nbsp;22.897791000000002 &nbsp; 8.600210999999998&nbsp;<br />
+280 1 &nbsp;19.224709000000001 &nbsp; 8.592990000000000 &nbsp; 9.452289000000002&nbsp;<br />
+281 1 &nbsp; 8.592990000000000 &nbsp; 9.452289000000002 &nbsp;19.224709000000001&nbsp;<br />
+282 1 &nbsp;14.617710999999998 &nbsp; 7.189709000000000 &nbsp; 3.442010000000000&nbsp;<br />
+283 1 &nbsp; 3.442010000000000 &nbsp;14.617710999999998 &nbsp; 7.189709000000000&nbsp;<br />
+284 1 &nbsp;22.897791000000002 &nbsp; 8.600210999999998 &nbsp; 9.459510000000000&nbsp;<br />
+285 1 &nbsp; 8.600210999999998 &nbsp; 9.459510000000000 &nbsp;22.897791000000002&nbsp;<br />
+286 1 &nbsp;10.862791000000001 &nbsp; 3.434789000000001 &nbsp;14.610490000000000&nbsp;<br />
+287 1 &nbsp; 1.172208999999999 &nbsp;20.635210999999998 &nbsp; 2.575490000000000&nbsp;<br />
+288 1 &nbsp; 9.452289000000002 &nbsp;19.224709000000001 &nbsp; 8.592990000000000&nbsp;<br />
+289 2 &nbsp;13.450315999999999 &nbsp;21.598011000000000 &nbsp;17.551843999999999&nbsp;<br />
+290 2 &nbsp; 6.518156000000001 &nbsp; 1.415315999999999 &nbsp;14.506989000000001&nbsp;<br />
+291 2 &nbsp;23.569344000000001 &nbsp; 8.489489000000001 &nbsp; 7.432815999999999&nbsp;<br />
+292 2 &nbsp;17.551843999999999 &nbsp;13.450315999999999 &nbsp;21.598011000000000&nbsp;<br />
+293 2 &nbsp;14.506989000000001 &nbsp; 6.518156000000001 &nbsp; 1.415315999999999&nbsp;<br />
+294 2 &nbsp;20.524488999999999 &nbsp; 4.602184000000001 &nbsp; 0.500656000000001&nbsp;<br />
+295 2 &nbsp;21.598011000000000 &nbsp;17.551843999999999 &nbsp;13.450315999999999&nbsp;<br />
+296 2 &nbsp; 1.415315999999999 &nbsp;14.506989000000001 &nbsp; 6.518156000000001&nbsp;<br />
+297 2 &nbsp; 8.489489000000001 &nbsp; 7.432815999999999 &nbsp;23.569344000000001&nbsp;<br />
+298 2 &nbsp;10.619684000000001 &nbsp; 9.563010999999999 &nbsp;18.553156000000001&nbsp;<br />
+299 2 &nbsp; 3.545511000000000 &nbsp;16.637184000000001 &nbsp;11.534344000000003&nbsp;<br />
+300 2 &nbsp; 0.500656000000001 &nbsp;20.524488999999999 &nbsp; 4.602184000000001&nbsp;<br />
+301 2 &nbsp;16.637184000000001 &nbsp;11.534344000000003 &nbsp; 3.545511000000000&nbsp;<br />
+302 2 &nbsp;11.534344000000003 &nbsp; 3.545511000000000 &nbsp;16.637184000000001&nbsp;<br />
+303 2 &nbsp;15.580511000000000 &nbsp;19.467815999999999 &nbsp;12.535656000000001&nbsp;<br />
+304 2 &nbsp;22.654684000000000 &nbsp; 2.471989000000000 &nbsp; 5.516844000000002&nbsp;<br />
+305 2 &nbsp; 2.471989000000000 &nbsp; 5.516844000000002 &nbsp;22.654684000000000&nbsp;<br />
+306 2 &nbsp;18.553156000000001 &nbsp;10.619684000000001 &nbsp; 9.563010999999999&nbsp;<br />
+307 2 &nbsp; 9.563010999999999 &nbsp;18.553156000000001 &nbsp;10.619684000000001&nbsp;<br />
+308 2 &nbsp;19.467815999999999 &nbsp;12.535656000000001 &nbsp;15.580511000000000&nbsp;<br />
+309 2 &nbsp;12.535656000000001 &nbsp;15.580511000000000 &nbsp;19.467815999999999&nbsp;<br />
+310 2 &nbsp; 7.432815999999999 &nbsp;23.569344000000001 &nbsp; 8.489489000000001&nbsp;<br />
+311 2 &nbsp; 4.602184000000001 &nbsp; 0.500656000000001 &nbsp;20.524488999999999&nbsp;<br />
+312 2 &nbsp; 5.516844000000002 &nbsp;22.654684000000000 &nbsp; 2.471989000000000&nbsp;<br />
+313 2 &nbsp;13.748784000000001 &nbsp;20.127334000000001 &nbsp;19.499107000000002&nbsp;<br />
+314 2 &nbsp; 4.570892999999999 &nbsp; 1.713784000000004 &nbsp;15.977665999999999&nbsp;<br />
+315 2 &nbsp; 1.446607000000001 &nbsp; 9.960165999999999 &nbsp; 7.731284000000004&nbsp;<br />
+316 2 &nbsp;19.499107000000002 &nbsp;13.748784000000001 &nbsp;20.127334000000001&nbsp;<br />
+317 2 &nbsp;15.977665999999999 &nbsp; 4.570892999999999 &nbsp; 1.713784000000004&nbsp;<br />
+318 2 &nbsp;21.995165999999998 &nbsp; 4.303715999999999 &nbsp;22.623393000000000&nbsp;<br />
+319 2 &nbsp;20.127334000000001 &nbsp;19.499107000000002 &nbsp;13.748784000000001&nbsp;<br />
+320 2 &nbsp; 1.713784000000004 &nbsp;15.977665999999999 &nbsp; 4.570892999999999&nbsp;<br />
+321 2 &nbsp; 9.960165999999999 &nbsp; 7.731284000000004 &nbsp; 1.446607000000001&nbsp;<br />
+322 2 &nbsp;10.321216000000000 &nbsp; 8.092334000000001 &nbsp;16.605892999999998&nbsp;<br />
+323 2 &nbsp; 2.074834000000001 &nbsp;16.338715999999998 &nbsp;13.481607000000000&nbsp;<br />
+324 2 &nbsp;22.623393000000000 &nbsp;21.995165999999998 &nbsp; 4.303715999999999&nbsp;<br />
+325 2 &nbsp;16.338715999999998 &nbsp;13.481607000000000 &nbsp; 2.074834000000001&nbsp;<br />
+326 2 &nbsp;13.481607000000000 &nbsp; 2.074834000000001 &nbsp;16.338715999999998&nbsp;<br />
+327 2 &nbsp;14.109834000000001 &nbsp;19.766284000000002 &nbsp;10.588393000000000&nbsp;<br />
+328 2 &nbsp;22.356216000000000 &nbsp; 3.942665999999999 &nbsp; 7.464107000000001&nbsp;<br />
+329 2 &nbsp; 3.942665999999999 &nbsp; 7.464107000000001 &nbsp;22.356216000000000&nbsp;<br />
+330 2 &nbsp;16.605892999999998 &nbsp;10.321216000000000 &nbsp; 8.092334000000001&nbsp;<br />
+331 2 &nbsp; 8.092334000000001 &nbsp;16.605892999999998 &nbsp;10.321216000000000&nbsp;<br />
+332 2 &nbsp;19.766284000000002 &nbsp;10.588393000000000 &nbsp;14.109834000000001&nbsp;<br />
+333 2 &nbsp;10.588393000000000 &nbsp;14.109834000000001 &nbsp;19.766284000000002&nbsp;<br />
+334 2 &nbsp; 7.731284000000004 &nbsp; 1.446607000000001 &nbsp; 9.960165999999999&nbsp;<br />
+335 2 &nbsp; 4.303715999999999 &nbsp;22.623393000000000 &nbsp;21.995165999999998&nbsp;<br />
+336 2 &nbsp; 7.464107000000001 &nbsp;22.356216000000000 &nbsp; 3.942665999999999&nbsp;<br />
+337 2 &nbsp;14.003926000000000 &nbsp;17.898452000000002 &nbsp;20.336742999999998&nbsp;<br />
+338 2 &nbsp; 3.733257000000000 &nbsp; 1.968925999999997 &nbsp;18.206547999999998&nbsp;<br />
+339 2 &nbsp; 2.284243000000000 &nbsp;12.189048000000000 &nbsp; 7.986425999999997&nbsp;<br />
+340 2 &nbsp;20.336742999999998 &nbsp;14.003926000000000 &nbsp;17.898452000000002&nbsp;<br />
+341 2 &nbsp;18.206547999999998 &nbsp; 3.733257000000000 &nbsp; 1.968925999999997&nbsp;<br />
+342 2 &nbsp; 0.154047999999999 &nbsp; 4.048574000000000 &nbsp;21.785757000000000&nbsp;<br />
+343 2 &nbsp;17.898452000000002 &nbsp;20.336742999999998 &nbsp;14.003926000000000&nbsp;<br />
+344 2 &nbsp; 1.968925999999997 &nbsp;18.206547999999998 &nbsp; 3.733257000000000&nbsp;<br />
+345 2 &nbsp;12.189048000000000 &nbsp; 7.986425999999997 &nbsp; 2.284243000000000&nbsp;<br />
+346 2 &nbsp;10.066074000000000 &nbsp; 5.863452000000001 &nbsp;15.768257000000000&nbsp;<br />
+347 2 &nbsp;23.915952000000001 &nbsp;16.083574000000002 &nbsp;14.319243000000000&nbsp;<br />
+348 2 &nbsp;21.785757000000000 &nbsp; 0.154047999999999 &nbsp; 4.048574000000000&nbsp;<br />
+349 2 &nbsp;16.083574000000002 &nbsp;14.319243000000000 &nbsp;23.915952000000001&nbsp;<br />
+350 2 &nbsp;14.319243000000000 &nbsp;23.915952000000001 &nbsp;16.083574000000002&nbsp;<br />
+351 2 &nbsp;11.880952000000001 &nbsp;20.021425999999998 &nbsp; 9.750757000000000&nbsp;<br />
+352 2 &nbsp;22.101074000000001 &nbsp; 6.171547999999999 &nbsp; 8.301743000000000&nbsp;<br />
+353 2 &nbsp; 6.171547999999999 &nbsp; 8.301743000000000 &nbsp;22.101074000000001&nbsp;<br />
+354 2 &nbsp;15.768257000000000 &nbsp;10.066074000000000 &nbsp; 5.863452000000001&nbsp;<br />
+355 2 &nbsp; 5.863452000000001 &nbsp;15.768257000000000 &nbsp;10.066074000000000&nbsp;<br />
+356 2 &nbsp;20.021425999999998 &nbsp; 9.750757000000000 &nbsp;11.880952000000001&nbsp;<br />
+357 2 &nbsp; 9.750757000000000 &nbsp;11.880952000000001 &nbsp;20.021425999999998&nbsp;<br />
+358 2 &nbsp; 7.986425999999997 &nbsp; 2.284243000000000 &nbsp;12.189048000000000&nbsp;<br />
+359 2 &nbsp; 4.048574000000000 &nbsp;21.785757000000000 &nbsp; 0.154047999999999&nbsp;<br />
+360 2 &nbsp; 8.301743000000000 &nbsp;22.101074000000001 &nbsp; 6.171547999999999&nbsp;<br />
+&nbsp; &nbsp; 0.000000 &nbsp;&nbsp; 0.000000 &nbsp;&nbsp; 0.000000&nbsp;<br />
+&nbsp; 24.070000 &nbsp;&nbsp; 0.000000 &nbsp;&nbsp; 0.000000<br />
+&nbsp; &nbsp; 0.000000&nbsp; 24.070000 &nbsp;&nbsp; 0.000000<br />
+&nbsp; &nbsp; 0.000000 &nbsp;&nbsp; 0.000000&nbsp; 24.070000<br />
+----------<br />
+<br />
+------------------------------------------------------------------------------

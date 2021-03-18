@@ -1,0 +1,306 @@
+-----------------------------------------------------------------------------<br />
+Å° Supercell (https://orex.github.io/supercell/)<br />
+(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(Edit: 10/Jul/2020)<br />
+<br />
+Å† Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git wget openbabel<br />
+&nbsp; cd ~<br />
+1.&nbsp;git clone https://github.com/orex/supercell.git<br />
+2. cd supercell<br />
+3. wget&nbsp;https://orex.github.io/supercell/exe/supercell-linux.tar.gz<br />
+4. tar zxvf supercell-linux.tar.gz<br />
+<br />
+Å† Environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo '# supercell environment settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=$PATH:$HOME/supercell' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo 'export BABEL_DATADIR=$HOME/supercell' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+<br />
+Å† Usage<br />
+1. cd ~/supercell/data/examples/Ca2Al2SiO7<br />
+2. supercell -i Ca2Al2SiO7.cif -s 1x1x2 -m -o Ca2Al2SiO7_cell_1x1x2<br />
+<br />
+Å† Options<br />
+-i: input file<br />
+-o: output file<br />
+-s: supercell size<br />
+-m: present in the command line<br />
+-----------------------------------------------------------------------------<br />
+Å° GULP (http://gulp.curtin.edu.au/gulp/)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† Register<br />
+(http://gulp.curtin.edu.au/gulp/register.cfm)<br />
+1. (input data) &gt; [check] I agree ... &gt; Send<br />
+<br />
+Å† Install<br />
+ÅEgulp-5.1.tgz<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y gcc g++ build-essential gfortran<br />
+&nbsp; cd ~<br />
+1. tar zxvf gulp-5.1.tgz<br />
+2. cd gulp-5.1/Src<br />
+3. ./mkgulp<br />
+<br />
+Å† Environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo '# glup-5.1 environment settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=$PATH:$HOME/gulp-5.1/Src' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export GULP_LIB=$HOME/gulp-5.1/Libraries' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export GULP_DOC=$HOME/gulp-5.1/Docs' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+Å¶ If you install alamode, you can do [echo 'export ALAMODE_DIR=$HOME/alamode-v.1.1.0' &gt;&gt; ~/.bashrc].<br />
+<br />
+Å† Test calcultion<br />
+1. cd ~/gulp-5.1/Examples<br />
+2. chmod +x run.sh<br />
+3. ./run.sh<br />
+4. cd Output<br />
+<br />
+Å† Run command<br />
+1. gulp &lt; case.gin &gt; case.got<br />
+-----------------------------------------------------------------------------<br />
+Å° Special Quasirandom Structures (SQS)<br />
+(Supercell + GULP)<br />
+<br />
+Å† Examples (PbSnTe)<br />
+1. cd ~/supercell/data/examples/PbSnTe-SQS<br />
+2. chmod +x df_cfg.bash<br />
+3. ./df_cfg.bash<br />
+4. cat SQS-1x1x2<br />
+5. cat SQS-1x2x2<br />
+(you can get&nbsp;Interatomic potentials [eV] for rcut value)<br />
+-----------------------------------------------------------------------------<br />
+Å° cif2cell-lammps (https://github.com/andeplane/cif2cell-lammps)<br />
+(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† Install (cif2cell-lammps)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git python<br />
+&nbsp; cd ~<br />
+1. git clone&nbsp;https://github.com/andeplane/cif2cell-lammps.git<br />
+2.&nbsp;cd cif2cell-lammps<br />
+3. tar zxvf&nbsp;PyCifRW-3.3.tar.gz<br />
+4. cd&nbsp;PyCifRW-3.3<br />
+5. sudo python setup.py install<br />
+5. cd ~/cif2cell-lammps<br />
+6.&nbsp;sudo python setup.py install<br />
+<br />
+Å† Test<br />
+1. cd&nbsp;~/cif2cell-lammps/cifs<br />
+2. cif2cell BaTiO3_cubic.cif --no-reduce -p lammps<br />
+&nbsp; (you can get BaTiO3_cubic.data)<br />
+3. cif2cell BaTiO3_cubic.cif --no-reduce -p cfg<br />
+&nbsp; (you can get&nbsp;BaTiO3_cubic.cfg)<br />
+&nbsp; (sed -i '/^#/d'&nbsp;BaTiO3_cubic.cfg) or (sed -i '/#\*/d' BaTiO3_cubic.cfg)<br />
+4. cif2cell BaTiO3_cubic.cif --no-reduce -p vasp --vasp-cartesian-positions&nbsp;--vasp-format=5 -o case.poscar<br />
+&nbsp; (you can get case.poscar)<br />
+5. cif2cell BaTiO3_cubic.cif --no-reduce -p dftb<br />
+&nbsp; (you can get&nbsp;BaTiO3_cubic.gen)<br />
+&nbsp; (sed -i '/^#/d'&nbsp;BaTiO3_cubic.gen) or (sed -i '/#\*/d' BaTiO3_cubic.gen)<br />
+-----------------------------------------------------------------------------<br />
+Å° Lammps<br />
+(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† Install (including meam/c)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget<br />
+&nbsp; cd ~<br />
+2. wget https://lammps.sandia.gov/tars/lammps-stable.tar.gz<br />
+3. tar zxvf lammps-stable.tar.gz<br />
+4. cd lammps-3Mar20<br />
+5. mkdir build ; cd build&nbsp;<br />
+6. cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake<br />
+7. cmake --build .<br />
+<br />
+Åû environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp;&nbsp;echo '#&nbsp;lammps-3Mar20 environment settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=$PATH:$HOME/lammps-3Mar20/build' &gt;&gt; ~/.bashrc<br />
+2. bash&nbsp;<br />
+-----------------------------------------------------------------------------<br />
+Å° Special Quasirandom Structures (SQS)<br />
+(Supercell + cif2cell-lammps + Lammps)<br />
+<br />
+Å† Examples (FeCrW)<br />
+0. cd ~<br />
+1. git clone&nbsp;https://github.com/by-student-2017/supercell-examples.git<br />
+2. cp -r ~/supercell-examples/* ~/supercell/data/examples<br />
+3. cd ~/supercell/data/examples/FeCrW-SQS-OPT<br />
+4. chmod +x df_cfg_lmp.bash<br />
+5. ./df_cfg_lmp.bash 1x1x2<br />
+&nbsp; (or&nbsp;./df_cfg_lmp.bash 2x2x1, etc)<br />
+6. cat SQS-1x1x2<br />
+&nbsp;&nbsp;(or cat SQS-2x2x1, etc)<br />
+7. cat result.txt<br />
+(you can get Total energy [eV] for every *.cif)<br />
+(FeCrW-SQS-OPT is minimize version)<br />
+<br />
+Note:&nbsp;Other systems can be calculated by changing the description of the potential in &quot;in.lmp&quot; so that it corresponds to the element in the &quot;.cif&quot; file.<br />
+-----------------------------------------------------------------------------<br />
+Å° Special Quasirandom Structures (SQS)<br />
+(Supercell + cif2cell-informal + PWscf)<br />
+(Ubuntu 18.04 LTS or Debian 10.0)<br />
+(Edit: 15/Jul/2020)<br />
+<br />
+Å† cif2cell-informal<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git python python-setuptools python-dev<br />
+&nbsp; cd ~<br />
+1. git clone https://github.com/by-student-2017/cif2cell-informal.git<br />
+2. cd cif2cell-informal<br />
+3. tar zxvf PyCifRW-3.3.tar.gz<br />
+4. cd PyCifRW-3.3<br />
+5. sudo python setup.py install<br />
+6. cd ~/cif2cell-informal<br />
+7. sudo python setup.py install<br />
+<br />
+Å† PWscf (v.6.4.1)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget<br />
+&nbsp; cd ~<br />
+2. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+3. tar zxvf qe-6.4.1.tar.gz<br />
+4. cd q-e-qe-6.4.1<br />
+5. wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+6. patch -p1 --merge &lt; backports-6.4.1.diff<br />
+7. ./configure<br />
+8. make pw<br />
+9. sudo make install<br />
+(/usr/local/bin/pw.x)<br />
+<br />
+Å† Examples (PbSnTe) (beta version)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git<br />
+&nbsp; cd ~<br />
+1. git clone https://github.com/by-student-2017/supercell-examples.git<br />
+2. cp -r ~/supercell-examples/* ~/supercell/data/examples<br />
+3. cd ~/supercell/data/examples/PbSnTe-SQS-OPT<br />
+4. chmod +x df_cfg_qe.bash<br />
+5. export OMP_NUM_THREADS=1<br />
+6. ./df_cfg_qe.bash 1x1x2 4<br />
+&nbsp; (last number is number of cpus)<br />
+7. cat SQS-1x1x2<br />
+(you can get Total energy [eV] for every *.cif)<br />
+<br />
+Note1:&nbsp;Since &quot;MSDA&quot; (units: r<sup>2</sup>/Angstrom<sup>2</sup>) uses an initial structure, the initial structure must have an ideal atomic arrangement. For example, in the case of the FCC structure, the initial structure (cif file) of the FCC whose atomic positions are not displaced is required.<br />
+Note2:&nbsp;Beta version remains because we can't move to the final test because of PC spec restrictions.<br />
+-----------------------------------------------------------------------------<br />
+Å° Special Quasirandom Structures (SQS)<br />
+(Supercell + cif2cell-informal + lammps or PWscf)<br />
+(Google Colaboratory)<br />
+(Edit: 16/Jul/2020)<br />
+<br />
+Å† Install (supercell)<br />
+!apt update<br />
+!apt install -y git wget openbabel<br />
+%cd /content<br />
+!git clone https://github.com/orex/supercell.git<br />
+%cd supercell<br />
+!wget https://orex.github.io/supercell/exe/supercell-linux.tar.gz<br />
+!tar zxvf supercell-linux.tar.gz<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/supercell:&quot;+os.environ['PATH']<br />
+os.environ['BABEL_DATADIR'] = &quot;/content/supercell&quot;<br />
+<br />
+Å† Install (cif2cell-informal)<br />
+!apt update<br />
+!apt install -y git python python-setuptools python-dev<br />
+%cd /content<br />
+!git clone https://github.com/by-student-2017/cif2cell-informal.git<br />
+%cd cif2cell-informal<br />
+!tar zxvf PyCifRW-3.3.tar.gz<br />
+%cd PyCifRW-3.3<br />
+!python2 setup.py install<br />
+%cd /content/cif2cell-informal<br />
+!python2 setup.py install<br />
+<br />
+Å† Install (lammps)<br />
+%cd /content<br />
+!wget https://lammps.sandia.gov/tars/lammps-stable.tar.gz<br />
+!tar zxvf lammps-stable.tar.gz<br />
+%cd lammps-3Mar20<br />
+!mkdir build<br />
+%cd build&nbsp;<br />
+!cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake<br />
+!cmake --build .<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/lammps-3Mar20/build:&quot;+os.environ['PATH']<br />
+<br />
+Å† Examples (FeCrW, lammps)<br />
+%cd /content<br />
+!git clone&nbsp;https://github.com/by-student-2017/supercell-examples.git<br />
+!cp -r /content/supercell-examples/* /content/supercell/data/examples<br />
+%cd /content/supercell/data/examples/FeCrW-SQS-OPT-gc<br />
+!chmod +x df_cfg_lmp_gc.bash<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;<br />
+!./df_cfg_lmp_gc.bash 1x1x2 FeCrW.cif<br />
+<br />
+Note:&nbsp;Other systems can be calculated by changing the description of the potential in &quot;in.lmp&quot; so that it corresponds to the element in the &quot;.cif&quot; file.<br />
+<br />
+Å† Install (PWscf)<br />
+!apt update<br />
+!apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget<br />
+%cd /content<br />
+!wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+!tar zxvf qe-6.4.1.tar.gz<br />
+%cd q-e-qe-6.4.1<br />
+!wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+!patch -p1 --merge &lt; backports-6.4.1.diff<br />
+!./configure<br />
+!make pw<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']<br />
+<br />
+Å† Examples (FeCoW, PWscf) (beta version)<br />
+!apt update<br />
+!apt install -y git<br />
+%cd /content<br />
+!git clone https://github.com/by-student-2017/supercell-examples.git<br />
+!cp -r /content/supercell-examples/* /content/supercell/data/examples<br />
+%cd /content/supercell/data/examples/FeCoW-SQS-OPT-gc<br />
+!chmod +x MSDA.bash<br />
+!chmod +x df_cfg_qe_gc.bash<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;<br />
+!./df_cfg_qe_gc.bash 1x1x2 FeCoW.cif<br />
+<br />
+Note1:&nbsp;Since &quot;MSDA&quot; (units: r<sup>2</sup>/Angstrom<sup>2</sup>) uses an initial structure, the initial structure must have an ideal atomic arrangement. For example, in the case of the FCC structure, the initial structure (cif file) of the FCC whose atomic positions are not displaced is required.<br />
+Note2:&nbsp;Beta version remains because we can't move to the final test because of PC spec restrictions.<br />
+Note3: [r<sup>2</sup>/Angstrom<sup>2</sup>] * 100 * 100 = [r<sup>2</sup>/pm<sup>2</sup>] unit<br />
+-----------------------------------------------------------------------------<br />
+Å° Special Quasirandom Structures (SQS) (failed)<br />
+(Supercell + cif2cell-lammps + xTB)<br />
+<br />
+Å† Install (xtb v.6.3.0)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git<br />
+&nbsp; cd ~<br />
+1. git clone https://github.com/by-student-2017/xtb-6.3.0_Ubuntu18.04LTS.git<br />
+2. mv xtb-6.3.0_Ubuntu18.04LTS xtb-6.3.0<br />
+3. cd xtb-6.3.0<br />
+4. chmod +x install.sh<br />
+5. ./install.sh<br />
+<br />
+Å† Examples (GaInAs)<br />
+0. cd ~<br />
+1. git clone&nbsp;https://github.com/by-student-2017/supercell-examples.git<br />
+2. cp -r ~/supercell-examples/* ~/supercell/data/examples<br />
+3. cd ~/supercell/data/examples/GaInAs-SQS<br />
+4. chmod +x df_cfg_xtb.bash<br />
+5. ./df_cfg_xtb.bash 1x1x2<br />
+&nbsp; (or&nbsp;./df_cfg_xtb.bash 2x2x1, etc)<br />
+6. cat SQS-1x1x2<br />
+&nbsp;&nbsp;(or cat SQS-2x2x1, etc)<br />
+(you can get Total energy [eV] for every *.cif)<br />
+-----------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Supercell program: https://orex.github.io/supercell/<br />
+-----------------------------------------------------------------------------

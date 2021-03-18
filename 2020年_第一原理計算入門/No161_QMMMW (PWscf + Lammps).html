@@ -1,0 +1,629 @@
+&nbsp; QMMMW (QM/MM method) (PWscf/Lammps)&nbsp; (Edit: 19/Nov/2019)<br />
+------------------------------------------------------------------------------<br />
+□ Github<br />
+・https://github.com/by-student-2017/QMMMW_Ubuntu18.04LTS<br />
+・https://github.com/by-student-2017/QMMMW_Ubuntu20.04LTS<br />
+------------------------------------------------------------------------------<br />
+□ QMMMW code (PWscf/Lammps)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10 (64 bit)) (python 2.7)<br />
+<br />
+Note: lammps-30Oct14 (30 Oct 14)<br />
+<br />
+◇ Install<br />
+(http://cpc.cs.qub.ac.uk/summaries/AEWS_v1_0.html)<br />
+・ QMMMW<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gcc<br />
+&nbsp; sudo apt install bulid-essential<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install fftw-dev<br />
+&nbsp; sudo apt install python<br />
+&nbsp; sudo apt install libpython-dev<br />
+&nbsp; sudo apt install libssl-dev<br />
+&nbsp; sudo apt install csh<br />
+&nbsp; sudo apt install zlib1g-dev<br />
+&nbsp; sudo apt install make<br />
+&nbsp; (sudo apt install openssl)<br />
+&nbsp; (sudo apt install libopenblas-dev)<br />
+&nbsp; (sudo apt install libscalapack-openmpi-dev)<br />
+&nbsp; (sudo apt install libbz2-dev)<br />
+&nbsp; (sudo apt install libreadline-dev)<br />
+&nbsp; (sudo apt install libsqlite3-dev)<br />
+&nbsp; (sudo apt install cmake)<br />
+&nbsp; (sudo apt install patch)<br />
+&nbsp; (sudo apt install autoconf)<br />
+&nbsp; (sudo apt install libsm-dev)<br />
+&nbsp; (sudo apt install libdb-dev)<br />
+&nbsp; (sudo apt install libssl-dev)<br />
+&nbsp; (sudo apt install libffi-dev)<br />
+&nbsp; (sudo apt install flex)<br />
+&nbsp; (sudo apt install bison)<br />
+&nbsp; (sudo apt install byacc)<br />
+&nbsp; (sudo apt install libyaml-dev)<br />
+&nbsp; (sudo apt install tcl)<br />
+&nbsp; (sudo apt install tk)<br />
+&nbsp; (sudo apt install perl)<br />
+&nbsp; (sudo apt install libxrender-dev)<br />
+&nbsp; (sudo apt install libncurses-dev)<br />
+&nbsp; (sudo apt install libgdbm-dev)<br />
+&nbsp; (sudo apt install libxext-dev)<br />
+&nbsp; (sudo apt install g++)<br />
+&nbsp; (sudo apt install tcsh)<br />
+&nbsp; (sudo apt install git)<br />
+&nbsp; (sudo apt install wget)<br />
+&nbsp; (sudo apt install pip)<br />
+&nbsp; (sudo apt install evince)<br />
+1. tar zxvf aews_v1_0.tar.gz<br />
+2. cd QMMMWsoftware<br />
+3. tar zxvf qmmmw-1.0.tar.gz<br />
+&nbsp; tar zxvf espresso-5.0.2.tar.gz<br />
+&nbsp; tar zxvf lammps-stable.tar.gz<br />
+4. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+7. cd qmmmw-1.0<br />
+&nbsp; ./configure --prefix=$QMMMW_DIR ESPRESSO_DIR=$ESPRESSO_DIR LAMMPS_DIR=$LAMMPS_DIR<br />
+8. make patch<br />
+9. make<br />
+10. make install<br />
+・ PWscf<br />
+11. cd $ESPRESSO_DIR<br />
+&nbsp; ./configure<br />
+&nbsp; make pw<br />
+・ Lammps<br />
+12. cd $LAMMPS_DIR/src<br />
+&nbsp; make yes-RIGID<br />
+&nbsp; make yes-KSPACE<br />
+&nbsp; make yes-MOLECULE<br />
+&nbsp; make package-status<br />
+13. cd $LAMMPS_DIR/src/STUBS<br />
+&nbsp; make<br />
+(14. gedit $LAMMPS_DIR/src/MAKE/Makefile.ms2)<br />
+15. cd $LAMMPS_DIR/src<br />
+&nbsp; make ms2<br />
+<br />
+◇ environment settings<br />
+1. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+&nbsp; source $QMMMW_DIR/bin/ms2.env<br />
+(※ gedit $HOME/.bashrc で上記を記載してもよい）<br />
+<br />
+◇ Manual<br />
+1. evince ~/QMMMWsoftware/qmmmw-1.0/doc/tutorial.pdf<br />
+2. cat ~/QMMMWsoftware/qmmmw-1.0/doc/atom_selection_syntax.txt<br />
+3. cat ~/QMMMWsoftware/qmmmw-1.0/doc/ms2_transports.txt<br />
+<br />
+◇ files<br />
+・mastr: lammps<br />
+・slave: lammps<br />
+・qe: PWscf<br />
+<br />
+※ In the Amber force field, the structure and input files can be created quite easily using the script of Prof. Okubo at Chiba University.&nbsp;<br />
+(Amber力場では千葉大の大窪先生のスクリプトを使えば構造や入力ファイルをかなり容易に作ることができる（units realで書かれているので溶融塩やイオン液体、ガラスなどにも適用できる可能性が高い））。<br />
+<br />
+◇ ubuntu 20.04 LTS<br />
+&nbsp; sudo apt install python<br />
+&nbsp; sudo apt install python2<br />
+&nbsp; sudo apt install libpython2-dev<br />
+<br />
+◇ version<br />
+&nbsp;&nbsp;libopenmpi-dev is already the newest version (2.1.1-8).<br />
+&nbsp;&nbsp;g++ is already the newest version (4:7.4.0-1ubuntu2.3).<br />
+&nbsp;&nbsp;gcc is already the newest version (4:7.4.0-1ubuntu2.3).<br />
+&nbsp;&nbsp;gfortran is already the newest version (4:7.4.0-1ubuntu2.3).<br />
+&nbsp;&nbsp;liblapack-dev is already the newest version (3.7.1-4ubuntu1).<br />
+&nbsp;&nbsp;libfftw3-dev is already the newest version (3.3.7-1).<br />
+&nbsp;&nbsp;fftw-dev is already the newest version (2.1.5-4.2).<br />
+&nbsp;&nbsp;python is already the newest version (2.7.15~rc1-1).<br />
+&nbsp;&nbsp;libpython-dev is already the newest version (2.7.15~rc1-1).<br />
+&nbsp;&nbsp;libssl-dev is already the newest version (1.1.1-1ubuntu2.1~18.04.5).<br />
+&nbsp;&nbsp;csh is already the newest version (20110502-3ubuntu0.18.04.1).<br />
+&nbsp;&nbsp;zlib1g-dev is already the newest version (1:1.2.11.dfsg-0ubuntu2).<br />
+&nbsp;&nbsp;make is already the newest version (4.1-9.1ubuntu1).<br />
+------------------------------------------------------------------------------<br />
+■ Examples<br />
+<br />
+◇ Water (Mechanical coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd 32water_mc<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+◇ restart<br />
+5. gedit ~/QMMMWsoftware/qmmmw-1.0/examples/32water_mc/master/water.in<br />
+-----before<br />
+read_data &nbsp; &nbsp; &nbsp; data.water<br />
+-----<br />
+-----after<br />
+read_restart &nbsp; &nbsp;restart1.qmmmw<br />
+-----<br />
+6. ./job.sh<br />
+◇ get xyz<br />
+7. cd master<br />
+&nbsp; python $QMMMW_DIR/tools/xyz_tool.py dump.xyz -s -d data.water -o out.xyz<br />
+8. jmol out.xyz<br />
+&nbsp; (sudo apt install jmol)<br />
+&nbsp; (jmol: Display &gt; Bounding Box, Tools &gt; Animate... &gt; Loop)<br />
+&nbsp; vmd out.xyz<br />
+&nbsp; (sudo apt install avogadro)<br />
+&nbsp; avogadro out.xyz<br />
+9. cd ~/QMMMWsoftware/qmmmw-1.0/examples/32water_mc/qe<br />
+10. gnuplot<br />
+&nbsp; plot&quot;ms2.rdf.dat&quot; w l<br />
+&nbsp; plot &quot;ms2.msd.dat&quot; w l<br />
+11. quit<br />
+<br />
+◇ Water (Electrostatic coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd 32water_ec<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+<br />
+◇ Alanine in water (Mechanical coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd alanine_mc<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+<br />
+◇ Alanine in water (Electrostatic coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd alanine_ec<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+<br />
+◇ calculation conditions for above examples<br />
+・calculation='md'<br />
+・k-point: gamma (1 k-point)<br />
+・pseudo potential type: ULTRASOFT<br />
+&nbsp; C.pbe-van_bm.UPF: ULTRASOFT<br />
+&nbsp; H.pbe-van_ak.UPF: ULTRASOFT<br />
+&nbsp; O.pbe-van_bm.UPF: ULTRASOFT<br />
+&nbsp; N.pbe-van_bm.UPF: ULTRASOFT<br />
+<br />
+◇ 動作の調べ方<br />
+1. ~/QMMMWsoftware/qmmmw-1.0/examples/alanine_mc/master<br />
+2. ls -l<br />
+とすると、出力ファイルが論文(https://www.sciencedirect.com/science/article/pii/S0010465515001678)の通り更新されており、slave(lammps)とqe(PWscf)からの力(force)のデータを統合して新しい原子位置としていることが分かる。<br />
+------------------------------------------------------------------------------<br />
+■ parallel calculation (for PWscf)<br />
+<br />
+□ job file (e.g., alanine)<br />
+1. gedit job.sh<br />
+-----<br />
+export filename=alanine # please, input file name (* for *.in, *_reduced.in, *_qm.in)<br />
+export num_cpu_qm=4 # number of CPUs for PWscf (QM)<br />
+export sleep_time=5 # second<br />
+<br />
+export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+<br />
+source $QMMMW_DIR/bin/ms2.env<br />
+<br />
+cd master<br />
+$LAMMPS_DIR/src/lmp_ms2 &lt; $filename.in &gt; $filename.out &amp;<br />
+<br />
+sleep ${sleep_time}<br />
+<br />
+cd ../slave<br />
+$LAMMPS_DIR/src/lmp_ms2 &lt; ${filename}_reduced.in &gt; ${filename}_reduced.out &amp;<br />
+<br />
+sleep ${sleep_time}<br />
+<br />
+cd ../qe<br />
+export&nbsp;<br />
+mpirun -np $num_cpu_qm -x OMP_NUM_THREADS=1 $ESPRESSO_DIR/bin/pw.x &lt; ${filename}_qm.in | tee ${filename}_qm.out<br />
+-----<br />
+3. sed -i 's/\r//g' job.sh<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place job.shy)<br />
+4. chmod +x job.sh<br />
+※ please, rewrite &quot;alanine&quot;(file name), &quot;4&quot;(number of CPUs) and &quot;5&quot;(sleep time)<br />
+※ Recommend number of CPUs(QM) = Total CPUs - 1 CPU(master(MD)) - 1 CPU(slave(MD)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[QM1] QMMMW: A wrapper for QM/MM simulations with Quantum ESPRESSO &nbsp;and LAMMPS<br />
+&nbsp; https://doi.org/10.1016/j.cpc.2015.04.024<br />
+[QM2] PWQMMM<br />
+&nbsp; http://www.training.prace-ri.eu/uploads/tx_pracetmo/PWQMMM.pdf<br />
+[QM3] QM/MMシミュレーションによるタンパク質機能解析<br />
+&nbsp; https://www.r-ccs.riken.jp/r-ccssite/wp-content/uploads/2016/05/20151209takano.pdf<br />
+[QM4] 計算生命科学の基礎Ⅳ　QM/MM法を用いたタンパク質の機能解析②<br />
+&nbsp; https://www.youtube.com/watch?v=OJbKYRrgyqo<br />
+[QM5] QM/MM法を用いたタンパク質機能解析①<br />
+&nbsp; https://www.youtube.com/watch?v=J7pr0tkVYoc<br />
+[QM6] 蛋白質中の電子構造を計算するQM/MM法<br />
+&nbsp; http://www.cat.hokudai.ac.jp/hasegawa/hase_files/Osaka/QMMM.pdf<br />
+[QM7] 計算生命科学の基礎Ⅳ　QM/MM法を用いたタンパク質の機能解析①<br />
+&nbsp; https://www.youtube.com/watch?v=m5wgt7x0LCY<br />
+[QM8] QM/MMシミュレーションによるタンパク質機能解析<br />
+&nbsp; https://www.youtube.com/watch?v=HRbc5y-lUIc<br />
+[QM9] MM・MD・QM/MM法による生体分子シミュレーション&nbsp;<br />
+&nbsp; https://www.sbj.or.jp/wp-content/uploads/file/sbj/9309/9309_yomoyama.pdf<br />
+[QM10] QM/MM 法と溶液の理論の融合による凝縮系の化学過程の自由エネルギー計算&nbsp;<br />
+&nbsp; https://www.jstage.jst.go.jp/article/mssj/12/4/12_4_4_8/_pdf<br />
+[QM11] ハイブリッドQM/MM分子シミュレーションによる生体内化学反応と機能の研究<br />
+&nbsp; https://www.jstage.jst.go.jp/article/biophys/46/2/46_2_76/_pdf<br />
+[QM12] Advanced Quantum Chemistry III: Part 7<br />
+&nbsp; http://ccl.scc.kyushu-u.ac.jp/lec2015/E_Lecture7_ver01.pdf<br />
+------------------------------------------------------------------------------<br />
+◇ Install (+ OpenMP)<br />
+(http://cpc.cs.qub.ac.uk/summaries/AEWS_v1_0.html)<br />
+・ QMMMW<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gcc<br />
+&nbsp; sudo apt install bulid-essential<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp;&nbsp;sudo apt install fftw-dev<br />
+&nbsp; sudo apt install python<br />
+&nbsp; sudo apt install libpython-dev<br />
+&nbsp; sudo apt install libssl-dev<br />
+&nbsp; sudo apt install csh<br />
+&nbsp; sudo apt install zlib1g-dev<br />
+&nbsp; sudo apt install make<br />
+&nbsp; (sudo apt install libopenmpi-dev)<br />
+&nbsp; (sudo apt install openssl)<br />
+&nbsp; (sudo apt install libopenblas-dev)<br />
+&nbsp; (sudo apt install libscalapack-openmpi-dev)<br />
+&nbsp; (sudo apt install libbz2-dev)<br />
+&nbsp; (sudo apt install libreadline-dev)<br />
+&nbsp; (sudo apt install libsqlite3-dev)<br />
+&nbsp; (sudo apt install cmake)<br />
+&nbsp; (sudo apt install patch)<br />
+&nbsp; (sudo apt install autoconf)<br />
+&nbsp; (sudo apt install libsm-dev)<br />
+&nbsp; (sudo apt install libdb-dev)<br />
+&nbsp; (sudo apt install libssl-dev)<br />
+&nbsp; (sudo apt install libffi-dev)<br />
+&nbsp; (sudo apt install flex)<br />
+&nbsp; (sudo apt install bison)<br />
+&nbsp; (sudo apt install byacc)<br />
+&nbsp; (sudo apt install libyaml-dev)<br />
+&nbsp; (sudo apt install tcl)<br />
+&nbsp; (sudo apt install tk)<br />
+&nbsp; (sudo apt install perl)<br />
+&nbsp; (sudo apt install libxrender-dev)<br />
+&nbsp; (sudo apt install libncurses-dev)<br />
+&nbsp; (sudo apt install libgdbm-dev)<br />
+&nbsp; (sudo apt install libxext-dev)<br />
+&nbsp; (sudo apt install g++)<br />
+&nbsp; (sudo apt install tcsh)<br />
+&nbsp; (sudo apt install git)<br />
+&nbsp; (sudo apt install wget)<br />
+&nbsp; (sudo apt install pip)<br />
+&nbsp; (sudo apt install evince)<br />
+1. tar zxvf aews_v1_0.tar.gz<br />
+2. cd QMMMWsoftware<br />
+3. tar zxvf qmmmw-1.0.tar.gz<br />
+&nbsp; tar zxvf espresso-5.0.2.tar.gz<br />
+&nbsp; tar zxvf lammps-stable.tar.gz<br />
+4. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-30Oct14<br />
+7. cd qmmmw-1.0<br />
+&nbsp; ./configure --prefix=$QMMMW_DIR ESPRESSO_DIR=$ESPRESSO_DIR LAMMPS_DIR=$LAMMPS_DIR<br />
+8. make patch<br />
+9. make<br />
+10. make install<br />
+・ PWscf<br />
+11. cd $ESPRESSO_DIR<br />
+&nbsp; ./configure --enable-openmp FFT_LIBS=&quot;-lfftw3 -lfftw3_omp&quot;<br />
+&nbsp; make pw<br />
+・ Lammps<br />
+12. cd $LAMMPS_DIR/src<br />
+&nbsp; make yes-RIGID<br />
+&nbsp; make yes-KSPACE<br />
+&nbsp; make yes-MOLECULE<br />
+&nbsp; make yes-USER-OMP<br />
+&nbsp; make package-status<br />
+13. cd $LAMMPS_DIR/src/STUBS<br />
+&nbsp; make<br />
+(14. gedit $LAMMPS_DIR/src/MAKE/Makefile.ms2)<br />
+15. cd $LAMMPS_DIR/src<br />
+&nbsp; make ms2<br />
+<br />
+※ OpenMP<br />
+&nbsp; lmp_serial -pk omp 4 -sf omp &lt; in.lmp<br />
+------------------------------------------------------------------------------<br />
+■ lammps new version<br />
+<br />
+◇ Install<br />
+(http://cpc.cs.qub.ac.uk/summaries/AEWS_v1_0.html)<br />
+・ QMMMW<br />
+1. tar zxvf aews_v1_0.tar.gz<br />
+2. cd QMMMWsoftware<br />
+3. tar zxvf qmmmw-1.0.tar.gz<br />
+&nbsp; tar zxvf espresso-5.0.2.tar.gz<br />
+&nbsp; wget https://github.com/lammps/lammps/archive/stable_7Aug2019.tar.gz<br />
+&nbsp; tar zxvf stable_7Aug2019.tar.gz<br />
+4. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-stable_7Aug2019<br />
+7. cd qmmmw-1.0<br />
+&nbsp; ./configure --prefix=$QMMMW_DIR ESPRESSO_DIR=$ESPRESSO_DIR LAMMPS_DIR=$LAMMPS_DIR<br />
+8. make patch<br />
+9. make<br />
+10. make install<br />
+・ PWscf<br />
+11. cd $ESPRESSO_DIR<br />
+&nbsp; ./configure<br />
+&nbsp; make pw<br />
+・ Lammps<br />
+12. cd $LAMMPS_DIR/src<br />
+&nbsp; make yes-RIGID<br />
+&nbsp; make yes-KSPACE<br />
+&nbsp; make yes-MOLECULE<br />
+&nbsp; make package-status<br />
+13. gedit $LAMMPS_DIR/src/MAKE/Makefile.ms2<br />
+&nbsp; (show below)<br />
+14. cd $LAMMPS_DIR/src<br />
+&nbsp; make ms2<br />
+※ sudo apt install libopenmpi-dev liblapack-dev libblas-dev libfftw3-dev<br />
+<br />
+◇ Water (Mechanical coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/espresso-5.0.2<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-stable_7Aug2019<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd 32water_mc<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+------------------------------------------------------------------------------<br />
+■ Makefile.ms2<br />
+-----<br />
+# ms2 = sample makefile for the MS2 project (works on most distros)<br />
+<br />
+prefix = ${HOME}/QMMMWsoftware/qmmmw-1.0<br />
+exec_prefix = ${prefix}<br />
+libdir = ${exec_prefix}/lib<br />
+includedir = ${prefix}/include<br />
+pkglibdir = $(libdir)/ms2<br />
+<br />
+SHELL = /bin/sh<br />
+<br />
+# ---------------------------------------------------------------------<br />
+# compiler/linker settings<br />
+# specify flags and libraries needed for your compiler<br />
+<br />
+CC = &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;mpicxx<br />
+CCFLAGS = &nbsp; &nbsp; &nbsp; -g -O2<br />
+SHFLAGS = &nbsp; &nbsp; &nbsp; -fPIC<br />
+DEPFLAGS = &nbsp; &nbsp; &nbsp;-M<br />
+<br />
+LINK = &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;mpicxx<br />
+LINKFLAGS = &nbsp; &nbsp; -g -O2<br />
+LIB =<br />
+<br />
+ARCHIVE = &nbsp; &nbsp; &nbsp; ar<br />
+ARFLAGS = &nbsp; &nbsp; &nbsp; -rc<br />
+SIZE = &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;size<br />
+SHLIBFLAGS = &nbsp; &nbsp;-shared<br />
+<br />
+# ---------------------------------------------------------------------<br />
+# LAMMPS-specific settings, all OPTIONAL<br />
+# specify settings for LAMMPS features you will use<br />
+# if you change any -D setting, do full re-compile after &quot;make clean&quot;<br />
+<br />
+# LAMMPS ifdef settings<br />
+# see possible settings in Section 2.2 (step 4) of manual<br />
+<br />
+LMP_INC = &nbsp; &nbsp; &nbsp; -DLAMMPS_GZIP -DLAMMPS_MEMALIGN=64<br />
+<br />
+# MPI library<br />
+# see discussion in Section 2.2 (step 5) of manual<br />
+# MPI wrapper compiler/linker can provide this info<br />
+# can point to dummy MPI library in src/STUBS as in Makefile.serial<br />
+# use -D MPICH and OMPI settings in INC to avoid C++ lib conflicts<br />
+# INC = path for mpi.h, MPI compiler settings<br />
+# PATH = path for MPI library<br />
+# LIB = name of MPI library<br />
+<br />
+MPI_INC = &nbsp; &nbsp; &nbsp; -DMPICH_SKIP_MPICXX -DOMPI_SKIP_MPICXX=1<br />
+MPI_PATH =<br />
+MPI_LIB =<br />
+<br />
+# FFT library<br />
+# see discussion in Section 2.2 (step 6) of manual<br />
+# can be left blank to use provided KISS FFT library<br />
+# INC = -DFFT setting, e.g. -DFFT_FFTW, FFT compiler settings<br />
+# PATH = path for FFT library<br />
+# LIB = name of FFT library<br />
+<br />
+FFT_INC = &nbsp; &nbsp; &nbsp; # -DFFT_FTW<br />
+FFT_PATH =<br />
+FFT_LIB = &nbsp; &nbsp; &nbsp; # -lfftw<br />
+<br />
+MS2_INC = -I$(includedir)<br />
+MS2_LIB = -L$(pkglibdir) -lms2 -lms2ec<br />
+<br />
+# JPEG and/or PNG library<br />
+# see discussion in Section 2.2 (step 7) of manual<br />
+# only needed if -DLAMMPS_JPEG or -DLAMMPS_PNG listed with LMP_INC<br />
+# INC = path(s) for jpeglib.h and/or png.h<br />
+# PATH = path(s) for JPEG library and/or PNG library<br />
+# LIB = name(s) of JPEG library and/or PNG library<br />
+<br />
+JPG_INC =<br />
+JPG_PATH =<br />
+JPG_LIB =<br />
+<br />
+# additional system libraries needed by LAMMPS package libraries<br />
+# these settings are IGNORED if the corresponding LAMMPS package<br />
+# &nbsp; (e.g. gpu, meam) is NOT included in the LAMMPS build<br />
+# SYSLIB = names of libraries<br />
+# SYSPATH = paths of libraries<br />
+# -------------------<br />
+# gpu_SYSLIB = &nbsp; &nbsp; &nbsp; -lcudart<br />
+# meam_SYSLIB = &nbsp; &nbsp; &nbsp;-lgfortran<br />
+# reax_SYSLIB = &nbsp; &nbsp; &nbsp;-lgfortran<br />
+# user-atc_SYSLIB = &nbsp;-lblas -llapack<br />
+<br />
+# gpu_SYSPATH = &nbsp; &nbsp; &nbsp;-L/usr/local/cuda/lib64<br />
+# meam_SYSPATH = &nbsp; &nbsp; -L/opt/intel/fce/10.0.023/lib<br />
+# reax_SYSPATH = &nbsp; &nbsp; -L/opt/intel/fce/10.0.023/lib<br />
+# user-atc_SYSPATH =<br />
+# -------------------<br />
+<br />
+# ---------------------------------------------------------------------<br />
+# build rules and dependencies<br />
+# do not edit this section<br />
+<br />
+include Makefile.package.settings<br />
+include Makefile.package<br />
+<br />
+EXTRA_INC = $(LMP_INC) $(PKG_INC) $(MPI_INC) $(FFT_INC) $(JPG_INC) $(PKG_SYSINC) $(MS2_INC)<br />
+EXTRA_PATH = $(PKG_PATH) $(MPI_PATH) $(FFT_PATH) $(JPG_PATH) $(PKG_SYSPATH)<br />
+EXTRA_LIB = $(PKG_LIB) $(MPI_LIB) $(FFT_LIB) $(JPG_LIB) $(PKG_SYSLIB) $(MS2_LIB)<br />
+EXTRA_CPP_DEPENDS = $(PKG_CPP_DEPENDS)<br />
+EXTRA_LINK_DEPENDS = $(PKG_LINK_DEPENDS)<br />
+<br />
+# Path to src files<br />
+<br />
+vpath %.cpp ..<br />
+vpath %.h ..<br />
+<br />
+# Link target<br />
+<br />
+$(EXE): $(OBJ) $(EXTRA_LINK_DEPENDS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(LINK) $(LINKFLAGS) $(EXTRA_PATH) $(OBJ) $(EXTRA_LIB) $(LIB) -o $(EXE)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(SIZE) $(EXE)<br />
+<br />
+# Library targets<br />
+<br />
+lib: &nbsp; &nbsp;$(OBJ) $(EXTRA_LINK_DEPENDS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(ARCHIVE) $(ARFLAGS) $(EXE) $(OBJ)<br />
+<br />
+shlib: &nbsp;$(OBJ) $(EXTRA_LINK_DEPENDS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(CC) $(CCFLAGS) $(SHFLAGS) $(SHLIBFLAGS) $(EXTRA_PATH) -o $(EXE) \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(OBJ) $(EXTRA_LIB) $(LIB)<br />
+<br />
+# Compilation rules<br />
+<br />
+%.o:%.cpp<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(CC) $(CCFLAGS) $(SHFLAGS) $(EXTRA_INC) -c $&lt;<br />
+<br />
+# Individual dependencies<br />
+<br />
+depend : fastdep.exe $(SRC)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @./fastdep.exe $(EXTRA_INC) -- $^ &gt; .depend || exit 1<br />
+<br />
+fastdep.exe: ../DEPEND/fastdep.c<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cc -O -o $@ $&lt;<br />
+<br />
+sinclude .depend<br />
+-----<br />
+※ need to replace 8 spaces to TAB after # Link target (see makefile rule)<br />
+&nbsp; or cp Makefile.mpi Makefile.ms2, then modified Makefile.ms2 like above data.<br />
+------------------------------------------------------------------------------<br />
+■ lammps new version + PWscf v.5.4.0 version<br />
+&nbsp;(only &quot;mpirun -np 1&quot;, but this is corrects ?)<br />
+<br />
+◇ Install<br />
+(http://cpc.cs.qub.ac.uk/summaries/AEWS_v1_0.html)<br />
+・ QMMMW<br />
+1. tar zxvf aews_v1_0.tar.gz<br />
+2. cd QMMMWsoftware<br />
+3. tar zxvf qmmmw-1.0.tar.gz<br />
+&nbsp; tar zxvf espresso-5.0.2.tar.gz<br />
+&nbsp; wget https://github.com/QEF/q-e/archive/qe-5.4.tar.gz<br />
+&nbsp; tar zxvf qe-5.4.tar.gz<br />
+&nbsp; wget https://github.com/lammps/lammps/archive/stable_7Aug2019.tar.gz<br />
+&nbsp; tar zxvf stable_7Aug2019.tar.gz<br />
+4. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/q-e-qe-5.4<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-stable_7Aug2019<br />
+7. cd qmmmw-1.0<br />
+&nbsp; ./configure --prefix=$QMMMW_DIR ESPRESSO_DIR=$ESPRESSO_DIR LAMMPS_DIR=$LAMMPS_DIR<br />
+&nbsp; cp ~/QMMMWsoftware/espresso-5.0.2/PW/src/ms2.f90 ~/QMMMWsoftware/q-e-qe-5.4/PW/src/ms2.f90<br />
+&nbsp;&nbsp;<br />
+&nbsp; (copy&amp;past from &quot;#if&quot; to &quot;#endif&quot; for PW/src/input.f90, PW/src/pwscf.f90, Modules/input_parameters.f90, PW/src/setlocal.f90, PW/src/forces.f90) ※ PW/src/pwscf.f90 (v.5.0.2) -&gt; PW/src/pwscf.f90 and PW/src/run_pwscf.f90 (v.5.4), Modules/mp_global.f90, PW/src/Makefile (add &quot;ms2.o&quot;), PW/src/make.depend (add &quot; : ms2.o&quot;), Modules/image_io_routines.f90, qmmmw-1.0/tools/patch_codes.py<br />
+8. make patch<br />
+9. make<br />
+10. make install<br />
+・ PWscf<br />
+11. cd $ESPRESSO_DIR<br />
+&nbsp; ./configure<br />
+&nbsp; make pw<br />
+・ Lammps<br />
+12. cd $LAMMPS_DIR/src<br />
+&nbsp; make yes-RIGID<br />
+&nbsp; make yes-KSPACE<br />
+&nbsp; make yes-MOLECULE<br />
+&nbsp; make package-status<br />
+13. gedit $LAMMPS_DIR/src/MAKE/Makefile.ms2<br />
+&nbsp; (show above)<br />
+&nbsp; (sed -i 's/\r//g' Makefile.ms2)<br />
+14. cd $LAMMPS_DIR/src<br />
+&nbsp; make clean-all<br />
+&nbsp; make ms2<br />
+※ sudo apt install libopenmpi-dev liblapack-dev libblas-dev libfftw3-dev fftw-dev<br />
+<br />
+◇ Water (Mechanical coupling)<br />
+0. export QMMMW_DIR=$HOME/QMMMWsoftware/qmmmw-1.0<br />
+&nbsp; export ESPRESSO_DIR=$HOME/QMMMWsoftware/q-e-qe-5.4<br />
+&nbsp; export LAMMPS_DIR=$HOME/QMMMWsoftware/lammps-stable_7Aug2019<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/QMMMWsoftware/qmmmw-1.0/lib/ms2<br />
+&nbsp; echo 0 | sudo tee /proc/sys/kernel/yama/ptrace_scope<br />
+1. cd ~/QMMMWsoftware/qmmmw-1.0/examples<br />
+2. cd 32water_mc<br />
+3. chmod +x job.sh<br />
+4. ./job.sh<br />
+<br />
+PW/src/pwscf.f90<br />
+-----<br />
+#ifdef __MPI<br />
+&nbsp; CALL mp_startup ( start_images = .true. )<br />
+#endif<br />
+-----<br />
+<br />
+Modules/mp_global.f90<br />
+-----<br />
+&nbsp; ! ... World group (all processors)<br />
+&nbsp; !<br />
+&nbsp; INTEGER :: mpime = 0 &nbsp;! processor index (starts from 0 to nproc-1)<br />
+&nbsp; INTEGER :: root &nbsp;= 0 &nbsp;! index of the root processor<br />
+&nbsp; INTEGER :: nproc = 1 &nbsp;! number of processors<br />
+-----<br />
+※ others are same as v.5.0.2<br />
+<br />
+□ retry &quot;make patch&quot;<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/ms2.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/input.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/pwscf.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/run_pwscf.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/Modules/mp_global.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/Modules/input_parameters.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/setlocal.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/forces.f90_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/src/make.depend_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/install/make.sys.in_ms2backup<br />
+rm -f -r $HOME/QMMMWsoftware/q-e-qe-5.4/PW/Makefile_ms2backup<br />
+<br />
+rm -f -r $HOME/QMMMWsoftware/lammps-stable_7Aug2019/src/fix_ms2.h<br />
+rm -f -r $HOME/QMMMWsoftware/lammps-stable_7Aug2019/src/fix_ms2.cpp<br />
+rm -f -r $HOME/QMMMWsoftware/lammps-stable_7Aug2019/src/fix_ms2debug.h<br />
+rm -f -r $HOME/QMMMWsoftware/lammps-stable_7Aug2019/src/fix_ms2debug.cpp<br />
+rm -f -r $HOME/QMMMWsoftware/lammps-stable_7Aug2019/src/MAKE/Makefile.ms2<br />
+------------------------------------------------------------------------------<br />
+ms2ec_qm_initialize_simplified<br />
+&nbsp;

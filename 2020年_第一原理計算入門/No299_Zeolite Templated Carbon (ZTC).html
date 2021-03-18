@@ -1,0 +1,159 @@
+------------------------------------------------------------------------------<br />
+□ Zeolite Templated Carbonの構造の作成<br />
+（AvogadorとVESTAで作成しPWscfでの計算）<br />
+1. C36H9 のクラスターをAvogadroのMM計算(分子力学法）で構造最適化<br />
+2. 中心部分の3回対称の構造のみを取り出し、P4132で原子が重ならないように格子定数を変える<br />
+　格子定数を変えてもダメな端の原子は原子を動かす<br />
+3. C36H9と単位胞の中間の構造でAvogadroのMM計算(分子力学法）で構造最適化<br />
+4. 中心部分の3回対称の構造のみを取り出し、P4132で原子が重ならないように格子定数を変える<br />
+　格子定数を変えてもダメな端の原子は原子を動かす<br />
+5. 単位胞でAvogadroのMM計算(分子力学法）で構造最適化<br />
+6. 中心部分の3回対称の構造のみを取り出し、P4132で原子が重ならないように格子定数を変える<br />
+　格子定数を変えてもダメな端の原子は原子を動かす<br />
+7. PWscf用の入力ファイルとした<br />
+　Avogadorで構造最適化（MM計算(分子力学法)でファイル名「ZTC_MM(avogadro_UFF).vasp」）した構造を用いて計算を行ったが計算が1 cycleも終わらない。<br />
+<br />
+※ 論文の構造と同じであるが、格子定数の異なるものと、端が一つの炭素で4つの炭素と結合する構造も得られている。<br />
+※ 端の六員環の構造が壊れて十員環になっているものもある。<br />
+<br />
+※ 対称性がP4132であっても構造次第ではPWscfの計算でFFTの関係で対称性が減少することもある。<br />
+&nbsp; 24 sym. から 3 sym. にされている。<br />
+&nbsp;&nbsp;<br />
+□ PWscf<br />
+0. gedit ztc.in<br />
+&nbsp; 使用したパラメータのメモ:<br />
+&nbsp; ecutwfc 20-30 Ry<br />
+&nbsp; van = 8-12*ecitwfc<br />
+&nbsp; ※ ecutwfc (http://institute.loni.org/dft2011/documents/NarasimhanLec2.pdf)<br />
+1. set OMP_NUM_THREADS=6<br />
+2. mpiexec -np 1 pw -in ztc.in &gt; ztc.out<br />
+※ 管理者モードでコマンドプロンプトを開いて、smpd.exe -install とすると動作する。<br />
+&nbsp; mpiexec -np 6 pw -in ztc.in &gt; ztc.out<br />
+&nbsp; ただし、複数のCPUが同じ計算を個別に6個計算しているだけで無意味。<br />
+<br />
+Y型ゼオライト: https://www.tosoh.co.jp/zeolite/hsz/list01.html<br />
+<br />
+□ PWscf<br />
+ztc.in<br />
+----------<br />
+&amp;control<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;calculation = 'relax' ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; pseudo_dir = './' ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; outdir = './work/'<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;disk_io = 'low',<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;etot_conv_thr = &nbsp;6.0d-4 ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;forc_conv_thr = &nbsp;1.0d-3 ,<br />
+/<br />
+&amp;system<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ibrav &nbsp;= 1,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;space_group = 213,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;celldm(1) = 57.636642652,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;nat = 15,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ntyp = 2,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ecutwfc = 20 ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;ecutrho = 150 ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;occupations = 'smearing'<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; smearing = 'm-p'<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;degauss = 0.01<br />
+/<br />
+&amp;electrons<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; conv_thr = 6.0d-4 ,<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;mixing_beta = 0.7 ,<br />
+/<br />
+&amp;ions<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; &nbsp; C &nbsp; 12.01070 &nbsp;C.pz-van_ak.UPF<br />
+&nbsp; &nbsp; H &nbsp; &nbsp;1.00794 &nbsp;H.pz-van_ak.UPF<br />
+ATOMIC_POSITIONS crystal_sg<br />
+&nbsp;C &nbsp; &nbsp; 0.221510793 &nbsp; &nbsp; &nbsp; &nbsp; 0.214225863 &nbsp; &nbsp; &nbsp; &nbsp; 0.159113087<br />
+&nbsp;C &nbsp; &nbsp; 0.237376057 &nbsp; &nbsp; &nbsp; &nbsp; 0.175812096 &nbsp; &nbsp; &nbsp; &nbsp; 0.183024563<br />
+&nbsp;C &nbsp; &nbsp; 0.252373727 &nbsp; &nbsp; &nbsp; &nbsp; 0.139132422 &nbsp; &nbsp; &nbsp; &nbsp; 0.157975713<br />
+&nbsp;C &nbsp; &nbsp; 0.219857685 &nbsp; &nbsp; &nbsp; &nbsp; 0.213681940 &nbsp; &nbsp; &nbsp; &nbsp; 0.110544900<br />
+&nbsp;C &nbsp; &nbsp; 0.234559966 &nbsp; &nbsp; &nbsp; &nbsp; 0.099554742 &nbsp; &nbsp; &nbsp; &nbsp; 0.177330455<br />
+&nbsp;C &nbsp; &nbsp; 0.239899307 &nbsp; &nbsp; &nbsp; &nbsp; 0.175642592 &nbsp; &nbsp; &nbsp; &nbsp; 0.084947852<br />
+&nbsp;C &nbsp; &nbsp; 0.267275670 &nbsp; &nbsp; &nbsp; &nbsp; 0.142684233 &nbsp; &nbsp; &nbsp; &nbsp; 0.111588838<br />
+&nbsp;C &nbsp; &nbsp; 0.263547147 &nbsp; &nbsp; &nbsp; &nbsp; 0.099354080 &nbsp; &nbsp; &nbsp; &nbsp; 0.087557034<br />
+&nbsp;C &nbsp; &nbsp; 0.288688159 &nbsp; &nbsp; &nbsp; &nbsp; 0.147967995 &nbsp; &nbsp; &nbsp; &nbsp; 0.022617362<br />
+&nbsp;C &nbsp; &nbsp; 0.262219929 &nbsp; &nbsp; &nbsp; &nbsp; 0.185807181 &nbsp; &nbsp; &nbsp; &nbsp; 0.040946550<br />
+&nbsp;C &nbsp; &nbsp; 0.233429143 &nbsp; &nbsp; &nbsp; &nbsp; 0.062202286 &nbsp; &nbsp; &nbsp; &nbsp; 0.154307522<br />
+&nbsp;C &nbsp; &nbsp; 0.248621941 &nbsp; &nbsp; &nbsp; &nbsp; 0.062361631 &nbsp; &nbsp; &nbsp; &nbsp; 0.107679328<br />
+&nbsp;H &nbsp; &nbsp; 0.218306526 &nbsp; &nbsp; &nbsp; &nbsp; 0.032950155 &nbsp; &nbsp; &nbsp; &nbsp; 0.167522274<br />
+&nbsp;H &nbsp; &nbsp; 0.237345867 &nbsp; &nbsp; &nbsp; &nbsp; 0.196710790 &nbsp; &nbsp; &nbsp; &nbsp; 0.016899996<br />
+&nbsp;H &nbsp; &nbsp; 0.244874063 &nbsp; &nbsp; &nbsp; &nbsp; 0.032296058 &nbsp; &nbsp; &nbsp; &nbsp; 0.089067522<br />
+K_POINTS gamma<br />
+----------<br />
+※ 文献で使われるecutwfc = 30にしてforc_conv_thr = &nbsp;1.0d-4としたいところだが、何日経っても計算が終わらない。<br />
+・スペック<br />
+&nbsp; Windows 10 (64 bit)<br />
+&nbsp; Intel(R) Core(TM) i5-8500 CPU @ 3.00 GHz 3.00 GHz<br />
+&nbsp; 16.0 GB (15.8 GB使用可能)<br />
+・出力ファイル<br />
+&nbsp; 3 Sym. Ops. (no inversion) found<br />
+&nbsp; (note: 21 additional sym.ops. were found but ignored<br />
+&nbsp; &nbsp; their fractional translations are incommensurate with FFT grid)<br />
+&nbsp; iteration # &nbsp;2 &nbsp; &nbsp; ecut= &nbsp; &nbsp;20.00 Ry &nbsp; &nbsp; beta=0.70<br />
+&nbsp; total cpu time spent up to now is &nbsp; &nbsp;43545.8 secs<br />
+&nbsp; ----------<br />
+と出力ファイルに記載されているので絶望的。2009年の論文はスペックがきっと凄いわ。<br />
+※ 体感ではPWscfのwindows版(http://rpm.lammps.org/qe4win/release/index.html)でOpenMPが6でOpenMPIが1コアの方が下記でWindows上のubuntuでOpneMPは1でOpenMPIは6コア並列で計算したものよりも倍くらい計算速度が速かった。PDFに関するコードの導入での失敗続きで明確なデータを取る時間がなかった。<br />
+------------------------------------------------------------------------------<br />
+■ PWscf 6.3-max (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Install<br />
+0. sudo apt-get -y install libfftw3-dev<br />
+&nbsp; sudo apt-get -y install liblapack-dev<br />
+&nbsp; sudo apt-get -y install libopenmpi-dev<br />
+&nbsp; sudo apt-get -y install python-dev python-numpy python-matplotlib python-yaml python-h5py<br />
+&nbsp; sudo apt-get -y install python-setuptools<br />
+&nbsp; sudo apt-get -y install python-dev<br />
+&nbsp; sudo apt-get -y install imagemagick<br />
+&nbsp; sudo apt-get -y install graphicsmagick-imagemagick-compat<br />
+1. wget https://github.com/QEF/q-e/archive/qe-6.3MaX.zip<br />
+2. tar zxvf PyCifRW-4.4.tar.gz<br />
+3. cd PyCifRW-4.4<br />
+4. sudo python setup.py install<br />
+5. cd ..<br />
+6. sudo python setup.py install<br />
+------------------------------------------------------------------------------<br />
+VESTA &gt; .vasp &gt; ロドリゲスの回転公式.xls (置換でスペースをTabにするとよい)<br />
+<br />
+ZTCの場合は回転以外にも111の方向に移動させることが必要。<br />
+分子力学（MM）法も十分に精度が高い。<br />
+周囲に何もない状態でMM法で構造最適化した値を用いてそれほど悪くない。<br />
+0.数%歪ませるのには大きなエネルギーが必要になるので、まずはMM法やMD法で小さなユニットを作成して、それに合うように周期のサイズや分子の位置を移動させることが大切。<br />
+<br />
+「大きなセルでMMの計算をする場合、構造が不安定な分子は除くようにしないと意味がない」は、誤りでほぼ類似の位置の原子が記述されていたため。<br />
+------------------------------------------------------------------------------<br />
+MM法では長距離の原子間距離は改善されていないように見える。<br />
+最初に何も考えずに素直に構造を大きくしてMM法で構造最適化した結果の方が論文とよくあっている。<br />
+<br />
+ZTC_MM(avogadro_UFF).vasp<br />
+&nbsp; この構造はケンブリッジ大学の結晶データベースの「CCDC1580143」と原子位置についてはわずかに異なる。当然ながらVESTAでXRDのスペクトルを計算すると「CCDC1580143」の方が2009年時点で報告されているXRDによく合う。流石、良い仕事をされている。<br />
+　VESTAで描く場合は、空間群を213番（P4132）を指定すると論文に似た図になる。<br />
+----------<br />
+<br />
+1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp;24.0699996948 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;24.0699996948 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp; 0.0000000000 &nbsp; &nbsp; &nbsp; &nbsp;24.0699996948<br />
+&nbsp; &nbsp; C &nbsp; &nbsp;H<br />
+&nbsp; &nbsp;12 &nbsp; &nbsp;3<br />
+Direct<br />
+&nbsp; &nbsp; &nbsp;0.755347629 &nbsp; &nbsp; &nbsp; &nbsp; 0.811359493 &nbsp; &nbsp; &nbsp; &nbsp; 0.839193234<br />
+&nbsp; &nbsp; &nbsp;0.766356446 &nbsp; &nbsp; &nbsp; &nbsp; 0.849292752 &nbsp; &nbsp; &nbsp; &nbsp; 0.794101435<br />
+&nbsp; &nbsp; &nbsp;0.715288315 &nbsp; &nbsp; &nbsp; &nbsp; 0.868785823 &nbsp; &nbsp; &nbsp; &nbsp; 0.773240889<br />
+&nbsp; &nbsp; &nbsp;0.694849097 &nbsp; &nbsp; &nbsp; &nbsp; 0.802819532 &nbsp; &nbsp; &nbsp; &nbsp; 0.844523588<br />
+&nbsp; &nbsp; &nbsp;0.669586355 &nbsp; &nbsp; &nbsp; &nbsp; 0.840951211 &nbsp; &nbsp; &nbsp; &nbsp; 0.801937175<br />
+&nbsp; &nbsp; &nbsp;0.749405925 &nbsp; &nbsp; &nbsp; &nbsp; 0.871450564 &nbsp; &nbsp; &nbsp; &nbsp; 0.674427867<br />
+&nbsp; &nbsp; &nbsp;0.711790030 &nbsp; &nbsp; &nbsp; &nbsp; 0.898961315 &nbsp; &nbsp; &nbsp; &nbsp; 0.719554056<br />
+&nbsp; &nbsp; &nbsp;0.651565436 &nbsp; &nbsp; &nbsp; &nbsp; 0.904256961 &nbsp; &nbsp; &nbsp; &nbsp; 0.702905842<br />
+&nbsp; &nbsp; &nbsp;0.732367207 &nbsp; &nbsp; &nbsp; &nbsp; 0.870882005 &nbsp; &nbsp; &nbsp; &nbsp; 0.620432784<br />
+&nbsp; &nbsp; &nbsp;0.617437525 &nbsp; &nbsp; &nbsp; &nbsp; 0.848890283 &nbsp; &nbsp; &nbsp; &nbsp; 0.783758328<br />
+&nbsp; &nbsp; &nbsp;0.608307767 &nbsp; &nbsp; &nbsp; &nbsp; 0.882868744 &nbsp; &nbsp; &nbsp; &nbsp; 0.732338047<br />
+&nbsp; &nbsp; &nbsp;0.678273231 &nbsp; &nbsp; &nbsp; &nbsp; 0.896190548 &nbsp; &nbsp; &nbsp; &nbsp; 0.603394502<br />
+&nbsp; &nbsp; &nbsp;0.582069045 &nbsp; &nbsp; &nbsp; &nbsp; 0.828687522 &nbsp; &nbsp; &nbsp; &nbsp; 0.802361198<br />
+&nbsp; &nbsp; &nbsp;0.566333062 &nbsp; &nbsp; &nbsp; &nbsp; 0.886514577 &nbsp; &nbsp; &nbsp; &nbsp; 0.716201021<br />
+&nbsp; &nbsp; &nbsp;0.756517475 &nbsp; &nbsp; &nbsp; &nbsp; 0.851830865 &nbsp; &nbsp; &nbsp; &nbsp; 0.588039712<br />
+----------<br />
+------------------------------------------------------------------------------

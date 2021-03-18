@@ -1,0 +1,837 @@
+------------------------------------------------------------------------------<br />
+■ 一読しておくと良い参考書<br />
+・（社）日本分析化学会編『有機構造解析』共立出版<br />
+　初学者に役立つ記述が多々ある。<br />
+・平山令明『第2版 化学・薬学のためのX線解析入門』丸善株式会社<br />
+　分子及び医療分野に関する記述は論文執筆での議論において役に立つ。実際の測定から解析方法、標準的なCIFの内容の記述やその他に実用的な視点から多くの経験が記述されている。<br />
+------------------------------------------------------------------------------<br />
+■ 単結晶X線構造解析 [1]<br />
+　直接的に分子構造を決定できるため、単結晶さえ手に入れることができるならば、複雑な分子の分析手段としては最も有力かつ決定的な方法といえる。（省略）<br />
+　分析対象は一般の有機化合物、金属錯体などの分子性化合物だけでなく、無限構造を持った無機結晶やタンパク質などの高分子化合物についても適用できる。単結晶X線構造解析では、分子内で各原子がどのような順序、配列で結合しているかを決定できるだけでなく、結合距離や結合角を精密に求められる。これらのデータは結合の次数や原子の混成を知るための情報となる。また、試料分子の立体化学を確実に決定することができる。特に、絶対配置を一義的に決定するための方法としては結合していない原子間の距離や角度、分子どうしの位置関係について詳細に決定できるので、水素結合やホスト-ゲスト相互作用、さらにはもっと弱い相互作用（例えばCH-<span style="font-family: times new roman,times,serif;">&pi;</span>相互作用、芳香環の<span style="font-family: times new roman,times,serif;">&pi;</span>-<span style="font-family: times new roman,times,serif;">&pi;</span>スタッキング、金属錯体におけるアゴスティック相互作用など）についても多くの情報を得ることができる。<br />
+　一方、試料の単結晶が得られない場合には適用できないため、結晶化の難しい高分子などの試料に対しては利用できない。また、単結晶X線構造解析で得られる分子構造はあくまでも結晶中という特殊な状況における構造であって、溶液や気相中での分子構造を保証するものではないし、結晶中でのコンホメーションが最安定形であるというわけでもない。溶液中で平衡状態にある二つの構造のうちのマイナーなほうが結晶化してくる場合もあるし、二つのまったく異なるコンホーマーを同時に含む結晶が生成することもある。一般論からいえば、各種スペクトルからの情報と単結晶X線構造解析の結果に矛盾がないことを確認すべきである。<br />
+　単結晶X線構造解析で決められるのは電子密度であって、元素の種類が直接決まるわけではないことにも注意するべきであろう。原則的には電子密度の大きいところに原子番号の大きい元素を置くことができるが、例えば炭素と窒素のどちらの原子がその場所にあるのかを完全に判別できるわけではない。やはりスペクトルや元素分析などの情報と合わせて、合理的に決定する必要がある。水素原子はX線の散乱が小さいので、その位置は通常精度良く決定することができない。水素原子の位置（水素を含む原子間距離、角度）を正確に決めるには中性子線回折を用いる必要がある。<br />
+　なお、一般の有機化合物および有機配位子を含む錯体の単結晶X線構造解析の結果は、Cambridge Crystallographic Data Centre（CCDC)のCambridge Structural Database (CSD)に集められている。また、無機化合物やタンパク質については、Inorganic Crystal Structure Database (ICSD)、Protein Data Bank (PDB)がある。<br />
+<br />
+◇ 理論 [1]<br />
+　単結晶では、単位格子と呼ばれる繰り返し単位が3次元的に配列されている。単位格子は一般に平行六面体であるが、三つの軸の長さ（a, b, c）および軸のなす角（&alpha;、&beta;、&gamma;）により7つの晶系に分類されている。また、最小の繰り返し単位（単純格子）よりも大きく格子を取って対称性を上げた複合格子も含めると、14種類の格子（ブラベー格子）に分類できる。<br />
+　一方、単位格子中には（分子性化合物の場合）分子が1個のことも2個以上入っていることもあるが、例えば2個以上入っていたとしても、それらは対称心や2回回転軸などの数学的対称性で関係付けられた位置にあることが多い。この単位格子中の分子（原子）の配置の仕方の対称性とブラベー格子の組み合わせにより、結晶中の空間的対称性は全部で230通りの空間群に分けられる。<br />
+　さて、単結晶中では分子（原子）は規則正しく配列しているので、X線に対して回折格子として働き、(h k l) 面で散乱されたX線は指数 h, k, l で表される特定の方向でのみ観測される。この回折X線の全振幅F(h k l)（構造因子と呼ばれる）は単位格子中の原子jの座標（x<sub>j</sub>, y<sub>j</sub>, z<sub>j</sub>）と原子散乱因子f<sub>j</sub>により次式で表される。<br />
+　F(h k l) = &Sigma;<sub>j</sub> f<sub>j</sub>*exp{2*<span style="font-family: times new roman,times,serif;">&pi;</span>*i*(h*x<sub>j</sub> + k*y<sub>j</sub> + l*z<sub>j</sub>)}<br />
+これから単位格子中の電子密度分布&rho;(x, y, z)はVを単位格子の体積として次式のように求められる（フーリエ合成）<br />
+　&rho;(x, y, z) = (1/V)*&Sigma;<sub>h</sub>&Sigma;<sub>k</sub>&Sigma;<sub>l</sub> F(h k l)*exp{-2*<span style="font-family: times new roman,times,serif;">&pi;</span>*i*(h*x + k*y + l*z)}<br />
+上記の式でわかるように、一般にF(h k l)は複素数であり、位相と振幅に分けて次式で表すことができる。<br />
+　F(h k l) = |F(h k l)|*exp{i*&phi;(h k l)}<br />
+実際の測定で散乱強度として得られるのは構造因子であるF(h k l)そのものではなく、構造因子の振幅の絶対対|F(h k l)|の2乗であるので、構造を解くためにはその位相&phi;(h k l)を求める必要がある。その方法が直接法、あるいは重原子法（パターソン法）などと呼ばれるもので、これによって分子構造が求まる。一般には、遷移金属などの原子番号の大きな原子（重原子）を含む構造では重原子法がよく用いられ、重原子を含まない構造では直接法が用いられる。（省略）直接法または重原子法により得られる初期構造モデルは完全なものではない。しかし、適切な初期構造モデルが得られれば、それから計算される構造因子とその実測値の差を用いたフーリエ合成（D合成）により、初期構造モデルが見つかっていなかった原子の位置を決めることができる。構造モデルが得られたら原子の位置や温度因子（原子の熱振動などの運動性を示すパラメータ）を最小二乗法で精密化する。この操作を繰り返すことにより最終的な構造を求める。<br />
+<br />
+◇ 直接法 [2]<br />
+（省略、文献[2]を参照してください）<br />
+<br />
+◇ 重原子法 [2]<br />
+　一つの単位格子に含まれる原子の中で原子番号のとくに大きな原子を重原子と呼ぶ。例えば、C, H, NおよびOなどからなる典型的な有機化合物の中に1原子のBr原子が含まれる場合、このBr原子を重原子と呼ぶ。重原子のfが十分に大きいと、重原子の位置だけでもその構造の近似構造になり得るので、パターソン関数で求めた重原子位置を頼りに、分子内の残りの原子の位置を求めることができる。このように重原子の位置をまず手がかりに位相の近似値を求める方法を重原子法という。低分子有機化合物であればたいてい直説法で構造解析が可能である。しかし、構造を求めるべき分子の分子量が1000近くになると、直接法ではなかなか解析できない場合があり、そうした場合に重原子法は有用である。また直接法による構造解析が難航し、適当な重原子誘導体（ないし重原子を含む塩や複合体）が比較的容易に調製できるときは、重原子法を試みる価値がある。<br />
+<br />
+◇ 装置 [1]<br />
+　単結晶X線構造解析装置の測定部はX線発生部、結晶を支持し方位を調節するゴニオメータ、X線検出器かららなっている。ここに制御用および構造解析用コンピュータ、試料冷却装置などが組み合わされて全体のシステムを構成する。<br />
+　一般的な装置では、X線源としてX線管球または回転対陰極型X線発生装置（ローターフレックス）が用いられている。X線管球と比較すると回転対陰極型X線発生装置は大きな負荷をかけられるので、より高輝度のX線を得ることができる。そのため、後者ではより小さな結晶でも測定に使用できる。利用されるX線は通常Cu K&alpha;線あるいはMo K&alpha;線であるが、重金属元素などを含む試料に対してはCu K&alpha;線は吸収が問題となるので、Mo K&alpha;線が用いられる。X線はモノクロメータ、コリメータを通して単色、平行X線として取り出される。<br />
+　X線検出器として以前はシンチレーションカウンターがもっぱら用いられてきた。<br />
+　カウンターの方向を決める2&theta;と結晶の方位を決める&omega;、&Chi;、&Phi;の四つの軸を回転させ、一つ一つの反射にカウンターを合わせて順に測定していくのであるが（いわゆる4軸型回折装置）、格子が大きく反射点の多い結晶の測定には長時間（1日から数日）を要した。これは効率面だけでなく、X線による結晶の損傷という問題にもつながる欠点であった。<br />
+　近年、新しいX線検出器としてイメージングプレートやCCDを用いた2次元検出器が急速に普及してきた。2次元検出器では多数の反射の強度を一度に測定するため、結晶の対称性にもよるが4軸型回転装置の場合の数分の1以下の測定時間で済む。これにより測定を効率的に、またX線による損傷が進まないうちに行えるようになった。また、2次元検出器を用いると4軸型ゴニオメータを用いる必要がないため検出器を結晶に近づけることができ、測定感度を向上させることができる。これによりかなり小さな試料結晶でも測定ができるようになったことも2次元検出器の有利な点といえる。<br />
+　この他、低温、高温、高圧などの環境下での測定を行うための装置も用いられる。特に低温下での測定は、熱的に不安定な化合物や風解性の結晶の測定に有効であるだけでなく、原子の熱運動を抑制して精度よく構造解析できる点で優れており、低温の窒素ガスを試料結晶に吹き付けて100 K程度の温度で測定する方法がしばしば用いられる。<br />
+<br />
+◇ 陽極の特性&nbsp;[3]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 544.09px;">
+	<tbody>
+		<tr>
+			<td style="width: 72.72px;">ターゲット</td>
+			<td style="width: 71.19px;">波長 [Å]</td>
+			<td style="width: 172.36px;">特徴</td>
+			<td style="width: 209.63px;">対象</td>
+		</tr>
+		<tr>
+			<td style="width: 72.72px;">Mo</td>
+			<td style="width: 71.19px;">0.71073</td>
+			<td style="width: 172.36px;">重原子（金属など）によるX線吸収が少ない</td>
+			<td style="width: 209.63px;">迅速測定<br />
+			有機金属錯体など</td>
+		</tr>
+		<tr>
+			<td style="width: 72.72px;">Cu</td>
+			<td style="width: 71.19px;">1.5418</td>
+			<td style="width: 172.36px;">波長が長く回折点の間隔が広がり、回折点の重なりが起こりにくい<br />
+			有機化合物の回折強度大</td>
+			<td style="width: 209.63px;">絶対構造の決定<br />
+			格子定数の大きな単結晶に適用<br />
+			タンパク質などの結晶構造解析<br />
+			微小結晶</td>
+		</tr>
+	</tbody>
+</table>
+　Moは重元素によるX線吸収が少ないため、有機金属錯体等の解析に使われる。一方、Cuは波長が長いので、回折点の間隔が広がり、重なりにくいため、格子定数の大きな単結晶の場合にも有利となる。このために、タンパク質などのX線構造解析では主にCuが用いられる。<br />
+<br />
+◇ 試料結晶の調整 [1]<br />
+　X線構造解析を行うためにはまず試料の単結晶を作製しなければならない。よい解析結果を得るためには良好な結晶を得ることが必要となる。単結晶を作るにはさまざまな方法が用いられるが、分子性の有機化合物、有機金属錯体の場合には溶液から再結晶するのが最も一般的である。<br />
+　空気下安定で比較的結晶化しやすい物質では、溶液からゆっくりと溶媒を揮発させて結晶を析出させる方法が簡便である。溶解度のあまり高い溶媒を用いると濃厚溶液から結晶が析出するので、結晶どうしがくっついてしまうなどして質の高い単結晶が得られないことが多い。必要に応じて混合溶媒を用いてもよい。溶解度の小さい溶媒（貧溶媒）を試料化合物の溶液中へ拡散させて結晶を析出させる方法も利用されている。<br />
+A. 適当な溶媒に試料を溶解して小型容器に入れ、これを揮発性の貧溶媒を入れた少し大きなビーカーやシャーレ内に置く。全体をデシケータなどに入れて密閉静置すると、貧溶媒の蒸気が拡散して溶液中に溶け込み、ゆうくり溶解度が下がって良好な結晶が得られる。<br />
+B. 空気下で不安定な化合物では、不活性気体雰囲気下でシュレンク管に試料溶液を入れ、その上に貧溶媒を二層になるように静かに乗せて密閉静置する。<br />
+　いずれの場合にも溶媒の選択は非常に重要であり、結晶解析に適した結晶を得るためには何種類もの溶媒（あるいはその組み合わせ）の検討が必要なこともある。<br />
+　結晶が得られたら実体顕微鏡で観察し、ひびや濁りがなく、結晶同士がくっついていない（双晶でない）ものを選び出す。一般的にはきれいな結晶面を持った多面体の結晶がよいが、偏光顕微鏡で観察すると双晶などを判別しやすい。大きさは0.1 - 0.5 mmが適当であるが、2次元検出器を備えた装置では比較的小さい結晶が使える。また、回折強度は結晶の体積によるので、針状や板状の結晶ではそれぞれ長さ、面積を大きく取る必要がある。逆に、結晶が大きすぎるとX線ビームからはみ出してしまう。そのような場合や、結晶の一部に小さい結晶が付着していたりひびがある場合には、結晶を切らなければならない。実体顕微鏡で結晶を観察しながら、スライドグラスまたはろ紙上に置いた結晶をかみそりの刃を使って切り出す。溶液から結晶を取り出したときに結晶の透明感が失われたり、結晶が雲母様の光沢を示す場合には、結晶が風解している可能性がある。このようなときは容器中に結晶を入れたままで観察し、試料結晶を選ばなければならない。<br />
+　試料結晶はガラスファイバーの先端に瞬間接着剤などで固定し、ロウなどで金属製のチップに取り付ける。また、結晶のサイズを測っておく（論文投稿時には必要である）。<br />
+　空気下不安定な化合物の結晶では、窒素やアルゴンでフラッシュしたガラスキャピラリ内にグリースなどで付着させて封入する方法が取られる。キャピラリ内に結晶とともに溶液を少量封入することにより風解を防げる場合もある。細いナイロン製のループでオイル（専用のものが市販されている）中に入れた結晶をすくいとり、それを冷却窒素で凍結して低温で測定する方法も不安定化合物や風解性結晶の測定に簡便、有効である。<br />
+　試料結晶はゴニオメーターヘッドに取り付け、回転させてもいX線の光軸からずれないようセンタリングして測定を開始する。<br />
+◇ 結晶作成 [3]<br />
+　結晶を作るためには、溶媒の中に化合物が過剰に溶解している状態（過飽和状態）にする。過飽和状態の溶液になると、初めに結晶の核が生じて、その後結晶が成長していく。過飽和状態で核が数多く発生すると、非常に小さな結晶が数多くできてしまう。また、結晶の成長速度が速すぎる場合には、結晶に筋やひび割れのようなものが入って、解析が失敗に終わる場合もある。解析に適した結晶を作るには、結晶化の方法や用いる溶媒を十分に検討する必要がある。測定してみて、解析に適したデータを得ることができなかった場合、同じ方法で作製したほかの結晶に交換、もしくは結晶化の条件を再検討して新たに結晶を作りなおすのがよい。<br />
+-----<br />
+・単結晶作成法Ⅰ（溶媒蒸発）<br />
+　揮発しやすい有機溶媒を選び、試料を溶解させて放置しておく。溶媒が自然蒸発して溶液が過飽和状態になり、結晶が析出する。<br />
+　自然放置のままで測定に適した大きさの結晶が得られなかった場合、溶媒の揮発速度を遅くするような工夫をする必要がある。単結晶の成長を抑制するには、例えばフタをして揮発をおさえ、1-2週間程度の時間をかけて析出させるなど溶媒の蒸発量を抑制する。得られた結晶が大きすぎる場合には、逆に揮発スピードを速くするような工夫をする。あるいは大きな結晶をカットして使用することもある。<br />
+・単結晶作成法Ⅱ（徐冷あるいは冷却）<br />
+　一般的に化合物は温度が高いほど溶解度が大きくなる。室温で試料を飽和濃度まで溶かした溶液に、さらに試料化合物を加えて、加温しながら溶解させる。その後室温まで放冷すると結晶が析出してくる。また、飽和溶液を冷蔵庫に入れることでも同様に結晶を得ることができる（この場合には室温に戻すと再び溶解してしまうので、素早く結晶を取り出す）。ただし、熱的に不安定な化合物は、加熱により分解するので注意が必要である。<br />
+-----<br />
+　上記のように温度一定の条件下で結晶を育成するか、あるいは温度設定を制御できるオーブンなどの徐冷システムを用いて、良質な単結晶を育成する。その他にも良く使われる方法として、蒸気拡散による単結晶作成法もなどもある。下の参考文献を参照。<br />
+-----<br />
+・桜井俊雄『X線結晶解析の手引き』裳華房<br />
+・桜井俊雄『X線結晶解析』裳華房<br />
+・大場茂ら『X線構造解析』朝倉書店<br />
+・岩村秀ら『物質の科学・有機構造解析』放送大学教育振興会<br />
+・山口健太郎『分子構造解析』裳華房<br />
+・平山令明『化学・薬学のためのX線解析入門』丸善<br />
+・日本化学会編『物質の構造Ⅲ-回折（第5版）』実験化学講座11<br />
+-----<br />
+　作成した結晶が単結晶かどうかの判定は、測定の前に、実体顕微鏡（例えば20倍程度）を見ながら判断する。透明性が高く、ヒビやコブがない結晶を選ぶ。この際、結晶の外形や内部に歪みがないかどうかを調べるために、偏光板を利用すると、より明瞭になることが多い。<br />
+　結晶の大きさは、一般的に、0.3 x 0.3 x 0.3 mm程度が望ましく、大きすぎる場合には顕微鏡で観察しながらその大きさにカミソリで整形する。0.1 mm角程度あるいはそれより小さい結晶でも解析できることがある。<br />
+　測定対象の化合物をメタノールまたはエタノールに溶かして、室温で放置しておくと数日後に複数の結晶が得られた。<br />
+　バイアル瓶の中でエタノールに溶解させ、①ふたを軽く閉めたもの、②ふたをしないまま放置したもの、について結晶の形を顕微鏡で観察したところ、②ふたをしないまま放置したもののほうが、揮発スピードが速いために、得られた結晶は軽く、①ふたを軽く閉めたものに比べて、結晶の大きさがやや小さくなる傾向が見られた。<br />
+（省略）<br />
+　測定に適した結晶は、結晶同士が付着、あるいは、他の小さな結晶が表面に付着していないこと、透明でひびなどがないこと、などである。実体顕微鏡できれいに見えても、実際には小さなびひなどを見逃してしまう場合がある。偏光顕微鏡で観察し、結晶を回したときに一様に消光するものが測定に適している。<br />
+◇ 結晶を装着するときの注意点 [3]<br />
+　金属ピンについた支持ガラス棒に接着材（エポキシ系）で固定する。金属ピンはゴニオメーターヘッドに装着する（マウントとも言う）。このとき、結晶の中心がゴニオメーターの回転中心になるように位置を調整する。この調整が不十分な場合、測定中に結晶が回転してもX線が均一に照射されず、結果として解析結果の質が低下する。<br />
+　潮解性を持つ試料など結晶が不安定な場合には、キャピラリーやループを用いてマウントする。これらの部品は専門のメーカー（ハンプトンリサーチ社やファルマアクセス社など）から市販されており、有用である。<br />
+　不安定な試料の長時間測定や原子の熱振動の抑制には、必要に応じて試料に低温ガスを吹き付ける装置を使用することもある。低温測定ではおもに液体窒素を用いた吹きつけ装置（低温用定用ユニット）を用いることが多いが、吹き付けるとき、空気中の水分により発生する霜が結晶へ付着することが問題となるので、低温気流中のまわりに乾燥ガス（シールドガス）を流す仕組みになっている。100 K程度の低温測定では、液体窒素が使われるが、それ以下に冷却する場合には液体ヘリウムを用いる。<br />
+<br />
+◇ 結晶学的データおよび回折データの測定 [1]<br />
+　現在利用されている単結晶X線構造解析装置では測定操作はほとんど自動化されているので、測定の流れだけを述べることとする。<br />
+　4軸型回転装置では、回折X線の来る場所にカウンターを移動させなければならないので、本測定に先立って格子定数などの結晶額的データと結晶のセッティングパラメータを決めなければならない。下に典型的な測定の流れを示す。<br />
+------------------<br />
+　結晶マウント＆センタリング &gt; ピークサーチ &gt; 指数付け＆格子定数計算 &gt; ラウエ対称性チェック &gt; 予備測定・格子定数精密化 &gt; 回折データ測定 &gt; 精密な格子定数の決定 &gt; 吸収補正用データ測定<br />
+------------------<br />
+　ピークサーチでは2&theta;の比較的小さな領域でランダムに回折X線を探し、その方位を測定する。反射のプロファイル（ロッキングカーブ）がブロードであったりいくつにも分裂していれば単結晶ではないことを示すので、試料を交換しなければならない。<br />
+　15 - 25個の反射が得られると、各反射の指数を決め、格子定数およびセッティングパラメータを求めることができる。このとき決まる単位格子の体積V（Å<sup>3</sup>）と試料の想定分子量M、単位格子中の分子数Zから結晶の密度d（=1.66*M*Z/V）が計算できる。一般にC, H, O, Nからなる有機化合物の密度は1.2 g cm<sup>-3</sup>前後、遷移金属錯体でも単核なら1.3 - 1.7 g cm<sup>-3</sup>程度の密度が普通なので、この時点でZが決められる。なるべく正しい分子式（特に重原子の数）とZ値を求めておくことは、構造解析をスムーズに行うために必要である。<br />
+　ピークサーチで得られる格子定数は精度が低いので、プログラムの指示するブラベー格子も誤っている可能性がある（例えば、90.1度が正確には90度なのかどうかがわからない）。この認識のため、結晶のラウエ対称性のチェック（等価反射の強度の比較）が行われる。ここで問題がある場合には測定者が実際にデータを見て、対称性の低い格子を検討しなおす必要が出てくる。問題がなければ得られたセッティングパラメータを用いて予備測定を行い、より精密な格子定数を決めてから回折データの本測定に入る。<br />
+　本測定の際には、結晶の損傷とともに回折強度が低下することがある。軽度の損傷なら標準反射を継続的にモニターして補正すれば、解析に用いることができる。回折データの測定終了後に最終的な格子定数の精密な決定を行い、必要があれば吸収補正（結晶によるX線の吸収の補正）を経験的に行うための&Psi;スキャンデータを取る。<br />
+　2次元検出器を利用する場合には結晶学的データの精密な決定を回折データ測定と並行して進めることができるので、4軸型回転装置とは手順がやや異なる。しかし収集するデータは本質的には同じである。また吸収補正には数値積分による解析的方法が取られることも多い。その場合、結晶の形状測定と面指数の決定が行われる。<br />
+<br />
+◇ 晶系 [3]<br />
+　無機化合物では立方晶系などの対称性の高い配置になる場合が多いが、有機化合物の場合には空間的に対称性の低い配置になる場合が多い。主に有機化合物、有機金属化合物の結晶構造を登録しているデータベースCSD（Cambridge Structual Database）を運営しているCCDCがホームページ（<a href="http://www.ccdc.am.ac.uk">http://www.ccdc.am.ac.uk</a>）で公開している統計によると、有機化合物が取り得る晶系の確率（% of CSD）は、三斜晶系、単斜晶系、斜方晶系の3つの晶系で全体の90%以上を占めている。<br />
+<br />
+◇ 構造解析 [3]<br />
+a. 晶系（結晶格子の形）を決める<br />
+b. ブラベ格子（結晶格子の形と分子の位置）を決める<br />
+c. 空間群と消滅則（結晶格子の形と対称性）を決める<br />
+　実際の解析の過程で空間群を決定する際には、消滅則と呼ばれる規則を用いる。これは並進を伴う対称要素を含む空間群の場合に、h k lの反射強度の一部が規則的に0（零）になる現象である。実際には並進を伴う対称要素以外にも、複合格子をとる場合にも消滅側がある。<br />
+　空間群がわかれば、分子一つの座標からその単位格子に含まれている複数の分子の分子座標を、対称操作によって自動的に決定可能となる。<br />
+d. 結晶構造解析<br />
+　空間群の決定ができたら回折強度から構造因子Fobsの絶対値|Fobs|を求めて、構造因子Fobsの位相を求める（位相問題）。通常は直説法を用いることが多い。<br />
+　直接法とは各反射の構造因子の位相間にある数学的な関係をもとにして位相を統計的に推定する方法である。低分子量の有機化合物はほとんどこの方法で解くことができる。<br />
+　直説法以外のおもなものに重原子法がある。分子中に重原子（Brや金属原子など）が存在する場合、パターソン関数でまず重原子の位置を見出し、それを手がかりに位相の近似値を求める方法である。直説法では解けなかった場合、重原子法が有効なこともある。<br />
+e. 構造精密化<br />
+　直接法などにより原子位置が決まったら、原子座標や温度因子を精密化する。精密化の進行度合いの指標としてR因子（Reliability Factor、信頼度因子）が用いられる。（省略）<br />
+　等方性温度因子を用いて計算したR因子が10から20%（0.1から0.2と表示する場合が多い）になれば、ほぼ正しい構造を示していると考えられ、さらに温度因子を異方性にしたり、水素原子を導入することで最終的にR因子は5%（0.05）程度になる。<br />
+　直接法から得られた最初の段階の構造では、まだ完全な構造を示していない場合が多く、原子番号の近いC, N, Oなどはお互いに違った元素に帰属（アサイン）されていることもある（NMRなどで化合物の構造が推定されている場合にはそれを参考にして帰属しなおす）。<br />
+　精密化のある段階で分子構造の一部分が見えない場合がしばしばあるが、その場合にはD合成（Difference Synthesis）を行うことで、見えていなかった原子が見えてくることが多い。<br />
+　実際の測定データの構造因子を用いたフーリエ合成では、周りの原子の電子密度の影響で、電子密度の小さい水素原子や結晶溶媒は見つからないことが多い。そこで、実測データの構造因子（|Fo|とする）と精密化のある段階でわかった結晶子構造から計算される構造因子（|Fc|とする）を持ち知恵、<br />
+　&Delta;F = |Fo| - |Fc| （残差の構造因子）<br />
+とし、<br />
+　&Delta;&rho;(x, y, z) = (1/V)*&Sigma;&Sigma;&Sigma;[&Delta;F(h k l)*exp(i&phi;)*exp{-2<span style="font-family: times new roman,times,serif;">&pi;</span>i(hx+ky+lz)}]（残差の電子密度）<br />
+の形でフーリエ合成を行い、今まで見つかっている原子位置はそのままにして、残りの電子密度から見逃していた原子の位置を発見する手法である。逆に、分子構造に対して想定される以上の電子密度ピークが観測される場合もある。<br />
+　単結晶は溶媒中から結晶化されるので、溶媒和を起こして結晶中に溶媒を含む場合も多い。想定外のピークが見つかった場合、溶媒として判別できる場合には、溶媒に帰属する（溶媒を含んでいるかどうかを熱分析（TG）やNMRなどで確認しておいたほうがよい）。<br />
+　結晶中に水が存在する場合には、水分子の中では酸素原子しか観測されないので帰属が難しいが、通常、水分子は試料の分子の一部分と水素結合している場合が多いので、格子を表示させてみて、水素結合が考えられる位置にある場合には、水分子が存在すると考えてもよい。<br />
+　ただし、解析の段階のD合成で出てきたピークを、むやみに水分子（酸素原子）に帰属すると見かけのR因子は小さくなるが、その位置に水分子が存在する妥当性がない場合には、それは適切な処理とは言えない。<br />
+f. 結果の評価<br />
+　信頼性の高い解析結果として、R因子が7%（0.07）を下回り、ORTEP図で異常な原子形状の見られないことが必要である。結果は、ORTEP図、結晶学データテーブル、原子座標テーブル、距離角度データテーブルを揃えるのが一般的である。結果を論文投稿する場合には、CIFファイル（Crystallographic Information File；結晶解析専用ファイル）にする。SHELX-97プログラムではActaコマンドを使用するとCIFファイルを簡単に作成できる。<br />
+<br />
+◇ 構造解析 [1]<br />
+　現在の解析プログラムは自動化が進んでいるので、構造解析に関しても特に問題が発生しない限りルーチン化された手順で解析ができる場合が多い。しかし正しい解析ができているかどうかの判断には多少の経験が必要である。構造解析は普通、下のように進められる。<br />
+------------------<br />
+　データ処理・補正＆空間群決定 &gt; 初期構造（直接法・重原子法）&gt; 構造精密化＆D合成 &gt; 水素原子割り当て &gt; 構造の収束 &gt; レポート＆CIF作成<br />
+------------------<br />
+　最終的に原子の座標や温度因子が収束したところで、合理的な構造が得られており、解き残した電子密度がなく、R値やGOF値が妥当な数値になっていれば解析を終了する。<br />
+　まず、空間群の決定には、消滅則（特定の指数で回折強度が規則的に消える現象）が用いられる。しかし同じ消滅則を示す空間群は複数あることが多いので、うまく解析が進まない場合には解析プログラムが選んだ空間群以外にも可能性のある空間群をテストする必要がある。特に注意を要するのは、実際には対称心のある構造であるに正しい空間群で解いても妥当な初期構造が得られず、対称心のない空間群を仮定すると初期構造が得られる場合である。例えば、真の空間群がP-1であるのにP1を仮定しないと解が得られない場合や、正しくはC2/cであるのにCcで解かないと解が得られない場合がよく見受けられる。このようなときは、解析が少し進んだところで構造をよく調べると対称心が存在することがわかるので、その時点で空間群を変更すればよい。しかしこのことに気づかないと、対称心のない誤った空間群で最後まで構造解析をしてしまうことになる。実際の投稿論文でもこのような誤りが少なからずあるといわれているので気をつけたい。水素原子の位置はD合成で見出される場合も少なくないが、実際には（特にCHの場合）単純に理想的な位置に置いてしまっても十分である。<br />
+　最後に、キラルな空間群の場合は絶対配置の決定をする必要がある。試料化合物が光学活性体の場合はもちろんであるが、そうでなくても自然分晶が起こることもあるし、分子の配列がキラルなために結晶がキラルとなることもある。対称心のある空間群では|F(h k l)|と|F(-h -k -l)|は等価である（フリーデル則）が、キラルな空間群では異常散乱のために等価でなくなる。遷移金属などの重元素を含む化合物の場合は異常散乱の効果が大きいので、これを使って世帯配置を決めることができる。最近は簡便な判別法としてフラックパラメータがしばしば用いられる。フラックパラメータは絶対配置が正しければ0、逆なら1に近づく。<br />
+　構造解析が終了したら、必要なデータや図を作成するだけでなく、結果をCIFとして残す。CIFに必要な項目はActa Crystallogr. Sect. Cに規定されている。構造解析の結果を論文として発表する場合にはCIFをCCDCに送ってそのID番号を記載するか、CIF自体を論文に添付することを求められるのが普通である。<br />
+<br />
+◇ X線構造解析の一般的な流れ [2]<br />
+----------<br />
+1. 結晶化および結晶の選択（例としてエトフィリンを採りあげている）<br />
+　エトフィリンをエタノールに溶解し、その溶液を室温で暗所に放置し、自然蒸発させ結晶化させる。<br />
+　下の図に示すように、小さなサンプル管になるべく少量の溶媒に結晶化すべき化合物を溶かす。化合物の入った小さなサンプル管は大き目のガラス容器に入れて完全には閉めない状態でフタをする。<br />
+　<img src="data:image/png;base64,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" /><br />
+　この化合物に関するMerck Indexの記載からエタノールを溶媒に選んでいる。予備的な知見のない場合には、適当な種類の溶媒やそれらの混合溶媒を試行錯誤的に試すことになる。 得られる結晶は無色の板状晶である。暗所に放置するのは、この化合物の結晶および結晶化の過程への可視光線による影響を除くための安全措置であった。結果として、特に大きな影響はなかった。<br />
+　低分子有機結晶の結晶化法には色々な方法が用いられているが、このように単純に有機溶媒に溶解し、それを自然蒸発させる方法がもっともよく使われるので、まず試みるべき方法である。この方法でうまくいかないときには、種々の方法を試すことになる（平山令明『有機結晶作製ハンドブック』丸善 を参照してみるとよい）。<br />
+　結晶解析に用いる結晶は単一な結晶でなければならないので、偏光顕微鏡を用いて、綺麗な結晶面をもった単一の結晶を探す。結晶の中に亀裂やにごりのあるものも好ましくない。見るからに完璧な形の結晶が良い結晶である。結晶の外形は、実験誤差の立場からは球状が理想的であるが、現実的にはなるべく立方体に近いものを選択することになる。結晶の大きさは測定に用いるX線装置に大きく依存するので一概にいえないが、外形を立方体とすると各稜の長さがおおよそ0.1 mm以上で0.5 mm以下が望ましい。実際には、一つの稜が0.01 mm程度と非常に小さい場合もあるが、他の稜が十分に大きければ（例えば、0.5 x 0.5 x 0.01 mm）、十分に回折X線を測定できる。回折X線の強度は結晶の体積におおよそ比例するので、結晶の体積が同等であれば同等のデータがとれるとおおまかに考えてよい。しかし、上の例のように一つの稜が極端に短い場合、その稜方向の原子座標の精度が低下する。回折実験にかかる前になるべく良好な結晶を得ておくことが肝要である。<br />
+　多くの有機化学者から供与さえる結晶は回折実験には逆に大きすぎることがある。このような大きな結晶が成長する過程で、結晶内部にひびが入ったり、小さな結晶が大きな結晶に寄り添う形で成長してしまうことがある。これらは単一の結晶という基準から外れる。本来無色の化合物の結晶が薄く着色していることがあるが、X線回折には多くの場合支障にはならない。NMRチューブ内での結晶化で得られる結晶は多くの場合あまり良好でない。<br />
+　外観が非常に綺麗に見えても結晶解析に適さないこともあり、回折実験を行ってはじめてその結晶が真に回折実験に適するかどうかが判断される。最終的には、目的の構造解析ができた時点でその結晶の良否がわかる。結晶中に乱れがあり、乱れた部分が構造の解明を目的とする部分であれば、その結晶は不適ということになる。X線解析では残念ながら構造を解析してみないと、その結晶中で分子がどのような構造になっているか知ることはできない。この例では0.4 x 0.1 x 0.03 mmの板状の結晶を実験に用いた。<br />
+<br />
+2. 結晶学的データおよび回折データの測定<br />
+1) X線回折装置の原理<br />
+（省略）求める分子構造をなるべく精密に決定するためには、可能な限りたくさんの回折データを収集する必要がある。それを実現するために、ゴニオメータには2つの回転軸（&omega;と&Phi;）があり、その回転軸の周りに結晶を回転させることで、可能な限り広い範囲の回折データを収集する仕組みになっている。<br />
+2) 回折X線データの収集<br />
+　まず結晶をコゴニメータ・ヘッドに取り付ける。通常は金属のピンの先端に細く引いたガラス・キャピラリーをワックスなどで固定し、そのキャピラリーの先端にマニキュアや瞬間接着剤などで結晶を取り付けるこの金属ピンをさらにゴニオメータ・ヘッドに取り付ける。ゴニオメータ・ヘッドをゴニオメータ部分に取り付け、望遠鏡で覗きながら、結晶の中心が、ゴニオメータの中心に来るように調整する。結晶の中心がずれていると、結晶を回転した時に、X線が結晶に均等に当たらなくなるので、回折データが均質でなくなるので、構造解析の質に大きな影響を与える。したがって、慎重に結晶の中心を合わせる必要がある。ゴニオメータにはたいていCCDカメラが付属して、結晶の拡大図とゴニオメータの中心（+）が表示されるので、この画像を見ながら結晶の中心が、ゴニオメータの中心に合うように調整する（文献[2]には実際の画面が示してある。書いてある通りの図である）。<br />
+　実際の回折データ収集は大きく分けて、2段階になっている。<br />
+・第一段階<br />
+　第一段階は、結晶の格子定数の決定である。格子定数は3次元であるが、イメージングプレート（IP）上では回折X線は面で受ける。したがって、一つの面で受けた回折X線に基づき、格子定数を決定することは困難である。確実に格子定数を決定するために、実際には結晶の角度を大きく変えて、3方向からIP上に回折X線を記録する。結晶を静止したままであると、IP上に記録される回折X線が少なくなるので、結晶をわずかに回転させ、記録できる回折X線の数を増やす。この目的で測定したIP上の回折X線の例を見ると、黒い点の1つ1つが指数の異なる回折X線に相当する。結晶の回転角とIP上の各回折X線の位置から、この結晶の格子定数が求められる。<br />
+　その際、もう一つの重要な情報が得られる。結晶の中心とゴニオメータの中心は一致しているので（一致しているように結晶を取り付けるので）、結晶の座標系とゴニオメータの座標系を関連付けるには、一つの方位マトリックスを決定すれば良い。格子定数を求める時に、この方位マトリックスも同時に求められる。方位マトリックスが求まると、IPの面に対して、結晶の特定の面を任意に配向させることが出来る。すなわち、特定の反射を測定するためには、結晶をどのように回転させるべきかが計算できることになる。<br />
+　結晶に割れがあったり、複数の小さな結晶が付着していると、方位マトリックスも格子定数も正確に求められない。どの程度正確にこれらが求められたかの指数をこの段階で計算する。その指数が十分に良好でない場合は、ほとんどの場合結晶側の問題であるので、結晶を変えるか、付着している余分な微小結晶を覗くなどの結晶の整形作業が必要となる。形が綺麗で（面がしっかりしている）、透明度の高い（色のある場合には判断が難しいが）結晶を使用することが良質の回折データを得る重要なポイントである。<br />
+・第二段階<br />
+　第二段階で実際に解析している回折X線を測定する。実際の測定データを見ると、多くの測定点が記録されている。回折X線のほぼすべてを測定するには、このような測定を複数回繰り返す必要がある。回折装置の測定速度が遅かった時代は、収集する範囲を可能な限り少なくする工夫をしたが、最近では原則的にすべての収集可能な（装置の機械的限界まで）データを測定する。一回の測定における結晶の回転角を大きく取れば、IP上に記録される回折X線の数は増加し、測定時間も短縮できるが、回折X線同士の重なりが多くなり（二次元上に記録するので）、正確に測定できるデータの数が少なくなるので、全体のデータの質が下がる。一方、回転角を必要以上に小さく取っても、時間の無駄になる。そこで、実際には格子定数の大きさや使用しているX線発生装置の出力などを勘案して、最適な回転角を用いる。大抵は装置メーカーからの測定用ソフトウェアに指定されている推奨値を用いれば十分である。記録された回折X線の指数を求めるには、第一段階で得た方位マトリックスを用いる。もし何らかの理由で、装置状の結晶が測定中に動いてしまうと、そのデータは使えなくなるか、特別な処理をする必要がある。各回折X線に指数が帰属できるかどうかは、計算で求めた位置と実際の回折X線の位置を比較すれば良い。各回折X線の周りに小さな四角（ボックス）（※ これは方位マトリックスから計算で求めた回折位置）が綺麗に捉えられていれば、この測定は良好に進んでいることになる。ボックスと回折X線の位置が大きくずれるには、種々の理由があるが、いずれにしても大きくずれた回折データを用いてすんなり構造解析ができる可能性は低い。<br />
+　きちんとボックスに回折X線が入り、回折X線の強度が十分であれば、構造解析の成功率は高い。回折X線は大ききを持つので、回折X線の強度を求めるには、適当な範囲のX線強度を積分し、バックグラウンドを差し引く必要がある。こうした処理は特殊な場合を除き、装置メーカーから提供されるソフトウェアでルーチン的に行える。予定した全部の測定が終了した時点で、それらのデータを利用して、より精密な格子定数が求められる。第一段階で求められた格子定数から大きく異なる時は、何か大きな問題を含んでいる。通常は、一番下の桁の数値が少し変わる程度の格子定数が求められる。<br />
+　回折X線を収集するためには、種々のX線が用いられるが、低分子の構造解析にはCu K&alpha;線（波長 1.5418 Å）およびMo K&alpha;（波長 0.71069 Å）がもっとも良く用いられる。Cu K&alpha;線の方が強度が強く、低分子有機化合物の絶対構造決定に有利であるので、金属を多く含まない有機分子の測定に適する。Mo K&alpha;線は、金属などの重原子（原子番号の大きな原子）によるX線吸収が少ないので、主に有機金属化合物の測定に用いる。<br />
+<br />
+3. コンピュータを用いた解析（WinGX; 低分子X線解析のほぼ全部の過程を追うことができる。もちろん、研究用の構造解析を行った例はたくさん論文として発表されている）<br />
+1) WinGXのアイコンをダブルクリックする<br />
+2) 計算結果の全てのファイルが作られるフォルダー名を、メニューのあるFileでproject working directoryに指定することで解析作業が始まる<br />
+　WinGXでは同じデータを使って複数の条件で解析が行えるようにproject IDを使用している。このIDはこの解析で作られる今後すべてのファイルに使用される<br />
+3) 参考文献[2]ではデータの書式として「Rigaku F2PLUS Format」を指定している。<br />
+　この指定を行うと直ちに回折データの処理が行なわれ、この場合（エトフィリン：etofylline）、3896個の測定された回折データがf2plus.hklというファイルに格納され、X線による吸収の補正も自動的に行われる<br />
+<br />
+4. 構造解析<br />
+1) 「Model &rarr; PRELIM &rarr; AUTO-START」を指定<br />
+　WinGXには初心者でも簡単に構造解析が行える便利な機能が備わっている。それはある程度まで自動的に構造解析を行ってくれる機能である。それを実行するには「Model &rarr; PRELIM &rarr; AUTO-START」を指定する<br />
+2) 回折データを読んだ後で、格子定数の入力を促す画面が出る<br />
+　X線回折装置で測定した格子定数と標準偏差（esd）を入力する。また分子の組成式も入力する。結晶水の存在などは解析を始める時にはわからないので、とりあえず結晶化した分子の組成式を入力する。解析過程で存在が明らかになった結晶溶媒は解析の途中で入れれば良い。入力した組成式が、実際の組成式と大きく違う時には、構造解析がうまく行かないこともある。また逆に天然物のように、当初組成式が正確にわからない場合でも、適当な組成式を入力することで、構造解析がうまく行くこともある。<br />
+　Formula units per cell Zとあるのは、単位格子中の分子数（正確には独立な分子群の数）Zである。構造解析の段階で、何原子の座標を決定すべきかは非常に重要な問題である。例えば、20個の非水素原子の位置を求める構造解析と40個の非水素原子の構造解析では、構造解析の計算の設定値は大きく変わる。したがって、構造解析に先って格子定数と組成式に基づいてなるべく正確なZを求めておく必要がある。Estimate Zをクリックすると、平均的な有機低分子結晶の比重に基づき、Zを予想してくれる。多くの有機結晶の比重は0.9から1.7 g/cm<sup>3</sup>の間にあるので、格子定数とこの分子の組成式から、Zは次式によって推定することができる。<br />
+　&rho; = (M*Z)/(6.02*10<sup>23</sup>*V)<br />
+ここで、&rho;はその結晶の比重（g/cm<sup>3</sup>）、Mは非対称単位中に含まれる分子（もしくは分子群）の分子量（ダルトン）、そしてVは単位格子の体積（Å<sup>3</sup>）である。Zは整数である必要がある。実験的に結晶の比重が求められる時には、Zを明確に決めることができる。しかし最近では実験的に比重を決定することはほとんど行なわれない。実際には、0.9 &lt; &rho; &lt; 1.7 かつ Z が整数という条件を使うと、Zの値は大抵ユニークに決めることができる。ただし、結晶溶媒が多く含まれていたり、思いがけず他の分子との複合体になっていると、Zが正確に求められないことがある。重原子を多く含んでいたり、結晶が密に詰まっている場合（カルボン酸などのイオン性の官能基や水素結合に関与できる官能基が含まれる分子では結晶は密に詰まる傾向になる）には比重が大きくなり、水素原子の含有量が多い場合には逆に比重は小さくなる。こうした点も加味すると、Zは絞れる。<br />
+　エトフィリンの場合には2になる。この結晶の空間群はP2<sub>1</sub>で非対称単位中に1分子が含まれるので、Z=2は正しい。もし非対称単位中に独立な分子が2個あればZ=4になる。エトフィリン分子が2<sub>1</sub>のらせん対称を持つことは不可能であるので、Z=1はない。<br />
+3) これらの値（格子定数やZなど）を入力して、OKボタンを押すと、これらの値を元に、種々の基本的な計算がなされる<br />
+　最も重要なことが空間群の決定である。空間群を正しく決定しないと、最終的な構造に大きな誤りが入る。良好なデータを取っても構造解析が成功しない例の多くは空間群の帰属の誤りである。格子定数を決定した段階では、晶系は明らかになるが、空間群は未知である。解析の次の段階に入る前に、空間群を決定しなければならない。230通りのどれか一つになるはずである。結晶中の対称性によって特定の反射の強度がゼロになる規則性が厳密に成立する。この規則（消滅則）を調べると、その結晶中に存在する対称性さらには空間群を知ることができる。（省略）原理的には簡単であるが、実験条件により、明確な消滅なのか、ノイズなのかを判断できない場合も少なくない。一般に低角の反射（指数が小さい値を取る）はノイズを多くかぶることがあるので、消滅則の判定が難しい。また結晶格子の長さが短いと、判定に使える反射数が少ないので、ユニークに空間群を決定することができない場合も少なくない。そうした場合には、可能性のあるいくつかの空間群を仮定して構造解析を断行し、構造解析の成功によって最終決定を下すのが一般的である。<br />
+　消滅則は予め230種の空間群について判っているので、それを用いて自動的に空間群を帰属する方法が多くのソフトウェアで採用されている。WinGXでもこのようなプログラムが実行される。（省略）ソフトウェアによる空間群の自動決定は誤りを犯すことが少なくない。空間群の決定は、種々の条件を加味して正しい空間群を採用しないと一般に構造解析は成功しない。万が一構造が一応求められても、求められた構造に不合理な点が生じ、得れた構造は分子設計などの議論にはまったく使えなくなる。初心者が構造解析に失敗し、空間群の帰属に疑問をもったら、迷わずX線解析の専門家に相談することを勧める。<br />
+4)「Structure Data for ファイル名」にX線の波長などのデータを入力する<br />
+　（文献[2]でこの画面に対応する図では、Cell refinementで「Reflns use:0, Min. theta:0, Max. theta:0, Temp.(K): 293」を記載され、Reflection file format&nbsp;で「HKLF 4 -data as F-squared」が選択されている）<br />
+5.1 直説法による構造解析<br />
+1) 「Structure Data for ファイル名」の画面でOKをクリック<br />
+　これらのデータを持ちいて、直説法のソフトウェアSHELXが実行され、SXGRAPHの画面が現われる。3 GHzのCPUを搭載したPCであれば約1秒で直説法の計算は終了する。<br />
+　WinGXには、SHELX-97、SHELX-86およびSIR-92という直説法ソフトウェアが準備されている。またライセンスを取得すればDIRDIFという直接法ソフトウェアも私用できるようなインターフェースが既にある。AUTO-STARTで構造解析に失敗した場合には、これらのソフトウェアを個別に使用することになる。<br />
+　直説法は基本的に確率論に基づいているので、アルゴリズムの違いや計算条件の微妙な違いで構造解析がうまく進まない場合がある。WinGXのように複数のアルゴリズムが用意されていう場合には、それらのプログラムをとりあえずディフォルトの設定値で端から試してみるのが初心者には便利である。<br />
+　SIR-92の場合には、構造解析の困難さに応じて、設定値をstandard, hard, harder そして、 difficultという4段階で変えることができるので、解析できるまでこの設定値を変化させることができる。高いレベルの設定にすると多少計算時間が多くかかるが、現在のPCではそれほど極端に時間が増加することはない。結晶学を専門としていない研究者が結晶解析を行う主な目的は、なるべく早く構造解析をすることにあるので、これらを全部試しても、構造解析がうまく行かない場合には、専門家に相談することをお勧めする。<br />
+　既存のアルゴリズムに基づいた直接法のソフトウェアは既に完成の領域にある。上記のやり方を取れば、初心者でも9割近い確率で構造解析が可能であるので、構造解析に興味のある方は積極的に試してみることを薦める。結晶解析が成功しない理由には色々あるが、最も多いのが結晶の問題である。データ収集にあたって、結晶の良否を目視で判断するが、これは決して完全ではない。見るからに結晶が汚い、割れている、複数の小さい結晶が付着している、結晶が極めて小さい、結晶が極めて大きいなどという理由は論外であるが、顕微鏡で完全そうに見えても実は問題を含んでいることがある。結晶が複数ある場合には、構造解析に難航したら、別の結晶でデータを取り直して解析を試みることを薦める。驚くほど簡単に構造が解けてしまうことも少なくない。試料がたくさんある場合には、別の溶媒での結晶化を試みるのも効果がある。空間群の誤りも構造解析を難航させる。これ以外にも結晶構造が非常に特殊で、構造解析が困難な場合もあるが、通常の有機化合物で外見の綺麗な結晶が得られた場合には、このようなことはあまり起こらないと考えて良い。筆者はこれまで500化合物以上の構造解析を行ってきたが、どうしても構造が解けなかったのはわずか2例であった。<br />
+2) Label Q-peaksという機能を使って、各ピークを電荷密度の高い順から番号をつける<br />
+　原子核付近に存在する電子の数は原子番号の大きいほど多くなるので、ピーク番号の小さいほど、原子番号が大きい原子を表していると考えて差支えない。<br />
+　しかし、この段階では、OとN原子の区別は難しいので、その区別は化学構造と照らし合わせて行う。逆に、ピークの順位がずっと低いものは、C原子よりさらに電子密度が低い可能性があるので、偽のピークと考えられる。直説法の解は、少数の回折データを用いて計算されることなどの理由から、偽の原子ピークを含むことが多い。目安として、上から非水素原子の数までは正しいピークである可能性がある。まず、O原子と考えられるピークを化学構造との対応から帰属を推定する。次いでN原子も同様に帰属を推定する。Cを推定する。最後に、原子が帰属されていないピークをチェックする。化学構造にはない位置にあるピークは偽のピークであることが推測される。化学構造に不確定性がある場合や構造未知の天然物の構造を解析する場合には、こうした残りのピークの帰属は慎重に行う必要がある。<br />
+　これらのピークの帰属が正しいかどうかは、次の精密化の段階で確認することができる。<br />
+　各ピークへの原子の帰属は簡単で、例えば、O原子の場合、左マウスで各ピークを選択し、マウスの右ボタンをクリックすると、原子帰属の画面（「Change Group Properties」）が出現する。実際に酸素原子が帰属されるようにScattering factor type（原子散乱因子）のところをOxygenにして、ピークに酸素原子が帰属されるように明示的に設定する。<br />
+　直説法で得られる構造はあくまで近似構造であり、これを更に最小二乗法で精密化する。この段階ではH原子の位置はまったく求められていないが、精密化を進めると回折データが良質であれば、H原子の位置も求めることができる。<br />
+3) WinGXでは標準的にSHELXL 97というソフトウェアで構造の精密化を行う<br />
+　SHGRAPHのメニューにあるRefinementからRun SHELXLをクリックすれば、標準的な条件での精密化が実行され、上で示したCPUなら10秒ほどで計算が終了し、計算結果の概要が示される。<br />
+　多くのパラメータが表示されるが、注目するのがR1である。R1はR因子と同じものである。精密化の結果、R1の値が0.1024である。結晶内にまったくランダムに原子を置くと、P2<sub>1</sub>のような対称心をもたない空間群の場合、R1は0.59になるので、直説法で得られたこの解はほとんど正解であると考えられる。対称心のない空間群の結晶で、初期のR1が0.30以下で、得られた構造が化学的にある程度意味があるものであれば、構造解析は概ねうまく行っていると考えて良い。対称心のある空間群では、ランダムな構造に対するR1は0.83になるので、初期のR1が0.40付近にあれば、まず構造は解けたと考えて良い。しかしR1は結晶中の重原子の存在などにより大きく左右される（重原子があるとR1は小さくなる）ので、構造が解析できたかどうかは、やはり十分低いR1まで精密化されるまではわからない。<br />
+　画面の下に出ている警告（Warnings）では、「Cell contents from UNIT instruction and atom list do not agree」は原子の組成式が当初与えたものと異なるということであり、H原子をまだモデル構造に入れてないので、この警告はこの段階では深刻なものではない。下の方に、Flackパラメータに関する記述がある。不斉炭素持たない場合、「Absolute structure cannot determined reliably（絶対構造が決定できない）」というコメントは無視して良い（標準的条件では自動的にこの係数が計算される）。<br />
+4) SHELXL Refinement Summaryの画面でOKをクリックするとSXGRAPHの画面が現われる<br />
+　標準的な計算条件では、精密化の後で差フーリエ合成を行う。この画面の上には、差フーリエ合成で求められた電子密度に相当するピーク（小さい黒丸）が表示されている。既に入力した原子とその間の結合は線で表現されている。もし、O, NおよびC原子の位置が十分に精密化されていなければ、このピークはH原子に相当するが、まだ精密化が十分ではない。この段階で一番重要なことは温度因子の扱いである。最初の精密化では、非水素原子には等方性温度因子を用いているが、この近似は粗すぎる。したがって、その結果得れた差フーリエ合成も大きな誤差を本質的に含み、電子密度が少ないH原子の位置をそこに見出すことは困難である。そこで、異方性温度因子を用いて非水素原子を次に精密化する。最初から異方性温度因子を用いて精密化しない理由は、直接法から得られた直後の構造は正しい構造からかなりずれている場合がおおく、いきなり異方性温度因子で精密化すると、構造が発散してしまうことがあるからである。構造が発散するとは、最小二乗法の計算で得られた各原子のシフト値が大きすぎ、構造が大きく崩れ、次の精密化のサイクルで元に戻らなくなることを意味する。構造の発散は種々の条件で起こり得るが、今のように構造が最適化されていない状況で、多くのパラメータを一度に自由に動かす場合に良く起きる。等方性温度因子を異方性に変化させるのは簡単である。<br />
+5) 等方性温度因子を設定したときと同様の手続きで異方性温度因子を設定する<br />
+　異方性温度因子を用いて4サイクル精密化するとR1はさらに下がり0.0777になる。<br />
+　この程度まで精密化されれば、H原子を差フーリエ合成から見出すことができる。<br />
+6) 以上で構造解析は終了。これ以降、構造の幾何学的特徴の解析や分子の作図等を行う<br />
+　ORTEP-3がリンクされていると、ORTEP図をすぐさま書き出すことができる。他のグラフのソフトウェアともリンク可能である。<br />
+　解析された構造の結合距離、結合角度、ねじれ角、そして、分子間の水素結合などの特徴を調べるためには、幾何学的な計算を行う。WinGXのメインメニューのAnalysisにはいくつかの機能が用意されている。PublishのメニューではCIFを作製することができる。<br />
+　別のソフトであるが、PLATON（<a href="http://www.chem.gla.ac.uk/~louis/software/platon/">http://www.chem.gla.ac.uk/~louis/software/platon/</a>）は網羅的に計算するので出力が大きくなる欠点があるが、最小二乗平面も含めて必要な計算が1回で済む場合が多いので便利である。<br />
+　結晶構造を観察するという観点からは、CCDCから無料配布されているMercury（<a href="https://www.ccdc.cam.ac.uk/solutions/csd-system/components/mercury/">https://www.ccdc.cam.ac.uk/solutions/csd-system/components/mercury/</a>）がベストである。結晶解析を専ら活用する立場であるなら、MercuryとPLATONがあれば、大抵の計算を行うことができる。<br />
+　Mercuryを通してデータ変換を行うことにより、結晶解析結果を分子設計支援用の各種ソフトウェアに渡して活用する場合に便利である。その他にも非常に多くの機能がある。特に、Packingというボタンにチェックを入れると、簡単に単位格子中の全ての分子を描くことができる。Mercuryでは予め設定されたデータに基づき水素結合距離を計算し、点線で表示する。この機能を使って、分子間にある水素水素結合を表示させることができる。<br />
+　Mercuryのメニューは非常に良くできているので、興味ある結晶構造を用いて1時間も色々試してみると、マニュアルが無くとも大抵のことができるようになる。唯一の欠点はステレオ表示ができないことであるが、実際上これが使用の大きな制約になることはない。<br />
+5.2 重原子法を用いた構造解析<br />
+1) メインメニューのSolveからSHELX-86を選び、そのサブメニューからPattersonを選択する<br />
+　制吐作用のある医薬分子のブロモプリド（bromopride、この化合物にはBrが一個入っている）では1.4秒程度で計算が終了する。この計算では、重原子の位置をまず求め、それに基づきフーリエ合成を計算するところまでを一気に行う。その結果がSXGRAPHとして示される。化学構造とピークの順番を頼りに、表示されたこれらのピークに原子を帰属していく。Br原子を含め非水素原子の数は全部で20個あるので、21番目以降のピークは偽のピークと疑って原子を帰属する。<br />
+　これらの原子を用いて、等方性温度因子で4サイクル精密化すると、R1=0.1455となり、この構造が正しいことが示される。前例に比べて最初のR1が若干高いのはBr原子の影響である。非水素原子に異方性温度因子を用いて精密化を進め、R1=0.069になる。H原子を求め、精密化をした最終のR1は0.054になる。分子中の重原子がこのゆに際立って大きい時には、直説法ではなかなか構造が解けない場合もあり、その際、重原子法は非常に有用である。<br />
+　一昔前は、解析者がパターソン関数を解釈することで重原子位置を求めたが、現在ではこの例のように、途中の重原子の座標を求める必要はほとんどない。しかし、どうしても構造が解けない場合には、パターソン関数を解析して重原子の位置を求める必要がある。<br />
+----------<br />
+<br />
+◆&nbsp;結晶解析の正しさ [2]<br />
+　結晶解析がどの程度正しく行われたかは、R因子でおおまかに知ることができる。まったくでたらめな構造に対するR因子は、対称心のある結晶については0.83であり、対称心のない結晶については0.59である。結晶が適切であれば、たいていの構造は最終的なR因子が0.05付近になるまで精密化できる。（省略）Sはgoodness of ift略してGOFとも呼ばれる。RやRwが0.05程度で、Sが1付近にあれば、提出されている分子構造は十分に正確であると判断してよく、RやRwが0.10を切っていれば分子設計の構造モチーフとして十分考慮するに足る構造であると判断できる。しかし、分子や結晶の本来的な性質のために、RやRwが大きく、Sが1から大きくずれている場合もある。これらの解析は正しさという点からは要注意であるが、分子の運動性や結晶中での反応空間に関する貴重な情報を含んでいることもあるので、単純にR値で足切りをしてしまうことには問題がある。分子設計などに結晶解析の結果を用いる場合には、最終的なR因子よりむしろ構造的な特徴を優先しなくてはならないことも少なくない。<br />
+　最近では、構造解析の結果に関する論文の採択が単にR因子の大小だけで判断されることが多くなり、構造化学的に興味ある結果が不採用になることも少なくない。報告される構造より実際にはずっと多くの構造が解析されていると考えられる。こうした埋もれたデータを少なくする努力が必ずしもされてないのは残念である。<br />
+----------<br />
+　R因子が0.10以下になれば、その構造はほぼ間違いない。結晶が非常に小さい、結晶が割れている、結晶や分子がX線の損傷を大きく受ける。結晶中の原子の運動が非常に大きい、そして分子の構造に乱れがあるなど大きな問題がない場合、たいていR因子は0.05程度まで下がる。<br />
+　重原子があるとR因子は小さくなる。<br />
+----------<br />
+※ 注意：RwまたはRwpは、バックグラウンドが高いデータや、カウント数が大きいデータ、反射数が少ないデータでは、小さくなりやすい。S=Rwp/Reであるが、Reは観測データの数Nによって値が決まる。そのため、観測強度が小さい場合はReが大きくなり、Sは小さくなる。大型放射光施設では観測強度が1万カウント（室内光源での最強回折線の強度の目安）を超えることがいくらでもあり、Reは極めて小さく、Sは大きく算出される。[4]<br />
+　恐らくこういった事情も理解しないままレフェリーは論文を判断しているのだろうか？　このことは日本結晶学会の講習会に参加すると毎回言われる。日本結晶学会の講習会に参加していないのか？ R因子は目安であり、盲目的に利用できる指標ではないことは心に留めておきたい。<br />
+----------<br />
+◇ データベースの活用 [2]<br />
+　最近は構造解析がルーチン化しているため、構造解析例は増加している。しかし、一方で、きちんとした学術雑誌に投稿され、審査員の目を通った解析結果にも致命的な誤りを含む場合が皆無ではない。X線解析の結果であるだけで、その構造データは信用されてしまうことが多いが、そのデータを活用して、何らかの考察を行う場合には、データの質を吟味する必要がある。CIFの形で解析データを提出する時には、通常その解析内容に間違いがないかどうかをチェックするソフトウェアを使用し、間違いや不適当な箇所を訂正する。<br />
+　そうしたチェック・ソフトウェアの一つとしてcheckCIFがある。checkCIF（<a href="http://checkcif.iucr.org/">http://checkcif.iucr.org/</a>）は国際結晶学連合のホーム・ページで無料で使用することができる。第一ページのCalculatedとReportedでは、実際に供託されたデータに基づいて計算し直した数字と、CIFの中に書誌的データとして研究者が書き込んだものの一致度をチェックしている。この場合、H原子の数が両者で不一致であり、また測定した反射の指数の範囲も異なっている。チェックした結果は、4段階の警告（alert）で示される。レベルAは最も致命的な問題点であり、このalertがたくさん出るデータは間違いなく問題を含んでいる。したがって、そうした構造データは採用しないか、もしどうしても採用すべき時には、そのalertの内容を十分に検討しなければならない。筆者の経験では、レベルAが10個以上出る構造解析の結果は用いない方が良い。なぜなら、どのエラーが致命的なのか、結局わからないことが多いからである。このデータの場合、実はレベルAのalertが非常にたくさん出ている。いくつかのalertはこの構造精密化が終了していないことを示しているが、実際に最も重要であった間違いは、空間群の帰属であった。このデータの筆者らは空間群はP2<sub><font size="2">1</font></sub>で、非対称単位に2分子があるとして、構造解析をしたが、正しい空間群はP2<sub><font size="2">1</font></sub>2<sub><font size="2">1</font></sub>2<sub><font size="2">1</font></sub>で非対称単位には1分子が存在する。空間群の帰属が間違ったために、山のようにレベルAのalertが出た。より下位のalertも空間群の帰属の間違いによる。この場合、R因子は0.07と報告されており、非対称単位に2分子があると考えると、一般的にはそれほど悪い構造解析の結果でもないと、判断される。しかし、分子間には不自然な接触が見られ、かつ分子内の結合距離や角度にも不自然な箇所が見られる。R因子がある程度下がっていても、慎重に扱うべきであることを示している例といえる。<br />
+　分子設計などにデータベースの構造を用いる場合には、このようなチェックを十分にする必要がある。基本的にはR因子が0.05以下になっていれば、その構造は普通信頼して良い。しかし、結合距離や分子間相互作用に異常がある場合には、原論文に当たるか、上述のようにcheckCIFを行ってみるべきである。データベース中のデータの質は全部が一律ではなく、質には大きな差があることを忘れてはならない。R因子は、用いる反射を操作することである程度まで下げることもできるので、R因子だけでも実は判断できない場合もある。2006年1月1日現在で、CSDに含まれるR因子が0.05より小さい構造解析の結果は、186,298件あり、全体の約51%も占める。分子設計などに活用する場合には、この範疇に入るデータをまず用いることが無難であろう。しかし、原子にdisorderがあったり、結晶が良好でなければ必然的にR因子が0.10付近になる構造解析もある。無論、こうした構造が重要な知見を与えてくれる場合も決して少なくない。（省略）<br />
+　CIFを受け取った時に、その場で簡単にCIFの内容をチェックし、構造を確認する上で、enCIFerというソフトウェアは非常に便利である。このソフトウェアはCCDCから無償で配布されている。このソフトウェアはCIFを作ったり、編集したりする目的で作られたものであるが、CIFの内容を簡易的にチェックする上で便利である。多くの構造解析ソフトウェアでは自動的にCIFを作ってくれる機能があるが、CIFを最初から作る必要がある場合にはenCIFerは便利なソフトウェアである。（省略）<br />
+　同一ないし類似構造について複数の座標データが収録されていることがある。これらの構造を分子設計などで活用する場合には、R因子がなるべく小さいものを選択すべきである。R因子が0.05以下のものがあれば、参照構造としては十分に精度が高いと考えてよい。R因子が0.010以上である場合には、原論文にあたってその理由を確認する必要がある。当然のことではあるが、データベース中のデータの質を端から信じてはいけない。<br />
+<br />
+◇ 原子位置の精度 [2]<br />
+　X線構造解析で求められた構造については、非常に精度高くかつ客観的に応えることが可能である。分子設計を行う場合には、必ずしも全ての分子のX線解析が行えるわけでもなく、また未合成の分子に関する議論を論理的な計算に基づいて行わざるを得ない場合が少なくない。その際、どの程度厳密に議論すればよいかということが問題になる。筆者はR因子で7%程度の精度で得られる構造の精度を一応の目安として考えることにしている。医薬品や有機材料などの構造と機能ないし活性との相関を議論する場合には、この程度の精度を目安とすればよいだろう。原子位置の標準偏差はその構造中のもっとも重い原子とデータの分解能に依存する。すなわち、金属を含まない構造中の炭素原子などの軽原子の標準偏差は金属を含む構造中のものよりずっと小さくなる。<br />
+<br />
+◇ 幾何学諸量の精度 [2]<br />
+　原子位置の標準偏差に基づき、原子間距離、角度、ねじれ角および2面角に対しても標準偏差を計算することができ、多くの論文ではそれらの値が表になって載っている。（省略）回折データに偶然誤差だけが含まれていると考えると（系統誤差は極力入り込まないように努力するか、適切な補正をしておかなければならない）、そのデータから得られる変数は正規分布になるはずで、その真の値から&plusmn;q&sigma;以上離れたところでその変数を見つける確率p（有意水準p値）は下の表のようになる。<br />
+・正規分布<br />
+　xという量がその平均値から+,-どちらかの方向にq&sigma;以上離れて存在する確率をpとする。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 217.72px;">
+	<tbody>
+		<tr>
+			<td style="width: 45.36px;">p</td>
+			<td style="width: 51.72px;">q</td>
+			<td style="width: 56.72px;">p</td>
+			<td style="width: 43.72px;">q</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">1.00</td>
+			<td style="width: 51.72px;">0.000</td>
+			<td style="width: 56.72px;">0.30</td>
+			<td style="width: 43.72px;">1.04</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.90</td>
+			<td style="width: 51.72px;">0.126</td>
+			<td style="width: 56.72px;">0.20</td>
+			<td style="width: 43.72px;">1.28</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.80</td>
+			<td style="width: 51.72px;">0.253</td>
+			<td style="width: 56.72px;">0.10</td>
+			<td style="width: 43.72px;">1.65</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.70</td>
+			<td style="width: 51.72px;">0.385</td>
+			<td style="width: 56.72px;">0.05</td>
+			<td style="width: 43.72px;">1.96</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.60</td>
+			<td style="width: 51.72px;">0.524</td>
+			<td style="width: 56.72px;">0.01</td>
+			<td style="width: 43.72px;">2.58</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.50</td>
+			<td style="width: 51.72px;">0.674</td>
+			<td style="width: 56.72px;">0.001</td>
+			<td style="width: 43.72px;">3.29</td>
+		</tr>
+		<tr>
+			<td style="width: 45.36px;">0.40</td>
+			<td style="width: 51.72px;">0.842</td>
+			<td style="width: 56.72px;">0.0001</td>
+			<td style="width: 43.72px;">3.89</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>　この表は確率統計論から純粋に導かれたものである。この表を使うことで、実際は等しい長さの結合aとbが異なる長さに測定される確率を見積もることができる。普通は次のように判断する。<br />
+　p &gt; 0.05 なら、その差は有意ではない<br />
+　0.05 &gt; p &gt; 0.01 なら、その差は多分有意である<br />
+　0.01 &gt; p なら、その差は有意である<br />
+　p=0.05は1.96&sigma;, p=0.01は2.58&sigma;に相当する。いま、結合長の標準偏差が0.006 Åで、二つの独立な結合の距離の差が0.04 Åであるとすると、その差の標準偏差は&sigma;（差&dagger;）=&radic;2*0.006=0.008 Åになる。したがって、同じ長さの二つの結合が、与えられた0.04 Åより小さい、2.58*(0.008)=0.021 Å以上の差をもつ確率は0.01ときわめて小さく、この差は有意である。つまり、これら二つの結合長の差は意味があるということになる。<br />
+-----<br />
+&dagger;&nbsp;x<sub>1</sub>とx<sub>2</sub>の和ないし差（y=x<sub>1</sub>&plusmn;x<sub>2</sub>）の標準偏差<br />
+　x<sub>1</sub>とx<sub>2</sub>の標準偏差を&sigma;<sub>1</sub>および&sigma;<sub>2</sub>とすると、yの標準偏差は、<br />
+　　&sigma;<sub>y</sub> = &radic;(&sigma;<sub>1</sub><sup>2</sup> + &sigma;<sub>2</sub><sup>2</sup>)<br />
+になる。一般に関数fが変数x<sub>1</sub>の関数のとき、関数fの標準偏差&sigma;<sub>f</sub>は各変数x<sub>j</sub>の標準偏差&sigma;<sub>j</sub>で次式のように表現される。<br />
+　　&sigma;<sub>f</sub> = &radic;(&Sigma;<sup>n</sup><sub>j=1</sub> (&part;f/&part;x<sub>j</sub>)<sup>2</sup>*&sigma;<sub>j</sub><sup>2</sup>))<br />
+-----<br />
+（省略、もし、結合距離の差/差の標準偏差&sigma;(差) &gt; 3.29ならば、p&lt;0.01となり、その差は有意であるから）結合の長さの差が偶然によるものではなく、何か化学的な理由によると考えてよいことがわかる。以上では結合距離について述べたが、結合角やねじれ角などについても同様の手続きでその差を論じることができる。精度が高い実験データに基づけば非常に細かい差について議論が可能になる。<br />
+　比較的良好な精度で解析された構造では結合距離の標準偏差は0.01 Å以下、結合距離やねじれ角の標準偏差は0.1&deg;以下になる。一つの構造中の各原子の標準偏差はその原子中の電子の数にほぼ反比例する。たとえば有機金属錯体中の金属-金属結合、金属-炭素または金属-酸素結合距離の標準偏差は0.001 Å以下になることも珍しくない。一方、同じ構造中でもC-CまたはC-O結合距離などの標準偏差は一般的に0.005から0.015 Åの間にあり、C-HやO-H結合距離の標準偏差は0.05 Å以上になることもある。通常水素原子の標準偏差は同じ構造中の炭素原子の8から10倍である。水素原子の位置を正確に求めるためには中性子回折を行う必要がある。<br />
+<br />
+◇ 平面部分の平面度<br />
+　最適平面を計算すると、たとえそれらが平面にのっていなくても、すべての原子に対して一応平面の方程式は計算されてしまう。そこで、計算された平面がどの程度平面であるかまたどの部分までが平面といえるかを知る必要がある。そのためには計算結果を統計学的に吟味しなければならない。最適平面がどの程度最適平面になっているかは、簡単には面の計算に用いた各原子の平面からのずれをみればわかる。また面からのずれの平均値の大きさをみればわかる。しかし厳密にその平面性を論じるには、&Chi;<sup>2</sup>検定が用いられる。n個の原子について計算された最適平面からの原子のずれ（d<sub>n</sub>）の標準偏差&sigma;（平面）は次式で与えられる。<br />
+　&sigma;(平面) = &radic;{(&Sigma;<sub>n </sub>d<sub>n</sub><sup>2</sup>) / (n-3)}<br />
+この&sigma;（平面）と各原子の位置の標準偏差&sigma;に基づき計算される比<br />
+　&nbsp;&Sigma;<sub><font size="2">n </font></sub>d<font size="2"><sub>n</sub><sup>2</sup></font> /&nbsp;&sigma;<sup>2</sup> = (n-3)*&sigma;<sup>2</sup>(平面)/&sigma;<sup>2</sup><br />
+は統計学の&Chi;<sup>2</sup>分布をとっている。自由度n-3に対する&Chi;<sup>2</sup>分布表から、平面を構成する原子がこの&Chi;<sup>2</sup>より大きい比を与える確率を求めることができる。（省略）&Chi;<sup>2</sup>検定による平面性の判定は、かなり厳しいので、この方法で平面とされない場合でも、論文中では平面的とされる場合が少なくない。（省略）<br />
+　最適平面からの原子のずれの平均値より、&Chi;<sup>2</sup>検定は敏感であるので、どの範囲を平面とすべきか決めたい場合には、&Chi;<sup>2</sup>検定を判断のよりどころにすることが便利である。結晶解析の論文の中で平面についての記述がある場合には例外なく最適平面について述べている。分子設計などの分野では、複数の本来平面的ではない環に最適平面を考え、それらの平面のなす角で分子の立体配座の特徴を表現することも多く行われている。それらの値は半定量的な性格をもつものであり、細かい差を論じることは意味のないことが多い。<br />
+----------<br />
+・最適平面<br />
+　分子の全体または部分の平面性を考える場合、最適平面を通常用いる。平面を仮定する部分構造のn番目の原子がその平面から距離d<sub>n</sub>だけずれているとするなら、&Sigma;d<sub>n</sub><sup>2</sup>を最小にする平面が最適平面である。最小二乗法により最適平面を求めることができる。<br />
+　抗癌剤となる分子の抗癌活性と立体構造との相関を考える上で、この問題は重要になる。<br />
+----------<br />
+<br />
+◇&nbsp;結晶中での分子間相互作用 [2]<br />
+　結晶中で分子は種々の力で凝集している。結晶を形成するという意味から、分子間力とよばずにパッキング力と呼ぶことも多い。結晶を形成する分子間力には、静電相互作用、水素結合およびvan der Waals力がある。静電相互作用とvan der Vaals力に大きく分け、水素結合を広義の静電相互作用に分類する方法もある。分子構造のみを知るという観点からは結晶中の分子間相互作用は知る必要はない。しかし材料設計、医薬品設計あるいは反応性を考える上で、現在問題にしている分子が結晶中でどのような分子間力にかかわっているかを知ることは非常に有用である。分光学的な方法でも分子間相互作用を知ることは可能であるが、X線解析のようにそれに携わる個々の原子間の相互作用がすべて明らかにされるわけではない。「結晶中の」という大きな付帯条件がついても結晶解析で得られるこの種の情報が貴重な理由がここにある。<br />
+◇ 分子間相互作用の判断<br />
+　原子同士が共有結合しているかどうかは分子内の各原子の共有結合半径の和や典型的な結合距離を目安に調べたが、分子間相互作用を知るうえで通常用いられる基準はvan der Waals半径である。主な原子のvan der Waals半径を下の表に示す。<br />
+・種々の原子のvan der Waals半径（Å）<br />
+　Paulingによる値とBondiによる値（カッコ内）を示した。Bondiはさらに、芳香環のHに1.00 Å、ベンゼン環に垂直方向のCに1.77 Åを提案している。</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 540.54px;">
+	<tbody>
+		<tr>
+			<td style="width: 115.36px;">H 1.2（1.20）</td>
+			<td style="width: 160px;">N&nbsp;1.5（1.55）</td>
+			<td style="width: 168px;">O&nbsp;1.4（1.52）</td>
+			<td style="width: 79.27px;">C（1.70）</td>
+		</tr>
+		<tr>
+			<td style="width: 115.36px;">F&nbsp;1.35（1.47）</td>
+			<td style="width: 160px;">P&nbsp;1.9（1.80）</td>
+			<td style="width: 168px;">S&nbsp;1.85（1.80）</td>
+			<td style="width: 79.27px;">Si（2.10）</td>
+		</tr>
+		<tr>
+			<td style="width: 115.36px;">Cl&nbsp;1.8（1.75）</td>
+			<td style="width: 160px;">As&nbsp;2.0（1.85）</td>
+			<td style="width: 168px;">Se&nbsp;2.0（1.90）</td>
+			<td style="width: 79.27px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 115.36px;">Br&nbsp;1.95（1.85）</td>
+			<td style="width: 160px;">Sb&nbsp;2.2（2.10）</td>
+			<td style="width: 168px;">Te&nbsp;2.2（2.06）</td>
+			<td style="width: 79.27px;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 115.36px;">I&nbsp;2.15（1.98）</td>
+			<td style="width: 160px;">〔メチル基の半径 2.0〕</td>
+			<td style="width: 168px;">〔芳香環の厚みの1/2 1.70〕</td>
+			<td style="width: 79.27px;">&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>　低分子の有機化合物についてはPaulingの値とBondiの値がよく用いられ、両者で若干の差がある。van der Waals半径は球近似の値であるので、残念ながらそれほど厳密な値ではない。したがって、van der Waals半径で分子間相互作用を検討する場合には適当な距離の範囲をあたらなければならない。現実的にはこのように非結合性原子間距離から、それらの原子間に特別な相互作用があるかどうかを判断する。しかし、その判断基準は研究者によっていくぶん異なっている。著者は2つの原子のvan der Waals半径の和+0.2 Åまでの距離を目安にしている。つまりこの距離内であればそれらの原子間に何らかの相互作用があると判断して検討の対象とする。またvan der Waals半径の和より0.2 Å以上短いときには、そこに明確な相互作用があると判断して詳しい検討をすることにしている。このような判定基準が一般的である。<br />
+　X線解析では水素結合の位置の精度はほかの原子に比較してかなり悪いので、水素原子とほかの原子との距離を検討する場合には、その距離の扱いには十分注意する必要がある。とくに文献から水素原子の位置を得る場合には、その精度を十分確かめてから検討しなければならない。水素原子と非結合距離が異常に短いときにはその水素原子が結合している原子との結合距離や結合角を調べてみる必要があるかもしれない。報告されている論文中の座標を用いて計算すると時として、C-HやO-H距離が異常な値をとる場合がある。またC-C-Hなどの角度が通常の化学結合ではとうてい許されない角度になっているものもある。これらは解析結果を報告した研究者の責任というより、X線解析の一つの限界である場合もある。もちろん良質の結晶を用い、精度の良い検出器で丁寧に測定し、厳密な解析をすれば位置の標準偏差はかなり小さくすることができる。しかしこのような場合でも、X線解析では原子核の位置ではなく、電子密度の極大点を見ているので、X線解析で求められる水素原子が関与する結合距離は実際の結合距離（原子核間の距離）よりだいぶ短くなる。例えば、メチル基のC-H結合距離はX線解析では1.0 Å以下になることが多いが、中性子回折で求められる距離は約1.10 Åである。したがってX線解析の結果に基づいて分子動力学計算などをする場合には、X線解析で得られた水素原子の位置をそのまま採用することは好ましくなく、多くの場合中性子回折で求められる距離に修正してから計算する必要がある。以上のように分子間相互作用を原子間距離で判断する場合には、水素原子との距離は参考にし、その水素原子が結合している非水素原子ともう一方の非水素原子との距離を議論するほうが無難である。<br />
+　van der Waals半径以下に2つの原子が接近していた場合、それらの原子の間には何らかの引き合う相互作用があるか、それらの原子間の立体反発を吸収できるような条件が分子内ないし結晶中にあることが考えられる。これらの原子が電気陰性度の高い原子である場合には、その相互作用は水素結合である可能性が高い。低分子性の有機化合物結晶中においては、電気陰性度の高い原子を含む官能基はたいてい水素結合に寄与していると考えてよい。イオン化している可能性のある原子であれば、静電相互作用が働いている。<br />
+（省略）以上のような判断からわかるように、水素原子の位置に関する情報がまったくないか、非常に不明瞭な場合には、どちらの原子が水素受容体かを判断することがかなり難しいことが理解できよう。水素結合の形成により、ヘテロ原子とその隣の原子の間の結合（この場合C-NおよびC-O結合）に影響がでるはずであるが、通常のX線解析ではそれを判断することは困難である。したがって、水素原子の位置がまったくわからない場合の水素結合様式に関する議論の解釈には十分注意を要する。論文中の図で水素原子が描かれていても、水素原子位置が実験的に求められていないことが少なくない。水素結合の有無がその化合物の反応性に関与し、それについての考察を展開したい場合には、解析論文での水素原子の扱いを十分注意深く読む必要がある。<br />
+　水素原子の扱いには、次のようなケースがある。<br />
+・第一は、全水素原子の位置がD合成で求められ、それらの位置と温度因子を精密化できた場合<br />
+・第二は、全水素原子の位置がD合成で求められたが、一部の水素原子のみ精密化（座標と温度因子両方または座標のみ）できた場合で、残りの水素原子は精密化されていない<br />
+・第三は、一部の水素原子のみD合成で求められ、残りの水素原子は結合した原子の混成状態を考慮して幾何学的に計算された場合で、それらの原子のパラメータはすべて精密化される場合も一部のみ精密化される場合もある<br />
+・第四は、すべての水素原子の位置を幾何学的計算で求めた場合。この場合、水素原子パラメータを精密化することはあまり多くない<br />
+　当然、水素結合を判断する場合には、第一の場合が適切である。ヒドロキシ基の水素原子の位置は幾何学的計算では求めることができないので、D合成で求められない場合には基本的に求めることができない。<br />
+　論文が発表されている構造の大部分については構造因子データが出版社や学会に供託されているので、水素原子の位置をぜひ確認したいときには、構造因子データを入手して、それに基づきフーリエ合成を行うことが必要になる。簡単な化合物で、入手も可能なものであれば、X線解析をやり直すほうが場合によっては早道であるかもしれない。<br />
+　StoutとJenseによって、低分子有機化合物中に見られる水素結合距離とその範囲は下の表のように示されている。<br />
+・N-H・・・XおよびO-H・・・X水素結合の平均距離（N(O)・・・X）とその範囲</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 411.45px;">
+	<tbody>
+		<tr>
+			<td style="width: 223.54px;">結合</td>
+			<td style="width: 79.27px;">平均（Å）</td>
+			<td style="width: 94.45px;">範囲（Å）</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">N-H・・・X</td>
+			<td style="width: 79.27px;">3.10</td>
+			<td style="width: 94.45px;">2.88 - 3.38</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">N-H・・・O<br />
+			　アンモニア<br />
+			　アミド<br />
+			　アミン</td>
+			<td style="width: 79.27px;"><br />
+			2.88<br />
+			2.93<br />
+			3.04</td>
+			<td style="width: 94.45px;"><br />
+			2.68 - 3.24<br />
+			2.55 - 3.04<br />
+			2.57 - 3.22</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">N-H・・・F</td>
+			<td style="width: 79.27px;">2.78</td>
+			<td style="width: 94.45px;">2.62 - 3.01</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">N-H・・・Cl</td>
+			<td style="width: 79.27px;">3.21</td>
+			<td style="width: 94.45px;">2.91 - 3.52</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">N-H・・・Br</td>
+			<td style="width: 79.27px;">3.37</td>
+			<td style="width: 94.45px;">3.28 - 3.44</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">O-H・・・N</td>
+			<td style="width: 79.27px;">2.80</td>
+			<td style="width: 94.45px;">2.62 - 2.93</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">O-H・・・O<br />
+			　オキシム、無機酸<br />
+			　カルボン酸<br />
+			　有機・無機物両方に含まれる水<br />
+			　アルコール<br />
+			　無機物に含まれる水<br />
+			　有機物に含まれる水<br />
+			　水酸化物</td>
+			<td style="width: 79.27px;"><br />
+			2.58<br />
+			2.63<br />
+			2.71<br />
+			2.74<br />
+			2.75<br />
+			2.80<br />
+			2.82</td>
+			<td style="width: 94.45px;"><br />
+			2.44 - 2.84<br />
+			2.45 - 2.75<br />
+			2.49 - 3.07<br />
+			2.55 - 2.96<br />
+			2.49 - 3.15<br />
+			2.65 - 2.93<br />
+			2.36 - 3.36</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">O-H・・・Cl</td>
+			<td style="width: 79.27px;">3.07</td>
+			<td style="width: 94.45px;">2.86 - 3.21</td>
+		</tr>
+		<tr>
+			<td style="width: 223.54px;">O-H・・・Br</td>
+			<td style="width: 79.27px;">3.30</td>
+			<td style="width: 94.45px;">3.17 - 3.38</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>　StoutとJensenは、&ang;D-H・・・Aが150&deg;程度までを水素結合とみなすことを提案している。いずれにしても単なる距離や角度だけでなく、化学的な情報も加味して水素結合の帰属をしなければならない場合が少なくない。<br />
+<br />
+◇ 分子を認識する [2]<br />
+　分子構造の特徴を知るためには、各原子間の共有結合距離、結合角、結合周りのねじれ角、特定の原子がつくる部分構造の平面性などを知る必要がある。また分子間相互作用の強さを知るためには、分子間の原子間距離などを知る必要もある。X線解析で最初に得られる電子密度の極大点を原子として認識した後、さらに分子を認識するには、各原子間の距離をよりどころにする。すなわち原子間の距離が共有結合の範囲にあるかどうかを判断しなければならない。共有結合の存在の有無を判断するにはその結語に関与する原子の共有結合半径の和が目安になる。下の表に有機化合物を構成するおもな原子の共有結合半径を示す。<br />
+・共有結合半径（Å）</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 179.81px;">
+	<tbody>
+		<tr>
+			<td style="width: 25.54px;">H</td>
+			<td style="width: 49.18px;">0.37</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 27.27px;">S</td>
+			<td style="width: 50.81px;">1.04</td>
+		</tr>
+		<tr>
+			<td style="width: 25.54px;">C</td>
+			<td style="width: 49.18px;">0.77</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 27.27px;">F</td>
+			<td style="width: 50.81px;">0.72</td>
+		</tr>
+		<tr>
+			<td style="width: 25.54px;">N</td>
+			<td style="width: 49.18px;">0.74</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 27.27px;">Cl</td>
+			<td style="width: 50.81px;">0.99</td>
+		</tr>
+		<tr>
+			<td style="width: 25.54px;">O</td>
+			<td style="width: 49.18px;">0.74</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 27.27px;">Br</td>
+			<td style="width: 50.81px;">1.14</td>
+		</tr>
+		<tr>
+			<td style="width: 25.54px;">P</td>
+			<td style="width: 49.18px;">1.10</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 27.27px;">I</td>
+			<td style="width: 50.81px;">1.33</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>[A. F. Wells, &quot;Structural Inorganic Chemistry&quot;, Oxford University Press (1962).]<br />
+この和の&plusmn;20%の距離であれば共有結合に関与している可能性が高い。下の表には、有機化合部中にみられる典型的な結合の結合距離を示す。<br />
+・有機化合物中にみられる典型的な結合距離（Å）<br />
+　arおよびRはおのおの芳香族およびアルキルを表す。</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 425.91px;">
+	<tbody>
+		<tr>
+			<td style="width: 46.36px;">C-C</td>
+			<td style="width: 109px;">sp<sup><font size="2">3</font></sup>-sp<font size="2"><sup>3</sup></font><br />
+			sp<sup><font size="2">3</font></sup>-sp<font size="2"><sup>2</sup></font><br />
+			sp<sup><font size="2">3</font></sup>-sp</td>
+			<td style="width: 46.81px;">1.54<br />
+			1.51<br />
+			1.46</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-P</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-P</td>
+			<td style="width: 56.91px;">1.84</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C-C</td>
+			<td style="width: 109px;">芳香族</td>
+			<td style="width: 46.81px;">1.39</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-H</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-H<br />
+			C(ar)-H</td>
+			<td style="width: 56.91px;">1.10<br />
+			1.38</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C=C</td>
+			<td style="width: 109px;">&gt;C=C&lt;<br />
+			&gt;C=C=C&lt;<br />
+			&gt;C=C=C=C&lt;</td>
+			<td style="width: 46.81px;">1.33<br />
+			1.31<br />
+			1.28</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-F</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-F<br />
+			C(sp<sup><font size="2">2</font></sup>)-F</td>
+			<td style="width: 56.91px;">1.38<br />
+			1.33</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C&equiv;C</td>
+			<td style="width: 109px;">&nbsp;</td>
+			<td style="width: 46.81px;">1.20</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-Cl</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-F<br />
+			C(sp<sup><font size="2">2</font></sup>)-F<br />
+			C(sp)-F</td>
+			<td style="width: 56.91px;">1.77<br />
+			1.71<br />
+			1.64</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C-N</td>
+			<td style="width: 109px;">sp<sup><font size="2">3</font></sup>-sp<font size="2"><sup>3</sup></font></td>
+			<td style="width: 46.81px;">1.47</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-Br</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-Br<br />
+			C(sp<sup><font size="2">2</font></sup>)-Br<br />
+			C(sp)-Br</td>
+			<td style="width: 56.91px;">1.94<br />
+			1.87<br />
+			1.80</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C=N</td>
+			<td style="width: 109px;">&nbsp;</td>
+			<td style="width: 46.81px;">1.27</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">C-I</td>
+			<td style="width: 86.1px;">C(sp<sup><font size="2">3</font></sup>)-I<br />
+			C(sp<sup><font size="2">2</font></sup>)-I</td>
+			<td style="width: 56.91px;">2.14<br />
+			2.07</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C&equiv;N</td>
+			<td style="width: 109px;">&nbsp;</td>
+			<td style="width: 46.81px;">1.16</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">N-H</td>
+			<td style="width: 86.1px;">&nbsp;</td>
+			<td style="width: 56.91px;">1.01</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C-O</td>
+			<td style="width: 109px;">R-O-R<br />
+			RCO-OR<br />
+			RCO-OH<br />
+			RCOO-R<br />
+			C(ar)-OR</td>
+			<td style="width: 46.81px;">1.43<br />
+			1.34<br />
+			1.31<br />
+			1.44<br />
+			1.36</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">O-H</td>
+			<td style="width: 86.1px;">&nbsp;</td>
+			<td style="width: 56.91px;">0.95</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C-O</td>
+			<td style="width: 109px;">RCOO-</td>
+			<td style="width: 46.81px;">1.25</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">S-S</td>
+			<td style="width: 86.1px;">RS-SR</td>
+			<td style="width: 56.91px;">2.05</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C=O</td>
+			<td style="width: 109px;">&gt;C=O<br />
+			=C=O</td>
+			<td style="width: 46.81px;">1.20<br />
+			1.16</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">O-O</td>
+			<td style="width: 86.1px;">RO-OR</td>
+			<td style="width: 56.91px;">1.48</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C-S</td>
+			<td style="width: 109px;">C(sp<sup><font size="2">3</font></sup>)-S-<br />
+			C(sp<sup><font size="2">2</font></sup>)-S-</td>
+			<td style="width: 46.81px;">1.82<br />
+			1.76</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">N-N</td>
+			<td style="width: 86.1px;">&gt;N-N&lt;</td>
+			<td style="width: 56.91px;">1.45</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">C=S</td>
+			<td style="width: 109px;">&nbsp;</td>
+			<td style="width: 46.81px;">1.71</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">N=N</td>
+			<td style="width: 86.1px;">-N=N-</td>
+			<td style="width: 56.91px;">1.25</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">S-Si</td>
+			<td style="width: 109px;">C(sp<sup><font size="2">3</font></sup>)-Si-</td>
+			<td style="width: 46.81px;">1.87</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">N-O</td>
+			<td style="width: 86.1px;">&gt;N-O-<br />
+			&gt;N&rarr;O<br />
+			-NO<font size="2"><sub>2</sub></font></td>
+			<td style="width: 56.91px;">1.36<br />
+			1.30<br />
+			1.22</td>
+		</tr>
+		<tr>
+			<td style="width: 46.36px;">&nbsp;</td>
+			<td style="width: 109px;">&nbsp;</td>
+			<td style="width: 46.81px;">&nbsp;</td>
+			<td style="width: 1px;">&nbsp;</td>
+			<td style="width: 46px;">N=O</td>
+			<td style="width: 86.1px;">-N=O</td>
+			<td style="width: 56.91px;">1.20</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>[G. Gilli, &quot;Fundamentals of Crystallography&quot; (Ed., C. Giacovazzo) p.503, Oxford Science Publications (1985).]<br />
+<br />
+◆ X線解析結果の活用 [2]<br />
+◇ 芳香族環中の結合距離および結合角<br />
+　一般に結合距離が短いほど、その結合は強い。ダイヤモンド中のC(sp<sup><font size="2">3</font></sup>)-C(sp<sup><font size="2">3</font></sup>)単結晶は1.54Åであり、共役に関わっていないC(sp<sup><font size="2">2</font></sup>)=C(sp<sup><font size="2">2</font></sup>)二重結合距離は1.34 Åある。ベンゼンなどの芳香環中のC-C結合は1.38から1.40 Åの間の距離をとり、C&equiv;C三重結合距離は1.20 Åである。C-C結合の性質を表すために化学者がよく使う値に結合次数と<span style="font-family: times new roman,times,serif;">&pi;</span>結合がある。結合次数（bond order）は結合を表現するのに用いる結合の数であり、単結合では1.0、二重結合では2.0、そして三重結合では3.0である。これらの間にある中間的な結合については、すべての可能な共鳴構造についての次数を平均して結合次数は求められる。この方法でベンゼン中のすべてのC-C結合の結合次数を求めると1.50になる。（結合次数と結合距離の関係の図を見ると）比較的きれいな直線関係であることがわかる。この図を用いて、X線解析で決定された結合距離から、その結合次数が求められる。<br />
+　<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数（<span style="font-family: times new roman,times,serif;">&pi;</span>-bond order）は分子軌道法から導かれるもので、次のように定義される。<br />
+　<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数 = （結合軌道中の電子数 - 反結合軌道中の電子数）/ 2<br />
+単結合の<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数は0であり、ベンゼン中のC-C結合では0.667、二重結合では1.0、そして三重結合では2.0になる。<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数と結合距離の関係も比較的綺麗な直線関係をとっている。<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数は特定の原子rの自由原子価（free valence）もしくは不飽和指数（unsaturation index）fを求めるうえで有用である。原子rへのすべての結合の結合次数の和と最大の<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数の差がその原子の<span style="font-family: times new roman,times,serif;">&pi;</span>結合力である。式で表せば、<br />
+　自由原子価 = 最大<span style="font-family: times new roman,times,serif;">&pi;</span>結合数-（&Sigma;<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数）<br />
+である。炭素、窒素および酸素原子に対する最大<span style="font-family: times new roman,times,serif;">&pi;</span>結合数の値はおのおの&radic;3、&radic;2および1である。上式から得られる自由原子価が高い原子がとくにフリーラジカルによる攻撃を受け易いことを示す。したがって、実測結合距離から<span style="font-family: times new roman,times,serif;">&pi;</span>結合次数を求めると、原子の化学反応性をある程度予測することができる。<br />
+　単結晶X線解析で求められる多環芳香族化合物中のC-C結合距離は描くことのできる種々の共鳴混成構造から期待される結合距離に近く、また分子軌道法で計算できるものに近い。下の図にナフタレンの例を示す。<br />
+　<img src="data:image/png;base64,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" /><br />
+（省略）半経験的分子軌道法（MOPACに含まれるPM3法）で最適化した結合距離は、結合次数から予測される結合距離と非常によく合っている。<br />
+　置換基の電子的な影響はそれが結合している原子団の結合距離だけでなく、結合角にも及ぶ。ここではベンゼン環への置換基がベンゼン環内の結合角に与える影響を見てみる。ベンゼン自身の中性子線回折によると、ベンゼンはD<sub>6h</sub>の対称性をもっており、下の図に示すような結合距離と結合角を示す。<br />
+　<img src="data:image/png;base64,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" /><br />
+ベンゼンカ環内のC-C-C角は120&deg;であるが、下の図に示すように、ベンゼン環内の角度は114から125&deg;まで変わっており、置換基の電子求引性が高いと、この角度が大きくなり、置換基の電子供与性が高いとこの角度は小さくなる。<br />
+　<img src="data:image/png;base64,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" /><br />
+全ての場合でベンゼン環はほとんど平面である。結合角のこのような傾向から置換基の電子的な影響を推定することもできる。（省略）他の分子群についても同様の関係を見出すことができ、X線解析で得られる構造からそれらの分子の性質について多くの知見を求めることが可能である。<br />
+◇ 反応中間体の構造を推定する<br />
+　X線解析では単結晶を用い、通常の反応速度に比較するときわめて長い時間をかけてデータを収集するので、例外的な場合や特殊な手段を用いない限り、反応の中間状態の構造を観察することはできない。しかし、分子構造あるいは結晶構造中で反応中間状態が凍結されている場合があり、その状態の構造から反応進行による構造変化を予測できる場合がある。（省略）いくつかの静的状態の構造から反応の中間状態を推定する非常に重要な材料を提供する場合も決して少なくない。X線解析が単なる構造決定の手段としてだけではなく、反応の解析を行ううえでも重要であるのはこうした理由にもよる。分子軌道法などを用い、反応座標を考えるうえでもX線解析で得られるこのような情報はきわめて有用であり、理論計算の成否を判断するうえでも非常に重要な実験データといえる。最近では理論化学的な計算が容易に行えるようになり、実験データをまったく意識しない計算例も決して少なくない。しかし、より妥当な理論計算を行ううえでも、理論計算のモデルになり得るX線解析の例がある場合にはぜひそれらを活用することを薦める。<br />
+<br />
+◇ 結合距離と結合角の計算 [2]<br />
+　分極座標は座標をコンパクトに表現するには適しているが、長さの次元をもたないので、そのままでは距離などの幾何学的な値を計算するには適さない。また、&alpha;、&beta;および&gamma;が90&deg;でない晶系においては、その座標系は斜交座標系であり、取り扱いがやっかいである。そこで分子の幾何学的な諸量を計算するためには通常分極座標をÅの次元をもつ直交座標系に直す必要がある。<br />
+----------<br />
+・分極座標からÅ単位の直交座標への変換<br />
+　格子定数がa, b, c, &alpha;, &beta;および&gamma;で、分極座標がx, y, zである場合、Å単位の直交座標X, Y, Zは次のように表される。<br />
+　X = a*x + b*y*cos(&gamma;) + c*z*cos(&beta;)<br />
+　Y = b*y*sin(&gamma;) + c*z*(cos(&alpha;)-cos(&beta;)*cos(&gamma;))/sin(&gamma;)<br />
+　Z = z*V/(a*b*sin(&gamma;))&nbsp;<br />
+　V = a*b*c*sin(&beta;)<br />
+----------<br />
+<br />
+◆ 構造の比較 [2]<br />
+◇ X線解析で得られる構造は最安定構造か<br />
+　X線解析で得られた構造を基にその分子の機能や生理活動さらには分子設計を行う場合に最初に遭遇する問題は、結晶中の構造がこの分子が存在すると想定している系でとり得る構造と同じかどうかということである。この問題に対しては実は簡単な答えはない。例えば医薬品の場合、生体中の受容体と結合する時に分子がとる構造と結晶中で分子がとる構造が必ずしも同一であるという保証はない。（省略）もし受容体と結合する状態の構造を精密に知ろうとするなら、やはりその分子と受容体との複合体のX線解析を行わなければならない。単分子のX線解析で得られる分子の構造は複数の安定な構造の一つであるとしかいえない。ただし、結合距離や結合角は結晶場の力ではひずみにくく、これに対してねじれ角は影響を受けやすい。したがって、ねじれ角の自由度が高い分子の結晶中での立体配座の解釈には注意を払う必要がある。<br />
+　結晶中では結晶場により少なからず分子の構造は影響を受けるが、多くの類似の構造について結晶中の構造を比較することができる場合には、結晶場の影響によらない構造についての情報を得ることができる。<br />
+◇ 分子の重ね合わせ<br />
+　比較をすべき複数の分子中に対応する明確な原子が認められる場合には、それらの原子同士を重ね合わせる方法がよく用いられる。対応する複数の原子間の距離を最小二乗法で最小にすることにより、重ね合わせをすることができる。最近では、比較的安価な分子計算用ソフトウェアパッケージにもこのような機能がついている。重ね合わせがどの程度うまく行っているかは、対応する全ての原子のずれの二乗平均の平方根（root mean square deviation略してrmsd）で表すことが一般的である。rmsdは一つの指数で重ねあわせの具合を判断できる長所があるが、各原子の局所的な重なり具合についての情報は与えない。各原子の重なり具合や対応する原子の選択が適当かどうかを判断するためには、個々の原子や特定の原子団についての重なり具合を調べる必要がある。<br />
+　医薬品のように別の（巨大な）分子との相互作用によって機能を発揮する分子の場合、結合する相手の分子のことを考慮した重ね合わせが必要になる。Marshallらは、このような場合、van der Waals半径で描いた空間充填モデルを用いた重ね合わせによる比較が有用であることを示した。複数の分子をこの方法で表現し、それらの差を求めることはそれら分子の機能の差を論じるうえで便利である。同じ受容体と相互作用するが、その作用の仕方が異なるアゴニストとアンタゴニストの構造の差をこの方法で見出すことも可能である。（省略、薬理活性を有する化合物であるAとB分子のvan der Waals体積の和集合から薬理活性を有しない化合物であるC分子のvan der Waals体積との差をとることで、C分子に属する部分が不活性の原因となる部分であると推定できる）受容体の結合部分の形と相補的な形をもう分子は受容体に結合できるが、その一部の形が異なり受容体に結合できない場合には、その分子は活性を示すことはできないと考えることができ、受容体表面の形状はおおよそ（省略）のようではないかと予測できる。また、薬理活性を有する化合物である(a)分子と(b)分子の和集合より著しく小さい体積しかもち得ない分子はこの受容体に対する相互作用が小さいと予測できる。このような考え方はひどく単純に見えるが、受容体の立体構造に関する知見が少ない分子設計の初期段階では有用である。<br />
+<br />
+◆&nbsp;原子の運動性 [2]<br />
+◇ 結晶中での原子の動き<br />
+　結晶中で実は原子は静止していない。たとえ絶対0度でも、原子は動いている。運動は温度の上昇とともに大きくなる。この運動の程度は結晶中でのその原子周りの環境や動ける空間の大きさによって決まる。X線回折の高角データ（2&theta;が大きい）は細かい構造を反映するものである。したがって温度を上昇させ、原子の運動性を高めると、このような細かい部分における規則性が損なわれるので、高角側にある反射の強度は弱くなる。逆に、高角側の反射がどの程度強く出ているかを知れば、その結晶中での原子の運動性も推定できる。<br />
+　原子の振動は10<sup>-13</sup>秒のオーダーで起こっているのに対し、X線の振動数は5*10<sup>-19</sup>秒のオーダーであるので、X線で見ると、本来は振動している原子の位置を一つ一つ見ることができるはずである。しかしX線解析では10<sup>18</sup>オーダーの膨大な数の単位格子の平均像を求めるので、各単位格子中での原子のちょっとしたずれが、平均化した原子の振動として扱われてしまう。また仮に結晶中で一つの原子が一つの位置から別の位置に動的に動いても、結晶全体で見てしまうとそれらは二つの位置に凍結して見えてしまう。つまりX線結晶解析では、原子の運動性と規則構造からの乱れを区別することが難しい。<br />
+　X線解析では各原子の電子密度の極大点の座標だけでなく、その原子の運動性を表現するパラメータを求める。これらのパラメータは一般的に温度因子と呼ばれるが、上述の意味からすると、原子変位パラメータ（atomic displacement parameter）と呼ぶ方が適切であり、結晶学の分野ではこの言葉の方が最近ではよく使われる。しかし温度因子という言葉は現在でも使われており、なじみやすい言葉なので本書では以下、温度因子を使うことにする。原子が結晶中のどの方向にも等しい程度で動いていると仮定する場合には等方性の温度因子で、動きが方向によって異なる場合には異方性の温度因子で結晶中の原子の運動を表現する。<br />
+◇ 温度因子の表現<br />
+　X線は原子中の電子によって散乱される。その原子の運動性が低ければ電子は原子核の近傍に局在しているが、原子が運動すると実質的に電子の分布は広くかつ極大値が小さくなるようになる。この効果を原子によるX線散乱能を表す原子散乱因子fに考慮すると、<br />
+　f = f<sub>0</sub>*exp(-M)<br />
+のように表現される。f<sub>0</sub>は静止した原子の原子散乱因子である。右辺第二項の寄与分だけfは扁平化する。Mは(sin(&theta;)/&lambda;)<sup>2</sup>の関数であり、その減衰効果の係数としてBを与えると、<br />
+　M = B*(sin(&theta;)/&lambda;)<sup>2</sup><br />
+になる。このBを温度因子という。いま、原子の位置の平均二乗変位を&lt;u<sup>2</sup>&gt;で表すと、<br />
+　B = 8<span style="font-family: times new roman,times,serif;">&pi;</span><sup>2</sup>&lt;u<sup>2</sup>&gt;<br />
+となる。また&lt;u<sup>2</sup>&gt;は簡単にUと表すことがある。原子の運動を等方的と考える（近似する）場合には、BおよびUをB<sub>iso</sub>およびU<sub>iso</sub>と表示する。この場合、<br />
+　Biso = 8<span style="font-family: times new roman,times,serif;">&pi;</span><sup><font size="2">2</font></sup>U<sub>iso </sub>= 8<span style="font-family: times new roman,times,serif;">&pi;</span><sup><font size="2">2</font></sup>&lt;u<sup><font size="2">2</font></sup>&gt; ≒ 79&lt;u<sup>2</sup>&gt;<br />
+の関係がある。U<sub>iso</sub>=&lt;u<sup>2</sup>&gt;は原子核の平均二乗変位を示すので、理解しやすい量である。有機低分子結晶中の非水素原子の&lt;u<sup>2</sup>&gt;は一般的に0.02から0.07 Å<sup>2</sup>である。これはBでは2から6 Å<sup><font size="2">2</font></sup>の値である。鉱物など、結晶構造がきちんとしている場合には、これらの値はずっと小さくなる。逆にタンパク質など結晶中での自由度が大きい巨大分子の場合には、これらの値は逆にずっと大きくなる。　　<br />
+　結晶中での原子の環境は実際には異方的であるので、より現実に即した近似として異方性温度因子が用いられる。通常に低分子有機化合物の構造解析においては、水素原子以外はすべて異方性温度因子を用いて精密化される。等方性温度因子が球で表されるのに対して、異方性温度因子は三つの直交する主軸をもつ楕円体で表される。温度因子の表現にはいくつかあり、論文中では混在する。例えば、U<sub>11</sub>, U<sub>22</sub>, U<sub>33</sub>, U<sub>12</sub>, U<sub>13</sub>およびU<sub>23</sub>が異方性温度因子を表すテンソル量である。正確を期する時は異方性温度因子を用いるが、原子の運動性を簡単に知るためには、あまり便利な量ではない。そこで、最近では異方性温度因子を平均化した等価等方性温度因子が用いられることが多い。U<sub>eq</sub>はそうした等価等方性温度因子の一つであり、次式で表される。<br />
+　U<sub>eq</sub> = (1/3)*&Sigma;<sub>i</sub> &Sigma;<sub>j</sub> U<sub>ij</sub>*&alpha;<sub>i</sub>*&alpha;<sub>j</sub>*・<strong>&alpha;<sub>i</sub></strong>・<strong>&alpha;<sub>j</sub></strong><br />
+　　　 = {1/(24*<span style="font-family: times new roman,times,serif;">&pi;</span><sup><font size="2">2</font></sup>)}*&Sigma;<sub><font size="2">i</font></sub> &Sigma;<sub><font size="2">j</font></sub> B<sub><font size="2">ij</font></sub>*&alpha;<sub><font size="2">i</font></sub>*&alpha;<sub><font size="2">j</font></sub>*・<strong>&alpha;<sub><font size="2">i</font></sub></strong>・<strong>&alpha;<sub><font size="2">j</font></sub></strong><br />
+◇ ORTEP図<br />
+　温度因子、とくに異方性温度因子は数字で示すとわかりにくいので、図で示すことがよく行われる。熱振動の様子を楕円対で表示するためのプログラムORTEPは米国のCarroll K. Johnsonによって開発され、現在でも広く使われており、学術論文中の多くの図がこのプログラムで作成されている。ORTEPで作成された図を簡単にORTEP図と言うことが多い。<br />
+　楕円体の大きさは、その楕円体の中に原子が存在する確率を変えると変化する。同じ確率なら、楕円体が大きいほど原子の振動が大きいことに対応する。<br />
+　通常50%の確率が用いられるが、その数字は報告者によって変わってくることがあるので、複数の解析結果を図を用いて比較する場合には注意を要する。この確率を30%に設定すると楕円体は小さくなり、見かけの熱振動は小さく見える。もちろん、低温では振動が抑えられるので、楕円体のサイズも小さくなる。原子の位置に乱れがある場合には乱れのある方向に楕円体は長くなる。一般に分子の中央部で動きにくいところの温度因子は小さく、分子周辺のとくに長く、柔軟性のある鎖状の部分では温度因子は大きくなる。（省略）一般に芳香環のように柔軟性に欠ける原子団を構成する原子の温度因子は低い。一方、柔軟な原子団を構成する原子の温度因子は高い。しかし長い鎖状の原子団でも、水素結合やvan der Waals力で分子内または分子間で相互作用している場合には、運動性が減少し、温度因子も小さくなる。<br />
+　筋弛緩作用のあるカリソプロドール（carisoprodol）にはペンチル基とイソプロピル基がある。ペンチル基末端の3個のC原子からなる直鎖とイソプロピル基の3個のC原子について考えると、前者のC原子の運動性の方が高いと予想されるが、結晶中での温度因子はその予想に反する。（省略）これは、結晶中での両者の分子間相互作用の差によっている。つまり、後者のC原子が存在する周りには比較的余裕のある空間があるため、運動性が高くなる。孤立分子の立体配座を考える場合には、前者の方が柔軟性は高い。この例のように、結晶解析で得られる温度因子は、その分子が孤立した状態での各原子固有の運動性を必ずしも表していない。<br />
+◇ 温度因子の信頼性<br />
+　良好なデータに基づき、きちんと精密化した構造中の温度因子は信頼できる。しかし、異方性温度因子は回折データの質やデータ中の誤りに大きく影響される。精密化される他のパラメータとの相関も大きい。観測データ由来の構造因子の大きさ（この大きさのスケールは任意である。強いX線を使えば大きくなり、弱いX線を使えば小さくもなる）を結晶中に含まれる電子の数に合わせ、絶対的なスケールでの構造因子に直すためには、適切な尺度因子を求めなければならないが、この尺度因子と温度因子は本来的に相関している。つまり、尺度因子の誤差が温度因子に影響してしまう。また普通、原子の占有率は温度因子と強い相関を持っている。占有率を低くすれば、温度因子も小さくなり、逆に占有率を高くすると、温度因子も大きくなる。したがって、分子中にとくに小さい温度因子を示す原子があったら、占有率が誤って小さい値に設定されている可能性もある。またX線による吸収の補正などを適切に処理しないと、その系統誤差を吸収するように温度因子が誤った方向に働く可能性がある。データが不良であったり、温度因子と他のパラメータの相関が強すぎる場合に、異方性温度因子の対角項（U<sub>11</sub>, U<sub>22</sub>, U<sub>33</sub>）が負になり、物理的な意味がなくなってしまうこと（non-positive definite）がある。発表されている結晶解析の結果にはこのような値を示すものはないと思われるが、異方性の温度因子の形が原子ごとにかなり大きなばらつきを示していたり、異常な値を示したり、論文中に適当な説明がない場合には、その構造解析の結果について、疑う余地がある。<br />
+　温度因子が極端に大きい原子間の結合距離は短くなる。とくに長い鎖状の部分の末端部分などにおいてこのような現象がよく見られる。このような場合、構造比較を厳密に行うためには、振動による補正を行う必要があるが、解析結果を利用する立場ではこの補正はできないので、そのような原子は厳密な比較の対象からはずすのが賢明であろう。したがって、結合距離や結合角などの値を厳密に求めるためには、なるべく低温で回折データをとった解析結果を利用することが望ましい。<br />
+　温度因子は当然結晶中での運動性に関するものであるので、単分子の運動性や溶液中での運動性とただちに比較することは難しいが、結晶中で運動性が高いところは単分子でも運動性が高いと予測されるので、限定的には反応性などの議論の材料に使うことも可能である。<br />
+◇ 乱れ（disorder）<br />
+　単位格子中での空間やAないしBの構造をとったときの立体配座エネルギーの差により、必ずしも二つの位置のポテンシャルエネルギーは等しいわけではないので、占有率は0.5以上のときも以下のときもある。（省略）占有率と温度因子の間には強い相関があるので、（二つに位置AとBの間にあるポテンシャル障壁が小さくなく、明確にAとBのポテンシャルが明確に分かれているとき）AとBの位置に原子をおいたときの温度因子が両者でほぼ等しくなるように占有率を決める方法が通常行われる。当然のことではあるが、占有率0.5というのはすべての単位格子中ではAかBかのどちらかになっているはずである。しかも単位格子のその位置にはAでもBでも受け入れられるだけの空間が空いているはずである。二つの位置の間になるポテンシャル障壁の大きさによっては、温度を十分低くすることで、温度因子を小さくし、実質的に原子を一つの位置に固定して扱うことが可能な場合もある。<br />
+　このような乱れは長く柔軟性のある鎖状構造のとくに末端部分や結晶溶媒にみられる。とくに結晶から抜け易い結晶溶媒の場合、他分子との相互作用が少ないので、乱れていることが多い。しかし、環構造をもっていても構造に乱れがある場合もある。<br />
+　二つのクマリン誘導体ではそのような乱れが認められる。立体配座に自由度がある。二つの位置で適当な占有率を用いて精密化すると温度因子の形もきれいに精密化されることもあるが、温度因子が環の上下に大きく伸びるような場合は、二つ以上の位置が存在する可能性がある。そのような場合、研究者によっては低い占有率でそれらの複数個所に原子が存在するとして精密化している場合もあるが、正確な帰属は非常に困難なことが多い。異なる結晶形にするとまったく乱れが生じないこともある。その部分の本質的な立体構造を明確にしたい場合には別の結晶形での解析を行い、それらの構造を比較検討することも必要である。原子に乱れがある構造について公開されている座標データ中には当然複数の原子座標が一つの原子に対して与えられている。<br />
+　分子表示用のソフトウェアの中には、デフォルトの設定ではこの種の構造をまったく受け付けないことや一方の原子のみを受け付けてしまうことがあるので注意を要する。<br />
+<br />
+◆ 絶対構造 [2]<br />
+　分子中に不斉原子があると、その分子構造とその鏡像体分子は重ね合わせることができない。鏡像体同士が重ならない分子を光学活性分子という。このような場合、これらの2分子は相対構造は同じだが、絶対構造は異なるという。（省略、例えば）両者（L-セリンとD-セリン）は互いに鏡像体であり、それらは異なった光学的および生物学的性質を示す。通常アミノ酸のような天然由来の化合物は一方の絶対構造をとっており、逆の絶対構造をとる化合物はまったく生理活性を示さないことが多い。したがって、天然化合物の構造決定やその化合物に基づく分子設計を行ううえで、絶対構造に関する情報は非常に重要である。X線解析は分子の絶対構造を一義的に決定できる唯一の方法といえる。核磁気共鳴などでは相対構造は決定できても絶対構造決定は非常に困難である。<br />
+　不斉炭素原子を有する天然物であれば対称中心や鏡面対称をもつ空間群の結晶は絶対に作らない。可能な空間群は全部で230通りあるが、光学活性分子が作る結晶の空間群は64通りしか取り得ない。もちろんラセミ体分子の場合には230通りすべての空間群をとることが可能である。したがって、空間群から結晶中の分子が光学活性であるかどうかの推定をある程度できることになる。タンパク質は光学活性分子であり、64通りの空間群しかとり得ない（種々の条件から実際に取り得る空間群の幅はもっと狭い）。また、天然からの抽出物がこの64通り以外の空間群の結晶を与えたとしたら、結晶になったその化合物は天然由来かどうかがかなり怪しいことになる。<br />
+◇ 絶対構造の決定<br />
+（省略）異常分散（&Delta;f'および&Delta;f''）が十分大きい場合（例えば、Coのような場合）、強度I(hkl)&ne;I(-h -k -l)となる（異常分散効果）。もし求めた構造が正しい絶対構造になっており、この構造に基づいて計算したIc(hkl)とIc(-h -k -l)の大きさの関係がIc(hkl)&gt;Ic(-h -k -l)であるなら、実験的に求められる強度もIo(hkl)&gt;Io(-h -k -l)になっているはずである。Bijvoet法では、構造に基づいて計算した強度Ic(hkl)（または|Fc(hkl)|）とIc(-h -k -l)（または|Fc(-h -k -l)|）の大きさに十分差のある20個程度の反射の組についてこの大小関係の合い方を調べる。<br />
+◇ 絶対構造決定の問題点<br />
+　いくつかの絶対構造を決定する方法が知られているが、絶対構造既知の化合物との複合体を作って決定する方法がもっとも確実である。その化合物のみを用いる場合には、Bijvoet法の信頼性が高い。R因子テスト法はR因子が比較的高い条件の場合、必ずしも正しい結果を与えない。最近ではこの方法により絶対構造が決定される例はほとんどない。もしこの方法で決定された絶対構造に疑問がある場合（CDスペクトルや生合成経路などから）には、再検討してみる価値がある。異常分散項の&Delta;f''の係数を精密化するRodgersらの方法では、絶対構造の正しさの目安を標準偏差つきの数字で示すことができるので、比較的間違いが少ない。しかし結晶中にF以上に重い原子（重原子）がない場合には、単独分子での絶対構造決定が危ない場合が少なくない。重原子を含まない光学活性分子の絶対構造決定の結果を利用する場合には、その解析の過程を充分検討すべきである。絶対構造決定の前提は十分な構造の精密化であるから、R因子が0.05以上で、結果がCDスペクトルなどと矛盾している場合は、一応疑ってかかる必要がある。F以上の重原子を含まない分子について絶対構造の再検討を行う場合には、安全のために十分大きい重原子を塩や誘導体の形で導入するか、絶対構造既知の分子との複合体ないし塩を調製してから行うほうが安全である。ただし、重原子が空間群の特殊な対称性の位置にのってしまうと、その寄与を有効活用できなくなることもある。<br />
+　絶対構造は鏡面対称の操作を施すことで簡単に反転してしまうので、座標の取扱には十分注意を要する。例えば、他の研究者から提供された座標のうち、y座標にすべてマイナスの符号がついていたとする。入力時に面倒なので、yの符号をすべて無視して（プラスにして）入力すると、入力された構造の絶対構造は反転してしまう。座標系には常に右手系を使うように心掛けていると、誤りに陥ることがなく、また誤りを発見しやすくなる。<br />
+-------------------------------------------------------------<br />
+■ Q&amp;A [3]<br />
+Q: 原子核とX線の相互作用はないのですか？<br />
+A: X線の散乱において、電荷から放射されるX線の強度は、電荷をe、質量をmとすると、(e<sup>2</sup>/m)<sup>2</sup>に比例する。したがって、電子に比べ質量の大きな原子核による散乱は極めて小さい。<br />
+<br />
+Q: 結晶の大きさやX線強度などの関係で、測定時間はどうなるか？<br />
+A: 回折線強度は、X線に照射されている結晶の体積に比例するので、他の要素もあるが、基本的には結晶が大きいほど測定時間は短くなる。例えば、直径 0.3 mmの結晶と直径0.1 mmの結晶で強度を比較すると、0.3 mmの方が10倍程度強度が強くなるので測定時間もかなり短縮できる。<br />
+<br />
+Q: 原子の見分け方、特にC, N, Oの見分け方は？<br />
+A: 電子数の多いC &lt; N &lt; Oの順番で電子密度が大きくなるはずであるが、必ずしもそうはならない場合がある。NMRなどであらかじめ構造解析を進めておくことも必要。また、結合長などから見分けることが可能な場合もある。<br />
+<br />
+Q: 水素原子を見ることができるか？<br />
+A: C-H結合の結合距離は約1.1 Åであるが、X線回折像から与えられる距離は0.96 Å程度と成留ことが知られている。これは、電子雲が炭素原子側に偏っているためである。構造精密化などの段階でR因子が7%程度になれば、水素原子も差フーリエ合成で見える場合もある。しかしながら、差フーリエ合成で水素原子の位置を決定することができない場合もあり、その際幾何学的な計算（立体障害の最も少ない位置）で求めることもある。<br />
+<br />
+Q: 水素原子の位置をより詳細に知る方法はあるか？<br />
+A: 中性子回折は水素に大きな回折があるため、水素の座標位置を求めるのに有力な手法である。ただし、専用の大規模実験施設でしか中性子の利用はできない。<br />
+<br />
+Q: 光学異性体は本当に絶対構造が決まるのか？<br />
+A: X線源としてCuを用いれば、イオウ（S）やハロゲン（X）元素を含む化合物ならば比較的容易に絶対構造の決定が可能である。X線源がMoの場合でも可能となることもある。Cu線を用いても、C, H, N, Oからなる分子では異常散乱（diffuse scattering）効果が大きくないため絶対構造決定が難しいことが多い。しかし良質の結晶を用いて、最新の装置で正確な回折情報を得られれば、絶対構造の決定が可能な場合もある。最近は、絶対構造を判定する方法としてはFlackのパラメータ&Chi;を用いるのが一般的である。Flackのパラメータは次式で表される。<br />
+　|F&gt;(h k l &Chi;)|<sup>2</sup> = (1-&Chi;)|F(h k l)|<sup>2</sup>&nbsp;+ &Chi;|F(-h -k -l)|<sup>2</sup><br />
+&Chi;が0に近い値である場合は正しい絶対構造であり、+1に近い場合は逆の絶対構造である。絶対構造を判定するためにはFriedel対（|F(h k l)|と|F(-h -k -l)|）をできるだけ多く測定する必要がある。<br />
+<br />
+Q: X線を当てると失透や分解しやすいもの、あるいは不安定な結晶の測定はどのように行なうか？<br />
+A: 低温で測定すると良い結果が得られることがある。<br />
+<br />
+Q: 格子定数が決まらないときの対応は？<br />
+A: 予備測定の測定エリアを増やし、より多くの回折点を得ると格子定数が決定しやすくなる。また、回折点の形状を観察し、割れている場合は試料を別のものに変えたり、他の回折点が重なっている場合は結晶の方向を返るたりするなど、再測定をすると結果が改善されることが多い。</p>
+
+<p>Q: 構造が解けないときはどうするのか？<br />
+A: 単結晶の質や大きさが不十分と思われるときには、別の結晶で最測定をすると解けることが多い。回折点の強度が十分なのに構造決定（位相決定）できない場合は、格子定数や空間群が間違っている場合が多い。解析ソフト任せではなく、実際の測定データを見直し、別の格子定数、空間群で再解析することで解けることもある。また、通常は直説法による構造決定を行っているが、化合物中に重原子などが入っている場合は、重原子法など異なる解析法を用いるとうまくいく場合がある。<br />
+<br />
+Q: R因子が10%から下がらない場合の対応は？<br />
+A: 一般的にR因子が20%以下であれば、構造の大部分が決定できていると思われる。精度の高い回折データが得られていれば、通常R因子が10%以下になる。精度の高い回折データが得られているにもかかわらずR因子が10%以上になる場合は、結晶が双晶であったり、結晶内に配列の乱れがある可能性が高い。また、未同定の水分子や溶媒が含まれている可能性が高い場合も考えられる。可能であれば低温で測定することや、別の結晶で再測定することも信頼できるデータを得るために有効である。<br />
+<br />
+Q: 粉末試料からでも結晶構造解析はできるか？<br />
+A: 放射光などで測定した高分解能なデータを用いれば、無機化合物だけでなく有機化合物の粉末X線回折からも結晶構造を求めることが可能となってきている。しかしながら、粉末X線回折測定から求められた回折強度は単結晶とは異なり、重なりがあるために正確さで劣る。したがって、特に有機化合物の場合には異方性温度因子まで求めることはできない。有機化合物の結晶構造を精度良く知りたい場合には、単結晶X線回折測定を行なうべきである。単結晶の作製がどうしてもできない場合には、粉末X線回折からの解析を試してみる価値はある。<br />
+<br />
+Q: SPring-8など高輝度X線（放射光）を利用するメリットは？<br />
+A: 非常に小さな単結晶でも測定が可能になる場合がある。放射光を用いると、一辺が0.01 mmレベルの結晶でも測定できる可能性がある。また、金属錯体などの場合には、吸収などの影響の少ない波長を選択することができる。<br />
+------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] 野瀬卓平ら『若手研究者のための有機・高分子測定ラボガイド』講談社サイエンティフィック<br />
+[2] 平山令明『第2版 化学・薬学のためのX線解析入門』丸善株式会社<br />
+[3] （社）日本分析化学会編『分析化学 実技シリーズ　応用分析編・3 有機構造解析』共立出版<br />
+[4] 坪田 雅己、伊藤 孝憲&nbsp;『RIETAN‐FPで学ぶリートベルト解析』情報機構<br />
+------------------------------------------------------------------------------</p>

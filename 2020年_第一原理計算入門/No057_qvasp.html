@@ -1,0 +1,393 @@
+<div><span style="font-size: 14px;">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size: 14px;">Å° qvasp (quickluy use vienna ab-initio simulation package)<br />
+(ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))</span></div>
+
+<div><span style="font-size: 14px;">(Edit: 9/Aug/2020)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† Install</span></div>
+
+<div><span style="font-size: 14px;">0. cd ~</span></div>
+
+<div><span style="font-size: 14px;">1. wget https://versaweb.dl.sourceforge.net/project/qvasp/qvasp-v2.21.tar.gz</span></div>
+
+<div><span style="font-size: 14px;">2. tar zxvf qvasp-v2.21.tar.gz</span></div>
+
+<div><span style="font-size: 14px;">3. cd qvasp-v2.21</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† environment settings (easy method)</span></div>
+
+<div><span style="font-size: 14px;">1. cd ~/qvasp-v2.21</span></div>
+
+<div><span style="font-size: 14px;">2. chmod +x install.sh</span></div>
+
+<div><span style="font-size: 14px;">3. ./install.sh</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; do you wish the installer to prepend the qvasp location to PATH in /home/username/.bashrc ? (yes or no):yes</span></div>
+
+<div><span style="font-size: 14px;">4. bash</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† environment settings (other method)</span></div>
+
+<div><span style="font-size: 14px;">1. gedit ~/.bashrc</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; export qvasppath=$HOME/</span>qvasp-v2.21</div>
+
+<div><span style="font-size: 14px;">&nbsp; export PATH=$qvasppath:$PATH</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; export PATH=$qvasppath/exefile/Tools/USERTooLs/vtstscripts:$PATH</span></div>
+
+<div><span style="font-size: 14px;">2. bash</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† set potentials&nbsp;(no check)</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/exefile/POTCAR</span></div>
+
+<div><span style="font-size: 14px;">2. cp ~/vasp/potpaw_PBE/* ./paw_pbe</span></div>
+
+<div><span style="font-size: 14px;">3. cp ~/vasp/potpaw_LDA/* ./paw_lda</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† examples (Please, see run.log. e.g., &quot;cat run.log&quot;)</span></div>
+
+<div>----------<br />
+ÅEINCAR<br />
+1. cd $qvasppath/examples/<span style="font-size: 14px;">INCAR</span><br />
+2. <span style="font-size: 14px;">qvasp -relax</span><br />
+&nbsp; (you can get INCAR)<br />
+<span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEKPOINTS</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/KPOINTS</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (POSCAR) (This is input file)</span></div>
+
+<div><span style="font-size: 14px;">2. qvasp -k 0.03</span></div>
+
+<div>&nbsp; (you can get KPOINTS)</div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEPOTCAR</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/POTCAR</span></div>
+
+<div><span style="font-size: 14px;">2. qvasp -pbe Ca_sv N<br />
+&nbsp; (POTCAR from PBE)</span></div>
+
+<div><span style="font-size: 14px;">3. qvasp -cp<br />
+&nbsp; (Check the POTCAR)</span></div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEPOSCAR (Trasition States)</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/POSCAR/TrasitionStates</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (P, R) (This is input file)</span></div>
+
+<div><span style="font-size: 14px;">2. qvasp -t 6</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (you can get 00&nbsp; 01&nbsp; 02&nbsp; 03&nbsp; 04&nbsp; 05&nbsp; 06&nbsp; 07&nbsp; and INCAR)</span></div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEPOSCAR (cif2poscar)</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/POSCAR/cif2poscar</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (BP.cif) (This is input file)</span></div>
+
+<div><span style="font-size: 14px;">2.&nbsp;</span>?qvasp -c2p BP.cif</div>
+
+<div><span style="font-size: 14px;">&nbsp; (you can get BP.vasp and POSCAR)</span></div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEPOSCAR (fix position)</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/POSCAR/fix-surface</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (Cu-COH.vasp) (This is input file)</span></div>
+
+<div><span style="font-size: 14px;">2. qvasp -fix</span></div>
+
+<div><span style="font-size: 14px;">3. Input the Z coordinate range you want to fix (eg: 0.1 0.2): 0 0.2</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (you can get POSCAR) (0-0.2 area was fixed = no moving atom = F)</span></div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div><span style="font-size: 14px;">ÅEPOSCAR (make supercell)</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/examples/POSCAR/supercell</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (POSCAR) (This is input file)</span></div>
+
+<div><span style="font-size: 14px;">2. qvasp -sc POSCAR</span></div>
+
+<div><span style="font-size: 14px;">3. Please input the supercell along a, b and c directions (eg. 3 3 1):2 3 1</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (you can get supercell231.vasp)</span><br />
+----------<br />
+ÅE<span style="font-size: 14px;">Customizable-Tools (bader)</span>&nbsp;(failed)<br />
+<span style="font-size: 14px;">1. </span>cd $qvasppath/examples/<span style="font-size: 14px;">Customizable-Tools/bader</span><br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -baderd</span><br />
+&nbsp; (<span style="font-size: 14px;">AECCAR0&nbsp; AECCAR2&nbsp; CHGCAR) (These are input file)<br />
+<br />
+Error messages:<br />
+&nbsp;&nbsp;/home/username/qvasp-v2.21/exefile/Tools/USERTooLs/baderd: line 13:&nbsp; 5881 Segmentation fault&nbsp; &nbsp; &nbsp; (core dumped) $qvasppath/exefile/Tools/USERTooLs/bader.x CHGCAR -ref CHGCAR_sum</span><br />
+----------<br />
+ÅECustomizable-Tools (cleave-surface)<br />
+1.&nbsp;cd $qvasppath/examples/Customizable-Tools/<span style="font-size: 14px;">cleave-surface<br />
+&nbsp; (POSCAR) (This is input)</span><br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -cleavesurface POSCAR</span>
+
+<div><span style="font-size: 14px;">&nbsp; Input Miller Index(such as 1 0 0):1 1 1</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Input Slab Layers Number(default:6):12</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Input Slab Vacuum Thick(default:20 angston):18</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Input Slab Depth(default:0.0):0</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Transfer done, please check POSCAR-surface.vasp</span><br />
+----------<br />
+ÅECustomizable-Tools (heterojunction)&nbsp;(failed)<br />
+1.&nbsp;cd $qvasppath/examples/Customizable-Tools/heterojunction<br />
+&nbsp; (<span style="font-size: 14px;">03_black_P_POSCAR, 03_Graphene_POSCAR</span>) (These&nbsp;are&nbsp;input file)<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -heterojunction 03_black_P_POSCAR&nbsp; 03_Graphene_POSCAR<br />
+&nbsp;&nbsp;Do you want to continue? (y/n): n</span><br />
+<br />
+Error messages:&nbsp;
+<div><span style="font-size: 14px;">Traceback (most recent call last):</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; File &quot;/home/inukai/qvasp-v2.21/exefile/Tools/USERTooLs/pe-building.py&quot;, line 2, in &lt;module&gt;</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; &nbsp; from numpy import *</span></div>
+
+<div><span style="font-size: 14px;">ModuleNotFoundError: No module named 'numpy'</span></div>
+----------<br />
+ÅECustomizable-Tools (<span style="font-size: 14px;">nanotube</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Customizable-Tools/<span style="font-size: 14px;">nanotube</span><br />
+&nbsp; (<span style="font-size: 14px;">POSCAR</span>) (This is&nbsp;input file)<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -nanotube</span><br />
+----------<br />
+ÅECustomizable-Tools (<span style="font-size: 14px;">out2arc</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Customizable-Tools/<span style="font-size: 14px;">out2arc</span><br />
+&nbsp; (<span style="font-size: 14px;">OUTCAR,&nbsp;POSCAR</span>) (These&nbsp;are&nbsp;input file)<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -out2arc</span><br />
+----------<br />
+ÅETools (band)<br />
+1.&nbsp;cd $qvasppath/examples/<span style="font-size: 14px;">Tools</span>/band<br />
+&nbsp; (<span style="font-size: 14px;">CONTCAR, EIGENVAL, OUTCAR</span>) (These&nbsp;are&nbsp;input file)&nbsp;&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -bandd<br />
+&nbsp;&nbsp;</span>Input Fermi level(Default: read from current OUTCAR):
+
+<div><span style="font-size: 14px;">&nbsp; Type yes for HSE band caculation(Default: no):<br />
+3. gnuplot<br />
+&nbsp; set ylabel &quot;Energy / eV&quot;<br />
+&nbsp; plot &quot;band.dat&quot; w l</span></div>
+----------<br />
+ÅETools (dos)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/dos<br />
+&nbsp; (<span style="font-size: 14px;">DOSCAR, OUTCAR</span>) (These&nbsp;are&nbsp;input file)&nbsp;&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -dosd</span><br />
+3. gnuplot<br />
+&nbsp; set xlabel &quot;Energy / eV&quot;<br />
+&nbsp; set ylabel &quot;Density of States / eV&quot;<br />
+&nbsp; plot &quot;DOS0&quot; w l<br />
+----------<br />
+ÅETools (ldos)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/ldos<br />
+&nbsp; (DOSCAR,&nbsp;OUTCAR) (These&nbsp;are&nbsp;input file)&nbsp;&nbsp;<br />
+2.&nbsp;qvasp -dosd<br />
+3.&nbsp;<span style="font-size: 14px;">qvasp -ldos 2 3</span><br />
+&nbsp; (LDOS.dat = DOS2 + DOS3)<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Energy / eV&quot;<br />
+&nbsp; set ylabel &quot;Density of States / eV&quot;<br />
+&nbsp; plot &quot;LDOS.dat&quot; w l<br />
+----------<br />
+ÅETools (<span style="font-size: 14px;">optics</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/<span style="font-size: 14px;">optics</span>&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -opticsd<br />
+&nbsp; (vasprun.xml) (This is input file)<br />
+&nbsp; (Please check IMAG.dat,REAL.dat,x,y,z, the unit of absorption coefficient is x10<sup>5</sup> cm<sup>-1</sup>)<br />
+3.&nbsp;sed -i '1s/^/#/' adsorptionsp.dat<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Photon Energy / eV&quot;<br />
+&nbsp; set ylabel &quot;{/Symbol a} / 10^5 cm^{-1}&quot;<br />
+&nbsp; plot &quot;adsorptionsp.dat&quot;&nbsp; u 1:2 w l t &quot;xx&quot;, &quot;adsorptionsp.dat&quot;&nbsp; u 1:3 w l t &quot;yy&quot;</span>, &quot;adsorptionsp.dat&quot;&nbsp; u 1:4 w l t &quot;zz&quot;, &quot;adsorptionsp.dat&quot;&nbsp; u 1:5 w l t &quot;xy&quot;, &quot;adsorptionsp.dat&quot;&nbsp; u 1:6 w l t &quot;yz&quot;, &quot;adsorptionsp.dat&quot;&nbsp; u 1:7 w l t &quot;zx&quot;<br />
+----------<br />
+ÅETools (<span style="font-size: 14px;">mde</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/<span style="font-size: 14px;">mde</span><br />
+&nbsp; (<span style="font-size: 14px;">OSZICAR, OUTCAR</span>) (These&nbsp;are&nbsp;input file)&nbsp;&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -mde</span><br />
+----------<br />
+ÅETools (<span style="font-size: 14px;">findsym</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/<span style="font-size: 14px;">findsym</span><br />
+&nbsp; (<span style="font-size: 14px;">POSCAR</span>) (This is input file)&nbsp;&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -findsym 0.2</span><br />
+----------<br />
+ÅETools (<span style="font-size: 14px;">findcell</span>) (=find primitive cell)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/<span style="font-size: 14px;">findcell</span><br />
+&nbsp; (POSCAR) (This is&nbsp;input file)&nbsp;&nbsp;<br />
+2.&nbsp;<span style="font-size: 14px;">qvasp -findcell</span><br />
+----------<br />
+ÅETools (<span style="font-size: 14px;">poscar2cif</span>)<br />
+1.&nbsp;cd $qvasppath/examples/Tools/<span style="font-size: 14px;">poscar2cif</span><br />
+&nbsp; (POSCAR) (This is&nbsp;input file)&nbsp;&nbsp;<br />
+2.<span style="font-size: 14px;">&nbsp;qvasp -p2c</span></div>
+</div>
+
+<div><span style="font-size: 14px;">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† check perl scripts</span></div>
+
+<div><span style="font-size: 14px;">0. sudo update</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; sudo apt install -y perl</span></div>
+
+<div><span style="font-size: 14px;">1. cd $qvasppath/exefile/Tools/USERTooLs/vtstscripts</span></div>
+
+<div><span style="font-size: 14px;">2. ls</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† help</span></div>
+
+<div><span style="font-size: 14px;">1. qvasp -help<br />
+<br />
+Å† HSE calculation</span>&nbsp;(no check)<br />
+<span style="font-size: 14px;">1.&nbsp;qvasp -c2p<br />
+&nbsp; (Transfer cif file to POSCAR)<br />
+2.&nbsp;qvasp -pbe ELE_Name<br />
+&nbsp; (POTCAR from PBE)<br />
+3.&nbsp;qvasp -cp<br />
+&nbsp; (Check the POTCAR)<br />
+4.&nbsp;qvasp -k 0.076<br />
+&nbsp; (Create KPOINTS(Auto mesh))<br />
+5.&nbsp;qvasp -relax<br />
+&nbsp; (For Structure Optimization calculation)<br />
+&nbsp; (qvasp -p2c) (you can get cif file)<br />
+6.&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+<span style="font-size: 14px;">7. qvasp -hse<br />
+&nbsp; (For HSE06 calculation)<br />
+8.&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+<span style="font-size: 14px;">9.&nbsp;qvasp -e<br />
+&nbsp; (Read energy from OUTCAR)</span><br />
+<br />
+Å† structure optimization + SCF&nbsp;calculation&nbsp;(no check)<br />
+1.&nbsp;qvasp -c2p<br />
+&nbsp; (Transfer cif file to POSCAR)<br />
+2.&nbsp;qvasp -pbe ELE_Name<br />
+&nbsp; (POTCAR from PBE)<br />
+3.&nbsp;qvasp -cp<br />
+&nbsp; (Check the POTCAR)<br />
+4.&nbsp;qvasp -k 0.0764<br />
+&nbsp; (Create KPOINTS(Auto mesh))<br />
+5.&nbsp;<span style="font-size: 14px;">qvasp -scf&nbsp;<br />
+&nbsp; (For Self_Consistent calculation)</span><br />
+&nbsp; (For Structure Optimization calculation)<br />
+<br />
+Å† dos&nbsp;(no check)<br />
+6.&nbsp;qvasp -k 0.0764<br />
+&nbsp; (Create KPOINTS(Auto mesh))<br />
+7.&nbsp;<span style="font-size: 14px;">qvasp -dos<br />
+&nbsp; (For Density Of States calculation)<br />
+8.&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+<span style="font-size: 14px;">9.&nbsp;qvasp -dosd<br />
+&nbsp; (Deal DOS data from DOSCAR)<br />
+10.&nbsp;qvasp -ldos 1 2&nbsp; &nbsp;<br />
+&nbsp; (Get LDOS data from DOS1 DOS2.)</span><br />
+<br />
+Å† band&nbsp;(no check)<br />
+6. gedit KPOINTS<br />
+&nbsp; (write &quot;<span style="font-size: 14px;">Line-mode&quot; information)</span><br />
+7.&nbsp;<span style="font-size: 14px;">qvasp -bandd&nbsp;<br />
+&nbsp; (Deal Bands data from EIGENVAL)</span><br />
+8.&nbsp;<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+9.&nbsp;<span style="font-size: 14px;">qvasp -bandd<br />
+&nbsp; (Deal Bands data from EIGENVAL)</span><br />
+<br />
+Å†&nbsp;work function&nbsp;(no check)<br />
+5.&nbsp;qvasp -wk<br />
+&nbsp;&nbsp;(For Work Fuction calculation)<br />
+6.&nbsp;<span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+7.&nbsp;qvasp -wkd<br />
+&nbsp;&nbsp;(Get Work Function from LOCPOT)<br />
+<br />
+Å†&nbsp;Elastic Constants&nbsp;(no check)<br />
+5.&nbsp;<span style="font-size: 14px;">qvasp -elastic<br />
+&nbsp; (For Elastic Constants calculation)<br />
+6.&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+7.&nbsp;<span style="font-size: 14px;">qvasp -elasticd<br />
+&nbsp; (Read elastic constants)</span><br />
+<br />
+Å† Bader charge&nbsp;(no check)<br />
+5.&nbsp;<span style="font-size: 14px;">qvasp -bader<br />
+&nbsp; (For Bader Charge calculation)<br />
+6.&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">export OMP_NUM_THREADS=1<br />
+&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ÇlÇr ÉSÉVÉbÉN&quot;, &quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;, &quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;, Osaka?ìôïù, Osaka, ïΩê¨äpÉSÉVÉbÉN, sans-serif;">mpirun -np 4 ~/vasp.5.4.1/bin/vasp_std</span><br />
+<span style="font-size: 14px;">7.&nbsp;qvasp -baderd<br />
+&nbsp; (Obtian bader charge information)</span><br />
+&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† References</span></div>
+
+<div><span style="font-size: 14px;">[1] W. Yi et al., Comp. Phys. Comm. 5 (2020) 107535.</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; https://doi.org/10.1016/j.cpc.2020.107535</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; https://www.sciencedirect.com/science/article/pii/S001046552030254X</span></div>
+
+<div><span style="font-size: 14px;">[2] qavsp</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; https://sourceforge.net/projects/qvasp/</span></div>
+
+<div><span style="font-size: 14px;">[3] VTST Tools</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; http://theory.cm.utexas.edu/vtsttools/scripts.html</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">Å† Information (v.2.21)</span></div>
+
+<div><span style="font-size: 14px;">ÅERuning Environment (Linux x64 Bit), we have tested it on: (Platforms and Version)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Centos &gt; 6.0</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; RedHat &gt; 5.0</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Ubuntu &gt; 16.0 (need run &quot;sudu dpkg-reconfigure dash&quot; and choose &quot;No&quot;)&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Ferdora &gt; 15.0</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; SUSE &gt; 11</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; If you try to running on x32 Bit Linux system, Please try to run &quot;sh fix-program.sh&quot; to recompile *.f90 file</span></div>
+
+<div><span style="font-size: 14px;">We did not have tested it on Mac for no apple device.</span></div>
+
+<div><span style="font-size: 14px;">ÅEperl script (*.pl files)</span></div>
+
+<div><span style="font-size: 14px;">------------------------------------------------------------------------------</span></div>

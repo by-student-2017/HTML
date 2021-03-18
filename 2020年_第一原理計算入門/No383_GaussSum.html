@@ -1,0 +1,22 @@
+　ここでは、Gausssum のインストールや関連情報を記述していきます。<br />
+--------------------------------------------------------------------------------<br />
+GausssumのHPを見ればインストールのセットアップ方法が書かれているので、それに従ってインストールすればよい。（windows XP, VISTA 動作確認済み）（編集中）<br />
+<br />
+■ DOS<br />
+下記のHPにあるPhCCC_pop.out&nbsp;を見ると<br />
+&nbsp; <a href="http://gausssum.sourceforge.net/Example/index.html">http://gausssum.sourceforge.net/Example/index.html</a>&nbsp;<br />
+下記の箇所がある。<br />
+&nbsp;&nbsp;&nbsp; 60 basis functions,&nbsp;&nbsp; 180 primitive gaussians,&nbsp;&nbsp;&nbsp; 60 cartesian basis functions<br />
+&nbsp;&nbsp;&nbsp; 35 alpha electrons&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 35 beta electrons<br />
+<br />
+以下の箇所では軌道のエネルギーが記述されている。<br />
+Orbital energies and kinetic energies (alpha):<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1&nbsp; (BU)--O&nbsp;&nbsp;&nbsp;&nbsp; -10.02021&nbsp; 15.58257<br />
+右から二番目の列が軌道のエネルギーである。eV単位にすると、軌道のエネルギー = -10.02021 * 27.204 = -272.59&nbsp;eV となる。同じようにして、計算していくとHPにあるDOSの結果と一致していることが分かる。<br />
+<br />
+PhCCCの結果はalpha electrons について描写したものであることが分かる。また、緑や青の縦軸のバーは1であることから、絶対零度(0K)で一つの軌道に1つの電子が占有されていることが分かる。 描かれているDOSの縦軸はalpha電子についてのものであり、縦軸の単位は Density of state / eV / spin であることが分かる。<br />
+<br />
+References<br />
+[1] <a href="http://gausssum.sourceforge.net/">http://gausssum.sourceforge.net/</a> <br />
+--------------------------------------------------------------------------------

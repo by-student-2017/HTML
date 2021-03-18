@@ -1,0 +1,799 @@
+<p>------------------------------------------------------------------------------<br />
+■ XenonPy (version information)<br />
+(Attention!!!: Please be careful about various code versions as development continues. The developer's manuals and samples have also changed.)<br />
+(Edit: Feb/3/2021)<br />
+・ver.0.6.0<br />
+&nbsp; Maybe,&nbsp;python 3.7 and 3.8<br />
+・ver.0.5.0 recommend python 3.7,<br />
+&nbsp;&nbsp;Pytorch 1.7 or later,&nbsp;<br />
+&nbsp;&nbsp;rdkit&nbsp;2020.03 (2020.09 is No&nbsp;!),&nbsp;<br />
+&nbsp;&nbsp;scikit-learn 0.23&nbsp;or later.<br />
+&nbsp; bc=True: yeo-johnson transform (probably)<br />
+&nbsp; bc=False: min-max scale<br />
+・ver.0.4.4<br />
+&nbsp; bc=True: box-cox transform<br />
+&nbsp; bc=False: min-max scale<br />
+(Note:&nbsp;The developer is also suffering from the version relationship. Therefore, the developer describes how to prepare the environment with docker.)<br />
+------------------------------------------------------------------------------<br />
+■ google colaboratory<br />
+(Edit: Mar/11/2021)<br />
+(trial version)<br />
+<br />
+□ GPU setting<br />
+1. Runtime &gt; Change runtime type &gt; GPU<br />
+<br />
+□ Installation (for XenonPy ver.0.4.4)<br />
+#&nbsp;If this works, you can learn a lot about &quot;Xenon Py&quot;.<br />
+!git&nbsp;clone&nbsp;https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.4.4/samples<br />
+%run&nbsp;installation_044_v20210311.ipynb<br />
+<br />
+□ Installation (for XenonPY ver.0.5.0)<br />
+# This is probably a failure. &quot;Solving environment:&quot; does not end.&nbsp;<br />
+!git&nbsp;clone&nbsp;https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.5.0/samples<br />
+%run&nbsp;installation_050_v20210311.ipynb<br />
+<br />
+□ Usage<br />
+&nbsp; see below or <a href="https://xenonpy.readthedocs.io/en/stable/tutorial.html">Tutorial &mdash; xenonpy documentation</a><br />
+<br />
+□ Various library versions and environments have changed too much.<br />
+&nbsp; I've got tired. It's a surrender. I don't feel like testing because it's not my main business.&nbsp;I can't volunteer anymore.<br />
+------------------------------------------------------------------------------<br />
+■ XenonPy (ver.0.5.0) (python 3.6)<br />
+google colaboratory (Anaconda + GPU=Cuda 10.1)<br />
+(fix versions) (Edit: Jun/27/2021)<br />
+<br />
+□ GPU setting<br />
+1. Runtime &gt; Change runtime type &gt; GPU<br />
+<br />
+□ Installation<br />
+(<a href="https://github.com/by-student-2017/xenonpy-gcolab/blob/main/0.5.0/samples/installation.ipynb">https://github.com/by-student-2017/xenonpy-gcolab/blob/main/0.5.0/samples/installation.ipynb</a>)<br />
+◇ ----- step 1&nbsp;(Install scikit-learn) -----<br />
+!pip3&nbsp;install&nbsp;scikit-learn==0.23.2<br />
+import sklearn<br />
+print(sklearn.__version__)<br />
+◇ ----- step 2&nbsp;(Install Anaconda and set PATH) -----<br />
+!wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh<br />
+!bash Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local<br />
+import sys<br />
+sys.path.append('/usr/local/lib/python3.6/site-packages/')<br />
+◇ ----- step 3&nbsp;(Install RDKit) -----<br />
+!conda&nbsp;install&nbsp;-q&nbsp;-y&nbsp;-c&nbsp;rdkit&nbsp;rdkit=2020.3&nbsp;python=3.6<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+◇ ----- step 4&nbsp;(Install PyTorch) -----<br />
+!conda install --yes pytorch torchvision torchaudio cudatoolkit=10.1 -c pytorch<br />
+import torch<br />
+print(torch.__version__)<br />
+◇ ----- step 5&nbsp;(Install pymatgen) -----<br />
+!conda install --yes --channel conda-forge pymatgen=2020.10.20<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+◇ ----- step 6&nbsp;(Install XenonPy) -----<br />
+!wget&nbsp;https://raw.githubusercontent.com/by-student-2017/xenonpy-gcolab/main/0.5.0/conda_env/cuda101.yml<br />
+!conda create --yes -n xenonpy python=3.6<br />
+!conda env update -n xenonpy -f cuda101.yml<br />
+!source&nbsp;activate&nbsp;xenonpy<br />
+!pip3 install -U xenonpy==0.5.0<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+◇ ----- step 7&nbsp;(Install XenonPy samples) -----<br />
+!git clone https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.5.0/samples<br />
+!wget&nbsp;https://github.com/yoshida-lab/XenonPy/releases/download/v0.4.1/iQSPR_sample_data.csv<br />
+!ls<br />
+◇&nbsp;----- step 8&nbsp;(Install Gaussian process) -----<br />
+!pip3&nbsp;install GPy==1.9.9<br />
+◇&nbsp;----- step 9&nbsp;(Install OpenNMT-py) -----<br />
+!pip3 install OpenNMT-py==1.2.0<br />
+◇ ----- step 10&nbsp;(check libraries) -----<br />
+import sklearn<br />
+print(sklearn.__version__)<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+import torch<br />
+print(torch.__version__)<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+(※&nbsp;If you change the installation order, the specified version will not be included. Especially sklearn. )<br />
+<br />
+□ Memo (pytorch 1.7.0) (Edit: Mar/10/2021)<br />
+(<a href="https://pytorch.org/get-started/previous-versions/">https://pytorch.org/get-started/previous-versions/</a>)<br />
+・!conda install -y pytorch==1.7.0 torchvision==0.8.0 torchaudio==0.7.0 cudatoolkit=10.1 -c pytorch<br />
+<br />
+□&nbsp;Version information<br />
+----------<br />
+sklearn:&nbsp;0.23.2<br />
+RDKit:&nbsp;2020.03.3<br />
+PyTorch: 1.7.0+cu101<br />
+PyMatgen:&nbsp;2020.10.20<br />
+XenonPy:&nbsp;0.5.0<br />
+----------<br />
+<br />
+□ Material Project API<br />
+1.&nbsp;<a href="https://materialsproject.org/">Materials Project</a>&nbsp;&gt; [Sign In or Register]<br />
+2. Sign in with Google<br />
+3. Institution: individual<br />
+&nbsp; Affiliation: other<br />
+&nbsp; [check] This site is ...<br />
+&nbsp; Complete Registration<br />
+4. API &gt; API Keys (API key generated: ****************<code>)</code><br />
+<br />
+□ Usage<br />
+1. (see,&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+2. (copy &amp; paste command on&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+---------- Data access ----------<br />
+3. sample_data_building.ipynb<br />
+&nbsp; &gt; (write)&nbsp;api_key = '****************'&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&gt; (click) Run<br />
+4.&nbsp;dataset_and_preset.ipynb<br />
+----------&nbsp;Descriptor calculation ----------<br />
+5.&nbsp;custom_descriptor_calculator.ipynb<br />
+----------&nbsp;Visualization ----------<br />
+6.&nbsp;visualization.ipynb<br />
+&nbsp; (before you should do &quot;sample_data_building.ipynb&quot; and &quot;dataset_and_preset.ipynb&quot;)<br />
+-----(and I recommend &quot;bc=False&quot; in this case. In the case of bc=True, it's probably &quot;# use yeo-johonson transform &quot; instead of &quot;# use box-cox transform &quot;. )<br />
+7.&nbsp;random_nn_model_and_training.ipynb<br />
+8.&nbsp;pre-trained_model_library.ipynb<br />
+9. transfer_learning.ipynb<br />
+10. iQSPR.ipynb&nbsp;<br />
+※ Now, &quot;storage&quot; do not exist in code (obsolete storage).&nbsp; please, ignore &quot;storage.ipynb&quot;.<br />
+<br />
+□ Appendix: upload example files case<br />
+(<a href="https://github.com/yoshida-lab/XenonPy">GitHub - yoshida-lab/XenonPy: XenonPy is a Python Software for Materials Informatics</a>)<br />
+1. Code &gt; Download ZIP (on Windows)<br />
+2.&nbsp;from&nbsp;google.colab&nbsp;import&nbsp;files<br />
+&nbsp; uploaded&nbsp;=&nbsp;files.upload()<br />
+<br />
+※ Manual and changes<br />
+[M1] <a href="https://readthedocs.org/projects/xenonpy/downloads/pdf/latest/">https://readthedocs.org/projects/xenonpy/downloads/pdf/latest/</a><br />
+[M2] <a href="https://github.com/yoshida-lab/XenonPy/blob/master/docs/source/changes.rst">https://github.com/yoshida-lab/XenonPy/blob/master/docs/source/changes.rst</a><br />
+[P1] <a href="https://arxiv.org/pdf/2010.07683.pdf">https://arxiv.org/pdf/2010.07683.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ XenonPy (ver.0.4.4) (python3.6)<br />
+google colaboratory (Anaconda + GPU=Cuda 10.1)<br />
+(fix versions) (Edit: Jun/27/2021)<br />
+<br />
+□ GPU setting<br />
+1. Runtime &gt; Change runtime type &gt; GPU<br />
+<br />
+□ Installation<br />
+(<a href="https://github.com/by-student-2017/xenonpy-gcolab/blob/main/0.4.4/samples/installation.ipynb">https://github.com/by-student-2017/xenonpy-gcolab/blob/main/0.4.4/samples/installation.ipynb</a>)<br />
+◇ ----- step 1&nbsp;(Install Anaconda and Set PATH) -----<br />
+!wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh<br />
+!bash Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local<br />
+import sys<br />
+sys.path.append('/usr/local/lib/python3.6/site-packages/')<br />
+◇ ----- step 2 (Install RDKit) -----<br />
+!conda&nbsp;install&nbsp;-q&nbsp;-y&nbsp;-c&nbsp;rdkit&nbsp;rdkit=2020.3&nbsp;python=3.6<br />
+import&nbsp;rdkit<br />
+print(rdkit.__version__)<br />
+◇ ----- step 3&nbsp;(Install PyTorch) -----<br />
+!conda install --yes pytorch torchvision torchaudio cudatoolkit=10.1 -c pytorch<br />
+import torch<br />
+print(torch.__version__)<br />
+◇ ----- step 4&nbsp;(Install pymatgen) -----<br />
+!conda install --yes --channel conda-forge pymatgen=2020.10.20<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+◇ ----- step 5&nbsp;(Install XenonPy) -----<br />
+!wget&nbsp;https://raw.githubusercontent.com/by-student-2017/xenonpy-gcolab/main/0.4.4/conda_env/xepy36_cuda10.yml<br />
+!conda create --yes -n xenonpy python=3.6<br />
+!conda env update -n xenonpy -f&nbsp;xepy36_cuda10.yml<br />
+!source&nbsp;activate&nbsp;xenonpy<br />
+!pip3 install -U xenonpy==0.4.4<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+◇ ----- step 6&nbsp;(Install XenonPy samples) -----<br />
+!git clone&nbsp;https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.4.4/samples<br />
+!wget&nbsp;https://github.com/yoshida-lab/XenonPy/releases/download/v0.4.1/iQSPR_sample_data.csv<br />
+!ls<br />
+◇ ----- step 7&nbsp;(check libraries) -----<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+import torch<br />
+print(torch.__version__)<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+<br />
+□ <span class="VIiyi" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span class="JLqJ4b ChMk0b" data-language-for-alternatives="en" data-language-to-translate-into="ja" data-phrase-index="0" jsaction="agoMJf:PFBcW;usxOmf:aWLT7;jhKsnd:P7O7bd,F8DmGf;Q4AGo:Gm7gYd,qAKMYb;uFUCPb:pvnm0e,pfE8Hb,PFBcW;f56efd:dJXsye;EnoYf:KNzws,ZJsZZ,JgVSJc;zdMJQc:cCQNKb,ZJsZZ,zchEXc;Ytrrj:JJDvdc;tNR8yc:GeFvjb;oFN6Ye:hij5Wb" jscontroller="Zl5N8" jsdata="uqLsIf;_;$24" jsmodel="SsMkhd" jsname="txFAF"><span jsaction="click:qtZ4nf,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:qtZ4nf,c2aHje" jsname="W297wb">Version information</span></span></span><br />
+----------<br />
+sklearn:&nbsp;0.22.2.post1<br />
+RDKit:&nbsp;2020.03.3<br />
+PyTorch: 1.7.0+cu101<br />
+PyMatgen:&nbsp;2020.10.20<br />
+XenonPy:&nbsp;0.4.4<br />
+----------<br />
+<br />
+□ Material Project API<br />
+1.&nbsp;<a href="https://materialsproject.org/">Materials Project</a>&nbsp;&gt; [Sign In or Register]<br />
+2. Sign in with Google<br />
+3. Institution: individual<br />
+&nbsp; Affiliation: other<br />
+&nbsp; [check] This site is ...<br />
+&nbsp; Complete Registration<br />
+4. API &gt; API Keys (API key generated: ****************<code>)</code><br />
+<br />
+□ Usage<br />
+1. (see,&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+2. (copy &amp; paste command on&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+---------- Data access ----------<br />
+3. sample_data_building.ipynb<br />
+&nbsp; &gt; (write)&nbsp;api_key = '****************'&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&gt; (click) Run<br />
+4.&nbsp;dataset_and_preset.ipynb<br />
+----------&nbsp;Descriptor calculation ----------<br />
+5.&nbsp;custom_descriptor_calculator.ipynb<br />
+----------&nbsp;Visualization ----------<br />
+6.&nbsp;visualization.ipynb<br />
+&nbsp; (before you should do &quot;sample_data_building.ipynb&quot; and &quot;dataset_and_preset.ipynb&quot;)<br />
+7.&nbsp;random_nn_model_and_training.ipynb<br />
+8.&nbsp;pre-trained_model_library.ipynb<br />
+9. transfer_learning.ipynb<br />
+10. iQSPR.ipynb<br />
+※ Now, &quot;storage&quot; do not exist in code (obsolete storage).&nbsp; please, ignore &quot;storage.ipynb&quot;.<br />
+<br />
+□ Appendix: upload example files case<br />
+(<a href="https://github.com/yoshida-lab/XenonPy">GitHub - yoshida-lab/XenonPy: XenonPy is a Python Software for Materials Informatics</a>)<br />
+1. Code &gt; Download ZIP (on Windows)<br />
+2.&nbsp;from&nbsp;google.colab&nbsp;import&nbsp;files<br />
+&nbsp; uploaded&nbsp;=&nbsp;files.upload()<br />
+------------------------------------------------------------------------------<br />
+■ XenonPy (ver.0.5.0) (python3.6)<br />
+google colaboratory (Anaconda + CPU)<br />
+(Edit: Jun/26/2021)<br />
+<br />
+□ CPU setting<br />
+1. Runtime &gt; Change runtime type &gt; None<br />
+<br />
+□ Installation<br />
+◇ ----- step 1&nbsp;(Install scikit-learn) -----<br />
+!pip3&nbsp;install&nbsp;scikit-learn==0.23.2<br />
+import sklearn<br />
+print(sklearn.__version__)<br />
+◇ ----- step 2&nbsp;(Install Anaconda and set PATH) -----<br />
+!wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh<br />
+!bash Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local<br />
+import sys<br />
+sys.path.append('/usr/local/lib/python3.6/site-packages/')<br />
+◇ ----- step 3&nbsp;(Install RDKit) -----<br />
+!conda&nbsp;install&nbsp;-q&nbsp;-y&nbsp;-c&nbsp;rdkit&nbsp;rdkit=2020.3&nbsp;python=3.6<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+◇ ----- step 4&nbsp;(Install PyTorch) -----<br />
+!conda install --yes pytorch torchvision torchaudio cpuonly -c pytorch<br />
+import torch<br />
+print(torch.__version__)<br />
+◇ ----- step 5&nbsp;(Install pymatgen) -----<br />
+!conda install --yes --channel conda-forge pymatgen=2020.10.20<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+◇ ----- step 6&nbsp;(Install XenonPy) -----<br />
+!wget&nbsp;https://raw.githubusercontent.com/by-student-2017/xenonpy-gcolab/main/0.5.0/conda_env/cpu.yml<br />
+!conda create --yes -n xenonpy python=3.6<br />
+!conda env update -n xenonpy -f cpu.yml<br />
+!source&nbsp;activate&nbsp;xenonpy<br />
+!pip3 install -U xenonpy==0.5.0<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+◇ ----- step 7&nbsp;(Install XenonPy samples) -----<br />
+!git clone https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.5.0/samples<br />
+!wget&nbsp;https://github.com/yoshida-lab/XenonPy/releases/download/v0.4.1/iQSPR_sample_data.csv<br />
+!ls<br />
+◇&nbsp;----- step 8&nbsp;(Install Gaussian process) -----<br />
+!pip3 install GPy==1.9.9<br />
+◇&nbsp;----- step 9&nbsp;(Install OpenNMT-py) -----<br />
+!pip3 install OpenNMT-py==1.2.0<br />
+◇ ----- step 10&nbsp;(check libraries) -----<br />
+import sklearn<br />
+print(sklearn.__version__)<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+import torch<br />
+print(torch.__version__)<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+(※&nbsp;If you change the installation order, the specified version will not be included. Especially sklearn. )<br />
+<br />
+□ <span class="VIiyi" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span class="JLqJ4b ChMk0b" data-language-for-alternatives="en" data-language-to-translate-into="ja" data-phrase-index="0" jsaction="agoMJf:PFBcW;usxOmf:aWLT7;jhKsnd:P7O7bd,F8DmGf;Q4AGo:Gm7gYd,qAKMYb;uFUCPb:pvnm0e,pfE8Hb,PFBcW;f56efd:dJXsye;EnoYf:KNzws,ZJsZZ,JgVSJc;zdMJQc:cCQNKb,ZJsZZ,zchEXc;Ytrrj:JJDvdc;tNR8yc:GeFvjb;oFN6Ye:hij5Wb" jscontroller="Zl5N8" jsdata="uqLsIf;_;$24" jsmodel="SsMkhd" jsname="txFAF"><span jsaction="click:qtZ4nf,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:qtZ4nf,c2aHje" jsname="W297wb">Version information</span></span></span><br />
+----------<br />
+sklearn:&nbsp;0.23.2<br />
+RDKit:&nbsp;2020.03.3<br />
+PyTorch: 1.7.0+cu101<br />
+PyMatgen:&nbsp;2020.10.20<br />
+XenonPy:&nbsp;0.5.0<br />
+----------<br />
+<br />
+□ Material Project API<br />
+1.&nbsp;<a href="https://materialsproject.org/">Materials Project</a>&nbsp;&gt; [Sign In or Register]<br />
+2. Sign in with Google<br />
+3. Institution: individual<br />
+&nbsp; Affiliation: other<br />
+&nbsp; [check] This site is ...<br />
+&nbsp; Complete Registration<br />
+4. API &gt; API Keys (API key generated: ****************<code>)</code><br />
+<br />
+□ Usage<br />
+1. (see,&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+2. (copy &amp; paste command on&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+---------- Data access ----------<br />
+3. sample_data_building.ipynb<br />
+&nbsp; &gt; (write)&nbsp;api_key = '****************'&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&gt; (click) Run<br />
+4.&nbsp;dataset_and_preset.ipynb<br />
+----------&nbsp;Descriptor calculation ----------<br />
+5.&nbsp;custom_descriptor_calculator.ipynb<br />
+----------&nbsp;Visualization ----------<br />
+6.&nbsp;visualization.ipynb<br />
+&nbsp; (before you should do &quot;sample_data_building.ipynb&quot; and &quot;dataset_and_preset.ipynb&quot;)<br />
+-----(and I recommend &quot;bc=False&quot; in this case. In the case of bc=True, it's probably &quot;# use yeo-johonson transform &quot; instead of &quot;# use box-cox transform &quot;. )<br />
+7.&nbsp;random_nn_model_and_training.ipynb<br />
+8.&nbsp;pre-trained_model_library.ipynb<br />
+9. transfer_learning.ipynb<br />
+10. iQSPR.ipynb&nbsp;<br />
+※ Now, &quot;storage&quot; do not exist in code (obsolete storage).&nbsp; please, ignore &quot;storage.ipynb&quot;.<br />
+<br />
+□ Appendix: upload example files case<br />
+(<a href="https://github.com/yoshida-lab/XenonPy">GitHub - yoshida-lab/XenonPy: XenonPy is a Python Software for Materials Informatics</a>)<br />
+1. Code &gt; Download ZIP (on Windows)<br />
+2.&nbsp;from&nbsp;google.colab&nbsp;import&nbsp;files<br />
+&nbsp; uploaded&nbsp;=&nbsp;files.upload()<br />
+------------------------------------------------------------------------------<br />
+■ XenonPy (ver.0.4.4) (python3.6)<br />
+google colaboratory (Anaconda + CPU)<br />
+(fix versions) (Edit: Jun/27/2021)<br />
+<br />
+□ CPU setting<br />
+1. Runtime &gt; Change runtime type &gt; None<br />
+<br />
+□ Installation<br />
+◇ ----- step 1&nbsp;(Install Anaconda and Set PATH) -----<br />
+!wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh<br />
+!bash Miniconda3-latest-Linux-x86_64.sh -b -f -p /usr/local<br />
+import sys<br />
+sys.path.append('/usr/local/lib/python3.6/site-packages/')<br />
+◇ ----- step 2 (Install RDKit) -----<br />
+!conda&nbsp;install&nbsp;-q&nbsp;-y&nbsp;-c&nbsp;rdkit&nbsp;rdkit=2020.3&nbsp;python=3.6<br />
+import&nbsp;rdkit<br />
+print(rdkit.__version__)<br />
+◇ ----- step 3&nbsp;(Install PyTorch) -----<br />
+!conda install --yes pytorch torchvision torchaudio cudatoolkit=10.1 -c pytorch<br />
+import torch<br />
+print(torch.__version__)<br />
+◇ ----- step 4&nbsp;(Install pymatgen) -----<br />
+!conda install --yes --channel conda-forge pymatgen=2020.10.20<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+◇ ----- step 5&nbsp;(Install XenonPy) -----<br />
+!wget&nbsp;https://raw.githubusercontent.com/by-student-2017/xenonpy-gcolab/main/0.4.4/conda_env/xepy36_cpu.yml<br />
+!conda create --yes -n xenonpy python=3.6<br />
+!conda env update -n xenonpy -f&nbsp;xepy36_cpu.yml<br />
+!source&nbsp;activate&nbsp;xenonpy<br />
+!pip3 install -U xenonpy==0.4.4<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+◇ ----- step 6&nbsp;(Install XenonPy samples) -----<br />
+!git clone&nbsp;https://github.com/by-student-2017/xenonpy-gcolab.git<br />
+%cd&nbsp;xenonpy-gcolab/0.4.4/samples<br />
+!wget&nbsp;https://github.com/yoshida-lab/XenonPy/releases/download/v0.4.1/iQSPR_sample_data.csv<br />
+!ls<br />
+◇ ----- step 7&nbsp;(check libraries) -----<br />
+import rdkit<br />
+print(rdkit.__version__)<br />
+import torch<br />
+print(torch.__version__)<br />
+import pymatgen<br />
+print(pymatgen.__version__)<br />
+import xenonpy<br />
+print(xenonpy.__version__)<br />
+<br />
+□ <span class="VIiyi" jsaction="mouseup:BR6jm" jsname="jqKxS" lang="en"><span class="JLqJ4b ChMk0b" data-language-for-alternatives="en" data-language-to-translate-into="ja" data-phrase-index="0" jsaction="agoMJf:PFBcW;usxOmf:aWLT7;jhKsnd:P7O7bd,F8DmGf;Q4AGo:Gm7gYd,qAKMYb;uFUCPb:pvnm0e,pfE8Hb,PFBcW;f56efd:dJXsye;EnoYf:KNzws,ZJsZZ,JgVSJc;zdMJQc:cCQNKb,ZJsZZ,zchEXc;Ytrrj:JJDvdc;tNR8yc:GeFvjb;oFN6Ye:hij5Wb" jscontroller="Zl5N8" jsdata="uqLsIf;_;$24" jsmodel="SsMkhd" jsname="txFAF"><span jsaction="click:qtZ4nf,GFf3ac,tMZCfe; contextmenu:Nqw7Te,QP7LD; mouseout:Nqw7Te; mouseover:qtZ4nf,c2aHje" jsname="W297wb">Version information</span></span></span><br />
+----------<br />
+sklearn:&nbsp;0.22.2.post1<br />
+RDKit:&nbsp;2020.03.3<br />
+PyTorch: 1.7.0+cu101<br />
+PyMatgen:&nbsp;2020.10.20<br />
+XenonPy:&nbsp;0.4.4<br />
+----------<br />
+<br />
+□ Material Project API<br />
+1.&nbsp;<a href="https://materialsproject.org/">Materials Project</a>&nbsp;&gt; [Sign In or Register]<br />
+2. Sign in with Google<br />
+3. Institution: individual<br />
+&nbsp; Affiliation: other<br />
+&nbsp; [check] This site is ...<br />
+&nbsp; Complete Registration<br />
+4. API &gt; API Keys (API key generated: ****************<code>)</code><br />
+<br />
+□ Usage<br />
+1. (see,&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+2. (copy &amp; paste command on&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorial.html">Tutorial &mdash; xenonpy documentation</a>&nbsp;and&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy (github.com)</a>)<br />
+---------- Data access ----------<br />
+3. sample_data_building.ipynb<br />
+&nbsp; &gt; (write)&nbsp;api_key = '****************'&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&gt; (click) Run<br />
+4.&nbsp;dataset_and_preset.ipynb<br />
+----------&nbsp;Descriptor calculation ----------<br />
+5.&nbsp;custom_descriptor_calculator.ipynb<br />
+----------&nbsp;Visualization ----------<br />
+6.&nbsp;visualization.ipynb<br />
+&nbsp; (before you should do &quot;sample_data_building.ipynb&quot; and &quot;dataset_and_preset.ipynb&quot;)<br />
+7.&nbsp;random_nn_model_and_training.ipynb<br />
+8.&nbsp;pre-trained_model_library.ipynb<br />
+9. transfer_learning.ipynb<br />
+10. iQSPR.ipynb<br />
+※ Now, &quot;storage&quot; do not exist in code (obsolete storage).&nbsp; please, ignore &quot;storage.ipynb&quot;.<br />
+<br />
+□ Appendix: upload example files case<br />
+(<a href="https://github.com/yoshida-lab/XenonPy">GitHub - yoshida-lab/XenonPy: XenonPy is a Python Software for Materials Informatics</a>)<br />
+1. Code &gt; Download ZIP (on Windows)<br />
+2.&nbsp;from&nbsp;google.colab&nbsp;import&nbsp;files<br />
+&nbsp; uploaded&nbsp;=&nbsp;files.upload()<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Types of Fingerprint&nbsp;used on&nbsp;XenonPy.<br />
+(Edit: Jun/27/2021)<br />
+<br />
+・ver.0.5.0<br />
+&nbsp; Fingerprint (FP):&nbsp;PatternFP, LayeredFP, MHFP and (Fingerprint of ver.0.4.4)<br />
+・ver.0.4.4<br />
+&nbsp; Fingerprint (FP): RDKitFP, AtomPairFP, TopologicalTorsionFP, MACCS, FCFP, ECFP and&nbsp;DescriptorFeature<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;Types of Sequential Monte Carlo (SMC)&nbsp;used on&nbsp;XenonPy.<br />
+(Edit: Jun/27/2021)<br />
+<br />
+・ver.0.5.0<br />
+&nbsp;&nbsp;Sequential Monte Carlo (SMC): IQSPR, IQSPR4DF<br />
+・ver.0.4.4<br />
+&nbsp; Sequential Monte Carlo (SMC): IQSPR<br />
+------------------------------------------------------------------------------<br />
+■ Coding [21]<br />
+(Edit: Jun/27/2021)<br />
+<br />
+◇ fundamental minimal structure<br />
+--------------------<br />
+class class_name(BaseXXX):<br />
+&nbsp; def __init__(self, yyy):<br />
+&nbsp; &nbsp; super().__init__(zzz)<br />
+&nbsp; &nbsp; &nbsp; self.aaa&nbsp;= bbb(ccc)<br />
+&nbsp; &nbsp; &nbsp; self.ddd&nbsp;= ['eee','fff']<br />
+<br />
+&nbsp; def featurize(self, x, ggg):<br />
+&nbsp; &nbsp; tmp&nbsp;= self.aaa.transform(x)<br />
+&nbsp; &nbsp; output = self.hhh(tmp)<br />
+&nbsp; &nbsp; return self.scaler.inverse_transform(output)<br />
+<br />
+&nbsp; @jjj<br />
+&nbsp; def feature_labels(self):<br />
+&nbsp; &nbsp; return self.ccc<br />
+--------------------<br />
+◇ Note (for exmaple,)<br />
+・dd&nbsp;= transform(data['SMILES']): transform input (SMILES) to descriptor dataframe.<br />
+・inverse_transform(dd): transform descriptor dataframe to input (SMILES).<br />
+<br />
+◇ Basic components<br />
+・converter (descriptor)<br />
+&nbsp;&nbsp;input (S) -&gt; property (Y)<br />
+&nbsp; library (S) -&gt; property (Y)&nbsp;<br />
+・generator (modifier) = P(S|Y)<br />
+&nbsp;&nbsp;property (Y) -&gt; input (S)<br />
+・evaluator (property)<br />
+◇ Note (for example,)<br />
+・S = Structure (fingerprint).<br />
+<br />
+◇ Inverse design<br />
+・Generator (Modifier) &lt;--&gt; Likelihood (Descriptor, Estimator)<br />
+<br />
+◇ coding rules (more detail)<br />
+(If anything, the design mainly uses scikit-learn.)<br />
+・BaseFeaturizer<br />
+&nbsp;&nbsp;(BaseCompositionFeaturizer, CrystalGrraphFeaturizer, FrozenFeaturizer, RDKitFP, MACCS, etc)<br />
+&nbsp; Input: list-like(=list,numpy.array, pandas.series)/pandas.DataFrame<br />
+&nbsp; Output: numpy.array/pandas.DataFrame/custom<br />
+&nbsp; Necessary coding: def @jjj (featurize and fature_labels)<br />
+&nbsp; &nbsp; to use default parallelization setup. write featurize as a single input to list-like output descriptor calculator.<br />
+&nbsp; &nbsp; to use custom parallelization, implement it in featurize and fix n_jobs=0 in __init__<br />
+&nbsp; &nbsp; feature_labels should return list of strings.<br />
+・BaseLogLikelihood<br />
+&nbsp; (GaussianLogLikelihood)<br />
+&nbsp; Input: custom (recommend pandas.DataFrame -&gt; matching BaseFeaturizer)<br />
+&nbsp; Output: pandas.DataFrame<br />
+&nbsp; Necessary coding: def log_likelihood()<br />
+&nbsp; &nbsp; optional input targets is for defining desing target.<br />
+&nbsp; &nbsp; column names of outputs are target propoerties.<br />
+&nbsp; Optional coding: def fit()<br />
+&nbsp; &nbsp; this function is for any kind of model training involved in the log_likelihood<br />
+・BaseDescriptor/BaseLogLikelihoodSet<br />
+&nbsp; (Fingerprints, Compositons, Structures)<br />
+&nbsp; Input: same as corresponding BaseClass/pandas.DataFrame<br />
+&nbsp; Output: same as corresponding BaseClass<br />
+&nbsp; Necessary coding:&nbsp;class class_name(BaseXXX):<br />
+・BaseProposal<br />
+&nbsp; (NGram, ReactantPool)<br />
+&nbsp; Input: list-like(=list,numpy.array, pandas.series)/pandas.DataFrame<br />
+&nbsp; Output: same as input<br />
+&nbsp; Necessary coding: def proposal<br />
+&nbsp; &nbsp; produce new candidastes (with or without input candidates)<br />
+&nbsp; &nbsp; input/output type should be designed to match with descriptors for the problem of interest.<br />
+&nbsp; Optional coding: def fit()<br />
+&nbsp; &nbsp; this function is for any kind of model training involved in the proposal<br />
+・BaseSMC<br />
+&nbsp; (IQSPR, IQSPR4DF, BaseResample)<br />
+&nbsp; Input: match with BaseProposal<br />
+&nbsp; Output: same as input + (options)<br />
+&nbsp; Necessary coding: def unique and resample<br />
+&nbsp; &nbsp; use of this basee class is only intended for more advance users with special needs.<br />
+&nbsp; Optional coding: def __call__<br />
+&nbsp; &nbsp; changing this function is not recommended except for more advance users with special needs.<br />
+<br />
+□ Structure<br />
+◇ Descriptor<br />
+・BaseFeaturizer<br />
+&nbsp; BaseCompositionFeaturizer<br />
+&nbsp; CrystalGraphFeaturizer<br />
+&nbsp; FrozenFeaturizer<br />
+&nbsp; RDKitFP, MACCS, ECFP, etc<br />
+・BaseDescriptor<br />
+&nbsp; Fingerprints<br />
+&nbsp; Compositions<br />
+&nbsp; Structures<br />
+◇ Estimator<br />
+・BaseLogLikelihood<br />
+&nbsp; GaussainLogLikelihood<br />
+・BaseLogLikelihoodSet<br />
+◇ Modifier<br />
+・BaseProposal<br />
+&nbsp; NGram<br />
+&nbsp; ReactantPool<br />
+◇ SMC<br />
+・BaseSMC<br />
+&nbsp; IQSPR<br />
+&nbsp; IQSPR4DF<br />
+・BaseResample<br />
+◇ Model<br />
+・BaseQuery<br />
+&nbsp; QueryModelDetailesWith<br />
+&nbsp; QueryMethodsWith<br />
+・MDL<br />
+◇ Other tools<br />
+・BaseRunner<br />
+&nbsp; Trainer<br />
+・Dataset<br />
+&nbsp; Preset<br />
+・(other)<br />
+&nbsp; Splitter<br />
+&nbsp; DescriptorHeatmap<br />
+&nbsp; Checker<br />
+&nbsp; LoadReactor<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;How to contribute<br />
+(Edit: Jun/27/2021)<br />
+<br />
+1. *.ipynb<br />
+2.&nbsp;Github (Fork) + VSCode &gt; Github (pull requests &gt; New pull request)<br />
+&nbsp; Fork:&nbsp;<a href="https://github.com/yoshida-lab/XenonPy">https://github.com/yoshida-lab/XenonPy</a><br />
+&nbsp; pull requests:&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/pulls">https://github.com/yoshida-lab/XenonPy/pulls</a>&nbsp;&gt; [New pull request]<br />
+------------------------------------------------------------------------------<br />
+■ Refrences<br />
+<br />
+[1]&nbsp;<a href="https://github.com/yoshida-lab/XenonPy">GitHub - yoshida-lab/XenonPy: XenonPy is a Python Software for Materials Informatics</a><br />
+[2]&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/">What is XenonPy project &mdash; xenonpy documentation</a><br />
+[3]&nbsp;<a href="https://github.com/yoshida-lab/XenonPy/tree/master/samples">XenonPy/samples at master &middot; yoshida-lab/XenonPy &middot; GitHub</a><br />
+[4]&nbsp;<a href="https://www.youtube.com/watch?v=wNU8QawIcG0&amp;feature=emb_logo">組成式から記述子を計算してみよう！ XenonPy簡易マニュアルとMIへの適用例 - YouTube</a><br />
+[5]&nbsp;物性予測訓練済みモデルライブラリXenonPy.MDL<br />
+&nbsp;&nbsp;<a href="https://xenonpy.readthedocs.io/en/latest/tutorials/5-pre-trained_model_library.html">Pre-trained Model Library &mdash; xenonpy documentation</a><br />
+[6]&nbsp;XenonPy：材料設計を加速する機械学習プラットフォーム<br />
+&nbsp;&nbsp;<a href="https://elements-strategy.jp/pdf/04-P56.pdf">04-P56.pdf (elements-strategy.jp)</a><br />
+[7]&nbsp;<a href="https://qiita.com/tamata78/items/00b47faa84a2c0180cb3">WSLでdocker-ceを動作させる手順 - Qiita</a><br />
+&nbsp;&nbsp;<a href="https://qiita.com/sugimount/items/b6277ca4a97b4a05ac11">WSLでDockerを動かす - Qiita</a><br />
+[8] Docker is not running on Colab<br />
+&nbsp;&nbsp;<a href="https://stackoverflow.com/questions/60235353/docker-is-not-running-on-colab">https://stackoverflow.com/questions/60235353/docker-is-not-running-on-colab</a><br />
+[9]&nbsp;<a href="https://www.digitalocean.com/community/tutorials/how-to-install-anaconda-on-ubuntu-18-04-quickstart">How To Install Anaconda on Ubuntu 18.04 [Quickstart] | DigitalOcean</a><br />
+[10]&nbsp;<a href="https://github.com/rdkit/rdkit/tags">Tags &middot; rdkit/rdkit &middot; GitHub</a><br />
+[11]&nbsp;<a href="https://qiita.com/kimisyo/items/5a651eb84c5111ab5bdc">RDKitをWindows環境でビルドする - Qiita</a><br />
+[12]&nbsp;<a href="https://future-chem.com/rdkit-google-colab/#RDKitimport">Google ColabでRDKit：ケモインフォマティクス用のpython環境を手軽に構築 | 化学の新しいカタチ (future-chem.com)</a><br />
+[13]&nbsp;Google Colaboratoryの準備<br />
+&nbsp;&nbsp;<a href="http://y373.sakura.ne.jp/minami/wp-content/uploads/2019/04/pyctrl_googleclab.pdf">http://y373.sakura.ne.jp/minami/wp-content/uploads/2019/04/pyctrl_googleclab.pdf</a><br />
+[14]&nbsp;<a href="https://www.codexa.net/how-to-use-google-colaboratory/">Google Colabの知っておくべき使い方 &ndash; Google Colaboratoryのメリット・デメリットや基本操作のまとめ (codexa.net)</a><br />
+[15]&nbsp;<a href="https://qiita.com/shoyaokayama/items/8869b7dda6deff017046">[完全自動接続]Colaboratoryファイルのみで90分・12時間問題を解決した[Selenium使用] - Qiita</a><br />
+[16]&nbsp;<a href="http://starrydata.hatenadiary.jp/entry/2017/09/06/180838">Materials ProjectのAPIの使い方（基本） - TEdb project on Starrydata (hatenadiary.jp)</a><br />
+[17]&nbsp;<a href="https://ma.issp.u-tokyo.ac.jp/app-post/2331">pymatgenを使ったMaterials Projectのデータ収集 | MateriApps(マテリアップス) 計算物質科学の研究者、理論家、実験家・企業研究者、計算機科学者のための物質科学シミュレーションのポータルサイト (u-tokyo.ac.jp)</a><br />
+[18]&nbsp;<a href="https://qiita.com/VDiUZnM1hUIzKvb/items/4d18ca1d781ed6ff2b2f">[python]「AttributeError: module(object) &lsquo;xxx&rsquo; has no attribute &lsquo;yyy&rsquo;」が起きたときの対処法5選 - Qiita</a><br />
+[19] anaconda環境下でのXenonPyのインストールが上手くいきません<br />
+&nbsp; <a href="https://teratail.com/questions/313168">https://teratail.com/questions/313168</a><br />
+[20]&nbsp;<a href="https://ma.issp.u-tokyo.ac.jp/app-post/2351">XenonPyまでの長く曲がりくねった道 | MateriApps(マテリアップス) 計算物質科学の研究者、理論家、実験家・企業研究者、計算機科学者のための物質科学シミュレーションのポータルサイト (u-tokyo.ac.jp)</a><br />
+[21] XenonPy seminar (2021)<br />
+------------------------------------------------------------------------------<br />
+■ Docker<br />
+(Edit: Jun/21/2021)<br />
+(Ubuntu 18.04 LTS on windows10)<br />
+(under constrcting)<br />
+<br />
+□ Install library<br />
+1.&nbsp;sudo apt-get update<br />
+2.&nbsp;sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common<br />
+3.&nbsp;curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -<br />
+4.&nbsp;sudo apt-key fingerprint 0EBFCD88<br />
+----------(you can see)<br />
+pub &nbsp; rsa4096 2017-02-22 [SCEA]<br />
+&nbsp; &nbsp; &nbsp; 9DC8 5822 9FC7 DD38 854A &nbsp;E2D8 8D81 803C 0EBF CD88<br />
+uid &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [ unknown] Docker Release (CE deb) &lt;docker@docker.com&gt;<br />
+sub &nbsp; rsa4096 2017-02-22 [S]<br />
+----------<br />
+<br />
+□ Install Docker Engine<br />
+1. sudo apt remove docker.io<br />
+2. sudo apt -y install docker.io=17.12.1-0ubuntu1<br />
+<br />
+◇ Run XenonPy<br />
+(Open ubuntu with administrator privileges !)<br />
+1. sudo service docker start<br />
+2. sudo docker run --rm -it --ipc=host --publish=&quot;8888:8888&quot; --volume=$HOME/.xenonpy:/home/user/.xenonpy --volume=$Home/workspace:$Home/workspace -e NVIDIA_VISIBLE_DEVICES=0 yoshidalab/xenonpy:cpu<br />
+<br />
+※ Check docker<br />
+(Open ubuntu with administrator privileges !)<br />
+1. sudo service docker start<br />
+(1.5. sudo service docker status)<br />
+2. sudo docker run hello-world<br />
+<br />
+※ Get images<br />
+(Open ubuntu with administrator privileges !)<br />
+1. sudo service docker start<br />
+2. docker pull yoshidalab/xenonpy:cpu<br />
+------------------------------------------------------------------------------<br />
+□ Installation&nbsp;(Ubuntu 18.04 LTS on windows10)<br />
+(failed, because versions do not match)<br />
+(Edit: Jun/21/2021)<br />
+<br />
+□ Install RDKit (<a href="https://github.com/rdkit/rdkit/tags">Tags &middot; rdkit/rdkit &middot; GitHub</a>)<br />
+1. sudo apt update<br />
+2. sudo apt -y install gcc python3-pip cmake python3 libboost-dev libboost-all-dev&nbsp;python3-numpy<br />
+3. wget https://github.com/rdkit/rdkit/archive/Release_2018_09_2.tar.gz<br />
+4. tar zxvf&nbsp;Release_2018_09_2.tar.gz<br />
+5. cd rdkit-Release_2018_09_2<br />
+6. mkdir build<br />
+7. cd build<br />
+8. cmake ..<br />
+9. make<br />
+10. sudo make install<br />
+11.&nbsp;export RDBASE=$HOME/rdkit-Release_2018_09_2<br />
+&nbsp;&nbsp;export PYTHONPATH=$PYTHONPATH:$HOME/rdkit-Release_2018_09_2<br />
+&nbsp;&nbsp;export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/rdkit-Release_2018_09_2/lib<br />
+<br />
+□ Install pytorch and pymatgen<br />
+1. sudo apt update<br />
+2. sudo apt -y install gcc python3-pip<br />
+3.&nbsp;pip3 install torch==1.7.1+cpu torchvision==0.8.2+cpu torchaudio==0.7.2 -f https://download.pytorch.org/whl/torch_stable.html<br />
+4. pip3 install pymatgen<br />
+<br />
+□ Install XenonPy<br />
+1. sudo apt update<br />
+2. sudo apt -y install git<br />
+3.&nbsp;pip3 install Cython==0.28.5<br />
+4.&nbsp;git clone https://github.com/yoshida-lab/XenonPy.git<br />
+5. cd XenonPy<br />
+6. sudo python3 setup.py install<br />
+7.&nbsp;pip3 install -U xenonpy<br />
+<br />
+□ Install Jupyter<br />
+1.&nbsp;sudo -H apt -y install jupyter-notebook<br />
+<br />
+◇ Usage<br />
+1.&nbsp;cd ~/XenonPy/samples<br />
+export RDBASE=$HOME/rdkit-Release_2018_09_2<br />
+export PYTHONPATH=$PYTHONPATH:$HOME/rdkit-Release_2018_09_2<br />
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$HOME/rdkit-Release_2018_09_2/lib<br />
+2.&nbsp;jupyter notebook<br />
+---------- Data access ----------<br />
+3. (click)&nbsp;sample_data_building.ipynb<br />
+&nbsp; &gt; (write)&nbsp;api_key = '****************'&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&gt; (click) Run<br />
+4.&nbsp;dataset_and_preset.ipynb<br />
+-----(before)<br />
+from xenonpy.datatools import preset<br />
+<br />
+preset.elements.head(5)<br />
+-----<br />
+-----(after)<br />
+from xenonpy.datatools import preset<br />
+preset.sync('elements')<br />
+preset.sync('elements_completed')<br />
+-----<br />
+5.&nbsp;storage.ipynb<br />
+----------&nbsp;Descriptor calculation ----------<br />
+6.&nbsp;custom_descriptor_calculator.ipynb<br />
+----------&nbsp;Visualization ----------<br />
+7.&nbsp;visualization.ipynb<br />
+???<br />
+□ Appendix: Material Project API<br />
+1.&nbsp;<a href="https://materialsproject.org/">Materials Project</a>&nbsp;&gt; [Sign In or Register]<br />
+2. Sign in with Github<br />
+3. Authorize materialproject<br />
+4. API &gt; API Keys (API key generated: ****************<code>)</code><br />
+------------------------------------------------------------------------------<br />
+□ Install Docker Engine on Ubuntu 18.04 LTS (on Windows10) (failed)<br />
+(Open ubuntu with administrator privileges !)<br />
+0.&nbsp;sudo apt-get remove docker docker-engine docker.io containerd runc<br />
+1.&nbsp;sudo apt-get update<br />
+2.&nbsp;sudo apt-get -y install apt-transport-https ca-certificates curl gnupg-agent software-properties-common<br />
+3.&nbsp;curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -<br />
+4.&nbsp;sudo apt-key fingerprint 0EBFCD88<br />
+----------(you can see)<br />
+pub &nbsp; rsa4096 2017-02-22 [SCEA]<br />
+&nbsp; &nbsp; &nbsp; 9DC8 5822 9FC7 DD38 854A &nbsp;E2D8 8D81 803C 0EBF CD88<br />
+uid &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [ unknown] Docker Release (CE deb) &lt;docker@docker.com&gt;<br />
+sub &nbsp; rsa4096 2017-02-22 [S]<br />
+----------<br />
+5.&nbsp;sudo add-apt-repository &quot;deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable&quot;<br />
+----------(you can see &quot;ubuntu bionic&quot;, which is the name of your Ubuntu distribution)<br />
+6. sudo apt-get update<br />
+----------[Easy method]<br />
+7.&nbsp;sudo apt-get -y install docker-ce docker-ce-cli containerd.io<br />
+----------[If you select version (e.g., 20.10.2~3-0~ubuntu-bionic)]<br />
+7.&nbsp;apt-cache madison docker-ce<br />
+8.&nbsp;sudo apt-get -y install docker-ce=20.10.2~3-0~ubuntu-bionic docker-ce-cli=20.10.2~3-0~ubuntu-bionic containerd.io<br />
+----------[Other method]<br />
+7. wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce_20.10.2~3-0~ubuntu-bionic_amd64.deb<br />
+8.&nbsp;wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/docker-ce-cli_20.10.2~3-0~ubuntu-bionic_amd64.deb<br />
+9.&nbsp;wget https://download.docker.com/linux/ubuntu/dists/bionic/pool/stable/amd64/containerd.io_1.4.3-1_amd64.deb<br />
+10.&nbsp;sudo dpkg -i docker-ce_20.10.2~3-0~ubuntu-bionic_amd64.deb<br />
+11.&nbsp;sudo dpkg -i docker-ce-cli_20.10.2~3-0~ubuntu-bionic_amd64.deb<br />
+12.&nbsp;sudo dpkg -i containerd.io_1.4.3-1_amd64.deb<br />
+----------<br />
+◇ help<br />
+1.&nbsp;docker run --help<br />
+◇ test<br />
+1.&nbsp;sudo cgroupfs-mount<br />
+2. sudo usermod -aG docker $USER<br />
+3.&nbsp;sudo service docker start<br />
+4.&nbsp;sudo docker run hello-world<br />
+------------------------------------------------------------------------------<br />
+□ Install Docker Engine on Ubuntu 18.04 LTS (on Windows10)<br />
+(Open ubuntu with administrator privileges !)<br />
+1. sudo apt remove docker.io<br />
+2. sudo apt -y install docker.io=17.12.1-0ubuntu1<br />
+3. sudo cgroupfs-mount<br />
+4. sudo usermod -aG docker $USER<br />
+5. sudo service docker start<br />
+------------------------------------------------------------------------------<br />
+□ Install Docker Engine<br />
+1. sudo apt-get -y remove docker docker-engine docker.io containerd runc<br />
+2. sudo apt-get -y autoremove<br />
+3. sudo rm -rf /var/lib/docker<br />
+4. curl -O https://download.docker.com/linux/debian/dists/stretch/pool/stable/amd64/docker-ce_17.09.0~ce-0~debian_amd64.deb<br />
+5. sudo apt install libltdl7 -y<br />
+6. docker -v<br />
+------------------------------------------------------------------------------<br />
+□ Install anaconda<br />
+0. sudo apt update<br />
+&nbsp; sudo apt -y install gcc python3-pip<br />
+1.&nbsp;curl -O https://repo.anaconda.com/archive/Anaconda3-2019.03-Linux-x86_64.sh<br />
+2.&nbsp;sha256sum Anaconda3-2019.03-Linux-x86_64.sh<br />
+----------<br />
+45c851b7497cc14d5ca060064394569f724b67d9b5f98a926ed49b834a6bb73a &nbsp;Anaconda3-2019.03-Linux-x86_64.sh<br />
+----------<br />
+3. bash Anaconda3-2019.03-Linux-x86_64.sh<br />
+&nbsp; (All [Enter] or [yes])<br />
+4.&nbsp;source ~/.bashrc<br />
+5.&nbsp;conda create --yes --name my_env python=3<br />
+<br />
+□ PyTorch<br />
+1.&nbsp;conda install pytorch torchvision torchaudio cpuonly -c pytorch<br />
+<br />
+□ pymatgen<br />
+1.&nbsp;conda install -c conda-forge pymatgen<br />
+<br />
+□ RDKit<br />
+1. conda create --yes -c rdkit -n my_env rdkit<br />
+<br />
+□ my_env<br />
+1.&nbsp;source activate my_env<br />
+------------------------------------------------------------------------------</p>

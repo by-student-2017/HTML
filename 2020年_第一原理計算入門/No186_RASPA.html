@@ -1,0 +1,769 @@
+RASPA (https://www.iraspa.org/RASPA/index.html)<br />
+------------------------------------------------------------------------------<br />
+Å° RASPA (http://www.iec.northwestern.edu/software.php)<br />
+(https://www.iraspa.org/RASPA/index.html)<br />
+<br />
+Å† Install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (mirror below github)<br />
+(https://github.com/numat/RASPA2) (python)<br />
+0. sudo apt install python-pip<br />
+1. pip install RASPA2 --user<br />
+&nbsp; (or sudo pip install RASPA2)<br />
+Å¶ ~/.local/bin<br />
+Å¶ ~/.local/lib/python2.7/site-packages<br />
+<br />
+Å† Install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (mirror below github)<br />
+(https://github.com/numat/RASPA2) (python3)<br />
+0. sudo apt install python3-pip<br />
+1. pip3 install RASPA2 --user<br />
+&nbsp; (or sudo pip3 install RASPA2)<br />
+Å¶ ~/.local/bin<br />
+Å¶ ~/.local/lib/python3.6/site-packages<br />
+Å¶ python --version<br />
+&nbsp; python3.6.7<br />
+<br />
+Å† Install (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(https://github.com/iraspa/raspa2)<br />
+ÅERASPA2-master.zip<br />
+&nbsp; [Clone or download] &gt; Download ZIP)<br />
+1. unzip RASPA2-master.zip<br />
+&nbsp; (or git clone https://github.com/iRASPA/RASPA2.git)<br />
+2. cd RASPA2-master<br />
+&nbsp; (cd RASPA2)<br />
+3. rm -rf autom4te.cache<br />
+4. mkdir m4<br />
+5. aclocal<br />
+6. autoreconf -i<br />
+7. automake --add-missing<br />
+8. autoconf<br />
+9. ./configure<br />
+&nbsp; (or ./configure --prefix=${RASPA_DIR})<br />
+10. make<br />
+11. make check<br />
+12. sudo make install<br />
+<br />
+Å† Test<br />
+1. simulate -h<br />
+<br />
+Å† Install (Openbabel &amp; pybel) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (mirror above github)<br />
+(https://sourceforge.net/projects/openbabel/files/openbabel/)<br />
+0. sudo apt install cmake<br />
+&nbsp; sudo apt install libwxgtk3.0-dev<br />
+&nbsp; sudo apt install libxml2-dev&nbsp;<br />
+&nbsp; sudo apt install zlib1g-dev<br />
+&nbsp; sudo apt install libeigen3-dev<br />
+&nbsp; sudo apt install libcairo2-dev<br />
+1. wget https://jaist.dl.sourceforge.net/project/openbabel/openbabel/2.4.1/openbabel-2.4.1.tar.gz<br />
+2. tar zxvf openbabel-2.4.1.tar.gz<br />
+3. cd openbabel-2.4.1<br />
+4. mkdir build<br />
+5. cd build<br />
+4. cmake ../ -DPYTHON_BINDINGS=ON -DRUBY_BINDINGS=ON<br />
+5. make<br />
+6. sudo make install<br />
+7. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+(/usr/local/lib/python2.7/site-packages/openbabel.py)<br />
+(/usr/local/lib/python2.7/site-packages/pybel.py)<br />
+Å¶ sudo apt-cache search libwxgt*<br />
+Å¶ sudo apt-cache search libwxbase*<br />
+Å¶ sudo apt-cache search libeigen*<br />
+[OB1] https://future-chem.com/open-babel-usage/<br />
+[OB2] https://wiki.wxwidgets.org/Installing_and_configuring_under_Ubuntu<br />
+Å¶ Note!: &quot;pip install bybel&quot; and &quot;pip3 install bybel&quot; are other codes. Do not install them.<br />
+<br />
+Å† Install (Openbabel &amp; pybel?) (easy method)<br />
+1. sudo apt install openbabel libopenbabel-dev<br />
+<br />
+Å† MySQL<br />
+1. sudo apt install mysql-client-core-5.7<br />
+Åû test<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e 'select file from data where flags like &quot;%has Fobs%&quot;' cod<br />
+2. curl --silent http://www.crystallography.net/cod/2018107.cif &gt; test.cif<br />
+Åû Usage<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e 'select count(*) from data where text like &quot;%mof%&quot;' cod | cat | tail -1 | (read num ; echo &quot;Number of cif data: $num&quot;;)<br />
+2. mysql -u cod_reader -h sql.crystallography.net -e 'select file from data where text like &quot;%mof%&quot;' cod | tail -n +2 | &nbsp;(while read line ; do curl -s http://www.crystallography.net/cod/&quot;$line&quot;.cif &gt; &quot;$line&quot;.cif; echo &quot;[ID] $line&quot;; done;)<br />
+[SQL1] http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?%B7%EB%BE%BD%B9%BD%C2%A4%B8%A1%BA%F7COD_SQL%C8%C7<br />
+[SQL2] COD wiki/ COD MySQL database schema<br />
+&nbsp; http://wiki.crystallography.net/cod_mysql_schema/<br />
+Åû Usage (simple version)<br />
+1. mysql -u cod_reader -h sql.crystallography.net -e 'select count(*) from data where text like &quot;%mof%&quot;' cod | cat<br />
+2. mysql -u cod_reader -h sql.crystallography.net -e 'select file from data where text like &quot;%mof%&quot;' cod | tail -n +2 | &nbsp;(while read line ; do curl -s http://www.crystallography.net/cod/&quot;$line&quot;.cif &gt; &quot;$line&quot;.cif; done;)<br />
+Åû Remove water<br />
+0. sudo apt-get install build-essential python-dev python-pmw libglew-dev freeglut3-dev libpng-dev libfreetype6-dev libxml2-dev libmsgpack-dev python-pyqt5.qtopengl libglm-dev<br />
+1. sudo apt install pymol<br />
+&nbsp; (/usr/bin/pymol)<br />
+&nbsp; remove resn hoh<br />
+[RW1] https://gehrcke.de/2011/06/pymol-remove-hydrogens-and-water/<br />
+[RW2] https://tokky-info-memo.blogspot.com/2012/03/pymolpython.html<br />
+[RW3] https://pymolwiki.org/index.php/Linux_Install<br />
+Å¶ sudo apt-get install x11-apps<br />
+&nbsp; &nbsp;export DISPLAY=localhost:0.0<br />
+&nbsp; &nbsp;(xeyes &amp;)<br />
+Å¶ pyenvÇÃä¬ã´Ç≈égÇ®Ç§Ç∆évÇ¡ÇΩÇÁ pip install pymolÇ™ñ≥Ç¢ÇÃÇ≈moduleÇ™Ç†ÇËÇ‹ÇπÇÒÇ∆ï\é¶Ç≥ÇÍÇƒìÆçÏÇµÇ»Ç©Ç¡ÇΩ<br />
+Å¶ eqeqÇÕopenbabelÉvÉçÉWÉFÉNÉgÇÃã@î\Ç∆ÇµÇƒä‹Ç‹ÇÍÇƒÇ¢ÇÈÇΩÇﬂì±ì¸ÇÕïKóvÇ»Ç¢<br />
+------------------------------------------------------------------------------<br />
+Å† Usage -1-<br />
+&nbsp; There are 2 methods.<br />
+<br />
+Åû Command Line<br />
+1. simulate -h<br />
+<br />
+Åû Python<br />
+1. gedit run.py<br />
+-----<br />
+import RASPA2<br />
+<br />
+# Set up<br />
+gas = &quot;CO2&quot;<br />
+pressures = [1e4 * 10**(0.1 * i) for i in range(21)]<br />
+<br />
+# Run<br />
+results = [RASPA2.run(my_structure, gas, temperature=298, pressure=pressure) for pressure in pressures]<br />
+<br />
+# Parse<br />
+uptakes = [r[&quot;Number of molecules&quot;][gas][&quot;Average loading absolute [cm^3 (STP)/cm^3 framework]&quot;][0] for r in results]<br />
+<br />
+# Plot<br />
+plot(pressures, uptakes)<br />
+-----<br />
+2. python run.py<br />
+<br />
+Åû For example (python, IRMOF-1)<br />
+0. sudo apt install python-matplotlib<br />
+&nbsp; sudo apt install python-pandas<br />
+1. cd $HOME/raspa2<br />
+2. mkdir IRMOF-1_H2gas_gcmc<br />
+3. cd IRMOF-1_H2gas_gcmc<br />
+4. cp $HOME/EQeq/IRMOF-1.cif ./IRMOF-1.cif<br />
+5. gedit run.py<br />
+-----<br />
+import pybel<br />
+import RASPA2<br />
+import pandas as pd<br />
+import matplotlib.pyplot as plt<br />
+<br />
+# Set up<br />
+gas = &quot;H2&quot;<br />
+# 1e4 Pa = 0.1 bar (0.01 MPa), 1e7 Pa = 100 bar (10 MPa)<br />
+pressures = [1e4 * 10**(0.1 * i) for i in range(31)]<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+my_structure = pybel.readfile(&quot;cif&quot;, &quot;IRMOF-1.cif&quot;).next()<br />
+#my_structure.unitcell.FillUnitCell(mol.OBMol)<br />
+#my_structure.calccharges(&quot;eqeq&quot;)<br />
+<br />
+# Run at 298 K<br />
+results = [RASPA2.run(my_structure, gas, temperature=298, pressure=pressure) for pressure in pressures]<br />
+<br />
+# Parse, we will get the v/v H2 gas uptake at 0.01 MPa - 10 MPa.<br />
+uptakes = [r[&quot;Number of molecules&quot;][gas][&quot;Average loading absolute [cm^3 (STP)/cm^3 framework]&quot;][0] for r in results]<br />
+<br />
+# print output<br />
+z = [pressures,uptakes]<br />
+df = pd.DataFrame(z).T<br />
+print df<br />
+df.to_csv(&quot;Pa_vs_NumAbsGas.csv&quot;)<br />
+<br />
+# Plot<br />
+plt.plot(pressures, uptakes)<br />
+plt.show()<br />
+-----<br />
+6. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+7. python run.py<br />
+Å¶ gas (see, https://github.com/numat/RASPA2/tree/master/molecules/TraPPE)<br />
+Å¶ import RASPA2 (see, raspa2.py, https://github.com/numat/RASPA2/blob/master/python/raspa2.py)<br />
+Å¶ cpu monitor command: top<br />
+Å¶ cifÇ≈ëŒèÃê´ÇÃèÓïÒÇ™ãLç⁄Ç≥ÇÍÇƒÇ¢ÇƒÇ‡ìÆçÏÇ∑ÇÈÅBílÇÕMCÇÃåvéZÇ≈Ç†ÇÈÇ±Ç∆ÇçlÇ¶ÇƒÇ‡à´Ç¢åãâ ÇÃÇÊÇ§Ç…ÇÕå©Ç¶Ç»Ç¢ÅBåvéZÇ‡ë¨Ç¢<br />
+<br />
+Åû Force field<br />
+1. cd `raspa-dir`<br />
+------------------------------------------------------------------------------<br />
+Å† Usage -2-<br />
+<br />
+Å† Command Line (no check)<br />
+0. export RASPA_DIR=&quot;~/.local/lib/python3.6/site-packages/RASPA2&quot;<br />
+1. VESTA &gt; P1 structure &gt; *.cif<br />
+2. ./eqeq mof.cif<br />
+3. $RASPA_DIR/share/raspa/structures/cif ./<br />
+4. gedit *.input<br />
+5. simulate -i *.input<br />
+<br />
+Å† Python<br />
+1. gedit run.py<br />
+-----<br />
+import pybel<br />
+import RASPA2<br />
+<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+mol = pybel.readfile(&quot;cif&quot;, &quot;sample.cif&quot;).next()<br />
+mol.unitcell.FillUnitCell(mol.OBMol)<br />
+mol.calccharges(&quot;eqeq&quot;)<br />
+<br />
+# Use RASPA to get the helium void fraction<br />
+print(RASPA2.get_helium_void_fraction(mol))<br />
+-----<br />
+2. python run.py<br />
+<br />
+Åû For example (python, IRMOF-1)<br />
+1. cd $HOME/raspa2<br />
+2. mkdir IRMOF-1<br />
+3. cd IRMOF-1<br />
+4. cp $HOME/EQeq/IRMOF-1.cif ./<br />
+5. gedit run.py<br />
+-----<br />
+import pybel<br />
+import RASPA2<br />
+<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+mol = pybel.readfile(&quot;cif&quot;, &quot;IRMOF-1.cif&quot;).next()<br />
+mol.unitcell.FillUnitCell(mol.OBMol)<br />
+mol.calccharges(&quot;eqeq&quot;)<br />
+<br />
+# Use RASPA to get the helium void fraction<br />
+print(RASPA2.get_helium_void_fraction(mol))<br />
+-----<br />
+6. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+7. python run.py<br />
+Å¶ cifÇ≈ëŒèÃê´ÇÃèÓïÒÇ™ãLç⁄Ç≥ÇÍÇƒÇ¢ÇƒÇ‡ìÆçÏÇ∑ÇÈÅB[mol.unitcell.FillUnitCell(mol.OBMol)]Ç…ÇÊÇ¡ÇƒP1ÇÃëŒèÃê´Ç…Ç»Ç¡ÇƒÇ¢ÇÈ<br />
+Å¶ mol = pybel.readfile(&quot;cif&quot;, &quot;sample.cif&quot;).next()ÇÃçsà»ç~Ç≈â∫ãLÇì¸óÕÇµÇƒÇ›ÇÈÇ∆ÇÊÇ¢ÅB<br />
+&nbsp; print mol.molwt<br />
+&nbsp; print len(mol.atoms)<br />
+&nbsp; output = pybel.Outputfile(&quot;cif&quot;, &quot;test.cif&quot;)<br />
+&nbsp; output.write(mol)<br />
+&nbsp; output.close()<br />
+Å¶ https://openbabel.org/docs/dev/UseTheLibrary/Python_Pybel.html<br />
+<br />
+Å† Python (using Amazon cloud cores) (no check)<br />
+1. gedit run.py<br />
+-----<br />
+# Connect to database and get 3000 sample MOFs.<br />
+# Let's assume that these contain an id, a charged RASPA molfile, and a helium void fraction.<br />
+import pymongo<br />
+db = pymongo.MongoClient().sample<br />
+mofs = db.mof.find().limit(3000)<br />
+<br />
+# On each core, we will get the v/v methane uptake at 65 bar.<br />
+def f(mof):<br />
+&nbsp; &nbsp; import RASPA<br />
+&nbsp; &nbsp; output = RASPA.run(mof[&quot;charged mol&quot;], &quot;CH4&quot;, temperature=298, pressure=65e5, helium_void_fraction=mof[&quot;helium void fraction&quot;], input_file_type=&quot;mol&quot;)<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;CH4&quot;][&quot;Average loading absolute [cm^3 (STP)/cm^3 framework]&quot;][0]<br />
+<br />
+# Distribute the jobs on the amazon cloud cores. Wait for the jobs to finish.<br />
+import cloud<br />
+jids = cloud.map(f, mofs)<br />
+uptakes = cloud.result(mofs)<br />
+<br />
+# Let's print the results for postprocessing, and additionally save them back into the database.<br />
+# By saving into a central database, you can share your simulation results with everyone else. (Useful for data mining!<br />
+for mof, uptake in zip(mofs, uptakes):<br />
+&nbsp; &nbsp; print mof[&quot;_id&quot;], uptake<br />
+&nbsp; &nbsp; db.mof.update({&quot;_id&quot;: mof[&quot;_id&quot;]}, {&quot;$set&quot;: {&quot;CH4&quot;: uptake}})<br />
+-----<br />
+2. python run.py<br />
+<br />
+Åû For example (python)<br />
+1. cd $HOME/raspa2<br />
+2. mkdir MOFs<br />
+3. cd MOFs<br />
+4. gedit run.py<br />
+-----<br />
+# Connect to database and get 1000 sample MOFs.<br />
+# Let's assume that these contain an id, a charged RASPA molfile, and a helium void fraction.<br />
+import copy<br />
+import pymongo<br />
+db = pymongo.MongoClient().sample<br />
+mofs = db.mof.find().limit(50)<br />
+<br />
+# On each core, we will get the v/v methane uptake at 65 bar.<br />
+def f(mof):<br />
+&nbsp; &nbsp; import RASPA2<br />
+&nbsp; &nbsp; output = RASPA2.run(mof[&quot;cif&quot;], &quot;methane&quot;, temperature=298, pressure=65e5, helium_void_fraction=mof[&quot;helium void fraction&quot;], input_file_type=&quot;cif&quot;)<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;methane&quot;][&quot;Average loading absolute [cm^3 (STP)/cm^3 framework]&quot;][0]<br />
+<br />
+# Distribute the jobs on the amazon cloud cores. Wait for the jobs to finish.<br />
+#import cloud<br />
+#jids = cloud.map(f, mofs)<br />
+#uptakes = cloud.result(mofs)<br />
+mofs_data = copy.deepcopy(mofs)<br />
+uptakes = map(f, mofs)<br />
+<br />
+# Let's print the results for postprocessing, and additionally save them back into the database.<br />
+# By saving into a central database, you can share your simulation results with everyone else. (Useful for data mining!<br />
+for mof, uptake in zip(mofs_data, uptakes):<br />
+&nbsp; &nbsp; print mof[&quot;_id&quot;], uptake<br />
+&nbsp; &nbsp; db.mof.update({&quot;_id&quot;: mof[&quot;_id&quot;]}, {&quot;$set&quot;: {&quot;methane&quot;: uptake}})<br />
+-----<br />
+5. sudo service mongodb start<br />
+&nbsp; export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+6. python run.py<br />
+<br />
+[1] https://github.com/numat/RASPA2/wiki/Workflow<br />
+[2] https://github.com/moleculerjs/moleculer-db<br />
+&nbsp; https://github.com/moleculerjs/moleculer-db/tree/master/packages/moleculer-db-adapter-mongo<br />
+[3] https://kbsezginel.github.io/tutorials/conformers-bokeh/<br />
+[4] Welcome to the Computation-Ready, Experimental (CoRE) Metal-Organic Frameworks Database!<br />
+&nbsp; http://gregchung.github.io/CoRE-MOFs/<br />
+[5] numat/RASPA2/python/output_parser.py<br />
+&nbsp; https://github.com/numat/RASPA2/blob/master/python/output_parser.py#L19<br />
+&nbsp; change [&quot;Number of molecules&quot;][&quot;methane&quot;][&quot;Average loading absolute [cm^3 (STP)/cm^3 framework]&quot;][0]<br />
+&nbsp; e.g., &nbsp;methane -&gt; H2<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;H2&quot;][&quot;Average loading absolute [mol/kg framework]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;H2&quot;][&quot;Average loading absolute [milligram/gram framework]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;H2&quot;][&quot;Average loading excess [mol/kg framework]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Number of molecules&quot;][&quot;H2&quot;][&quot;Average loading excess [milligram/gram framework]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Average Widom Rosenbluth factor&quot;][&quot;Widom&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Average Henry coefficient:&quot;][&quot;Henry&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Heat of desorption&quot;][&quot;[K]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Heat of desorption&quot;][&quot;[KJ/MOL]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Average Surface Area&quot;][&quot;[m^2/g]&quot;][0]<br />
+&nbsp; &nbsp; return output[&quot;Average Surface Area&quot;][&quot;[m^2/cm^3]&quot;][0]<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Music - Multipurpose Simulation Code<br />
+&nbsp; http://www.iec.northwestern.edu/music.php<br />
+[2] ZIF-8<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[3] GCMC simulations with music<br />
+&nbsp; http://www.iec.northwestern.edu/Music/gcmc/gcmc.htm<br />
+[4] Music Tutorial (GCMC, IRMOF1 (MOF5))<br />
+&nbsp; http://people.bath.ac.uk/td222/research/music/Tutorial/<br />
+[5] Music Documentation<br />
+&nbsp; http://www.iec.northwestern.edu/Music/Documentation/index.html<br />
+[6] Snurr Research Group&nbsp;<br />
+&nbsp; https://github.com/snurr-group<br />
+[7] MCCCS Towhee: Related Software<br />
+&nbsp; http://towhee.sourceforge.net/software.html<br />
+[8] AiiDA workchains for (water) adsorption isotherms&nbsp;<br />
+&nbsp; https://github.com/kjappelbaum/water_isotherm_workchains<br />
+[9] AiiDA plugin for RASPA2.<br />
+&nbsp; https://github.com/yakutovicha/aiida-raspa<br />
+&nbsp; https://pypi.org/project/aiida-raspa/<br />
+------------------------------------------------------------------------------<br />
+Å† Install (EQeq) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (mirror above github)<br />
+(https://github.com/numat/EQeq)<br />
+1. git clone https://github.com/numat/EQeq.git<br />
+2. cd EQeq<br />
+3. g++ main.cpp -O3 -o eqeq<br />
+4. g++ -c -fPIC main.cpp -O3 -o eqeq.o<br />
+&nbsp; g++ -shared -Wl,-soname,libeqeq.so -O3 -o libeqeq.so eqeq.o<br />
+&nbsp; sudo cp libeqeq.so /usr/lib<br />
+<br />
+Åû Settings (EQeq)<br />
+1. python eqeq.py --help<br />
+&nbsp; python eqeq.py IRMOF-1.cif --output-type mol --method ewald<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+<br />
+Åû Test (simple, EQeq)<br />
+1. gedit run.py<br />
+-----<br />
+import EQeq<br />
+EQeq.run(&quot;IRMOF-1.cif&quot;)<br />
+-----<br />
+2. python run.py<br />
+<br />
+Åû Test (Ewald method, EQeq)<br />
+1. gedit run_ewald.py<br />
+-----<br />
+import eqeq<br />
+# Load a file. In practice, this can come from any source, such as a database<br />
+with open(&quot;IRMOF-1.cif&quot;) as in_file:<br />
+&nbsp; &nbsp; data = in_file.read()<br />
+charges = eqeq.run(data, output_type=&quot;list&quot;, method=&quot;ewald&quot;)<br />
+-----<br />
+2. python run_ewald.py<br />
+------------------------------------------------------------------------------<br />
+Å° pyenv (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+<br />
+Åû Usage (pyenv)<br />
+1. pyenv global 2.7.15<br />
+&nbsp; (pyenv local 2.7.15)<br />
+2. pip install (module name)<br />
+&nbsp; e.g., pip install scipy<br />
+&nbsp; &nbsp; pip install matplotlib<br />
+&nbsp; &nbsp; pip install numpy<br />
+&nbsp; &nbsp; pip install scipy<br />
+&nbsp; &nbsp; pip install pandas<br />
+(./.pyenv/versions/2.7.15/lib/python2.7/site-packages)<br />
+<br />
+Å¶ éÑÇÃèÍçáÅAmatplotlibÇ‚pip installÇ≈Ç´Ç»Ç¢moduleÇ™ìÆçÏÇµÇ»Ç©Ç¡ÇΩÇÃÇ≈pyenvÇÃóòópÇÇ‚ÇﬂÇΩ<br />
+------------------------------------------------------------------------------<br />
+Å° iRASPA (GUI) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit) (failed)<br />
+(https://www.iraspa.org/iRASPA/index.html)<br />
+ÅEiRASPA-QT&nbsp;<br />
+(https://github.com/iRASPA/iRASPA-QT)<br />
+<br />
+Åû install (easy method) (failed)<br />
+(https://snapcraft.io/install/iraspa/ubuntu#install)<br />
+1. sudo apt update<br />
+2. sudo apt install snapd<br />
+3. sudo snap install iraspa<br />
+<br />
+Åû install (qt version)<br />
+0. sudo apt-get install -y liblzma-dev<br />
+&nbsp; sudo apt install -y qt5-qmake qt5-default<br />
+&nbsp; sudo apt-get autoremove<br />
+&nbsp; sudo apt-get install qt5-default cmake gcc g++ build-essential<br />
+&nbsp; sudo apt install qtwebengine5-dev<br />
+&nbsp; sudo apt-get install opencl-headers<br />
+&nbsp; sudo apt install ocl-icd-opencl-dev<br />
+&nbsp; sudo apt-get install ocl-icd-libopencl1<br />
+1. git clone https://github.com/iRASPA/iRASPA-QT.git<br />
+2. cd iRASPA-QT<br />
+3. qmake<br />
+&nbsp; (/usr/lib/qt5/bin/qmake -o Makefile iRASPA.pro)<br />
+4. make<br />
+<br />
+Åû Usage<br />
+1. ~/iRASPA-QT/iraspa<br />
+<br />
+[iRASPA1] https://github.com/iRASPA/iRASPA-QT<br />
+[iRASPA2] https://snapcraft.io/iraspa<br />
+[iRASPA3] https://snapcraft.io/install/iraspa/ubuntu#install<br />
+Å¶ Windows 10 ÇÕMicrosoft StoreÇÃÉAÉvÉäÇ©ÇÁì¸éËÇ≈Ç´ÇÈ<br />
+------------------------------------------------------------------------------<br />
+Å° VESTA (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)<br />
+<br />
+Å† Install<br />
+1. wget http://jp-minerals.org/vesta/archives/3.4.6/VESTA-x86_64.tar.bz2<br />
+2. tar xvf VESTA-x86_64.tar.bz2<br />
+3. cd VESTA-x86_64<br />
+4. ./VESTA<br />
+------------------------------------------------------------------------------<br />
+------------------------------------------------------------------------------<br />
+Å° Appendix: RASPA2 imformation<br />
+<br />
+ÅEWater<br />
+1. cd $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/molecules/TraPPE<br />
+2. gedit water.def<br />
+-----before<br />
+# critical constants: Temperature [T], Pressure [Pa], and Acentric factor [-]<br />
+647.14<br />
+22064000.0<br />
+-0.217000<br />
+# Number Of Atoms<br />
+3<br />
+# Number Of Groups<br />
+1<br />
+# O<br />
+3<br />
+rigid<br />
+0 Ow &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.8660 &nbsp;-0.5000 &nbsp; 0.0000<br />
+1 Hw &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1.7321 &nbsp;-0.0000 &nbsp; 0.0000<br />
+2 Hw &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; 0.0000 &nbsp; 0.0000<br />
+# Chiral centers Bond &nbsp;BondDipoles Bend &nbsp;UrayBradley InvBend &nbsp;Torsion Imp. Torsion Bond/Bond Stretch/Bend Bend/Bend Stretch/Torsion Bend/Torsion IntraVDW IntraCoulomb<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp;2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+# Bond stretch: atom n1-n2, type, parameters<br />
+0 1 RIGID_BOND<br />
+0 2 RIGID_BOND<br />
+# Number of config moves<br />
+0<br />
+-----<br />
+-----after<br />
+# critical constants: Temperature [T], Pressure [Pa], and Acentric factor [-]<br />
+647.14<br />
+22064000.0<br />
+-0.217000<br />
+# Number Of Atoms<br />
+3<br />
+# Number Of Groups<br />
+1<br />
+# H2O-group<br />
+rigid<br />
+# number of atoms<br />
+3<br />
+# atomic positions<br />
+0 Ow &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.8660 &nbsp;-0.5000 &nbsp; 0.0000<br />
+1 Hw &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1.7321 &nbsp;-0.0000 &nbsp; 0.0000<br />
+2 Hw &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.0000 &nbsp; 0.0000 &nbsp; 0.0000<br />
+# Chiral centers Bond &nbsp;BondDipoles Bend &nbsp;UrayBradley InvBend &nbsp;Torsion Imp. Torsion Bond/Bond Stretch/Bend Bend/Bend Stretch/Torsion Bend/Torsion IntraVDW IntraCoulomb<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp;2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0<br />
+# Bond stretch: atom n1-n2, type, parameters<br />
+0 1 RIGID_BOND<br />
+0 2 RIGID_BOND<br />
+# Number of config moves<br />
+0<br />
+------<br />
+<br />
+Åû show output data<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+1. gedot run.py<br />
+-----<br />
+import pybel<br />
+import RASPA2<br />
+import pprint<br />
+<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+mol = pybel.readfile(&quot;cif&quot;, &quot;Faujasite.cif&quot;).next()<br />
+mol.unitcell.FillUnitCell(mol.OBMol)<br />
+#mol.calccharges(&quot;eqeq&quot;)<br />
+<br />
+# Use RASPA to get the helium void fraction<br />
+helium_void_fraction = RASPA2.get_helium_void_fraction(mol)<br />
+<br />
+output = RASPA2.run(mol, &quot;water&quot;, temperature=423, pressure=1e-2, helium_void_fraction=helium_void_fraction, input_file_type=&quot;cif&quot;)<br />
+print output[&quot;Number of molecules&quot;][&quot;water&quot;][&quot;Average loading excess [milligram/gram framework]&quot;][0]<br />
+<br />
+pprint.pprint(output)<br />
+-----<br />
+2. python run.py &gt; output.txt<br />
+<br />
+Åû output command<br />
+-----<br />
+print list(output)<br />
+-----<br />
+import pprint<br />
+pprint.pprint(output)<br />
+pprint.pformat(output)<br />
+-----<br />
+f = open('output.txt','w')<br />
+for key in output:<br />
+&nbsp; &nbsp; f.write(&quot;%s\n&quot; %(key)) # python 2<br />
+&nbsp; &nbsp; #f.write('{0} {1}\n'.format(key, value)) # python 2<br />
+&nbsp; &nbsp; #f.write(f'{key} {value}\n') # python 3<br />
+f.close()<br />
+-----<br />
+<br />
+Åû other file adress<br />
+$HOME/.local/lib/python2.7/site-packages/RASPA2/<br />
+$HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/structures/cif<br />
+------------------------------------------------------------------------------<br />
+Å° Appendix: using simulate command (RASPA2)<br />
+(Å¶ If you use another gas, change &quot;water&quot; to other gas, e.g., &quot;H2&quot;, etc)<br />
+(Å¶ If you use other conditions, change value of temperature (K) and pressure (Pa))<br />
+<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Åû github</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">1. git clone&nbsp;https://github.com/by-student-2017/csh.git</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">2. cd csh/RASPA2</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">3. ls</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; (you can see&nbsp;</span>make_input_file.py, make_structure_file.py<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> and run_raspa_ver_July24.py, etc)</span><br />
+<br />
+Åû make input file<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+1. gedit make_input_file.py<br />
+-----<br />
+import RASPA2<br />
+input_script = RASPA2.create_script(&quot;water&quot;,temperature=423, pressure=1e-2, helium_void_fraction=1.0, input_file_type=&quot;cif&quot;)<br />
+print input_script<br />
+-----<br />
+2. python make_input_file.py &gt; simulation.input<br />
+<br />
+Åû make structure file (please, change &quot;Faujasite.cif&quot;)<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+1. gedit make_structure_file.py<br />
+-----<br />
+import pybel<br />
+<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+mol = pybel.readfile(&quot;cif&quot;, &quot;Faujasite.cif&quot;).next()<br />
+#mol.unitcell.FillUnitCell(mol.OBMol)<br />
+<br />
+output = pybel.Outputfile(&quot;cif&quot;, &quot;streamed.cif&quot;)<br />
+output.write(mol)<br />
+output.close()<br />
+-----<br />
+2. python make_structure_file.py<br />
+Å¶ rm -f -r streamed.cif<br />
+&nbsp; (or output = pybel.Outputfile(&quot;cif&quot;, &quot;streamed.cif&quot;, &quot;overwrite=True&quot;)<br />
+Å¶ Please, check streamed.cif. if you can get bad data, change symmetry group to P1 for cif file by using VESTA, etc.<br />
+<br />
+Åû run calculation (using RASPA2-master.zip)<br />
+1. cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/molecules/TraPPE/water.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/force_field.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/force_field_mixing_rules.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/pseudo_atoms.def ./<br />
+2. simulate simulation.input<br />
+<br />
+Åû show results<br />
+1. cd Movies/System_0<br />
+2. jmol Framework_0_final.vasp<br />
+&nbsp; jmol Framework_0_final_1_1_1_P1.cif<br />
+&nbsp; jmol Framework_0_final_1_1_1_VASP.cif<br />
+&nbsp; jmol Framework_0_final.pdb<br />
+&nbsp; jmol Framework_final.pdb<br />
+&nbsp; jmol Framework_0_initial.vasp<br />
+&nbsp; jmol Framework_0_initial_1_1_1_P1.cif<br />
+&nbsp; jmol Framework_0_initial_1_1_1_VASP.cif<br />
+&nbsp; jmol Framework_0_initial.pdb<br />
+&nbsp; jmol Framework_initial.pdb<br />
+3. cd ..<br />
+4. cd Output/System_0<br />
+5. gedit output*<br />
+------------------------------------------------------------------------------<br />
+Å° Appendix: using simulate command (RASPA2)<br />
+(H2, 298 K, 1 MPa, ZTC(=CCDC1580143.cif))<br />
+<br />
+Åû make input file<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+1. gedit make_input_file.py<br />
+-----<br />
+import RASPA2<br />
+input_script = RASPA2.create_script(&quot;H2&quot;,temperature=298, pressure=1000000, helium_void_fraction=1.0, input_file_type=&quot;cif&quot;)<br />
+print input_script<br />
+-----<br />
+2. python make_input_file.py &gt; simulation.input<br />
+<br />
+Åû make structure file (please, change &quot;ztc_CCDC1580143.cif&quot;)<br />
+0. export PYTHONPATH=/usr/local/lib/python2.7/site-packages/:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/EQeq:$PYTHONPATH<br />
+1. gedit make_structure_file.py<br />
+-----<br />
+import pybel<br />
+<br />
+# Use pybel to parse, fill, and charge cif structure<br />
+mol = pybel.readfile(&quot;cif&quot;, &quot;ztc_CCDC1580143.cif&quot;).next()<br />
+#mol.unitcell.FillUnitCell(mol.OBMol)<br />
+<br />
+output = pybel.Outputfile(&quot;cif&quot;, &quot;streamed.cif&quot;)<br />
+output.write(mol)<br />
+output.close()<br />
+-----<br />
+2. python make_structure_file.py<br />
+Å¶ rm -f -r streamed.cif<br />
+&nbsp; (or output = pybel.Outputfile(&quot;cif&quot;, &quot;streamed.cif&quot;, &quot;overwrite=True&quot;)<br />
+Å¶ Please, check streamed.cif. if you can get bad data, change symmetry group to P1 for cif file by using VESTA, etc.<br />
+<br />
+Åû modify simulation.input<br />
+1. gedit simulation.input<br />
+-----before<br />
+SimulationType &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;MonteCarlo<br />
+NumberOfCycles &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2000<br />
+NumberOfInitializationCycles &nbsp;1000<br />
+PrintEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;200<br />
+<br />
+Movies &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;no<br />
+WriteMoviesEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;100<br />
+-----<br />
+-----after<br />
+SimulationType &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;MonteCarlo<br />
+NumberOfCycles &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;250000<br />
+NumberOfInitializationCycles &nbsp;100000<br />
+PrintEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1000<br />
+<br />
+Movies &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;yes<br />
+WriteMoviesEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1000<br />
+-----<br />
+Å¶ In my case, both of them (before and after settings) are same resutls.<br />
+<br />
+<br />
+Åû run calculation (using RASPA2-master.zip)<br />
+1. cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/molecules/TraPPE/H2.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/force_field.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/force_field_mixing_rules.def ./<br />
+&nbsp; cp $HOME/.local/lib/python2.7/site-packages/RASPA2/share/raspa/forcefield/CrystalGenerator/pseudo_atoms.def ./<br />
+2. simulate simulation.input<br />
+<br />
+Åû show results<br />
+0. sudo apt install mymol<br />
+1. cd Movies/System_0<br />
+2. jmol Framework_0_final.vasp<br />
+&nbsp; jmol Framework_0_final_1_1_1_P1.cif<br />
+&nbsp; jmol Framework_0_final_1_1_1_VASP.cif<br />
+&nbsp; jmol Framework_0_final.pdb<br />
+&nbsp; jmol Framework_final.pdb<br />
+&nbsp; jmol Framework_0_initial.vasp<br />
+&nbsp; jmol Framework_0_initial_1_1_1_P1.cif<br />
+&nbsp; jmol Framework_0_initial_1_1_1_VASP.cif<br />
+&nbsp; jmol Framework_0_initial.pdb<br />
+&nbsp; jmol Framework_initial.pdb<br />
+3. mymol<br />
+&nbsp; File &gt; Open... &gt; Movie_... (all_compotent.pdb)<br />
+&nbsp; File &gt; Open... &gt; Frramework_0_final.pdb<br />
+&nbsp; Play &gt; Stop&nbsp;<br />
+&nbsp; Display &gt; Zoom &gt; Complete<br />
+&nbsp; Display &gt; Roving Detail<br />
+&nbsp; [PyMOL&gt;] show cell<br />
+&nbsp; [PyMOL&gt;] preset.ball_and_stick(selection='all', mode=1)<br />
+4. cd ..<br />
+5. cd Output/System_0<br />
+6. gedit output*<br />
+Åû ovito<br />
+1. (drag &amp; drop) Framework_0_final.pdb<br />
+2. (remain) Last MODEL data in Movie_... (all_compotent.pdb)<br />
+&nbsp; (drag &amp; drop) Movie_... (all_compotent.pdb)<br />
+&nbsp; [Add to scene)<br />
+Åû MyMOL (making movie) (on Windows)<br />
+1. (drag &amp; drop) Framework_0_final.pdb<br />
+2. (drag &amp; drop) Movie_... (all_compotent.pdb)<br />
+3. Display &gt; Zoom &gt; Complete<br />
+4. Display &gt; Roving Detail<br />
+5. File &gt; Export Movie As ... &gt; Quicktime... &gt; Save Movie as ...&nbsp;<br />
+&nbsp; File &gt; Export Movie As ... &gt; png... &gt; Save Movie as ... &gt; test_<br />
+&nbsp; test_0001.png&nbsp;<br />
+<br />
+Å¶ H2 wt% calculation (Budgetary estimate)<br />
+&nbsp; For example,&nbsp;<br />
+&nbsp; (298 K, 1 MPa)<br />
+&nbsp; Average loading absolute [milligram/gram framework] &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.9298809037 +/- &nbsp; &nbsp; &nbsp; 0.1456339032 [-]<br />
+&nbsp; H2 wt% = 1.9298809037 * 0.1 = about 0.192 wt%<br />
+&nbsp; (298 K, 10 MPa)<br />
+&nbsp; Average loading absolute [milligram/gram framework] &nbsp; &nbsp; &nbsp; &nbsp; 17.6389173874 +/- &nbsp; &nbsp; &nbsp; 1.0452055957 [-]<br />
+&nbsp; H2 wt% = 17.6389173874 * 0.1 = about 1.763 wt%<br />
+------------------------------------------------------------------------------<br />
+Åû RDF<br />
+ÅEsimulation.input<br />
+-----<br />
+SimulationType &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;MonteCarlo<br />
+NumberOfCycles &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;2000<br />
+NumberOfInitializationCycles &nbsp;1000<br />
+PrintEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;100<br />
+RestartFile &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; no<br />
+<br />
+Forcefield &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;CrystalGenerator<br />
+CutOff &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;12.8<br />
+ChargeMethod &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Ewald<br />
+EwaldPrecision &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1e-6<br />
+UseChargesFromMOLFile &nbsp; &nbsp; &nbsp; &nbsp; no<br />
+<br />
+Framework &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+FrameworkName &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; streamed<br />
+InputFileType &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cif<br />
+UnitCells &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 1 1<br />
+HeliumVoidFraction &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.0<br />
+ExternalTemperature &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 298<br />
+ExternalPressure &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;35000000<br />
+<br />
+Movies &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;yes<br />
+WriteMoviesEvery &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;100<br />
+<br />
+ComputeRDF yes<br />
+WriteRDFEvery &nbsp; &nbsp;100<br />
+RDFHistogramSize 400<br />
+RDFRange &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0.5<br />
+<br />
+Component 0 MoleculeName &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; H2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; StartingBead &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MoleculeDefinition &nbsp; &nbsp; &nbsp; TraPPE<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; IdealGasRosenbluthWeight 1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; TranslationProbability &nbsp; 1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; RotationProbability &nbsp; &nbsp; &nbsp;1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ReinsertionProbability &nbsp; 1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; SwapProbability &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; CreateNumberOfMolecules &nbsp;0<br />
+-----<br />
+Å¶ RDF<br />
+&nbsp; number of step = RDFHistogramSize<br />
+&nbsp; step = RDFRange / RDFHistogramSize<br />
+<br />
+Åû plot<br />
+1. cd RadialDistributionFunctions<br />
+2. cd System_0<br />
+3. gnuplot<br />
+&nbsp; set xlabel &quot;Distance, r [Angstrom]&quot;<br />
+&nbsp; set ylabel &quot;Pair distribution function, g(r)&quot;<br />
+&nbsp; set y2label &quot;RDF(r)&quot;<br />
+&nbsp; plot &quot;RDF_Framework_H_h2.dat&quot; u 2:3 ax x1y1 w l, &quot;RDF_Framework_H_h2.dat&quot; u 2:4 ax x1y2 w l<br />
+4. quit<br />
+<br />
+Å¶ T(r) = Total correlation function<br />
+Å¶ RDF(r) = Radial distribution function<br />
+Å¶ g(r) = Pair distribution function<br />
+Å¶ G(r) = Reduced Pair distribution function<br />
+Å¶ Please, check what is unnormalized distance histogram. I think whether RDF(r) or T(r).<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

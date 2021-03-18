@@ -1,0 +1,540 @@
+&nbsp; sxdefectalign<br />
+--------------------------------------------------------------------------------<br />
+Å° sxdefectalign<br />
+(https://sxrepo.mpie.de/)<br />
+(https://sxrepo.mpie.de/projects/sphinx-add-ons/files)<br />
+<br />
+Å† Install<br />
+0. sudo apt install grace<br />
+1. wget https://sxrepo.mpie.de/attachments/download/20/sxdefectalign.bz2<br />
+2. bunzip2 sxdefectalign.bz2<br />
+3. chmod +x sxdefectalign<br />
+<br />
+Å† Manual<br />
+1. wget https://sxrepo.mpie.de/attachments/download/36/sxdefectalign-manual.pdf<br />
+2. evince sxdefectalign-manual.pdf<br />
+<br />
+Å† Example: quantum espresso (GaAs, Ga vacancy, 3-)<br />
+1. gedit inp<br />
+---------<br />
+&amp;INPUTPP<br />
+&nbsp; prefix=&rsquo;GaAs&rsquo;<br />
+&nbsp; outdir=&rsquo;relax_pris&rsquo;<br />
+&nbsp; filplot=&rsquo;relax_pris.pp&rsquo;<br />
+&nbsp; plot_num = 11<br />
+/<br />
+&amp;PLOT<br />
+&nbsp; nfile=1<br />
+&nbsp; filepp(1)=&rsquo;relax_pris.pp&rsquo;<br />
+&nbsp; iflag=3<br />
+&nbsp; output_format=6<br />
+&nbsp; fileout=&rsquo;v_elec_pristine.cube&rsquo;<br />
+/<br />
+---------<br />
+2. ~/qe-6.5/bin/pp.x &lt; inp<br />
+3. ~/sxdefectalign -q 3 --eps 12.9 --vdef v_elec_defect.cube --vref v_elec_pristine.cube --ecut 30 --qe --average 5.2<br />
+&nbsp; (you can get dielectric constant 12.9 on ph.x)<br />
+4. xmgrace -nxy vline-eV-a0.dat<br />
+&nbsp; xmgrace -nxy vline-eV-a1.dat<br />
+&nbsp; xmgrace -nxy vline-eV-a2.dat<br />
+&nbsp; (you estimate a plateau value of C=-0.01eV for the green line.)<br />
+5. ~/sxdefectalign -q 3 --eps 12.9 --vdef v_elec_defect.cube --vref v_elec_pristine.cube --ecut 30 --qe --average 5.2 -C -0.01<br />
+--------------------------------------------------------------------------------<br />
+Å° GaAs (PWscf)<br />
+(sxdefectalign ver.2.2, Quantum Espresso ver.6.5, Ubuntu 18.04 LTS, gfrotran, and Netlib (&quot;sudo apt install&quot; command))<br />
+<br />
+Å† step1: structure optimization<br />
+0. wget https://www.quantum-espresso.org/upf_files/Ga.pz-bhs.UPF<br />
+&nbsp; wget https://www.quantum-espresso.org/upf_files/As.pz-bhs.UPF<br />
+1. gedit gaas.scf.in<br />
+----------<br />
+&amp;control<br />
+&nbsp; calculation='scf'<br />
+&nbsp; prefix='GaAs',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav=&nbsp; 2,<br />
+&nbsp; celldm(1) =10.4749,<br />
+&nbsp; nat=&nbsp; 2,<br />
+&nbsp; ntyp= 2,<br />
+&nbsp; ecutwfc =20.0<br />
+/<br />
+&amp;electrons<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; Ga&nbsp; 69.723&nbsp; Ga.pz-bhs.UPF<br />
+&nbsp; As&nbsp; 74.92&nbsp; As.pz-bhs.UPF<br />
+ATOMIC_POSITIONS (alat)<br />
+&nbsp; Ga 0.00 0.00 0.00<br />
+&nbsp; As 0.25 0.25 0.25<br />
+K_POINTS automatic<br />
+&nbsp; 6 6 6 1 1 1<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/pw.x &lt;&nbsp;gaas.scf.in | tee gaas.scf.out<br />
+3. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot; &nbsp;total energy&quot; </span>gaas.scf.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>!&nbsp;&nbsp;&nbsp; total energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp;&nbsp;&nbsp; -17.31753720 Ry)<br />
+<br />
+Å† step2: dielectric constant calculation (ph.x)<br />
+1. gedit gaas.phG.in<br />
+----------<br />
+&amp;inputph<br />
+&nbsp; tr2_ph=1.0d-12,<br />
+&nbsp; prefix='GaAs',<br />
+&nbsp; amass(1)=69.723,<br />
+&nbsp; amass(2)=74.92,<br />
+&nbsp; outdir='./',<br />
+&nbsp; fildyn='gaas.dynG',<br />
+&nbsp; epsil=.true.<br />
+/<br />
+0.0 0.0 0.0<br />
+----------<br />
+2. ~/qe-6.5/bin/ph.x &lt; gaas.phG.in | tee gaas.phG.out<br />
+3. gedit gedit gaas.phG.out<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Dielectric constant in cartesian axis<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.444199376&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.000000000 )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.444199376&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000 )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.444199376 )<br />
+Å¶ nosym = .ture. Ç∆&nbsp;calculation='vc-relax' Ç≈åvéZÇ∑ÇÈÇ∆èÍçáÇ…ÇÊÇ¡ÇƒÇÕîÒëŒäpçÄÇ…10%íˆìxÇÃílÇ™é¶Ç≥ÇÍÇÈÇ±Ç∆Ç™Ç†ÇÈÅiÇªÇÃÇÊÇ§Ç»èÍçáÇ…ÇÕí·Ç¢ÉJÉbÉgÉIÉtÇ‚è≠Ç»Ç¢kì_êîÅAä…Ç¢é˚ë©èåèÇ»Ç«Ç≈åvéZê∏ìxÇ™í·Ç∑Ç¨ÇΩâ¬î\ê´Ç™çlÇ¶ÇÁÇÍÇÈÅjÅB<br />
+<br />
+Å† step3: GaAs (2x2x2)<br />
+0. wget https://www.quantum-espresso.org/upf_files/Ga.pz-bhs.UPF<br />
+&nbsp; wget https://www.quantum-espresso.org/upf_files/As.pz-bhs.UPF<br />
+1. gedit gaas_2x2x2.scf.in<br />
+----------<br />
+&amp;control<br />
+&nbsp; calculation='scf'<br />
+&nbsp; prefix='GaAs_2x2x2',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav=&nbsp; 0,<br />
+&nbsp;&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">A =&nbsp; <font face="Meiryo">1.0</font></span>,<br />
+&nbsp; nat=&nbsp; 16,<br />
+&nbsp; ntyp= 2,<br />
+&nbsp; ecutwfc =20.0<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; nosym = .true. ,</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; tot_charge = 0.0 ,</span><br />
+/<br />
+&amp;electrons<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; conv_thr = 1.6e-04 ,<br />
+&nbsp; electron_maxstep = 900,</span><br />
+/<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">CELL_PARAMETERS {alat}</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 8.1319866180 &nbsp; 0.0000000000 &nbsp; 0.0000000000</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 4.0659928401 &nbsp; 7.0425072652 &nbsp; 0.0000000000</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 4.0659928401 &nbsp; 2.3475022412 &nbsp; 6.6397395888</span><br />
+ATOMIC_SPECIES<br />
+&nbsp; Ga&nbsp; 69.723&nbsp; Ga.pz-bhs.UPF<br />
+&nbsp; As&nbsp; 74.92&nbsp; As.pz-bhs.UPF<br />
+ATOMIC_POSITIONS (crystal)<br />
+&nbsp; Ga 0.00 0.00 0.00<br />
+&nbsp; Ga 0.00 0.00 0.50<br />
+&nbsp; Ga 0.00 0.50 0.00<br />
+&nbsp; Ga 0.50 0.00 0.00<br />
+&nbsp; Ga 0.00 0.50 0.50<br />
+&nbsp; Ga 0.50 0.00 0.50<br />
+&nbsp; Ga 0.50 0.50 0.00<br />
+&nbsp; Ga 0.50 0.50 0.50<br />
+&nbsp; As 0.375 0.375 0.375<br />
+&nbsp; As 0.375 0.375 0.875<br />
+&nbsp; As 0.375 0.875 0.375<br />
+&nbsp; As 0.875 0.375 0.375<br />
+&nbsp; As 0.375 0.875 0.875<br />
+&nbsp; As 0.875 0.375 0.875<br />
+&nbsp; As 0.875 0.875 0.375<br />
+&nbsp; As 0.875 0.875 0.875<br />
+K_POINTS automatic<br />
+&nbsp; 3 3 3 1 1 1<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/pw.x &lt;&nbsp;gaas_2x2x2.scf.in | tee gaas_2x2x2.scf.out<br />
+3. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot; &nbsp;total energy&quot; </span>gaas_2x2x2.scf.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>!&nbsp;&nbsp;&nbsp; total energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp;&nbsp; -138.47843590 Ry)<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">4</span>. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot;highest&quot; </span>gaas_2x2x2.scf.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>&nbsp;&nbsp;&nbsp;&nbsp; highest occupied level (ev):&nbsp;&nbsp;&nbsp;&nbsp; 3.9923)<br />
+Å¶ cif -&gt; VESTA (1x1x1 -&gt; 2x2x2) -&gt; POSCAR (VASP)&nbsp;<br />
+<br />
+Å† step4: GaAs (2x2x2, Ga vacancy, 3-)<br />
+1. cp&nbsp;gaas_2x2x2.scf.in&nbsp;gaas_2x2x2_vga3m.relax.in<br />
+2. gedit&nbsp;gaas_2x2x2_vga3m.relax.in<br />
+----------before<br />
+&nbsp; calculation='scf'<br />
+&nbsp; prefix='GaAs_2x2x2',<br />
+<br />
+&nbsp; nat=&nbsp; 16,<br />
+<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; tot_charge = 0.0 ,</span><br />
+<br />
+&nbsp; Ga 0.00 0.00 0.00<br />
+----------<br />
+----------after<br />
+&nbsp; calculation='relax'<br />
+&nbsp; nstep = 900<br />
+&nbsp; prefix='GaAs_2x2x2_vga3m',<br />
+<br />
+&nbsp; nat=&nbsp; 15,<br />
+<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; tot_charge = -3.0 ,<br />
+<br />
+&amp;ions<br />
+/</span><br />
+----------<br />
+3. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/pw.x &lt;&nbsp;gaas_2x2x2_vga3m.relax.in | tee gaas_2x2x2_vga3m.relax.out<br />
+4. xcrysden --pwo&nbsp;gaas_2x2x2_vga3m.relax.out<br />
+5. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot; &nbsp;total energy&quot; </span>gaas_2x2x2_vga3m.relax.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>!&nbsp;&nbsp;&nbsp; total energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp;&nbsp; -132.86315351 Ry)<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">6</span>. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot;highest&quot; </span>gaas_2x2x2_vga3m.relax.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>&nbsp;&nbsp;&nbsp;&nbsp; highest occupied level (ev):&nbsp;&nbsp;&nbsp;&nbsp; 4.0204)<br />
+<br />
+Å† step5: sxdefectalign<br />
+1. gedit inp_pris<br />
+---------<br />
+&amp;INPUTPP<br />
+&nbsp; prefix='GaAs_2x2x2'<br />
+&nbsp; outdir='./'<br />
+&nbsp; filplot='pris.pp'<br />
+&nbsp; plot_num = 11<br />
+/<br />
+&amp;PLOT<br />
+&nbsp; nfile=1<br />
+&nbsp; filepp(1)='pris.pp'<br />
+&nbsp; iflag=3<br />
+&nbsp; output_format=6<br />
+&nbsp; fileout='v_elec_pristine.cube'<br />
+/<br />
+---------<br />
+2. ~/qe-6.5/bin/pp.x &lt; inp_pris<br />
+3. gedit inp_defe<br />
+---------<br />
+&amp;INPUTPP<br />
+&nbsp; prefix='GaAs_2x2x2_vga3m'<br />
+&nbsp; outdir='./'<br />
+&nbsp; filplot='relax_defe.pp'<br />
+&nbsp; plot_num = 11<br />
+/<br />
+&amp;PLOT<br />
+&nbsp; nfile=1<br />
+&nbsp; filepp(1)='relax_defe.pp'<br />
+&nbsp; iflag=3<br />
+&nbsp; output_format=6<br />
+&nbsp; fileout='v_elec_defect.cube'<br />
+/<br />
+---------<br />
+4. ~/qe-6.5/bin/pp.x &lt; inp_defe<br />
+5. ./sxdefectalign -q 3 --eps 11.4 --vdef v_elec_defect.cube --vref v_elec_pristine.cube --ecut 20 --qe --average 5.2<br />
+&nbsp; (a1. wget https://sxrepo.mpie.de/attachments/download/20/sxdefectalign.bz2<br />
+&nbsp;&nbsp; a2. bunzip2 sxdefectalign.bz2<br />
+&nbsp;&nbsp; a3. chmod +x sxdefectalign)<br />
+----------<br />
+=== Intermediate results (unscreened) ===<br />
+Isolated energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 3.59045<br />
+Periodic energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 2.64109<br />
+Difference (Hartree)&nbsp; : -0.949364<br />
+Difference (eV)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : -25.8335<br />
++-----------------------------------------------------------------------------<br />
+Calculation performed with epsilon = 11.4<br />
++-----------------------------------------------------------------------------<br />
+Defect correction (eV): 2.2661 (incl. screening &amp; alignment)<br />
+----------<br />
+6. xmgrace -nxy vline-eV-a0.dat<br />
+&nbsp; xmgrace -nxy vline-eV-a1.dat<br />
+&nbsp; xmgrace -nxy vline-eV-a2.dat<br />
+&nbsp; (you estimate a plateau value of C=-0.3 eV for the green line.)<br />
+7. ./sxdefectalign -q 3 --eps 11.4 --vdef v_elec_defect.cube --vref v_elec_pristine.cube --ecut 20 --qe --average 5.2 -C -0.3<br />
+----------<br />
+=== Intermediate results (unscreened) ===<br />
+Isolated energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 3.59045<br />
+Periodic energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : 2.64109<br />
+Difference (Hartree)&nbsp; : -0.949364<br />
+Difference (eV)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : -25.8335<br />
++-----------------------------------------------------------------------------<br />
+Calculation performed with epsilon = 11.4<br />
++-----------------------------------------------------------------------------<br />
+Defect correction (eV): 3.1661 (incl. screening &amp; alignment)<br />
+----------<br />
+<br />
+Å† step6: Ga (ortho, Cmce, 64)<br />
+1. gedit ga.scf.in<br />
+----------<br />
+&amp;control<br />
+&nbsp; calculation='scf'<br />
+&nbsp; prefix='Ga',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav=&nbsp; 0,<br />
+&nbsp;&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">A =&nbsp; <font face="Meiryo">1.0</font></span>,<br />
+&nbsp; nat=&nbsp; 4,<br />
+&nbsp; ntyp= 1,<br />
+&nbsp; ecutwfc =20.0<br />
+/<br />
+&amp;electrons<br />
+/<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">CELL_PARAMETERS {alat}</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 4.4942765236 &nbsp; 0.0000000000 &nbsp; 0.0000000000</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp;-2.1718145883 &nbsp; 3.9346845953 &nbsp; 0.0000000000</span><br style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 13.93px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 0.0000000000 &nbsp; 0.0000000000 &nbsp; 4.6018095016</span><br />
+ATOMIC_SPECIES<br />
+&nbsp; Ga&nbsp; 69.723&nbsp; Ga.pz-bhs.UPF<br />
+ATOMIC_POSITIONS (crystal)<br />
+&nbsp; Ga 0.65625&nbsp; 0.34374&nbsp; 0.41815<br />
+&nbsp; Ga 0.84374&nbsp; 0.15626&nbsp; 0.91820<br />
+&nbsp; Ga 0.34374&nbsp; 0.65626&nbsp; 0.58180<br />
+&nbsp; Ga 0.15626&nbsp; 0.84374&nbsp; 0.08180<br />
+K_POINTS automatic<br />
+&nbsp; 3 3 3 1 1 1<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/pw.x &lt;&nbsp;ga.scf.in | tee ga.scf.out<br />
+3. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">grep &quot; &nbsp;total energy&quot; </span>ga.scf.out<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> | tail -n 1<br />
+&nbsp; (</span>!&nbsp;&nbsp;&nbsp; total energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp;&nbsp;&nbsp; -18.01711232 Ry)<br />
+Å¶ cif -&gt; VESTA -&gt; POSCAR (VASP)&nbsp;<br />
+<br />
+Å† step7: defect formation energy<br />
+1. defect <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">formation enegy = E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(GaAs_V</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ga</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(3-)) - E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(GaAs) +&nbsp; E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(Ga)</span>/4+&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">q*(E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">VBM</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> + E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">) </span>+&nbsp;Defect correction (eV)<br />
+&nbsp; = (-132.86315351<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> - (</span>-138.47843590<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">) +&nbsp; </span>-18.01711232/4)*13.6058 +&nbsp;<span class="qv3Wpe">-3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*(E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">VBM</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> + E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">) </span>+&nbsp;3.1661 [eV]<br />
+&nbsp; = <span class="qv3Wpe" id="cwos">18.2822</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*(E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">VBM</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> + E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">) [eV]<br />
+&nbsp;&nbsp; (Ref [10] case: E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">VBM </sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">=&nbsp;</span> 3.9923 eV (for undefected supercell))<br />
+&nbsp; = <span class="qv3Wpe" id="cwos">18.2822</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*</span>3.9923 -3<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"> = </span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F </sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[eV]</span><br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Å¶ Note: Fermi energy E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F </sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">= electron chemical potential &mu;<sub>e</sub> at 0 K<br />
+2. Ga-rich (or As-poor) limit:&nbsp;</span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">F </sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[eV]<br />
+&nbsp; As-rich (or Ga-poor) limit:&nbsp;</span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F </sub>+ &Delta;H <span style="text-align: left; color: inherit; text-transform: none; line-height: 1.3; text-indent: 0px; letter-spacing: normal; font-family: Roboto,Arial,sans-serif; font-style: normal; font-variant: normal; font-weight: 400; text-decoration: none; word-spacing: 0px; display: inline !important; white-space: normal; orphans: 2; float: none; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">[eV] = </span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F </sub>+ -3.8898/2 = 4.3604 <span class="qv3Wpe">-3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F&nbsp;</sub> [eV]<br />
+Å¶ 2GaAs(c) = 2Ga(c) + As<sub>2</sub>(g); &Delta;H&deg;(298.15 K) = 89.7&plusmn;1.2 [kcal/mol] = 3.8898&plusmn;0.05204 [eV]<br />
+&nbsp; https://www.sciencedirect.com/science/article/pii/0021961474902559<br />
+&nbsp; åvéZÇ≈å`ê¨ÉGÉlÉãÉMÅ[ÇåvéZÇ∑ÇÈÇ∆â∫ãLÇÃÇÊÇ§Ç…Ç»ÇÈÅB<br />
+&nbsp; <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">As-rich (or Ga-poor) limit:&nbsp;</span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F </sub>+ &Delta;H<sub>f</sub>(GaAs) <span style="text-align: left; color: inherit; text-transform: none; line-height: 1.3; text-indent: 0px; letter-spacing: normal; font-family: Roboto,Arial,sans-serif; font-style: normal; font-variant: normal; font-weight: 400; text-decoration: none; word-spacing: 0px; display: inline !important; white-space: normal; orphans: 2; float: none; -webkit-text-stroke-width: 0px; background-color: rgb(255, 255, 255);">[eV] = </span><span class="qv3Wpe" id="cwos">6.3053</span><span class="qv3Wpe"> -3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F </sub>+ -0.9970 = 5.3083 <span class="qv3Wpe">-3</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">*E</span><sub>F&nbsp;</sub> [eV]<br />
+Å¶ Here we briefly discuss the other ingredients needed to calculate defect formation energies using the Zhang-Northrup formula. First, the valence band position ?v must be obtained from a calculation on the pristine unit cell, with a dense enough k-point sampling so that the band edge is included (for GaAs this just means that the &Gamma; point is included). [9] (where ?v is <span style="display: inline !important; float: none; background-color: rgb(252, 252, 252); color: rgb(64, 64, 64); font-family: Lato,proxima-nova,Helvetica Neue,Arial,sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 24px; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">the valence band maximum</span>, then ?v = <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">VBM</sub>)<br />
+----------(the &Gamma; point is included)<br />
+&nbsp;&nbsp;K_POINTS automatic<br />
+&nbsp; NKX NKY NKZ 0 0 0<br />
+----------<br />
+<br />
+Å† infromation<br />
+----------<br />
+&epsilon;(&omega;) = &epsilon;<sup>elec</sup>(&omega;) + &epsilon;<sup>lat</sup>(&omega;) + &epsilon;<sup>disp</sup>(&omega;)<br />
+&epsilon;(&omega;) Å‡ &epsilon;<sup>elec</sup>(&omega;) + &epsilon;<sup>lat</sup>(&omega;): semi-conducter or Metal oxide case<br />
+<br />
+&epsilon;<sup>elec</sup>(&omega;) (&omega; &lt; 10 PHz): all materials<br />
+&nbsp;&nbsp;Polarization of the electronic state of matter caused by an electric field<br />
+&nbsp; 10 PHz:&nbsp;Vacuum ultraviolet region<br />
+&epsilon;<sup>lat</sup>(&omega;) (&omega; &lt; 10 THz):&nbsp;Compound liquid and solid<br />
+&nbsp;&nbsp;It is caused by a change in the arrangement of the atoms that make up the compound due to an electric field.<br />
+&epsilon;<sup>disp</sup>(&omega;) (&omega; &lt; 10 MHz ? 1 GHz):&nbsp;Molecular liquids and polymers with dipoles<br />
+&nbsp;&nbsp;Caused by the orientation of a molecule or polymer dipole with respect to the electric field<br />
+<br />
+&epsilon;(&omega;=0) = &epsilon;<sub>1</sub>(&omega;=0)<br />
+&epsilon;(&omega;&ne;0) = &epsilon;<sub>1</sub>(&omega;&ne;0) + i*&epsilon;<sub>2</sub>(&omega;&ne;0)<br />
+<br />
+static permittivity &epsilon;<sub>s</sub> = lim<sub>&omega;&rarr;0</sub> &epsilon;(&omega;)<br />
+Ref:&nbsp;https://en.wikipedia.org/wiki/Permittivity<br />
+<br />
+&epsilon;(&omega;) = &epsilon;<sub>&infin;</sub> + (&epsilon;<sub>s</sub> - &epsilon;<sub>&infin;</sub>)/(1-i&omega;&tau;)<br />
+Ref:&nbsp;https://en.wikipedia.org/wiki/Dielectric<br />
+<br />
+The dielectric tensor can be split in the ionic (&epsilon;<sub>0</sub>) and electronic (&epsilon;<sub>&infin;</sub>) contributions:<br />
+&nbsp; &epsilon;<sub>ij</sub> =&nbsp;&epsilon;<sub>ij</sub><sup>0</sup> +&nbsp;&epsilon;<sub>ij</sub><sup>&infin;</sup><br />
+The refractive index, n<br />
+&nbsp; n = (&epsilon;<sub>poly</sub><sup>&infin;</sup>)<sup>0.5</sup><br />
+where&nbsp;&epsilon;<sub>poly</sub><sup>&infin;</sup> is the average of the eigenvalues of electronic contribution to the dielectric tensor. It should be noted this equation for the refractive index assumes the material is non-magnetic.<br />
+Ref:&nbsp;https://wiki.materialsproject.org/Dielectric_calculations<br />
+----------<br />
+<br />
+Å¶ åvéZéËèáÇämîFÇ∑ÇÈÇΩÇﬂÇ…Ç±ÇÃÉyÅ[ÉWÇçÏê¨ÇµÇΩÇÃÇ≈ÅAé¿ç€Ç…ÇÕÅAÉJÉbÉgÉIÉtÇ30 RyÅA3x3x3ÇÃÉXÅ[ÉpÅ[ÉZÉãÅAkì_êîÇëùÇ‚Ç∑ÅAé˚ë©èåèÇåµÇµÇ≠Ç∑ÇÈÇ»Ç«ÇµÇƒåvéZê∏ìxÇè„Ç∞ÇƒêiÇﬂÇƒó~ÇµÇ¢ÅBK_POINTS automaticÇ≈ÇÃç≈å„ÇÃ3Ç¬ÇÃêîéöÇ0Ç…Ç∑ÇÈÇ∆&Gamma;ì_Çä‹ÇﬂÇΩkì_Ç™ê›íËÇ≥ÇÍÇÈÅièoóÕÉtÉ@ÉCÉãÇ…Ç«ÇÃÇÊÇ§Ç…kì_Ç™ê›íËÇ≥ÇÍÇƒÇ¢ÇÈÇ©Ç™ï\é¶Ç≥ÇÍÇƒÇ¢ÇÈÅjÅB<br />
+-----------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] http://www.fisica.uniud.it/~giannozz/QE-Tutorial/<br />
+&nbsp;&nbsp;http://ermes.unt.edu/PhononsWithDFPT.pdf<br />
+[2] http://www.cmpt.phys.tohoku.ac.jp/~koretsune/SATL_qe_tutorial/index.html<br />
+&nbsp; http://www.stat.phys.titech.ac.jp/SATL_qe_tutorial/<br />
+[3]&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Project: 4.1 (phonon) Si phonon gamma point | Quantum Espresso Tutorial 2019</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; https://www.youtube.com/watch?v=FTFSwm3lMOY</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; äiéqóUìdó¶ÇÕÇ±ÇÃìÆâÊÇå©ÇÍÇŒÇÊÇ¢ÅB</span><br />
+[4] An introduction to density functional theory for experimentalists (Tutorial 4.1)<br />
+&nbsp;&nbsp;https://www.paradim.org/sites/default/files/2019-05/Phonon_Dispersion.pdf<br />
+&nbsp; (https://www.paradim.org/toolbox/theory/quantum_espresso/tutorials)<br />
+&nbsp; GaAsÇÃåvéZó·Ç™ãLç⁄Ç≥ÇÍÇƒÇ¢ÇÈÅB<br />
+[5]&nbsp;Project: 4.1 (phonon) Si phonon gamma point | Quantum Espresso Tutorial 2019<br />
+&nbsp; https://www.youtube.com/watch?v=FTFSwm3lMOY<br />
+&nbsp; äiéqóUìdó¶ÇÕÇ±ÇÃìÆâÊÇå©ÇÍÇŒÇÊÇ¢ÅB<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[6]&nbsp;Developers&rsquo; Manual for PHonon (. 6.1)</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp;&nbsp;http://web.mit.edu/espresso_v6.1/i386_linux26/qe-6.1/PHonon/Doc/developer_man.pdf</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; General structure of ph.x </span>
+<table border="1" cellpadding="1" cellspacing="1" style="border-collapse: separate; color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; width: 500px; word-spacing: 0px;">
+	<tbody>
+		<tr>
+			<td style="width: 210px;">&nbsp;</td>
+			<td style="text-align: center; width: 89px;">frequency</td>
+			<td style="text-align: center; width: 79px;">q</td>
+			<td style="text-align: center; width: 111px;">perturbations</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">polarizability</td>
+			<td style="text-align: center; width: 89px;">iu</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">dielectric constant</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">zeu</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">electro optic coefficient</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">x,y,z</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">raman tensor</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">3 x 3</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">dynamical matrix</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">all q</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">zue</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">gamma</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center; width: 210px;">electron phonon interactions</td>
+			<td style="text-align: center; width: 89px;">0</td>
+			<td style="text-align: center; width: 79px;">all q</td>
+			<td style="text-align: center; width: 111px;">all irreps&nbsp;</td>
+		</tr>
+	</tbody>
+</table>
+
+<p><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEzeu = Born effective charges as derivative of the forces</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEzue = Born effective charges as derivative of the polarization</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">----------</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEfpol, if .TRUE. computes the frequency dependent polarizability</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEepsil, if .TRUE. computes the dielectric constant</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEzeu, if .TRUE. computes eff. charges as induced forces</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅElraman, if .TRUE. computes the raman tensor</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEelop, if .TRUE. computes the el-optical coefficient</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEtrans, if .TRUE. computes the dynamical matrix</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEzue, if .TRUE. computes eff. charges as induced polarization</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">ÅEelph if .TRUE. computes the electron phonon coupling</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">[7] F. Zheng et al., Phys. Rev. B 95 (2017) 035203.</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp;&nbsp;https://www.sas.upenn.edu/rappegroup/publications/Papers/Zheng17p035203.pdf<br />
+[8] N. Martines et al., J. Phys.: Conf. Ser. 743 (2016) 012007.<br />
+&nbsp;&nbsp;https://iopscience.iop.org/article/10.1088/1742-6596/743/1/012007<br />
+[9]&nbsp;Calculating the formation energies of charged defects Introduction<br />
+&nbsp;&nbsp;https://wiki.fysik.dtu.dk/gpaw/dev/tutorials/defects/defects.html<br />
+&nbsp; GPAWÇópÇ¢ÇΩGaAsÇ≈ÇÃ</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">V</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Ga</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"><sup>3-</sup>ÇÃ</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">åvéZï˚ñ@Åi2x2x2ÇÃÉXÅ[ÉpÅ[ÉZÉãÇópÇ¢ÇƒÇ¢ÇÈÅjÅB<br />
+[10] Formation energies of charged defects<br />
+&nbsp;&nbsp;https://docs.quantumwise.com/tutorials/charged_defects/charged_defects.html<br />
+&nbsp;&nbsp;https://docs.quantumatk.com/_downloads/charged_defects.pdf<br />
+&nbsp;&nbsp;https://docs.quantumatk.com/_downloads/ppt_charged_defects.pdf<br />
+&nbsp; QuantumATKÇópÇ¢ÇΩGaAsÇ≈ÇÃ</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">V</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">As</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;"><sup>3-</sup>ÇÃ</span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">åvéZï˚ñ@<br />
+&nbsp; &quot;</span><span style="display: inline !important; float: none; background-color: rgb(252, 252, 252); color: rgb(64, 64, 64); font-family: &quot;Roboto-Light&quot;,Arial,sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">dielectric constant at zero frequency&quot;</span>Ç∆èëÇ©ÇÍÇƒÇ¢ÇÈÇÃÇ≈è„ãLÇÃï˚ñ@Ç≈ñ‚ëËÇ»Ç¢ÇÊÇ§Ç»ãCÇ™Ç∑ÇÈÅBÇøÇ»Ç›Ç…è„ãLÇÃóUìdó¶ÇÃåvéZÇÃëOÇÃscfÇ≈kì_êîÇ4x4x4Ç…Ç∑ÇÈÇ∆12.3íˆìxÇÃílÇ…Ç»ÇÈÅB<br />
+&nbsp; &quot;<span style="display: inline !important; float: none; background-color: rgb(252, 252, 252); color: rgb(64, 64, 64); font-family: &quot;Roboto-Light&quot;,Arial,sans-serif; font-size: 16px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">The dielectric screening is described by the static dielectric constant computed in the following section for bulk GaAs.&quot;Ç∆Ç‡èëÇ©ÇÍÇƒÇ¢ÇÈÅB</span><br />
+-----------------------------------------------------------------------------<br />
+Å° formation energy (GaAs)<br />
+<br />
+Å† As (tri, R-3m, 166)<br />
+1. gedit as.scf.in<br />
+----------<br />
+&amp;control<br />
+&nbsp; calculation='scf'<br />
+&nbsp; prefix='As',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav=&nbsp; 0,<br />
+&nbsp;&nbsp;<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">A =&nbsp; <font face="Meiryo">1.0</font></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>,<br />
+&nbsp; nat=&nbsp; 2,<br />
+&nbsp; ntyp= 1,<br />
+&nbsp; ecutwfc =20.0<br />
+/<br />
+&amp;electrons<br />
+/<br />
+<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">CELL_PARAMETERS {alat}</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><br style="color:#000000; font-family:Roboto,Arial,sans-serif; font-size:13.93px; font-style:normal; font-variant:normal; font-weight:400; letter-spacing:normal; orphans:2; text-align:left; text-decoration:none; text-indent:0px; text-transform:none; -webkit-text-stroke-width:0px; white-space:normal; word-spacing:0px" />
+<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">&nbsp; 4.3620953560 &nbsp; 0.0000000000 &nbsp; 0.0000000000</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><br style="color:#000000; font-family:Roboto,Arial,sans-serif; font-size:13.93px; font-style:normal; font-variant:normal; font-weight:400; letter-spacing:normal; orphans:2; text-align:left; text-decoration:none; text-indent:0px; text-transform:none; -webkit-text-stroke-width:0px; white-space:normal; word-spacing:0px" />
+<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">&nbsp; 2.7089045686 &nbsp; 3.4190220726 &nbsp; 0.0000000000</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><br style="color:#000000; font-family:Roboto,Arial,sans-serif; font-size:13.93px; font-style:normal; font-variant:normal; font-weight:400; letter-spacing:normal; orphans:2; text-align:left; text-decoration:none; text-indent:0px; text-transform:none; -webkit-text-stroke-width:0px; white-space:normal; word-spacing:0px" />
+<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">&nbsp; 2.7089045686 &nbsp; 1.3098295307 &nbsp; 3.1581732906</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span><br />
+ATOMIC_SPECIES<br />
+&nbsp; As&nbsp; 74.92&nbsp; As.pz-bhs.UPF<br />
+ATOMIC_POSITIONS (crystal)<br />
+&nbsp; As 0.27716&nbsp; 0.27716 &nbsp;0.27716<br />
+&nbsp; As 0.72284&nbsp; 0.72284&nbsp; 0.72284<br />
+K_POINTS automatic<br />
+&nbsp; 3 3 3 1 1 1<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/pw.x &lt; as.scf.in | tee as.scf.out<br />
+3. <span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px">grep &quot; &nbsp;total energy&quot; <font face="Meiryo">as</font></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>.scf.out<span style="font-size:0.87rem; text-align:left; text-indent:0px; -webkit-text-stroke-width:0px"><span style="display:inline !important"><span style="float:none"><span style="background-color:#ffffff"><span style="color:inherit"><span style="font-family:Roboto,Arial,sans-serif"><span style="font-style:normal"><span style="font-variant:normal"><span style="font-weight:400"><span style="letter-spacing:normal"><span style="line-height:1.3"><span style="orphans:2"><span style="text-decoration:none"><span style="text-transform:none"><span style="white-space:normal"><span style="word-spacing:0px"> | tail -n 1<br />
+&nbsp; (</span></span></span></span></span></span></span></span></span></span></span></span></span></span></span></span>!&nbsp;&nbsp;&nbsp; total energy&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; =&nbsp;&nbsp;&nbsp;&nbsp; -25.47995165 Ry)<br />
+Å¶ cif -&gt; VESTA -&gt; POSCAR (VASP)&nbsp;<br />
+<br />
+Å† formation energy (GaAs)<br />
+1. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">formation enegy = </span><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(GaAs) -&nbsp; E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(Ga)</span>/4 <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">-&nbsp; E</span><sub style="color: rgb(0, 0, 0); font-family: Roboto,Arial,sans-serif; font-size: 11.53px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">tot</sub><span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(As)</span>/2 [Ry]<br />
+&nbsp; <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: inherit; font-family: Roboto,Arial,sans-serif; font-size: 0.87rem; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.3; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">= </span>-17.31753720 -(-18.01711232)/4 -(-25.47995165)/2 = -0.07328 [Ry]<br />
+&nbsp; = -0.07328*13.6058 = -0.9970 [eV]<br />
+-----------------------------------------------------------------------------<br />
+Å° epsilon calculation (electron part, epsilon.x)<br />
+<br />
+(need nband=10) for scf calculation<br />
+Å† step2: epsilon calculation (electron part, epsilon.x)<br />
+1. gedit gaas.eps.in<br />
+----------<br />
+&amp;inputpp<br />
+&nbsp; outdir='./'<br />
+&nbsp; prefix='GaAs'<br />
+&nbsp; calculation='eps'<br />
+/<br />
+&amp;energy_grid<br />
+&nbsp; smeartype='gauss'<br />
+&nbsp; intersmear=0.136d0<br />
+&nbsp; intrasmear=0.0d0<br />
+&nbsp; wmax=30.0d0<br />
+&nbsp; wmin=0.0d0<br />
+&nbsp; nw=600<br />
+&nbsp; shift=0.0<br />
+/<br />
+----------<br />
+2. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 3 ~/qe-6.5/bin/epsilon.x &lt;&nbsp;gaas.eps.in | tee gaas.eps.out<br />
+3. gedit epsr_GaAs.dat<br />
+&nbsp; (&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp; 11.236281800&nbsp;&nbsp; 11.235443740&nbsp;&nbsp; 11.234334397)<br />
+&nbsp; gedit epsi_GaAs.dat<br />
+&nbsp; (&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp; 0.000000000&nbsp;&nbsp;&nbsp; 0.000000000)<br />
+Ref: GaAs &epsilon;<sup>elec</sup>(0) = 10.8<br />
+&nbsp; Physics of Group 4 Elements and 3-5 Compounds, Springer, Berlin (1982).<br />
+-----------------------------------------------------------------------------<br />
+Å° PWscf v.6.5 (ubuntu 18.04.4 LTS on virtualbox &amp; windows 10)<br />
+<br />
+Å† install<br />
+0. sudo apt install build-essential<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+1. wget&nbsp;https://github.com/QEF/q-e/releases/download/qe-6.5/qe-6.5-ReleasePack.tgz<br />
+2. tar zxvf&nbsp;qe-6.5-ReleasePack.tgz<br />
+3. cd qe-6.5<br />
+4. make pwall<br />
+--------------------------------------------------------------------------------</p>

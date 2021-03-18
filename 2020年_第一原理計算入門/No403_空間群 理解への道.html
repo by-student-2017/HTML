@@ -1,0 +1,373 @@
+-----------------------------------------------------------------------------<br />
+　空間群を理解する方法は教官によって違うと思われますが、空間群の番号と空間群の国際表記から、どのような構造が作られることになるかを理解することから始めると良いでしょう。<br />
+<br />
+◆ 下記のHPが良く纏めています。これを参考に、VESTA(VICS-II など)を用いて色々な構造を作成してみましょう。<br />
+A. VESTAの使い方： <a href="http://e-m.skr.jp/sub/VESTA-v001-gaku.pdf">http://e-m.skr.jp/sub/VESTA-v001-gaku.pdf</a>　<br />
+B. 空間群の国際表記： <a href="http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/IV/supplement4-2.pdf">http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/IV/supplement4-2.pdf</a><br />
+C. International Tables for Crystallography A： <a href="http://it.iucr.org/">http://it.iucr.org/</a><br />
+D. Space Group Diagrams and Tables： <a href="http://img.chem.ucl.ac.uk/sgp/large/sgp.htm">http://img.chem.ucl.ac.uk/sgp/large/sgp.htm</a><br />
+E. 結晶構造解析のための空間群： <a href="http://neutron-center.imr.tohoku.ac.jp/HERMES/Analysis/SPGroup.html">http://neutron-center.imr.tohoku.ac.jp/HERMES/Analysis/SPGroup.html</a><br />
+F. 月刊ホームページ2007 年11 月号「結晶の対称性って何？」： <a href="http://www.st.hirosaki-u.ac.jp/~tak/2007_11.pdf">http://www.st.hirosaki-u.ac.jp/~tak/2007_11.pdf</a><br />
+G. Crystallography &amp; Mineralogy: Lecture 1. Introduction to Crystallography [Part 1] : <a href="https://www.youtube.com/watch?v=0dUOCu9jz9A">https://www.youtube.com/watch?v=0dUOCu9jz9A</a><br />
+※ 上記C.が理解できなかった場合は、&quot;今野豊彦、「物質の対称性と群論」、共立出版&quot; と &quot;中井泉、泉富士夫、「粉末X線解析の実際 第2版」、朝倉書店&quot; を参照すると良い。<br />
+<br />
+◆ 日本で制作されている理論計算のコードでは、空間群の取り扱いで、TSPACE が良く取り上げられます。書籍やHP (<a href="http://aquarius.mp.es.osaka-u.ac.jp/~tspace/index.html">http://aquarius.mp.es.osaka-u.ac.jp/~tspace/index.html</a>) があります。<br />
+<br />
+◆ 実際に理論計算で扱う場合には、CISSのHP(<a href="http://www.ciss.iis.u-tokyo.ac.jp/">http://www.ciss.iis.u-tokyo.ac.jp/</a>)のダウンロードにある ABCAP や Phase のマニュアル TSPACEのHPにある空間群の生成元のデータベース（generator.table）の理解を助ける記述があります。<br />
+<br />
+◆ DV-X&alpha;の書籍にも回転対称性と構造に関する記述がありますので、それもあわせて理解しておくと良いでしょう（GAMESSなどを使う方は読んでおくと良いかもしれない）。<br />
+<br />
+◆ さらに上記を理解した後に、<a href="http://mukiken.eng.niigata-u.ac.jp/kougi.html">http://mukiken.eng.niigata-u.ac.jp/kougi.html</a>&nbsp;での関連講義 「群論と結晶場」を読み込んでみるのも良いでしょう。<br />
+<br />
+◆ 他の詳しいテキスト<br />
+・ <a href="http://mineralx.sci.hokudai.ac.jp/~seto/class/IV/4.pdf">http://mineralx.sci.hokudai.ac.jp/~seto/class/IV/4.pdf</a><br />
+・ <a href="http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/IV/3.pdf">http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/IV/3.pdf</a><br />
+<br />
+※ちなみに、私は準結晶を研究してきたので、未だに空間群を専門家と言える程まで理解できておりません。大学院では空間群の国際表記と構造の対応関係を1.5時間（大学院の講義で1回）学習したのみです。<br />
+<br />
+勉学するのに良い書籍<br />
+[1] 中井泉、泉富士夫、「粉末X線解析の実際 第2版」、朝倉書店<br />
+[2] 今野豊彦、「物質の対称性と群論」、共立出版<br />
+[3] 大森啓一、「点群と空間群の表現」、内田老鶴圃新社<br />
+-----------------------------------------------------------------------------<br />
+（図が多く必要であれば記述しない予定であったが、数式の部分も多くあったので、その部分を主に記述する）<br />
+■&nbsp;bilbao crystallographic server： <a href="http://www.cryst.ehu.es/">http://www.cryst.ehu.es/</a>&nbsp;<br />
+■ 対称性・群論トレーニングコース： <a href="http://pfwww.kek.jp/trainingcourse/index.html">http://pfwww.kek.jp/trainingcourse/index.html</a><br />
+<br />
+◆ 対称性の低い群（subgroup｛部分群、または、下位群｝）の探し方<br />
+（別の原子にしたり、2元系から3元系にしたり、相転移などで、高い対称性から低い対称性を探すときによく用いられる）<br />
+G （群, group）<br />
+&darr; t-部分群（translationengleiche subgroup）： 点群での対称性が落ちる。格子点は変化せず。<br />
+M<br />
+&darr; k-部分群(klassengleiche subgroup)： 格子点が一部欠ける。<br />
+H （部分群, subgroup） &rarr; この後、他者の結果と比較できるように軸の方向を変えたりする（標準設定）。<br />
+※ Hermann定理と呼ばれ、HがGの一般部分群の場合に上記のような分割ができる。<br />
+<br />
+◆&nbsp;対称性の低い群（subgroup｛部分群、または、下位群｝）の探し方<br />
+・ International Tables Vol. A1 での ⅠMaximal translationengleiche subgroups から、実際になっていそうな下位群を探す。<br />
+・ 対称性の横に太字で<strong> a</strong> や <strong>b</strong> などが書かれていれば、それは格子ベクトルの変換を示す。その横にはx, y, z を用いて原子座標の変換方法が書かれている。<br />
+・ Wyckoff position がどのように変わるか書かれている。その記述と対称性の関係を参考にして、部分群（下位群）でのSite symmetry を設定する。<br />
+・ 2元系から3元系にするなどの場合には、似た原子は似た原子位置に置く。例えば、遷移金属のサイトには遷移金属を、典型元素のサイトには典型元素を置く。<br />
+※ Wyckoff position (つまり、ある対称の原子位置)の分割を調べるには、<a href="http://www.cryst.ehu.es/cryst/wpsplit.html">http://www.cryst.ehu.es/cryst/wpsplit.html</a>&nbsp;を用いると良い。<a href="http://www.cryst.ehu.es/">http://www.cryst.ehu.es/</a>&nbsp;-&gt; <a href="http://www.cryst.ehu.es/cryst/subgroupgraph.html">http://www.cryst.ehu.es/cryst/subgroupgraph.html</a> -&gt; Input G, H, index -&gt; Construct the lattice -&gt; transformation から3x3の回転行列（rotational matrix）と 3x1のベクトル（origin shift）を得ることができる。<br />
+※ order は 一般点の多重度と同じである。そのためため、<a href="http://it.iucr.org/A1/">http://it.iucr.org/A1/</a> での Site symmetry の一番上にある最初の数値を order とすればよい。群G と 部分群 H の位数(order)が分かるから、index =　群Gの位数&nbsp;/&nbsp;群Hの位数&nbsp;として計算できる。<br />
+<br />
+◆ 同じ対称性に属するかの比較<br />
+・ 焦電群に関するデータが15.2. EUCLIDEAN AND AFFINE NORMALIZERS, Tabe 15.2.1.4 に記載されている。ここで&epsilon;は任意の値。<br />
+・ VESTA -&gt; Utilities -&gt; Standardization of Crystal Data で標準設定できる（斜方晶はb軸基準）<br />
+・ <a href="http://www.cryst.ehu.es/cryst/equivstru.html">http://www.cryst.ehu.es/cryst/equivstru.html</a> -&gt; cif file （正規化部分群を用いて判別している） -&gt; Show<br />
+※ <font size="2">Equivalent Structures では、もちろん直接手で入力してもよい（とても大変でオススメできないが・・・・・・）。</font><br />
+<br />
+◆ 対称操作<br />
+・ 第一種対称操作（Ⅰ）： 並進、回転、螺旋<br />
+・ 第二種対称操作（Ⅱ）： 対称中心、回反<br />
+（※ 反転操作は奇数次元空間にしか存在しない。証明： det(-I )= (-1)<sup>n</sup>であると、次元nが奇数だと-1、偶数だと1であるため、偶数次元では -1 にならず反転しない）<br />
+※ Ⅰ・Ⅰ=Ⅰ、Ⅰ・Ⅱ=Ⅱ、Ⅱ・Ⅰ=Ⅱ、Ⅱ・Ⅱ=Ⅰの関係がある。<br />
+<br />
+◆ 回転や螺旋<br />
+　結晶学では、時計回りが-、反時計回りが+となる。<br />
+<br />
+◆ 写像の種類<br />
+・ Affine mapping： 線形変換（回転、拡大、縮小、せん断）と平行移動の組み合わせ<br />
+・ Isometry （等長写像または等距離写像）： 長さを変えない写像<br />
+・ Symmetry operation （対称操作）： 距離、角度、体積が保存される<br />
+<br />
+◆ 空間の記号<br />
+E<sup>2</sup> ： ユークリッド2次元空間<br />
+E<sup>3</sup> ： ユークリッド3次元空間<br />
+<br />
+◆ ヘルマン・モーガン記号<br />
+・ ブラベー格子型　第1対称方向の対称操作　第2対称方向の対称操作　第3対称方向の対称操作 と記述される (例えば、Pcmm など)。<br />
+・ ブラベー格子型： P, A, C, I, F, R<br />
+・ 各格子系に対する第1から第3対称方向の関係は下記のようになる。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">格子系</td>
+			<td style="text-align: center;">&nbsp;</td>
+			<td style="text-align: center;">第1対称方向</td>
+			<td style="text-align: center;">第2対称方向</td>
+			<td style="text-align: center;">第3対称方向</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Triclinic (P)</td>
+			<td style="text-align: center;">1, -1</td>
+			<td style="text-align: center;">-</td>
+			<td style="text-align: center;">-</td>
+			<td style="text-align: center;">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Monoclinic (P, A, C, I, F)</td>
+			<td style="text-align: center;">1 x A<sub>2</sub></td>
+			<td style="text-align: center;">[010]</td>
+			<td style="text-align: center;">-</td>
+			<td style="text-align: center;">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Othorhombic (P, A, C, I, F)</td>
+			<td style="text-align: center;">3 x A<sub>2</sub></td>
+			<td style="text-align: center;">[100]</td>
+			<td style="text-align: center;">[010]</td>
+			<td style="text-align: center;">[001]</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Tetragonal (P, C, I, F)</td>
+			<td style="text-align: center;">1x A<sub>4</sub></td>
+			<td style="text-align: center;">[001]</td>
+			<td style="text-align: center;">&lt;100&gt;</td>
+			<td style="text-align: center;">&lt;-110&gt;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Rombohedral (R)</td>
+			<td style="text-align: center;">1 x A<sub>3</sub></td>
+			<td style="text-align: center;">[111]</td>
+			<td style="text-align: center;">&lt;-110&gt;</td>
+			<td style="text-align: center;">-</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Hexagonal (P)</td>
+			<td style="text-align: center;">1 x A<sub>6</sub></td>
+			<td style="text-align: center;">[001]</td>
+			<td style="text-align: center;">&lt;100&gt;</td>
+			<td style="text-align: center;">&lt;-110&gt;</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">Cubic (P, I, F)</td>
+			<td style="text-align: center;">4 x A<sub>3</sub></td>
+			<td style="text-align: center;">&lt;001&gt;</td>
+			<td style="text-align: center;">&lt;111&gt;</td>
+			<td style="text-align: center;">&lt;110&gt;</td>
+		</tr>
+	</tbody>
+</table>
+※ Trigonal の結晶格子は R か P<br />
+A<sub>2</sub> = -1, 2 , -2, m&nbsp;　 ※ 位数2のものは半周期に点がある。<br />
+A<sub>3</sub> = 3　　※ 位数3<br />
+A<sub>4</sub> = 4, -4 　※ 位数4<br />
+A<sub>6</sub> = -3, 6, -6　　※ 位数6<br />
+・ アンギュラルブラケット &lt; &gt; は対称関係にある方向を示す。<br />
+&lt;100&gt; = [100], [010] (Tetragonal)<br />
+&lt;-110&gt; = [110], [-110] (Tetragonal)<br />
+&lt;-110&gt;=[-110], [0-10], [-101]&nbsp;(Trigonal)<br />
+&lt;100&gt; = [100], [010], [-1-10] （Hexagonal）<br />
+&lt;-110&gt; = [-110], [120], [-2-10] （Hexagonal）<br />
+&lt;001&gt; = [001], [100], [010] (Cubic)<br />
+&lt;111&gt; = [111], [111], [-1-11], [-11-1], [-1-11]&nbsp;(Cubic)<br />
+&lt;110&gt; = [110], [-110], [011], [0-11], [101], [-101]&nbsp;(Cubic)<br />
+※&nbsp;Rombohedralでは R3□で3回回転軸が1本、cubic ではP□3□で3回回転軸が4本となる。ここで□は何らかの対称操作を示す<br />
+※ [1-1]や[1-10]の方位が採用されるのは、他の対称性でもこの方位が多く見られるためである<br />
+<br />
+◆ 記号の優先順位<br />
+・ n &gt; n<sub>m</sub><br />
+・ m &gt; e &gt; abc &gt; n (&gt; d)<br />
+ここで n<sub>m　</sub>は反時計回りを+とした螺旋を示す (m/n 移動するという意味が含まれている）。さらに、例えば、4<sub>2</sub> &sup; 2 となることにも注意。時計回りの螺旋はn<sub>n-m</sub>となる。<br />
+※ グライド（映進）の記号は対角(diagonal) から、 dをdiamond (P/4)、g,は2次元での映進、nをdiagonal (P/2) として覚えたりする。&nbsp;ここでPは周期。<br />
+<br />
+◆ 対称中心が原点にある場合<br />
+・ 対称中心が原点にあると位相は 0 （=0&deg;）か &pi;(=180&deg;) の何れかになる<br />
+・ International Tebles A 1で、○の中に ，（コンマ）が無い構造は対称中心が無い<br />
+※ ○の中にコンマがあるのは、0 か ○だけの数と同じ<br />
+※ 第二種対称操作は 0 か 第一種対称操作の数と同じ<br />
+<br />
+◆&nbsp;ssg （席対称群＝安定部分群）<br />
+・&nbsp;ssg （席対称群＝安定部分群）が同じ記号でも、共役（きょうやく）部分群が同じでない場合には分けて書かれる（同じワイコフ位置にないことを示す）。同じワイコフ位置にある対称操作は何らかの空間群で関連付けられる。例えば、同じワイコフ位置にある2つの二回対称軸の中心に対称中心があるなど。<br />
+・ (W, w) S (W, w)<sup>-1</sup> = S' としたとき、S = S' であれば、同じ軸か同じミラー<br />
+ここで、W は対称操作の行列、w はベクトルを意味する。<br />
+<br />
+◆ 対称操作の行列 W と ベクトル w （大文字は行列、小文字はベクトル）<br />
+・ w&nbsp; = w<sub>intrinsic</sub> + w<sub>localisation</sub>、ここで、w<sub>intrinsic</sub> は並進、w<sub>localisation</sub>は対称操作の位置のベクトルを示す<br />
+・ det(W) ： 1のとき第一種対称操作、-1のとき第二種対称操作<br />
+・ Tr(W) ： 対角部分のみを和算したもので、Tr(W) = 2 * cos&theta; +&nbsp; 1 として回転操作の種類を割り出すことができる。<br />
+&nbsp; （※ ベクトルがあると螺旋)<br />
+・ Tr(W) = 2 * cos&theta; +&nbsp; 1 で計算したときにおける対称操作の行列表現の関係
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="text-align: center;">&nbsp;</td>
+			<td style="text-align: center;">Ⅰ</td>
+			<td style="text-align: center;">Ⅰ</td>
+			<td style="text-align: center;">Ⅰ</td>
+			<td style="text-align: center;">Ⅰ</td>
+			<td style="width: 41.35px; text-align: center;">Ⅰ</td>
+			<td style="width: 42.64px; text-align: center;">Ⅱ</td>
+			<td style="text-align: center;">Ⅱ</td>
+			<td style="text-align: center;">Ⅱ</td>
+			<td style="text-align: center;">Ⅱ</td>
+			<td style="text-align: center;">Ⅱ</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">&theta;</td>
+			<td style="text-align: center;">0</td>
+			<td style="text-align: center;">180</td>
+			<td style="text-align: center;">120</td>
+			<td style="text-align: center;">90</td>
+			<td style="width: 41.35px; text-align: center;">60</td>
+			<td style="width: 42.64px; text-align: center;">0</td>
+			<td style="text-align: center;">180</td>
+			<td style="text-align: center;">120</td>
+			<td style="text-align: center;">90</td>
+			<td style="text-align: center;">60</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">行列式</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">1</td>
+			<td style="width: 41.35px; text-align: center;">1</td>
+			<td style="width: 42.64px; text-align: center;">-1</td>
+			<td style="text-align: center;">-1</td>
+			<td style="text-align: center;">-1</td>
+			<td style="text-align: center;">-1</td>
+			<td style="text-align: center;">-1</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">跡</td>
+			<td style="text-align: center;">3</td>
+			<td style="text-align: center;">-1</td>
+			<td style="text-align: center;">0</td>
+			<td style="text-align: center;">1</td>
+			<td style="width: 41.35px; text-align: center;">2</td>
+			<td style="width: 42.64px; text-align: center;">-3</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">0</td>
+			<td style="text-align: center;">-1</td>
+			<td style="text-align: center;">-2</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">操作</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">2</td>
+			<td style="text-align: center;">3</td>
+			<td style="text-align: center;">4</td>
+			<td style="width: 41.35px; text-align: center;">6</td>
+			<td style="width: 42.64px; text-align: center;">-1</td>
+			<td style="text-align: center;">-2 = m</td>
+			<td style="text-align: center;">-3</td>
+			<td style="text-align: center;">-4</td>
+			<td style="text-align: center;">-6</td>
+		</tr>
+		<tr>
+			<td style="text-align: center;">操作の位数</td>
+			<td style="text-align: center;">1</td>
+			<td style="text-align: center;">2</td>
+			<td style="text-align: center;">3</td>
+			<td style="text-align: center;">4</td>
+			<td style="width: 41.35px; text-align: center;">6</td>
+			<td style="width: 42.64px; text-align: center;">2</td>
+			<td style="text-align: center;">2</td>
+			<td style="text-align: center;">6</td>
+			<td style="text-align: center;">4</td>
+			<td style="text-align: center;">6</td>
+		</tr>
+	</tbody>
+</table>
+Ⅰ: 第一種対称操作： ベクトルの対称軸に平行な部分が並進を示す。<br />
+Ⅱ: 第二種対称操作： 鏡映面の場合はベクトルの対称軸に垂直な部分が並進を示す。その他では並進が存在しない（そのため、例えば、回反の場合には、w<sub>intrinsic </sub>= (0 0 0)として、w<sub>localisation </sub>を求めれば、w<sub>localisation</sub>が反転をする中心の位置になる）。<br />
+・ [ det(W) * W - I ]&nbsp;[u v w]<sup>ｔ</sup> = 0&nbsp;： u v w の関係が得られる。それに整数を入れると、対称操作の軸の方位[u v w]が分かる。<br />
+・ 位数3以上では、回転方向も重要になる。回転方向を明らかにするには実際に値を入れてみればよい。例えば、W (0 0 1) としたときに、ベクトルがどちらに移動しているかを調べればよい。<br />
+・ 反転操作が存在する場合には反転操作の中心を調べる必要が出てくる。上記を参考にすればよい。<br />
+<br />
+◆&nbsp;対称操作の表記<br />
+　ITA： 対称操作 <sub>方位を示す方程式； inversion point</sub><br />
+　Seitz： 対称操作 <sub>方位 </sub>???<br />
+<br />
+◆ 計量テンソル G<br />
+　座標を変換する場合に、機械的に計算するために用いられる。<br />
+・ 体積 V = a ・ b x c = &radic;( det(G) )<br />
+・ 距離 = &radic;( [&Delta;x<sub>12</sub> &Delta;y<sub>12</sub> &Delta;z<sub>12</sub>] G [&Delta;x<sub>12</sub> &Delta;y<sub>12</sub> &Delta;z<sub>12</sub>]<sup>t</sup> )<br />
+・ 角度 cos&theta;= r<sub>12</sub> ・ r<sub>13</sub> / ||r<sub>12</sub>|| ・||r<sub>13</sub>|| = [&Delta;x<sub>12</sub> &Delta;y<sub>12</sub> &Delta;z<sub>12</sub>] G [&Delta;x<sub>13</sub> &Delta;y<sub>13</sub> &Delta;z<sub>13</sub>]<sup>t</sup> / { &radic;( [&Delta;x<sub>12</sub> &Delta;y<sub>12</sub> &Delta;z<sub>12</sub>] G [&Delta;x<sub>12</sub> &Delta;y<sub>12</sub> &Delta;z<sub>12</sub>]<sup>t</sup> ) * &radic;( [&Delta;x<sub>13</sub> &Delta;y<sub>13</sub> &Delta;z<sub>13</sub>] G [&Delta;x<sub>13</sub> &Delta;y<sub>13</sub> &Delta;z<sub>13</sub>]<sup>t</sup> ) }<br />
+※ 内積は可換的であるため、計量テンソルは対称行列になる。<br />
+※ Tr （=跡）は対角成分を総和するという意味。つまり、Tr A = &Sigma;<sub>i</sub> a<sub>ii</sub><br />
+<br />
+◆ 基底変換｛ (a b c) &rarr; (a' b' c') 座標へ｝<br />
+・ (a b c) P = (a' b' c')<br />
+・&nbsp;(a' b' c') 座標での計量テンソル： G' = (a' b' c')<sup>t</sup> (a' b' c') = P<sup>t</sup> (a b c)<sup>t</sup> (a b c) P = P<sup>t</sup> G P<br />
+<br />
+◆ 同じ構造かどうかを調べる方法(結晶形態の分析)<br />
+　面間角度が同じかどうかを調べればよい。ステレオ投影（stereo projection）を用いて調べられたりする。<br />
+　※ Gnomonic projection と Stereo projection を間違えていないか注意すること！<br />
+<br />
+◆ 消滅則<br />
+　実空間 &rarr; 逆格子空間 だから、ベクトルの長さ n 倍 &rarr; 1/n 倍 である。そのため、周期的な格子点を実空間上で描いて、その格子点上で、プリミティブな格子とコンベンショナルな格子（つまり、AやB, C, I, F になる）を選択し、逆格子空間に描きなおすと、コンベンショナルな格子では逆格子点にない部分が現れる。その位置が消滅則に対応する。<br />
+・ 格子<br />
+A ： (b+c)/2 の点は逆格子空間上には無いので、k+l = 2n<br />
+B ： (a+c)/2 の点は逆格子空間上には無いので、h+l = 2n<br />
+C ： (a+b)/2 の点は逆格子空間上には無いので、h+k = 2n<br />
+I ： (a+b+c)/2 の点は逆格子空間上には無いので、h+k+l = 2n<br />
+F ： A, B, C のときの条件を全て満たす<br />
+・ 映進 （投影すると見かけ上、周期の間隔が短くなったようにみえることを利用して考えるとよい）<br />
+b[100]に垂直な映進： 0kl; k=2n<br />
+c[010]に垂直な映進： h0l; l=2n<br />
+n[001]に垂直な映進： hk0; h+k=2n<br />
+・ 螺旋 （投影すると見かけ上、周期の間隔が短くなったようにみえることを利用して考えるとよい）<br />
+2<sub>1</sub>[100]： h00; h=2n<br />
+4<sub>1</sub>[001]： 00l; l=4n<br />
+<br />
+◆ 読み方<br />
+・ / ： オーバー<br />
+・ ' ： プライム<br />
+・ '' ： ダブルプライム<br />
+・ . ： ドット （その方位や方向に対称操作が無いという意味）<br />
+・ 数値の上の - ： バー（人によってはバールと聞こえる）<br />
+<br />
+◆ 結晶軌道<br />
+・ 結晶中のある原子は、その結晶構造に対する対称性よりも高い対称性を持つことがある。<br />
+　例： 原子がP2/m の対称性を持って並んでいる場合、同じ対称性を持つ原子を別の位置に置けば、結晶全体の対称性は、P2/m, P(111) &cap; P2/m,P(111) = P2, P(111) となる。ここで、P()の部分は周期。<br />
+・ 結晶軌道を考慮することで、ある原子での消滅則と原子散乱因子を考慮に入れて、回折強度をより詳細に議論できる場合がある。<br />
+　例： 酸素が Fmm2の対称性を持ち（＝消滅則 [h+k=2n, k+l=2n, k+l=2n] ）、鉄がPmmm, P(1/2, 1/2, 1/2) を持つ（＝消滅則 [ h=2n, k=2n, l=2n] ）ときなど。<br />
+※ P()の部分は、例えば、ある原子に注目して、偶然にもある原子の位置が対称性が高くなって周期が半分で良くなるなるような場合には P(1/2, 1/2, 1/2)となる。<br />
+<br />
+◆ 結晶軌道に関連する用語<br />
+・ characteristic： 軌道を形成する原子は空間群と同じ対称性を回折図形で示す<br />
+・ non-characteristic： 軌道を形成する原子は空間群より高い対称性を回折図形で示す<br />
+・ extraordinary： 軌道を形成する原子は逆部分格子にしか貢献しない： 特別消滅則（special reflections conditions）が表れる。<br />
+<br />
+◆ 群論 [G1]<br />
+・ 群 （group）<br />
+　結合法則を満たし、単位元、逆元が存在する。<br />
+・ 部分群 (sub group)<br />
+　群の中の元を取り出して、群を形成するもの。<br />
+・ 剰余類 (cosets)<br />
+　群 = 部分群 + 剰余類&nbsp;となる。<br />
+・ 巡回群 (cyclic group)<br />
+　同じ操作をn回繰り返すと元の操作に戻るもの。例えば、4回回転の操作に対する群を書くと 4 = {4<sup>0</sup>=1, 4<sup>1</sup>=4, 4<sup>2</sup>=2, 4<sup>3</sup>=4<sup>-1</sup>, 4<sup>4</sup>=1}となって、同じ操作を4回繰り返すと元に戻る。<br />
+・ 位数 (order)<br />
+　巡回群で元に戻る最小の自然数。例えば、4回回転であれば位数は4。一般的には群Gの位数は|G|と書かれる。これと結晶の格子点の数（Pは1、AやBやCやIは2、Fは4）を用いると、結晶における一般点の個数や特殊点の多重度を知ることができる。<br />
+・ 指数 (index)<br />
+&nbsp;指数 i = |G| / |H|<br />
+・ 可換群<br />
+・ 共役部分群 [G2]<br />
+　gi H = H gi が満たされるとき、HはGの正規部分群と呼ばれる。giは群Gの元のどれかである。これによって、同じ対称性の特殊点を分類分けすることができる。<br />
+・ 正規部分群 [G2]<br />
+　全てのiで gi H = H gi が満たされるとき、HはGの正規部分群と呼ばれる。giは群Gの元のどれかである。<br />
+　これを用いると、Equivalent Descriptions of Crystal Strucutres (<a href="http://www.cryst.ehu.es/cryst/equivstru.html">http://www.cryst.ehu.es/cryst/equivstru.html</a>)を調べることができる。<br />
+・ 同型部分群(isomorphic subgroup)<br />
+・ 焦電群<br />
+・ 商群（剰余群）<br />
+　HがGの正規部分群の場合は、剰余類 gi H の集合 { gi H, &forall;gi &isin; G ｝は群を形成する。その群を商群（剰余群）と呼び、G/Hという記号で記述される。<br />
+※ &forall;「全ての」または「任意の」という意味。&isin;は「元として含まれるもの」を示す。この例であれば、Gの全ての元に対して作られる gi H の集合は群を成しているということを意味する。<br />
+・ 乗積表<br />
+<br />
+References<br />
+[1] <a href="http://www.crystallography.fr/pages_perso/Nespolo/jp/">http://www.crystallography.fr/pages_perso/Nespolo/jp/</a><br />
+[2] <a href="http://bb.phys.se.tmu.ac.jp/~bb/pukiwiki/index.php?Neutron_xray_2%2Fspgroup">http://bb.phys.se.tmu.ac.jp/~bb/pukiwiki/index.php?Neutron_xray_2%2Fspgroup</a><br />
+[3] <a href="http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/gunron.pdf">http://mukiken.eng.niigata-u.ac.jp/satokougi/daigakuin/gunron.pdf</a><br />
+[4] <a href="http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/V/5.pdf">http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/V/5.pdf</a> （2次元空間での記述）<br />
+[5] <a href="http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/V/6.pdf">http://pmsl.planet.sci.kobe-u.ac.jp/~seto/class/V/6.pdf</a> （3次元空間での記述）<br />
+[G1] <a href="http://ufcpp.net/study/group/group.html">http://ufcpp.net/study/group/group.html</a><br />
+[G2] <a href="http://hooktail.sub.jp/algebra/NormalSubgroup/">http://hooktail.sub.jp/algebra/NormalSubgroup/</a><br />
+-----------------------------------------------------------------------------<br />
+◆ 1次元格子： 1次元の格子は無限。型は1個。鏡面あり。<br />
+<br />
+◆&nbsp;2次元空間の対称性<br />
+・ 2次元： identity<br />
+・ 1次元：&nbsp;reflections<br />
+・ 0次元： rotations, translations<br />
+<br />
+◆ 3次元空間の対称性<br />
+・ 3次元： identity<br />
+・ 2次元：&nbsp;reflections<br />
+・ 1次元：&nbsp;rotations<br />
+・ 0次元： rotoinversion<br />
+・ 並進操作： translations<br />
+-----------------------------------------------------------------------------

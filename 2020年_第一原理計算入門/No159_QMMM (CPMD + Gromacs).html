@@ -1,0 +1,77 @@
+QMMM (QM/MM method) (CPMD/Gromacs)&nbsp;<br />
+------------------------------------------------------------------------------<br />
+Å° QMMM code (CPMD/Gromacs)<br />
+&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10 (64 bit))<br />
+<br />
+Å† Install (CPMD: gfortran + OpenMPI)<br />
+ÅEcpmd-v4.3.tar.gz<br />
+0. sudo apt install patch<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+1. tar zxvf cpmd-v4.3.tar.gz<br />
+2. cd CPMD<br />
+3. patch -p0 &lt; patch.to.4612<br />
+&nbsp; patch -p0 &lt; patch.to.4615<br />
+&nbsp; patch -p0 &lt; patch.to.4616<br />
+&nbsp; patch -p0 &lt; patch.to.4621<br />
+&nbsp; patch -p0 &lt; patch.to.4624<br />
+4. ./configure.sh LINUX-X86_64-GFORTRAN-MPI<br />
+5. gedit Makefile<br />
+-----before<br />
+LFLAGS = &nbsp;/home/manish/lapack-3.5.0/liblapack.a /home/manish/OPENBLAS/0.2.18/lib/libopenblas.a<br />
+-----<br />
+-----after<br />
+LFLAGS = &nbsp;/usr/lib/x86_64-linux-gnu/liblapack.a /usr/lib/x86_64-linux-gnu/libopenblas.a<br />
+-----<br />
+6. make clean<br />
+7. make<br />
+(You can get ./bin/cpmd.x)<br />
+<br />
+Å† CommLib&nbsp;<br />
+(https://gitlab.com/MiMiC-projects/CommLib)<br />
+1. wget https://gitlab.com/MiMiC-projects/CommLib/-/archive/master/CommLib-master.tar.gz<br />
+2. tar zxvf CommLib-master.tar.gz<br />
+3. cd CommLib-master<br />
+4. mkdir build<br />
+5. cd build<br />
+6. export CFLAGS=-fPIC<br />
+&nbsp; export CXXFLAGS=-fPIC<br />
+&nbsp; export CMAKE_C_FLAGS=-fPIC<br />
+&nbsp; cmake ..<br />
+7. make<br />
+8. sudo make install<br />
+(/usr/local/lib, /usr/local/include, /usr/local/cmake)<br />
+<br />
+Å† Gromacs (+OpenMPI)<br />
+(http://manual.gromacs.org/documentation/)<br />
+0. sudo apt-get install gcc<br />
+&nbsp; sudo apt-get install build-essential<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libfftw3-dev<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+1. wget ftp://ftp.gromacs.org/pub/gromacs/gromacs-2019.4.tar.gz<br />
+2. tar xfz gromacs-2019.4.tar.gz<br />
+3. cd gromacs-2019.4<br />
+4. mkdir build<br />
+5. cd build<br />
+6. export CFLAGS=-fPIC<br />
+&nbsp; export CXXFLAGS=-fPIC<br />
+&nbsp; export CMAKE_C_FLAGS=-fPIC<br />
+&nbsp; cmake .. -DGMX_BUILD_OWN_FFTW=ON -DREGRESSIONTEST_DOWNLOAD=ON -DCMAKE_C_COMPILER=mpicc -DCMAKE_CXX_COMPILER=mpicxx -DGMX_DOUBLE=ON -DGMX_MPI=ON -DGMX_MIMIC=ON<br />
+7. make -j 4<br />
+8. make check<br />
+9. sudo make install<br />
+10. source /usr/local/gromacs/bin/GMXRC<br />
+&nbsp; (source /usr/local/gromacs/bin/gmx-completion-mdrun_mpi.bash)<br />
+11. /usr/local/gromacs/bin/mdrun_mpi -h<br />
+&nbsp; (mpirun -np 4 /usr/local/gromacs/bin/mdrun_mpi -h)<br />
+Å¶ retry: rm -f -r build<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Installation guide<br />
+&nbsp; http://manual.gromacs.org/documentation/current/install-guide/index.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

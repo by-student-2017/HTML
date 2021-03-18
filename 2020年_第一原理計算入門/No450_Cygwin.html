@@ -1,0 +1,191 @@
+------------------------------------------------------------------------------<br />
+■ Cygwin (Edit:12/May/2020)<br />
+<br />
+□ Install<br />
+1. setup-x86_64.exe<br />
+&nbsp;&nbsp;(https://www.cygwin.com/)<br />
+2. ftp://ftp.jaist.ac.jp<br />
+&nbsp; (Institute in Japan)<br />
+3. select version (View [Full])<br />
+&nbsp; (e.g.,<br />
+&nbsp; gcc-fortran<br />
+&nbsp; libopenblas<br />
+&nbsp; liblapack-devel<br />
+&nbsp; libarpack-devel<br />
+&nbsp; libfftw3-devel<br />
+&nbsp; make<br />
+&nbsp; cmake<br />
+&nbsp; patch<br />
+&nbsp; wget, etc)<br />
+(xfce4系列がAVGの検疫にひっかかって面倒なことになった）<br />
+(openssl-devel -&gt; libssl-devel)<br />
+<br />
+□ Usage<br />
+1. startx<br />
+&nbsp; ウィンドウが表示される<br />
+&nbsp; C:\cygwin64\home からサクラダエディアなどで編集する方がよい。<br />
+<br />
+□ distribution<br />
+1. cygcheck ./*.exe<br />
+&nbsp; (objdump -a *.exe)<br />
+&nbsp; 表示されたファイルを一つのファイルにまとめて配布すればよい<br />
+<br />
+□&nbsp; compiling<br />
+1. ./configure --build=x86_64-pc-cygwin<br />
+<br />
+□ English
+<div>1. echo &quot;export LANG=C&quot; &gt;&gt; /etc/profile.d/lang.sh<br />
+2.&nbsp;echo &quot;export LANG=C&quot; &gt;&gt; /etc/profile.d/lang.csh</div>
+3.&nbsp;echo &quot;export LANG=C&quot; &gt;&gt; ~/.bashrc<br />
+<br />
+□ C drive on Windows<br />
+1. cd&nbsp;/cygdrive/c<br />
+<br />
+□ cygwin on command prompt<br />
+1. command pronpt を開く<br />
+2.&nbsp;C:\cygwin64\Cygwin.bat<br />
+<br />
+□ 改行の変換（win -&gt; linux）<br />
+1.&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">sed -i 's/\r//g' ファイル名</span><br />
+------------------------------------------------------------------------------<br />
+■ cp2k (minimal, latest version from github) (Edit: 1/Jun/2020)<br />
+&nbsp; (https://www.cp2k.org/exercises:2019_uzh_acpc2:installation)<br />
+0. bison<br />
+&nbsp; byacc<br />
+&nbsp; gcc-fortran<br />
+&nbsp; gcc-g++<br />
+&nbsp; make<br />
+&nbsp; libopenblas<br />
+&nbsp; liblapack-devel<br />
+&nbsp; liblapack0<br />
+&nbsp; python2<br />
+&nbsp; python2-devel<br />
+&nbsp; python3<br />
+&nbsp; python3-devel<br />
+&nbsp; zlib<br />
+&nbsp; zlib-devel<br />
+&nbsp; git<br />
+&nbsp; vim<br />
+1.&nbsp;git clone --recursive https://github.com/cp2k/cp2k.git cp2k<br />
+2. cd cp2k/arch<br />
+3. gedit&nbsp;Cygwin-x86-64-gfortran.ssmp<br />
+-----<br />
+CC &nbsp; &nbsp; &nbsp; = cc<br />
+CPP &nbsp; &nbsp; &nbsp;=&nbsp;<br />
+<br />
+FC &nbsp; &nbsp; &nbsp; = gfortran<br />
+LD &nbsp; &nbsp; &nbsp; = gfortran<br />
+<br />
+AR &nbsp; &nbsp; &nbsp; = ar -r<br />
+<br />
+CPPFLAGS =&nbsp;<br />
+DFLAGS &nbsp; = -D__GFORTRAN -D__FFTSG<br />
+FCFLAGS &nbsp;= -g -O2 -funroll-loops -ftree-vectorize -march=native -ffree-form $(DFLAGS) -fopenmp<br />
+LDFLAGS &nbsp;= $(FCFLAGS)&nbsp;<br />
+LIBS &nbsp; &nbsp; = -llapack -lblas<br />
+<br />
+OBJECTS_ARCHITECTURE = machine_gfortran.o<br />
+-----<br />
+(3.5. <span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">sed -i 's/\r//g' </span>Cygwin-x86-64-gfortran.ssmp)<br />
+(3.6.&nbsp;export LANG=C)<br />
+4. cd ~/cp2k&nbsp;<br />
+5.&nbsp;make ARCH=Cygwin-x86-64-gfortran VERSION=ssmp<br />
+6. gedit ~/.bashrc<br />
+-----<br />
+export PATH=${PATH}:$HOME/cp2k/exe/Cygwin-x86-64-gfortran<br />
+-----<br />
+7.&nbsp;source ~/.bashrc<br />
+8.&nbsp;cp2k.ssmp --version<br />
+&nbsp; CP2K version 8.0 (Development Version)<br />
+&nbsp; Source code revision git:ce96559<br />
+&nbsp; cp2kflags: omp<br />
+※ ~/cp2k/exe/Cygwin-x86-64-gfortran/cp2k.ssmp<br />
+※ gitをAVGが検疫に入れてしまった場合、検疫での例外に指定することが必要になる<br />
+<br />
+□ tests (QS/xTB)<br />
+1. cd ~/cp2k/tests<br />
+2. cd&nbsp;xTB/regtest-1<br />
+3.&nbsp;set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 2 cp2k.ssmp -i si_geo.inp | tee si_geo.out<br />
+------------------------------------------------------------------------------<br />
+■ xtb (cygwin on windows10 (64 bit))<br />
+(Edit: 29/Jun/2020)<br />
+<br />
+□ install (version 6.3.0)<br />
+1. git clone https://github.com/grimme-lab/xtb.git<br />
+2. cd xtb<br />
+3. export FC=&quot;gfortran -O2 -mtune=native&quot; CC=gcc<br />
+&nbsp; mkdir build<br />
+&nbsp; pushd build<br />
+&nbsp; cmake -DCMAKE_BUILD_TYPE=Release ..<br />
+&nbsp; make<br />
+&nbsp; ctest<br />
+&nbsp; popd<br />
+4. cygcheck ./xtb.exe<br />
+&nbsp; (0 tests failed out of 83)<br />
+5.&nbsp;make -C build install<br />
+(6. ~/xtb/build/xtb.exe --help)<br />
+<br />
+◇ environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo '# xtb settings' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBHOME=$HOME/xtb' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export XTBPATH=${XTBHOME}/build:${XTBHOME}:${HOME}' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export MANPATH=${MANPATH}:${XTBHOME}/man' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=${PATH}:${XTBHOME}/build' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:${XTBHOME}/include:${XTBHOME}/scripts' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PYTHONPATH=${PYTHONPATH}:${XTBHOME}/python' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+■ lammps (https://lammps.sandia.gov/doc/Build_windows.html)<br />
+<br />
+□ Install<br />
+1. wget https://lammps.sandia.gov/tars/lammps-stable.tar.gz<br />
+2. cd ~/lammps-3Mar20<br />
+3. mkdir build ; cd build<br />
+4. cmake -D BUILD_OMP=yes -D BUILD_TOOLS=yes ../cmake<br />
+5. make<br />
+<br />
+□ phana<br />
+1. cd ~/lammps-3Mar20/tools/phonon<br />
+2. make<br />
+<br />
+□ eam_database (DYNAMO-formatted EAM)<br />
+1. cd ~/lammps-3Mar20/tools/eam_database<br />
+2. gfortran create.f<br />
+3. ./a.exe &lt; EAM.input<br />
+&nbsp; (you can get TaCu.set)<br />
+&nbsp; (pair_style eam/alloy command)<br />
+<br />
+□ eam_generate<br />
+1. cd ~/lammps-3Mar20/tools/eam_generate<br />
+2. gcc Al_Zhou.c<br />
+3. ./a.exe<br />
+&nbsp; (you can get Al_Zhou.eam)<br />
+&nbsp; (pair_style eam/alloy command)<br />
+<br />
+□ latgen (https://code.google.com/archive/p/latgen/)<br />
+1. mkdir latgen ; cd latgen<br />
+2. wget https://storage.googleapis.com/google-code-archive-downloads/v2/code.google.com/latgen/latgen-1.50.tar.gz<br />
+3. tar zxvf latgen-1.50.tar.gz<br />
+4. make<br />
+◇ test<br />
+1. cd ~/latgen/test<br />
+2. ../lategen.exe<br />
+3. Your choice [1]: 7<br />
+4. Would you like to read the lattice info from a file?(y/n)[n]: y<br />
+5. Please input the name of the file that contains the lattice info: b2-user.dat&nbsp;<br />
+------------------------------------------------------------------------------<br />
+------------------------------------------------------------------------------<br />
+■ mpich2 (http://www.mpich.org/static/downloads/1.4.1p1/)<br />
+<br />
+□ install (test version)<br />
+1. tar zxvf &nbsp;mpich2-1.4.1p1.tar.gz<br />
+2. cd&nbsp;mpich2-1.4.1p1<br />
+3.&nbsp;./configure --build=x86_64-pc-cygwin&nbsp;FC=gfortran<br />
+&nbsp; (./configure --prefix=/cygdrive/c/MPICH2 --build=x86_64-pc-cygwin FC=gfortran) (need administrator)<br />
+4. make<br />
+5. make install<br />
+※ openmpi-3.x.xは私が試したときは失敗した<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

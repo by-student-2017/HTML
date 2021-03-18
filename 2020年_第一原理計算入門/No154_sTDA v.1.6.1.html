@@ -1,0 +1,842 @@
+------------------------------------------------------------------------------<br />
+■ sTDA v.1.6.1 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(Edit: 16/Jun/2020)<br />
+<br />
+□ install (sTDA v.1.6.1)<br />
+0. cd ~<br />
+1. git clone https://github.com/grimme-lab/stda.git<br />
+2.&nbsp;cd stda<br />
+3. wget https://github.com/grimme-lab/stda/releases/download/v1.6.1/stda_v1.6.1<br />
+4. chmod +x stda_v1.6.1<br />
+<br />
+□ environment settings (sTDA v.1.6.1)<br />
+1. gedit ~/.bashrc<br />
+&nbsp; export STDAHOME=~/stda<br />
+&nbsp; export PATH=$PATH:$STDAHOME<br />
+<br />
+□ check (sTDA v.1.6.1)<br />
+1.&nbsp;stda_v1.6.1 -h<br />
+<br />
+□ install (xtb4stda v.1.0)<br />
+0. cd ~<br />
+1. git clone&nbsp;https://github.com/grimme-lab/xtb4stda.git<br />
+2.&nbsp;cd xtb4stda<br />
+3. mkdir exe<br />
+&nbsp; cd exe<br />
+4. wget https://github.com/grimme-lab/stda/releases/download/v1.6.1/xtb4stda<br />
+5. chmod +x xtb4stda<br />
+<br />
+□ environment settings (xtb4stda v.1.0)<br />
+1. gedit ~/.bashrc<br />
+&nbsp; export XTB4STDAHOME=~/xtb4stda<br />
+&nbsp; export PATH=$PATH:$XTB4STDAHOME/exe<br />
+&nbsp; export OMP_NUM_THREADS=4<br />
+&nbsp; export MKL_NUM_THREADS=4<br />
+&nbsp; export OMP_STACKSIZE=4G<br />
+(2. ulimit -s unlimited)<br />
+<br />
+□ check&nbsp;(xtb4stda v.1.0)<br />
+1.&nbsp;xtb4stda -h<br />
+<br />
+□ g_spec<br />
+1. mkdir g_spec<br />
+&nbsp; cd g_spec<br />
+2. wget&nbsp;https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/stda/g_spec.zip<br />
+(2.5.&nbsp;sudo apt install -y unzip)<br />
+3. unzip&nbsp;g_spec.zip<br />
+4.&nbsp;chmod +x g_spec<br />
+<br />
+□ environment settings (g_spec)<br />
+1. gedit ~/.bashrc<br />
+&nbsp; export GSPECHOME=~/g_spec<br />
+&nbsp; export PATH=$PATH:$GSPECHOME<br />
+<br />
+□ install (SpecDis v.1.71)<br />
+1. mkdir&nbsp;SpecDis-1.71<br />
+&nbsp; cd&nbsp;SpecDis-1.71<br />
+2. wget https://github.com/TBruhn74/SpecDis/raw/master/SpecDis171_gtk2.zip<br />
+(2.5.&nbsp;sudo apt install -y unzip)<br />
+3. unzip&nbsp;SpecDis171_gtk2.zip<br />
+4.&nbsp;chmod +x SpecDis171<br />
+<br />
+□ manual (sTDA)<br />
+1. wget&nbsp;https://github.com/grimme-lab/stda/releases/download/v1.6.1/stda_manual.pdf<br />
+(1.5.&nbsp;sudo apt install -y evince)<br />
+2.&nbsp;evince stda_manual.pdf<br />
+<br />
+□ Usage (sTDA-xTB Procedure)<br />
+1. xtb4stda *.coord<br />
+&nbsp; (or xtb4stda *.xyz)<br />
+2. stda_v1.6.1 -xtb -e 10<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 10 -rpa) (sTD-xTB)<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 10 -sf) (SF-sTD-xTB)<br />
+※ &quot;-e 10&quot; mean &quot;compute all excited states up to 10eV&quot;<br />
+<br />
+□ examples<br />
+0. sudo apt install -y git<br />
+1. cd ~/stda<br />
+2. git clone&nbsp;https://github.com/by-student-2017/sTDA-examples.git<br />
+3. mv&nbsp;sTDA-examples examples<br />
+<br />
+□ Feature<br />
+・The sTDA program for computing excited states and response functions via simplified TD-DFT methods (sTDA, sTD-DFT, and SF-sTD-DFT).<br />
+・A simplified Tamm-Dancoff density functional approach for electronic excitation spectra.<br />
+------------------------------------------------------------------------------<br />
+■ Examples<br />
+<br />
+□ Adenine (Circular dichroism, CD) (sTDA-xTB)<br />
+(https://github.com/nutjunkie/IQmol/tree/master/share/fragments/Molecules/Nucleobases)<br />
+1. cat &lt;&lt; EOF &gt; adenine.xyz<br />
+15<br />
+7H-Purin-6-amine<br />
+&nbsp; N &nbsp; &nbsp; -2.2027 &nbsp; &nbsp; -0.0935 &nbsp; &nbsp; -0.0068<br />
+&nbsp; C &nbsp; &nbsp; -0.9319 &nbsp; &nbsp; &nbsp;0.4989 &nbsp; &nbsp; -0.0046<br />
+&nbsp; C &nbsp; &nbsp; &nbsp;0.0032 &nbsp; &nbsp; -0.5640 &nbsp; &nbsp; -0.0064<br />
+&nbsp; N &nbsp; &nbsp; -0.7036 &nbsp; &nbsp; -1.7813 &nbsp; &nbsp; -0.0164<br />
+&nbsp; C &nbsp; &nbsp; -2.0115 &nbsp; &nbsp; -1.4937 &nbsp; &nbsp; -0.0151<br />
+&nbsp; C &nbsp; &nbsp; &nbsp;1.3811 &nbsp; &nbsp; -0.2282 &nbsp; &nbsp; -0.0017<br />
+&nbsp; N &nbsp; &nbsp; &nbsp;1.7207 &nbsp; &nbsp; &nbsp;1.0926 &nbsp; &nbsp; -0.0252<br />
+&nbsp; C &nbsp; &nbsp; &nbsp;0.7470 &nbsp; &nbsp; &nbsp;2.0612 &nbsp; &nbsp; -0.0194<br />
+&nbsp; N &nbsp; &nbsp; -0.5782 &nbsp; &nbsp; &nbsp;1.8297 &nbsp; &nbsp; -0.0072<br />
+&nbsp; H &nbsp; &nbsp; &nbsp;1.0891 &nbsp; &nbsp; &nbsp;3.1044 &nbsp; &nbsp; -0.0278<br />
+&nbsp; N &nbsp; &nbsp; &nbsp;2.4103 &nbsp; &nbsp; -1.1617 &nbsp; &nbsp; &nbsp;0.1252<br />
+&nbsp; H &nbsp; &nbsp; -3.0709 &nbsp; &nbsp; &nbsp;0.3774 &nbsp; &nbsp; -0.0035<br />
+&nbsp; H &nbsp; &nbsp; -2.8131 &nbsp; &nbsp; -2.2379 &nbsp; &nbsp; -0.0191<br />
+&nbsp; H &nbsp; &nbsp; &nbsp;2.1765 &nbsp; &nbsp; -2.0715 &nbsp; &nbsp; -0.1952<br />
+&nbsp; H &nbsp; &nbsp; &nbsp;3.3110 &nbsp; &nbsp; -0.8521 &nbsp; &nbsp; -0.1580<br />
+EOF<br />
+2. xtb4stda adenine.xyz<br />
+3. stda_v1.6.1 -xtb -e 10<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 10 -rpa) (sTD-xTB)<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 10 -sf) (SF-sTD-xTB)<br />
+4. g_spec &lt;&nbsp;tda.dat<br />
+5. gnuplot<br />
+&nbsp;&nbsp;set ylabel &quot;{/Symbol De} / L mol^{-1} cm^{-1} &quot;<br />
+&nbsp; set xlabel &quot;wavelength / nm&quot;<br />
+&nbsp; plot &quot;spec.dat&quot; w l t &quot;Circular dichroism, VELO&quot;<br />
+<br />
+□ indigo (UV) (sTDA-xTB)<br />
+1. cd ~/stda/examples/UV<br />
+2. xtb4stda indigo.xyz<br />
+3. stda_v1.6.1 -xtb -e 11.5<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 11.5 -rpa) (sTD-xTB)<br />
+&nbsp; (or&nbsp;stda_v1.6.1 -xtb -e 11.5 -sf) (SF-sTD-xTB)<br />
+4. gedit tda.dat<br />
+-----(before)<br />
+&nbsp;NM<br />
+&nbsp;VELO<br />
+-----<br />
+-----(after)<br />
+&nbsp;UV<br />
+-----<br />
+5. g_spec &lt;&nbsp;tda.dat<br />
+6. gnuplot<br />
+&nbsp; set ylabel &quot;{/Symbol e} / L mol^{-1} cm^{-1} &quot;<br />
+&nbsp; set xlabel &quot;energy / eV&quot;<br />
+&nbsp; set xrange [1:12]<br />
+&nbsp; plot &quot;spec.dat&quot; w l t &quot;UV&quot;<br />
+※ option in tda.dat<br />
+&nbsp; UV:&nbsp;Calculate absorption spectra (if not specified, CD is calculated)<br />
+&nbsp; VELO: Use the velocity representations of R and f (the latter if UV is also specified).<br />
+&nbsp; NM:&nbsp;Plot spectrum in nanometer scale instead of eV.<br />
+&nbsp; WIDTH:&nbsp;Half width at 1/e maximum of Gaussian curve (in eV).<br />
+&nbsp; SHIFT:&nbsp;Energy shift applied to whole spectrum (in eV).<br />
+&nbsp; LFAKTOR:&nbsp;Scaling factor for the stick spectrum printed to rots.dat.<br />
+&nbsp; RFAKTOR: Scaling factor for the broadended spectrum printed to spec.dat.<br />
+<br />
+※ Please, see head of tda.dat.<br />
+-----<br />
+&nbsp;NM<br />
+&nbsp;VELO<br />
+&nbsp;MMASS<br />
+&nbsp; &nbsp;720.660000000000<br />
+&nbsp;LFAKTOR<br />
+&nbsp; 0.5<br />
+&nbsp;RFAKTOR<br />
+&nbsp; 1.0<br />
+&nbsp;WIDTH<br />
+&nbsp; 0.20<br />
+&nbsp;SHIFT<br />
+&nbsp; 0.00<br />
+&nbsp;DATXY<br />
+&nbsp; &nbsp;1 &nbsp; &nbsp;1.7692 &nbsp; &nbsp; 0.000000 &nbsp; &nbsp; 0.000000 &nbsp; &nbsp;-0.000279 &nbsp; &nbsp;-0.000245<br />
+&nbsp;&nbsp; ...<br />
+-----(g_spec &lt;&nbsp;tda.dat)<br />
+&nbsp;** nm-scale &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** read velocity data **<br />
+&nbsp;** molar mass = &nbsp; &nbsp;720.65999999999997 &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** lfaktor = &nbsp; 0.50000000000000000 &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** rfaktor = &nbsp; &nbsp;1.0000000000000000 &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** width = &nbsp; 0.20000000000000001 &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** shift = &nbsp; &nbsp;0.0000000000000000 &nbsp; &nbsp; &nbsp; **<br />
+&nbsp;** xmin, xmax = &nbsp; 0.50000000000000000 &nbsp; &nbsp; &nbsp; &nbsp;13.282240049016476<br />
+&nbsp;** roots &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp; &nbsp; &nbsp; 1018<br />
+&nbsp; 1*** &nbsp; &nbsp; &nbsp;9.9928 &nbsp; &nbsp;124.0736 &nbsp;80597.3383 &nbsp; &nbsp;0.021455 &nbsp; &nbsp; &nbsp; &nbsp;0.20<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] sTDA<br />
+&nbsp; https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/stda/stda<br />
+[2] sTDA webpage has now moved to GitHub<br />
+&nbsp; https://github.com/grimme-lab/stda<br />
+[3] binaries<br />
+&nbsp; https://github.com/grimme-lab/stda/releases/tag/v1.6.1<br />
+[4]&nbsp;plotted and visualized with the SpecDis program<br />
+&nbsp;&nbsp;https://specdis-software.jimdofree.com/<br />
+[5]&nbsp;S. Grimme, J. Chem. Phys. 138, 244104 (2013)<br />
+&nbsp; DOI:10.1063/1.4811331<br />
+&nbsp;&nbsp;https://aip.scitation.org/doi/10.1063/1.4811331<br />
+[6] C. Bannwarth et al.,&nbsp; Comput. Theor. Chem., 1040-1041 , 45-53 (2014)<br />
+&nbsp; DOI: 10.1016/j.comptc.2014.02.023<br />
+&nbsp;&nbsp;https://www.sciencedirect.com/science/article/abs/pii/S2210271X14000942<br />
+[7] S. Grimme et al., J. Chem. Phys., 145, 054103 (2016)<br />
+&nbsp; DOI:10.1063/1.4959605<br />
+&nbsp;&nbsp;https://aip.scitation.org/doi/full/10.1063/1.4959605<br />
+[8] K. Batra et al., Adv. Theory Simul., 3, 1900192 (2020)<br />
+&nbsp;&nbsp;https://doi.org/10.1002/adts.201900192<br />
+&nbsp;&nbsp;https://onlinelibrary.wiley.com/doi/full/10.1002/adts.201900192<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;TABLE I. Comparison of calculateda and experimentalb singlet-singlet excitation energies (in eV) for the EXC26 benchmark set. The states are ordered according to energy in two groups (more local states in entries 1&ndash;9 and delocalized &pi;&pi;* states in entries 10&ndash;26). [5]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 493px;">
+	<tbody>
+		<tr>
+			<td style="width: 29px;">&nbsp;</td>
+			<td style="width: 114px; text-align: center;">Molecule</td>
+			<td style="width: 67px; text-align: center;">State</td>
+			<td style="width: 61px; text-align: center;">sTDA</td>
+			<td style="width: 63px; text-align: center;">TDA</td>
+			<td style="width: 61px; text-align: center;">TD</td>
+			<td style="width: 71px; text-align: center;">Exptl.</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">1</td>
+			<td style="width: 114px; text-align: center;">O<sub>3</sub></td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>2</sub></td>
+			<td style="width: 61px; text-align: center;">1.89</td>
+			<td style="width: 63px; text-align: center;">2.02</td>
+			<td style="width: 61px; text-align: center;">1.93</td>
+			<td style="width: 71px; text-align: center;">2.0</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">2</td>
+			<td style="width: 114px; text-align: center;">CH<sub>2</sub>S</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>A</em><sub>2</sub></td>
+			<td style="width: 61px; text-align: center;">2.09</td>
+			<td style="width: 63px; text-align: center;">2.26</td>
+			<td style="width: 61px; text-align: center;">2.23</td>
+			<td style="width: 71px; text-align: center;">2.24</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">3</td>
+			<td style="width: 114px; text-align: center;">Tetrazine</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">2.09</td>
+			<td style="width: 63px; text-align: center;">2.36</td>
+			<td style="width: 61px; text-align: center;">2.27</td>
+			<td style="width: 71px; text-align: center;">2.29</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">4</td>
+			<td style="width: 114px; text-align: center;">C<sub>5</sub></td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup>&Pi;<em><sub>u</sub></em></td>
+			<td style="width: 61px; text-align: center;">3.02</td>
+			<td style="width: 63px; text-align: center;">3.58</td>
+			<td style="width: 61px; text-align: center;">3.47</td>
+			<td style="width: 71px; text-align: center;">2.8</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">5</td>
+			<td style="width: 114px; text-align: center;">CH<sub>2</sub>O</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>A</em><sub>2</sub></td>
+			<td style="width: 61px; text-align: center;">3.20</td>
+			<td style="width: 63px; text-align: center;">3.19</td>
+			<td style="width: 61px; text-align: center;">3.16</td>
+			<td style="width: 71px; text-align: center;">3.88</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">6</td>
+			<td style="width: 114px; text-align: center;">Uracil</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sup>''</sup></td>
+			<td style="width: 61px; text-align: center;">4.70</td>
+			<td style="width: 63px; text-align: center;">4.78</td>
+			<td style="width: 61px; text-align: center;">4.76</td>
+			<td style="width: 71px; text-align: center;">4.8</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">7</td>
+			<td style="width: 114px; text-align: center;">P<sub>4</sub></td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>T</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">5.31</td>
+			<td style="width: 63px; text-align: center;">5.29</td>
+			<td style="width: 61px; text-align: center;">5.29</td>
+			<td style="width: 71px; text-align: center;">5.6</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">8</td>
+			<td style="width: 114px; text-align: center;">Adenine</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sup>''</sup></td>
+			<td style="width: 61px; text-align: center;">5.02</td>
+			<td style="width: 63px; text-align: center;">5.11</td>
+			<td style="width: 61px; text-align: center;">5.10</td>
+			<td style="width: 71px; text-align: center;">5.12</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">9</td>
+			<td style="width: 114px; text-align: center;">Acetamide</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sup>''</sup></td>
+			<td style="width: 61px; text-align: center;">5.73</td>
+			<td style="width: 63px; text-align: center;">5.67</td>
+			<td style="width: 61px; text-align: center;">5.65</td>
+			<td style="width: 71px; text-align: center;">5.69</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">10</td>
+			<td style="width: 114px; text-align: center;">Prophyrine</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>2<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">2.10</td>
+			<td style="width: 63px; text-align: center;">2.35</td>
+			<td style="width: 61px; text-align: center;">2.30</td>
+			<td style="width: 71px; text-align: center;">2.0</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">11</td>
+			<td style="width: 114px; text-align: center;">Prophyrine</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>3<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">2.30</td>
+			<td style="width: 63px; text-align: center;">2.54</td>
+			<td style="width: 61px; text-align: center;">2.46</td>
+			<td style="width: 71px; text-align: center;">2.4</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">12</td>
+			<td style="width: 114px; text-align: center;">Azulene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">2.73</td>
+			<td style="width: 63px; text-align: center;">2.79</td>
+			<td style="width: 61px; text-align: center;">2.71</td>
+			<td style="width: 71px; text-align: center;">2.19</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">13</td>
+			<td style="width: 114px; text-align: center;">Perylene</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>B</em><sub>2<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">2.89</td>
+			<td style="width: 63px; text-align: center;">3.08</td>
+			<td style="width: 61px; text-align: center;">2.85</td>
+			<td style="width: 71px; text-align: center;">3.44</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">14</td>
+			<td style="width: 114px; text-align: center;">Coumarin153</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em></td>
+			<td style="width: 61px; text-align: center;">3.17</td>
+			<td style="width: 63px; text-align: center;">3.58</td>
+			<td style="width: 61px; text-align: center;">3.28</td>
+			<td style="width: 71px; text-align: center;">3.51</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">15</td>
+			<td style="width: 114px; text-align: center;">Anthracene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>3<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">3.37</td>
+			<td style="width: 63px; text-align: center;">3.52</td>
+			<td style="width: 61px; text-align: center;">3.29</td>
+			<td style="width: 71px; text-align: center;">3.7</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">16</td>
+			<td style="width: 114px; text-align: center;">t-azobenzene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B<sub>u</sub></em></td>
+			<td style="width: 61px; text-align: center;">3.85</td>
+			<td style="width: 63px; text-align: center;">3.97</td>
+			<td style="width: 61px; text-align: center;">3.75</td>
+			<td style="width: 71px; text-align: center;">3.9</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">17</td>
+			<td style="width: 114px; text-align: center;">Naphthalene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>2<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">4.56</td>
+			<td style="width: 63px; text-align: center;">4.55</td>
+			<td style="width: 61px; text-align: center;">4.53</td>
+			<td style="width: 71px; text-align: center;">4.24</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">18</td>
+			<td style="width: 114px; text-align: center;">Naphthalene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><i>B</i><sub>3<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">4.62</td>
+			<td style="width: 63px; text-align: center;">4.67</td>
+			<td style="width: 61px; text-align: center;">4.47</td>
+			<td style="width: 71px; text-align: center;">4.77</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">19</td>
+			<td style="width: 114px; text-align: center;">DMABN</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">4.48</td>
+			<td style="width: 63px; text-align: center;">4.59</td>
+			<td style="width: 61px; text-align: center;">4.50</td>
+			<td style="width: 71px; text-align: center;">4.3</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">20</td>
+			<td style="width: 114px; text-align: center;">DMABN</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">4.87</td>
+			<td style="width: 63px; text-align: center;">4.97</td>
+			<td style="width: 61px; text-align: center;">4.73</td>
+			<td style="width: 71px; text-align: center;">4.6</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">21</td>
+			<td style="width: 114px; text-align: center;">Octatetraene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">4.42</td>
+			<td style="width: 63px; text-align: center;">4.49</td>
+			<td style="width: 61px; text-align: center;">4.05</td>
+			<td style="width: 71px; text-align: center;">4.66</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">22</td>
+			<td style="width: 114px; text-align: center;">Hexatriene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1</sub></td>
+			<td style="width: 61px; text-align: center;">5.25</td>
+			<td style="width: 63px; text-align: center;">5.22</td>
+			<td style="width: 61px; text-align: center;">4.75</td>
+			<td style="width: 71px; text-align: center;">5.10</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">23</td>
+			<td style="width: 114px; text-align: center;">Adenine</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sup>'</sup></td>
+			<td style="width: 61px; text-align: center;">5.14</td>
+			<td style="width: 63px; text-align: center;">5.24</td>
+			<td style="width: 61px; text-align: center;">5.09</td>
+			<td style="width: 71px; text-align: center;">5.25</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">24</td>
+			<td style="width: 114px; text-align: center;">Norbornadiene</td>
+			<td style="width: 67px; text-align: center;">2<sup>1</sup><em>A</em><sub>2</sub></td>
+			<td style="width: 61px; text-align: center;">5.24</td>
+			<td style="width: 63px; text-align: center;">5.19</td>
+			<td style="width: 61px; text-align: center;">5.03</td>
+			<td style="width: 71px; text-align: center;">5.34</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">25</td>
+			<td style="width: 114px; text-align: center;">Benzene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>1<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">5.52</td>
+			<td style="width: 63px; text-align: center;">5.53</td>
+			<td style="width: 61px; text-align: center;">5.50</td>
+			<td style="width: 71px; text-align: center;">5.08</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">26</td>
+			<td style="width: 114px; text-align: center;">Benzene</td>
+			<td style="width: 67px; text-align: center;">1<sup>1</sup><em>B</em><sub>2<em>u</em></sub></td>
+			<td style="width: 61px; text-align: center;">6.72</td>
+			<td style="width: 63px; text-align: center;">6.44</td>
+			<td style="width: 61px; text-align: center;">6.21</td>
+			<td style="width: 71px; text-align: center;">6.54</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">&nbsp;</td>
+			<td style="width: 114px; text-align: center;">MD<sup>c</sup></td>
+			<td style="width: 67px; text-align: center;">&nbsp;</td>
+			<td style="width: 61px; text-align: center;">-0.04</td>
+			<td style="width: 63px; text-align: center;">0.06</td>
+			<td style="width: 61px; text-align: center;">-0.08</td>
+			<td style="width: 71px; text-align: center;">...</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">&nbsp;</td>
+			<td style="width: 114px; text-align: center;">Max-min<sup>d</sup></td>
+			<td style="width: 67px; text-align: center;">&nbsp;</td>
+			<td style="width: 61px; text-align: center;">1.22</td>
+			<td style="width: 63px; text-align: center;">1.47</td>
+			<td style="width: 61px; text-align: center;">1.39</td>
+			<td style="width: 71px; text-align: center;">...</td>
+		</tr>
+		<tr>
+			<td style="width: 29px; text-align: center;">&nbsp;</td>
+			<td style="width: 114px; text-align: center;">MAD<sup>c</sup></td>
+			<td style="width: 67px; text-align: center;">&nbsp;</td>
+			<td style="width: 61px; text-align: center;">0.23</td>
+			<td style="width: 63px; text-align: center;">0.22</td>
+			<td style="width: 61px; text-align: center;">0.28</td>
+			<td style="width: 71px; text-align: center;">...</td>
+		</tr>
+	</tbody>
+</table>
+<sup>a</sup>PBE0 functional using TPSS-D3/def2-TZVP82 optimized geometries and TZVP basis set.<br />
+<sup>b</sup>For experimental or best estimate values from high-level wave function calculations, see Refs. 71, 88, 89, and 90.<br />
+<sup>c</sup>Mean deviation. A negative value corresponds to a systematic underestimation of the excitation energy.<br />
+<sup>d</sup>Difference between largest and smallest deviation.<br />
+<sup>e</sup>Mean absolute deviation.<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;TABLE V. Comparison of vertical singlet-singlet excitation energies (in eV) for states with dominant valence character. SCS-CC2 values (oscillator strengths f for assignment of transitions in parentheses) are taken as reference and all ground state structures were optimized at the PBEh-3c level. [7]
+<table border="1" cellpadding="1" cellspacing="1" style="width: 568px;">
+	<tbody>
+		<tr>
+			<td style="width: 24px;">&nbsp;</td>
+			<td style="width: 128px; text-align: center;">Molecule</td>
+			<td style="width: 43px; text-align: center;">State</td>
+			<td style="width: 75px; text-align: center;">SCS-CC2<sup>a</sup></td>
+			<td style="width: 76px; text-align: center;">xTDA-xTB</td>
+			<td style="width: 66px; text-align: center;">TD-DFTB</td>
+			<td style="width: 55px; text-align: center;">PM6-CI</td>
+			<td style="width: 66px; text-align: center;">TD-PBE<sup>b</sup></td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">1</td>
+			<td style="width: 128px; text-align: center;">MePC<sub>2</sub>H<sub>4</sub></td>
+			<td style="width: 43px; text-align: center;">1A<sup>''</sup></td>
+			<td style="width: 75px; text-align: center;">6.53<br />
+			(0.0399)</td>
+			<td style="width: 76px; text-align: center;">6.56</td>
+			<td style="width: 66px; text-align: center;">6.23</td>
+			<td style="width: 55px; text-align: center;">5.27</td>
+			<td style="width: 66px; text-align: center;">6.28</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">2</td>
+			<td style="width: 128px; text-align: center;">P<sub>2</sub>H<sub>4</sub></td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">6.25<br />
+			(0.0498)</td>
+			<td style="width: 76px; text-align: center;">5.91</td>
+			<td style="width: 66px; text-align: center;">5.66</td>
+			<td style="width: 55px; text-align: center;">6.19</td>
+			<td style="width: 66px; text-align: center;">5.71</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">3</td>
+			<td style="width: 128px; text-align: center;">CF<sub>3</sub>COOH</td>
+			<td style="width: 43px; text-align: center;">1A<sup>''</sup></td>
+			<td style="width: 75px; text-align: center;">5.95<br />
+			(0.0003)</td>
+			<td style="width: 76px; text-align: center;">5.95</td>
+			<td style="width: 66px; text-align: center;">7.12</td>
+			<td style="width: 55px; text-align: center;">4.83</td>
+			<td style="width: 66px; text-align: center;">5.45</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">4</td>
+			<td style="width: 128px; text-align: center;">Si<sub>4</sub>H<sub>8</sub></td>
+			<td style="width: 43px; text-align: center;">A<sub>2</sub></td>
+			<td style="width: 75px; text-align: center;">5.22<br />
+			(0.0000)</td>
+			<td style="width: 76px; text-align: center;">6.65</td>
+			<td style="width: 66px; text-align: center;">4.26</td>
+			<td style="width: 55px; text-align: center;">2.86</td>
+			<td style="width: 66px; text-align: center;">4.63</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">5</td>
+			<td style="width: 128px; text-align: center;">Saccharin</td>
+			<td style="width: 43px; text-align: center;">2A<sup>'</sup></td>
+			<td style="width: 75px; text-align: center;">4.91<br />
+			(0.0045)</td>
+			<td style="width: 76px; text-align: center;">4.86</td>
+			<td style="width: 66px; text-align: center;">4.21</td>
+			<td style="width: 55px; text-align: center;">4.03</td>
+			<td style="width: 66px; text-align: center;">4.33</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">6</td>
+			<td style="width: 128px; text-align: center;">Hexatriyne</td>
+			<td style="width: 43px; text-align: center;">1&sum;<sup>-</sup><sub><em>u</em></sub></td>
+			<td style="width: 75px; text-align: center;">4.85<br />
+			(0.0000)</td>
+			<td style="width: 76px; text-align: center;">5.04</td>
+			<td style="width: 66px; text-align: center;">5.89</td>
+			<td style="width: 55px; text-align: center;">3.71</td>
+			<td style="width: 66px; text-align: center;">3.76</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">7</td>
+			<td style="width: 128px; text-align: center;">ASS</td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">4.80<br />
+			(0.0219)</td>
+			<td style="width: 76px; text-align: center;">4.62</td>
+			<td style="width: 66px; text-align: center;">4.56</td>
+			<td style="width: 55px; text-align: center;">3.90</td>
+			<td style="width: 66px; text-align: center;">3.98</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">8</td>
+			<td style="width: 128px; text-align: center;">Purine</td>
+			<td style="width: 43px; text-align: center;">1A''</td>
+			<td style="width: 75px; text-align: center;">4.69<br />
+			(0.0029)</td>
+			<td style="width: 76px; text-align: center;">4.49</td>
+			<td style="width: 66px; text-align: center;">5.20</td>
+			<td style="width: 55px; text-align: center;">3.31</td>
+			<td style="width: 66px; text-align: center;">3.60</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">9</td>
+			<td style="width: 128px; text-align: center;">Dithiacyclohexane</td>
+			<td style="width: 43px; text-align: center;">1B</td>
+			<td style="width: 75px; text-align: center;">4.52<br />
+			(0.0088)</td>
+			<td style="width: 76px; text-align: center;">4.50</td>
+			<td style="width: 66px; text-align: center;">4.17</td>
+			<td style="width: 55px; text-align: center;">1.61</td>
+			<td style="width: 66px; text-align: center;">3.99</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">10</td>
+			<td style="width: 128px; text-align: center;">Fluorisochinoline</td>
+			<td style="width: 43px; text-align: center;">2A'</td>
+			<td style="width: 75px; text-align: center;">4.50<br />
+			(0.0282)</td>
+			<td style="width: 76px; text-align: center;">4.44</td>
+			<td style="width: 66px; text-align: center;">5.23</td>
+			<td style="width: 55px; text-align: center;">3.46</td>
+			<td style="width: 66px; text-align: center;">4.07</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">11</td>
+			<td style="width: 128px; text-align: center;">Bisthiophene</td>
+			<td style="width: 43px; text-align: center;">1B<sub>u</sub></td>
+			<td style="width: 75px; text-align: center;">4.48<br />
+			(0.3949)</td>
+			<td style="width: 76px; text-align: center;">4.21</td>
+			<td style="width: 66px; text-align: center;">4.41</td>
+			<td style="width: 55px; text-align: center;">3.27</td>
+			<td style="width: 66px; text-align: center;">3.81</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">12</td>
+			<td style="width: 128px; text-align: center;">c-propenone</td>
+			<td style="width: 43px; text-align: center;">1B<sub>2</sub></td>
+			<td style="width: 75px; text-align: center;">4.42<br />
+			(0.0001)</td>
+			<td style="width: 76px; text-align: center;">3.89</td>
+			<td style="width: 66px; text-align: center;">4.47</td>
+			<td style="width: 55px; text-align: center;">2.57</td>
+			<td style="width: 66px; text-align: center;">3.40</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">13</td>
+			<td style="width: 128px; text-align: center;">Terpyridine</td>
+			<td style="width: 43px; text-align: center;">1A<sub>2</sub></td>
+			<td style="width: 75px; text-align: center;">4.23<br />
+			(0.0000)</td>
+			<td style="width: 76px; text-align: center;">4.69</td>
+			<td style="width: 66px; text-align: center;">4.41</td>
+			<td style="width: 55px; text-align: center;">3.62</td>
+			<td style="width: 66px; text-align: center;">2.84</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">14</td>
+			<td style="width: 128px; text-align: center;">Silabenzene</td>
+			<td style="width: 43px; text-align: center;">1B<sub>1</sub></td>
+			<td style="width: 75px; text-align: center;">4.23<br />
+			(0.0595)</td>
+			<td style="width: 76px; text-align: center;">4.64</td>
+			<td style="width: 66px; text-align: center;">4.90</td>
+			<td style="width: 55px; text-align: center;">2.67</td>
+			<td style="width: 66px; text-align: center;">4.39</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">15</td>
+			<td style="width: 128px; text-align: center;">B(C<sub>6</sub>F<sub>5</sub>)<sub>3</sub></td>
+			<td style="width: 43px; text-align: center;">1A<sub>2</sub></td>
+			<td style="width: 75px; text-align: center;">4.10<br />
+			(0.0224)</td>
+			<td style="width: 76px; text-align: center;">4.30</td>
+			<td style="width: 66px; text-align: center;">3.00</td>
+			<td style="width: 55px; text-align: center;">4.25</td>
+			<td style="width: 66px; text-align: center;">2.78</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">16</td>
+			<td style="width: 128px; text-align: center;">Corannulene</td>
+			<td style="width: 43px; text-align: center;">1E<sub>2</sub></td>
+			<td style="width: 75px; text-align: center;">3.86<br />
+			(0.0000)</td>
+			<td style="width: 76px; text-align: center;">3.56</td>
+			<td style="width: 66px; text-align: center;">4.21</td>
+			<td style="width: 55px; text-align: center;">3.40</td>
+			<td style="width: 66px; text-align: center;">3.25</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">17</td>
+			<td style="width: 128px; text-align: center;">S0904 dye</td>
+			<td style="width: 43px; text-align: center;">2A'</td>
+			<td style="width: 75px; text-align: center;">3.81<br />
+			(0.7251)</td>
+			<td style="width: 76px; text-align: center;">3.72</td>
+			<td style="width: 66px; text-align: center;">3.99</td>
+			<td style="width: 55px; text-align: center;">3.52</td>
+			<td style="width: 66px; text-align: center;">2.97</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">18</td>
+			<td style="width: 128px; text-align: center;">S2127 dye</td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">3.66<br />
+			(0.9637)</td>
+			<td style="width: 76px; text-align: center;">3.49</td>
+			<td style="width: 66px; text-align: center;">3.50</td>
+			<td style="width: 55px; text-align: center;">3.24</td>
+			<td style="width: 66px; text-align: center;">2.62</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">19</td>
+			<td style="width: 128px; text-align: center;">Acenaphthene</td>
+			<td style="width: 43px; text-align: center;">1B<sub>1</sub></td>
+			<td style="width: 75px; text-align: center;">3.65<br />
+			(0.0002)</td>
+			<td style="width: 76px; text-align: center;">2.74</td>
+			<td style="width: 66px; text-align: center;">3.66</td>
+			<td style="width: 55px; text-align: center;">2.84</td>
+			<td style="width: 66px; text-align: center;">2.89</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">20</td>
+			<td style="width: 128px; text-align: center;">Proflavine</td>
+			<td style="width: 43px; text-align: center;">1B<sub>1</sub></td>
+			<td style="width: 75px; text-align: center;">3.54<br />
+			(0.2342)</td>
+			<td style="width: 76px; text-align: center;">3.30</td>
+			<td style="width: 66px; text-align: center;">3.85</td>
+			<td style="width: 55px; text-align: center;">2.93</td>
+			<td style="width: 66px; text-align: center;">3.01</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">21</td>
+			<td style="width: 128px; text-align: center;">S2408 dye</td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">3.64<br />
+			(0.8379)</td>
+			<td style="width: 76px; text-align: center;">3.52</td>
+			<td style="width: 66px; text-align: center;">4.21</td>
+			<td style="width: 55px; text-align: center;">3.08</td>
+			<td style="width: 66px; text-align: center;">3.18</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">22</td>
+			<td style="width: 128px; text-align: center;">HCSOH</td>
+			<td style="width: 43px; text-align: center;">1A''</td>
+			<td style="width: 75px; text-align: center;">3.57<br />
+			(0.0000)</td>
+			<td style="width: 76px; text-align: center;">3.49</td>
+			<td style="width: 66px; text-align: center;">3.56</td>
+			<td style="width: 55px; text-align: center;">1.52</td>
+			<td style="width: 66px; text-align: center;">3.34</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">23</td>
+			<td style="width: 128px; text-align: center;">S2153 dye</td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">3.48<br />
+			(1.0045)</td>
+			<td style="width: 76px; text-align: center;">3.36</td>
+			<td style="width: 66px; text-align: center;">3.75</td>
+			<td style="width: 55px; text-align: center;">3.04</td>
+			<td style="width: 66px; text-align: center;">2.86</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">24</td>
+			<td style="width: 128px; text-align: center;">CT5 system</td>
+			<td style="width: 43px; text-align: center;">2A</td>
+			<td style="width: 75px; text-align: center;">3.33<br />
+			(0.0170)</td>
+			<td style="width: 76px; text-align: center;">2.91</td>
+			<td style="width: 66px; text-align: center;">3.53</td>
+			<td style="width: 55px; text-align: center;">3.19</td>
+			<td style="width: 66px; text-align: center;">1.58</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">25</td>
+			<td style="width: 128px; text-align: center;">S0491 dye</td>
+			<td style="width: 43px; text-align: center;">1B</td>
+			<td style="width: 75px; text-align: center;">2.70<br />
+			(1.5478)</td>
+			<td style="width: 76px; text-align: center;">2.75</td>
+			<td style="width: 66px; text-align: center;">3.25</td>
+			<td style="width: 55px; text-align: center;">2.69</td>
+			<td style="width: 66px; text-align: center;">2.56</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">26</td>
+			<td style="width: 128px; text-align: center;">S2084 dye</td>
+			<td style="width: 43px; text-align: center;">1B<em>u</em></td>
+			<td style="width: 75px; text-align: center;">2.37<br />
+			(1.4233)</td>
+			<td style="width: 76px; text-align: center;">2.60</td>
+			<td style="width: 66px; text-align: center;">2.33</td>
+			<td style="width: 55px; text-align: center;">2.22</td>
+			<td style="width: 66px; text-align: center;">2.42</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">27</td>
+			<td style="width: 128px; text-align: center;">Thioindigo</td>
+			<td style="width: 43px; text-align: center;">1B<em>u</em></td>
+			<td style="width: 75px; text-align: center;">1.84<br />
+			(0.3255)</td>
+			<td style="width: 76px; text-align: center;">1.92</td>
+			<td style="width: 66px; text-align: center;">1.96</td>
+			<td style="width: 55px; text-align: center;">1.78</td>
+			<td style="width: 66px; text-align: center;">1.64</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">&nbsp;</td>
+			<td style="width: 128px; text-align: center;">MD</td>
+			<td style="width: 43px; text-align: center;">&nbsp;</td>
+			<td style="width: 75px; text-align: center;">...</td>
+			<td style="width: 76px; text-align: center;">-0.04</td>
+			<td style="width: 66px; text-align: center;">0.09</td>
+			<td style="width: 55px; text-align: center;">-0.89</td>
+			<td style="width: 66px; text-align: center;">-0.66</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">&nbsp;</td>
+			<td style="width: 128px; text-align: center;">MAD</td>
+			<td style="width: 43px; text-align: center;">&nbsp;</td>
+			<td style="width: 75px; text-align: center;">...</td>
+			<td style="width: 76px; text-align: center;">0.27</td>
+			<td style="width: 66px; text-align: center;">0.42</td>
+			<td style="width: 55px; text-align: center;">0.90</td>
+			<td style="width: 66px; text-align: center;">0.67</td>
+		</tr>
+		<tr>
+			<td style="width: 24px; text-align: center;">&nbsp;</td>
+			<td style="width: 128px; text-align: center;">SD</td>
+			<td style="width: 43px; text-align: center;">&nbsp;</td>
+			<td style="width: 75px; text-align: center;">...</td>
+			<td style="width: 76px; text-align: center;">0.41</td>
+			<td style="width: 66px; text-align: center;">0.55</td>
+			<td style="width: 55px; text-align: center;">0.76</td>
+			<td style="width: 66px; text-align: center;">0.44</td>
+		</tr>
+	</tbody>
+</table>
+<sup>a</sup>aug-cc-VXZ AO basis (X = T, X = D for the larger molecules).<br />
+<sup>b</sup>def2-TZVP AO basis.<br />
+<sup>c</sup>def2-SV(P) AO basis.<br />
+<sup>d</sup>Incomplete data set due to missing parameters for B, Si, P, and S.<br />
+<br />
+□ get mol file<br />
+1.&nbsp;http://www.syn-c.com/re-details/few.html<br />
+&nbsp; S??? &gt; CAS<br />
+2.&nbsp;https://m.chemicalbook.com/Search_JP.aspx?keyword=644979-14-6&amp;start=0<br />
+&nbsp; CAS &gt; mol file<br />
+3. Avogadro &gt; mol file &gt; Extensions. &gt; Optimize Geometory &gt; Save<br />
+<br />
+□ get SDF<br />
+1.&nbsp;https://pubchem.ncbi.nlm.nih.gov/<br />
+&nbsp; 3D Conformer (2D structure) &gt;&nbsp;Download &gt; SDF &gt; SAVE<br />
+2. jmol *.sdf<br />
+&nbsp; tool &gt; Gaussian &gt; *.xyz<br />
+3. Avogadro &gt; *.xyz &gt; Extensions. &gt; Optimize Geometory &gt; Save<br />
+※ 金属錯体などでは3D Conformerが正確な描写をしていない場合がある。2D structureと比較しながら問題ないかを確かめる必要がある。一方、2D structureは原子間距離がおかしいので、UFFで構造最適化しても上手くいかないことがあることも記憶しておいて欲しい。特にpubchemからデータを持ってきて処理するGUIを購入している場合は、その動作が問題ないかを確認する必要がある。<br />
+------------------------------------------------------------------------------

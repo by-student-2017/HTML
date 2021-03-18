@@ -1,0 +1,396 @@
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 3D-AIR-IMAGE (Windows10 or Mac)</span></div>
+
+<div><span style="font-size:14px">(<a href="https://osdn.net/projects/tmcoca/">https://osdn.net/projects/tmcoca/</a>)</span></div>
+
+<div><span style="font-size:14px">(<a href="https://ja.osdn.net/projects/tmcoca/releases/p14436">https://ja.osdn.net/projects/tmcoca/releases/p14436</a>)</span></div>
+
+<div><span style="font-size:14px">(Edit: Jun/9/2021)</span></div>
+
+<div><span style="font-size:14px">(Please forgive me if I make a mistake)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ Get &quot;3D-AIR-IMAGE&quot; free software</span></div>
+
+<div><span style="font-size:14px">1. Go to <a href="https://osdn.net/projects/tmcoca/">https://osdn.net/projects/tmcoca/</a></span></div>
+
+<div><span style="font-size:14px">2. Clikc 3D-AIR-IMAGE PREVIEW 0.0.95</span></div>
+
+<div><span style="font-size:14px">3. Clikc 3D-AIR-IMAGE-PREVIEW0095-64bit.zip</span></div>
+
+<div><span style="font-size:14px">4. Unzip 3D-AIR-IMAGE-PREVIEW0095-64bit.zip</span></div>
+
+<div><span style="font-size:14px">5. You can see &quot;3D-AIR-IMAGE-PREVIEW0095-64bit&quot;</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ Preparation *.xtl file from *.cif</span></div>
+
+<div><span style="font-size:14px">1. Material Project &gt; CIF &gt; Conventional Standard</span></div>
+
+<div><span style="font-size:14px">&nbsp; (For example,)</span></div>
+
+<div><span style="font-size:14px">・MoS<sub>2</sub>: <a href="https://materialsproject.org/materials/mp-2815/">https://materialsproject.org/materials/mp-2815/</a></span></div>
+
+<div><span style="font-size:14px">・beta-Ga<sub>2</sub>O<sub>3</sub> (C2/m): <a href="https://materialsproject.org/materials/mp-886/">https://materialsproject.org/materials/mp-886/</a></span></div>
+
+<div><span style="font-size:14px">・GaN: <a href="https://materialsproject.org/materials/mp-804/">https://materialsproject.org/materials/mp-804/</a></span></div>
+
+<div><span style="font-size:14px">・C (diamond):&nbsp;</span><a href="https://materialsproject.org/materials/mp-66/">mp-66: C (cubic, Fd-3m, 227) (materialsproject.org)</a></div>
+
+<div><span style="font-size:14px">2. VESTA.exe (you can get VESTA-win64.zip from <a href="https://jp-minerals.org/vesta/jp/download.html">https://jp-minerals.org/vesta/jp/download.html</a>)</span></div>
+
+<div><span style="font-size:14px">3. File &gt; Open... &gt; *.cif &gt; Open</span></div>
+
+<div><span style="font-size:14px">&nbsp; (or drag&amp;drop *.cif on VESTA)</span></div>
+
+<div><span style="font-size:14px">4. File &gt; Export Data... &gt; Fractional Coordinate (*.xtl) &gt; Save</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ Simulation of XFH (e.g., MoS2.xtl case)</span></div>
+
+<div><span style="font-size:14px">1. 3dairimage.exe</span></div>
+
+<div><span style="font-size:14px">2. Holography &gt; TMSP cluster</span></div>
+
+<div><span style="font-size:14px">3. Import unit cell &gt; *.xtl</span></div>
+
+<div><span style="font-size:14px">4. (Rename) &quot;Name [Mo2 S4]&quot; to &quot;Name [MoS2]&quot; on &quot;Define Crystal and surface&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Save as New Crystal &gt; Yes &gt; OK</span></div>
+
+<div><span style="font-size:14px">5. (Select) MoS2 on &quot;TMSP cluster&quot;(window) &gt; Create Cluster</span></div>
+
+<div><span style="font-size:14px">6. (Check) Mo on &quot;Candidate atoms for EMITTER&quot;(column)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (increase) 5 to 30 on &quot;Cluster Radius&quot;(column) &gt; Create Cluters</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Save as xml_cl(TMSP) &gt; MoS2.xml_cl &gt; Save</span></div>
+
+<div><span style="font-size:14px">7. XFH on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Simulation for X-ray fluorescence hologram[fast]</span></div>
+
+<div><span style="font-size:14px">8. (1) Load Cluster &gt; MoS2.xml_cl &gt; Open &gt; OK on &quot;Dialog&quot;(window)</span></div>
+
+<div><span style="font-size:14px">9. (2) Energy (keV) list of incident photon</span></div>
+
+<div><span style="font-size:14px">&nbsp; (For example, 7 data for every 0.5 (keV) step)</span></div>
+
+<div><span style="font-size:14px">&nbsp; -----</span></div>
+
+<div><span style="font-size:14px">&nbsp; 10</span></div>
+
+<div><span style="font-size:14px">&nbsp; 10.5</span></div>
+
+<div><span style="font-size:14px">&nbsp; 11</span></div>
+
+<div><span style="font-size:14px">&nbsp; 11.5</span></div>
+
+<div><span style="font-size:14px">&nbsp; 12</span></div>
+
+<div><span style="font-size:14px">&nbsp; 12.5</span></div>
+
+<div><span style="font-size:14px">&nbsp; 13</span></div>
+
+<div><span style="font-size:14px">&nbsp; -----</span></div>
+
+<div><span style="font-size:14px">10. Anmalous (skip in this case)</span></div>
+
+<div><span style="font-size:14px">11. Vibration &amp; Fluctuation</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Input &quot;K&quot;) &gt; TD(K) -&gt;&gt; Vibration (A)</span></div>
+
+<div><span style="font-size:14px">12. (3) Hologram Image</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Select projection, e.g., Equidistant cylindrical)&nbsp;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Set value of Degree/Pix (resolution))&nbsp;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; calculate (and wait for a long time)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; OK on &quot;Finished&quot;</span></div>
+
+<div><span style="font-size:14px">(You can get *.xmlsrs and *.xml_air)</span></div>
+
+<div><span style="font-size:14px">13. Holography on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Sphere: Convert Map Projection</span></div>
+
+<div><span style="font-size:14px">14. Holography on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Printout image v2(Write Numerals)&nbsp;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Atom &gt; Load TMSP Cluster</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Barton method</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xmlsrs (from above step 12) on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">2. XFH &gt; Atom image reconstruction</span></div>
+
+<div><span style="font-size:14px">3. (Change Accuracy (Spherical Mesh size):</span></div>
+
+<div><span style="font-size:14px">&nbsp; (63 = 1 degree)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (The lower the accuracy, the faster the calculation speed.)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (This value depends on the photon energy.)</span></div>
+
+<div><span style="font-size:14px">3. CALC SLICE on &quot;XFH RECONSTRUCTION 0.0.27&quot;(window)</span></div>
+
+<div><span style="font-size:14px">4. VOLUME Reconstruction (for a long time)</span></div>
+
+<div><span style="font-size:14px">5. Iso-Surface on &quot;3D-AIR-IMAGE&quot;(window) &gt; (set CONTOIR(%)) &gt; OK</span></div>
+
+<div><span style="font-size:14px">6. SMOOTH SHADING on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">7. XFH&nbsp; on &quot;3D-AIR-IMAGE&quot;(window) &gt; XFH 3DImage Radial Correction</span></div>
+
+<div><span style="font-size:14px">8. VolumeImage on &quot;3D-AIR-IMAGE&quot;(window) &gt; Slice image</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (set Plane index) &gt; Update</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ SPEA-L1</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xml_air (from above step 12) on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">2. XFH &gt; Atom image reconstruction</span></div>
+
+<div><span style="font-size:14px">3. TEST &gt; SPEA-L1</span></div>
+
+<div><span style="font-size:14px">4. 1) Create real space voxel &gt; OK</span></div>
+
+<div><span style="font-size:14px">5. 2) Parameter ologram, Scattering pattern matrix &gt; OK</span></div>
+
+<div><span style="font-size:14px">6. 3) Parameter for L1 method</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; L1 Threashold(%)= 50&nbsp;&nbsp;(&lt;- Empirically good value)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Threshold scaling&nbsp;&nbsp;(&lt;- Empirically good value)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; OK</span></div>
+
+<div><span style="font-size:14px">7. RUN</span></div>
+
+<div><span style="font-size:14px">8. NSmooth=3 &gt; DISPLAY 3D ATOMIC IMAGE</span></div>
+
+<div><span style="font-size:14px">9. (Check) ERROR FUNC&nbsp;</span>&gt; (Change Distance(A)) &gt; DISP CROSS SECTION</div>
+
+<div><span style="font-size:14px">10. (Click) RMSE, L1 parameter or voxel max value</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Get information (experimental data)</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xml_air</span></div>
+
+<div><span style="font-size:14px">2. Tool &gt; Sdit image metadata</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Treat background (experimental data)</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xml_air</span></div>
+
+<div><span style="font-size:14px">2. XFH &gt; XFH Background</span></div>
+
+<div><span style="font-size:14px">3. (Change two value) Poly. Terms:&nbsp;</span></div>
+
+<div><span style="font-size:14px">&nbsp; (start with a low order)</span></div>
+
+<div><span style="font-size:14px">4. (Check background)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Increase order of &quot;Poly. Terms:&quot; until background become flat)</span></div>
+
+<div><span style="font-size:14px">5. NEW IMAGE to Mainwindow</span></div>
+
+<div><span style="font-size:14px">&nbsp; (If you can see Kossel line, it is good)</span></div>
+
+<div>&nbsp;</div>
+
+<div>
+<div><span style="font-size:14px">□ Simulation of PEH</span></div>
+
+<div><span style="font-size:14px">1. Holography on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; TMSP 5/SPEA-L1(MEM)</span></div>
+
+<div><span style="font-size:14px">2. Load Cluster &gt; *.xml_cl &gt; Open &gt; OK</span></div>
+
+<div><span style="font-size:14px">3. Calculate Potential &gt; Calculate or Load potential &gt; Close</span></div>
+
+<div><span style="font-size:14px">4. New Emitter</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Set Kinetic energy/(Innter potential is inclded) 1000.00 &gt; &quot;&lt;- Add&quot;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Set emitted electron &gt; Close</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Photoelectron (Dipole transition) &gt; Polarization of light [ Circular+1] &gt; Set Eitted electron &gt; Close</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">&nbsp; DIANA: Photoelectron, Auger</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Unpolarized case) DA30 or RFA: Auger, Auger</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">5. New phase shift &gt; Calculate phase shift &gt; (Check &quot;Phase shifts (degree)&quot;) &gt; View Inside function [Pr(r)*r] &gt; Close</span></div>
+
+<div><span style="font-size:14px">6. New Scattering Calculation &gt; (Select &quot;Type&quot;, e.g., [Fast-FF-Multipule_scattering]) &gt; Start Calculation &gt; *.xml_sf &gt; Save&nbsp; (and wait for a long time)</span></div>
+
+<div><span style="font-size:14px">7. Hologram image</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Check &quot;Use meam free path (A)&quot;)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Set &quot;Temperature (K)&quot; [300]) &gt; (Set &quot;TD(K)&quot;) &gt; [-&gt;Calc Vibration]</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; List of pattern (Usually, check all)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Select projection) &gt; (Set value of Degree/Pix (resolution)) &gt; Calculate</span></div>
+
+<div><span style="font-size:14px">8. OneImage &gt; Operate by Image&nbsp;&gt; New Image</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Divide the pattern by &quot;I0&quot;)</span></div>
+
+<div><span style="font-size:14px">9. OneImage &gt; Spherical Defocus &gt;&nbsp;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Angular resolution (deg)</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">&nbsp; DIANA: 3 (dgree)</span></div>
+
+<div><span style="font-size:14px">&nbsp; DA30, RFA: Not use</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">&nbsp;&nbsp;&gt; New Image</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ Simulation of PEH (DIANA or RFA)</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xml_air on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">2. Diana &gt; DIANA/RFA SCREEN</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Change &quot;Cone Angle (deg)&quot;, &quot;Center (X Y)&quot;, &quot;Size(Pixel)&quot;, &quot;(001) Position (X,Y)&quot; and &quot;phi=0 Position (X,Y)&quot;)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Draw DIANA Screen</span></div>
+
+<div><span style="font-size:14px">3. Self Image &gt; Phi0 Position Y &gt; Search Parameter &gt; Change obtained Parameter</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Repeat other positon)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Adjust &quot;Cone Angle (deg)&quot; and &quot;phi=0 Position (X,Y)&quot;)</span></div>
+
+<div><span style="font-size:14px">4. (Select &quot;Azimuthal eauidistant map Angular resolution&quot;) &gt; Convert Single image</span></div>
+
+<div><span style="font-size:14px">5. OneImage &gt; Rotation Symmetry &gt; (Set &quot;Rotation symmetry&quot;) &gt; New Iamge</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ E</span>xperimental data<span style="font-size:14px">&nbsp;of PEH</span></div>
+
+<div><span style="font-size:14px">1. (Drag&amp;drop) *.xml_air on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">2. Holography on &quot;3D-AIR-IMAGE&quot;(window)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; TMSP 5/SPEA-L1(MEM)</span></div>
+
+<div><span style="font-size:14px">3. Load Cluster &gt; *.xml_cl &gt; Open &gt; OK</span></div>
+
+<div><span style="font-size:14px">4. Calculate Potential &gt; Calculate or Load potential &gt; Close</span></div>
+
+<div><span style="font-size:14px">5. New Emitter</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Set Kinetic energy/(Innter potential is inclded) 1000.00 &gt; &quot;&lt;- Add&quot;</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Set emitted electron &gt; Close</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Photoelectron (Dipole transition) &gt; Polarization of light [ Circular+1] &gt; Set Eitted electron &gt; Close</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">&nbsp; DIANA: Photoelectron, Auger</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Unpolarized case) DA30 or RFA: Auger, Auger</span></div>
+
+<div><span style="font-size:14px">&nbsp; ----------</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; (Botton &quot;wave&quot; of Initial state&quot; on Auger electron)</span></div>
+
+<div><span style="font-size:14px">6. Calc. scattering pattern matrix &gt; Calculate &gt; (Save image)</span></div>
+
+<div><span style="font-size:14px">7. SPEA-L1 (MEM) &gt; SPEA</span></div>
+
+<div><span style="font-size:14px">8. Set parameter A &gt; OK</span></div>
+
+<div><span style="font-size:14px">9. Select hologram image &gt; OK (Start Conversion of the mapping)</span></div>
+
+<div><span style="font-size:14px">10. Create real space voxel</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp; Voxcel size (A) : 5 - 10 [Angstrom]</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp; (Check &quot;Remove Z&lt;-0.5&quot; in &quot;Azmuthal Equidistant map&quot; case)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Create</span></div>
+
+<div><span style="font-size:14px">11. Set SPEA parameters</span></div>
+
+<div><span style="font-size:14px">&nbsp; L1 Threshold (%)= 50 (&lt;- Empirically good value)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Check) &quot;Threshold scaling&quot; on &quot;Treatment of meam squre error (L1)&quot;&nbsp; (&lt;- Empirically good value)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; OK</span></div>
+
+<div><span style="font-size:14px">12. Start SPEA &gt; (Save image)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (If you can get good result, click &quot;Terminate SPEA&quot;)</span></div>
+
+<div><span style="font-size:14px">13. Display real space</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Display Err in real space</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Display 3D</span></div>
+
+<div><span style="font-size:14px">&nbsp; &gt; Graph RMSE</span></div>
+
+<div>&nbsp;</div>
+
+<div>※ (Drag&amp;drop) *.xmlsrs, *.xml_air or *.xml_cl on &quot;3D-AIR-IMAGE&quot;(window)</div>
+
+<div>------------------------------------------------------------------------------<br />
+■ PEH</div>
+
+<div>1. A sample is irradiated with soft x-ray.</div>
+
+<div>2. Photoelectron is excited.</div>
+
+<div>3. Electron wave is scattered by surrounding atoms.</div>
+
+<div>4. Interference pattern between the scattered waves and emitted wave appears.&nbsp; This pattern is photoelectron hotogram.</div>
+
+<div>※ Forwad focusing peak indicates the direction of scatterer.</div>
+
+<div>※ Interference pattern implies the atomic distance between emitter and scatterer.</div>
+</div>
+
+<div><span style="font-size:14px">-------------------------------------</span>-----------------------------------------</div>
+
+<div>■&nbsp;<span style="font-size:14px">References</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">[1] SPring-8 秋の学校</span></div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>

@@ -1,0 +1,2217 @@
+<p>　WIEN2kのセットアップ方法を記載します<br />
+------------------------------------------------------------------------------<br />
+■ 重要<br />
+　WIEN2kはサイトライセンスなので、眠っているPCにWIEN2kをセットアップして、多くのモデルで計算を行ってみるとよいでしょう。高いPCを買わなくても幾つかの仕事が出来きます。構造最適化にはPWscfやABINITなどを用いるが、研究費に余裕があればVASPを選択するのもよいでしょう。VASPはWIEN2kの結果と合うように調整しているとのこと。<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+・WIEN2k:&nbsp;<a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN">https://www.youtube.com/playlist?list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN</a></p>
+
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN" width="560"></iframe></div>
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a>&nbsp;&nbsp;<br />
+※ 2017年後半以降、私は研究環境が無いので、WIEN2kでDMFT計算が可能なツール（DFTTools）については解説できていない。申し訳ない。<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2kとVASPの違い<br />
+<br />
+◇ WIEN2kの利点<br />
+・ほぼ最高の計算精度を誇る<br />
+・信頼性が高いので、計算結果をほぼ信頼できる<br />
+・GUI(w2web)がしっかりしているので入力ファイルからバンド分散までの計算が容易<br />
+　Youtube動画：<a href="https://www.youtube.com/watch?v=_2O38qvabZo">https://www.youtube.com/watch?v=_2O38qvabZo</a>, <a href="https://www.youtube.com/watch?v=9Us6c8CUf-E&amp;list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN">https://www.youtube.com/watch?v=9Us6c8CUf-E&amp;list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN</a><br />
+<br />
+◇ VASPの得意なこと<br />
+・擬ポテンシャル法を使っているので、フルポテンシャル法のWIEN2kよりも構造最適化に適している<br />
+・フォノン計算に必要なDFPTが最新版には実装されている<br />
+・他の方が作ったツールが他に比べて充実している<br />
+------------------------------------------------------------------------------<br />
+■ フォルダ名にスペース（空白）があるとエラーが出て計算が走らないので注意してください。<br />
+□ 下記は中級者及び上級者向け（初心者は飛ばしてよい）<br />
+　WIEN2kのファイルを解凍すると存在しているファイルで runsp_c_lapw などと書かれているのは、cshやtschのファイルです。それは、各Fortranプログラム（lapw0やlapw1など）、そして、オプションや関連するファイルのコピーなどを順番に実行していくように作られています。 w2webでのShow dayfile で見るよりも詳細な操作が、それらのファイルで分かりますので、何か問題があれば、それを参照してみてください。<br />
+※ hup: Command not found と表示される場合がある。これは、runsp_c_lapw などのcshファイル中に hup と記入されているためである。これが表示されていても正常に動作する。何故、cshファイル中に hup が記述されているかはいまのところ不明。<br />
+※ setenv でエラーがあった場合は、runsp_c_lapw などのファイル中で setenv の記述のある行で問題が生じている。cshやtschのファイルは他のファイルを呼び出して用いていることもあるので注意。echo &quot;check No.1&quot; などをcshやtschファイル中に記入してセーブし、実行して問題がある箇所を探してみるとよい。<br />
+------------------------------------------------------------------------------<br />
+■ フルポテンシャル法<br />
+　APW法やLAPW法が仮定するマフィンティンポテンシャル近似は対称性の低い系や表面・界面系では精度が低くなるばかりでなく、計算結果が仮定されるマフィンティン球の半径に大きく依存してしまう（例えば、マフィンティン球を用いたKKR法では、結晶中に存在する大きな隙間や表面や界面の何も無い空間にVacancyを入れると精度が良くなると言われている｛左欄のAkai-KKRを参照｝）。一方、フルポテンシャル化したFLAPW法ではこの問題が解決される。<br />
+参考：笠井秀明ら著、計算機マテリアルデザイン入門、大阪大学出版会<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2k version 12 で gfortran を用いた場合でのtelnes3のコンパイルエラー｛読み取り長さ｝の問題は解決されました。a-Mnなどでの計算はWIEN2k_v9.1以前のものを用いてください）<br />
+<br />
+■ WIEN2k 12.1 を用いている皆様へ<br />
+&nbsp;&nbsp; 計算する系によっては、'LOPW' - Plane waves exhausted とエラーが表示される場合があります。対処方法は下記のメーリングリスト[EM1]にあります。下記に具体的な方法を記しますので、どうしても LOPW エラーが lopw1 で表示されてお困りの方はご検討下さい。<br />
+1. [EM1]にある&nbsp; SUBROUTINE LOPW(NAT) から&nbsp;END までをコピーして、メモ帳などにペーストします。<br />
+2. ペーストしたファイル名を lopw.f とします。<br />
+3. WIEN2kのファイルの中の、SRC_lapw1 の中の lopw.f の名称を、元に戻したいときのために別の名称にしておいて下さい（例えば、lopw_ori.f&nbsp; など)。<br />
+4. SRC_lapw1 の中に、メーリングリスト[EM1]のコードの部分をペーストして作成した lopw.f を入れます。<br />
+5. Terminal などを開いて、WIEN2kのコンパイル画面を開きます（./siteconfig と書けば思い当たる方も多いと思います）。<br />
+6.&nbsp;r を押して、 Compile/Reconmpile に入ります。<br />
+7. s を押して、Select program にして、 lapw1 と入力します。<br />
+8. エラーが出なければ無事にコンパイルは終了です。<br />
+※ もし、元のソースコードの方が良かった場合は、lopw.f を消して、名称を書き換えた方の lopw.f を元の名称に戻して、コンパイル( 上記5-7の作業を行う）してください。<br />
+[EM1] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg08256.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg08256.html</a>　<br />
+------------------------------------------------------------------------------<br />
+■ segmentation fault の原因<br />
+&nbsp; コンパイルに -axAVX を入れると生じることがある。その場合は、-axAVXを除く。<br />
+------------------------------------------------------------------------------<br />
+■ 直接入力ファイルを書き換える（w2webのGUIを使用しない）場合は、&quot;_st&quot; の無い方にしてください。変更が反映されません。<br />
+------------------------------------------------------------------------------<br />
+■ Lecture notes of the 2011 WIEN2k workshop (pdf)<br />
+<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/</a>　<br />
+（Exercises_11.pdf と userguide を見ながら計算方法を取得すると良い）<br />
+（WIEN2kのセットアップは Blaha_WIEN2k-installation.pdf を参照すると良い）<br />
+（supercellはoctave を用いて作製しているように見える。Blaha_WIEN2k-getting_started.pdf&nbsp; のP.44 を参照）<br />
+■ userguide<br />
+<a href="http://www.wien2k.at/reg_user/textbooks/usersguide.pdf">http://www.wien2k.at/reg_user/textbooks/usersguide.pdf</a><br />
+■ 理論<br />
+<a href="http://www.wien2k.at/reg_user/textbooks/DFT_and_LAPW-2_cottenier.pdf">http://www.wien2k.at/reg_user/textbooks/DFT_and_LAPW-2_cottenier.pdf</a><br />
+■ Lecture notes of the 2017 WIEN2k workshop<br />
+<a href="http://susi.theochem.tuwien.ac.at/events/ws2017/">http://susi.theochem.tuwien.ac.at/events/ws2017/</a>&nbsp;&gt; Exercise: の各項目を参照するとよい<br />
+------------------------------------------------------------------------------<br />
+■ ubnutu10.04以降ではlibstdc++.so.5がダウンロードされない。<br />
+そのため、下記のプロセスが必要となる。（ubuntu11.04 32bit, 64bit共に成功）<br />
+&nbsp; 1) cd /etc/apt<br />
+&nbsp; 2) sudo vi sources.list または sudo emacs sources.list<br />
+&nbsp; 3) vi の場合は、最後の行までカーソルを持っていったら o を入力<br />
+&nbsp; 4) deb http://ftp.nara.wide.ad.jp/debian squeeze main を入力<br />
+&nbsp; 5) vi の場合は、ESC を押し、その後、:wq を入力<br />
+&nbsp; 6) Applications を開いて、Ubuntu Software Center にて libstdc++5 を検索する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; または sudo apt-get install libstdc++5 と入力<br />
+References<br />
+[1] <a href="https://forums.ubuntulinux.jp/viewtopic.php?id=8578&amp;action=new">https://forums.ubuntulinux.jp/viewtopic.php?id=8578&amp;action=new</a><br />
+[2] <a href="http://packages.debian.org/stable/base/libstdc++5">http://packages.debian.org/stable/base/libstdc++5</a><br />
+[3] <a href="http://packages.debian.org/squeeze/i386/libstdc++5/download">http://packages.debian.org/squeeze/i386/libstdc++5/download</a><br />
+[4] <a href="http://tonkatsu2009.wordpress.com/category/ubuntu%E8%A8%AD%E5%AE%9A/">http://tonkatsu2009.wordpress.com/category/ubuntu%E8%A8%AD%E5%AE%9A/</a><br />
+------------------------------------------------------------------------------<br />
+■ 必ず動くようにしたい場合（ 8) の後のコンパイルでエラーが出てしまう方用　）<br />
+&nbsp; 1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) V gfortran + gotolib を選択<br />
+&nbsp; 7) gfortran, gcc を入力<br />
+&nbsp; 8) r を押して、-llapack_lapw -lblas_lapw -lblas -llapack<br />
+&nbsp; 9) ./userconfig_lapw&nbsp;<br />
+&nbsp; 10) bash<br />
+&nbsp; 11) w2web<br />
+&nbsp; 12) tar -zxvf WIEN2k_11_executables.tar.gz<br />
+※ 12) のようにすると、WIEN2kを開発したグループがコンパイルした実行ファイルが解凍される。<br />
+※ 上手くコンパイルできない場合は、blasやlapackがインストールされているかをチェックする。<br />
+Ubuntu の場合、予めコマンドプロンプトで下記を入力することが必要。<br />
+sudo apt-get install csh<br />
+sudo apt-get install tk<br />
+sudo apt-get install gfortran<br />
+sudo apt-get install build-essential<br />
+sudo apt-get install libblas-dev<br />
+sudo apt-get install liblapack-dev<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 以下のソフトをダウンロードして下さい。(&nbsp;Fedora, CentOS&nbsp;)<br />
+Intel Fortran or C<br />
+yum install libstdc++.so.5<br />
+yum install gcc<br />
+<br />
+w2web<br />
+yum install perl<br />
+<br />
+XCrySDen (あると便利なソフト)<br />
+yum install Tcl<br />
+yum install Tk-Toolkit<br />
+<br />
+Editer (あると便利なソフト)<br />
+yum install emacs<br />
+yum install ghostscript<br />
+yum install gnuplot<br />
+yum install pdf-reader<br />
+<br />
+parallel calculation (MPIでの並列計算をしなければ、インストールしなくてもよい)<br />
+openMPI, MPICH, MPICH2, LAM or PVM and SCALAPACK and FFT<br />
+<br />
+------------------------------------------------------------------------------<br />
+遠隔操作したい場合（下記の2つの方法がある）<br />
+■ RealVNC<br />
+■ Xming + putty + Firefox<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 各Linux OSでのインストールのコマンド（ネットワークが利用可能な場合）<br />
+（Install command or install centre for every Linux OS.）<br />
+Linux OS : Ubuntu, Debian<br />
+sudo apt-get update or apt-get install<br />
+<br />
+Linux OS : openSUSE<br />
+Software Management at Software in YaST2<br />
+<br />
+Linux OS : Fedora, CentOS<br />
+yum install<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 各Linux OSでのファイルのインストールコマンド（ネットワークが利用不可能な場合）<br />
+（Install command or install centre for every Linux OS.）<br />
+Linux OS : Ubuntu, Debian<br />
+&nbsp; dpkg -i&nbsp;<br />
+&nbsp; sudo dpkg -i&nbsp;xxxxxx.deb<br />
+<br />
+Linux OS : openSUSE 10.3<br />
+Software Management at Software in YaST2<br />
+<br />
+Linux OS : Fedora, CentOS<br />
+rpm -i xxxxxx.rpm<br />
+<br />
+■ Ubuntu12.04.5<br />
+<a href="http://packages.ubuntu.com/">http://packages.ubuntu.com/</a> にて、Distribution: precise とし、キーワードを入れる。<br />
+sudo dpkg -i&nbsp;xxxxxx.deb としてインストールする。<br />
+g++_4.6.3-1ubuntu5_amd64.deb<br />
+libstdc++6-4.6-dev_4.6.3-1ubuntu5_amd64.deb<br />
+build-essential_11.5ubuntu2_amd64.deb<br />
+dpkg-dev_1.16.1.2ubuntu7.6_all.deb<br />
+libdpkg-perl_1.16.1.2ubuntu7.6_all.deb<br />
+libtimedate-perl_1.2000-1_all.deb<br />
+csh_20110502-2ubuntu1_amd64.deb<br />
+tcsh_6.17.06-2_amd64.deb<br />
+tk_8.5.0-2_all.deb<br />
+tcl_8.5.0-2_all.deb<br />
+tk8.5_8.5.11-1_amd64.deb<br />
+tcl8.5_8.5.11-1ubuntu1_amd64.deb<br />
+libwxbase2.8-0_2.8.12.1-6ubuntu2_amd64.deb<br />
+gnuplot_4.4.3-0ubuntu3_all.deb<br />
+gnuplot-nox_4.4.3-0ubuntu3_amd64.deb<br />
+gnuplot-x11_4.4.3-0ubuntu3_amd64.deb<br />
+libxss1_1.2.1-2_amd64.deb<br />
+libwxgtk2.8-0_2.8.12.1-6ubuntu2_amd64.deb<br />
+など<br />
+---------------------------------------------------<br />
+■ セットアップ手順<br />
+tar -xvf WIEN2k_09.tar<br />
+gunzip *.gz<br />
+chmod +x ./expand_lapw<br />
+./expand_lapw<br />
+./siteconfig_lapw<br />
+./userconfig_lapw<br />
+w2web<br />
+------------------------------------------------------------------------------<br />
+■ 64 bit type OS (Standard)<br />
+Environment ( WIEN2k_14.2 )<br />
+(Fortran : ifort, C : gcc )<br />
+<br />
+.bashrc<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+<br />
+WIEN2k<br />
+1) mkdir WIEN2k_14.2<br />
+2) cd WIEN2k_14.2<br />
+3) cp $HOME/Downloads/WIEN2k_14.2.tar .<br />
+4) tar -xvf WIEN2k_14.2.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) continue (y/n) y<br />
+9) ./siteconfig_lapw<br />
+11) I&nbsp;&nbsp;&nbsp; Linux (Intel ifort compiler (12.0 and later) + mkl )<br />
+12) specify compiler options<br />
+&nbsp;&nbsp; 1. To change an item select option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compiler options=-FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -assume buffered_io -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp; 2. Shared Memory Architecture? (y/n): y<br />
+&nbsp;&nbsp; 3. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp;&nbsp; 4. You need to KNOW dedtails about your installed MPI and FFTW ) n<br />
+13) ./userconfig<br />
+14) bash<br />
+15) w2web<br />
+------------------------------------------------------------------------------<br />
+■ 64 bit type OS (Advance 1)<br />
+Environment ( WIEN2k_14.2 )<br />
+(Fortran : ifort, C : gcc, FFTW: MKL)<br />
+<br />
+.bashrc<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+<br />
+WIEN2k<br />
+1) mkdir WIEN2k_14.2<br />
+2) cd WIEN2k_14.2<br />
+3) cp $HOME/Downloads/WIEN2k_14.2.tar .<br />
+4) tar -xvf WIEN2k_14.2.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) continue (y/n) y<br />
+9) ./siteconfig_lapw<br />
+11) I&nbsp;&nbsp;&nbsp; Linux (Intel ifort compiler (12.0 and later) + mkl )<br />
+12) specify compiler options<br />
+&nbsp;&nbsp; 1. To change an item select option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -assume buffered_io -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW options:&nbsp;-L$(MKLROOT)/interfaces/fftw3xf -lfftw3xf_intel -I$(MKLROOT)/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW_LIBS: -L$(MKLROOT)/interfaces/fftw3xf<br />
+&nbsp;&nbsp; 2. Shared Memory Architecture? (y/n): y<br />
+&nbsp;&nbsp; 3. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp;&nbsp; 4. You need to KNOW dedtails about your installed MPI and FFTW ) n<br />
+13) ./userconfig<br />
+14) bash<br />
+15) w2web<br />
+<br />
+Error: (FFTW options: -lfftw3xf_intel -I$(MKLROOT)/include) case<br />
+------------------------------------------------------------------------------<br />
+■ 64 bit type OS (Advance 2)<br />
+Environment ( WIEN2k_14.2 )<br />
+(Fortran : ifort, C : gcc, FFTW: FFTW3)<br />
+<br />
+.bashrc<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+<br />
+WIEN2k<br />
+1) mkdir WIEN2k_14.2<br />
+2) cd WIEN2k_14.2<br />
+3) cp $HOME/Downloads/WIEN2k_14.2.tar .<br />
+4) tar -xvf WIEN2k_14.2.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) continue (y/n) y<br />
+9) ./siteconfig_lapw<br />
+11) I&nbsp;&nbsp;&nbsp; Linux (Intel ifort compiler (12.0 and later) + mkl )<br />
+12) specify compiler options<br />
+&nbsp;&nbsp; 1. To change an item select option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -assume buffered_io -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW options: -DFFTW3 -I/usr/local/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW_LIBS:&nbsp;-lfftw3_mpi -lfftw3_threads -lfftw3 -L/usr/local/lib<br />
+&nbsp;&nbsp; 2. Shared Memory Architecture? (y/n): y<br />
+&nbsp;&nbsp; 3. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp;&nbsp; 4. You need to KNOW dedtails about your installed MPI and FFTW ) n<br />
+13) ./userconfig<br />
+14) bash<br />
+15) w2web<br />
+------------------------------------------------------------------------------<br />
+■ 64 bit type OS (Expert)<br />
+Environment ( WIEN2k_14.2 )<br />
+(Fortran : ifort, C : gcc )<br />
+(FFTW: FFTW3, your installed MPI and FFTW: OpenMPI and FFTW3)<br />
+<br />
+.bashrc<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+<br />
+WIEN2k<br />
+1) mkdir WIEN2k_14.2<br />
+2) cd WIEN2k_14.2<br />
+3) cp $HOME/Downloads/WIEN2k_14.2.tar .<br />
+4) tar -xvf WIEN2k_14.2.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) continue (y/n) y<br />
+9) ./siteconfig_lapw<br />
+11) I&nbsp;&nbsp;&nbsp; Linux (Intel ifort compiler (12.0 and later) + mkl )<br />
+12) specify compiler options<br />
+&nbsp;&nbsp; 1. To change an item select option.<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -assume buffered_io -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW options:&nbsp;-DFFTW3 -I/usr/local/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW_LIBS:&nbsp;-lfftw3_mpi -lfftw3_threads -lfftw3 -L/usr/local/lib<br />
+&nbsp;&nbsp; 2. Shared Memory Architecture? (y/n): y<br />
+&nbsp;&nbsp; 3. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp;&nbsp; 4. You need to KNOW dedtails about your installed MPI and FFTW ) y<br />
+&nbsp;&nbsp; 5. Set MPI_REMOTE to 0 / 1:<br />
+&nbsp;&nbsp; 6. Your compiler: mpif90<br />
+&nbsp;&nbsp; 7. Please specify whether you want to use FFTW3 (default) or FFTW2&nbsp; (FFTW3 / FFTW2)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FFTW3<br />
+&nbsp;&nbsp; 8. Please specify the ROOT-path of your FFTW installation (like /opt/fftw3):<br />
+&nbsp;&nbsp;&nbsp;&nbsp; /usr/local<br />
+&nbsp;&nbsp; 9. is this correct? enter Y (default) or n: y<br />
+&nbsp;&nbsp; 10. Current settings:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_lp64 -lmkl_blacs_lp64 $(R_LIBS)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FPOPT(par.comp.options): -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -assume buffered_io -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+13) ./userconfig<br />
+14) bash<br />
+15) w2web<br />
+<br />
+Current settings:<br />
+RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_lp64 -lmkl_blacs_lp64 $(R_LIBS)<br />
+or<br />
+RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 $(R_LIBS)<br />
+------------------------------------------------------------------------------<br />
+■ 64 bit type CPU<br />
+<br />
+Environment ( WIEN2k_09 )<br />
+Linux OS : openSUSE 11.2 (64 bit type)<br />
+CPU : intel Core2 Quad<br />
+Compiler : l_cprof_p_11.1.069_intel64<br />
+(Fortran : ifort, C : gcc )<br />
+<br />
+Current settings:<br />
+O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align　-DINTEL_VML -traceback -parallel<br />
+L Linker Flags: $(FOPT)　-L/opt/intel/Compiler/11.1/069/mkl/lib/em64t -pthread -i-static<br />
+P Preprocessor flags '-DParallel'<br />
+R R_LIB (LAPACK+BLAS): -lmkl_intel_lp64 -lmkl_intel_thread　-lmkl_core -liomp5 -lpthread<br />
+<br />
+in /root/.bashrc,<br />
+source /opt/intel/Compiler/11.1/069/bin/ifortvars.sh intel64<br />
+source /opt/intel/Compiler/11.1/069/mkl/tools/environment/mklvarsem64t.sh<br />
+intel64<br />
+<br />
+<strong>------------------------------------------------------------------------------</strong><br />
+■ Environment ( WIEN2k_09 )<br />
+Linux OS : Debian 5.03<br />
+CPU : AMD<br />
+kernel 2.6.26-1-AMD64<br />
+Compiler :(ifort : 11.1.064, icc : 11.1.064)<br />
+<br />
+O Compiler options: -FR -mp1 -msse3 -parallel -nowarn -prec-div -pad　-align -DINTEL_VML -traceback -ip<br />
+L Linker Flags: $(FOPT) -L/opt/intel/Compiler/11.1/064/mkl/lib/em64t　-liomp5 -lpthread<br />
+P Preprocessor flags '-DParallel'<br />
+R R_LIB (LAPACK+BLAS): -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core　-liomp5 -lpthreads<br />
+<br />
+in /root/.bashrc,<br />
+source /opt/intel/Compiler/11.1/064/bin/intel64/ifortvars_intel64.sh<br />
+source /opt/intel/Compiler/11.1/064/bin/intel64/iccvars_intel64.sh<br />
+source /opt/intel/Compiler/11.1/064/mkl/tools/environment/mklvarsem64t.sh<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 32 bit type<br />
+<br />
+Environment ( WIEN2k_09 )<br />
+Linux OS : CentOS 5.3 (32 bit type)<br />
+CPU : Pentium4 3.2 GHz<br />
+Compiler : l_cprof_p_11.1.069_ia32<br />
+(Fortran : ifort, C : gcc )<br />
+<br />
+Current settings:<br />
+O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML<br />
+-traceback<br />
+L Linker Flags: $(FOPT) -L/opt/intel/Compiler/11.1/069/mkl/lib/32 -pthread<br />
+-i-static<br />
+P Preprocessor flags '-DParallel'<br />
+R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_sequential -lmkl_core -lpthread<br />
+<br />
+in /root/.bashrc,<br />
+source /opt/intel/Compiler/11.1/069/bin/ifortvars.sh ia32<br />
+source /opt/intel/Compiler/11.1/069/mkl/tools/environment/mklvars32.sh<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ ACMLを用いる場合（ACMLのインストール）<br />
+1) mkdir ACML_5_2_0<br />
+2) cd ACML_5_2_0<br />
+3) tar zxvf acml-5-2-0-gfortran-64bit.tgz<br />
+4) sudo ./install-acml-5-2-0-gfortran-64bit.sh<br />
+5) .bashrc にて<br />
+&nbsp;&nbsp; export LD_LIBRARY_PATH=/opt/acml5.2.0/gfortran64/lib<br />
+&nbsp;&nbsp; OpenMPを用いる場合は下記にする。<br />
+&nbsp;&nbsp; export LD_LIBRARY_PATH=/opt/acml5.2.0/gfortran64_mp/lib<br />
+6) bash<br />
+<br />
+□ ACMLを用いた場合のWIEN2kのセットアップ（業者様向け）<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) Vを選択<br />
+7) gfortran, gcc を入力<br />
+8) Current settings:<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options: -ffree-form -O2 -m64 -ffree-line-length-none<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags: $(FOPT) -L/opt/acml5.2.0/gfortran64/lib<br />
+&nbsp;&nbsp;&nbsp; P&nbsp;&nbsp; Preprocessor flags: '-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS): -lacml<br />
+9) Shared Memory Architecture? (y/n): y<br />
+10) Do you have MPI and Scalapack installed and......(y/n): n<br />
+11) ./userconfig_lapw<br />
+12) bash<br />
+13) w2web<br />
+&nbsp;<br />
+□ ACMLを用いた場合のWIEN2kのセットアップ（業者様向け）<br />
+OpenMP<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) Vを選択<br />
+7) gfortran, gcc を入力<br />
+8) Current settings:<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options: -ffree-form -O2 -m64 -ffree-line-length-none -fopenmp<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags: $(FOPT) -L/opt/acml5.2.0/gfortran64_mp/lib<br />
+&nbsp;&nbsp;&nbsp; P&nbsp;&nbsp; Preprocessor flags: '-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS): -lacml_mp<br />
+9) Shared Memory Architecture? (y/n): y<br />
+10) Do you have MPI and Scalapack installed and......(y/n): n<br />
+11) ./userconfig_lapw<br />
+12) .bashrc を開いて、export OMP_NUM_THREADS= 4<br />
+13) bash<br />
+14) w2web<br />
+※ 上記だとSO（spin orbit coupling）計算のコンパイルでエラーが表示される。SOの計算が必要なければ問題は無い。<br />
+------------------------------------------------------------------------------<br />
+■ Please, reffer /opt/intel/Compiler/11.1/069/Documentation/en_US/mkl<br />
+( userguide.pdf, e.g. P49 ) and Quick-Reference Guide to Optiimization<br />
+with intel compilers version 11.<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 業社様向け<br />
+1) tar -xvf WIEN2k_9.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) r を押して、-llapack_lapw -lblas_lapw -lblas -llapack<br />
+9) ./userconfig_lapw&nbsp;<br />
+10) bash<br />
+11) w2web<br />
+参考HP : <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf">http://www.ghfecher.de/Fecher_CompileIntel.pdf</a><br />
+<br />
+□ 業社様向け　（ATLAS）\<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2 -mtune=core2 -m32<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags:&nbsp;$(FOPT) -L/usr/local/atlas/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;'-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-llapack_netlib_atlas -lf77blas -latlas<br />
+9) ./userconfig_lapw&nbsp;<br />
+10) bash<br />
+11) w2web<br />
+※ telnes3 でエラーが出る。(これは、EELSが計算できないが、他は計算が出来る可能性があることを意味する）<br />
+TiC 収束まで 107 sec.<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+<br />
+□&nbsp;業社様向け　（GotoBLAS2 + OpenMP）<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2 -mtune=core2 -m32<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags:&nbsp;$(FOPT) -L/usr/lib -static<br />
+&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;'-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-lgoto2 -lpthread -fopenmp<br />
+9) ./userconfig_lapw&nbsp;<br />
+10) bash<br />
+11) w2web<br />
+※ telnes3 でエラーが出る。(これは、EELSが計算できないが、他は計算が出来る可能性があることを意味する）<br />
+TiC 収束まで 107 sec.<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+参考HP : <a href="http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html">http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■ BoltzTraP set up methods<br />
+（化学ポテンシャルやゼーベック係数が計算可能。緩和時間が実験的に分かれば、電気伝導度の予測も可能になる）<br />
+<br />
+□&nbsp;コンパイル（Compile）<br />
+1) tar xjvf BoltzTraP_1.20.tar.bz2&nbsp;<br />
+2)&nbsp;cd&nbsp;boltztrap-1.2.0<br />
+3) cd src<br />
+4) 解凍されたファイルで、src と書かれたファイルを開く<br />
+5) Makefileを書き換える<br />
+&nbsp; A) gfortran<br />
+&nbsp;&nbsp;&nbsp; a) Netlib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDFLAGS = -L/usr/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBS = -llapack -lblas<br />
+&nbsp;&nbsp;&nbsp; b) ATLAS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDFLAGS = -L/usr/local/atlas/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBS = -llapack_netlib_atlas -lblas_atlas -latlas<br />
+&nbsp;&nbsp;&nbsp; c) GotoBLAS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LDFLAGS = -L/usr/local/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIBS = -lgoto2 -lpthread<br />
+&nbsp; B) Intel&nbsp;compiler　(調査中)<br />
+&nbsp;&nbsp;&nbsp; FC =&nbsp;ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOPT = -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LDFLAGS =&nbsp;&nbsp;$(FOPT) -L/home/*/intel/mkl/lib/ia32 -pthread -i-static<br />
+&nbsp;&nbsp;&nbsp;&nbsp;LIBS = -lmkl_intel -lmkl_sequential -lmkl_core -lpthread<br />
+6)&nbsp;make<br />
+<br />
+□ 実行方法<br />
+1) 計算させたい系の名前のファイルを作る。<br />
+2)&nbsp;新しく作ったそのファイルをカレントディレクトリにする。<br />
+3) WIEN2kからのデータ（case.energy, case.struct ）を入れる。<br />
+&nbsp; その他に、case.intrans が必要（README.pdfに詳細がある）。<br />
+&nbsp;&nbsp;case.intransはCoSb3のものをコピーするのもよい。その場合は下記のようにする。<br />
+&nbsp;&nbsp;A. EFは case.dos1 または case.output2（femiで検索すると良い）で書かれている値を入力。<br />
+&nbsp;&nbsp;B.&nbsp;電子数は case.in2 での NE(Number of electron)の値を入力。<br />
+&nbsp;&nbsp;C. NOCALC を CALC にする。<br />
+4) /home/ boltztrap-1.2.0/src/x_trans BoltzTraP と入力。<br />
+&nbsp; 　(動作しない場合は、x_trans BoltzTraP -t と入力）<br />
+※ CoSb3, Bi2Te3, Alについてはtestsに入力ファイルの例が記してある。ReferenceにあるCoSb3.trace や Bi2Te3.trace の良い。データを Efが同じところで比較してみると良い。大体似た結果が出ていればよい。<br />
+※ Fe2VAl を計算してみると、例えばWIEN2kでは、単位胞中に価電子帯の電子はXX個の設定になる。EFは9 eVとなる。しかし、実際の試料では、アーク炉での試料作成中にAlが0.3%程蒸発して無くなる可能性もある。そこで、Alが3価だからX電子程度が無くなったと考えてEFをシフトさせてみると、ゼーベック係数の傾向は実測値と比較的よく合うようになる（更に検証中）。<br />
+<br />
+□&nbsp;スピントロニクスに関する研究について（編集中）<br />
+1) &nbsp;他のオプションは、x_transを開けばわかる。スピントロニクスに関する研究を行うならば、-up や -dn のオプションを利用して輸送現象やゼーベック係数を検討してみるのも良いだろう。<br />
+2) 余裕があれば、他のcodeに対しても同様のプログラムを作成してみるとよい（例えば、TDDFTが利用可能なexcitingや開発中のPWscfなど）。<br />
+3) 電流 Je = J&uarr; + J&darr;　（J&uarr; ：上向きスピンの電子の流れ。J&darr;：下向きのスピンのそれ)と、スピン流 Js = J&uarr;&nbsp;- J&darr;　を様々な物質で比較検討すればよい。<br />
+4) 「スピンホール効果：電流を流すと垂直方向にスピン流れが生じる」「逆スピンホール効果：スピン流を流すと垂直方向に電流が生じる」「スピンゼーベック効果：温度差によりスピン圧が生じる。スピン依存電気化学ポテンシャルの差『&mu;&uarr;-&mu;&darr;』を計算すれば良い）。K. Uchida et al., Nature 455 (2008) 778.の論文を読んで検討してみるとよい」(磁性絶縁体でも検討してみられたい。加えて、日本物理学会誌,Vol 65, 2010. も参考にされるとよいだろう）<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2PHON<br />
+1) download WIEN2kPHON :<br />
+&nbsp; <a href="http://www.wien2k.at/reg_user/unsupported/WIEN2PHON.tgz">http://www.wien2k.at/reg_user/unsupported/WIEN2PHON.tgz</a><br />
+2) フォルダを作成してWIEN2PHON.tgzを入れる<br />
+3) tar zxvf WIEN2PHON.tgz<br />
+4) cd WIEN2PHON<br />
+5) cd WIEN2POSCAR<br />
+6) WIEN2POSCAR にあるMakefileでFC = ifc をFC = ifort に書き換える<br />
+7) make<br />
+8) cd ..<br />
+9) cd cellconv<br />
+10) cellconvにあるMakefileでFC = ifc をFC = ifort に書き換える<br />
+11) make<br />
+12) cd ..<br />
+13) 文献[1]を参考にperl-math-MatrixReal.pm を /usr/lib/perl5/Math/へダウンロードする（調査中）<br />
+&nbsp; <a href="http://search.cpan.org/dist/Math-MatrixReal/">http://search.cpan.org/dist/Math-MatrixReal/</a>&nbsp;（Dr. G.Madsen へ交渉準備中）<br />
+<br />
+□ PHON : <a href="http://www.homepages.ucl.ac.uk/~ucfbdxa/">http://www.homepages.ucl.ac.uk/~ucfbdxa/</a><br />
+1) mkdir PHON<br />
+2) phon.1.30.tar.Z をPHONに入れる<br />
+3) cd PHON<br />
+4) tar zxvf phon.1.30.tar.Z<br />
+5) cd blas<br />
+6) make<br />
+7) cd ../lapack<br />
+8) make<br />
+9) cd ../src<br />
+10) cp makefile.linux_ifort makefile<br />
+11) make<br />
+&nbsp;<br />
+□ 実行方法（調査中）<br />
+1) WIEN2POSCAR case<br />
+&nbsp; このコマンドで POSCAR が作成される<br />
+2) INPHONを作成する<br />
+&nbsp; PHON のファイルにある manual.pdf を参照して作成する<br />
+3)&nbsp;WIEN2kで計算（[run SCF] での Convergence criteria : で Force にチェック）<br />
+4) makedisp.pl case&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+5)&nbsp;（調査中）&nbsp;<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Phonopy<br />
+set up methods (andLinux or Ubuntu)<br />
+1) download phonopy : <a href="https://sourceforge.net/projects/phonopy/">https://sourceforge.net/projects/phonopy/</a><br />
+2)&nbsp;sudo apt-get install python-dev python-numpy python-matplotlib python-tk python-lxml python-yaml python-scipy<br />
+3) tar zxvf phonopy-0.9.4.3-pre8.tar.gz<br />
+4) cd phonopy*<br />
+5) sudo python setup.py install<br />
+<br />
+□ scf2forces&nbsp;（最新のphonopyの場合は必要ない）<br />
+1)&nbsp;download scf2forces<br />
+2) tar zxvf SRC_scf2forces_ph0.9.4.3.tar.gz<br />
+3) cd scf2*<br />
+4) Makefile を書き換える<br />
+&nbsp; FC =&nbsp;ifort<br />
+5) make<br />
+&nbsp;<br />
+□ 実行方法（調査中）<br />
+1) ファイルを作成し、その中にcase.struct（空間群はPまたはP1であること！）を入れる<br />
+2) phonopy -d --dim=&quot;1 1 1&quot; --wien2k=case.struct<br />
+&nbsp;&nbsp; 2x2x2のスーパーセルを作る場合： phonopy -d --dim=&quot;2 2 2&quot; --wien2k=case.struct<br />
+<br />
+◆Force constant calculation の場合（この手法は私の方では成功していない）<br />
+3)&nbsp;case.structSファイルが作成される<br />
+&nbsp;&nbsp; この名称をcase-S.structなどに書き換える<br />
+4)&nbsp;WIEN2kでのCreate New Sessionでcase-Sを作成する<br />
+&nbsp;&nbsp; 作成されたファイルの中にcase-S.structを入れて、計算を走らせる<br />
+5) phonopyで計算する場合（調査中）<br />
+&nbsp;&nbsp;&nbsp; WIEN2kで計算したファイルの中にcase-S.scfを用いて下記を実行する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;phonopy --wien2k=case.struct -f case-S.scf<br />
+6) phonopy --wien2k=case.struct 他のオプション 設定ファイル<br />
+<br />
+◆Force calculation の場合<br />
+3) case.structS-001などのファイルが作成される<br />
+&nbsp;&nbsp;&nbsp; これらの名称をcase-001.structなどに書き換える<br />
+4) WIEN2kでのCreate New Sessionでcase-001を作成する<br />
+&nbsp;&nbsp;&nbsp;作成されたファイルの中にcase-001.structを入れて、計算を走らせる＊<br />
+&nbsp;&nbsp;&nbsp;（※ Dr. Evgeniya Kabliman から、[run SCF] での Convergence criteria : で Force にチェックを入れることが必要であると、丁寧に御返答を頂きました。または、-fc 0.5など）<br />
+&nbsp;&nbsp; 同様にして、002や003などがあれば計算する<br />
+5)&nbsp;以下のa), b)の二通りの方法がある（ 最新のphonopyを用いた場合はb)へ ）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;a)&nbsp;scf2forcesで計算する場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; scf2forces_ph0.9.4.3 にdisp.yaml, case-001.scf, case-001.struct などを入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;./scf2forces<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case-<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;case-<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FORCE_SETS が形成される。これをphonopyの計算に用いる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b) WIEN2kで計算したファイルの中にcase-001.scfなどを用いて下記を実行する<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;phonopy --wien2k=case.struct -f case-001.scf case-002.scf ......<br />
+6) phonopy --wien2k=case.struct 他のオプション 設定ファイル<br />
+&nbsp;&nbsp;&nbsp;&nbsp;設定ファイルは下記のHPを参考に作成し、コマンドを入力すればよい<br />
+&nbsp;&nbsp;&nbsp;&nbsp;<a href="http://phonopy.sourceforge.net/procedure.html">http://phonopy.sourceforge.net/procedure.html</a><br />
+References : <a href="http://phonopy.sourceforge.net/index.html">http://phonopy.sourceforge.net/index.html</a><br />
+<a href="http://atztogo.users.sourceforge.net/">http://atztogo.users.sourceforge.net/</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■ ATA@WIEN2k&nbsp;（*はユーザー名です）<br />
+1) tar zxvf <a href="mailto:ATAT@WIEN2k_files_2010-08-18.tgz">ATAT@WIEN2k_files_2010-08-18.tgz</a><br />
+2) cd <a href="mailto:ATAT@WIEN2k_files">ATAT@WIEN2k_files</a><br />
+3) ホームディレクトリの .bashrc にて下記を書き加える。<br />
+&nbsp; export ATAT_DIR=<a href="mailto:ATAT_DIR=/home/*/ATAT@WIEN2k_files">/home/*/ATAT@WIEN2k_files</a><br />
+4)&nbsp;&nbsp;<a>/home/*/ATAT@WIEN2k_files</a>に戻って、make.inc を書き換える<br />
+&nbsp; A) gfortran<br />
+&nbsp;&nbsp;&nbsp; FC=gfortran<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOPT=-O2<br />
+&nbsp;&nbsp;B) Intel Compiler<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FC=ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FOPT=-O2<br />
+5) make<br />
+<br />
+□&nbsp; 実行方法<br />
+&nbsp; （調査中）<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Cubic-elastic<br />
+1) tar zxvf cubic-elastic-by-using-deriative-method.tar.gz<br />
+2) cd cubic-elastic<br />
+3) Makefile にて書き換える（makefile-exampleを参考にすればよい）<br />
+&nbsp;&nbsp;FC = ifort<br />
+&nbsp;&nbsp;FOPT = -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;LDFLAGS&nbsp; = $(FOPT) -L/home/*/intel/*/mkl/lib/ia32 -lpthread<br />
+4) make<br />
+<br />
+□&nbsp;実行方法<br />
+&nbsp; （調査中）<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Hex-elastic<br />
+1) tar zxvf hex-elastic.tar.gz<br />
+2) cd hex-elastic<br />
+3) Makefile にて書き換える（makefile-exampleを参考にすればよい）<br />
+&nbsp;&nbsp;FC = ifort<br />
+&nbsp;&nbsp;FOPT = -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;LDFLAGS&nbsp; = $(FOPT) -L/home/*/intel/*/mkl/lib/ia32 -lpthread<br />
+4) make<br />
+<br />
+□&nbsp;実行方法<br />
+&nbsp; （調査中）<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ XCrySDenのセットアップ :&nbsp;<a href="http://www.xcrysden.org/XCrySDen.html">http://www.xcrysden.org/XCrySDen.html</a><br />
+1)&nbsp;tar zxvf&nbsp;xc-1.4.1bin-linuxPC-static.tar.gz&nbsp;<br />
+2)&nbsp;cd XCrySDen-1.4.lbin-static<br />
+3)&nbsp;./xcConfigure<br />
+4) Please specify XCRYSDEN_SCRATCH directory<br />
+&nbsp;&nbsp; (default: /home/lecture/cp120/xcrys_tmp): (enter)<br />
+5) Do you have a CRYSTAL package ([y]es/[n]o): n<br />
+6) Specify print command (default: lpr -h): (enter)<br />
+7) Do you want to enable the BABEL program ([y]es/[n]o): n<br />
+8) Do you want to enable image conversion program ([y]es/[n]o): y<br />
+9) Which image conversion program&nbsp;<br />
+&nbsp;&nbsp;&nbsp;(default: //bin/X11/convert): (enter)<br />
+10) Do you want to enable whirlgif program ([y]es/[n]o): n<br />
+11) Do you want to enable mpeg_encode program ([y]es/[n]o): y<br />
+12)&nbsp;Which mpeg_encode program<br />
+&nbsp;&nbsp;&nbsp; (default: //bin/mpeg_encode): (enter)<br />
+13) Is this correct ([y]es/[n]o): y<br />
+14)&nbsp;Would you like to edit ~/.xcrysden/custom-definitions<br />
+&nbsp;&nbsp;&nbsp;file now ([y]es/[n]o): n<br />
+以上で終了。最新版の1.5でなくても十分に他のプログラムが使える。大変良い意味で枯れたプログラムである。これまでのところ、ユーザー側で明示的にパスを通さなくても、WIEN2kやPWguiは動作してくれる。<br />
+※ Xming で用いたい場合はPrevious 1.5 versions:を選択し、semishare のものをダウンロードすれば良いだろう。<br />
+※ 上記の7) のbabelはubuntu10.04でopenbabelをインストールした場合には、y で良い。<br />
+参考HP : <a href="http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html">http://cphys.s.kanazawa-u.ac.jp/~oda/butsuri-jikken-print/node5.html</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 計算の結果で論文に書く項目<br />
+1) k点の数（Brillouin zone内かirreducible wedge内のk点数）<br />
+2) Muffin-Tin半径（Rmtの値｛WIEN2kで入力している値は a.u. 単位になります｝）<br />
+3) RmtKmaxの値（ポテンシャルと電荷密度の展開における最大のL）<br />
+4) カットオフ Gmax（case.in2の最後にある）<br />
+5) 基底関数の数（平面波の数+local orbitalsの数）<br />
+6) Core statesとvalence statesの区切りの値<br />
+以上で、1は必須、2と3は書かれている方が良い。4-6を書かれている論文は少ないが、書かれているとありがたい。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 並列化について<br />
+&nbsp; 複数のPCを用いて並列計算させようとすると、mpichとScalapackやfftw（gfortranの場合はより容易にインストールできる）、rshやsshの取り扱いを利用可能なように整備しなければならない。一方、CPUが複数搭載されたPCを用いる場合は、OpenMPを選択すれば、このような煩わしさがないため初学者にはお勧めであると思われる（MPIより速度は落ちると言われている）。コンパイルに不安があれば、-parallel で自動並列化してみるだけでもよい。
+<p>&nbsp;</p>
+
+<p><br />
+■ 並列化（業者様向け） ＜以下は調査中＞<br />
+＜ubuntu11.04で試行した。cd /usr/lib の後、ls または、find *blas* などと入力して、ライブラリの名称を確認する。/usr/lib の中にある liblapack.a などは -llapack として、lib を -l とし、最後の.aを除くとリンクされる｛ただし、-L/usr/lib と、-L の後に ライブラリが入っているディレクトリがどこにあるかを記述しておく必要がある｝。私がセットアップしたときには、ubuntu11.04でのblasはliblas.aという名称になっていたため、リンクの指定は-llasとした。新しくセットアップしたものでは改善されていた{9/9/2011}＞<br />
+＜左の欄にあるandLinuxでのsudo apt-get installで並列化に関係するものは入れておく＞<br />
+OpenMPを用いた場合&nbsp;[1]&nbsp;（CentOSのテストでは1 Cycleが終わらない）<br />
+1) tar -xvf WIEN2k_11.tar&nbsp;<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8)&nbsp;l を押して、最後の-staticを除く<br />
+9) r を押して、-llapack_lapw -lblas_lapw -llapack -lblas&nbsp;-fopenmp<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n): n<br />
+12)&nbsp;error が出たルーチンの部分を再度コンパイルする<br />
+&nbsp;&nbsp;oを押して、次にoを選び、最後に追加した --fopenmpi を除く<br />
+&nbsp;&nbsp;rを押して、次にsを選び、Errorの出たルーチンを選択する（例えば、lapwso&nbsp;など）<br />
+13) ./userconfig_lapw<br />
+14) bash<br />
+15) w2web<br />
+※どうしてもtelnes3だけErrorが出る。<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+参考HP :<br />
+[1] <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a><br />
+[2] <a href="http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html">http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html</a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf">http://www.ghfecher.de/Fecher_CompileIntel.pdf</a>&nbsp;<br />
+※&nbsp;./userconfig_lapwの後、.bashrc を開いて、export OMP_NUM_THREADS= の後にスレッドの数 を書き入れる。<br />
+参考HP：<a href="http://www2.kobe-u.ac.jp/~lerl2/l_cc_p_10.1.008/doc/main_cls/mergedProjects/optaps_cls/common/optaps_par_var.htm">http://www2.kobe-u.ac.jp/~lerl2/l_cc_p_10.1.008/doc/main_cls/mergedProjects/optaps_cls/common/optaps_par_var.htm</a><br />
+<a href="http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp?topic=/com.ibm.xlf121.aix.doc/proguide/ompthreads.html">http://publib.boulder.ibm.com/infocenter/comphelp/v101v121/index.jsp?topic=/com.ibm.xlf121.aix.doc/proguide/ompthreads.html</a></p>
+
+<p><br />
+□&nbsp;OpenMPIを用いた場合<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) l を押して、-static を除くき、-L/usr/lib を追加<br />
+9) r を押して、-llapack_lapw -lblas_lapw&nbsp;-llapack -lblas<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n):&nbsp;y<br />
+&nbsp;&nbsp;Your compiler: mpif90.openmpi<br />
+&nbsp;&nbsp;RP RP_LIB(SCALAPACK+PBLAS): -lscalapack-openmpi -lblacs-openmpi -lmpi -lfftw_mpi -lfftw&nbsp;<br />
+12) ./userconfig_lapw&nbsp;<br />
+13) bash<br />
+14) w2web<br />
+※どうしてもtelnes3だけErrorが出る。<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+<br />
+□&nbsp;MPICHを用いた場合<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) l を押して、-static を除くき、-L/usr/lib を追加<br />
+9) r を押して、-llapack_lapw -lblas_lapw -llapack -lblas<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n): y<br />
+&nbsp; Your compiler: mpif90<br />
+&nbsp;&nbsp;RP RP_LIB(SCALAPACK+PBLAS): -lscalapack-openmpi&nbsp; -lblacs-openmpi -lfftw_mpi -lfftw&nbsp;<br />
+&nbsp;&nbsp;FP FPOPT(par.comp.options): -ffree-form -O2 -I/usr/lib/mpich/include<br />
+12) ./userconfig_lapw&nbsp;<br />
+13) bash<br />
+14) w2web<br />
+※どうしてもtelnes3だけErrorが出る。<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+&nbsp;<br />
+□&nbsp;OpenMPIを用いた場合&nbsp;（ATLAS,&nbsp;Ubuntu11.04&nbsp;32bitの場合｛64bitの場合は -m32を-m64へ｝）&nbsp;<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2 -mtune=core2 -march=core2 -m32<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags:&nbsp;$(FOPT) -L/usr/local/atlas/lib<br />
+&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;'-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-llapack_netlib_atlas -lf77blas -latlas<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n):&nbsp;y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Your compiler:&nbsp;/usr/lib/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP&nbsp; RP_LIB(SCALAPACK+PBLAS): -L/usr/local/atlas/lib -lscalapack_openmpi -lblacsF77_openmpi -lblacs_openmpi -llapack_netlib_atlas -lf77blas -latlas&nbsp;-L/usr/lib -lfftw_mpi -lfftw<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FP&nbsp; FPOPT(par.comp.options): -ffree-form -O2 -mtune=core2 -m32<br />
+&nbsp;&nbsp;&nbsp;&nbsp; MP&nbsp; MPIRUN commando : mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+12) ./userconfig_lapw&nbsp;<br />
+13) bash<br />
+14) w2web<br />
+※どうしてもtelnes3だけErrorが出る。&nbsp;<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+<br />
+□ OpenMPIを用いた場合&nbsp;（ATLAS,&nbsp;Ubuntu11.04&nbsp;32bitの場合｛64bitの場合は -m32を-m64へ｝）<br />
+（lapw1などが成功していない）<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2 -mtune=core2 -m32<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags:&nbsp;$(FOPT) -L/usr/local/atlas/lib -lpthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;'-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-lptlapack_netlib_atlas -lptf77blas -latlas<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n):&nbsp;y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Your compiler:&nbsp;/usr/lib/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP&nbsp; RP_LIB(SCALAPACK+PBLAS): -L/usr/local/atlas/lib -lscalapack_openmpi -lblacsF77_openmpi -lblacs_openmpi -llapack_netlib_atlas -lf77blas -latlas&nbsp;-L/usr/lib -lfftw_mpi -lfftw<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FP&nbsp; FPOPT(par.comp.options): -ffree-form -O2 -mtune=core2 -m32<br />
+&nbsp;&nbsp;&nbsp;&nbsp; MP&nbsp; MPIRUN commando : mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+12) ./userconfig_lapw&nbsp;<br />
+13) bash<br />
+14) w2web<br />
+※どうしてもtelnes3だけErrorが出る。<br />
+※&nbsp;&nbsp;O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。<br />
+<br />
+□&nbsp;OpenMPI+OpenMPを用いた場合&nbsp;（GotoBLAS, Ubuntu11.04&nbsp;32bitの場合｛64bitの場合は -m32 を -m64 へ｝）<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V gfortran + gotolib を選択<br />
+7) gfortran, gcc を入力<br />
+8) O&nbsp;&nbsp; specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options:&nbsp;-ffree-form -O2 -mtune=core2 -march=core2 -m32<br />
+&nbsp;&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags:&nbsp;$(FOPT) -L/usr/local/lib&nbsp;-L../SRC_lib -lpthread<br />
+&nbsp;&nbsp;&nbsp;&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;'-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;-lgoto2 -fopenmp -llapack_lapw -lblas_lapw<br />
+10) Shared Memory Architecture? (y/n): y<br />
+11) Do you have MPI and Scalapack installed and......(y/n):&nbsp;y<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Your compiler: /usr/lib/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP RP_LIB(SCALAPACK+PBLAS): -L/usr/local/lib -lscalapack_goto2_openmpi -lblacsF77_goto2_openmpi -lblacs_goto2_openmpi -lgoto2 -lpthread -fopenmp -L/usr/lib -lfftw_mpi -lfftw&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;FP&nbsp; FPOPT(par.comp.options): -ffree-form -O2 -mtune=core2 -march=core2 -m32<br />
+&nbsp;&nbsp;&nbsp;&nbsp;MP&nbsp; MPIRUN commando : mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+12) ./userconfig_lapw&nbsp;<br />
+13) bash<br />
+14) w2web<br />
+※telnes3でerrorが出る。<br />
+※&nbsp;./userconfig_lapwの後、.bashrc を開いて、export OMP_NUM_THREADS= の後にスレッドの数 を書き入れる。<br />
+&nbsp; TiC: 108 sec. (2 threads)<br />
+※&nbsp; O&nbsp;&nbsp; Compiler options:の最後に -ffree-line-length-none を追加すればtelnes3 でエラーが解決するかもしれない。</p>
+
+<p>&nbsp;<br />
+■ 並列化（学生様向け）<br />
+root または home で 隠しファイルになっている.bashrcに下記を書き込む。<br />
+&nbsp;&nbsp;source /opt/intel/composerxe-2011.5.220/bin/compilervars.sh ia32<br />
+上記は64bit 版の場合、ia32 ではなく intel64 となる。<br />
+&nbsp;<br />
+□&nbsp;OpenMPを用いた場合<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) ヴァージョンに合わせてI, J, K, K1 を選択（ここでは11.1 のK1を選択してみる）<br />
+7) ifort, gcc を入力<br />
+8)&nbsp;Current settings:<br />
+&nbsp;&nbsp;&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;&nbsp; L Linker Flags: $(FOPT) -L/opt/intel/Compiler/11.1/080/mkl/lib/32 -pthread<br />
+&nbsp;&nbsp;&nbsp; P Preprocessor flags '-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+9) Shared Memory Architecture? (y/n): y<br />
+10) Do you have MPI and Scalapack installed and......(y/n): n<br />
+11) ./userconfig_lapw<br />
+12) bash<br />
+13) w2web<br />
+参考HP : <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf">http://www.ghfecher.de/Fecher_CompileIntel.pdf</a>&nbsp;<br />
+※ -lguide&nbsp;を付けると lapw0でエラー、-lmkl_lapack を付けると lapw1とlapw2でエラーが出る。そのため、-lguide と&nbsp;-lmkl_lapack を R R_LIB (LAPACK+BLAS):&nbsp;から除いた。<br />
+※&nbsp;./userconfig_lapwの後、.bashrc を開いて、export OMP_NUM_THREADS= の後にスレッドの数 を書き入れる。<br />
+<br />
+□&nbsp;並列化 （SCF計算まで動作確認 成功事例）<br />
+OpenMPI&nbsp;<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) ヴァージョンに合わせてI, J, K, K1 を選択（ここでは 12 のIを選択する）<br />
+7) ifort, icc を入力<br />
+8) Current settings:<br />
+&nbsp;&nbsp;&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback<br />
+&nbsp;&nbsp;&nbsp; L Linker Flags: $(FOPT) $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread<br />
+&nbsp;&nbsp;&nbsp; P Preprocessor flags '-DParallel'<br />
+&nbsp;&nbsp;&nbsp; R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+9) Shared Memory Architecture? (y/n): y<br />
+10) Do you have MPI and Scalapack installed and......(y/n): y<br />
+&nbsp;&nbsp;&nbsp; Your compiler: /usr/local/openmpi/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_core -lmkl_solver -lmkl_blacs_openmpi -L/usr/local/lib -lfftw_mpi -lfftw $(R_LIBS)<br />
+&nbsp;&nbsp; FP FPOPT(par.comp.options): $(FOPT) -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback&nbsp;<br />
+11) ./userconfig_lapw&nbsp;<br />
+12) bash<br />
+13) w2web<br />
+参考HP : <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf">http://www.ghfecher.de/Fecher_CompileIntel.pdf</a>&nbsp;<br />
+<br />
+□ MPICHを用いた場合＜再確認中＞<br />
+ifort, icc の場合<br />
+tar zxvf fftw-2.1.5.tar.gz<br />
+cd fftw-2.1.5<br />
+&nbsp; sudo su<br />
+&nbsp; export CC=icc<br />
+&nbsp; export F77=ifort<br />
+&nbsp; ./configure --enable-mpi --enable-threads<br />
+&nbsp; make<br />
+&nbsp; make install<br />
+<br />
+tar zxvf fftw-3.3.tar.gz<br />
+cd fftw-3.3<br />
+&nbsp; sudo su<br />
+&nbsp; export CC=icc<br />
+&nbsp; export F77=ifort<br />
+&nbsp; ./configure --enable-mpi --enable-threads<br />
+&nbsp; make<br />
+&nbsp; make install<br />
+<br />
+&nbsp; 1) tar -xvf WIEN2k_11.tar<br />
+&nbsp; 2) gunzip *.gz<br />
+&nbsp; 3) chmod +x ./expand_lapw<br />
+&nbsp; 4) ./expand_lapw<br />
+&nbsp; 5) ./siteconfig_lapw<br />
+&nbsp; 6) ヴァージョンに合わせてI, J, K, K1 を選択（ここでは 11.1 のK1を選択する）<br />
+&nbsp; 7) ifort, icc を入力<br />
+&nbsp; 8) O specify compiler options, BLAS and LAPACK<br />
+&nbsp;&nbsp;&nbsp; L Linker Flags: $(FOPT) -L/opt/intel/Compiler/11.1/080/mkl/lib/32 -pthread<br />
+&nbsp;&nbsp;&nbsp; R R_LIB (LAPACK+BLAS): -lmkl_intel -lmkl_intel_thread -lmkl_core -lguide -lpthread<br />
+&nbsp; 9) Shared Memory Architecture? (y/n): y<br />
+&nbsp; 10) Do you have MPI and Scalapack installed and......(y/n): y<br />
+&nbsp;&nbsp;&nbsp; Your compiler: /usr/local/mpich/bin/mpif90<br />
+&nbsp;&nbsp;&nbsp; RP RP_LIB(SCALAPACK+PBLAS): -L/usr/local/lib -lscalapack -lblacs -L/opt/intel/Compiler/11.1/080/mkl/lib/32 -lmkl_solver -L/usr/local/mpich/lib -lmpich -L/usr/local/lib -lfftw_mpi -lfftw -lfftw3_mpi -lfftw3&nbsp;$(R_LIBS)<br />
+&nbsp;&nbsp; FP FPOPT(par.comp.options): $(FOPT) -FR -mp1 -w -prec_div -pc80 -pad -ip -DINTEL_VML -traceback -I/usr/local/mpich/include -I/usr/local/include<br />
+&nbsp; 11) ./userconfig_lapw&nbsp;<br />
+&nbsp; 12) bash<br />
+&nbsp; 13) w2web<br />
+参考HP : <a href="http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx">http://xinhuolin.web.officelive.com/Wien2kinUbuntu.aspx</a><br />
+参考文献 : <a href="http://www.ghfecher.de/Fecher_CompileIntel.pdf">http://www.ghfecher.de/Fecher_CompileIntel.pdf</a><br />
+<a href="http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html">http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html</a></p>
+
+<p><a href="http://web.kudpc.kyoto-u.ac.jp/hpc/intel">http://web.kudpc.kyoto-u.ac.jp/hpc/intel</a><br />
+<br />
+□ MPICHを用いた場合＜再確認中＞<br />
+&nbsp; Intel Fortran Compiler (ifort)<br />
+&nbsp; GCC or Intel C/C++ compiler (icc)<br />
+&nbsp; Intel MKL libraries<br />
+&nbsp; FFTW 2.1.5<br />
+&nbsp; MPI (MPICH1)<br />
+<br />
+&nbsp; Fortran compiler: ifort<br />
+&nbsp; C compiler: icc<br />
+&nbsp; Compiler options, BLAS and LAPACK:<br />
+&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback<br />
+&nbsp; L Linker Flags: $(FOPT) -L/opt/intel/Compiler/11.1/069/mkl/lib/em64t -lguide -pthread<br />
+&nbsp; P Preprocessor flags '-DParallel'<br />
+&nbsp; R R_LIB (LAPACK+BLAS): $(FOPT) -L/opt/intel/Compiler/11.1/069/mkl/lib/em64t&nbsp; -lmkl_lapack -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lguide -pthread<br />
+&nbsp; RP RP_LIB(SCALAPACK+PBLAS): -L/opt/intel/Compiler/11.1/069/mkl/lib/em64t -lmkl_intel_lp64 -lmkl_scalapack_lp64 -lmkl_blacs_lp64 -lmkl_sequential -lmkl -L/opt/mpich1/lib -lmpich -L/usr/fftw-2.1.5/mpi/.libs -lfftw_mpi -L/usr/fftw-2.1.5/fftw/.libs -lfftw<br />
+&nbsp; FP FPOPT(par.comp.options): $(FOPT) -I/opt/mpich1/include<br />
+&nbsp; MP MPIRUN commando : mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+<br />
+参考文献：<a href="http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html">http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html</a>　<br />
+------------------------------------------------------------------------------</p>
+
+<p>■ コンパイルオプション メモ（Memo: Compile Option）</p>
+
+<p>&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axSSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp; L Linker Flags: $(FOPT) -Wl,-rpath=/opt/intel/mkl/10.1.2.024/lib/em64t -Wl,-rpath=/opt/inte/Compiler/11.0/083/lib/intel64 -L/opt/intel/mkl/10.1.2.024/lib.em64t<br />
+&nbsp; P Preprocessor flags '-DParallel'<br />
+&nbsp; R R_LIB (LAPACK+BLAS): $(FOPT) -lmkl_lapack -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lguide -lpthread<br />
+&nbsp;</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>■ Memo #1</p>
+
+<p>◇&nbsp;システムによっては、R_LIBSに -llapack_lapw -lblas_lapw -llapack_lapw -lblas_lapw のように、ライブラリを二重に指定する必要がある場合もある。それは、後ろに指定されたライブラリの中の副プログラムが、前に指定されたライブラリの中の副プログラムを呼んでいるときに、前のライブラリを繰り返し参照するようになっていないシステムの場合である。<br />
+◇ w2web でのパスワードが分からなくなってしまったら、個人の最上の（ホーム）ディレクトリにできている環境設定ディレクトリ .w2web にあるパスワードファイル .w2web/users を消去あるいは別名にしてしまえば、パスワードの指定が再度要求される。<br />
+◇ w2web で指定したポート番号は、1024 から 65536 であり、1023以下の番号は root でしか使えない。<br />
+◇ セッションは作業をするディレクトリ（通常、物質名などを付ける）のショートカット名であり、セッションの作成、消去はディレクトリの作成・消去とは関係がない。セッションの消去方法は以下のとおりである。[メイン・ウインドウ]の左側下方の [Session Mgnt. &gt;&gt;] をクリックして [delete session]を表示し、さらに[delete session]をクリックして先に進む。</p>
+
+<p>参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>■ Memo #2<br />
+◆ init_lapw<br />
+◇ NN: RMT球のチェック<br />
+◇ SGROUP: 空間群<br />
+◇ SYMMETRY: 空間群<br />
+◇ LSTART: 各原子でのシュレーディンガー方程式の計算<br />
+◇ KGEN: k点メッシュの作成<br />
+◇ DSTART: 各原子での電子密度を重ね合わせる。電子密度分布&rho;が得られる。<br />
+◆ runSCF<br />
+◇ LAPW0： DSTARTまたは前回のSCFサイクルで作られた電荷密度分布&rho;からポテンシャルを作成する。ポアソン方程式を解いて&rho;からポテンシャルVcを計算する。交換相関ポテンシャルVxcも&rho;から計算して、ポテンシャル V = Vc + Vxc とする。<br />
+◇ ORB： LDA+Uの計算時に、LDA+UでのUをVに入れる。V=Vc+Vxc+V(+U)<br />
+◇ LAPW1： ポテンシャルを使って価電子バンドの固有値と固有ベクトルの計算をする。case.in1 の第1行にあるフラグのWFFIL を WFPRI に変えると、サブルーチン wfprint1.Fの中でエネルギー値とAPWの係数が書式にしたがってファイル case.vec （または case.output1） に出力されるから、新しい物理量の計算プログラムを書くときに使いやすい。ただし、球内の部分波の係数や動径波動関数は求め直さなければならない。＜Spin orbit coupling （SOC または SO）での固有値は case.outputso に出力されるが、APWの係数は出力されない。 Blaha教授からは、SRC_lapwso/kptout.f を書き換え、case.vectorso files (unformatted) だけでなく、unit 6=case.outputso) に出力させるようにして下さいとのこと＞＜現在では、wfprint1.Fではなくwfpnt1.F及び詳細な表示用のwfpnt.Fが使われている＞<br />
+◇ LWPWSO： スピン軌道相互作用の計算<br />
+◇ LAPW2： 固有値、固有ベクトルからフェルミエネルギーや価電子の電荷密度分布を求める。<br />
+◇ LAPWDM： 密度行列を計算<br />
+◇ LCORE： 内殻電子の状態と電荷密度分布を計算する。<br />
+◇ MIXER： 次に使う電荷密度分布を新しい電荷密度分布（価電子帯の電荷密度{LAPW2で計算}と内殻の電荷密度{LCOREで計算}の合計）と古い電荷密度分布を混ぜ合わせて作る。<br />
+※&nbsp;complex （平面波が複素成分）を含む計算の場合に、ファイルや処理でc が付けられる。<br />
+参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>■ Memo #3</p>
+
+<p>◇ バンド計算を行うエネルギーの範囲の指定は、case.strcut ではなく、lapw1に対してはcase.in1 であり、電荷密度分布 lapw2 では case.in2 である。特に、前者の emax は少し大きめにとっておかないと、期待通りの計算がされない場合がある。</p>
+
+<p>参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所<br />
+&nbsp;</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>■ Memo #4 初期化計算（initialize calc.）</p>
+
+<p>※ [StructGen]画面で[set automatically RMT and continue editing]をクリックすると内接球半径に近い値がRMTに与えられる。</p>
+
+<p>1) &nbsp;まず、ピンク色に変っているメニュー[x nn] をクリックしてプログラム nn [Nearest Beighbour] を実行 [eXecute]する。 nn-bondinglength factor (f) を標準値 2 のままで [Execute!]　をクリックする。次に進むには、画面の下の方の[initialapw]をクリックする。</p>
+
+<p>　このプログラムでは、単位胞にある各原子の周りの隣接原子の座標と原子間距離のデータが作られ、後でフルポテンシャルの作成などで使われる。取り入れる原子は、距離が最隣接原子間距離（NN-dist)のf倍以内となる。</p>
+
+<p>2)&nbsp;[wiew outputnn] をクリックして、nnの出力ファイルの1つである&nbsp;case.outputnn を表示する。このファイルのデータは、&nbsp;結晶内の原子の距離関係などであり、一応目を通してデータの意味を想像することは有意義であろう。ここで注意すべきことは、マフィンティン半径 RMT の和が最隣接原子間距離 NN-DIST より小さくなければならないことである。次に進むには上部にある[initlapw] をクリックする。以後、[initlapw] をクリックすることは記述しない。</p>
+
+<p>3) [x sgroup] をクリックしてプログラム sgroup を実行する。このプログラムでは、結晶の対称性を調べ、対称操作の行列のデータなどが case.outputsgroup に出力される。</p>
+
+<p>4) [view outputsgroup] をクリックして sgroup の出力ファイルの1つである case.outputsgroup を表示する。</p>
+
+<p>5) [sgroup found：] に続く場面では通常[No]を選択する。対称性の指定に過ちの警告があった場合には[Yes] を選択して、struct ファイルを取り替えるプログラムを走らせる。</p>
+
+<p>6) [x symmetry] をクリックしてプログラム symmetry を実行する。</p>
+
+<p>　このプログラムでは、各原子位置における対称性を調べ、各原子位置での調和関数展開の項（LM）の数を減らすために、局所的な座標軸を変換する変換行列（Local Rotation Matrix）とLMの組などが出力される。</p>
+
+<p>7) [copy struct?st (and view outputs) ] をクリックしてsymmetry の出力ファイルである outputs を表示する。[copy struct_st]の下にあるコメント and view outputs は、上にある[copy strcut_st] に対するものであり、下にある[xlstart]に対するものではない。今後出てくるコメントも全て直前にある作業に対するものとなる。</p>
+
+<p>8) [x lstart] をクリックしてプログラム lstart を実行する。交換相関ポテンシャルの選択と準内殻電子と価電子を区別するエネルギー値の指定を問い合わせてくるから、とりあえずディフォールト値のPBE-GGA （sol は2回微分を用いた交換相関ポテンシャル）と -6.0 のまま [Execute!] をクリックして進む（もし、エラーが出たら、このエネルギーの値を変える。内殻電子と準内殻電子は、ここで指定したエネルギーよりも 3.0 Ry 引いた値がWIEN2k側で自動的に設定される。つまり、ディフォルトの場合 -6.0 Ry となる）。</p>
+
+<p>　このプログラムでは殻原子の原子状態での自己無撞着な計算が指定された交換相関ポテンシャルを用いて行われ、電荷密度を求めるほか各電子を内殻電子（1s, 2s, 2p）とするか、局所軌道を使う準内殻電子（3s, 3p）とするか、あるいは価電子（3d, 4s, 4d）とするかなどを決定する。</p>
+
+<p>9) [view outputst] をクリックして lstart の出力ファイルである outputst を表示する。各原子で計算された電子状態のデータが示されるから、電荷の広がりなどを見て電子状態の分類が意図したものとなっているか調べることができる。</p>
+
+<p>　この原子の計算はディフォルトでは Desclaux [1] の相対論的原子計算プログラムを使っている。</p>
+
+<p>10) [check case.in1_st] をクリックして、同じく lstart の出力ファイル case.in_st を表示する。このファイルの第2行は採用すべき逆格子点の数（基底関数となるから、行列の大きさになる）を決定するパラメータ RKMAX=7.0、マフィンティン球内での波動関数の最大値（l &lt; 10）、ポテンシャルの展開の最大値（l &lt; 4）である。RKMAXはマフィンティン半径と逆格子ベクトルの最大値の積であり、7.0が与えられているが、LAPWを使うときは 6 ? 10、APWを使うときは 5 ? 9 でよい。以下で、軌道にLAPWを使うかAPWを使うかを、それぞれ 0 か 1 かで指定する。第3行には線形化の基準となるエネルギー値 El の標準値 0.30、以下で個別に指定する軌道の数、それ以外の軌道にLAPWを使うことを指定する 0 がある。第4行には l （方位量子数）、E0、El を求めるときのエネルギー刻みde の値、後に説明するswitch、最後にLAPWかAPWを指定する。de=0.0の場合には、Elの標準値0.30を使う。de=0.0でない場合にはE0としてバンドの中間値を探し、switch が STOP 指定していれば、中間値が見つからなかった場合に計算を中断することになる。</p>
+
+<p>　局在化している3d電子、4f電子だけをAPWに指定すればよいことが多い。最後の行は計算するk点のデータファイルの入力装置識別子iuの標準値4であり、ファイル case.klist を使うことを指定し、-9.0, 1.5 は固有値（Ry単位）を探すエネルギー・ウィンドウの範囲（emin, emax）の指定である。エネルギーの高い占有されていない状態の密度（DOS）なども求めたいならば、emax を 2.0 などに変更しなければならない。変更した場合には [Save] しておく。</p>
+
+<p>11) [check case.in2_st] をクリックして case.in2_st を表示する。このファイルは先の[check case.in1_st] のチェックが済むとでき上がっている。このファイルには各原子で使うLM展開のLM値が記され、電荷のフーリエ変換に使う逆講師の最大値 GMAX に12、フェルミ・エネルギーを求めるためのブリルアン・ゾーンでの積分に四面体法（TETRA）が指定されているので、必要に応じて変更する。筆者の経験だと、常磁性 Cr の SCF の計算では TETRA では収束せずGAUSS にすると収束した。</p>
+
+<p>12) [check case.inm_st] をクリックして case.inm_st を表示する。このファイルには自己無撞着にする繰り返しで、新しい電荷あるいはポテンシャルの重み（mixing factor）が0.4 と指定してある。局所的なd, f 電子や磁性体を扱う場合には、もっと小さく 0.05 程度にしないと収束しないこともある。</p>
+
+<p>13) [Prepare input files] をクリックすると計算に使うインプット・ファイル in0, in1, in2, inc, inm を、同名で後ろに_st の付いたファイルにコピーを作る。</p>
+
+<p>14) [x kgen] をクリックしてプログラム kgen を実行する。このプログラムでは実際に計算をする k点を生成する。生成するk点を第一ブリルアン・ゾーン（BZ）の中で何点程度使うかを[Number of k-point] に指定する。　1000程度が推奨されているが、単位胞に複数の原子がある場合にはもっと少なくてよい。また、生成するk点を対称性のある重みの小さい軸上から、重みの大きい対称性の低い点（「高い点」の誤りか？）にシフトしてk点の数を減らすためには[yes]を、そうでないなら[no]を指定する。</p>
+
+<p>　ただし、ガンマ点やBZの境界上の点でのエネルギー値などが重要な場合にはシフトしてはいけない。</p>
+
+<p>15) [view klist] をクリックして kgen の出力ファイルである klist を表示する。x, y, z 軸のそれぞれが分割され、既約領域でk点が作られている。第一列は通し番号であり、第2?4列は第5列で割った値がk点となる。第1行にはeminとemaxの値も記されている。</p>
+
+<p>16) [x dstart] をクリックしてプログラム dstart を実行する。このプログラムでは自己無撞着にするサイクルの最初の電荷密度分布を、lstart で求めた各原子の電荷密度分布を重ね合わせて作成する。[interactively] にチェックを入れておくと、計算が済むまで他の作業は行えず、待たされる。</p>
+
+<p>17) [view case.outputd] をクリックして dstart の出力ファイルである dstart を表示する。gmax &gt; gmin であることを確認する。</p>
+
+<p>　このファイルにはマフィンティン球外の平面波のKn、内部のLM展開などがある。</p>
+
+<p>18) スピン偏極した計算をするかどうかを聞いてくる。常磁性物質の計算の場合[No]を選択し、初期化の計算を終える。磁性物質の場合には[Yes]を選択する。</p>
+
+<p>19) [Continue with run SCF] をクリックするか、左側の[run SCF]をクリックするとSCF Cycle の画面が表示される。画面のオプションはそのままでもよいが、収束条件をより厳しくしたい場合には[charge]にチェックを入れ、その値を0.0001にする。フォノンの計算をしたい場合はForce にチェックを入れて値を設定する。下の方にある[Start SCF cycle]をクリックすると、自己無撞着サイクルが走りはじめる。左側の[Utils.]をクリックして現れるメニューにある[Show STDOUT] をクリックすると、進行状況が示される。[reload]をクリックすると最新情報に更新され、[reload in reverse order]をクリックすると逆の順に最新情報が表示される。[show dayfile] をクリックすると進行状況がわかり、最後に stop が表示されてSCF計算が終了していることが分かる。</p>
+
+<p>参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所</p>
+
+<p>[1] J. P. Desclaux, Comp. Phys. Commun. 1 (1969) 216.<br />
+------------------------------------------------------------------------------<br />
+■ 反強磁性<br />
+1. Change Session information -&gt; spin polarized calculation と AFM calculation にチェックを入れる。<br />
+2. スピンを入れた計算をするように設定していくが、case.inst でスピンを反平行に設定する(instgen_lapwで　selected below: を選択してuとdを指定してもよい)。<br />
+Cr 1<br />
+(省略)<br />
+3, -3, 1.0 N<br />
+3, -3, 0.0 N<br />
+4, -1, 0.5 N<br />
+4, -1, 0.5 N<br />
+Cr 2<br />
+(省略)<br />
+3, -3, 0.0 N<br />
+3, -3, 1.0 N<br />
+4, -1, 0.5 N<br />
+4, -1, 0.5 N<br />
+3. Perform antiferromagnetic calc. ? -&gt; yes -&gt; Yes, continue -&gt; x afminput -&gt; case.struct を case.struct.supergroup にコピーする(例えば、別のターミナルを開いておいて、cp case.struct case.struct_supergroup とする)。<br />
+4. 回転、平行移動の値を入力して、Execute! を実行する。<br />
+5. run SCF<br />
+<br />
+MacでX11のエラーが出る場合（上記3のx afminput または x_lapw afminput から下記のようにする。caseはフォルダー名に変更する）<br />
+1. vi afminput.def<br />
+-----<br />
+14, 'case.outputafminput',&nbsp; 'unknown','formatted', 0<br />
+15, 'case.inclmcopy_st',&nbsp;&nbsp;&nbsp; 'unknown','formatted', 0<br />
+16,'case.clmup',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'old',&nbsp;&nbsp;&nbsp; 'formatted', 0<br />
+17,'case.clmdn',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'old',&nbsp;&nbsp;&nbsp; 'formatted', 0<br />
+20,'case.struct',&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 'old',&nbsp;&nbsp;&nbsp; 'formatted', 0<br />
+21,'case.struct_supergroup','unknown','formatted', 0<br />
+-----<br />
+2.&nbsp;cp case.struct case.struct_supergroup<br />
+3. afminput afminput.def<br />
+4.&nbsp;回転、平行移動の値を入力<br />
+5. view outputafminput<br />
+6. view inclmcopy_st<br />
+7. cp case.inclmcopy_st case.inclumcopy<br />
+Please, check rotation matrix.<br />
+<br />
+error case<br />
+-----<br />
+&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NUMBER of ATOMS to CHANGE<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INTERCHANGE these ATOMS<br />
+&nbsp; 1.00000000000&nbsp; 0.00000000000&nbsp; 0.00000000000&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0 0.00000000&nbsp;&nbsp;&nbsp;&nbsp; SYMMETRY OPERATION<br />
+&nbsp; 0.00000000000&nbsp; 1.00000000000&nbsp; 0.00000000000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0 0.00000000<br />
+&nbsp; 0.00000000000&nbsp; 0.00000000000&nbsp; 1.00000000000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1-0.00000000<br />
+-----<br />
+<br />
+good case<br />
+-----<br />
+&nbsp;&nbsp; 5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; NUMBER of ATOMS to CHANGE<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INTERCHANGE these ATOMS<br />
+&nbsp; 1.00000000000&nbsp; 0.00000000000&nbsp; 0.00000000000&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0 0.00000000&nbsp;&nbsp;&nbsp;&nbsp; SYMMETRY OPERATION<br />
+&nbsp; 0.00000000000&nbsp; 1.00000000000&nbsp; 0.00000000000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp; 0 0.00000000<br />
+&nbsp; 0.00000000000&nbsp; 0.00000000000&nbsp; 1.00000000000&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp; 1 0.00000000<br />
+-----<br />
+8. run SCF<br />
+&nbsp;<br />
+参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 電荷密度のプロット　3D&nbsp;&amp; 2D<br />
+1. <a href="http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html"><font color="#0000ff">http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html</font></a>&nbsp;を参考にして、<a href="http://www.nims.go.jp/cmsc/staff/arai/wien/wien2venus.py">wien2venus.py</a>を&quot;wien2venus.py&quot;という名前で保存する。<br />
+2. Terminal 上で chmod +x wien2venus.py と入力する。または、保存したファイルを右クリックしてプロパティを開き、実行ファイルにチェックを入れる。<br />
+3. wien2venus.py を計算したいWIEN2kのディレクトリにコピー。<br />
+4. cd&nbsp;WIEN2kのディレクトリ<br />
+5. Terminal 上で wien2venus.py で 入れたいメッシュ数を x, y, z軸に対して入力する。<br />
+&nbsp; 例えば、wien2venus.py&nbsp;50 50 50<br />
+　ファイルの最後にc が付いている場合は、wien2venus.py&nbsp;50 50 50 -c とする。<br />
+6. case.rho3d の名称を case.rho に書き換える。<br />
+7. VESTAで&nbsp;case.rho を読み込む。<br />
+・ 3D: Properties... &rarr; Isosurfaces の中央にある表（No. level mode c... とある中央にある表）の中にある1を押します。Isosurface level: 右側の値を変えられるようになります。<br />
+・ 2D: Utilites &rarr; 2D data display...　で専用の画面が表示されます。Slice... のボタンを押すと2D面の入力画面が表示されます。入力が済めばOK &rarr; Contours &rarr; Draw contour lines にチェックを入れると等高線が入ります。この幅は 下にある Intervalの値を小さくすれば細かくなります。<br />
+□ 原子も含める場合<br />
+・ VESTAでEdit &rarr; Struct Parameter &rarr; Import から 構造ファイル(case.struct)を読み込む<br />
+<a href="http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html">http://www.nims.go.jp/cmsc/staff/arai/wien/venus-j.html</a><br />
+------------------------------------------------------------------------------<br />
+■ &nbsp;Memo #4 剛体バンドモデルでの電荷密度のプロット<br />
+1. SCF計算を行う<br />
+2. SCF計算終了後、case.in2 の 2行目の2番目のNEの数を変える。<br />
+3. run SCF にて、一番下の run anyway を選択して、SCF計算を行う。<br />
+4. DOS を描いて剛体バンドモデル的にシフトしているかを確認する。<br />
+5. 上記の「Memo #4 電荷密度のプロット 3D&nbsp;&amp; 2D」を参考にして電荷密度をプロットする。<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 電荷密度のプロット<br />
+SCF計算終了後では、準内殻電子まで表示される。<br />
+1. [El. Dens.] をクリック<br />
+2. [Electron density plots] 画面が現れる<br />
+3. [x lapw5] をクリック<br />
+4. [rhoplot] をクリック<br />
+5. [plot electron density] をクリックすれば図が表示される<br />
+表示されるエネルギー範囲を指定するには下記の様にする。<br />
+6. [edit case.in2] クリック<br />
+7. emin の値を変えて SAVE し、 [lapw2] で電荷密度分布の計算をし直す<br />
+表示される空間的な範囲を指定するには下記の様にする。<br />
+8. [case.in5] をクリック<br />
+1行目：plot の原点となる座標値（x, y, zの順に並ぶ）、第4列は分母。<br />
+<br />
+例えば、 1 0 0 4 となっていれば、原点の座標は　x=1/4, y=0/4, z=0/4 となる。<br />
+2行目：plot のx軸の終点と成る座標値。記述方法は1行目と同じ。<br />
+3行目：plot のy軸の終点と成る座標値。記述方法は1行目と同じ。<br />
+4行目：計算に取り入れるx, y, z 方向の単位砲の数<br />
+5行目：x, y 軸方向のメッシュ数<br />
+6行目：電荷密度分布など、プロットする物理量を指定<br />
+7行目：密度の単位（z軸）を A^{-3} とする<br />
+8行目：直交座標系を指定<br />
+9. 編集したらSAVE し、[x lapw5] , [rhoplot] を繰り返す。<br />
+10. Min, Max, Delta に値を入力して、[plot electron density] をクリック<br />
+内殻電子の電荷密度分布を計算する場合<br />
+11. [For difference densities only !] を使用する<br />
+12. [x lstart -sigma] で電子の全価電子の計算をする<br />
+13. [case.inst] で、表示したい軌道の[N] を [P] に変更する。<br />
+14. [x lapw2] をクリック<br />
+15. [case.in5] で RHO を OVER に変更すれば全電荷密度を表示できる<br />
+16. 表示が出来たら、[case.in2] でのemin の値を -9.0 に戻しておく。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 AIM ( atoms in molecules )<br />
+<br />
+□ SCF計算<br />
+1. initiallize calc. での in2_st にて、4行目以降にある「 &nbsp;0 0 &nbsp;4 0 &nbsp;4 4&nbsp; 6 0 &nbsp;6 4」の記述の部分を増やし（LMsが8-10になるまで記述する）、run SCFを行う（LMsを増やすには対称性に関する理解が必要なので、難しければin2_stを編集しないままAIM計算に取り組んでみるとよい）。<br />
+※ initiallize calc. での in2_st にて、4行目以降にあるLとMの変化の傾向を参考にして、LとMの値を8から10程度まで書き入れる、と良いと思う（調査中）。<br />
+※ LMsの記述は半角英数で、スペースも含めて、Lは3マス、Mは2マスで記述する。例えば、Lは「&nbsp; 0」や「 -1」、Mは「 0」や「 1」などである(正確にはFortran でのデータの読み込みで、LはI3、MはI2で読み込まれる。Iは整数として読み込むということ。Iの後の数値はデータを読み込む範囲｛読み込む記述の幅｝を指定している)。<br />
+※ WIEN2kのuserguide のcase.in2 における line 4でのL,Mについて書かれている「CAUTION: additional LM terms which do not belong to the lattice harmonics will in general not vanish and thus such terms must be omitted. Automatic termination of the lm series occurs when a second 0,0 pair appears within the list. When you change the l;m list during an SCF calculation the Broyden-Mixing is restarted in MIXER.」に注意する必要がある。<br />
+<br />
+□ AIM計算<br />
+1. cd SCF計算をしたディレクトリ<br />
+2. case.inaim という名称のテキストを作る<br />
+3. WIEN2k の ユーザーガイドにある AIM の inaim をコピー&amp;ペーストする。<br />
+SURFの次の番号は case.struct にある MULTも入れて数えたときの原子番号を入力する。それ以外はディフォルトで良いと思う。<br />
+*************<br />
+SURF<br />
+3 atom in center of surface (including MULT)<br />
+40 0.0 3.1415926536 theta, 40 points, from zero to pi<br />
+40 -0.7853981634 2.3561944902 phi<br />
+0.07 0.8 2 step along gradient line, rmin, check<br />
+1.65 0.1 initial R for search, step (a.u)<br />
+3 3 3 nshell<br />
+IRHO &quot;INTEGRATE&quot; rho<br />
+WEIT WEIT (surface weights from case.surf), NOWEIT<br />
+30 30 radial points outside min(RMIN,RMT)<br />
+END<br />
+*************<br />
+4. x aim<br />
+&nbsp; run SCF で -c の表示があった場合は、 x aimi -c と入力する。<br />
+5. case.outputaim に結果が出力される。（最後の部分の&quot;Z=&quot;の記述がある部分の charge がAIMでの結果のように見えるが、詳細は不明。&nbsp;Bader-Charge は :RHOTOT for IND-ATOMの行を見ると良いだろう）<br />
+6. 単位胞内にある全ての原子について計算をして、トータルの電子の増減数がほぼ0になっているかを確認すると良い。<br />
+<br />
+□ 境界の計算方法<br />
+境界は下記のようにして求められている。<br />
+&nbsp; This is clear from <a href="http://www.chemistry.mcmaster.ca/aim/aim_fig_5.html">Figure 5</a>, which shows that an interatomic surface is defined by the set of trajectories that terminate at a　point where <img src="http://www.chemistry.mcmaster.ca/aim/kicons/del.gif" /><img align="middle" src="http://www.chemistry.mcmaster.ca/aim/kicons/rho2.gif" />(<b>r</b>) = 0. Thus an interatomic surface satisfies the &quot;zero-flux&quot; boundary condition stated in equation (1)<br />
+<img src="http://www.chemistry.mcmaster.ca/aim/kicons/del.gif" /><img align="middle" src="http://www.chemistry.mcmaster.ca/aim/kicons/rho2.gif" />(<b>r</b><sub><font size="2">s</font></sub>)&middot;<b>n</b>(<b>r</b><sub><font size="2">s</font></sub>) = 0, for every point <b>r</b><sub><font size="2">s</font></sub> on the surface S(<b>r</b><sub><font size="2">s</font></sub>)&nbsp;(1)<br />
+where <b>n</b>(<b>r</b><sub><font size="2">s</font></sub>) is the unit vector normal to the surface at <b>r</b><sub><font size="2">s</font></sub>. In words, the surface is not crossed by any trajectories of <img src="http://www.chemistry.mcmaster.ca/aim/kicons/del.gif" /><img align="middle" src="http://www.chemistry.mcmaster.ca/aim/kicons/rho2.gif" />(<b>r</b>). An atom, as a constituent of some larger system, is itself an <i>open</i> system subject to fluxes in charge and momentum through its bounding surface. [2]<br />
+<br />
+□ Slide show<br />
+<a href="http://www.slideserve.com/Thomas/wien2k-software-package">http://www.slideserve.com/Thomas/wien2k-software-package</a><br />
+<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/WIEN2k-getting_started.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2013/WIEN2k-getting_started.pdf</a><br />
+<br />
+□ AIMの計算に必要なファイル<br />
+case.struct<br />
+case.clmsum<br />
+□ 入力ファイル<br />
+case.inaim<br />
+□ 出力ファイル<br />
+case.outputaim<br />
+*************<br />
+WIEN2kにあるメーリングリストの重要な記述<br />
+at the end of the AIM output you should see a line similar to this:<br />
+:RHOTOT for IND-ATOM 5 Z= 6.0 CHARGE: 7.30973 -1.30973<br />
+here you can see, that the atom integrated in this example has a Bader-Charge of -1.31 electrons.<br />
+However, if you plan to interpret these numbers you should make sure that the Bader charges of all atoms sum to zero! This is important in order to detect mistakes in the basin-boundaries or an insufficient numerical accuracy. You can easily obtain totally useless values for these charges if you fail to locate all critical points of your basin surface. When using the CRITIC code you can in addition use the value of the integrated second derivative of the electron density (the Laplacian) as a criterion which for each basin must be zero. [3]<br />
+*************<br />
+It is important to recognize that &quot;2+&quot; and &quot;2-&quot; are the valences, NOT the charges. The term &quot;formal charges&quot; is in my opinion dangerously misleading. Valences go back to Pauling, and are an insight into the bonding. You might find Surface Science 606 (2012) 344 and the references therein useful, or do a google search on &quot;Bond Valence&quot; which is the appropriate modern term.<br />
+The Bader charges are different, not really connected. They are a measure of how the charges (as against valences) are distributed. If you found Bader charges of (for instance) +1.5/-1.5 that would correspond to a very ionic compound, whereas with +0.12/-0.12 you have a covalent compound. (Please note that I have put the sign in front when I mean real electrostatic charges, as against after when it is a valence -- this is deliberate.) The fact that some of the charge is in the interstitial, i.e. outside the muffin-tins is not relevant to much. N.B., if you do &quot;x nn ; grep -e Bond *tnn &quot; you get the Bond Valences for oxides and a few other combinations, not sure about FeTe. [11]<br />
+*************<br />
+With respect to the second question, you can get an estimate of the nett charge on an atom from the output at the bottom of the output from case.outputaim (if you are running just one atom); I've never tested using it for more than one atom. Please note that I deliberately said &quot;estimate of the nett charge&quot;. There are two reasons for this:<br />
+1) The Bader charge, which is what the code approximates, is a useful measure, but it is not really something that you can measure experimentally. It is probably safest to only use it as a comparative measure.<br />
+2) The calculation is quite hard to do numerically with a reasonable degree of accuracy. In addition to needing a very well converged density (with LM's beyond just 6) the numerical errors can be relatively severe. I would not want to trust the values to more than 0.01 electrons.[14]</p>
+
+<p>*************<br />
+□ critic code [4-8]<br />
+□ Born effective charge (Born 有効電荷）の計算方法[9, 10]</p>
+
+<p><br />
+References:<br />
+[1] WIEN2k userguide: AIM<br />
+[2] <a href="http://www.aim2000.de/">http://www.aim2000.de/</a><br />
+[3] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06797.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06797.html</a><br />
+[4] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06792.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06792.html</a><br />
+[5] <a href="http://azufre.quimica.uniovi.es/software.html">http://azufre.quimica.uniovi.es/software.html</a><br />
+[6] <a href="http://iopscience.iop.org/1402-4896/86/2/025706">http://iopscience.iop.org/1402-4896/86/2/025706</a><br />
+[7] <a href="http://www.sciencedirect.com/science/article/pii/S092145261200590X">http://www.sciencedirect.com/science/article/pii/S092145261200590X</a><br />
+[8] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg07271.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg07271.html</a><br />
+[9] <a href="https://github.com/spichardo/BerryPI/tree/master/tutorials/tutorial2">https://github.com/spichardo/BerryPI/tree/master/tutorials/tutorial2</a><br />
+[10] <a href="http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf">http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf</a><br />
+[11] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg07272.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg07272.html</a><br />
+他の重要な記述<br />
+[12] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00313.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00313.html</a><br />
+[13] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00319.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00319.html</a><br />
+[14] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00322.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg00322.html</a><br />
+[15] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06417.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg06417.html</a><br />
+[16] <a href="http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg05720.html">http://www.mail-archive.com/wien@zeus.theochem.tuwien.ac.at/msg05720.html</a><br />
+論文<br />
+[17] <a href="http://zdsys.web.xtu.edu.cn:8081/xiangxinhuaeWebEditor_V280_Free_sp1/UploadFile/201292183922683.pdf">http://zdsys.web.xtu.edu.cn:8081/xiangxinhuaeWebEditor_V280_Free_sp1/UploadFile/201292183922683.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 DOSとバンド図<br />
+基本的に濃い灰色の行を除いて上から順にボタンを押していけばよい。<br />
+（バンド分散のところにある濃い灰色の部分は各原子の起動におけるバンド分散を計算するためのもの。バンド分散だけ必要であればボタンを押す必要は無い）<br />
+------------------------------------------------------------------------------<br />
+■ Total DOSの出力結果<br />
+　case.structに記載されている原子の数だけ計算されます。代表的な原子座標を記述すると等価な原子が自動的に記載されていることが分かります。その数の合計と各原子でのDOSが一致します。そのため、case.strcutに記載されている等価な原子の数でDOSを割ることで、単位は[Density of states / eV. atom] になります。同様に、Total DOS でもcase.structに記載されている原子数で割り[Density of states / eV. atom]にします。[Density of states / eV. unitcell]ではないので注意してください。<br />
+　Total DOS = &Sigma; Partial DOS + interstitial DOS （case.struct の Inewuivalent Atoms と edit case.int のAtomが対応）<br />
+　Total DOS = Total DOS (up) + Total DOS (down)<br />
+※ 単位胞内での原子数が分かっている場合は、Total DOSが下記のようにして出力されます。<br />
+1) BCC： 全原子＊1/2個 （case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を 2 倍すると [Density of states / eV. unitcell] になる。<br />
+2) FCC： 全原子＊1/4個 （case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;4 倍すると [Density of states / eV. unitcell] になる。<br />
+3) HCP： 全原子（case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;1 倍すると [Density of states / eV. unitcell] になる。<br />
+4) SC： 全原子（case.structで記述されている原子の数と同じになることが分かる）<br />
+　得られた Total DOS を&nbsp;1 倍すると [Density of states / eV. unitcell] になる。<br />
+※ case.dos1(Ryでの出力。integrated DOSも出力される)<br />
+　Ry &rarr; eVへの変換：&nbsp;(Energy - EF)*13.6058, DOS / 13.6058 とする。<br />
+　EF値は、case.dos1の二行目の一番最初に記載されている。<br />
+※ case.dos1eV（eVでの出力。EFが0の位置に自動的に調整されている）</p>
+
+<p>------------------------------------------------------------------------------<br />
+■ Memo #4 各成分に対するバンド図プロット<br />
+1. 濃い灰色の部分の2下の方のボタンを押す。<br />
+2. case.insp において、jatom のある行で、最初の部分に原子を、二番目に軌道の番号を入力する。入力の番号はDOSと同じ。（jatomが原子の番号、jtypeが軌道の番号）<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 格子定数 最適化計算<br />
+※ 慣れてきたら、格子定数最適化から始めるとよいであろう。<br />
+1. [StructGenTM]にて、[set automatically RMT and continue esiting]でReduce RMTs by %のところに数値を入れる。私は5にしている。<br />
+2. [runSCF]まで進んだら、[optimize(V,c/a)]に進む。<br />
+3. Generate structure files from でチェックを入れる。複数ある場合は、最初のものを選択すれば安全だろう。<br />
+4. optimizer では上から好きな手法での最適化を選択する。例えば、A, B, C軸の全てを最適化する場合は6)を選択する。次に、For option で、選択した数値に対応する行を探す。ここでは6)を選択したので、For option 6:の行を選択する。最初の数値では27を選択してみる。<br />
+5. edit optimize.jop では、最初に#が書かれているコメントの部分に従う。<br />
+&nbsp; # x dstart # -c &larr; non spin の場合はこの行の最初の#を消す。<br />
+&nbsp; # x dstart -up # -c&nbsp; &larr; spinを考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; # x dstart -dn # -c &larr; spin を考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; run_lapw -ec 0.0001 # -p -it &larr; spinを入れた場合はこの行の最初に#を付ける。<br />
+&nbsp; # runsp_lapw -ec 0.0001 &larr; spin を考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; ※ -c の前の#は、runSCFを走らせたときに -c が付いてたかを調べ、-c が付いていたら #　を消す。<br />
+&nbsp; 必要ならば、save_lapw ${1} &larr; save_lapw ${1}_pbe などとファイルの種類分けをするために記入する。<br />
+&nbsp;以上の変更が終わったら SAVE。<br />
+6. run optimize.job を押して計算を開始させ、[View STDOUT]を押す。上手くLAPW0やLAPW1などのrunSCFと同じように計算が走るようになれば成功。<br />
+7. plot を押して、右に出来る欄にある * の直後に、save_lapw ${1}の後に書き入れた文字を書き入れて plot を押す。<br />
+※ 元の構造よりも大きな原子半球の原子に置換した場合には、負の値のものは絶対値で正の値ほど大きな値が必要ないことが私の経験では多い（例えば、STOに金属元素をドープする場合には格子定数が-0.2%の変化でよい場合などもある。XRDであらかじめ調べておくのもよいだろう）。慣れて、経験を積んできたら、負の値の指定は少なくしておくこともよいだろう。例えば、-2%, 1%, 5%, 10% というように体積を増やすように指定するなど。（ここでの入力では負の値から正の値へ、そして、絶対値の大きなものから入力していくと、最後でエラーになるといったことが避けられる。例えば、-0.2%, 1.5%, 1.0%,&nbsp;5%, 2%, 0.2% など。最低限必要な点数は分からないがc/aの計算などでは6点あれば大丈夫だろう&nbsp;）。0%の値は必要ないかもしれないと考えている。<br />
+※ 格子定数の最適化の計算に失敗した場合は、残っているcase.strcut ファイルを使うことは避ける（エラーの出た最後の方の構造が case.strcut ファイルになっている為）。格子定数の最適化の計算をする前に、case.struct は別名にしたり、別のファイルに保存しておき、格子定数の計算に失敗した場合は、計算前に保存しておいたファイルを用いるとよい。そして、エラーの出た値よりも小さな値を選択して格子定数の最適化の計算をし直す（計算速度を早くするために、PCの再起動も忘れずに！）。<br />
+※ スーパーセルを作成して最適化する場合は、意図的に格子定数が長くなる方向の軸を長くして、空間群をより最適化に適したものにすることが良いと思われる。エラーの発生率が低くなる。当然Pなどの空間群指定の方が良さそうだが時間が掛かる。VASPやPWscf、ABINITなどで最適化した値を使うのも手だろう（そちらの方が安全で早いかも&hellip;&hellip;）。<br />
+※ 上記の手法でも上手く行かないことも多い。現在は、PWscfやXRDでの結果から、原子位置と格子定数を固定して、WIEN2kで計算する効率的な手法を模索中である。<br />
+※ 最後まで終わった後で、構造が変わっていた場合は、Pにしていないかを調べる。P1としておくと変更されることが少ない。つまり、VESTAなどで cif 形式 にして入力ファイルを作るとよい。<br />
+<br />
+■ unit ( Equation of state: Murnaghan )<br />
+Volume (bohr^3 / atom)<br />
+Volume = Lattice parameters (bohr) ^3 / XX, Inequivalent Atoms: XX<br />
+http://www.mail-archive.com/wien%40zeus.theochem.tuwien.ac.at/msg10272.html<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 原子位置の緩和（格子定数固定）<br />
+1. run_SCF で　Force にチェックを入れる<br />
+2. <a href="http://133.6.73.224:7890/exec/min.pl?SID=47383" rel="nofollow" target="_blank"><font size="2">mini. positions</font></a> で MSR1a の Change case.inm and goto ecf-execution を押す<br />
+3. Continue with [ run&nbsp;SCF ]&nbsp;を押す&nbsp;<br />
+参考文献： <a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 格子定数+原子位置の緩和<br />
+※ 慣れてきたら、格子定数最適化から始めるとよいであろう。<br />
+1. [StructGenTM]にて、[set automatically RMT and continue esiting]でReduce RMTs by %のところに数値を入れる。私は5にしている（10など大きな値でも時間は掛かるが計算精度は変わらないといわれている）。<br />
+2. [runSCF]まで進んだら、[optimize(V,c/a)]に進む。<br />
+3. Generate structure files from でチェックを入れる。複数ある場合は、最初のものを選択すれば安全だろう。<br />
+4. optimizer では上から好きな手法での最適化を選択する。<br />
+5. edit optimize.jop では、最初に#が書かれているコメントの部分に従う。<br />
+&nbsp; # x dstart # -c &larr; non spin の場合はこの行の最初の#を消す。<br />
+&nbsp; # x dstart -up # -c&nbsp; &larr; spinを考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; # x dstart -dn # -c &larr; spin を考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; run_lapw -ec 0.0001 # -p -it &larr; spinを入れた場合はこの行の最初に#を付ける。<br />
+&nbsp; # runsp_lapw -ec 0.0001 &larr; spin を考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp;&nbsp;# min -I -j &quot;run_lapw -I -fc 1.0 -i 40 &quot; &larr;&nbsp;&nbsp;原子位置の緩和を考慮に入れた計算の場合はこの行の最初の#を消す。<br />
+&nbsp; ※ -c の前の#は、runSCFを走らせたときに -c が付いてたかを調べ、-c が付いていたら # を消す。<br />
+&nbsp; 必要ならば、save_lapw ${1} &larr; save_lapw ${1}_pbe などとファイルの種類分けをするために記入する。<br />
+&nbsp;以上の変更が終わったら SAVE。<br />
+6. run optimize.job を押して計算を開始させ、[View STDOUT]を押す。上手くLAPW0やLAPW1などのrunSCFと同じように計算が走るようになれば成功。<br />
+7. plot を押して、右に出来る欄にある * の直後に、save_lapw ${1}の後に書き入れた文字を書き入れて plot を押す。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 内殻空孔の導入と伝導帯に電子の追加<br />
+1. スーパーセルを作成<br />
+2. case.inc で空孔にしたい電子のOCCUPを2&rarr;1にする。<br />
+3. case.in2のNEの値を+1する。<br />
+4. run scf<br />
+5.&nbsp;case.in2のNEの値を元に戻す。<br />
+6. task &rarr;&nbsp;XSPEC や TELNES3 を行う。<br />
+参考文献： <a href="http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html">http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html</a>　<br />
+<a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Blaha_xas_eels.pdf</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 内殻空孔の導入と伝導帯に電子の追加（詳細）<br />
+WIEN2kでのXASの計算のさせ方（常に単位、bohrならbohr かを確認して下さい）<br />
+<br />
+■ 基本的な入力ファイルの作成<br />
+1. Execution &rarr; StructGen &rarr;&nbsp; Number of atoms に inequivalent な原子の数（代表的となる原子の数）を入力する。<br />
+2. Lattice: の欄から空間群を選らんで青色のラインが掛かるようにする。<br />
+3. Lattice parameters を入力。<br />
+4. Atom1 の直ぐ右の欄に原子記号を入力する。続いて、Pos 1:のある行の x, y, z へ座標を入力する。<br />
+5. Save Structure &rarr; set automatically RMT and continue editing &rarr; do it<br />
+6. Save Structure &rarr; save file and clean up<br />
+<br />
+■ スーパーセルの作成<br />
+1. Execution &rarr; single prog. &rarr; Other programs にある supercell にチェックを入れる &rarr; Execute !<br />
+2. Number of cells in x direction にx軸方向で拡張したい倍率を入力（同様に y, z も入力）<br />
+3. Enter your target lattice type: で指定した空間群の分類に対応するものを選択する。（基本的な入力ファイルの作成でLattice で選んだ記号で P があればP, FがあればF, BがあればBを選択する）&rarr; Execute !<br />
+4. Files &rarr; struct file(s) &rarr; super.struct とあるファイルの行の一番左をクリック &rarr; Copy の行にある最後の/の次から同じ行の最後までの文字をコピーして to の横にある枠に入れる &rarr; _super を削除する &rarr; copy it<br />
+5. Execution &rarr; StructGen<br />
+<br />
+■ hole または 置換系をする原子の種類分け<br />
+1. Execution &rarr; StructGen &rarr; edit STRUCT file &rarr; 目的の座標の原子が1原子だけで inequivalent になっていない場合は 対応する座標の右にあるsplit を押す &rarr; 目的の座標の原子（置換やholeを入れる原子）の左から二番目の欄だけに他と異なった数値を入力する（他が空白であれば、目的の座標の原子だけ1を入力） 。置換する場合は原子記号も変える。<br />
+2. Save Structure &rarr; set automatically RMT and continue editing &rarr; do it<br />
+3. Save Structure &rarr; save file and clean up<br />
+4. Execution &rarr; initialize calc. &rarr; x nn (&rarr; Execute! &rarr; initlapw ) &rarr; view outputnn (&rarr; initlapw ) &rarr; x group ( &rarr; initlapw ) &rarr; view outputsgroup ( &rarr; initlapw ) &rarr; Yes &rarr; x symmetry ( &rarr; initlapw )<br />
+5. copy struct_st ( &rarr; initlapw ) &rarr; x lstart ( &rarr; Execute! &rarr; initlapw ) &rarr; view outputst ( &rarr; initlapw ) 等々と順番に押していく。<br />
+&nbsp;&nbsp; ※ 面倒な場合は Expert : で必要な情報（select spin-polarized calulation の場合はチェックを入れて、use X k-points in full BZ (default: 1000) にk点を入力｛2x2x2なら130、 3x3x3なら37、半導体や絶縁体ならさらに1/4?1/5倍する｝）を入力して、CHECK BATCH VALES &rarr; RUN BATCH INITIAKISATION<br />
+<br />
+■ hole の導入と valence electron の追加<br />
+1. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、hole にする原子の軌道のOCCUPを2から1にする。NUMBER OF ORBITALS の組は StructGenのinequivalent atomの順番に並んでいる。（KAPPAはWIEN2k のUserguideにある。nは主量子数）&rarr; Save<br />
+2. Files &rarr; input.files &rarr; .in2 のあるファイルを選択し、2行目の左から二番目の数値を+1する &rarr; Save<br />
+<br />
+■ 並列計算の設定<br />
+1. Utils &rarr; edit .machines &rarr; 1:localhost の行を CPUの数と同じにする &rarr; save<br />
+<br />
+■ SCF計算の実行<br />
+1. run SCF &rarr; parallel にチェックを入れる &rarr; start SCF cycle<br />
+<br />
+■ XSPEC の計算<br />
+1. Tasks &rarr; XSPEC &rarr; .in1 の一番最後の行の左から二番目の数値を2.5から4.5にする &rarr; save &rarr; continue with xspec<br />
+2. x lapw1<br />
+3. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save<br />
+4. x lapw2 -qtl<br />
+5. .inxsで atom と n colre と l core の値を書き換え、S（装置の分解能）とgamma0（内殻の寿命）の値を入力する &rarr; save<br />
+6. x xspec &rarr; continue with xspec &rarr; plot<br />
+※ Sとgamma0 はとりあえず 0.5 0.5 にしてplot した後、結果を見て再度 .inxs ファイルを書き直して、x xspec を実行すれば良い。<br />
+□ 方位指定<br />
+7. x xspec を行っていない場合は、x init_xspec<br />
+8. Files &rarr; input.files &rarr; .int にDOSのときと同じように計算する軌道を指定する。<br />
+9. x tetra<br />
+10. x txspec<br />
+11. x lorentz<br />
+※ x xspec = x init_xspec + x tetra + x txspec + x lorentz となる。結果はDOSでのplotで見れる。<br />
+※ SCF計算直後に「3. Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save」を行ってしまっても良いかどうかは調査中。<br />
+<br />
+■ EELSの計算（調査中）<br />
+1. Tasks &rarr; TELNES3<br />
+2. .innes で計算条件を記入する。濃い灰色の部分はディフォルトのままでよい。<br />
+Collection s.a.: と Convergence s.a.: を 0.00 にして、NRとNTを1にするとXSPECの結果と同等になる。<br />
+3. x qtl -telnes &rarr; continue with TELNES3<br />
+4. x telnes3 &rarr; continue with TELNES3<br />
+5. 後は上から最後まで順番に進めていけば良いだろう。<br />
+□ 方位指定<br />
+6. .innes でORIENTATION SENSITIVEを指定する。(0.0 0.0 0.0 で結晶のc軸と電子ビームが平行)<br />
+※ SCF計算後に「Files &rarr; input.files &rarr; .inc のあるファイルを選択し、2行目の左から二番目の数値を-1する &rarr; Save」を行った方が良いかどうは調査中。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 Spin orbital coupling の計算<br />
+1. spin orbit couplingを入れて計算をしたい場合は、[run SCF]&rarr;Optionsでのspinorbitにチェックを入れる。<br />
+2. p1/2の影響を入れてより高精度な結果で考慮したい場合は、case.insoでNXのところに計算に入れる数を入力します。<br />
+3. NX1に原子に付けられた番号を入れます（この行の部分を、NXで指定した数だけ増やします)。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 DFT+U の計算(xxxはsessionまたはディレクトリ名にして下さい。平面波の係数に複素数成分がある計算の場合は xxx.indmcとして下さい)<br />
+1. cp $WIENROOT/SRC_templates/case.indm xxx.indm<br />
+2. cp $WIENROOT/SRC_templates/case.inorb xxx.inorb<br />
+3. Files &rarr; input files &rarr; xxx.indm<br />
+&nbsp; 2行目：Uを考慮する原子の個数<br />
+&nbsp; 3行目：Uを考慮する原子の番号、Uを入れる軌道の数、Uを入れる軌道の方位量子数<br />
+&nbsp; (StructGenの入力と同じ番号を指定すればよい）<br />
+&nbsp;※ 4行目を削除し、Uを考慮する原子の数だけ、3行目の形式の行を書く。<br />
+4. Files &rarr; input files &rarr; xxx.inorb<br />
+&nbsp; 1行目：2番目の数値を、 Uを考慮する原子の数 に書き換える<br />
+&nbsp;&nbsp;3行目：Uを考慮する原子の番号、Uを入れる軌道の数、Uを入れる軌道の方位量子数<br />
+&nbsp; (StructGenの入力と同じ番号を指定すればよい）<br />
+&nbsp;&nbsp;nsic と記述のある行：1を指定。(つまり書き換える必要は無い)<br />
+&nbsp; U J と記述のある行：U と J の値を入力（Jはディフォルトにあるように0.00で良いだろう）。入力する数値の単位は Ry なので注意（1 Ry = 13.6 eV です）。<br />
+&nbsp; ※ 4行目を削除し、Uを考慮する原子の数だけ、3行目の形式の行を書く。<br />
+&nbsp; ※ 最後の行を削除し、Uを考慮する原子の数だけ、U J と記述のある行の形式の行を書く。<br />
+5. Execution &rarr; run SCF にて orbital pot (LDA+U) にチェックを入れる。<br />
+※ 反強磁性相（NiOなど）の場合は、case.inst を書き換える必要がある。case.inst は upとdownが交互に記述された形式になっている。そのため、反強磁性の計算において、downで主に支配される原子に対し、case.inst にある左から三番目の数値の記述を up と down で逆にする。つまり、主量子数と方位量子数が同じ行があるので、downが主に支配する原子に対して、電子の占有数（左から三番目の数値）を入れ換えれてしまえばよい。<br />
+[1] <a href="http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf">http://www.apph.tohoku.ac.jp/sakuma-lab/docs/wien2k.pdf</a>　<br />
+[2] <a href="http://www.nims.go.jp/cmsc/staff/arai/wien/ldau.html">http://www.nims.go.jp/cmsc/staff/arai/wien/ldau.html</a><br />
+<br />
+◇&nbsp;非磁性系の物質で、LDA+Uとスピン軌道相互作用の計算が必要な場合<br />
+spinを入れた入力ファイルを作り、ターミナルで計算させるディレクトリに cd&nbsp;コマンドで入り、runsp_c_lapw -so を入力して計算を走らせる。下記のようになり、内殻以外はupスピンでのみ計算される。<br />
+lapw0<br />
+lapw1 -c -up<br />
+lapwso -up -c<br />
+lapw2 -c -up -so<br />
+lcore -up<br />
+lcore -dn<br />
+mixer<br />
+計算の収束後、runsp_c_lapw -so -orbdu とする。<br />
+1回だけ計算させたい場合は、runsp_c_lapw -so -robdu -i 1とすればよい。<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 effective U の計算 ( U =d^2E/d^2n=E[n+1]+E[n-1]-2E[n] )<br />
+下記のWIEN2kの手法では Uを&nbsp;電子を0.5個足した全エネルギーと0.5個引いた全エネルギーから計算する。<br />
+1.&nbsp;スーパーセルでの計算を行う。<br />
+&nbsp; Uを計算したい原子の番号（原子記号を入力する次の欄）を変えて、RKMAX=5, 1 k-point にする。<br />
+2. case.inst で電子数を増減させる原子に対して、Uを導入するまでの軌道をNからPにする（Pにすると各軌道のデータが出力される）。下記はNiOの場合で、最初のNiに対して電子数を増減させる。他の部分は変えなくて良い。<br />
+&nbsp; Ni<br />
+&nbsp; Ar 3 5<br />
+&nbsp; 3, 2,2.0 P<br />
+&nbsp; 3, 2,2.0 P<br />
+&nbsp; 3,-3,3.0 P<br />
+&nbsp; 3,-3,1.0 P<br />
+&nbsp; 4,-1,1.0 N<br />
+&nbsp; 4,-1,1.0 N<br />
+&nbsp; Ni<br />
+&nbsp; Ar 3 5<br />
+&nbsp; 3, 2,2.0 N<br />
+&nbsp; 3, 2,2.0 N<br />
+&nbsp; &hellip;&hellip;<br />
+3.&nbsp;ターミナル上で下記を入力する。<br />
+&nbsp; cd&nbsp;$HOME/WIEN2k/計算するディレクトリ名<br />
+&nbsp; x lstart<br />
+&nbsp; x dstart<br />
+&nbsp; x dstart -up<br />
+&nbsp; x dstart -dn<br />
+&nbsp; runsp<br />
+&nbsp; save case_orig<br />
+&nbsp; ※ save すると その後に入力した名称でファイルが作られる（フォルダではない）。<br />
+4. ターミナル上で下記を入力する。<br />
+&nbsp; cp case.inc case.incup_+.50 &larr;電子数を0.5個追加した場合の入力ファイル<br />
+&nbsp; cp case.inc case.incdn_+.50 &larr;電子数を0.5個追加した場合の入力ファイル<br />
+&nbsp; cp case.inc case.incup_+.5-1&larr;電子数を0.5個引いた場合の入力ファイル<br />
+&nbsp; cp case.inc case.incdn_+.5-1&larr;電子数を0.5個引いた場合の入力ファイル<br />
+5. Uを計算する軌道を inc に書き入れる（coreに書き入れる）。<br />
+&nbsp; upとdnそれぞれUを計算する軌道の総和を2で割った値がupとdnのcoreに入れたUを計算する軌道の電子数になる。下記はNiOの場合で、最初のNiに対して電子数を増減させる。他の部分は変えなくて良い。<br />
+&nbsp; The 4.5 &uarr;,&nbsp;4&nbsp;&darr; calculation.<br />
+&nbsp; NiO.incup_+.50: NiO.incdn_+.50<br />
+&nbsp; 7 1.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 1.00<br />
+&nbsp; 1,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;1,-1,2<br />
+&nbsp; 2,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;2,-1,2<br />
+&nbsp; 2, 1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;2, 1,2<br />
+&nbsp; 2,-2,4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2,-2,4<br />
+&nbsp; 3,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3,-1,2<br />
+&nbsp; 3, 2,4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3, 2,4<br />
+&nbsp; 3,-3,5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;3,-3,4<br />
+&nbsp;<br />
+&nbsp; The 4.5 &uarr;, 3&nbsp;&darr; calculation.<br />
+&nbsp; NiO.incup_+.5-1: NiO.incdn_+.5-1<br />
+&nbsp; 7 1.00&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7 1.00<br />
+&nbsp; 1,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1,-1,2<br />
+&nbsp; 2,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2,-1,2<br />
+&nbsp; 2, 1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2, 1,2<br />
+&nbsp; 2,-2,4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2,-2,4<br />
+&nbsp; 3,-1,2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3,-1,2<br />
+&nbsp; 3, 2,4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3, 2,4<br />
+&nbsp; 3,-3,5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3,-3,2<br />
+6. Uを計算する軌道をフェルミエネルギーから遠くに離す。<br />
+&nbsp; in1 で 対応する軌道のエネルギーを20などと大きな値にする。<br />
+7. coreに入れたUを計算する軌道の電子を価電子から引く。<br />
+&nbsp; in2 で NE からUを計算する軌道の電子を引く。<br />
+&nbsp; case.in2_+.50 &larr;電子数を0.5個追加した場合の入力ファイル<br />
+&nbsp; case.in2_+.5-1&larr;電子数を0.5個引いた場合の入力ファイル<br />
+8. ターミナル上で下記を入力する。<br />
+&nbsp; cp case.in2_+.50 case.in2<br />
+&nbsp; cp case.incup_+.50 case.incup<br />
+&nbsp; cp case.incdn_+.50 case.incdn<br />
+&nbsp; runsp<br />
+&nbsp; save case_+.50<br />
+9. ターミナル上で下記を入力する。<br />
+&nbsp; cp case.in2_+.5-1 case.in2<br />
+&nbsp; cp case.incup_+.5-1 case.incup<br />
+&nbsp; cp case.incdn_+.5-1 case.incdn<br />
+&nbsp; runsp<br />
+&nbsp; save case_+.5-1<br />
+10. ターミナル上で下記を入力する。(3d orbital case)<br />
+&nbsp; grepline :fer &quot;case_+.50.scf&quot; 1<br />
+&nbsp;&nbsp;&nbsp; gives &epsilon;F ((n + 1)/2, n/2)<br />
+&nbsp; grepline &quot;:3DD001&quot; &quot;case_+.50.scf&quot; 2 | head -2 | tail -1<br />
+&nbsp; grepline &quot;:3D 001&quot; &quot;case_+.50.scf&quot; 2 | head -2 | tail -1<br />
+&nbsp;&nbsp;&nbsp; gives&nbsp;(4 * 3DD001+5 * 3D 001)/9 = &epsilon;3d&uarr;((n + 1)/2, n/2)<br />
+&nbsp; grepline :fer &quot;case_+.5-1.scf&quot; 1<br />
+&nbsp;&nbsp;&nbsp; gives &epsilon;F ((n + 1)/2, n/2-1)<br />
+&nbsp; grepline &quot;:3DD001&quot; &quot;case_+.5-1.scf&quot; 2 | head -2 | tail -1<br />
+&nbsp; grepline &quot;:3D 001&quot; &quot;case_+.5-1.scf&quot; 2 | head -2 | tail -1<br />
+&nbsp;&nbsp;&nbsp; gives (4 * 3DD001+5 * 3D 001)/9 = &epsilon;3d&uarr;((n + 1)/2, n/2-1)<br />
+11. U の計算<br />
+&nbsp; F0eff (Ry) = &epsilon;3d&uarr;((n + 1)/2, n/2) &minus; &epsilon;3d&uarr;((n + 1)/2, n/2 &minus; 1) &minus;&epsilon;F ((n + 1)/2, n/2) + &epsilon;F ((n + 1)/2, n/2 &minus; 1)<br />
+&nbsp; U (eV) = F0eff (Ry) * 13.6058<br />
+<br />
+[1] <a href="http://www.wien2k.at/reg_user/textbooks/Constraint_U.pdf">http://www.wien2k.at/reg_user/textbooks/Constraint_U.pdf</a><br />
+[2] <a href="http://www.abinit.org/documentation/helpfiles/for-v6.6/tutorial/lesson_detu.html">http://www.abinit.org/documentation/helpfiles/for-v6.6/tutorial/lesson_detu.html</a><br />
+[3] <a href="http://www.wien2k.at/events/ws2006/lda+u_transport.pdf">http://www.wien2k.at/events/ws2006/lda+u_transport.pdf</a>　<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 DFT + hybrid (xxxはsessionまたはディレクトリ名にして下さい。平面波の係数に複素数成分がある計算の場合は xxx.indmcとして下さい)（動作未確認）<br />
+1. cp $WIENROOT/SRC_templates/case.indm xxx.indm<br />
+&nbsp; (DFT+U の設定と同じ）<br />
+2. cp $WIENROOT/SRC_templates/case.ineece xxx.ineece<br />
+3. 1行目の二番目の数値に hybridを導入する原子の個数を入力する。<br />
+4. 3行目：hybrid する原子の番号、hybrid する軌道の数、hybrid する軌道の方位量子数<br />
+&nbsp;&nbsp; (StructGenの入力と同じ番号を指定すればよい）<br />
+5. 4行目を削除し、hybrid する原子の数だけ、3行目の形式の行を書く。<br />
+6. HYBR の書かれている行で HYBR を記入。<br />
+7. amount of exact exchange に数値を書き入れる。（PBE0は0.25, B3PW91とB3LYPは0.2）<br />
+9. xxx.inc で indxc を B3PW91 は18に、B3LYPは47にする。<br />
+8. Execution &rarr; run SCF にて eece (hybrid functionals) にチェックを入れる。&nbsp;<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 TB-mBJの計算(xxxはsessionまたはディレクトリ名にして下さい)<br />
+1. 通常のSCF計算を行う。<br />
+2. xxx.in0 の NR2V を R2V に書き換える。<br />
+3. cp $WIENROOT/SRC_templates/case.inm_vresp xxx.inm_vresp<br />
+4. run_lapw -NI -i 1<br />
+5. save_lapw default_lapw<br />
+6. xxx.in0 で indxc を PBEの13からmBJとなる 28 に書き換える。<br />
+7. cp xxx.in0 xxx.in0_grr<br />
+8. xxx.in0_grr で indxc を 50 にする。<br />
+9. 発散する場合があるので、それを防ぐ為に xxx.inm で PRATT にして、mixing factor を 0.1 にする。<br />
+10. Execution &rarr; run SCF &rarr; start SCF cycle<br />
+※ Userguide の4.5.9 の通りに行えばよい。<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 YS-PBE0の計算(xxxはsessionまたはディレクトリ名にして下さい)<br />
+1. 通常のSCF計算を行う。<br />
+2. save_lapw default_lapw<br />
+3. cp $WIENROOT/SRC_templates/case.inhf xxx.inhf<br />
+4. NBAND の値を入力する。（xxx.in2 の NE を 2割り程度増やした量で良い？）<br />
+5. cp xxx.in0 xxx.in0_grr<br />
+6. xxx.in0_grr で indxc を 52&nbsp;にする（LDAは51, PBEは52, WCは53）。NR2V を R2V に書き換える。TOT を&nbsp;KXC に書き換える。<br />
+7. xxx.inc で IPRINT を 0 から 1 にする（NUMBER OF ORBITALS のある行の左から三番目の数値）。<br />
+8. xxx.in1 で EMAX を 5 Ry にする。<br />
+9. run_kgenhf_lapw<br />
+10. k点を入力<br />
+11. run_lapw -hf &larr; spin-polarized calculation の場合は runsp_lapw -hf<br />
+※ Userguide の4.5.8 の通りに行えばよい。<br />
+※ band図を描く場合には、 run_bandplothf_lapw を用いる。<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 wannier関数を用いた計算<br />
+フェルミ面を構成するバンドの軌道成分を引き出すことができる。<br />
+文献[1]には具体的な計算方法の記述がある。<br />
+<br />
+（調査中）<br />
+1. ターミナルを開く<br />
+2. cd ディレクトリ名<br />
+3. init_w2w<br />
+&nbsp; 1) 0<br />
+&nbsp; 2) Specify 3 mesh-division(n1, n2, n3): 8 8 8<br />
+&nbsp; 3)&nbsp;0 (=unshift)<br />
+&nbsp; 4) continue with findbands or execute kgen again (c/e)?: c<br />
+&nbsp; 5) enter energy window for findbands [Emin Emax] (eV): -12.0 5.0<br />
+&nbsp; 6) continue with write_inwf or rerun findbands (c/r) c<br />
+&nbsp; 7) [Nmin Nmax]<br />
+&nbsp; 8) control + D<br />
+&nbsp; 9) continue with write_win or excute write_inwf(c/e)?:&nbsp;c<br />
+&nbsp; 10) continue with&nbsp;nnkp or excute write_wine (c/e)?: c<br />
+4. lapw1<br />
+5. w2w<br />
+6. wannier90<br />
+<br />
+1. ターミナルを開く<br />
+2. cd ディレクトリ名<br />
+3. init_w2w<br />
+&nbsp; 1) case.struct が case.ksym にコピーされる。<br />
+&nbsp; 2) case.ksym にて、 NUMBER OF OPERATONS を1にし、その下の行列を単位行列に変わる。<br />
+&nbsp; 3) kgenが実行される。0を入力し、Specify 3 mesh-division(n1, n2, n3)で 8, 8, 8 などと入力する。<br />
+4. lapw1と入力<br />
+5. バンド構造と case.output2 を見て、抽出するバンドを決める。<br />
+&nbsp; case.output2 には、あるバンドがどのような軌道成分から構成されているかを知ることができる。<br />
+6. write_w2win<br />
+&nbsp; case.w2winが生成される<br />
+7. write_win<br />
+&nbsp; Wannier90で用いられるcase.winが作成される。<br />
+8. case.win を修正する。<br />
+9. Wannier90のマニュアルを参照して、バンドの本数とwannier軌道の数、エネルギー範囲を書き換える。<br />
+&nbsp; projections には case.w2winで指定したwannier軌道と同じ数の軌道を指定する。<br />
+10. write_w2wdef<br />
+&nbsp; w2w.def が生成される。<br />
+11. wannier90 -pp case<br />
+&nbsp; case.nnkp が生成する。<br />
+12. w2wr w2w.def<br />
+&nbsp; case.amnとcase.mmnが生成される。<br />
+13. wannier90<br />
+&nbsp; case_band.dat が case.sphagetti_eneの結果を再現していればよい。<br />
+&nbsp; 軌道間の遷移積分の情報は case_hr.dat に出力される。<br />
+wannier 関数は case.mmn と case.amnの2つのファイルから作成できる。<br />
+[1] <a href="http://www.heavy-electrons.jp/files/newsletter/33/NL8_high2.pdf?t=1347426278">http://www.heavy-electrons.jp/files/newsletter/33/NL8_high2.pdf?t=1347426278</a>&nbsp;( Japanese )<br />
+[2] <a href="http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf">http://www.wien2k.at/reg_user/textbooks/WIEN2k_lecture-notes_2011/Exercises_11.pdf</a>　<br />
+[3] <a href="http://ir.lib.uec.ac.jp/infolib/user_contents/9000000623/9000000623.pdf">http://ir.lib.uec.ac.jp/infolib/user_contents/9000000623/9000000623.pdf</a><br />
+※ <span style="font-size: 10px;">WIEN</span>2<span style="font-size: 10px;">WANNIER</span> 1.0 is included in the WIEN2k_14.2 distribution; to use it, simply install the latest WIEN2k version. <span style="font-size: 10px;">WIEN</span>2<span style="font-size: 10px;">WANNIER</span>-specific documentation is included in <span style="font-family: Courier;">SRC_w2w/</span>. For reference, a complete copy of <span style="font-size: 10px;">WIEN</span>2<span style="font-size: 10px;">WANNIER</span> is provided <a class="download" href="http://www.ifp.tuwien.ac.at/fileadmin/Arbeitsgruppen/computational_materials_science/Software/wien2wannier-1.0.tar.gz" target="_blank" title="Initiates file download"><img alt="Initiates file download" src="http://www.ifp.tuwien.ac.at/typo3/sysext/rtehtmlarea/res/accessibilityicons/img/download.gif" />here</a>. [4]<br />
+[4] <a href="http://www.ifp.tuwien.ac.at/forschung/arbeitsgruppen/cms/software-download/wien2wannier/">http://www.ifp.tuwien.ac.at/forschung/arbeitsgruppen/cms/software-download/wien2wannier/</a><br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 Electric Field がある場合の計算<br />
+------------------------------------------------------------------------------<br />
+■ Memo #4 DMFTの計算<br />
+下記の条件が比較的良く成り立つと言われています。<br />
+U &lt;&lt; t : DFT(LDA, GGA, PBE)<br />
+U ? t : DFT + DMFT +&nbsp;wannier<br />
+U&nbsp;&gt;&gt; t: DFT +U, DFT+hybrid<br />
+t &rarr; kinetic energy, U &rarr; potential energy.<br />
+ハバード・モデルで考えると分かりやすい。tは移動積分、Uはクーロン反発エネルギー（Hubbard-U）。<br />
+<a href="http://wyvern.phys.s.u-tokyo.ac.jp/f/lecture/kobelect.pdf">http://wyvern.phys.s.u-tokyo.ac.jp/f/lecture/kobelect.pdf</a>　<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ Memo #5</p>
+
+<p>A) LAPW法は、スレーターのAPW法の行列要素を線形化して、固有値問題の解法を容易くしたものである。WIEN2kコードでは、フルポテンシャルを採用しているので、FLAPW法と言われる。また、マフィンティン球の内部で定義されるknに依存しない局所関数（local robital：LO）を取り入れて改良している。</p>
+
+<p>B) 2000年に E. Stostedt 等は、LAPW ではなく元のAPWにlocal orbital（lo）を取り入れることを提案した。この場合も線形な固有値問題としておくために、マフィンティン球の内部の展開に使う動径波動関数として、ある固定したEl における関数u(r,El)を使用した。変分の自由度を保つために、新しい局所関数（local orbital：lo）も取り入れている。この新しい局所関数（lo）はLAPWの基底関数に似ているが、式上で現れる二つの係数（uとuの微分にそれぞれ付けられる係数）はknに依存せず、それらはloが球上でゼロとなり、しかも規格化されているという条件から決定される。この新しい方法によると、LAPW法と同じ結果に収束し、しかも使う平面波の最大波数の目安であるRKmaxの値が1小さくて済むので、基底関数の数が最大50%少なくなり、計算時間は1桁短くなる可能性がある。</p>
+
+<p>参考文献：和光システム研究所、『個体の中の電子』、和光システム研究所<br />
+------------------------------------------------------------------------------<br />
+■ より簡単な入力の仕方<br />
+・tabで次のカラムに移動できる。座標の入力は、0.5 や 1/2, x などでも良い。<br />
+・StructGen &rarr; initialize calc &rarr; Expert の下の部分を入力（ディフォルトを選択する場合は入力しない） &rarr; check &rarr; viewでerrorやwarningが無いのを確認 &rarr; SCF の計算へ<br />
+・Analysis &rarr; ENE にチェックを入れる &rarr; グラフを描く<br />
+・save_lapw &rarr; save name or directory に pbe_rkm7_1000k_exp などと入力し、saveを押す。<br />
+・DOSでは濃い灰色の部分とeditは押さなくてよい。<br />
+・Electron densites<br />
+&nbsp; 1. edit case.scf1：各原子の軌道のエネルギーを表示。 E0_0001 E(0) は原子1のs軌道<br />
+&nbsp; 2. edit case.scf2：全体の軌道のエネルギーを表示。<br />
+&nbsp; 3. lapw2 &rarr; x lstart-sigma （difference density の場合のみ）&rarr; calculate density with XcrySDen （case.in5がこれで作成される）&nbsp;&rarr; 2D plot &rarr; number of point を入力 &rarr; Tree-atom にチェックを入れて三つの原子を選ぶ &rarr; selected を押す &rarr; ADなどの欄の値を全て0.5にする &rarr; Rectangular にチェックを入れる &rarr; update display &rarr; submit &rarr; RHO or DIFF（difference density の場合） &rarr; submit &rarr; Range で範囲を変える &rarr; Ball / Stick で原子の表示を小さくする。<br />
+&nbsp; 4. なるべく特定の軌道の電子密度分布を知りたい場合は、 lapw2 の右欄に数値を入れる（単位は Ry）。<br />
+・Fermisurface の表示<br />
+&nbsp; xcrysden --wien_fermisurface . &larr;ドットが重要。<br />
+・格子定数の最適化<br />
+&nbsp; 1. Rmt は小さくしておく。自動で計算する Rmt のところに1?5の値を入力。<br />
+&nbsp; 2. optimize.job をterminalで入力すると計算可能。<br />
+&nbsp; 3. restore_lapw &rarr; x lapw0 &rarr; DOSやBand図のプロット（上手く行うと 各体積での結果が得られる）<br />
+・原子位置の最適化(PORTの場合)( w2web上では min. positions ）<br />
+&nbsp; 1. Rmt は小さくしておく。自動で計算する Rmt のところに1?5の値を入力。(10にすることも多々ある)<br />
+&nbsp; 2. min_lapw を実行させる。( w2web上では min. positions ）<br />
+&nbsp; 構造最適化の結果は、structファイルに新しい構造に上書きされている。<br />
+&nbsp; ※ error で RMTが書かれている場合は、上記1の入力で大きな値を入力してRMTを小さくするか、RKmaxを小さくする。幾つか調べたところ、RKmaxが大きいとRMTを小さくしないと RMTに関するerrorが起こる事が判明した。<br />
+&nbsp; ※ 最初は k点を1や100など小さい値にして、RMTを10%減少させて、RKmaxを5や6にする。RKmaxを7にするとRMTを15など大きな値にしなければならず計算結果を待てなくなる。<br />
+&nbsp; ※ 個人的にはk点を1点にしてRMTを10%減少、RKmaxを5にしても良いのではないかと思う。気になれば、RKmaxを5.5にして結果の違いを比較してみたり、k点を増やしてみたらどうだろうか？結果が収束しているようならばそれで報告しても良いと思う。<br />
+・原子位置の最適化(MSR1aの場合)( w2web上では min. positions ）<br />
+&nbsp; 1. Rmt は小さくしておく。自動で計算する Rmt のところに1?5の値を入力。(10にすることも多々ある)<br />
+&nbsp; 2. run -fc 5<br />
+&nbsp; 3. save_lapw case_initial<br />
+&nbsp; 4. case.inm の MSR1 を MSR1a に書き換える<br />
+&nbsp; 5. run -fc 1 -cc 0.0001 -ec 0.00001<br />
+・Force の計算(caseはSession または ディレクトリ名,&nbsp;詳細は&nbsp;userguide の arrowsを参照）<br />
+&nbsp; save_lapw を実行すると case.clmsum, case.scf, case.struct<br />
+&nbsp; 1. run_lapw -fc 1<br />
+&nbsp; 2. save_lapw case_initial<br />
+&nbsp; 3. run_lapw -fc 1<br />
+&nbsp; 4. save_lapw case_final<br />
+&nbsp; 5. xcrysden --wien_struct case_initial<br />
+&nbsp; 6. case.initial.xsf でsave<br />
+&nbsp; 7. x arrows<br />
+&nbsp; 8. xcrysden --xsf case_forces.xsf<br />
+&nbsp; 9. x -delta arrows<br />
+&nbsp; 10. xcrysden --xsf case_delta.xsf<br />
+・ terminal での計算方法<br />
+&nbsp; run_lapw -h で run_lapw の後に入力する option が表示される。大抵はディフォルトで良い。</p>
+
+<p>------------------------------------------------------------------------------<br />
+■ Memo #6<br />
+&nbsp; プログラムと入出力ファイルの関係は Userguide での「Table 4.1: Input and output files of init programs」の部分から書かれている。特定のプログラムを動かす場合に、どのファイルを修正しても良いかはここから判断できる。以下では基本的な入出力ファイルについて解説する。<br />
+□ case.outputkgen: Shift k-mesh (if applicable)をNoの場合、&nbsp;「point&nbsp;&nbsp;&nbsp; coordinates&nbsp;&nbsp;&nbsp;&nbsp; relation」でのrelationの最も左にある番号は、&nbsp; weights of k-points:での左から二番目の番号に関連づけられる。weights of k-points:での左側はcase.klistの左側に対応する。自作のテトラへドロン法などでもっとも簡単なプログラムを作りたい場合には、この関係から得られるデータを用いて全てのk点に対するデータを用いるようにするとよい。<br />
+□ case.output1: 固有値（通常 -9.0 Ryまでが表示される）とWFPRIのオプションをcase.in1に入力すると平面波（最初にAPW、続いてlo）のデータが羅列される。Matrix size = APW + lo の数となっている。loを除いたAPWの成分の情報が欲しい場合は、「number of local orbitals, nlo (hamilt)&nbsp; 」（ヴァージョンによって表示が僅かにことなる）でloの数が表示されるので、平面波のデータの下からloの数だけ除けばよい。APWの平面波成分の係数が出力されるが最大が1を超えることもある。これはloなどの成分も合わせて規格化されているためである。<br />
+□ case.output2: FERMI ENERGY AT&nbsp;にEFでのエネルギーが記述されている。SCF後に出力されるので、DOSからEFを求めることができない場合などに用いるとよい。<br />
+□ case.outputt: DOSを低いエネルギーから積分したデータが出力される。Ry単位なので注意すること。積分をするプログラムやExcelのシートを作る自信がない場合は利用するとよい。<br />
+□ case.struct: 二行目には空間群に関するデータが記述される。最も左側が大まかな結晶の分類になる。FはFCC, BはBCC, HはHCPとなる（詳細はUserguideの「Table 4.4: Lattice type, description and bravais matrix used in WIEN2k.」を参照）。バンド分散でのk点のリストはこの記号に対応している。次は数値が続いて読み辛いが、NONEQUIV.ATOMS 空間群の番号_空間群の記号となっている。単位胞内の全原子の数はNONEQUIV.ATOMのMULTの総和で求めることができる。最後は「NUMBER OF SYMMETRY OPERATIONS」の情報が羅列される。case.outputkgenとどちらを用いるかは悩むところである。<br />
+<br />
+■ case.outputkgen<br />
+point coordinates relation<br />
+relation in case.outputkgen = second colume in weight of k-points<br />
+first colume in weight of k-points = coordinates in case.klist<br />
+bandstrucutre klist = coordinates in case.klist<br />
+------------------------------------------------------------------------------</p>
+
+<p>■ Memo #7 （最小限の入力ファイルとは？）<br />
+以下に記す10個の入力ファイルがあれば、SCFの計算が可能となる（複素数成分がある場合は最後にcの付いたファイルが必要）。<br />
+1) case.clmsum<br />
+2) case.in0<br />
+3) case.in1<br />
+4) case.in2<br />
+5) case.inc<br />
+6) case.inm<br />
+7) case.inst<br />
+8) case.kgen<br />
+9) case.klist<br />
+10) case.struct<br />
+11) case.vsp<br />
+------------------------------------------------------------------------------<br />
+■ 付録：データ取り出し用スクリプト（csh で作成されている）<br />
+使い方<br />
+1) 下記のスクリプトをコピーして、好きな名前を付ける<br />
+2)&nbsp;「Properties」&rarr;「Permissions」&rarr;「Execute:」にチェックを入れる<br />
+上記1) と 2) は一度だけで良い。作成したファイルは Desktopなどに置く<br />
+3) 作成したファイルを、計算したディレクトリ（フォルダ）の中に入れて実行<br />
+&nbsp; Ubuntu 10.04 の場合： 二回クリックして、Run を選択する<br />
+4) ディレクトリ（フォルダ）の名称 +_data の中に下記のデータがある<br />
+&nbsp; SCF_DATA：再計算に必須のデータ。これだけあれば、3回で収束する。<br />
+&nbsp; DOS_DATA： DOSのデータ。 igor などで呼び出せば良い。<br />
+&nbsp; BAND_DATA： BANDのデータ。 _ene のデータを Excel などで取り出し、最後の2列を igor にコピーして用いれば良い。<br />
+&nbsp; フォルダの中にある txt は履歴です。<br />
+※&nbsp;可能な限り作りは簡単にしましたので、色々な人が容易に書き換えることができると思います。各自で便利なスクリプトを作成して頂いて、PWscf や ABINIT 用のものなどを積極的に公開して頂ければ幸いです。<br />
+※ 幾つかのデータを取得して、自作したプログラムを走らせる場合などにも便利です。<br />
+※ terminal などで使用するコマンドもコピー&amp;ペーストすれば使えるので便利です。<br />
+※ 可能であれば学生の方にはGPLライセンスで使っていただけるとありがたいです。業者の方はBSDで良いと思います。<br />
+------------------------------------<br />
+non-spin 用データ自動纏めプログラム csh ファイル<br />
+------------------------------------------<br />
+#! /bin/csh -f<br />
+<br />
+set file = `pwd`<br />
+set file = $file:t<br />
+# echo $file<br />
+set subfilename = $file'_data'<br />
+mkdir $subfilename<br />
+<br />
+if !( -d SCF_DATA ) then<br />
+mkdir SCF_DATA<br />
+endif<br />
+set filename = $file'_scf_date'<br />
+echo '---------------------------------------------' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+echo ' put scf data' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+date &gt;&gt; ./SCF_DATA/$filename.txt<br />
+echo '---------------------------------------------' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+echo ' '<br />
+echo 'put scf data in' $file '/SCF_DATA/ directroy'<br />
+set refilename = $file<br />
+#'_rescf'<br />
+# set refilename = 'wien'<br />
+cp $file.clmsum ./SCF_DATA/$refilename.clmsum<br />
+cp $file.in0 ./SCF_DATA/$refilename.in0<br />
+cp $file.in1 ./SCF_DATA/$refilename.in1<br />
+cp $file.in2 ./SCF_DATA/$refilename.in2<br />
+cp $file.inc ./SCF_DATA/$refilename.inc<br />
+cp $file.inm ./SCF_DATA/$refilename.inm<br />
+cp $file.inst ./SCF_DATA/$refilename.inst<br />
+cp $file.kgen ./SCF_DATA/$refilename.kgen<br />
+cp $file.klist ./SCF_DATA/$refilename.klist<br />
+cp $file.struct ./SCF_DATA/$refilename.struct<br />
+cp $file.vsp ./SCF_DATA/$refilename.vsp<br />
+echo ' '<br />
+<br />
+if !( -d DOS_DATA ) then<br />
+mkdir DOS_DATA<br />
+cd DOS_DATA<br />
+mkdir DOS_up_DATA<br />
+mkdir DOS_dn_DATA<br />
+mkdir DOS_up_eV_DATA<br />
+mkdir DOS_dn_eV_DATA<br />
+cd ..<br />
+endif<br />
+set filename = $file'_DOS_date'<br />
+echo '---------------------------------------------' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+echo ' put dos data' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+date &gt;&gt; ./DOS_DATA/$filename.txt<br />
+echo '---------------------------------------------' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+echo ' '<br />
+echo 'put dos input data in' $file '/DOS_DATA/ directroy'<br />
+set filename = $file<br />
+cp $file.dos1up ./DOS_DATA/DOS_up_DATA/$filename.dos1up<br />
+cp $file.dos1dn ./DOS_DATA/DOS_dn_DATA/$filename.dos1dn<br />
+cp $file.dos1evup ./DOS_DATA/DOS_up_eV_DATA/$filename.dos1evup<br />
+cp $file.dos1evdn ./DOS_DATA/DOS_dn_eV_DATA/$filename.dos1evdn<br />
+cp $file.int ./DOS_DATA/$filename.int<br />
+if ( -e $file.dos2up ) then<br />
+cp $file.dos2up ./DOS_DATA/DOS_up_DATA/$filename.dos2up<br />
+cp $file.dos2dn ./DOS_DATA/DOS_dn_DATA/$filename.dos2dn<br />
+cp $file.dos2evup ./DOS_DATA/DOS_up_eV_DATA/$filename.dos2evup<br />
+cp $file.dos2evdn ./DOS_DATA/DOS_dn_eV_DATA/$filename.dos2evdn<br />
+endif<br />
+if ( -e $file.dos3up ) then<br />
+cp $file.dos3up ./DOS_DATA/DOS_up_DATA/$filename.dos3up<br />
+cp $file.dos3dn ./DOS_DATA/DOS_dn_DATA/$filename.dos3dn<br />
+cp $file.dos3evup ./DOS_DATA/DOS_up_eV_DATA/$filename.dos3evup<br />
+cp $file.dos3evdn ./DOS_DATA/DOS_dn_eV_DATA/$filename.dos3evdn<br />
+endif<br />
+if ( -e $file.dos4up ) then<br />
+cp $file.dos4up ./DOS_DATA/DOS_up_DATA/$filename.dos4up<br />
+cp $file.dos4dn ./DOS_DATA/DOS_dn_DATA/$filename.dos4dn<br />
+cp $file.dos4evup ./DOS_DATA/DOS_up_eV_DATA/$filename.dos4evup<br />
+cp $file.dos4evdn ./DOS_DATA/DOS_dn_eV_DATA/$filename.dos4evdn<br />
+endif<br />
+if ( -e $file.dos5up ) then<br />
+cp $file.dos5up ./DOS_DATA/DOS_up_DATA/$filename.dos5up<br />
+cp $file.dos5dn ./DOS_DATA/DOS_dn_DATA/$filename.dos5dn<br />
+cp $file.dos5evup ./DOS_DATA/DOS_up_eV_DATA/$filename.dos5evup<br />
+cp $file.dos5evdn ./DOS_DATA/DOS_dn_eV_DATA/$filename.dos5evdn<br />
+endif<br />
+echo ' '<br />
+<br />
+if !( -d BAND_DATA ) then<br />
+mkdir BAND_DATA<br />
+endif<br />
+set filename = $file'_BAND_date'<br />
+echo '---------------------------------------------' &gt;&gt; ./BAND_DATA/$filename.txt<br />
+echo ' put hr data' &gt;&gt; ./BAND_DATA/$filename.txt<br />
+date &gt;&gt; ./BAND_DATA/$filename.txt<br />
+echo '---------------------------------------------' &gt;&gt; ./BAND_DATA/$filename.txt<br />
+echo ' '<br />
+echo 'put&nbsp;BAND input data in' $file '/BAND_DATA/ directroy'<br />
+set filename = $file'_BAND'<br />
+cp $file.spaghettiup_ene ./BAND_DATA/$filename.spaghettiup_ene<br />
+cp $file.spaghettidn_ene ./BAND_DATA/$filename.spaghettidn_ene<br />
+cp $file.spaghettiup_ps ./BAND_DATA/$filename.spaghettiup_ps<br />
+cp $file.spaghettidn_ps ./BAND_DATA/$filename.spaghettidn_ps<br />
+echo ' '<br />
+<br />
+mv SCF_DATA $subfilename<br />
+mv DOS_DATA $subfilename<br />
+mv BAND_DATA $subfilename<br />
+#<br />
+------------------------------------------------------------------------------<br />
+------------------------------------------------------------------------------<br />
+■ Memo #7 （最小限の入力ファイルとは？）<br />
+以下に記す入力ファイルがあれば、SCFでspinを入れたSOCとLDA+Uの計算が可能となる（複素数成分がある場合は最後にcの付いたファイルが必要）。<br />
+1)&nbsp;case.clmdn<br />
+2) case.clmsum<br />
+3) case.clmup<br />
+4) case.dmatdn<br />
+5) case.dmatud<br />
+6) case.dmatup<br />
+7) case.in0<br />
+8) case.in1c<br />
+9) case.in2c<br />
+10) case.inc<br />
+11) case.indm<br />
+12)&nbsp;case.indmc<br />
+13)&nbsp;case.inm<br />
+14)&nbsp;case.inorb<br />
+15) case.inso<br />
+16) case.inst<br />
+17)&nbsp;case.kgen<br />
+18) case.klist<br />
+19) case.struct<br />
+20) case.vorbdn<br />
+21) case.borbup<br />
+22) case.vspdn<br />
+23) case.vspup<br />
+------------------------------------------------------------------------------<br />
+<br />
+□ SCF計算用 csh ファイル<br />
+------------------------------------------------------------------------------<br />
+#! /bin/csh -f<br />
+<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+#&nbsp; echo $file<br />
+<br />
+&nbsp; if !( -d SCF_DATA ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir SCF_DATA<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_scf_date'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put scf data' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+&nbsp; date &gt;&gt; ./SCF_DATA/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./SCF_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put scf data in' $file '/SCF_DATA/ directroy'<br />
+&nbsp; set refilename = $file'_rescf'<br />
+&nbsp; set refilename = 'wien'<br />
+&nbsp; cp $file.clmdn ./SCF_DATA/wien.clmdn<br />
+&nbsp; cp $file.clmsum ./SCF_DATA/wien.clmsum<br />
+&nbsp; cp $file.clmup ./SCF_DATA/wien.clmup<br />
+&nbsp; cp $file.dmatdn ./SCF_DATA/wien.dmatdn<br />
+&nbsp; cp $file.dmatud ./SCF_DATA/wien.dmatud<br />
+&nbsp; cp $file.dmatup ./SCF_DATA/wien.dmatup<br />
+&nbsp; cp $file.in0 ./SCF_DATA/wien.in0<br />
+&nbsp; cp $file.in1 ./SCF_DATA/wien.in1<br />
+&nbsp; cp $file.in2 ./SCF_DATA/wien.in2<br />
+&nbsp; cp $file.in1c ./SCF_DATA/wien.in1c<br />
+&nbsp; cp $file.in2c ./SCF_DATA/wien.in2c<br />
+&nbsp; cp $file.inc ./SCF_DATA/wien.inc<br />
+&nbsp; cp $file.indm ./SCF_DATA/wien.indm<br />
+&nbsp; cp $file.indmc ./SCF_DATA/wien.indmc<br />
+&nbsp; cp $file.inm ./SCF_DATA/wien.inm<br />
+&nbsp; cp $file.inorb ./SCF_DATA/wien.inorb<br />
+&nbsp; cp $file.inso ./SCF_DATA/wien.inso<br />
+&nbsp; cp $file.inst ./SCF_DATA/wien.inst<br />
+&nbsp; cp $file.kgen ./SCF_DATA/wien.kgen<br />
+&nbsp; cp $file.klist ./SCF_DATA/wien.klist<br />
+&nbsp; cp $file.struct ./SCF_DATA/wien.struct<br />
+&nbsp; cp $file.vorbdn ./SCF_DATA/wien.vorbdn<br />
+&nbsp; cp $file.vorbup ./SCF_DATA/wien.vorbup<br />
+&nbsp; cp $file.vsp ./SCF_DATA/wien.vsp<br />
+&nbsp; cp $file.vspdn ./SCF_DATA/wien.vspdn<br />
+&nbsp; cp $file.vspup ./SCF_DATA/wien.vspup<br />
+&nbsp; echo '&nbsp; '<br />
+<br />
+&nbsp; if !( -d HR_DATA ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir HR_DATA<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_HR_date'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put hr data' &gt;&gt; ./HR_DATA/$filename.txt<br />
+&nbsp; date &gt;&gt; ./HR_DATA/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put HR input data in' $file '/HR_DATA/ directroy'<br />
+&nbsp; set filename = $file'_HR'<br />
+&nbsp; cp $file.outputt ./HR_DATA/wien_HR.outputt<br />
+&nbsp; cp $file.klist ./HR_DATA/wien_HR.klist<br />
+&nbsp; cp $file.output1 ./HR_DATA/wien_HR.output1<br />
+&nbsp; cp $file.struct ./HR_DATA/wien_HR.struct<br />
+&nbsp; cp $file.output2 ./HR_DATA/wien_HR.output2<br />
+&nbsp; cp $file.outputkgen ./HR_DATA/wien_HR.outputkgen<br />
+&nbsp; cp $file.dos1 ./HR_DATA/wien_HR.dos1<br />
+&nbsp; echo '&nbsp; '<br />
+<br />
+&nbsp; if !( -d HR_DATA_up ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir HR_DATA_up<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_HR_date_up'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA_up/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put hr data' &gt;&gt; ./HR_DATA_up/$filename.txt<br />
+&nbsp; date &gt;&gt; ./HR_DATA_up/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA_up/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put HR input data up in' $file '/HR_DATA_up/ directroy'<br />
+&nbsp; set filename = $file'_HR_up'<br />
+&nbsp; cp $file.klist ./HR_DATA_up/wien_HR.klist<br />
+&nbsp; cp $file.output1up ./HR_DATA_up/wien_HR.output1up<br />
+&nbsp; cp $file.struct ./HR_DATA_up/wien_HR.struct<br />
+&nbsp; cp $file.output2up ./HR_DATA_up/wien_HR.output2up<br />
+&nbsp; cp $file.outputkgen ./HR_DATA_up/wien_HR.outputkgen<br />
+&nbsp; cp $file.dos1up ./HR_DATA_up/wien_HR.dos1up<br />
+&nbsp; echo '&nbsp; '<br />
+<br />
+&nbsp; if !( -d HR_DATA_dn ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir HR_DATA_dn<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_HR_date_dn'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA_dn/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put hr data' &gt;&gt; ./HR_DATA_dn/$filename.txt<br />
+&nbsp; date &gt;&gt; ./HR_DATA_dn/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./HR_DATA_dn/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put HR input data dn in' $file '/HR_DATA_dn/ directroy'<br />
+&nbsp; set filename = $file'_HR_dn'<br />
+&nbsp; cp $file.klist ./HR_DATA_dn/wien_HR.klist<br />
+&nbsp; cp $file.output1dn ./HR_DATA_dn/wien_HR.output1dn<br />
+&nbsp; cp $file.struct ./HR_DATA_dn/wien_HR.struct<br />
+&nbsp; cp $file.output2dn ./HR_DATA_dn/wien_HR.output2dn<br />
+&nbsp; cp $file.outputkgen ./HR_DATA_dn/wien_HR.outputkgen<br />
+&nbsp; cp $file.dos1dn ./HR_DATA_dn/wien_HR.dos1dn<br />
+&nbsp; echo '&nbsp; '<br />
+#<br />
+------------------------------------------------------------------------------<br />
+<br />
+□ DOS用 csh ファイル<br />
+------------------------------------------------------------------------------<br />
+#! /bin/csh -f<br />
+<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+#&nbsp; echo $file<br />
+<br />
+&nbsp; if !( -d DOS_DATA ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir DOS_DATA<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_DOS_date'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put dos data' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+&nbsp; date &gt;&gt; ./DOS_DATA/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./DOS_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put dos input data in' $file '/DOS_DATA/ directroy'<br />
+&nbsp; set filename = $file'_DOS'<br />
+#&nbsp; cp $file.dos1 ./DOS_DATA/$filename.dos1<br />
+#&nbsp; cp $file.dos1ev ./DOS_DATA/$filename.dos1ev<br />
+&nbsp; cp $file.outputt ./DOS_DATA/$filename.outputt<br />
+&nbsp; cp $file.int ./DOS_DATA/$filename.int<br />
+&nbsp; cp $file.struct ./DOS_DATA/$filename.struct<br />
+&nbsp; cp $file.dos1up ./DOS_DATA/$filename.dos1up<br />
+&nbsp; cp $file.dos1evup ./DOS_DATA/$filename.dos1evup<br />
+&nbsp; cp $file.outputtup ./DOS_DATA/$filename.outputtup<br />
+&nbsp; cp $file.dos1dn ./DOS_DATA/$filename.dos1dn<br />
+&nbsp; cp $file.dos1evdn ./DOS_DATA/$filename.dos1evdn<br />
+&nbsp; cp $file.outputtdn ./DOS_DATA/$filename.outputtdn<br />
+&nbsp; if ( -e $file.dos2up ) then<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos2 ./DOS_DATA/$filename.dos2<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos2ev ./DOS_DATA/$filename.dos2ev<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos2up ./DOS_DATA/$filename.dos2up<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos2evup ./DOS_DATA/$filename.dos2evup<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos2dn ./DOS_DATA/$filename.dos2dn<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos2evdn ./DOS_DATA/$filename.dos2evdn<br />
+&nbsp; endif<br />
+&nbsp; if ( -e $file.dos3up ) then<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos3 ./DOS_DATA/$filename.dos3<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos3ev ./DOS_DATA/$filename.dos3ev<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos3up ./DOS_DATA/$filename.dos3up<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos3evup ./DOS_DATA/$filename.dos3evup<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos3dn ./DOS_DATA/$filename.dos3dn<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos3evdn ./DOS_DATA/$filename.dos3evdn<br />
+&nbsp; endif<br />
+&nbsp; if ( -e $file.dos4up ) then<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos4 ./DOS_DATA/$filename.dos4<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos4ev ./DOS_DATA/$filename.dos4ev<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos4up ./DOS_DATA/$filename.dos4up<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos4evup ./DOS_DATA/$filename.dos4evup<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos4dn ./DOS_DATA/$filename.dos4dn<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos4evdn ./DOS_DATA/$filename.dos4evdn<br />
+&nbsp; endif<br />
+&nbsp; if ( -e $file.dos5up ) then<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos5 ./DOS_DATA/$filename.dos5<br />
+#&nbsp;&nbsp;&nbsp; cp $file.dos5ev ./DOS_DATA/$filename.dos5ev<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos5up ./DOS_DATA/$filename.dos5up<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos5evup ./DOS_DATA/$filename.dos5evup<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos5dn ./DOS_DATA/$filename.dos5dn<br />
+&nbsp;&nbsp;&nbsp; cp $file.dos5evdn ./DOS_DATA/$filename.dos5evdn<br />
+&nbsp; endif<br />
+&nbsp; echo '&nbsp; '<br />
+#<br />
+------------------------------------------------------------------------------<br />
+<br />
+□ バンド分散用 csh ファイル<br />
+------------------------------------------------------------------------------<br />
+#! /bin/csh -f<br />
+<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = `pwd`<br />
+&nbsp; set file&nbsp;&nbsp;&nbsp; = $file:t<br />
+#&nbsp; echo $file<br />
+<br />
+&nbsp; if !( -d FF_DATA ) then<br />
+&nbsp;&nbsp;&nbsp; mkdir FF_DATA<br />
+&nbsp; endif<br />
+&nbsp; set filename = $file'_FF_date'<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./FF_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp;&nbsp;&nbsp; put ff data' &gt;&gt; ./FF_DATA/$filename.txt<br />
+&nbsp; date &gt;&gt; ./FF_DATA/$filename.txt<br />
+&nbsp; echo '---------------------------------------------' &gt;&gt; ./FF_DATA/$filename.txt<br />
+&nbsp; echo '&nbsp; '<br />
+&nbsp; echo 'put FF input data in' $file '/FF_DATA/ directroy'<br />
+&nbsp; set filename = $file'_FF'<br />
+&nbsp; cp $file.outputt ./FF_DATA/wien_FF.outputt<br />
+&nbsp; cp $file.output1 ./FF_DATA/wien_FF.output1<br />
+&nbsp; cp $file.output2 ./FF_DATA/wien_FF.output2<br />
+&nbsp; cp $file.outputtup ./FF_DATA/wien_FF.outputtup<br />
+&nbsp; cp $file.output1up ./FF_DATA/wien_FF.output1up<br />
+&nbsp; cp $file.output2up ./FF_DATA/wien_FF.output2up<br />
+&nbsp; cp $file.outputtdn ./FF_DATA/wien_FF.outputtdn<br />
+&nbsp; cp $file.output1dn ./FF_DATA/wien_FF.output1dn<br />
+&nbsp; cp $file.output2dn ./FF_DATA/wien_FF.output2dn<br />
+&nbsp; cp $file.struct ./FF_DATA/wien_FF.struct<br />
+&nbsp; cp $file.dos1 ./FF_DATA/wien_FF.dos1<br />
+&nbsp; cp $file.dos1up ./FF_DATA/wien_FF.dos1up<br />
+&nbsp; cp $file.dos1dn ./FF_DATA/wien_FF.dos1dn<br />
+&nbsp; cp $file.klist_band ./FF_DATA/wien_FF.klist_band<br />
+&nbsp; cp $file.outputkgen ./FF_DATA/wien_FF.outputkgen<br />
+&nbsp; mkdir spaghetti_DATA<br />
+&nbsp; cp $file.spaghetti_ps ./spaghetti_DATA/$file.spaghetti_ps<br />
+&nbsp; cp $file.spaghetti_ene ./spaghetti_DATA/$file.spaghetti_ene<br />
+&nbsp; cp $file.spaghettiup_ps ./spaghetti_DATA/$file.spaghettiup_ps<br />
+&nbsp; cp $file.spaghettiup_ene ./spaghetti_DATA/$file.spaghettiup_ene<br />
+&nbsp; cp $file.spaghettidn_ps ./spaghetti_DATA/$file.spaghettidn_ps<br />
+&nbsp; cp $file.spaghettidn_ene ./spaghetti_DATA/$file.spaghettidn_ene<br />
+&nbsp; echo '&nbsp; '<br />
+endif<br />
+#<br />
+------------------------------------------------------------------------------<br />
+■ 以下は調査中の引数<br />
+------------------------------------------------------------------------------<br />
+lapw1/wfpnt.F の引数<br />
+NE：示する固有値の数<br />
+NV：基底関数の数<br />
+KZZ(1,J)、KZZ(2,J)、KZZ(3,J)：それぞれ基底関数のh,k,l<br />
+ZLOCAL(J,K)：基底関数の係数<br />
+Z(J,K)：基底関数の係数<br />
+DBLE（）：組み込み関数で、倍精度の実数へ変換。複素数の場合、実数部のみ表示<br />
+IMAG：複素数(0.0D+0,1.0D+0)<br />
+------------------------------------------------------------------------------<br />
+lapwso/kpout.f の引数（parameter）<br />
+SS(1), SS(2), SS(3) ： それぞれあるk点でのh, k, l<br />
+BNAME：バンドの番号及び名称<br />
+kt(1), kt(2), kt(3) ： それぞれある平面波のh, k, l<br />
+nv：number of plane wave.<br />
+nlo：number of local orbitals. totalである。nlo = nlon + nlov の関係がある。<br />
+nlon：number of relativistic local orbitals<br />
+nlov：number of original local orbitals<br />
+nnrlo：内殻の局在軌道の数？<br />
+ne(1)+ne(2)+2*nnrlo：Matrix Size であり、APW+loの数<br />
+WEIGHT：あるk点での重み<br />
+isi：スピンのUPとDOWN<br />
+is：スピンのUPとDOWN、1がup, 2がdown<br />
+neig：表示する固有値の数<br />
+en(j)：固有値<br />
+vect(n,j,isi)：vect（？、固有値、スピン）. SOの影響を含んだCk. （kはベクトル）<br />
+------------------------------------------------------------------------------<br />
+Dr. Pavel Novak に聞いてみた。<br />
+nv(is)&nbsp;&nbsp;&nbsp; is total number of LAPW1 basis functions for spin is<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; i.e. this does not include relativistic local orbitals<br />
+ne(is)&nbsp;&nbsp;&nbsp; is number of LAPW1 energies for spin is<br />
+nlo(ity)&nbsp; is number of local orbitals for atom of type ity<br />
+nlov(ity) is index of 1st lo of atom ity<br />
+nnlo&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; is total number of local orbitals<br />
+nrlo(ity)&nbsp; is number of relativistic local orbitals for atom of type ity<br />
+nnrlo&nbsp;&nbsp;&nbsp;&nbsp; is total number of relativistic local orbitals<br />
+nv(is) + nnrlo is total number of basis functions for spin is<br />
+ne(1)+ne(2)+2*nnrlo is dimension of matrix diagonalyzed in LAPWSO<br />
+------------------------------------------------------------------------------<br />
+real()：実数部を抽出<br />
+aimage()：虚数部を抽出<br />
+------------------------------------------------------------------------------<br />
+TH-HR-NFE-FF (SOC + LDA+U)<br />
+case.in1, case.in1_so, case.in1_st<br />
+case.inso<br />
+1.5 Ry -&gt; 3.5 Ry and inclease nband<br />
+case.inso: WFFIL (not use WFPRI, occuring uplapw2.def&nbsp;error)<br />
+------------------------------------------------------------------------------</p>

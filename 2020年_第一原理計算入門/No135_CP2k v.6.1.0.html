@@ -1,0 +1,202 @@
+CP2k-6.1.0 (https://www.cp2k.org/)<br />
+------------------------------------------------------------------------------<br />
+■ CP2k-6.1.0 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+□ Install (use install_cp2k_toolchain.sh and OpenBLAS)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/cp2k/cp2k/archive/v6.1.0.tar.gz<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gfortran<br />
+1. tar zxvf v6.1.0.tar.gz<br />
+2. cd cp2k-6.1.0<br />
+3. cd tools/toolchain/<br />
+4. ./install_cp2k_toolchain.sh --with-binutils=install --with-make=system --with-libxsmm=install --with-libxc=install --with-fftw=install --with-reflapack=no --with-openblas=install --with-mkl=no --with-scalapack=install --with-openmpi=install --with-mpich=no --enable-omp=no<br />
+5. cp ~/cp2k-6.1.0/tools/toolchain/install/arch/* ~/cp2k-6.1.0/arch/<br />
+&nbsp; (you can see local.popt, etc in above address (e.g., ~/cp2k-6.1.0/arch/local.popt))<br />
+6. source $HOME/cp2k-6.1.0/tools/toolchain/install/setup<br />
+7. cd ~/cp2k-6.1.0/makefiles/<br />
+8. make -j 4 ARCH=local VERSION=popt<br />
+(~/cp2k-6.1.0/exe/local/cp2k.popt)<br />
+<br />
+□ test<br />
+1. cd ~/cp2k-6.1.0/makefiles/<br />
+2. make -j ARCH=local VERSION=popt test<br />
+※ In my case, step between 29 and 30 was stopped.<br />
+<br />
+□ recompile<br />
+1. cd ~/cp2k-6.1.0/makefiles/<br />
+2. make ARCH=local VERSION=popt clean<br />
+<br />
+□ install_cp2k_toolchain.sh (information)<br />
+1. cd ~/cp2k-6.1.0/tools/toolchain/<br />
+2. ./install_cp2k_toolchain.sh --help<br />
+<br />
+□ run command<br />
+&nbsp; mpirun -np 4 ~/cp2k-6.1.0/exe/local/cp2k.popt -i *.inp | tee *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; mpirun -np 4 ~/cp2k-6.1.0/exe/local/cp2k.popt -i *.inp -o *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; ~/cp2k-6.1.0/exe/local/cp2k.popt -i *.inp | tee *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; ~/cp2k-6.1.0/exe/local/cp2k.popt -i *.inp -o *.out<br />
+<br />
+※ &quot;make clean&quot;も&quot;make distclean&quot;も動作していないように感じる。<br />
+------------------------------------------------------------------------------<br />
+□ Install (easy method)<br />
+1. sudo apt install cp2k<br />
+<br />
+□ Test<br />
+1. tar zxvf v6.1.0.tar.gz<br />
+2. cd cp2k-6.1.0/tests<br />
+3. cd DFTB/regtest-nonscc<br />
+4. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 /usr/bin/cp2k.popt -i MoS.inp | tee MoS.out<br />
+<br />
+□ run command<br />
+&nbsp; mpirun -np 4 /usr/bin/cp2k.popt -i *.inp | tee *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; mpirun -np 4 /usr/bin/cp2k.popt -i *.inp -o *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; /usr/bin/cp2k.popt -i *.inp | tee *.out<br />
+&nbsp; &nbsp; or<br />
+&nbsp; /usr/bin/cp2k.popt -i *.inp -o *.out<br />
+<br />
+※ Ab Initio Molecular Dynamics<br />
+&nbsp; https://packages.ubuntu.com/bionic/cp2k<br />
+------------------------------------------------------------------------------<br />
+□ Exercises<br />
+(https://www.cp2k.org/exercises:2018_ethz_mmm:index)<br />
+------------------------------------------------------------------------------<br />
+□ tools<br />
+・cp2k-input-tools<br />
+・Tools for simplifying your life with CP2K (https://www.cp2k.org/tools)<br />
+&nbsp; Basis sets and potentials<br />
+&nbsp; &nbsp; Goedecker-Teter-Hutter (GTH) pseudopotential parameter sets<br />
+&nbsp; &nbsp; Gaussian basis sets generator for Quickstep<br />
+------------------------------------------------------------------------------<br />
+□ GUI<br />
+・Avogadro2&nbsp;<br />
+&nbsp; https://www.cp2k.org/tools:avogadro2<br />
+・Ascalaph Designer (http://www.biomolecular-modeling.com/Ascalaph/)<br />
+&nbsp; (https://sourceforge.net/projects/asc-designer/)<br />
+------------------------------------------------------------------------------<br />
+□ Manaul<br />
+&nbsp;(https://manual.cp2k.org/#gsc.tab=0)<br />
+------------------------------------------------------------------------------<br />
+□ 3rd party software address<br />
+&nbsp;(https://www.cp2k.org/static/downloads/)<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] CP2K 6.1.0 for LX<br />
+&nbsp; https://ccportal.ims.ac.jp/node/2246<br />
+[2] CP2K インストール<br />
+&nbsp; https://blog.goo.ne.jp/jn1inl/e/1b831049f6588b82691b9a6ece95bf01<br />
+&nbsp; https://blog.goo.ne.jp/jn1inl/e/f6734182c180dd6f026da0c015f84152<br />
+&nbsp; ~/cp2k-6.1.0/arch/ に作られる local.sopt を編集すれば良いようだ。<br />
+[3] Installation of CP2K-4.1<br />
+&nbsp; https://sites.ualberta.ca/~chipuije/cp2k-install.html<br />
+[4] CP2K: INTRODUCTION AND OVERVIE<br />
+&nbsp; CP2K Summer School, 23-26 Aug 2016<br />
+&nbsp; https://www.cp2k.org/_media/events:2016_summer_school:cp2k_intro.pdf<br />
+[5] Tutorial &amp; User's Guide<br />
+&nbsp; https://brehm-research.de/files/spec_tutorial_2018.pdf<br />
+------------------------------------------------------------------------------<br />
+□ Install (use install_cp2k_toolchain.sh and OpenBLAS + Scalapack) (soso)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/cp2k/cp2k/archive/v6.1.0.tar.gz<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libc6-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi2.0<br />
+&nbsp; sudo cp /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so /usr/lib/x86_64-linux-gnu/libscalapack.so<br />
+1. tar zxvf v6.1.0.tar.gz<br />
+2. cd cp2k-6.1.0<br />
+3. cd $HOME/cp2k-6.1.0/tools/toolchain/<br />
+4. ./install_cp2k_toolchain.sh --with-gcc=system --with-binutils=install --with-make=system --with-libxsmm=install --with-libxc=install --with-fftw=system --with-reflapack=no --with-openblas=system --with-mkl=no --with-scalapack=system --with-openmpi=system --with-mpich=no --enable-omp=no<br />
+5. cp ~/cp2k-6.1.0/tools/toolchain/install/arch/* ~/cp2k-6.1.0/arch/<br />
+6. source $HOME/cp2k-6.1.0/tools/toolchain/install/setup<br />
+7. cd ~/cp2k-6.1.0/makefiles/<br />
+8. make -j 4 ARCH=local VERSION=popt<br />
+<br />
+□ test<br />
+1. cd ~/cp2k-6.1.0/makefiles/<br />
+2. make -j ARCH=local VERSION=popt test<br />
+------------------------------------------------------------------------------<br />
+□ Install (use install_cp2k_toolchain.sh and MKL) (failed)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+・Source code (tar.gz)&nbsp;<br />
+0. wget https://github.com/cp2k/cp2k/archive/v6.1.0.tar.gz<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install libc6-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+1. tar zxvf v6.1.0.tar.gz<br />
+2. cd cp2k-6.1.0<br />
+3. cd tools/toolchain/<br />
+4. ./install_cp2k_toolchain.sh --with-gcc=system --with-gcc=system --with-binutils=install --with-make=system --with-libxsmm=install --with-libxc=install --with-fftw=system --with-reflapack=no --with-openblas=no --with-mkl=system --with-scalapack=system --with-openmpi=system --with-mpich=no --enable-omp=no<br />
+5. cp ~/cp2k-6.1.0/tools/toolchain/install/arch/* ~/cp2k-6.1.0/arch/<br />
+6. source $HOME/cp2k-6.1.0/tools/toolchain/install/setup<br />
+7. cd ~/cp2k-6.1.0/makefiles/<br />
+8. make -j 4 ARCH=local VERSION=popt<br />
+(~/cp2k-6.1.0/exe/local/cp2k.popt)<br />
+<br />
+□ test<br />
+1. cd ~/cp2k-6.1.0/makefiles/<br />
+2. make -j ARCH=local VERSION=popt test<br />
+<br />
+※ Intel Math Kernel Library Link Line Advisor<br />
+&nbsp; https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/<br />
+※ https://pc-chem.info/blog/478 (OpenMPIのエラー対策)<br />
+※ 考えられる可能性として、gfortranでMKLを使う場合にはコンパイルオプションが違いすぎることが要因の一つとして挙げられる。 &nbsp;~/cp2k-6.1.0/arch の local.sopt を調べたが、LIBSのMKLのリンクの設定に関しては誤りがないように見える。<br />
+------------------------------------------------------------------------------<br />
+□ Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+◇ registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+◇ unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+◇ envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+#<br />
+# CP2k need libm (-lm) link<br />
+#export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/usr/lib/x86_64-linux-gnu<br />
+-----<br />
+2. bash<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

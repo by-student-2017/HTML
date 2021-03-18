@@ -1,0 +1,803 @@
+XRR software<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1-7]<br />
+<br />
+・XOP(IMD)<br />
+&nbsp; http://www.esrf.eu/Instrumentation/software/data-analysis/xop2.4<br />
+・motofit (+Igor)<br />
+&nbsp; http://motofit.sourceforge.net/wiki/index.php/Main_Page<br />
+&nbsp; https://sourceforge.net/projects/motofit/<br />
+・StochFit<br />
+&nbsp; http://stochfit.sourceforge.net/<br />
+&nbsp; https://sourceforge.net/projects/stochfit/<br />
+・RemagX<br />
+&nbsp; (magnetic contributions)<br />
+&nbsp; http://remagx.org<br />
+・DYNA<br />
+&nbsp; http://neel.cnrs.fr/spip.php?rubrique1008&amp;lang=en<br />
+・AuroreNR<br />
+&nbsp; https://sourceforge.net/projects/aurorenr/<br />
+・xraylabtool (+Matlab)<br />
+&nbsp; http://sinhagroup.ucsd.edu/files/xraylabtool.zip<br />
+・REFREG (+Matlab)<br />
+&nbsp; (regularization methods)<br />
+・GenX<br />
+&nbsp; http://genx.sourceforge.net/<br />
+&nbsp; https://sourceforge.net/projects/genx/<br />
+・NRFit (+Igor)<br />
+&nbsp; https://sourceforge.net/projects/nrfitproject/<br />
+・SimulReflec<br />
+&nbsp; http://www-llb.cea.fr/prism/programs/simulreflec/simulreflec.html<br />
+&nbsp; https://sourceforge.net/projects/simulreflec/<br />
+・IMD (+IDL)<br />
+&nbsp; http://www.rxollc.com/idl/<br />
+<br />
+[1] What is the best fitting software for XRR measurements ?<br />
+&nbsp; https://www.researchgate.net/post/What_is_the_best_fitting_software_for_XRR_measurements<br />
+[2] Software<br />
+&nbsp; http://gisaxs.com/index.php/Software<br />
+[3] Refectivity Worksho (tutorial)<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/tutorial.pdf<br />
+&nbsp; ww.afc.asso.fr (XRR data)<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+[4] X-Ray Analysis<br />
+&nbsp; https://sites.google.com/site/diehard2/x-rayanalysis<br />
+[5] Neutron Reflection and Neutron Reflectometers<br />
+&nbsp; http://www.reflectometry.net/reflect.htm<br />
+[6] Software developed and distributed at ESRF<br />
+&nbsp; http://www.esrf.eu/Instrumentation/software/data-analysis/OurSoftware<br />
+[7] Reflectometrie - informations supplementaires&nbsp;<br />
+&nbsp; https://www.afc.asso.fr/reflectometrie-informations-supplementaires<br />
+------------------------------------------------------------------------------<br />
+■ Windows 10 (64 bit)<br />
+・success (open GUI window)<br />
+&nbsp; StochFit<br />
+&nbsp; XOP<br />
+&nbsp; motofit (+Igor)<br />
+&nbsp; RemagX<br />
+&nbsp; DYNA<br />
+&nbsp; AuroreNR<br />
+------------------------------------------------------------------------------<br />
+■ XOP(+IMD) (Windows 10 (64 bit))<br />
+(http://www.esrf.eu/home/UsersAndScience/support-and-infrastructure/software/data-analysis/OurSoftware/xop2.4/download.html)<br />
+<br />
+□ download and install<br />
+1. https://beam.aps.anl.gov/apps/xop/<br />
+2. Start a New Application<br />
+&nbsp; Apply &gt; Submit Application &gt; Yes &gt; OK<br />
+&nbsp; メールの返事が来るまで待つ<br />
+&nbsp; [Your XOP application was approved]というタイトルで4から5日後にメールが来た<br />
+3. Anthorized User Login<br />
+&nbsp; Email Adress:<br />
+&nbsp; Password:<br />
+&nbsp; Login<br />
+4. xop24_Windows_20150309.zip [download]<br />
+5. xop24_Windows_20150309.zip を解凍<br />
+6. xop2.4 を C:\xop2.4 に置く<br />
+<br />
+□ download and install (IMD)<br />
+1. http://www.rxollc.com/idl/<br />
+&nbsp; IMD ? Modeling and Analysis of Multilayer Films<br />
+&nbsp; &nbsp; Download (imd_5.04.tar.gz)<br />
+2. imd_5.04.tar.gz を解凍<br />
+3. imd を xop24_Windows_20150309\xop2.4\extensions にコピー&amp;ペースト<br />
+4. imd4xop.bat を C:\xop2.4 にコピー&amp;ペースト<br />
+&nbsp; (※ imd\extras\imd4xop.bat)<br />
+5. notepad C:\xop2.4\imd4xop.bat<br />
+-----before<br />
+c:\xop2.3\xop.bat<br />
+-----<br />
+-----after<br />
+c:\xop2.4\xop.bat<br />
+-----<br />
+<br />
+□ Tutorial data [2]<br />
+(https://www.afc.asso.fr/images/reflecto2018/datasets.zpp)<br />
+1. datasets.zpp を解凍<br />
+<br />
+□ Tutorial [3]<br />
+1. C:\xop2.4\imd4xop.bat<br />
+2. OK<br />
+3. [check] Reflecance, Phase, Psi, Delta<br />
+4. Independent Variables<br />
+&nbsp; (double-click &quot;Grazing Incidence Angle, Theta [0.000 deg]&quot;<br />
+&nbsp; &gt; Units &gt; deg, Grazing &gt; Done<br />
+&nbsp; (double-click &quot;Wavelength, Lambda [1.000]&quot;<br />
+&nbsp; &gt; 1 Value: 1.5405 &gt; Done<br />
+5. File &gt; Save... &gt; master.imd (C:\xop2.4\extensions\imd\master.imd)<br />
+&nbsp; (Next time, 3. File &gt; Open &gt; master.imd)<br />
+6. File &gt; Change Working Directory ...<br />
+&nbsp; (e.g., C:\xop2.4\extensions\imd\examples)<br />
+7. File &gt; Import Mearsured Data<br />
+8. IDL command to read data: erom,x_m,y_m<br />
+9. Read Data File &gt; bic0.txt (in datasets) &gt; Open &gt; Done<br />
+10. [check] Log (on Y_m)<br />
+11. - (on IMD main window)<br />
+&nbsp; Browse... &gt; SiO2_llnl_cxro.nk (in C:\xop2.4\extensions\imd\nk) &gt; Open<br />
+&nbsp; Thicknes: 1000<br />
+&nbsp; roughness: 5<br />
+&nbsp; Done<br />
+&nbsp; ----- or<br />
+&nbsp; [check] Composition and Density<br />
+12. (double-click) Grazing Incidence Angle, Theta (on IMD main window)<br />
+&nbsp; 1000 values, form 0.000 to 1.998<br />
+&nbsp; Instrumental Angular Resolution, delta(Theta) 0.008 deg<br />
+&nbsp; Done<br />
+13. Calculate &gt; Specular Optical Functions/Fields<br />
+14. &darr; &gt; &uarr; (on the bottom left)<br />
+&nbsp; [check] Log (on Y line)<br />
+15. (close) x (on IMDXPLOT) &gt; No<br />
+-----(Independ Variables)(manual)<br />
+16. (double-click) [v] (on the bottom left)(Add Independ Variables)<br />
+&nbsp; &gt; SiO2 Layer (layer1) Thickness, z &gt; OK<br />
+&nbsp; &gt; 100 vales, from 900 to 1100 &gt; Done<br />
+17. Calculate &gt; Specular Optical Functions/Fields<br />
+18. [uncheck] Continuous Variables (z [SiO(1)] line)<br />
+&nbsp; (you can slide &lt; □ &gt;)<br />
+&nbsp; [check] Log (on Y line) (on Axes)<br />
+19. (close) x (on IMDXPLOT) &gt; No<br />
+20. (double-click) [v] (on the bottom left)(Add Independ Variables)<br />
+&nbsp; &gt; SiO2 Layer (layer1) Refractive Index, n &gt; OK<br />
+&nbsp; &gt; 8 vales, from 100.0000 and 100.0010 &nbsp;&gt; Done<br />
+21. Calculate &gt; Specular Optical Functions/Fields<br />
+&nbsp; (slide &lt; □ &gt;)<br />
+&nbsp; [check] Log (on Y line) (on Axes)<br />
+-----(Fitting and Optimization) (this method is very difficult)<br />
+・Fitting<br />
+16. (double-click) [v] (on the bottom left)(Add Fit Parameter)<br />
+&nbsp; &gt; SiO2 Layer (layer1) Thickness, z &gt; OK<br />
+&nbsp; &gt; Initial value:] 1140 &gt; Done<br />
+17. (double-click) [v] (on the bottom left)(Add Fit Parameter)<br />
+&nbsp; &gt; SiO2 Layer (layer1) Refractive Index, n &gt; OK<br />
+&nbsp; &gt; Initial value: 0.999991 &nbsp;&gt; Done<br />
+18. Settings...<br />
+&nbsp; Fitting Algorithm: Chi^2 Minimization - Levenberg-Marquardt<br />
+&nbsp; [check] Equal (Weight=1)<br />
+&nbsp; Done<br />
+・Optimization<br />
+19.(double-click) [v] (on the bottom left)(Add Optimization Parameter)<br />
+&nbsp; &gt; Reflectin Sacle Factor &gt; OK<br />
+&nbsp; Initial value: 1.00000 &gt; Done<br />
+20. Settings...<br />
+&nbsp; Optimization Algorithm: Chi^2 Minimization - Levenberg-Marquardt<br />
+&nbsp; [check] Equal (Weight=1)<br />
+&nbsp; Done<br />
+21. Calculate &gt; Fit to measured Data<br />
+<br />
+□ download and install (TOPO)<br />
+1. http://www.rxollc.com/idl/<br />
+&nbsp; TOPO ? Surface Topography Analysis<br />
+&nbsp; &nbsp; Download (topo_2.2.tar.gz)&nbsp;<br />
+2. topo_2.2.tar.gz を解凍<br />
+3. topo を xop24_Windows_20150309\xop2.4\extensions にコピー&amp;ペースト<br />
+4. topo4xop.bat を C:\xop2.4 にコピー&amp;ペースト<br />
+&nbsp; (※ topo\extras\topo4xop.bat)<br />
+5. notepad C:\xop2.4\imd4xop.bat<br />
+-----before<br />
+c:\xop2.3\xop.bat<br />
+-----<br />
+-----after<br />
+c:\xop2.4\xop.bat<br />
+-----<br />
+<br />
+[1] http://www.rxollc.com/idl/old/README.imd<br />
+※ I recommend &quot;Irvine 1.3.0&quot; for IMD.<br />
+※ ダウンロードが上手くいかなかったため、Irvineを用いてダウンロードした<br />
+※ XAIDはXAFS解析用のコード<br />
+[2] www.afc.asso.fr<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+[3] Re?ectivity Workshop 2 IMD<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/tutorial.pdf<br />
+[4] R?flectom?trie - informations suppl?mentaires&nbsp;<br />
+&nbsp; (click &quot;ici.&quot;)<br />
+&nbsp; https://www.afc.asso.fr/reflectometrie-informations-supplementaires<br />
+&nbsp; XOP2.3: http://ftp.esrf.fr/pub/scisoft/xop2.3/<br />
+&nbsp; IMD5: http://rxollc.com/idl/index.html<br />
+&nbsp; XRR data: https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+<br />
+・&quot;Instrumental Angular Resolution, delta(Theta)&quot;: This is basically the width of the incident beam on the sample. It is used to convolve (or &rsquo;smear&rsquo; ) the calculated data with a gaussian function in order to have a more realistic calculation close to the experimental curve.<br />
+・From the formula that relates the mass density to the optical index, we know that a higher density gives a lower refractive index.&nbsp;<br />
+-----------------------------------------------------------------------------<br />
+■ XOP(+IMD) (Ubuntu 18.04 LTS (64 bit))<br />
+(https://www.physics.hu-berlin.de/en/sem/software/qstem-download)<br />
+<br />
+□ download and install<br />
+1. https://beam.aps.anl.gov/apps/xop/<br />
+2. Start a New Application<br />
+&nbsp; Apply &gt; Submit Application &gt; Yes &gt; OK<br />
+&nbsp; メールの返事が来るまで待つ<br />
+&nbsp; [Your XOP application was approved]というタイトルで4から5日後にメールが来た<br />
+3. Anthorized User Login<br />
+&nbsp; Email Adress:<br />
+&nbsp; Password:<br />
+&nbsp; Login<br />
+4. xop2.4_Linux_20150130.tar.gz [download]<br />
+5. tar zxvf xop2.4_Linux_20150130.tar.gz<br />
+6. cd xop2.4<br />
+7. mkdir XOP_WD<br />
+8. gedit xop<br />
+-----before<br />
+&nbsp; XOP_HOME=/home/oxygen/DEJUS/esrf/nov_2014/xop2.4; export XOP_HOME&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;# Linux, Sun OS<br />
+-----<br />
+-----after<br />
+&nbsp; XOP_HOME=$HOME/xop2.4; export XOP_HOME&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;# Linux, Sun OS<br />
+-----<br />
+9. $HOME/xop2.4/xop<br />
+<br />
+□ download and install (IMD)<br />
+1. http://www.rxollc.com/idl/<br />
+&nbsp; IMD ? Modeling and Analysis of Multilayer Films<br />
+&nbsp; &nbsp; Download (imd_5.04.tar.gz)<br />
+2. gunzip imd_5.04.tar.gz<br />
+3. tar xvf imd_5.04.tar<br />
+4. mv imd xop2.4/extensions/imd<br />
+5. cd xop2.4/extensions/imd<br />
+6. cp imd4xop.sav ../<br />
+7. $HOME/xop2.4/xop imd4xop<br />
+8. OK<br />
+<br />
+□ download and install (TOPO)<br />
+1. http://www.rxollc.com/idl/<br />
+&nbsp; TOPO ? Surface Topography Analysis<br />
+&nbsp; &nbsp; Download (topo_2.2.tar.gz)&nbsp;<br />
+2. gunzip topo_2.2.tar.gz<br />
+3. tar xvf topo_2.2.tar<br />
+4. mv topo xop2.4/extensions/topo<br />
+5. cd xop2.4/extensions/topo<br />
+6. cp topo4xop.sav ../<br />
+7. $HOME/xop2.4/xop topo4xop<br />
+8. OK<br />
+------------------------------------------------------------------------------<br />
+■ motofit (+Igor) (Windows 10 (64 bit))<br />
+(https://sourceforge.net/projects/motofit/)<br />
+<br />
+□ Igor (demo)<br />
+(https://www.wavemetrics.com/Updates/IGORProJ/LatestVersion.html)(Japanese)<br />
+(https://www.wavemetrics.com/order/order_igordownloads.htm) (english)<br />
+・Downloads for Windows (64 and 32-bit):<br />
+1. setupIgor8.exe&nbsp;<br />
+<br />
+□ Install (easy method)<br />
+1. Download<br />
+2. Motofit_for_Igor8.zip<br />
+3. install_win.bat<br />
+<br />
+□ Install (easy method)<br />
+1. Download<br />
+2. Motofit_for_Igor8.zip<br />
+-----<br />
+2.1. Igor<br />
+2.2. print SpecialDirPath(&quot;Igor Pro User Files&quot;, 0, 0, 0)<br />
+&nbsp; (check &quot;C:Users:&lt;username&gt;:Documents:WaveMetrics:Igor Pro 8 User Files:&quot;)<br />
+-----<br />
+3. Motofit_for_Igor8\dist\winXOP\Igor Extensions (64-bit) の中身を<br />
+&nbsp; C:\Users\username\Documents\WaveMetrics\Igor Pro 8 User Files\Igor Extensions (64-bit) へコピー&amp;ペースト<br />
+4. Motofit_for_Igor8\dist\User Procedures の中身を<br />
+&nbsp; C:\Users\inukai\Documents\WaveMetrics\Igor Pro 8 User Files\User Procedures へコピー&amp;ペースト<br />
+5. Motofit_for_Igor8\dist\Igor Procedures\MOTOFIT_loadpackage.ipf を<br />
+&nbsp; C:\Users\username\Documents\WaveMetrics\Igor Pro 8 User Files\Igor Procedures へコピー&amp;ペースト0<br />
+6. Igor Pro (64-bit)<br />
+7. All [Yes] and [OK]<br />
+<br />
+□ Refconvert<br />
+(https://www.afc.asso.fr/images/reflecto2018/refconvert.xx)<br />
+1. refconvert.xx の名称を refconvert.exe に変える<br />
+2. refconvert.exe<br />
+&nbsp; （詳細情報 &gt; 実行)<br />
+<br />
+□ Tutorial data<br />
+(https://www.afc.asso.fr/images/reflecto2018/datasets.zpp)<br />
+1. datasets.zpp を解凍<br />
+※ 上手くいかない場合は、名前を datasets.zip にしてみる<br />
+<br />
+□ Refconvert (Tutorial [1])<br />
+1. refconvert.exe<br />
+2. [check] imd<br />
+&nbsp; [check] motofit<br />
+&nbsp; ([uncheck] others)<br />
+3. Choose file &gt; [All Files (*.*)] Ipvd1corrc2.txt (in datasets) &gt; Open &gt; OK<br />
+4. Quit<br />
+<br />
+□ Tutorial [1]<br />
+1. Igor Pro (64-bit)<br />
+2. Motofit &gt; Load Motofit package<br />
+3. Motofit &gt; Fit Reflectivity data<br />
+&nbsp; Enter number of data posint for model: 299<br />
+&nbsp; Enter minimum q-value(A^-1) for model: 0.005<br />
+&nbsp; Enter maximum q-value(A^-1) for model: 0.424<br />
+&nbsp; Enter %resolution(dq/q): 5<br />
+&nbsp; Which plot mode? [logR vs Q]<br />
+&nbsp; How many points do you want in the SLD plot: 299<br />
+&nbsp; Which mode? [complex SLD]<br />
+&nbsp; Continue<br />
+4. Motofit &gt; SLD calculator<br />
+5. Load data &gt; Ipvd1corrc2_motofit.dat (in datasets) &gt; Open<br />
+6. thickness estimation &gt; hight Q for FFT: 0.424 (+ Enter)<br />
+7. [check] use dQ wave?<br />
+8. Do fit &gt; No<br />
+&nbsp; &gt; 1-thick: lower_lim 50, upper_lim 150<br />
+&nbsp; &gt; Do Fit<br />
+9. Genetic &gt; Levenberg-Marquardt &gt; Do fit<br />
+11. Save fits &gt; datast: Ipvd1corrc2_motofit &gt; Continue<br />
+12. Save (on Model) &gt; coef_Ipvd1corrc2_motofit_R &gt; Continue<br />
+※ LM = Levenberg-Marquardt<br />
+<br />
+[1] Re?ectivity Workshop 2 IMD<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/tutorial.pdf<br />
+・The calculator calculates the scattering length density (SLD) as a function of the chemical formula and the mass density of the molecular volume. Note that both the Neutron and the X-ray SLD are calculated.&nbsp;<br />
+・Note that the SLD is to be given in 10^-6 Å^-2, and the absorption part just in Å^-2. Thickness and roughness are to be given in Å.<br />
+・&rsquo;Fronting&rsquo; represents the　SLD of the &rsquo;fronting&rsquo; medium, very often vacuum or air, but it can be also water or, in the case of neutrons, Si or a mixture of normal and deuterated water. You should specify here the real part (SLD) and the imaginary part (iSLD). &rsquo;Backing&rsquo;represents the SLD of the &rsquo;backing&rsquo; medium or substrate.<br />
+[2] www.afc.asso.fr<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+[3] R?flectom?trie - informations suppl?mentaires<br />
+&nbsp; (click &quot;ici.&quot;)<br />
+&nbsp; https://www.afc.asso.fr/reflectometrie-informations-supplementaires<br />
+&nbsp; XOP2.3: http://ftp.esrf.fr/pub/scisoft/xop2.3/<br />
+&nbsp; IMD5: http://rxollc.com/idl/index.html<br />
+&nbsp; Refconvert: https://www.afc.asso.fr/images/reflecto2018/refconvert.xx<br />
+&nbsp; XRR data: https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+<br />
+◇ reflectools<br />
+(https://www.afc.asso.fr/images/reflecto2018/reflectools.zpp)<br />
+1. reflectools.zpp を解凍<br />
+&nbsp; 上手くいかない場合は、名前を reflectools.zip にしてみる<br />
+2. dist\reflectools.exe<br />
+------------------------------------------------------------------------------<br />
+■ StochFit (Windows 10 (64 bit))&nbsp;<br />
+(https://sourceforge.net/projects/stochfit/)<br />
+<br />
+□ Install<br />
+1. Download<br />
+2. stochfit1.7.0Beta.exe<br />
+3. [Next&gt;] &gt; [I Agree] &gt; [Install]<br />
+4. StochFit 1.7.0<br />
+<br />
+□ Input file<br />
+&nbsp; Q R dR dQ<br />
+&nbsp; 誤差であるdRとdQは分散か標準偏差です。標準偏差がディフォルトの設定です。<br />
+&nbsp; 誤差(dRとdQ)が分散の場合は以下の手順を行ってください。<br />
+&nbsp; Options &gt; Miscellaneous Options &gt; Errors are in Variance<br />
+&nbsp; (test1refl.txtはstochfit1.7.0Beta.exeでは標準偏差なのでこの処理は必要ない。ちなみに、3行しかデータがないのでおそらくQ R dRのデータだけで動作するものと思われる)<br />
+<br />
+□ Tutorial<br />
+1. Load File &gt; test1refl.txt<br />
+2. Film Thickness: 25<br />
+&nbsp; Film SLD: 9.38<br />
+&nbsp; Sibphase SLD: 9.38<br />
+&nbsp; Number of Boxes in the Reflectivitiy: 40<br />
+&nbsp; &nbsp; (approximately 1.5 boxes per ? of film thickness)<br />
+&nbsp; &nbsp; Film Thickness * 1.5 = 25 * 1.5 = 37.5 = about 40 [1]<br />
+&nbsp; &nbsp; (Film Thickness * 2 - 3 = 25 * 2 - 3 = 50 - 75 [3])<br />
+2. Start<br />
+&nbsp; (wait for a long time)<br />
+&nbsp; グラフは5秒毎に更新される<br />
+&nbsp; ※ 見た目できれいにフィットできていればCancelで良いように思う。&quot;Fit Scre&quot;や&quot;Chi Square&quot;の値を参考にしている例もある[3]。<br />
+3. Modeling...<br />
+&nbsp; &quot;Rho Model&quot; window<br />
+4. Fit<br />
+&nbsp; (rhofit.dat)<br />
+5. Fit Details<br />
+&nbsp; a. [Normalized Rho]は副相(subphase)の散乱長密度に関係する表面の散乱長密度<br />
+&nbsp; &nbsp; (Normalized Rho is the scattering length density of the surface relative to the scattering length density of the subphase)<br />
+&nbsp; b. [Thickness]は層の厚みでÅ単位<br />
+&nbsp; &nbsp; (Old version: Length is the height of the layer in Angstroms)<br />
+&nbsp; c. [Roughness]は粗さでガウシアンガウス平滑化パラメータ<br />
+&nbsp; &nbsp; (Roughness is the Gaussian smoothing parameter)<br />
+6. Refrelctivity Fit<br />
+&nbsp; (classical re?ectivity ?t)<br />
+7. Fit Details<br />
+(8. Stochastic Fit)<br />
+※ モデル非依存のフィッティング（Model Independent Fit）を行ってから、&quot;Model Dependent Box Fit&quot;を作り、Roughnessを入れてガウシアンブロードニングしたものが&quot;Model Dependent Fit&quot;だと思われる。電子密度でもフィットを検討した後、再度反射率に戻ってフィットが上手くできていないところをフィットし直しているものと思われる。<br />
+※ &quot;Stochastic Fit&quot;は古典的な方法(&quot;Refrelctivity Fit&quot;)よりもはるかに時間がかかる可能性がある。非常に物理的ではない解が見つかる。例えば、非常に大きい粗さと、かなり小さい層厚との組み合わせ。<br />
+<br />
+□ output file<br />
+・settings.xml<br />
+&nbsp; すべての設定が含まれているファイル<br />
+・pop.dat<br />
+&nbsp; 1行目： 平滑化パラメータ、吸収パラメータ、アニーリングのための温度、反射率のための正規化定数、および確率論的トンネリングシミュレーテッドアニーリングのためのパラメータ<br />
+&nbsp; 2行目以降：各boxのバラメータ<br />
+・rf.da<br />
+&nbsp; 反射率（QとR)<br />
+&nbsp; (current model independent. No &quot;Rho Model&quot;)<br />
+・rho.dat<br />
+&nbsp; Zで正規化された電子密度プロファイル<br />
+&nbsp; (current model independent. No &quot;Rho Model&quot;)<br />
+<br />
+□ Tutorial (document)<br />
+[1] StochFit 1.7.0 &gt; Help &gt; Tutorial<br />
+[2] Tutorial (old version)<br />
+&nbsp; https://sites.google.com/site/diehard2/ModelIndependentFittingTutorial.doc<br />
+[3] Refectivity Worksho (tutorial)<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/tutorial.pdf<br />
+・We use the same data as before, i.e. Ipvd1corrc2.txt (amorphous carbon film on silicon) properly converted to STOCHFIT format using REFCONVERT. Start STOCHFIT and load the experimental data.<br />
+・The substrate SLD is called &rsquo;Subphase SLD&rsquo; in STOCHFIT language and the unitiesarein10^-6 A^-2.<br />
+・A fronting medium can be defned (&rsquo;SuperphaseSLD&rsquo;), e.g. water, but here it should be at 0.00, since air is the fronting medium. The absorption values are in A^-2, but using this fitting method, they can be neglected - possibly not if heavier elements are involved.&nbsp;<br />
+・The number of boxes should be set at 2-3 times the thickness of the layer.<br />
+・Alternatively you can try &rsquo;stochasting fitting&rsquo;. This is a stochastic random search within user specified limits and can take much more time than the classical fit,andyouwillendupwithacoupleofsolutionsthatarenotallveryphysical, e.g. a very large roughness combined with a rather small layer thickness.&nbsp;<br />
+・It should be noted that STOCHFIT is probably only a good choice for relatively thin layers, i.e. for total layers less than 20 or 30 nm thick. Calculations become very long for thicker layers.<br />
+------------------------------------------------------------------------------<br />
+■ RemagX (Windows 10 (64 bit))<br />
+(https://remagx.org/wiki/doku.php?id=disclaimer)<br />
+<br />
+□ Install<br />
+1. https://remagx.org/wiki/doku.php?id=disclaimer<br />
+&nbsp; Yes, I have understood<br />
+&nbsp; ReMagX 2.6 (current stable release)<br />
+2. ReMagX_2_6.zip を解凍<br />
+3. ReMagX.exe<br />
+<br />
+□ measurement data<br />
+&nbsp; qz(1/A units) &nbsp;R0(reflected intensity)<br />
+<br />
+□ Example data (for Tutorial 1 and 2)<br />
+1. Files for the tutorial (found in the documentation)<br />
+(http://www.remagx.org/Tutorial.zip)<br />
+2. Tutorial.zip を解凍<br />
+<br />
+□ Tutorial 1 (easy method)<br />
+(https://remagx.org/wiki/doku.php?id=documentation:tutorial)<br />
+1. ReMagX.exe<br />
+2. File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut1.all<br />
+3. Mode (Monochromatic) (on the bottom right side)<br />
+&nbsp; Reflectivitiy (qz-scan)<br />
+4. click table (above the graph)<br />
+&nbsp; scrollbar &lt; ■ &gt; (below the table, above the graph)<br />
+5. right-click on &delta;, &beta;, etc &gt; Get optical constants from database<br />
+6. File &gt; Import Dataset &gt; LCO_900eV.dat &gt; Open<br />
+&nbsp; dummy &gt;&gt;<br />
+&nbsp; Qz(needed) &gt;&gt;<br />
+&nbsp; R0 &gt;&gt;<br />
+&nbsp; OK<br />
+7. Sample<br />
+&nbsp; Dataset: LCO_900eV.dat<br />
+&nbsp; Energy: 900<br />
+8. Cnst. Energy settings (on Experiment)<br />
+&nbsp; Energy (eV): 900<br />
+8. &nbsp;Reflectivitiy (qz-scan)<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut2.all ---)<br />
+9. layers 1: thickness 150, sigma(=roughness) 3<br />
+&nbsp; bulk: sigma(=roughness) 3<br />
+10. right-click [thickness] (on the table) &gt; Fit (On/off)<br />
+11. Additional Fit Parameters (on Fit)<br />
+&nbsp; [check] Intens. scaling factor<br />
+12. Parameters (on Fit)<br />
+&nbsp; (you can see [thickness1, sigma1, sigma0, meas])<br />
+13. Fiting window (on Fit)<br />
+&nbsp; qz: 0.03 -- 0.451<br />
+14. Sample<br />
+&nbsp; Dataset: LCO_900eV.dat<br />
+&nbsp; (click) Fit<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut3.all ---)<br />
+15. Start/Stop (on Fit)<br />
+&nbsp; Start &gt; OK<br />
+16. Debug Window<br />
+&nbsp; Chi^2: 0.016 &lt; Stop<br />
+<br />
+□ Tutorial 1 (scratch)<br />
+1. ReMagX.exe<br />
+2. Remove Layer<br />
+3. air, thickness: --, db: vacuum, &delta;: 0, &beta;: 0, &sigma;: 0, &delta;m: 0, &beta;m: 0&nbsp;<br />
+&nbsp; layers: 1, thickness: 160, db: LCO, &delta;: 3e-4, &beta;: 3e-4, &sigma;: 1, &delta;m: 0, &beta;m: 0&nbsp;<br />
+&nbsp; bulk, thickness: --, db: STO, &delta;: 1e-4, &beta;: 1e-4, &sigma;: 1, &delta;m: 0, &beta;m: 0&nbsp;<br />
+4. Experiment<br />
+・Const. Energy Settings<br />
+&nbsp; 1000 eV<br />
+・X-Axis<br />
+&nbsp; number of points: 300<br />
+&nbsp; Const Energy settings<br />
+&nbsp; &nbsp; qz max: 0.6 1A<br />
+&nbsp; Energy Scan Settings<br />
+&nbsp; &nbsp; E-min: 300 eV<br />
+&nbsp; &nbsp; E-max: 30000 eV<br />
+・Resolution<br />
+&nbsp; Angular resolution<br />
+&nbsp; &nbsp; FWHM of Gaussian: 0.0001<br />
+&nbsp; &nbsp; [check] fast convolution<br />
+・Simulation Parameters<br />
+&nbsp; (epsilon: Parratt-formalism the value is meaningless)<br />
+・Polarization<br />
+&nbsp; Incoming Beam 1 and 2<br />
+&nbsp; &nbsp; sigma: real 1<br />
+&nbsp; &nbsp; pi: imaginary 1<br />
+5. Sample<br />
+・Dataset<br />
+&nbsp; Energy: 1000<br />
+&nbsp; Angular Reso: 0.0001<br />
+・Adaptive Layer Segmentation<br />
+&nbsp; model<br />
+&nbsp; &nbsp; [check] local<br />
+・Magneto-Optics<br />
+&nbsp; no magnetization<br />
+6. Preferences<br />
+&nbsp; Algorithm: Parratt<br />
+&nbsp; Scattering Type: Reflection<br />
+&nbsp; roughness approximation; Nevot &amp; Croce<br />
+&nbsp; Precision: double<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut1.all ---)<br />
+7. Mode (Monochromatic) (on the bottom right side)<br />
+&nbsp; Reflectivitiy (qz-scan)<br />
+8. click table (above the graph)<br />
+&nbsp; scrollbar &lt; ■ &gt; (below the table, above the graph)<br />
+9. (click) &delta;, &beta;, etc &gt; right-click on &delta;, &beta;, etc &gt; Get optical constants from database<br />
+10. File &gt; Import Dataset &gt; LCO_900eV.dat &gt; Open<br />
+&nbsp; dummy &gt;&gt;<br />
+&nbsp; Qz(needed) &gt;&gt;<br />
+&nbsp; R0 &gt;&gt;<br />
+&nbsp; OK<br />
+11. Sample<br />
+&nbsp; Dataset: LCO_900eV.dat<br />
+&nbsp; Energy: 900<br />
+12. Cnst. Energy settings (on Experiment)<br />
+&nbsp; Energy (eV): 900<br />
+13. &nbsp;Reflectivitiy (qz-scan)<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut2.all ---)<br />
+14. layers 1: thickness 150, sigma(=roughness) 3<br />
+&nbsp; bulk: sigma(=roughness) 3<br />
+15. right-click [thickness] (on the table) &gt; Fit (On/off)<br />
+16. Additional Fit Parameters (on Fit)<br />
+&nbsp; [check] Intens. scaling factor<br />
+17. Parameters (on Fit)<br />
+&nbsp; (you can see [thickness1, sigma1, sigma0, meas])<br />
+18. Fiting window (on Fit)<br />
+&nbsp; qz: 0.03 -- 0.451<br />
+19. Sample<br />
+&nbsp; Dataset: LCO_900eV.dat<br />
+&nbsp; (click) Fit<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial1 &gt; tut3.all ---)<br />
+20. Start/Stop (on Fit)<br />
+&nbsp; Start &gt; OK<br />
+21. Debug Window<br />
+<br />
+□ Tutorial 3 (easy method)<br />
+(https://remagx.org/wiki/doku.php?id=documentation:tutorial)<br />
+1. ReMagX.exe<br />
+2. File &gt; Open state &gt; Tutorial &gt; Tutorial2 &gt; tut1.all<br />
+・Experiment<br />
+3. Simulation Parameters<br />
+&nbsp; Multilayers<br />
+&nbsp; &nbsp; [check] Enable Multilayer<br />
+&nbsp; &nbsp; 1000*(1,5,2,5), 40*(3,5,4,5)<br />
+&nbsp; &nbsp; This mean SrTiO3 bulk | 1000 times (TiO2, vacuum, SrO, vacuum) | 40 times (CoO2, vacuum, LaO, vacuum)&nbsp;<br />
+4. Const. Energy settings<br />
+&nbsp; Energy (eV) 8050<br />
+&nbsp; (Cu Kalpha)<br />
+5. X-Axis<br />
+&nbsp; number of points: 500<br />
+&nbsp; qz max: &nbsp;6<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial2 &gt; tut2.all ---)<br />
+6. Reflectivity (qz-scan)<br />
+7. Tools &gt; Script &gt; Execute Script: Window &gt; Default<br />
+-----copy &amp; past<br />
+--lattice parameters<br />
+thicknessSrTiO3 = 3.904<br />
+thicknessLaCoO3 = 3.77<br />
+<br />
+-- layer parameters<br />
+-- assume that the thickness of vacuum layers is 1A<br />
+thicknessvacuum = 1.<br />
+-- define the other thickness&nbsp;<br />
+thicknessLaO = (thicknessLaCoO3-2.*thicknessvacuum)/2<br />
+thicknessCoO2 = thicknessLaO<br />
+thicknessSrO = (thicknessSrTiO3-2.*thicknessvacuum)/2<br />
+thicknessTiO2 = thicknessSrO<br />
+<br />
+-- write thicknesses to corresponding rows<br />
+thickness[5] = thicknessvacuum<br />
+thickness[4] = thicknessLaO<br />
+thickness[3] = thicknessCoO2<br />
+thickness[2] = thicknessSrO<br />
+thickness[1] = thicknessTiO2<br />
+-----copy &amp; past<br />
+8. Execute<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial2 &gt; tut3.all ---)<br />
+9. Reflectivity (qz-scan)<br />
+10. Tools &gt; Script &gt; Execute Script: Window &gt; Default<br />
+-----copy &amp; past (addition)<br />
+-- define atomic weights [kg/mol]<br />
+&nbsp; ALa = 138.9055;<br />
+&nbsp; ACo = 58.9332;<br />
+&nbsp; ASr = 87.62;<br />
+&nbsp; ATi = 47.867;<br />
+&nbsp; AO = 15.999;<br />
+<br />
+-- define Avogadro constant [atoms/mol]<br />
+&nbsp; NA = 0.6022e24&nbsp;<br />
+-- define factor to correct units (A^3 -&gt; meter^3 and kg/m^3 -&gt; g/cm^3)&nbsp;<br />
+&nbsp; f = 1.e30 / 1000000.<br />
+<br />
+-- Calculate corresponding densities<br />
+-- Assume that SrTiO3 is cubic and the a-axis and b-axis for LaCoO3 is the same as for SrTiO3<br />
+<br />
+&nbsp; densityLaO &nbsp;= (ALa + 1.*AO) * f / NA / (thicknessLaO &nbsp;* thicknessSrTiO3*thicknessSrTiO3);<br />
+&nbsp; densityCoO2 = (ACo + 2.*AO) * f / NA / (thicknessCoO2 * thicknessSrTiO3*thicknessSrTiO3);<br />
+&nbsp; densitySrO = &nbsp;(ASr + 1.*AO) * f / NA / (thicknessSrO &nbsp;* thicknessSrTiO3*thicknessSrTiO3);<br />
+&nbsp; densityTiO2 = (ATi + 2.*AO) * f / NA / (thicknessTiO2 * thicknessSrTiO3*thicknessSrTiO3);<br />
+<br />
+-- density for bulk SrTiO3<br />
+&nbsp; densitySrTiO3 = (ASr + ATi + 3.*AO) * f / NA / (thicknessSrTiO3*thicknessSrTiO3*thicknessSrTiO3);<br />
+<br />
+-- vacuum&nbsp;<br />
+&nbsp; density[6] = 0;<br />
+&nbsp; SetChemicalFormula(6, '');<br />
+<br />
+-- vacuum layer<br />
+&nbsp; density[5] = 0;<br />
+&nbsp; SetChemicalFormula(5, '');<br />
+<br />
+&nbsp; density[4] = densityLaO;<br />
+&nbsp; SetChemicalFormula(4, 'LaO');<br />
+<br />
+&nbsp; density[3] = densityCoO2;<br />
+&nbsp; SetChemicalFormula(3, 'CoO2');<br />
+<br />
+&nbsp; density[2] = densitySrO;<br />
+&nbsp; SetChemicalFormula(2, 'SrO');<br />
+<br />
+&nbsp; density[1] = densityTiO2;<br />
+&nbsp; SetChemicalFormula(1, 'TiO2');<br />
+<br />
+-- substrate<br />
+&nbsp; density[0] = densitySrTiO3;<br />
+&nbsp; SetChemicalFormula(0, 'SrTiO3');<br />
+-----copy &amp; past<br />
+11. Execute<br />
+12. (click) db &gt; right-click &gt; Properties<br />
+&nbsp; (you can see &quot;Checmical Formula&quot; and &quot;Density&quot;)<br />
+13. Preferences &gt; Preferences<br />
+&nbsp; Database<br />
+&nbsp; &nbsp; [chack] use internal database for scattering factors<br />
+&nbsp; OK<br />
+14. Tools &gt; Scratch &gt; Get optical constant from chemical formula in compound mode<br />
+・Sample<br />
+15. Optical Constants Database<br />
+&nbsp; (you can see a table)<br />
+16. (click) &delta; or &beta; (on the table) &gt; right-click on &delta;, &beta;, etc &gt; Get optical constants from database<br />
+(※ --- File &gt; Open state &gt; Tutorial &gt; Tutorial2 &gt; tut4.all ---)<br />
+17. Reflectivity (qz-scan)<br />
+18. Tools &gt; Script &gt; Execute Script: Default<br />
+19. Tools &gt; Scratch &gt; Get optical constants from chemical formula in compound mode<br />
+20. (click) &delta; or &beta; (on the table) &gt; right-click on &delta;, &beta;, etc &gt; Get optical constants from database<br />
+※ important information<br />
+・One thing you should always check is the number of crystalline layers of the substrate. Too small number of layers introduces additional oscillations which are not real. This is especially the case for small absorptions like in the hard X-ray regime.&nbsp;<br />
+・So you should play with the first number in the multilayer definition &ldquo;1000*(1,5,2,5), 40*(3,5,4,5)&rdquo; and increase the first from 1000 to higher numbers and simulate until the reflectivity converges. In our case 10000 instead of 1000 seems to be sufficient (but it still didn't converge). Note that the calculation will take very long if you increase this number.&nbsp;<br />
+・Since multiple scattering in the hard X-ray regime can neglected the speed can be increased a little bit by choosing the algorithm &ldquo;Parratt without multiple scattering&rdquo; in the &ldquo;Preferences&rdquo; menu. Note that some functions like plotting the delta/beta Profile will take extremly long as the functions are not optimized to work with so much layers. The optimization is still work in progress.&nbsp;<br />
+<br />
+□ Text and Tutorial<br />
+[1] Terms and Definitions document<br />
+&nbsp; https://www.remagx.org/Terms_and_Definitions.pdf<br />
+[2] FitTEY V 1.1 (with example)<br />
+&nbsp; http://www.remagx.org/FitTEY.zip<br />
+[3] Files for the tutorial (found in the documentation)<br />
+&nbsp; http://www.remagx.org/Tutorial.zip<br />
+<br />
+□ document and Tutorial<br />
+&nbsp; https://remagx.org/wiki/doku.php?id=documentation:main<br />
+------------------------------------------------------------------------------<br />
+■ DYNA (Windows 10 (64 bit))<br />
+(http://neel.cnrs.fr/spip.php?rubrique1008&amp;lang=en)<br />
+<br />
+□ Install<br />
+1. current MATLAB version<br />
+2. Dyna&nbsp;<br />
+&nbsp; Dyna_v_3_17_SRC.zip を解凍<br />
+&nbsp; Dyna_v_3_17_SRC<br />
+&nbsp; Dyna_v_3_17_SRC の中に Projects という名称のフォルダを作る<br />
+3. Tables&nbsp;<br />
+&nbsp; Tables_v3.zip を解凍<br />
+&nbsp; Tables_v3<br />
+4. Projet W(1nm)/Si(4nm) x 10 on Si substrate&nbsp;<br />
+&nbsp; W_Si_multilayer.zip を解凍<br />
+&nbsp; W_Si_multilayer<br />
+5. table_v3の中にあるTableをDyna_v_3_17_SRCに入れる<br />
+&nbsp; Projectsの中にW_Si_multilayerを入れる<br />
+6. matlab で 現在のフォルダを Dyna_v_3_17_SRC の Src にする<br />
+7. dyna (matlabのコマンドウィンドウ上で入力)<br />
+<br />
+[1] tutorial<br />
+&nbsp; http://neel.cnrs.fr/IMG/pdf/Tuto_DYNA_XRMR_2018-09.pdf<br />
+------------------------------------------------------------------------------<br />
+■ AuroreNR (Windows 10 (64 bit))&nbsp;<br />
+<br />
+□ Matlab runtime<br />
+・Matlab Component Runtime Library<br />
+0. MCRInstaller.exe<br />
+<br />
+□ Install<br />
+(https://sourceforge.net/projects/aurorenr/)<br />
+1. Download<br />
+2. Aurore_Installer_web.exe<br />
+&nbsp; 詳細情報 &gt; 実行<br />
+3. [次へ(N)&gt;]<br />
+&nbsp; ショートカットをディスクトップに追加<br />
+&nbsp; All [次へ(N)&gt;]<br />
+4. AuroreNR<br />
+※ 私の場合はショートカットがディスクトップに追加されなかった<br />
+------------------------------------------------------------------------------<br />
+■ NRFit (Windows 10 (64 bit))<br />
+(https://sourceforge.net/projects/nrfitproject/)<br />
+<br />
+□ Install<br />
+1. Download &gt; 開いたデータをテキストファイルにコピー&amp;ペーストする<br />
+2. コピー&amp;ペーストしたテキストファイルの名称を NRFit.ipf とする<br />
+(NRFit.ipfを Igor 5.x (Win) または Igor 6.1 (Mac)で開けば良いと思う<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Refectivity Worksho<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/tutorial.pdf<br />
+&nbsp; ww.afc.asso.fr (XRR data)<br />
+&nbsp; https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+[2] Tutorial (old version)<br />
+&nbsp; https://sites.google.com/site/diehard2/ModelIndependentFittingTutorial.doc<br />
+[3] R?flectom?trie - informations suppl?mentaires<br />
+&nbsp; (click &quot;ici.&quot;)<br />
+&nbsp; https://www.afc.asso.fr/reflectometrie-informations-supplementaires<br />
+&nbsp; XOP2.3: http://ftp.esrf.fr/pub/scisoft/xop2.3/<br />
+&nbsp; IMD5: http://rxollc.com/idl/index.html<br />
+&nbsp; Refconvert: https://www.afc.asso.fr/images/reflecto2018/refconvert.xx<br />
+&nbsp; XRR data: https://www.afc.asso.fr/images/reflecto2018/datasets.zpp<br />
+------------------------------------------------------------------------------<br />
+■ xraylabtool (+Matlab) (Windows 10 (64 bit)) (failed)<br />
+(http://sinhagroup.ucsd.edu/files/xraylabtool.zip)<br />
+<br />
+□ Install<br />
+1. xraylabtool.zip を解凍<br />
+2. C:\Program Files\MATLAB\R2019a\toolbox の中に解凍して得られた xraylabtool を入れる<br />
+3. matlab<br />
+&nbsp; ホーム &gt; パスの設定 &gt; サブフォルダーも追加...&nbsp;<br />
+&nbsp; &gt; C:\Program Files\MATLAB\R2019a\toolbox のファイルの中にある xraylabtool &gt; フォルダーの選択]<br />
+&nbsp; &gt; 閉じる &gt; [保存] はい<br />
+4. ホーム &gt; 設定 &gt; 一般 &gt; ツールボックスパスキャッシュの更新<br />
+5. specr (matlabのコマンドウィンドウ上で入力）<br />
+-----<br />
+'function_handle' 型の入力引数の単項演算子 ''' が未定義です。<br />
+<br />
+エラー: specr&gt;initFigure (line 273)<br />
+&nbsp; &nbsp; 'ClickedCallback',@toolbarLegendFcn',...<br />
+<br />
+エラー: specr (line 10)<br />
+&nbsp; &nbsp; initFigure;<br />
+-----<br />
+<br />
+※ specreader_instruction.pdf<br />
+------------------------------------------------------------------------------<br />
+■ GenX (Windows 10 (64 bit)) (failed)<br />
+<br />
+□ Install<br />
+(http://genx.sourceforge.net/)<br />
+1. GenX 2.4.10<br />
+&nbsp; Windows Installer<br />
+2. GenX-2.4.10-win.exe<br />
+3. All [Next&gt;] &gt; [Install]<br />
+<br />
+□ Install (old version)<br />
+(https://sourceforge.net/projects/genx/)<br />
+1. Download<br />
+2. GenX-2.4.9-win.exe<br />
+3. All [Next&gt;] &gt; [Install]<br />
+<br />
+[1] Manual<br />
+&nbsp; http://genx.sourceforge.net/doc/<br />
+[2] Youtube<br />
+&nbsp; https://www.youtube.com/watch?v=pCj3QhCLOnU<br />
+&nbsp; https://www.youtube.com/watch?v=DFiZgzWwcBY<br />
+------------------------------------------------------------------------------<br />
+■ SimulReflec (Windows 10 (64 bit)) (failed)<br />
+(http://www-llb.cea.fr/prism/programs/simulreflec/simulreflec.html)<br />
+<br />
+□ Install<br />
+1. SimulReflec_install_V175.exe をクリック<br />
+2. SimulReflec_install_V175.7z を解凍<br />
+※ 解凍の途中で止まった<br />
+------------------------------------------------------------------------------<br />
+■ TOPO and windt (Windows 10 (64 bit))<br />
+(http://www.rxollc.com/idl/)<br />
+<br />
+□ download and install (windt library)<br />
+1. http://www.rxollc.com/idl/<br />
+&nbsp; windt library ? Miscellaneous IDL Routines (IDL source code)<br />
+&nbsp; &nbsp; Download (windt_20130905.tar.gz)<br />
+<br />
+※ I recommend &quot;Irvine 1.3.0.&quot;<br />
+※ ダウンロードが上手くいかなかったため、Irvineを用いてダウンロードした<br />
+------------------------------------------------------------------------------

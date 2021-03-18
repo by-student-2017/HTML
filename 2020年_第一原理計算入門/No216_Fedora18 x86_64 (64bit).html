@@ -1,0 +1,424 @@
+　ここでは、Fedora18 x86_64 をインストールし、第一原理計算コードをセットアップするまでを解説する。<br />
+------------------------------------------------------------------------------<br />
+Fedora 18 x84_64<br />
+(Intel(R) Core(TM)i7-3820)<br />
+（日本語を選択してOSをインストールして下記の動作を確認。しかし、英語の選択を推奨します）<br />
+1. Xfce で開発ツール（Development Tools）にチェックを入れてインストール<br />
+2. download<br />
+&nbsp;&nbsp; for WIEN2k<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install emacs<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install gnuplot<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install tcl<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install tk<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install perl<br />
+&nbsp;&nbsp; for p4vasp<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install glibc<br />
+&nbsp;&nbsp; other good tool<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install kwrite (Fedora18)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install kate<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum instasll gedit (CentOS 6.4)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; yum install gnome-system-monitor<br />
+3. Adobe Reader<br />
+1) su<br />
+2) password<br />
+3) rpm -ivh http://linuxdownload.adobe.com/adobe-release/adobe-release-i386-1.0-1.noarch.rpm<br />
+4) rpm --import /etc/pki/rpm-gpg/RPM-GPG-KEY-adobe-linux<br />
+5) yum install nspluginwrapper.i686 AdobeReader_enu<br />
+6) yum list AdobeReader*<br />
+------------------------------------------------------------------------------<br />
+■ Intel(R) Composer XE 2013のインストールと環境設定<br />
+□ インストール<br />
+1. tar zxvf parallel_studio_xe_2013_update3_intel64.tgz<br />
+2. cd parallel_studio_xe_2013_update3_intel64<br />
+3. ./install.sh<br />
+4. 後は表示される英文に従っていく。<br />
+□ 環境設定 ( .bashrc in home and root directory )<br />
+# Intel Compiler ( Fortran &amp; C++ ) environmental setting<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+1. ifort -help &gt; ifort_option.txt<br />
+2. Please, see ifort_option.txt<br />
+□ fftw3xf_intel.a のコンパイル<br />
+0. bash<br />
+1. cd /opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/<br />
+2. su<br />
+3. make libintel64 compiler=intel<br />
+------------------------------------------------------------------------------<br />
+■ OpenMPI<br />
+□ インストール<br />
+1) http://www.open-mpi.org/<br />
+2) tar zxvf openmpi-1.4.5.tar.gz<br />
+3) cd openmpi-1.4.5<br />
+4) コンパイラにより下記のように設定<br />
+Intel Compiler の場合<br />
+./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+5) make<br />
+6) su<br />
+7) make all install<br />
+□ 環境設定 ( .bashrc in home and root directory )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+------------------------------------------------------------------------------<br />
+■ VASPのインストール<br />
+■ makefile の編集<br />
+OpenMP+OpenMPIは下記の2つのHPを参考にすると良い。<br />
+http://cms.mpi.univie.ac.at/wiki/index.php/Installing_VASP　<br />
+http://locs.bw.nitech.ac.jp/~kobayashi/fswiki/wiki.cgi?page=VASP%B4%D8%CF%A2<br />
+A. vasp.5.lib のコンパイル<br />
+1. tar zxvf vasp.5.lib.tar.gz<br />
+2. cd vasp.5.lib<br />
+3. cp makefile.linux_ifc_P4 makefile<br />
+4. emacs などで makefile を開いて、<br />
+gccをicc、ifc を ifort<br />
+CC = icc<br />
+CFLAGS = -O -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+FFLAGS = -O0 -FI -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+にして保存<br />
+5. make<br />
+--------------------------------------------------------------------<br />
+B. vasp.5.2 のコンパイル<br />
+1. tar zxvf vasp.5.2.12.tar.gz<br />
+2. cd vasp.5.2<br />
+3. cp makefile.linux_ifc_P4 makefile<br />
+4. emcacs などで makefile を開く<br />
+&nbsp; 1) ifc を ifort に書き換える<br />
+&nbsp; 2) FFLAGS = -free -names lowercase -assume byterecl<br />
+&nbsp; 3) OFLAG=-O2 -ip -ftz -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+&nbsp; 4) BLAS= -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core \<br />
+-liomp5 -lpthread -lm<br />
+&nbsp; 5) LAPACK= -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core \<br />
+-liomp5 -lpthread -lm<br />
+&nbsp; 6) FFT3D= fftw3d.o fftw3dlib.o \<br />
+/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/libfftw3xf_intel.a<br />
+# fortran linker for mpi 以降<br />
+&nbsp; 7) FC= mpif90 -openmp<br />
+&nbsp; 8) FCL= $(FC) -mkl<br />
+&nbsp; 9) CPP = $(CPP_) -DMPI -DHOST=\&quot;LinuxIFC\&quot; -DIFC \<br />
+-DCACHE_SIZE=4000 -DPGF90 -Davoidalloc -DNGZhalf \<br />
+-DMPI_BLOCK=8000 -DPROFILING<br />
+# -DRPROMU_DGEMV -DRACCMU_DGEMV<br />
+&nbsp; 10) SCA= /opt/intel/composer_xe_2013/mkl/lib/intel64/libmkl_scalapack_lp64.a \<br />
+/opt/intel/composer_xe_2013/mkl/lib/intel64/libmkl_blacs_openmpi_lp64.a<br />
+&nbsp; 11) LIB= -L../vasp.5.lib -ldmy \<br />
+../vasp.5.lib/linpack_double.o $(LAPACK) \<br />
+$(SCA) $(BLAS)<br />
+&nbsp; 12) FFT3D= fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \<br />
+/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/libfftw3xf_intel.a<br />
+5. make<br />
+※ link option: Please, see<br />
+/opt/intel/composer_xe_2013/Documentation/ja_JP/mkl/mkl_link_line_advisor.htm<br />
+or<br />
+file:///opt/intel/composer_xe_2013/Documentation/ja_JP/mkl/mkl_userguide/index.htm#GUID-F6E3AD73-ED3F-499E-A125-9570533F7B53.htm<br />
+※ -axCORE-AVX-I,CORE-AVX2,AVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 は自動で、そのCPUに最適なSSE命令の設定を行ってくれるオプションの指定方法。SSE: http://sourceforge.jp/magazine/09/09/07/0257257, AVX: http://www.isus.jp/article/compileroptimization/avx_part1/ などに説明がある。<br />
+--------------------------------------------------------------------<br />
+■ 入力ファイル<br />
+A. 必要な4つの入力ファイル （Input filesでの[1-6]を参照すると良い)<br />
+以下の4つのファイルが必要になる。<br />
+・ INCAR<br />
+・ POSCAR<br />
+・ POTCAR<br />
+・ KPOINTS<br />
+B. INCAR<br />
+・ 入力に必要なtagは下記のVASP manual を参照すればよい。<br />
+http://cms.mpi.univie.ac.at/vasp/vasp.pdf　<br />
+tag の部分を読む。必要ならば Ctrl + F でXXX-tag として検索（XXXはtagの名称）。Default: の次の行はtagが記述されなかった場合のディフォルトの値。vasp5ではECUTやGGAなどもPOTCARから自動で読まれる。どのようなtagの値になっているかはOUTCARで確認できる。<br />
+C. POSCAR<br />
+・ 構造最適化を行う場合に、動かしたい原子に対して、T T Tを記述する（Tは動かす。Fは動かさない）。例えば下記のようになる（Directの次の行から座標と緩和の有無が記述される）。<br />
+0.5000 0.5000 0.5000 T T T<br />
+D. POTCAR<br />
+・ 複数のポテンシャルを入力する場合は、End of Datasetの直ぐ次の行にポテンシャルを記述する。<br />
+・ ポテンシャルを記述する順番は、POSCARファイルと同じ順番にする。<br />
+E. KPOINTS<br />
+--------------------------------------------------------------------<br />
+■ 実行方法<br />
+Core i7-2700Kの場合（もっとも計算速度が速い指定）: mpirun -np 4 vasp<br />
+http://cms.mpi.univie.ac.at/wiki/index.php/Hybrid_openMPI/openMP_parallelization　<br />
+--------------------------------------------------------------------<br />
+■ Speed Check<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 vasp<br />
+grep LOOP+ OUTCAR<br />
+Intel Core i7-2700K: Ge, (-np 4) 12.13 s / Ge, (single) 31.95 s<br />
+Intel Core i7-3770 : Ge, (-np 4) 11.55 s / Ge, (single) 31.75 s<br />
+Intel Core i7-3820 : Ge, (-np 4) 11.28 s / Ge, (single) 31.33 s<br />
+--------------------------------------------------------------------<br />
+■ Warning, error, unit<br />
+・ small aliasing (wrap around) errors must be expected でなくしたい場合は、 PREC=accurate へ<br />
+--------------------------------------------------------------------<br />
+■ bash script<br />
+下記を参考にしてbash script を作れば連続的に計算ができる。<br />
+#!/bin/bash<br />
+export OMP_NUM_THREADS=1<br />
+date<br />
+cd /home/username/vasp_calc/Ge<br />
+mpirun -np 4 /home/username/vasp.5.2/vasp<br />
+date<br />
+cd /home/username/vasp_calc/Si<br />
+mpirun -np 4 /home/username/vasp.5.2/vasp<br />
+date<br />
+export OMP_NUM_THREADS=4<br />
+上記のテキストを作ったら、好きな名称で保存し、右クリック&rarr;プロパティ&rarr;アクセス権&rarr;プログラムとして実行できるにチェックを入れる。出来たファイルを左でダブルクリックしたり、Terminal 上で作成したテキストの名称を入力すればよい。<br />
+--------------------------------------------------------------------<br />
+cif2cell<br />
+PyCifRW library のインストール　（cif2cell インストールの準備1）<br />
+yum install python-setuptools<br />
+yum install python-devel<br />
+<br />
+PyCifRW library のインストール　（cif2cell インストールの準備2）<br />
+PyCifRW-3.3.tar.gz<br />
+1) tar zxvf PyCifRW-3.3.tar.gz<br />
+2) cd PyCifRW-3.3<br />
+3) su<br />
+4) python setup.py install<br />
+<br />
+cif2cell のインストール　<br />
+1) tar zxvf cif2cell-1.0.10.tar.gz<br />
+2) cd cif2cell-1.0.10<br />
+3) su<br />
+4) python setup.py install<br />
+<br />
+cif2cell の環境設定<br />
+.bashrc に下記を書き込む。<br />
+#cif2cell<br />
+export CIF2CELL=$HOME/cif2cell-1.0.10<br />
+PATH=&quot;$PATH:$CIF2CELL&quot;<br />
+<br />
+cif2cell の使用方法<br />
+a) VASP: cif2cell -p vasp -f Ni20Mn3P6.cif --setup-all --no-reduce --vasp-print-species --vasp-cartesian-lattice-vectors --vasp-pseudo-libdr=$HOME/vasp/potpaw_PBE --vasp-format=5.<br />
+&nbsp;&nbsp; エラーが表示されるが、INCAR 以外は生成されている。<br />
+&nbsp;&nbsp; ※ KPOINTS は、2x2x2のスーパーセルの場合、Gamma を Monkhorst Pack にして、grid を 4 4 4 にすると良いだろう。<br />
+b) ABINIT: cif2cell -p abinit -f SrTiO3.cif -o SrTiO3.in<br />
+c) exciting: cif2cell -p exciting -f SrTiO3.cif<br />
+d) Fleur: cif2cell -p fleur -f SrTiO3.cif<br />
+e) elk: cif2cell -p elk -f SrTiO3.cif<br />
+f) CPMD: cif2cell -p cpmd -f SrTiO3.cif -o SrTiO3.inp<br />
+g) CASTEP: cif2cell -p castep -f SrTiO3.cif -o SrTiO3.cell<br />
+※ cif2cell -h でヘルプを表示。<br />
+※ conventional unit cell の場合: --no-reduce を最後に付ける。<br />
+学習（学生向け）:http://www.geocities.jp/gchembio/kb2/pdf/2011_kb2_lecture_2.pdf<br />
+※ ファイル名を変える場合: -o 別のファイル名<br />
+※ cifs 中に 動作テスト用の cif ファイルが入れられている。<br />
+※ cif 形式でも受け付けないことがあるので、VESTAに入れて cif 形式で書き出すとよい。<br />
+※ --no-reduce のオプションを用いるとconventiuonal cell になる。<br />
+error case<br />
+A. Error: could not read case.cif. では_cgraph_comments に改行があるとエラーが表示される。ここにはICSD のタイトルが格納される。<br />
+B. Error: cell setup: Insufficient symmetry information to reduce to primitive cell (need space group number or Hermann-Mauguin symbol). では _symmetry_Int_Tables_number 空間群の数値　書き入れるとことで対処できる。<br />
+--------------------------------------------------------------------<br />
+GUI for VASP　（期限が切れたら使えなくなった）<br />
+Virtual NanoLab (下記はWindows7 64bit で行った結果)<br />
+1. download: http://quantumwise.com/products/free-trial<br />
+2. Demo version をインストール<br />
+3. atk-12.8.2-windows64 を実行<br />
+4. 幾つか進めていき、clear を選択<br />
+5. Virtual NanoLab を実行<br />
+6. Help &rarr; AddOn Manager...... &rarr; VASPScripter &rarr; Install &rarr; Refresh<br />
+7. Tools &rarr; Custum Scripter...... &rarr; Scripters &rarr; VASP Scripter<br />
+※ http://quantumwise.com/documents/tutorials/latest/VASPScripter/index.html/chap.setup.html に従っていくとよい（説明にあるようにDatabaseとVASP Scripter 二つを開いておけれる）。<br />
+------------------------------------------------------------------------------<br />
+初期構造予測用の計算コード<br />
+A. USPEX: http://han.ess.sunysb.edu/~USPEX/uspex.html<br />
+B. CALYPSO: http://www.calypso.cn/<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2kのインストール<br />
+FFTW3 for WIEN2k<br />
+1) tar zxvf fftw-3.3.3.tar.gz<br />
+2) cd fftw-3.3.3<br />
+4) export CC=&quot;icc -m64 -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+5) export MPICC=&quot;mpicc -m64 -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+6) export F77=&quot;ifort -mcmodel=large -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+7) ./configure --enable-mpi --enable-threads --enable-openmp<br />
+8) make ( in Xfce case, su)<br />
+9) su ( in Xfce case, make)<br />
+10) make install<br />
+--------------------------------------------------------------------<br />
+■ WIEN2k<br />
+1) mkdir WIEN2k_12<br />
+2) cd WIEN2k_12<br />
+3) cp $HOME/Downloads/WIEN2k_12.tar .<br />
+4) tar -xvf WIEN2k_12.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) ./siteconfig_lapw<br />
+&nbsp;&nbsp; 1. O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+OpenSSH and OpenMPI setting<br />
+&nbsp;&nbsp; 2. Shared Memory Architecture? (y/n):y<br />
+&nbsp;&nbsp; 3. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp;&nbsp; 4. Set MPI_REMOTE to 0 / 1:<br />
+&nbsp;&nbsp; 5. Your compiler: mpif90<br />
+&nbsp;&nbsp; 6. RP RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -L/usr/local/lib -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3 $(R_LIBS)<br />
+※ 1-3の手順が無いとOpenSSHでの認証などでエラーが出る。SSH関連でエラーが出る場合にはこれに注意すると良い。<br />
+9) ./userconfig<br />
+10) bash<br />
+11) w2web<br />
+--------------------------------------------------------------------<br />
+BoltzTraP<br />
+1. tar xvf BoltzTraP.tar.bz2<br />
+2. cd boltztrap-1.2.2/src<br />
+3. emacs Makefile<br />
+&nbsp;&nbsp; FC=ifort<br />
+&nbsp;&nbsp; FOPT = -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp; LDFLAGS = $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread<br />
+&nbsp;&nbsp; LIBS = -lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+4. make<br />
+------------------------------------------------------------------------------<br />
+■ SPRKKRのインストール<br />
+■ xband<br />
+0) install<br />
+&nbsp;&nbsp; yum install tk<br />
+&nbsp;&nbsp; yum install tcl<br />
+&nbsp;&nbsp; yum install tclx<br />
+&nbsp;&nbsp; yum install gnuplot<br />
+&nbsp;&nbsp; yum install grace<br />
+&nbsp;&nbsp; yum install xterm<br />
+1) mkdir sprkkr<br />
+2) cd sprkkr<br />
+3) mkdir band<br />
+4) cp $HOME/Downloads/xband_6.3.tar.gz ./band<br />
+5) cd band<br />
+6) tar -zxvf xband_6.3.tar.gz<br />
+7) .bashrc に下記を加える<br />
+&nbsp;&nbsp; export XBANDPATH=$HOME/sprkkr/band<br />
+&nbsp;&nbsp; export PATH=$PATH:$XBANDPATH:<br />
+&nbsp;&nbsp; export XLIB_SKIP_ARGB_VISUALS=1<br />
+8) bash<br />
+9) xband<br />
+--------------------------------------------------------------------<br />
+■ SPRKKR 6.3のインストール<br />
+1) unpack<br />
+&nbsp; cp $HOME/Downloads/sprkkr6.3.2pub20121219.tgz ./sprkkr<br />
+&nbsp; cd sprkkr<br />
+&nbsp; tar -zxvf sprkkr6.3.2pub20121219.tgz<br />
+2) cp make.inc_example make.inc<br />
+3) kwrite make.inc<br />
+&nbsp; ■ non parallel case<br />
+&nbsp; □ Intel compiler version 2013 (64bit type)<br />
+&nbsp;&nbsp; &nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FC = ifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; LINK = ifort $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp; ■ parallel case<br />
+&nbsp;&nbsp; □ OpenMPI case<br />
+&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FC = mpif90 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; LINK = mpif90 $(FFLAGS) $(INCLUDE)<br />
+4) make scfmpi（single type: make scf )<br />
+&nbsp;&nbsp; 上記の作業で binary が作成される。PCが 4 core の場合は下記となる<br />
+&nbsp;&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+5) この他にもプログラムを作成することができる<br />
+&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp; c) Makefile を見ると一応下記のコマンドがある<br />
+&nbsp;&nbsp; &nbsp; make genmpi, make embscfmpi, make chi<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+※ 再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+--------------------------------------------------------------------<br />
+下記のHPにも利用方法が記述されている。<br />
+[1] http://olymp.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en　（終わりの方に xband の使い方が解説されている）<br />
+[2] http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=22%3Aexamples&amp;catid=1&amp;Itemid=7&amp;lang=en<br />
+[3] http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=10&amp;catid=4&amp;Itemid=7&amp;lang=en<br />
+--------------------------------------------------------------------<br />
+■ SPRKKRの利用方法<br />
+□ xband 6.3 を用いた方法<br />
+灰色になって入力できなくなった場合には、unlockのボタンを押すとよい。<br />
+1) cd band<br />
+2) xband<br />
+&nbsp;&nbsp; w_font_select で 0 font と表示される場合は、全て any にして、下の欄に表示される好きなフォンを選択して、accept を数回押してみるとよい。<br />
+3) SET PREFERENCES のPROG_PATH0 -default path で、SPRKKRの実行ファイルが入っているフォルダを指定<br />
+4) DIRECTORIES で計算する系のフォルダを指定する<br />
+&nbsp;&nbsp; A. directry name に記入<br />
+&nbsp;&nbsp; B. create new + chnage directry を押す<br />
+&nbsp;&nbsp; C. close + create system を押すと CREATE SYSTEM になる<br />
+5) CREATE SYSTEM を選択（ CIRECTORIES で close + create system を押すとここに移る）<br />
+&nbsp;&nbsp; A. name of system-file でファイル名を入力<br />
+&nbsp;&nbsp; B. Structure type か Space group のどちらかを入力<br />
+&nbsp;&nbsp; C. set lattice parameter で a, b, c軸の格子定数を入力し、CONFIRMを押す<br />
+&nbsp;&nbsp; D. Angstrom単位の場合は、convert を押して、bohr単位にする<br />
+&nbsp;&nbsp; E. input OK---GO ON<br />
+&nbsp;&nbsp; E. set up via Space Group で原子のサイトを選択する<br />
+&nbsp;&nbsp; G. 各座標が書かれたラインを選択すると Specify occupation for site のパネルが出るので、specify occupant で原子を選択する<br />
+&nbsp;&nbsp; H. suppress symmetry, set same R_WS for all spheres, adjust R_WS by scaling,&nbsp;&nbsp;&nbsp;&nbsp; (calculate R_WS + empty spheres)、show structure を押す<br />
+&nbsp;&nbsp; I. Visualizer で表示したいソフトの選択をして、run visualizerを押す<br />
+(case.xcrysdenなどが出来る。XCrySDenなどで開いてみるとよい)<br />
+&nbsp;&nbsp; J. DONE - RETURN<br />
+6) SELECT / MODIFY<br />
+&nbsp;&nbsp; A. select directory で 計算する系のフォルダを指定する<br />
+&nbsp;&nbsp; B. 右にあるfile list (.sys)を選択する<br />
+&nbsp;&nbsp; C. 更に右に case.pot がある場合はそれも選択する<br />
+&nbsp;&nbsp; D. close<br />
+7) select and run program package<br />
+&nbsp;&nbsp; A. SPR-KKRを選択<br />
+&nbsp;&nbsp; B. select directroy で計算する系のフォルダを指定する<br />
+&nbsp;&nbsp; C. system で、create input を押す<br />
+&nbsp;&nbsp; D. Create input file で SCFやDOS, XAS(EXPERT MODEを押す, EKREL( band dispersion )を選択し、write inpfile quit を押す。<br />
+&nbsp;&nbsp; E. select | edit input-file で case.inpを選択する<br />
+SCF計算は case_SCF.inp, XAS計算はcase_XAS.inpになる<br />
+&nbsp;&nbsp; F. SCF計算の場合は kkrscf, DOSやXASの場合はkkrgen を選択<br />
+select program path でパスを指定し、create job file を選択する<br />
+&nbsp;&nbsp; G. job-file menu が出来る<br />
+edit で開いて source の前に # を書き入れる。次のcdの前にも # を入れる。 -np 8 を -np 4 に変更する。MPIMPIと二度続けて書かれている場合はMPI一つにする。そして、 &gt; 以後の記述を &gt; も含めて削除。<br />
+&nbsp;&nbsp; H. job-file menu で run<br />
+(上手く動かない場合は、コンソールやターミナルで、計算する系のフォルダに入り、case_SCF.job や case_XAS.job のコマンドを入力すればよい)<br />
+出力ファイルは、case.job.out となる。<br />
+8) SCF計算が済んだら、右側にある files を押す。<br />
+&nbsp;&nbsp; A. select | edit file で case.pot_new を押す。<br />
+&nbsp;&nbsp; B. move の隣にある to の右に case.pot と入力して move を押す。<br />
+&nbsp;&nbsp; C. continue move<br />
+以上で、SCF計算で新しく生成されたポテンシャルファイルを入力ファイルにできる。<br />
+9) 上記6)から再び続け、DOSやXASを計算させる<br />
+10) select and run program package で PLOTを選択<br />
+&nbsp;&nbsp; A. 左の欄から計算した系のファイルを選択する<br />
+&nbsp;&nbsp; B. 右の欄で計算したいファイルを選択する<br />
+&nbsp;&nbsp; C. 最も右の欄に結果をプロットできるファイルが出来る<br />
+&nbsp;&nbsp; xmgrace がある場合は、図が表示される<br />
+11) その他の使い方<br />
+------------------------------------------------------------------------------<br />
+■ abinit-7.2.1 のインストール<br />
+OpenMP ( I can not compile abinit with ifort or mpif90 for ifort. )<br />
+1) tar zxvf abinit-7.2.1.tar.gz<br />
+2) cd abinit-7.2.1<br />
+3) ./configure --enable-openmp --enable-64bit-flags&nbsp; --enable-gui --prefix=$HOME/abinit-7.2.1<br />
+4) make<br />
+5) make install<br />
+6) $HOME/abinit-7.2.1/bin/abinit &lt;case.files&gt; case.log<br />
+OpenMPI<br />
+1) ter xvf abinit-7.2.1_x86_64_linux_gnu4.5.bz2<br />
+<br />
+OpenMPI (Fedora18 GNOME Desktop, English)<br />
+1) tar zxvf abinit-7.2.2.tar.gz<br />
+2) cd abinit-7.2.2<br />
+3) ./configure --enable-mpi --enable-64bit-flags --enable-gui FC=mpif90 CC=mpicc CXX=mpicxx LDFLAGS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; LIBS=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot; --prefix=$HOME/abinit-7.2.2 --with-mpi-prefix=/usr/local/openmpi FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; CFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot;<br />
+4) make multi multi_nprocs=4<br />
+5) make install<br />
+6) mpirun -np 4 $HOME/abinit-7.2.2/bin/abinit &lt;case.files&gt; case.log<br />
+: catastrophic error: **Internal compiler error: internal abort** Please report this error along with the circumstances in which it occurred in a Software Problem Report. Note: File and line given may not be explicit cause of this error.<br />
+compilation aborted for prep_fourwf.F90 (code 1)<br />
+make[4]: *** [prep_fourwf.o] Error 1<br />
+make[4]: *** Waiting for unfinished jobs....<br />
+make[4]: Leaving directory `/home/pc1/abinit-7.2.2/src/66_wfs'<br />
+make[3]: *** [all-recursive] Error 1<br />
+make[3]: Leaving directory `/home/pc1/abinit-7.2.2/src'<br />
+make[2]: *** [all-recursive] Error 1<br />
+make[2]: Leaving directory `/home/pc1/abinit-7.2.2'<br />
+make[1]: *** [all] Error 2<br />
+make[1]: Leaving directory `/home/pc1/abinit-7.2.2'<br />
+make: *** [multi] Error 2<br />
+<br />
+------------------------------------------------------------------------------

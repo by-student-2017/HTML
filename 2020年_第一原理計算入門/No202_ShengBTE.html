@@ -1,0 +1,588 @@
+ShengBTE (http://www.shengbte.org/home)<br />
+------------------------------------------------------------------------------<br />
+■ ShengBTE (http://www.shengbte.org/home)<br />
+<br />
+□ ShengBTE<br />
+◇ Install<br />
+(http://www.shengbte.org/downloads)<br />
+1. tar xvf ShengBTE-v1.1.1-8a63749.tar.bz2<br />
+2. cd ShengBTE<br />
+3. cd Src<br />
+3. cp ../arch.make.example arch.make<br />
+4. gedit arch.make<br />
+-----<br />
+export FFLAGS=-O2<br />
+export LDFLAGS=-L$(HOME)/spglib/lib -Wl,--rpath=$(HOME)/spglib/lib -lsymspg<br />
+export MPIFC=mpif90<br />
+export LAPACK=-L/usr/lib/x86_64-linux-gnu<br />
+export LIBS=$(LAPACK) -llapack -lblas<br />
+-----<br />
+◇ Usage<br />
+1. ~/ShengBTE/ShengBTE input_file<br />
+<br />
+□ thirdorder.py<br />
+◇ Install<br />
+(http://www.shengbte.org/downloads)<br />
+0. cd ~/spglib/include<br />
+&nbsp; mkdir spglib<br />
+&nbsp; cp spglib.h ./spglib/spglib.h<br />
+1. tar xvf thirdorder-v1.1.1-8526f47.tar.bz2<br />
+2. cd thirdorder<br />
+3. gedit setup.py<br />
+-----(please, change &quot;username&quot;)<br />
+INCLUDE_DIRS = [&quot;/home/username/spglib/include&quot;]<br />
+<br />
+LIBRARY_DIRS = [&quot;/home/username/spglib/lib&quot;]<br />
+-----<br />
+4. ./compile.sh<br />
+(You can get thirdorder_core.so)<br />
+<br />
+□ almaBTE<br />
+(http://www.almabte.eu/)<br />
+◇ Install<br />
+(http://www.almabte.eu/index.php/downloads/)<br />
+0. sudo apt-get install cmake libboost-all-dev libhdf5-dev<br />
+1. wget http://www.almabte.eu/wp-content/uploads/2018/10/almabte-v1.3.2.tar.gz<br />
+2. tar zxvf almabte-v1.3.2.tar.gz<br />
+3. cd almabte-v1.3.2<br />
+4. mkdir build<br />
+&nbsp; cd build<br />
+&nbsp; cmake ..<br />
+5. make -j 4 all<br />
+6. make test<br />
+◇ Settings<br />
+1. gedit ~/.bashrc<br />
+&nbsp; export PATH=$PATH:$HOME/almabte-v1.3.2/build/src<br />
+2. source ~/.bashrc<br />
+------------------------------------------------------------------------------<br />
+■ GULP (http://gulp.curtin.edu.au/gulp/) + ShengBTE<br />
+<br />
+◇ Register<br />
+(http://gulp.curtin.edu.au/gulp/register.cfm)<br />
+1. (input data) &gt; [check] I agree ... &gt; Send<br />
+<br />
+<br />
+□ Install (ubuntu 18.04 LTS (64 bit))<br />
+・gulp-5.1.tgz<br />
+1. tar zxvf gulp-5.1.tgz<br />
+2. cd gulp-5.1<br />
+3. cd Src<br />
+4. ./mkgulp<br />
+&nbsp;(./mkgulp -h)<br />
+&nbsp;(./mkgulp -m -f -k -c intel)<br />
+&nbsp;(./mkgulp -m -f -k -c gfortran)<br />
+<br />
+◇ Settings<br />
+1. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+<br />
+◇ run command<br />
+1. $HOME/gulp-5.1//Src/gulp &lt; case.gin &gt; case.got<br />
+<br />
+<br />
+◇ Examples (Test calcultion)<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. chmod +x run.sh<br />
+3. ./run.sh<br />
+4. cd Output<br />
+<br />
+◇ Examples (thermal conductivity calcultion for MgO by using ALAMODE code)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. ~/gulp-5.1/Src/gulp &lt; example67.gin | tee example67.got<br />
+3. gedit example67_anphon.in<br />
+-----before<br />
+TMAX = &nbsp; &nbsp;0.0<br />
+-----after<br />
+TMAX = 1500.0<br />
+-----<br />
+4. ~/alamode/anphon/anphon example67_anphon.in<br />
+5. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;example67_rta.kl&quot; usi 1:2 w lp<br />
+6. quit<br />
+<br />
+◇ Examples (phonon properties for Si by using ShengBTE code)<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. cp example67.gin Si.gin<br />
+3. gedit Si.gin<br />
+-----<br />
+opti conp phon noden alamode nosym full shopt<br />
+name Si<br />
+cell<br />
+5.437 5.437 5.437 90 90 90<br />
+frac<br />
+Si core 0.000000 0.000000 0.000000<br />
+space<br />
+227<br />
+origin choice 1<br />
+# alamode<br />
+super 2 2 2<br />
+ala_disp 0.01 0.04<br />
+ala_cutoff 4.4<br />
+ala_shrink 10 10 10<br />
+ala_processor 4<br />
+#<br />
+botwobody<br />
+Si core Si core 1830.8 471.18 2.4799 1.7322 2.70 3.00<br />
+borepulsive<br />
+Si core Si core 0.0 3 0.78734 1.7322 2.70 3.00<br />
+boattractive theta<br />
+Si core Si core 0.00000109999 3 0.78734 1.7322 100390.0 16.218 -0.59826 2.70 3.00<br />
+-----<br />
+4. ~/gulp-5.1/Src/gulp &lt; Si.gin | tee Si.got<br />
+5. gedit Si_anphon.in<br />
+-----before<br />
+TMAX = &nbsp; &nbsp;0.0<br />
+-----after<br />
+TMAX = 1500.0<br />
+-----<br />
+6. ~/alamode/anphon/anphon Si_anphon.in<br />
+7. gnuplot<br />
+&nbsp; set logscale xy<br />
+&nbsp; set xlabel &quot;Temperature (K)&quot;<br />
+&nbsp; set ylabel &quot;Lattice thermal conductivity (W/mK)&quot;<br />
+&nbsp; plot &quot;Si_rta.kl&quot; usi 1:2 w lp<br />
+8. quit<br />
+9. gedit si_phband.in<br />
+-----<br />
+&amp;general<br />
+&nbsp; PREFIX = Si<br />
+&nbsp; MODE &nbsp; = phonons<br />
+&nbsp; FCSXML = Si_cubic.xml<br />
+<br />
+&nbsp; NKD = 1; KD = Si<br />
+&nbsp; MASS = 28.0855<br />
+/<br />
+<br />
+&amp;cell<br />
+&nbsp; 10.203<br />
+&nbsp; 0.0 0.5 0.5<br />
+&nbsp; 0.5 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.0<br />
+/<br />
+<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+10. ~/alamode/anphon/anphon si_phband.in<br />
+11. python ~/alamode/tools/plotband.py Si.bands<br />
+12. cp si_phband.in si_phdos.in<br />
+13. gedit si_phdos.in<br />
+-----before<br />
+&amp;kpoint<br />
+&nbsp; 1 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+-----after<br />
+&amp;kpoint<br />
+&nbsp; 2 &nbsp;# KPMODE = 1: line mode<br />
+&nbsp; 20 20 20<br />
+&nbsp; #G 0.0 0.0 0.0 X 0.5 0.5 0.0 51<br />
+&nbsp; #X 0.5 0.5 1.0 G 0.0 0.0 0.0 51<br />
+&nbsp; #G 0.0 0.0 0.0 L 0.5 0.5 0.5 51<br />
+/<br />
+-----<br />
+14. ~/alamode/anphon/anphon si_phdos.in<br />
+15. python ~/alamode/tools/plotdos.py --emax 550 --nokey Si.dos<br />
+<br />
+◇ Examples (thermal conductivity calcultion for Si by using ALAMODE code)<br />
+0. export GULP_LIB=$HOME/gulp-5.1/Libraries<br />
+&nbsp; export GULP_DOC=$HOME/gulp-5.1/Docs<br />
+&nbsp; export ALAMODE_DIR=$HOME/alamode-v.1.1.0<br />
+1. cd $HOME/gulp-5.1/Examples<br />
+2. cp example67.gin Si.gin<br />
+3. gedit Si.gin<br />
+-----<br />
+opti conp phon noden nosym full shopt num3<br />
+name Si<br />
+cell<br />
+5.437 5.437 5.437 90 90 90<br />
+frac<br />
+Si core 0.000000 0.000000 0.000000<br />
+space<br />
+227<br />
+origin choice 1<br />
+# ShengBTE<br />
+super 2 2 2<br />
+output shengbte<br />
+#<br />
+botwobody<br />
+Si core Si core 1830.8 471.18 2.4799 1.7322 2.70 3.00<br />
+borepulsive<br />
+Si core Si core 0.0 3 0.78734 1.7322 2.70 3.00<br />
+boattractive theta<br />
+Si core Si core 0.00000109999 3 0.78734 1.7322 100390.0 16.218 -0.59826 2.70 3.00<br />
+-----<br />
+4. ~/gulp-5.1/Src/gulp &lt; Si.gin | tee Si.got<br />
+5. gedit CONTROL<br />
+-----<br />
+&nbsp; &nbsp; &nbsp; &nbsp; ngrid(:)=4 4 4<br />
+<br />
+&nbsp; &nbsp; &nbsp; &nbsp; T=300.0<br />
+&nbsp; &nbsp; &nbsp; &nbsp; scalebroad=1.0<br />
+-----<br />
+6. ~/ShengBTE/ShengBTE<br />
+※ in order to get every temperature, you should repeat 4. and 5.&nbsp;<br />
+◇ phonon DOS<br />
+7. gnuplot<br />
+&nbsp; plot &quot;BTE.dos&quot; w l<br />
+8. quit<br />
+◇ phonon PDOS<br />
+7. gnuplot<br />
+&nbsp; plot &quot;BTE.pdos&quot; w l<br />
+8. quit<br />
+◇ kappa<br />
+7. cd T300K<br />
+8. gedit BTE.kappa_scalar<br />
+※ final overall thermal conductivity will be given in the file BTE.kappa_scalar as the last line (converged value from final iteration).<br />
+※ keyword: thermalconductivity (https://nanochemistry.curtin.edu.au/gulp/help/help_51_txt.html)<br />
+<br />
+◇ xtalopt<br />
+1. gedit gin1<br />
+-----<br />
+opti conj conp<br />
+switch_minimiser bfgs gnorm 0.5<br />
+cell<br />
+&nbsp; %a% %b% %c% %alphaDeg% %betaDeg% %gammaDeg%<br />
+frac<br />
+%coordsFrac%<br />
+species<br />
+Ti 2.196<br />
+O -1.098<br />
+buck<br />
+Ti Ti 31120.1 0.1540 5.25 &nbsp;15<br />
+O &nbsp;O &nbsp;11782.7 0.2340 30.22 15<br />
+Ti O &nbsp;16957.5 0.1940 12.59 15<br />
+lennard 12 6<br />
+Ti Ti 1 0 15<br />
+O &nbsp;O &nbsp;1 0 15<br />
+Ti O &nbsp;1 0 15<br />
+-----<br />
+<br />
+◇ manual<br />
+0. sudo apt install evince<br />
+1. evince ~/gulp-5.1/Docs/gulp5.1_manual.pdf<br />
+※ https://nanochemistry.curtin.edu.au/gulp/help/help_51_txt.html<br />
+------------------------------------------------------------------------------<br />
+■ Potential Libraries (GULP)<br />
+<br />
+□ ReaxFF<br />
+-----<br />
+・reaxff_general.lib<br />
+&nbsp; H<br />
+&nbsp; C,N,O,F<br />
+&nbsp; Na,Mg,Al,Si,P,S,Cl<br />
+&nbsp; Fe,Ni,Cu,Zn<br />
+&nbsp; Y,Zr<br />
+&nbsp; Ba,Au<br />
+<br />
+・reaxff.lib<br />
+&nbsp; H<br />
+&nbsp; C,N,O<br />
+&nbsp; Si,S<br />
+&nbsp; Co,Ni,Cu<br />
+&nbsp; Zr<br />
+&nbsp; Pt<br />
+<br />
+・reaxff_ausch.lib<br />
+&nbsp; Au,S,C,H<br />
+<br />
+・reaxff_auoh.lib<br />
+&nbsp; Au,O,H<br />
+<br />
+・reaxff_sio2.lib<br />
+&nbsp; Si,O<br />
+&nbsp; C,H,N,S,Pt,Zr,Ni,Cu,Co<br />
+<br />
+・reaxff_sicho.lib<br />
+&nbsp; Si,C,H,O<br />
+<br />
+・reaxff_siohna.lib<br />
+&nbsp; Si,O,H,Na<br />
+&nbsp; C,N,S<br />
+<br />
+・reaxff_bazro3.lib<br />
+&nbsp; Ba,Zr,O<br />
+&nbsp; C,H,N,Ys<br />
+<br />
+・reaxff_zno.lib<br />
+&nbsp; Zn,O<br />
+&nbsp; C,H,N,S,Si,Pt,Zr,Ni,Au,V,Bi,Ti,Cu<br />
+<br />
+・reaxff_hobn.lib<br />
+&nbsp; H,O,B,N<br />
+<br />
+・reaxff_oxidative.lib<br />
+&nbsp; C,H,O<br />
+<br />
+・reaxff_lg.lib<br />
+&nbsp; C,H,O,N,S,Si<br />
+<br />
+・reaxff_cohnsli.lib<br />
+&nbsp; C,O,H,N,S,Li<br />
+&nbsp; Mo,Ni,B,F,P<br />
+<br />
+・reaxff_lic.lib<br />
+&nbsp; Li,C<br />
+&nbsp; H,O,Vi,Gl<br />
+<br />
+・reaxff_lisi.lib<br />
+&nbsp; Li,Si<br />
+<br />
+・reaxff_feoh.lib<br />
+&nbsp; Fe,O,H<br />
+&nbsp; C,Cl<br />
+-----<br />
+<br />
+□ MEAM (Modified Embedded Atom Model)<br />
+-----<br />
+・meam_1nn.lib<br />
+&nbsp; M.I. Baskes, Phys. Rev. B, 46, 2727 (1992)<br />
+&nbsp; H<br />
+&nbsp; Li,C,N,O<br />
+&nbsp; Na,Al,Si<br />
+&nbsp; K,V,Cr,Fe,Ni,Cu,Ge<br />
+&nbsp; Nb,Mo,Rh,Pd,Ag<br />
+&nbsp; Ta,W,Ir,Pt,Au,Pb<br />
+<br />
+・meam_2nn.lib<br />
+&nbsp; Modified Embedded Atom Model parameters: MEAM-2NN version<br />
+&nbsp; H<br />
+&nbsp; Li,C,N,O<br />
+&nbsp; Mg,Al,Si,P<br />
+&nbsp; Ca,Ti,V,Cr,Mn,Fe,Co,Ni,Cu,Ga,Ge<br />
+&nbsp; Y,Zr,Nb,Mo,Pd,Ag,In,Sn<br />
+&nbsp; Ta,W,Pt,Au,Pb<br />
+<br />
+・meam_2nn_qeq.lib<br />
+&nbsp; This library contains parameters for the combination of MEAM-2NN with charge equilibration via QEq.<br />
+&nbsp; E. Lee, K.-R. Lee and B.-J. Lee, J. Phys. Chem. C, 121, 13008 (2017)<br />
+&nbsp; Li,O,Mn<br />
+-----<br />
+<br />
+□ EAM (Embedded Atom Model)<br />
+-----<br />
+・belashchenko.lib<br />
+&nbsp; Belashchenko EAM potential for Na<br />
+<br />
+・clerirosato.lib<br />
+&nbsp; Cleri-Rosato - library of potentials for GULP<br />
+&nbsp; F. Cleri and V. Rosato, Phys. Rev. B., 48, 22 (1993)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,cu,Rh,Pd,Ag,Ir,Pt,Au,Al,Pb<br />
+<br />
+・meidavenport.lib<br />
+&nbsp; Mei-Davenport - library of potentials for GULP<br />
+&nbsp; J. Mei and J.W. Davenport, &nbsp;Phys. Rev. B, 46, 21 (1992)<br />
+&nbsp; These potentials use the Embedded Atom Model for Al<br />
+&nbsp; Al<br />
+<br />
+・suttonchen.lib<br />
+&nbsp; SUTTON-CHEN - library of potentials for GULP<br />
+&nbsp; A.P. Sutton and J. Chen, Phil. Mag. Lett., 61, 139 (1990)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,Cu,Rh,Pd,Ag,Ir,Pt,Au,Pb,Al<br />
+<br />
+・suttonchen_alloy.lib<br />
+&nbsp; SUTTON-CHEN - library of potentials for GULP<br />
+&nbsp; A.P. Sutton and J. Chen, Phil. Mag. Lett., 61, 139 (1990)<br />
+&nbsp; These potentials use the Embedded Atom Model<br />
+&nbsp; Ni,Cu,Rh,Pd,Ag,Ir,Pt,Au,Pb,Al<br />
+<br />
+・glue.lib<br />
+&nbsp; GLUE - library of potentials for GULP<br />
+&nbsp; F. Ercolessi, M. Parrinello and E. Tosati,Phil. Mag. A, 58, 213 (1988)<br />
+&nbsp; Glue model for Au<br />
+&nbsp; EAM functional<br />
+-----<br />
+・finnissinclair.lib<br />
+&nbsp; Finnis-Sinclair - library of potentials for GULP<br />
+&nbsp; M.W. Finnis and J.E. Sinclair, Philosophical Magazine A, Vol. 50, No. 1, 45-55 (1984)<br />
+&nbsp; V,Nb,Ta,Cr,Mo,W,Fe<br />
+<br />
+□ Tersoff<br />
+-----<br />
+・kumagai_elast.lib<br />
+&nbsp; Tersoff bond order potentials for Si from the work of Kumagai et al, Comp. Mat. Sci., 39, 457 (2007)<br />
+&nbsp; Si<br />
+<br />
+・tersoff.lib<br />
+&nbsp; H,C,N,O,Si,Ge<br />
+<br />
+・tersoff_zrl.lib<br />
+&nbsp; Tersoff bond order potentials - ZRL variant<br />
+&nbsp; S.R. Billeter, A. Curioni, D. Fischer and W. Andreoni, Phys. Rev. B, 73, 155329 (2006)<br />
+&nbsp; H,O,N,Si<br />
+-----<br />
+<br />
+□ SW (Stillinger-Webe)<br />
+-----<br />
+・stillinger_weber.lib<br />
+&nbsp; Stillinger-Weber potential for silicon<br />
+&nbsp; Phys. Rev. B, 31, 5262 (1985)<br />
+&nbsp; Si<br />
+-----<br />
+<br />
+□ UFF (Universal Force Field)<br />
+-----<br />
+・uff.lib<br />
+&nbsp; Universal Force Field<br />
+&nbsp;&nbsp;<br />
+・uff4mof.lib<br />
+&nbsp; Universal Force Field for MOFs<br />
+-----<br />
+<br />
+□ buckingham<br />
+-----<br />
+・ffsioh.lib<br />
+&nbsp; FFSiOH force field library<br />
+&nbsp; A. Pedone, G. Malavasi, M.C. Menziani, U. Segre, F. Musso, M. Corno, B. Civalleri and P. Ugliengo, Chem. Mater., 20, 2522-2531 (2008)<br />
+&nbsp; Si,O,H<br />
+&nbsp; buckingham, morse<br />
+<br />
+・carbonate.lib<br />
+&nbsp; POTENTIALS FOR CALCITE<br />
+&nbsp; Rohl, Wright and Gale, Am. Miner., 88, 921-925 (2003)<br />
+&nbsp; Fisler, Gale and Cygan, Am. Miner., 85, 217-224 (2000)<br />
+&nbsp; Austen, Wright, Slater and Gale, PCCP, 7, 4150 - 4156 (2005)<br />
+&nbsp; Ca,Mg,Fe,Cd,Mn,Ni,Zn,Co,C,O<br />
+&nbsp; buckingham, morse, three, outofplane<br />
+<br />
+・bush.lib<br />
+&nbsp; BUSH -library of potentials for GULP<br />
+&nbsp; T.S.Bush, J.D.Gale, C.R.A.Catlow and P.D. Battle, J. Mater Chem., 4, 831-837 (1994)<br />
+&nbsp; Li,Na,K,Mg,Ca,Sr,Ba,Fe,Ti,Al,Ga,Y,La,Pr,Nd,Gd,Eu,Tb,Yb,O<br />
+&nbsp; buckingham<br />
+<br />
+・catlow.lib<br />
+&nbsp; K.P.Schroder, J.Sauer, M.Leslie, C.R.A.Catlow and J.M.Thomas, Chem. Phys. Lett., 188 (1992) 320.<br />
+&nbsp; J.D.Gale and N.J.Henson, JCS Faraday Trans., 90 (1994) 3175.<br />
+&nbsp; the Catlow oxygen-oxygen potential<br />
+&nbsp; Na,Mg,Al,Si,P,O,H<br />
+&nbsp; buckingham, morse, three<br />
+<br />
+・matsui-akaogi.lib<br />
+&nbsp; MATSUI AKAOGI-library of potentials for GULP<br />
+&nbsp; Matsui and Akaogi, Mol. Simul. 6, 239 (1991)<br />
+&nbsp; Ti,O<br />
+&nbsp; buckingham<br />
+<br />
+・bks.lib<br />
+&nbsp; BKS library - rigid ion potentials for silica<br />
+&nbsp; B.W.H. van Beest et al, Phys. Rev. Lett., 64, 1955 (1990)<br />
+&nbsp; Al,Si,P,O<br />
+&nbsp; buckingham<br />
+<br />
+・johnson.lib<br />
+&nbsp; JOHNSON - library of potentials for GULP<br />
+&nbsp; R.A. Johnson, Phys. Rev. B, 39, 12554 (1989)<br />
+&nbsp; Cu,Ag,Au,Ni,Pd,Pt<br />
+&nbsp; buckingham<br />
+<br />
+・lewis.lib<br />
+&nbsp; LEWIS library - collection of potentials around the Catlow oxygen-oxygen potential<br />
+&nbsp; G.V. Lewis and C.R.A. Catlow, J. Phys. C: Solid, State Phys., 18, 1149-1161 (1985)<br />
+&nbsp; Ca,Sc,Ti,V,Cr,Mn,Fe,Co,Ni,Zn,Zr,Cd,Hf,Ce,Eu,Tb,Th,U<br />
+&nbsp; Sc,Mn,Y,La,Nd,Eu,Gd,Ho,Yb,Lu,Pu<br />
+&nbsp; O<br />
+&nbsp; buckingham<br />
+----<br />
+<br />
+□ Lennard-Jones<br />
+-----<br />
+・clayFF.lib<br />
+&nbsp; ClayFF force field<br />
+&nbsp; R.T. Cygan, J.-J. Liang and A.G. Kalinichev, J. Phys. Chem. B, 108, 1255-1266 (2004)<br />
+&nbsp; H,O,Si,Al,Mg,Ca,Fe,Li,Na,K,Cs,Ba,Cl<br />
+&nbsp; Lennard-Jones potentials, harm, three<br />
+<br />
+・old-clayFF.lib<br />
+&nbsp; ClayFF force field<br />
+&nbsp; R.T. Cygan, J.-J. Liang and A.G. Kalinichev, J. Phys. Chem. B, 108, 1255-1266 (2004)<br />
+&nbsp; H,O,Si,Al,Mg,Ca,Fe,Li,Na,K,Cs,Ba,Cl<br />
+&nbsp; Lennard-Jones potentials, harm, three<br />
+<br />
+・kornyshev.lib<br />
+&nbsp; Potentials for proton transport in water from the group of Alexei Kornyshev<br />
+&nbsp; S. Walbran and A.A. Kornyshev, J. Chem. Phys. 114, 10039 (2001)<br />
+&nbsp; H,O<br />
+&nbsp; Intermolecular L-J<br />
+-----<br />
+<br />
+□ other potentials (mix)<br />
+-----<br />
+・mox.lib<br />
+&nbsp; Potentials for MOX fuels from the following papers:<br />
+&nbsp; Tiwary, van de Walle, Jeon and Gronbech-Jensen, Phys. Rev. B 83, 094104 (2011)<br />
+&nbsp; Tiwary, van de Walle and Gronbech-Jensen, Phys. Rev. B 80, 174302 (2009)<br />
+&nbsp; U,Np,Pu,O<br />
+<br />
+・vbo.lib<br />
+&nbsp; Valence-Bond Order (VBO) Potential Library<br />
+&nbsp; M. Zhao, et al., J. Chem. Theory Comput. 5, 594-604 (2009)<br />
+&nbsp; Al,H<br />
+<br />
+・dreiding.lib<br />
+&nbsp; DREIDING forcefield library<br />
+&nbsp; Torsions modified to handle different bond types April 2007 by JDG<br />
+&nbsp; Mayo, S.L., Olafson, B.D. and Goddard III, W. A., J. Phys. Chem. 1990, 94, 8897-8909<br />
+&nbsp; H,B,C,N,O,F,Cl,Br,I,Al,Si,P,S,Ga,Ge,As,Se,In,Sn,Sb,Te,Na,Ca,Fe,Zn,Ti,Tc,Ru<br />
+<br />
+・dreiding_paper.lib<br />
+&nbsp; DREIDING forcefield library<br />
+&nbsp; Torsions modified to handle different bond types April 2007 by JDG<br />
+&nbsp; Mayo, S.L., Olafson, B.D. and Goddard III, W. A., J. Phys. Chem. 1990, 94, 8897-8909<br />
+&nbsp; H,B,C,N,O,F,Cl,Br,I,Al,Si,P,S,Ga,Ge,As,Se,In,Sn,Sb,Te,Na,Ca,Fe,Zn,Ti,Tc,Ru<br />
+<br />
+・edip_marks.lib<br />
+&nbsp; EDIP potential for carbon from Nigel Marks (Curtin University)<br />
+&nbsp; J. Phys. Conden. Matter, 14, 2901-2927 (2002)<br />
+&nbsp; C<br />
+<br />
+・garofalini.lib<br />
+&nbsp; Library of potentials for modelling glass systems<br />
+&nbsp; D.A. Litton and S.H. Garofalini,J. Appl. Phys., 89, 6013 (2001)<br />
+&nbsp; Ca,Al,Si,O,H,Na<br />
+&nbsp; buckingham, fermi, sw3<br />
+<br />
+・bresme_water.lib<br />
+&nbsp; Central Force Model for water by Fernando Bresme.<br />
+&nbsp; F. Bresme, J. Chem. Phys., 115, 7564 (2001)<br />
+<br />
+・edip_si.lib<br />
+&nbsp; EDIP Potential Library for silicon<br />
+&nbsp; J. F. Justo, M. Z. Bazant, E. Kaxiras, V. V. Bulatov, and S. Yip, Physical Review B 58, 2539 (1998)<br />
+&nbsp; Si<br />
+<br />
+・streitzmintmire.lib<br />
+&nbsp; Parameters for the Streitz and Mintmire variable charge model for alumina<br />
+&nbsp; Phys. Rev. B, 50, 11996 (1994)<br />
+&nbsp; Al,O<br />
+&nbsp; buck, rydberg, manybody, eam_functional, eam_density<br />
+<br />
+・vashishta.lib<br />
+&nbsp; Potentials for silica from the following paper:<br />
+&nbsp; Vashishta et al, Phys. Rev. B, 41, 12197 (1990)<br />
+&nbsp; Si,O<br />
+&nbsp; lennard, sw3<br />
+<br />
+・tsuneyuki.lib<br />
+&nbsp; Potentials for silica from paper of Tsuneyuki et al, Phys. Rev. Lett., 61, 869 (1988)<br />
+&nbsp; Si,O<br />
+-----<br />
+<br />
+・eledata<br />
+------------------------------------------------------------------------------

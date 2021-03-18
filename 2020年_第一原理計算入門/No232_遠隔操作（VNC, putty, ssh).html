@@ -1,0 +1,203 @@
+　ここでは、リモート操作の方法を説明していきます。<br />
+&nbsp;-------------------------------------------------------------------------------<br />
+■ 遠隔操作にはVNCが便利です。下記のHPを参考にして、WindowsやMAC OSのPCでLinuxを操作してみると良いでしょう。<br />
+&nbsp; <a href="http://remomani.com/">http://remomani.com/</a><br />
+[1] <a href="http://www7a.biglobe.ne.jp/~tzwada/Win/vnc/index.html">http://www7a.biglobe.ne.jp/~tzwada/Win/vnc/index.html</a><br />
+[2] <a href="http://www14.plala.or.jp/campus-note/vine_linux/server_vnc/vnc.html">http://www14.plala.or.jp/campus-note/vine_linux/server_vnc/vnc.html</a><br />
+[3] <a href="http://hobby-kit.at.webry.info/201002/article_24.html">http://hobby-kit.at.webry.info/201002/article_24.html</a><br />
+[4] <a href="http://itneko.blogspot.com/2011/07/vnc-servergui-for-centos-6.html">http://itneko.blogspot.com/2011/07/vnc-servergui-for-centos-6.html</a><br />
+[5] <a href="http://kajuhome.com/vnc.shtml">http://kajuhome.com/vnc.shtml</a><br />
+[6] <a href="http://blog.livedoor.jp/loopus/archives/50249671.html">http://blog.livedoor.jp/loopus/archives/50249671.html</a><br />
+[7] <a href="http://blog.livedoor.jp/start_up_my_server/archives/65484964.html">http://blog.livedoor.jp/start_up_my_server/archives/65484964.html</a><br />
+[8] Nikkei Linux 2007年10月号 P.107<br />
+<br />
+■ Real VNC<br />
+Real VNC: <a href="http://www.vector.co.jp/soft/win95/net/se324464.html">http://www.vector.co.jp/soft/win95/net/se324464.html</a><br />
+を利用して、ubuntu 10.10 (amd64) のPCを windows7 のPCで操作出来た。<br />
+設定（愛知県内の某私立大学内では有線で成功した。兵庫県内の某財団法人ではネットワーク管理者に相談しないと出来ないらしい）<br />
+<br />
+□ ubuntu 10.04 側<br />
+1. 「Dash home」を押して、下にある文房具のアイコンを押す。<br />
+2. 「Filter results」を押して、下に表示される「Internet」を選択する。<br />
+3. 「Installed」にある「Desktop Sharing」を選択し、<br />
+&nbsp; a. sharing のところは全てチェックを入れる。<br />
+&nbsp; b. SecurityはRequire の行のみチェックを入れ、右側に好きなパスワードを入力。（上手く動作しない場合は、他のところも含めてチェックを入れたり外したりしてみよう）<br />
+&nbsp; c.&nbsp;show Notificatiohn Area IconではNeverにチェックを入れる。&nbsp;<br />
+4.&nbsp;「close」<br />
+5. 「Terminal」を開いて、「ifconfig」と入力し、eth1のIPアドレスをメモっておく。<br />
+<br />
+□ CentOS 6 側<br />
+1.&nbsp;「System」&rarr;「Preferences」&rarr;「Remote Desktop」を選択し、<br />
+&nbsp; a. sharingnのところは全てチェックを入れる。<br />
+&nbsp; b. SecurityはRequire の行のみチェックを入れ、右側に好きなパスワードを入力。<br />
+&nbsp; c. show Notificatiohn Area IconではNeverにチェックを入れる。&nbsp;<br />
+2.&nbsp; 「close」<br />
+3. 「Terminal」を開いて、「ifconfig」と入力し、eth1のIPアドレスをメモっておく。<br />
+4. 「System」&rarr;「Administration」&rarr;「Firewall」で学内でのセキュリティが既に高い場合は「Disable」を押して、「File」&rarr;「Apply」&rarr;「Quit」でもよいが心配なので、「other Ports」にて「User Defined」にチェックを入れて、「Port/Port Range:」に好きな数値を入れる。Protocolはtcpでよい。最後にOKを押す。<br />
+5.&nbsp;「Terminal」を開いて、「yum install vnc-server」と入力 （su 入力をして root にならないとインストールできないかもしれない。rootでインストールした場合、再起動した方がよい）<br />
+6.&nbsp;「Terminal」を開いて、「vncserver」と入力<br />
+&nbsp; ※ この設定だと、Shotdownする毎に、参照される側のPCで、vncserver と入力しなければならない。<br />
+<br />
+□ windows7側<br />
+1. 上記のRealVNCのHPからソフトをダウンロードし、インストールする。<br />
+2. 「Real VNC」&rarr;「VNC ビュワー 4」&rarr;「VNCビュワー4の起動」<br />
+3. サーバ: で eth1 のIPアドレス(ubuntu 10.10側 3. b.を参照)を入力し、CentOSの場合は、「:」の後に上記(CentOS 6 側 4.で入れた数値)を入力する。下記のような感じになる。<br />
+&nbsp;&nbsp;&nbsp; xxx.x.xxx.xxx:xxxx<br />
+4. パスワード: で 設定したパスワード(ubuntu 10.10側 5.を参照)を入力する。<br />
+<br />
+□ MacOS<br />
+1.&nbsp;林檎のマーク&nbsp;&rarr; システム環境設定 &rarr; 画面共有の左の箱にチェックを入れる。<br />
+2. 左下の鍵のマークをロックした形にする。<br />
+3. Safariを開いて一番上にあるURLを vnc://xxx.xxx.xxx.xxx (IPアドレス) と入力する。<br />
+4. このまま接続を続けますか？ で接続を選択。<br />
+<br />
+unlock keyringについては下記のHPを参照（ubuntu 10.04)<br />
+<a href="http://davestechsupport.com/blog/2009/01/16/how-to-remove-ubuntus-password-keyring/">http://davestechsupport.com/blog/2009/01/16/how-to-remove-ubuntus-password-keyring/</a><br />
+1. System &rarr; Preferences &rarr; Passwords and Encryption keys<br />
+2. default と書いた行を右クリックし、Change Passwordを選択する。&nbsp;<br />
+3. old password を入力して、後の2つは空白にする。<br />
+<br />
+私立大学ではVPNを用いて学内と学外の通信を行っているところがある。その手法での方法も今後模索していく予定である（挫折した）。<br />
+-------------------------------------------------------------------------------<br />
+■&nbsp;Xming + putty + firefox<br />
+Windows 7<br />
+1. <a href="http://sourceforge.net/projects/xming/files/">http://sourceforge.net/projects/xming/files/</a> から Download Xming-6-9-0-31-setup.exe (2.2 MB) を押して Xming をダウンロードする。<br />
+2. <a href="http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html">http://www.chiark.greenend.org.uk/~sgtatham/putty/download.html</a> から putty.exe をダウンロードしてデスクトップに保存する。起動は putty.exe を実行すればよい。<br />
+3. putty を起動し、 Connection &gt; SSH &gt; X11 にて、Enable X11 forwarding にチェックを入れる。Sessionに戻って Host Name に接続先のPCへのIPアドレスを入力する。Save Sessions に好きな名称を入れてSave を押す。最後にOpenを押す。(※ IPアドレスでの入力では ログインするユーザー名@IPアドレスとすると、login as で ログインするユーザー名を入力する必要が無い)<br />
+4. スタート &gt; Xming &gt; Xming を起動。<br />
+5. firefox &gt; オプション &gt; 詳細 &gt; ネットワーク &gt; 接続設定 &gt; 手動でプロキシを設定する &gt; プロキシなしで接続に接続先のPCへのIPアドレスを入力。HTTPプロキシやSSL, FTPプロキシ, SOCKSホストの右側は空白にする。<br />
+[1] <a href="http://www2.cc.kyushu-u.ac.jp/scp/system/manual/etc/Xming_howto.html">http://www2.cc.kyushu-u.ac.jp/scp/system/manual/etc/Xming_howto.html</a><br />
+[2] <a href="http://sourceforge.jp/magazine/09/10/14/0753240">http://sourceforge.jp/magazine/09/10/14/0753240</a><br />
+<br />
+□ Ubuntu<br />
+1. sudo apt-get install openssh-server<br />
+上記ではなくsudo apt-get install ssh が良いかもしれない。<br />
+[1] <a href="http://debianj.com/ubuntu/install/openssh.html">http://debianj.com/ubuntu/install/openssh.html</a><br />
+<br />
+□ MacOS<br />
+[1] <a href="http://med.wind.ne.jp/ariga/orca&amp;mac&amp;win.html">http://med.wind.ne.jp/ariga/orca&amp;mac&amp;win.html</a><br />
+[2] <a href="http://med.wind.ne.jp/ariga/filemakerpage19.html">http://med.wind.ne.jp/ariga/filemakerpage19.html</a><br />
+<br />
+■ PuTTY Fatal Error<br />
+&nbsp; [Disconnected: No supported authentication methods available (server sent: publickey)] (Ubuntu)<br />
+&nbsp; [Disconnected: No supported authentication methods available (server sent: publickey,gssapi-keyex,gssapi-with-mic)] (CentOS)<br />
+・前任者が優秀過ぎて上記のようなエラー表示がでて困ってしまった。私の場合、以下で対処できた。<br />
+1. PuTTYgenで公開鍵を作成する。下記のHPが参考になる。<br />
+　<a href="http://www.tempest.jp/security/keygen.html">http://www.tempest.jp/security/keygen.html</a><br />
+　（SSH2 RSA を指定してgenerateを押す）<br />
+2. PuTTYgenで作成した公開鍵をコピーして、Ubuntuの隠しファイルである.sshのフォルダにあるauthorized_keysに保存します<br />
+3. Key passphraseとConfirm passphrase を入力<br />
+4. Save public key と Save private keyを押す<br />
+5. PuTTYのConnection &gt; SSH &gt; Auth &gt; Private key file for authentication: のBrows...を押してSave private keyとしてセーブしたファイル（拡張子は.ppkとなる）を指定する<br />
+※ ポート番号（Port）はディフォルトで22のようです。ポートについては特に変更がありませんでした。<br />
+※ WinSCPでは&nbsp;設定 &gt; SSH &gt; 認証 &gt; 認証条件&nbsp;&gt; 秘密鍵の...を押して.ppkを指定してください。エージェントの転送を許可するにチェックをは必要ありません。<br />
+※ For CentOS, see https://www.ipentec.com/document/document.aspx?page=linux-vncserver-realvnc-connect and https://www.ipentec.com/document/document.aspx?page=linux-vnc-firewall-setting&amp;culture=ja-jp (setting firewall)<br />
+※ check ssh at service and add 5901 tcp at Port in firewall<br />
+-------------------------------------------------------------------------------<br />
+付録：putty での利用（Terminal などでも同じように行える）<br />
+・CPUの状況の確認<br />
+&nbsp; sudo apt-get install nmon で nmon をインストールし、nmon と入力して、c を押せばよい。終了は q を押す。<br />
+・ バックグラウンド処理<br />
+&nbsp; コマンドの後に &amp; を付ける。例えば、 emacs&nbsp;ファイル名 &amp; など。<br />
+・ バックグラウンド処理 putty を終了させても計算は走っているようにする方法<br />
+&nbsp; nohup コマンド &amp; とする。<br />
+・ バックグラウンド処理の確認<br />
+&nbsp; jobs や ps -ax で処理を確認できる。<br />
+・ バックグラウンドの強制終了<br />
+&nbsp; kill %?&nbsp;<br />
+&nbsp; ここで?は jobs コマンドで表示される[]内の数値。<br />
+参考HP：<a href="http://d.hatena.ne.jp/satake7/20080606/p1">http://d.hatena.ne.jp/satake7/20080606/p1</a>　<br />
+-------------------------------------------------------------------------------<br />
+■ SSHを用いた遠隔操作とファイルの取得方法<br />
+<br />
+□ Ubuntu<br />
+1. sudo apt-get install ssh<br />
+<br />
+□ MacOS（Linuxでの遠隔操作はMacとほぼ同じ）<br />
+1. 移動&rarr;アプリケーション&rarr;ユーティリティー&rarr;ターミナル<br />
+2. ssh Linuxでのユーザー名＠IPアドレス<br />
+3. yes<br />
+4. Linuxを使っているときのパスワードを入力<br />
+5. 終了する場合は logout を入力する<br />
+データの取得 （linuxへのlogout状態で行う）<br />
+1. scp -r&nbsp;Linuxでのユーザー名＠IPアドレス:取得したいディレクトリ名 .<br />
+2.&nbsp;Linuxを使っているときのパスワードを入力<br />
+3. Linuxから取得したディレクトリのデータやファイルはディフォルトの場合、下記の場所に格納される。<br />
+移動&rarr;コンピュータ&rarr;Machintosh HD&rarr;ユーザー&rarr;ターミナルに表示されている名称のファイルにダウンロードされている。<br />
+※ -r はディレクトリをコピーするために必要なオプション。ファイルを取得する場合は不要。Windowsの場合はWinSCPというソフトが存在する。<br />
+<br />
+□ Windows OS<br />
+1. WinSCP(winscp513setup.exe)のダウンロード：<a href="http://sourceforge.jp/projects/winscp/releases/">http://sourceforge.jp/projects/winscp/releases/</a>　<br />
+2. 日本語でOK、後はディフォルトで「次へ」を押していく。<br />
+3. スタート&rarr;WinSCP&rarr;WinSCPとしてログイン画面を開く。<br />
+4. SFTPを選び、ホスト名（またはIPアドレス）、ユーザー名、パスワードを入力して保存を押す。<br />
+5. ログインを押す。<br />
+6. 右にある好きなファイルを左にドラッグすれば良い。<br />
+[1]&nbsp;&nbsp;<a href="http://sourceforge.jp/magazine/08/09/03/1110251">http://sourceforge.jp/magazine/08/09/03/1110251</a><br />
+<br />
+※ Linux の遠隔での再起動は sudo shutdown -r now と入力すればよい。<br />
+-------------------------------------------------------------------------------<br />
+■ FTP<br />
+Ubuntu<br />
+1. sudo apt-get install vsftpd<br />
+2. sudo gedit /etc/vsftpd.conf<br />
+&nbsp;&nbsp;&nbsp; anonymous_enable=NO<br />
+&nbsp;&nbsp;&nbsp; local_enable=YES<br />
+&nbsp;&nbsp;&nbsp; write_enable=YES<br />
+&nbsp;&nbsp;&nbsp; ls_recurse_enable=YES<br />
+3. sudo service vsftpd restart<br />
+sudo apt-get install filezilla<br />
+<br />
+CentOS<br />
+1. su<br />
+2. yum install vsftpd<br />
+3. gedit /etc/vsftpd/vsftpd.conf<br />
+&nbsp;&nbsp;&nbsp; anonymous_enable=NO<br />
+&nbsp;&nbsp;&nbsp; #local_umask=022<br />
+&nbsp;&nbsp;&nbsp; ls_recurse_enable=YES<br />
+3. service vsftpd restart<br />
+4. check ftp at service and add 77 tcp at Port in firewall<br />
+yum install filezilla<br />
+<br />
+Please, use Filezilla<br />
+FilezillaはMac, Win, Linuxのどれでも使用可能なのでインストールしておくとよい。<br />
+<br />
+[1] http://linux.just4fun.biz/Ubuntu/Ubuntu12.04%E3%81%ABvsftpd%28FTP%E3%82%B5%E3%83%BC%E3%83%90%29%E3%82%92%E3%82%A4%E3%83%B3%E3%82%B9%E3%83%88%E3%83%BC%E3%83%AB%E3%81%99%E3%82%8B%E6%89%8B%E9%A0%86.html<br />
+<br />
+※ WIEN2kのw2web画面が無線LANで使えない場合は、プロキシの設定を調べてみてください。所属している大学でプロキシの設定が示されている場合があります。<br />
+Macの場合：リンゴのマーク＞システム環境設定＞ネットワーク＞Wi-Fi＞詳細＞プロキシ＞Webプロキシ（HTTP）でWebプロキシサーバーとその：の右にある欄にポート番号を入力する。<br />
+<br />
+-------------------------------------------------------------------------------<br />
+■&nbsp; replacement (all file in corrent directory)<br />
+grep -rl &quot;.exe&quot; ./ | xargs perl -i -pe &quot;s/.exe//g<br />
+grep -rl &quot;ifort&quot; ./ | xargs perl -i -pe &quot;s/ifort/ifort -mavx -mcmodel=large/g&quot;<br />
+grep -rl &quot;ifort&quot; ./ | xargs perl -i -pe &quot;s/ifort/ifort -m64 -mp1 -mavx -mcmodel=large -traceback/g&quot;<br />
+References:<br />
+[1] http://qiita.com/lonerydeveloper/items/b5751c6e46ef9013dd08<br />
+[2] https://hydrocul.github.io/wiki/commands/sed.html<br />
+<br />
+■&nbsp; r/bin/sh^M: bad interpreter error<br />
+sed -i 's/\r//' *<br />
+References: http://totech.hateblo.jp/entry/2014/03/19/174129<br />
+-------------------------------------------------------------------------------<br />
+■&nbsp; ディスクのエラーや不良セクタのチェックと修正<br />
+<span class="kw2">1. Disks<br />
+2. sudo</span> badblocks <span class="re5">-vs</span> <span class="re5">-o</span> bad.txt <span class="sy0">/</span>dev<span class="sy0">/</span>sdb<br />
+<span class="kw2">3. sudo</span> fsck <span class="re5">-l</span> bad.txt <span class="sy0">/</span>dev<span class="sy0">/</span>sdb<br />
+<br />
+completely clean Disks<br />
+<span class="kw2">1. Disks<br />
+2. sudo</span> badblocks <span class="re5">-vws</span> <span class="re5">-o</span> bad.txt <span class="sy0">/</span>dev<span class="sy0">/</span>sdb<br />
+<span class="kw2">3. sudo</span> fsck <span class="re5">-l</span> bad.txt <span class="sy0">/</span>dev<span class="sy0">/</span>sdb<br />
+[1] http://kaworu.jpn.org/ubuntu/badblocks<br />
+[2] http://tomono.eleho.net/2011/12/04/2186/<br />
+[3] http://ub.workdesign.jp/device/data68.html<br />
+-------------------------------------------------------------------------------<br />
+■ convert video (MTS) to mp4<br />
+sudo apt-get install ffmpeg<br />
+sudo apt install libav-tools<br />
+avconv -i input.mts -b:v 2000k -strict experimental threads 0 output.mp4<br />
+<br />
+silent movie<br />
+avconv -i input.mts -strict experimental threads 0 -an -aframes 15 output.mp4<br />
+-------------------------------------------------------------------------------

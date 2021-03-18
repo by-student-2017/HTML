@@ -1,0 +1,429 @@
+<p>　ここでは大学生及び社会人の方を対象とした最速の計算機構築への理解に必要な知識を参考文献を引用しながら紹介していきます<br />
+------------------------------------------------------------------------------<br />
+※ 現在ではCPUの性能がよく、最後にKの付くものや上位機種を購入する必要は無い。なぜなら、数分で済む計算は数%計算時間が短くなっても気にならないし、数日の計算は深夜に計算が終わってもどうしようもない。数ヶ月の計算は他の業務をしていたら数日の短縮は気にならなくなる。半年ある学会に必要な計算は十分余裕を持って計算できることが多い（※ 1-2台のPCで良いという場合、最後にKの付くCPUはお金に余裕があるときは購入してもよいとは思う）。<br />
+------------------------------------------------------------------------------<br type="_moz" />
+■ BTO（企業から購入できる）のPCのスペックの選び方（私の経験）<br />
+（文献[1]の自作PCクラスタとほぼ同じ。同じ結論に至るのは嬉しい限り）<br />
+&nbsp;</p>
+
+<p>□&nbsp;CPUの選定<br />
+　Core-i7がコストパフォーマンスが良い。Xeonは扱いにくい。WIEN2kもCore-i7を勧めている。</p>
+
+<p>　詳細は下記の文献などを参照。</p>
+
+<p>1) WIEN2kのベンチマークテストを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://www.wien2k.at/reg_user/benchmark/" rel="nofollow" sizcache="7" sizset="0" target="_blank"><span style="color: rgb(128, 0, 128);">http://www.wien2k.at/reg_user/benchmark/</span></a></p>
+
+<p sizcache="5" sizset="0">2) ABINITのベンチマークテストを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://www.abinit.org/documentation/benchmarks">http://www.abinit.org/documentation/benchmarks</a><br />
+3) Fireflyのperformanceを見て、CPUを選定してみて下さい。<br />
+&nbsp; <a href="http://classic.chem.msu.su/gran/gamess/index.html">http://classic.chem.msu.su/gran/gamess/index.html</a><br />
+4)&nbsp;雑誌『日経WinPC』日経BP<br />
+5)&nbsp;WIEN2k　Benchmark Result&nbsp;<br />
+&nbsp; <a href="http://topsecret.hpc.co.jp/wiki/index.php/WIEN2k">http://topsecret.hpc.co.jp/wiki/index.php/WIEN2k</a></p>
+
+<p>&nbsp; 大学の付属図書館で閲覧したり、web上で購入可能（必要な記事のみ購入できる）<br />
+※ 私は個人的にCore i7-2700やCorei7-2800以降の無理に高いものではないCore-i7シリーズのCPUが値段も演算スピードも速くて好き。<br />
+※ Xeonはユーザー数も少なく、マザーボードも少ないので、問題が発生したときに対処がし辛い。もしどうしてもXeonを購入したい場合は、購入実績のある先生に相談して、その系統のPCを購入するのが現時点では一番良いと思います。<br />
+<br />
+□&nbsp;CPUグリス<br />
+&nbsp; ノーマルグリスで十分です。安いので予算が余れば高熱伝導グリスも良いでしょう。</p>
+
+<p><br />
+□&nbsp;CPUファン<br />
+&nbsp; CPUを全コアフル稼働させても、水冷でなくてもBTOでの最低限の空冷ファンでクーラーの無い部屋でも十分に動作します。気になる場合は、BTOの空冷でグレードの高いものを選べば良いでしょう。<br />
+<br />
+□&nbsp;RAM Memoryの選定<br />
+&nbsp; 計算する規模にもよります。単位胞に数十原子であれば 4 GB程度で良いですが、数百原子であれば 8 GB以上が必要になります。24 GBや32 GB以上であれば色々とドープしてスーパーセルの計算も余裕を持って取り組めるでしょう。<br />
+&nbsp; BTOで購入すれば、メーカーは特に気にしなくて良いでしょう。&nbsp;&nbsp;&nbsp;<br />
+<br />
+□ HDD<br />
+&nbsp; BTOで購入できる最低限のHDDで十分です。パーティションは分割なし。SSDを選択した場合は、結果の出力場所のためにHDDを余分に付けておくと良いでしょう。SSDは読み出しは性能が良いですが、書き出し読み出しを繰り返すと処理速度が遅くなることが知られています。HDDにSCFサイクルのデータなどを書き込むようにアドレスや作業場所を指定しましょう。<br />
+<br />
+□&nbsp;GPU （グラフィックボードです）<br />
+&nbsp; GPUで計算する場合以外は無くても十分です。つまり、オンボードでよい。GPUで計算可能なコードはその情報もあまり多くないので、私は当分の間、オンボードか最低限のGPUで行くつもりです。<br />
+<br />
+□&nbsp;光学ドライブ<br />
+&nbsp; DVDが読める最低限のもので良いです。OSをインストールするために用いるだけです。<br />
+　（BTOには数千円で付いてくるのであまり気になることはない。初心者にも扱いやすい。USBが普及したいまでは、文献[1]のように対処することで光学ドライブは必要なくなる）<br />
+<br />
+□&nbsp;電源<br />
+&nbsp; 電源も最低限のもので十分です。理論計算でフルに使うことは無いですね。BTOで最低限のもので大丈夫です。私の場合、たぶん、GPUを使うことがない為だと思います。GPUがなく、省電力のCPUなら300 W程度あればいい（省電力のCPUはその代わり速度が遅いのがよくわかる）。この結果から考えれば、文献[1]で400 W程度と書かれている理由がよく分かると思う。<br />
+<br />
+□&nbsp;ブロードバンドポート<br />
+&nbsp; ギガビットLANポートで良いでしょう。ギガビット通信が可能なハブの値段がまだ高いので、それほど無理はしなくてよいと思います。特に1台のPCで並列計算を行う場合はBTOの最低限のもので良いです。<br />
+<br />
+□&nbsp;OS<br />
+&nbsp; OSはLinuxなので無しで良いです。それにしても、LinuxでIgorが使えれば、全部OSをLinuxにするのに&hellip;&hellip;。<br />
+&nbsp;</p>
+
+<p>□&nbsp;コンパイラとライブラリの選定</p>
+
+<p>　Intel Compiler + MKL がかなり速いようです（gfortran + OpenBLASも無償としてはかなり良いようです）。<br />
+<br />
+※ 私の運用経験ではマザーボードが壊れることが多い（これまでの故障の原因でこれが100%近い）。いつもマザーボードの交換か新しいPCかで迷う。他には大学の停電時の検査の前にコンセントを抜き忘れて電源などが壊れるということも過去には経験している（これはコンセントを抜いておけば防げる。だが、この注意喚起が足りなくて旧帝大に設置していたPCがよく壊れていた）。<br />
+------------------------------------------------------------------------------<br />
+■ 自作PCクラスタ [1]<br />
+<br />
+□ マザーボード<br />
+・自作サーバーを作る際、中心となるのがマザーボード（マザボと呼ばれる）。経験上、マザボが「購入での一番のネック」と言える。<br />
+・CPUは手に入っても「マザボの数が確保できない」あるいは「マザボが廃盤になって入手が難しい」という目に遭うことが多い。<br />
+・「一番、出回っているマザーボード」に載るCPUを選ぶのが、初心者には現実的な選び方といえます。<br />
+・ゲーマーなどの自作層というのは、コスパを勘案しながら性能を欲しがる層といえるので、ゲーマー・マーケットに乗っかるのが初心者には楽な選択といえる。<br />
+・ATXを選択。mATXもあるが、mATXはコンパクトな代わりに同じ値段でスペックが落ちる、生産終了となるピッチが早いなどの問題がある。<br />
+<br />
+□ CPU<br />
+・マザボを選ぶとCPUやメモリは呼応して大方決定される。<br />
+・パーツ選定で大切なことは、結婚式のオプションのように「折角だから」と欲張らないことです。<br />
+　インテルに絞れば、そのブランドにはXeon, Core-i7, Core-i5, ...といったものがあります。「インテル/Core-i7」のなかんも6700のほか、6700Kとか、6900といった上位機種や、オーバークロックできる機種もありますが、ここでは無難に6700としました。<br />
+・自作並列の場合、ノード数を徐々に増やすことになるので、管理上、パーツが統一されていることが望ましく、1台1台をでいるだけ安く作ることが重要。<br />
+・この点、「1点もの」の「オレ専用マシン」の自作とは意識を切り替えて、あまりこだわらずにコストを削ることが肝要です。1台1000円削れば、100台で10万円も違ってきます。<br />
+・単体性能を若干高めることよりも、「安価に、より多くの演算コアの確保」を優先します。<br />
+・マザボ側のスペックで使用するCPU、例えば、Core-i7 6700のCPUを使用するのであれば「Core i7/6700対応」などの記述があるかどうか、また、CPU側では「マザボ側のソケット規格； LGA1151」と整合しているかどうかをチェックのうえ購入する。<br />
+・リテールファン（購入したときに標準でついているファン）で十分。高価で大仰な別売り冷却ファンはいらない。<br />
+<br />
+□ メモリ<br />
+・マザボ側のスペックに記載のあるもの。<br />
+<br />
+□ 電源<br />
+・マザボに対応するもの。例えば、マザボがATXであれば、「ATX 電源」というキーワードでアマゾンなどで検索をかける。<br />
+・最近のCPU（2017年）は非常に省電力になっており、400&nbsp;Wもあれば十分ですので、あまりこだわらず、安めの電源（数千円程度）を購入しましょう。&nbsp;<br />
+<br />
+□ HDD<br />
+・3.5インチを選べばよい。2.5インチは「回転数に呼応するアクセス速度の性能」に対するコスパが悪い。<br />
+・「インターフェイス/SATA3.0」などスペックを調べる。SATA3.0では転送速度が6 Gbps、以前のSATA2.0では転送速度が3 Gbpsとなる。転送速度が高い方が性能が高い。<br />
+<br />
+※ 接続のケーブルは挿さるようにしか挿さらない。つまり誤った挿し方にならないように接続口の形状が非対称になっている。<br />
+<br />
+※ 基本的に、パフォーマンスが高く、かつ、信頼性はそこそこの価格帯のものを選べばよい。<br />
+□ 単ノードパーツの購入例</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 500px;">
+	<tbody>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">パーツ名</td>
+			<td style="width: 241.98px; text-align: center;">製品名</td>
+			<td style="width: 114.01px; text-align: center;">購入価格</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">CPU</td>
+			<td style="width: 241.98px; text-align: center;">Intel Core i7 4771 BOX</td>
+			<td style="width: 114.01px; text-align: center;">31511円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">マザーボード</td>
+			<td style="width: 241.98px; text-align: center;">ASRock H87 Pro4</td>
+			<td style="width: 114.01px; text-align: center;">8063円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">メモリ</td>
+			<td style="width: 241.98px; text-align: center;">UMAX Cetus QCD3-16 GB-1600OC<br />
+			[DDR3 PC3-128000 4GB 4枚組]</td>
+			<td style="width: 114.01px; text-align: center;">17520円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">電源</td>
+			<td style="width: 241.98px; text-align: center;">KEIAN BULL MAX2 KT-520RS2</td>
+			<td style="width: 114.01px; text-align: center;">2960円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">ハードディスク</td>
+			<td style="width: 241.98px; text-align: center;">WESTERN DIGITAL WD2000JS<br />
+			(200G STA300 7200)</td>
+			<td style="width: 114.01px; text-align: center;">3980円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">LANケーブル</td>
+			<td style="width: 241.98px; text-align: center;">ETPC5E2SKA (2m)</td>
+			<td style="width: 114.01px; text-align: center;">120円</td>
+		</tr>
+		<tr>
+			<td style="width: 125.02px; text-align: center;">ネットワークスイッチ</td>
+			<td style="width: 241.98px; text-align: center;">PLANEX FXG-08IM3</td>
+			<td style="width: 114.01px; text-align: center;">3059円</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+□ クラスタに必要な投資<br />
+・必要なソフトウェア： すべて無料<br />
+・必要なハードウェア<br />
+　単一ノードの作製： 約8万円<br />
+　複数ノードの作製： 約8万円*(演算ノード台数 + 2) + 約2万円（周辺機器）<br />
+※ 「+2」はファイルサーバとルータの分の台数が加わるため<br />
+※ 「周辺機器」とは、ネットワークスイッチ（1 GbE/16ポート程度 1台）、ルータ用の別付けNIC（1GbE）、LANケーブル、マザーボード固定用物品（100円ショップで購入できる結束バンドと金網、しめしめ（大型の結束バンドと結束器具））、ノード格納用のスチールラックなど。<br />
+※ 2ノード構成の場合： 8*4+2=34万円<br />
+※ ４ノード構成の場合： 8*6+2=50万円<br />
+※ 文献[1]を読みながら組み上げると、講師付きなら3日程度、独学で単ノード構築が1週間、独学でファイルサーバ/ルータの構築に1週間程度が標準。（私はこの本を読破するのに6*2=12時間なので、ある程度の域まで達している人は1日で構築できるかも）<br />
+<br />
+□ OS<br />
+・Ubuntu<br />
+<br />
+◇ sudo apt-get コマンドでインストールするもの<br />
+・gnuplot （プロッタ）<br />
+・gcc, g++, cpp（コンパイラ）<br />
+・openssh-server （sshを用いた通信環境）<br />
+・nfs-common（ファイルサーバー利用の際に利用するNFSプロトコルの環境一式）<br />
+・libgomp1（OpenMPと呼ばれるスレッド並列の実行環境）<br />
+・openmpi-bin/libopenmpi-dev（OpenMPIと呼ばれるプロセス並列の実行環境）<br />
+・libopenblas-dev/libblas-dev/liblapack-dev/liblapack-dev（BLASやLAPACKと呼ばれる線形計算ライブラリ）<br />
+・update-manager-core（Ubuntuディストリビューションで用いられるアップデータ）<br />
+◇ その他（これが必要かはわからない）<br />
+・rsh-server<br />
+・rsh-client<br />
+・xinetd<br />
+・samba<br />
+・samba-client<br />
+・rlwrap<br />
+・python（-dev, -numpy, -matplotlib, -yaml, -h5py）<br />
+・expect<br />
+----------<br />
+□ 並列計算のための設定（まだチェックしていない）<br />
+<br />
+◇ /etc/interfaces の設定<br />
+1. ifconfig | more<br />
+　Link encap; Ethernet&nbsp; の左に記載されている英数字がNICの識別番号となる<br />
+2. /etc/networkで「interfaces」をコピーして、もしものために対処できるようにする<br />
+3. interfacesの書き換え<br />
+#----------<br />
+auto lo<br />
+iface lo inet loopback<br />
+auto NICの識別番号<br />
+iface NICの識別番号 inet static<br />
+adress 192.168.0.PCに付けたい好きな番号<br />
+network 192.168.0.0<br />
+netmask 255.255.255.0<br />
+broadcast 192.168.0.255<br />
+gateway 192.168.0.PCに付けたい好きな番号<br />
+dns-nameservers 所属機関のIPアドレス<br />
+dns-domain yyyy.ac.jp<br />
+dns-search&nbsp;yyyy.ac.jp<br />
+#----------<br />
+4. sudo service networking restart<br />
+　このコマンドで「interfaces」の設定が反映される<br />
+※ ローカルネットワークは、「192.168.0.PCに付けたい好きな番号」でないと機能しない<br />
+※ ネットマスクは通常「255.255.255.0」<br />
+※ 所属機関の環境（所属機関のIPアドレス/yyyy.ac.jp）<br />
+<br />
+◇ hostsの設定<br />
+1. /etc の hosts をコピーして、もしものときに備える<br />
+2. hosts を書き換える<br />
+#----------<br />
+::1&nbsp;&nbsp;localhost6.localdomain6 localhost6<br />
+IPアドレス　PCを識別する為に付けたい名称<br />
+IPアドレス PCを識別する為に付けたい名称<br />
+（これを続けていく）<br />
+#----------<br />
+3. sudo service networking restart<br />
+※ 上記までの設定で（それが無くても動作するが）ノード内並列が可能になる。以下はノード間並列に必要な設定となる。<br />
+<br />
+◇ 公開鍵認証の設定<br />
+1. ssh-keygen<br />
+　すべてディフォルトでよいのでEnterキーを打ち続ける<br />
+2. ホームディレクトリに .ssh が作成される<br />
+　&nbsp;id_rsa と 公開鍵の id_rsa.pub ができる<br />
+3. cd ~/.ssh/<br />
+4. cp id_rsa.pub authorized_keys<br />
+5. cd<br />
+6. rsync -avz ~/.ssh 接続先のPCのIPアドレス:~/ .<br />
+7. ssh 接続先のPCのIPアドレス<br />
+　初回だけyes/noと尋ねられる<br />
+<br />
+◇ ノード間並列するPCを指定する<br />
+1. machinefile にPCのIPアドレスとCPU数を書き込む<br />
+　PCのIPアドレス cpu=CPU数<br />
+　PCのIPアドレス cpu=CPU数<br />
+　(使用して欲しいPCの順に上から記述）<br />
+2. machinefile はホームでも作業ディレクトリに置いてもよい<br />
+　計算の実行は、machinefileがホームに置かれていれば下記のようになる<br />
+　mpirun -machinefile ~/machinefile -np 並列数 実行するプログラムのアドレス<br />
+※ 以上でノード間並列の計算が可能になる。以下は作業を便利にするための設定<br />
+<br />
+◇ ファイルサーバーの構築<br />
+1. sudo apt-get install nfs-kernel-server<br />
+　NFS構築に必要となるプログラムをインストール<br />
+2. 共有ファイル領域用に比較的大容量の別HDD（2 TB程度）を準備し、いったん電源を切ってから、SATAケーブルで接続する<br />
+3. sudo fdisk -1<br />
+　/dev の後の記述（sdaなど）をメモする<br />
+　（※ もしext4形式のフォーマットする必要があれば： sudo mkfs.ext4 /dev/メモした記述）<br />
+4. sudo mkdir /mnt/外部ディスク名（好きな名前でよい）<br />
+　外部ディスク名のディレクトリを作成する<br />
+5. sudo mount -t ext4&nbsp;/dev/メモした記述 /mnt/外部ディスク名（上と同じ名前にする）<br />
+　外部ディスクをext4のフォーマットで搭載（マウント）する<br />
+6. cd mnt<br />
+7. sudo chmod -R ugo+rw 外部ディスク名（上でのものと同じ名前にする）<br />
+　-Rはディレクトリ内全てを対象にする指定。ugo+rwはu/g/oのいずれに対しても読み書き(rw)可能にする指定<br />
+8. ./etc/rc.local の「exit 0」の行の前に下の記述を追加<br />
+　mount -t ext4 /dev/メモした記述 /mnt/外部ディスク名（上でのものと同じ名前にする）<br />
+　これは起動時に自動的にマウントしてくれる設定をするためのコマンド<br />
+9. /etc/exports に下の記述を追加<br />
+　/mnt/外部ディスク 192.168.0.0/255.255.255.0 (rw)<br />
+　外部ディスクをネット上でつながっている192.168で始まるマシン群に読み書き(rw)で公開するという意味<br />
+10. /etc/init.d/nfs-kernel-server restart<br />
+　設定を反映させる<br />
+11. 計算するPC（演算サーバと呼ばれる）で<br />
+　sudo mkdir /mnt/外部ディスク名（上でのものと同じ名前にする）<br />
+12. sudo mount 外部ディスクのIPアドレス:/mnt/外部ディスク名（上でのものと同じ名前にする） /mnt/外部ディスク名（上でのものと同じ名前にする）<br />
+　外部ディスクのIPアドレスのPCの/mnt/外部ディスク名（上でのものと同じ名前にする）のディレクトリを、ネットーワーク越しに計算するPCの/mnt/外部ディスク名（上でのものと同じ名前にする）に搭載（マウント）する指定<br />
+13. 毎回マウントするのが面倒になるので/etc/rc.local に下の記述を追加<br />
+　mount 外部ディスクのIPアドレス:/mnt/外部ディスク名（上でのものと同じ名前にする） /mnt/外部ディスク名（上でのものと同じ名前にする）<br />
+<br />
+◇ 共有ファイル領域を使った並列計算<br />
+1. 計算するPC上で、<br />
+　cd /mnt/外部ディスク名（上でのものと同じ名前にする）<br />
+2. cp -r コピーしたいデータのアドレス .<br />
+3. cd コピーした計算用のデータのアドレス（共有ファイルの中にあるもの）<br />
+4. mpirun --machinefile machines -np 並列数 実行ファイル &amp;<br />
+※ ローカルを使った場合に比べて、共有ファイル領域を使った計算は大幅に遅くなる。文献では17秒から41秒に遅くなっている。これはファイルをネットワーク経由で転送しているため。HDDは6GB/sだがネットワークの速度が1 GB/sであることによる。<br />
+※ DFT計算はQMCと違いファイルの読み書きが多いため、NFSマウントで運用していると著しく性能が落ちる。対策方法としては、共有ファイル領域から必要なファイル群を、ローカルサーバのハードディスクにコピーして、これを参照するよう運用（ステージング）する方法やLustreファイルシステムを構築する、値段が高くなるが10 GbpsのNICとハブを購入する、などが考えられる。<br />
+<br />
+◇ ルータを用いた遠隔設置と遠隔制御<br />
+1. ギガビットLANカードを新たに購入し（約2線円程度。PCI_Expressの規格になっている）、マザボに挿す（挿さるところに挿せばOK）<br />
+2. ifconfig<br />
+　Link encap; Ethernet&nbsp; の左に記載されている英数字がNICの識別番号となる<br />
+　（LANカードを追加したことにより増えたNICの識別番号を用いればよい）<br />
+3. /etc/networkで「interfaces」をコピーして、もしものために対処できるようにする<br />
+4. interfacesの変更<br />
+#----------<br />
+auto lo<br />
+iface lo inet loopback<br />
+<br />
+auto NICの識別番号<br />
+iface NICの識別番号 inet static<br />
+adress 192.168.0.PCに付けたい好きな番号<br />
+network 192.168.0.0<br />
+netmask 255.255.255.0<br />
+broadcast 192.168.0.255<br />
+gateway 192.168.0.PCに付けたい好きな番号<br />
+dns-nameservers 所属機関のIPアドレス<br />
+dns-domain yyyy.ac.jp<br />
+dns-search yyyy.ac.jp<br />
+<br />
+auto 新たに増えたNICの識別番号<br />
+iface 新たに増えたNICの識別番号 inet dhcp<br />
+#----------<br />
+5. sudo service networking restart<br />
+　このコマンドで「interfaces」の設定が反映される<br />
+<br />
+◇ ルータの設定<br />
+1. /etc/sysctl.conf で「#net.ipv4.ip_forward = 1」と書かれている部分の#を削除する<br />
+2. bashスクリプトを作る。テキストファイルに下の内容を書き換えて、iptables-nat.shと名前を付けて保存する<br />
+#----------
+<p>#!/bin/sh</p>
+
+<p>LAN_NIC=NICの識別番号（ローカルネットワーク側）<br />
+WAN_NIC=新たに増えたNICの識別番号（インターネット側）</p>
+
+<p>service iptables stop<br />
+iptables -F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</p>
+
+<p>iptables -P INPUT DROP&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+iptables -P OUTPUT ACCEPT&nbsp;&nbsp;<br />
+iptables -P FORWARD ACCEPT&nbsp;</p>
+
+<p>LAN_NETMASK=`ifconfig $LAN_NIC | sed -e 's/^.*Mask:\([^ ]*\)$/\1/p' -e d`<br />
+LAN_NETADDR=`netstat -rn | grep $LAN_NIC | grep $LAN_NETMASK | awk '{print $1}'`</p>
+
+<p>iptables -t nat -A POSTROUTING -o $WAN_NIC -s $LAN_NETADDR/$LAN_NETMASK -j MASQUERADE</p>
+
+<p>iptables -A INPUT -i lo -j ACCEPT<br />
+iptables -A INPUT -s 127.0.0.0/8 -j ACCEPT</p>
+
+<p>iptables -A INPUT -i $LAN_NIC -j ACCEPT</p>
+
+<p>iptables -A INPUT -m state --state ESTABLISHED,RELATED -j ACCEPT</p>
+
+<p>iptables -A OUTPUT -o $WAN_NIC -d 127.0.0.0/8 -j DROP<br />
+iptables -A OUTPUT -o $WAN_NIC -d 10.0.0.0/8 -j DROP<br />
+iptables -A OUTPUT -o $WAN_NIC -d 172.16.0.0/12 -j DROP<br />
+iptables -A OUTPUT -o $WAN_NIC -d 192.168.0.0/16 -j DROP<br />
+#----------<br />
+3. chmod u+x iptables-nat.sh<br />
+4. sudo /sbin/iptables-save -c &gt; iptables.rules<br />
+5. sudo mv iptables.rules /etc/<br />
+6. /etc/network/if-pre-up.d/iptables_startで「exit 0」とある行の前に下記を追加<br />
+　/sbin/iptables-restore &lt; /etc/iptables.rules<br />
+7. /etc/iptables.rules を開き、「-A POSTROTING .. MASQUERADE」とある行の前に下記を追加<br />
+　-A PREROUTINH -i 新しく増えたNICの識別番号 -p tcp -m tcp -dport 22 -j DNAT-to-destination 192.168.0.好きなプライベートのPCの番号:22<br />
+　「これはグローバル側に繋がっているNICのPCから入って22番ポートを叩いてくるパケットは、192.168.0.好きなプライベートのPCの番号のアドレスをもつサーバの22番ポートに転送する」という指定になる。<br />
+<br />
+◇ デーモンの制御<br />
+1. sudo sysv-rc-conf<br />
+2. cupsはプリンタのサービスで不要なので[&times;]にする<br />
+※ ランレベル3は黒画面、ランレベル5は分かり易い画面、ランレベル3にした方が計算は早くなる。<br />
+<br />
+◇ その他<br />
+・crontabl: 指定した時間にコマンドを実行する（ファイルバックアップのときなどに利用される）<br />
+・ccollect: 容量の軽い手法である差分バックアップで利用される<br />
+・du -h: 各ディレクトリのファイル容量を確認できる<br />
+・find （ある条件のファイルを探す）をパイプで「| xargs （消去や圧縮などのコマンド）」と繋げることで不要で大容量のファイルを削除する助けになる<br />
+・Torque: 無料のジョブ監理ソフト<br />
+------------------------------------------------------------------------------<br />
+■ スパコンとの比較 [1]<br />
+・専門外の人にはあまり知られていませんが、スパコンのCPUは、受注してから建設するまでのタイムラグゆえ、1世代古い場合が多いのです。また商用スパコンでは、性能を最大限引き出すためには、コンパイルを徹底して調製するなどよくチューニングしないと、ノートパソコンより演算が遅くなってしまうような「非専門家には、とても乗りこなしにくいCPU」が採用されている場合も少なくありません。そのため、自作でインテルあたりの最新CPUを使うほうが、非専門家にとっては高いノード内性能を得られる可能性が高いのです。<br />
+※ 更新直後でもこれなので、次の更新の前などではCPUなどは数年遅れになってしまう。<br />
+・筆者の使っているプログラムの場合、単一CPUの性能では、自作よりスパコンが速かったことはありません。とはいえ、ソフトの実行速度は、CPUの演算速度だけではなく、メモリアクセスが律速になっている場合も多く、かつ、大量のメモリを利用する場合、自作で計算しようとすると、メモリ容量に入りきらない情報が、外部ディスクへの遅速なアクセスを経由することになってしまい、まったく性能が出ない場合があります。この点では、商用スパコンは一般に、大容量メモリを密結合で摘んでいるので、こうしたケースで格段の威力を発揮します。<br />
+・京スパコンなどに日本の代表的な共用スパコンを使う場合、どうしても共用ユーザー数が多いので、計算を投入しても、走り出すまでに日数がかかる場合がほとんどです。そうすると、「所属機関の500コアクラスを使うほうが、京スパコンの4000コアクラスで順番待ちをするよりプロジェクトが早く終了する」ということが度々で、スパコンを利用する場合には、こういう事情を勘案した作業立案が重要になってきます。こういう順番待ちのことをキュー（Queue）と呼び、上記の500コアクラス、4000コアクラスといったクラスを、一般にキュークラスと呼びます。<br />
+・キュー制限時間というのも、初心者には意外なネックになります。並列スパコンというのは、「大規模並列でしか実現できな利用事情」を優先するように運用されているので、並列度が高いキュークラスのほうに高い優先度が設定されています。20コアクラスに投入された計算よりも、500コアクラスに投入されたジョブのほうが優先されて先に走り出すのです。その代わり、「500コアも占有しちゃうんだから、1ジョブの利用は12時間以内」というキュー制限時間が設けられていて、12時間を越えれば、計算はシステムによって勝手に打ち切られてしまいます。もちろん筆者のような超大規模計算をするプロジェクトでは、一つの計算が通算半年（待ち時間を除いても！)かかる場合もありますから、12時間で終わるわけがありません。（※ このような制限があるため、中間ファイルを作るようにして、次回の計算で中間ファイルから計算するようにしている）<br />
+------------------------------------------------------------------------------<br />
+■ 並列化の種類 [1]<br />
+・プロセス並列＝MPI並列（OpenMPIなど）<br />
+　サンプリングなど明確に分散処理が可能なレベルで処理を分担させる<br />
+・スレッド並列＝OpenMP並列<br />
+　「よく考えると、ここも分散処理できるな」といった場所を並列化して分担させる<br />
+このような理由から、スレッド並列の計算速度は遅い。例えば、プロセス並列で2コアで2倍の計算速度だとすると、スレッド並列で2コアで1.6倍程度の計算速度となる。<br />
+------------------------------------------------------------------------------<br />
+■ 参考文献<br />
+[1] 前園涼『自作PCクラスタ超入門 - ゼロからはじめる並列計算環境の構築と運用』森北出版株式会社（初版 2017年12月15日）<br />
+------------------------------------------------------------------------------<br />
+■ 省電力化の方法<br />
+<br />
+1. LEDの液晶ディスプレイにする<br />
+　高負荷時： 冷陰極管 (49.0 W) -&gt; LED (19.7 W)<br />
+　アイドル時は 1.8 W程度で大きく変わらない<br />
+2. SSDにする<br />
+&nbsp; 高負荷時： HDD (7.9 W) -&gt; SDD (3.9 W)<br />
+&nbsp;&nbsp;アイドル時： HDD (6.3 W) -&gt; SDD (2.8 W)<br />
+&nbsp;3. 設計世代の新しいCPU<br />
+&nbsp;&nbsp; アイドル時の消費電力が約半分になる<br />
+4. シンプルなマザーボードにする<br />
+5. 高効率電源にする<br />
+&nbsp; 低発熱・低消費電力でエアコンの設定も軽減できる<br />
+6. 1年以上使用したPCはこまめに掃除<br />
+&nbsp;　CPUクーラーのフィンの隙間はエアダスターなどで吹き飛ばすのが一番良い<br />
+　乱暴だが、自己責任で、掃除機をかけて、ファンやチップクーラー、ビデオカード、HDDを掃除する<br />
+7. 高性能なCPUクーラーにする<br />
+8. メモリを増量する<br />
+　スワップが発生して計算時間が延びたりしているのであれば、メモリを増量して計算時間の短縮をするのがいい。<br />
+9. PCを省力設定にする<br />
+10. 電力需要のピークを避けて、深夜から早朝にPCを使う<br />
+11. 動画エンコードなど高負荷の処理は深夜にバッチ処理する<br />
+12. 重量級ゲームは夜プレイする<br />
+13. 長期間使わないPC、周辺機器はコンセントから抜く（待機電力を減少させるためだが、自己責任で）<br />
+14. 複数台のPCの同時使用をやめる<br />
+15. クラウドなどの使用<br />
+&nbsp; Gmai（GMail Drive）, Googleドキュメント、Picasa, Evernote, Dropbox, Office Web Apps などの利用<br />
+<br />
+参考文献<br />
+DOS/V POWER REPORT 2011年9月号付録 PC節約&amp;省電力化ハンドブック<br />
+-----------------------------------------------------------------------------<br />
+■ 消費電力の目安 (2016年時)<br />
+<br />
+&nbsp;()内は仕事率<br />
+1. CPU: 35-130 W程度 (84)<br />
+2. CPUクーラー: 10 W程度 (10)<br />
+3. マザーボード：20 W程度 (20)<br />
+4. メモリ： 4 W/枚 程度 (8)<br />
+5. HDD: 25 W/台 程度 (20)<br />
+6. 光学ドライブ： 25 W程度 (20)<br />
+7. ファン類: 2 W/個 程度 (10)<br />
+8. その他のボード類: 10-20 W/枚 程度<br />
+9. VGA: 29-270 W程度<br />
+&nbsp; 1 Gクラス：29-55 W程度<br />
+&nbsp; 2 Gクラス：170-230 W程度<br />
+&nbsp; 3-4Gクラス: 250-270 W程度<br />
+通常、上記の合計に1.5倍した値以上の電源を実装させる<br />
+<br />
+参考文献：アプライド株式会社<br />
+-----------------------------------------------------------------------------<br type="_moz" />
+&nbsp;</p>

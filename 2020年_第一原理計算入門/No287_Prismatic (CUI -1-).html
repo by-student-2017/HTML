@@ -1,0 +1,138 @@
+Prismatic (http://prism-em.com/)<br />
+------------------------------------------------------------------------------<br />
+Å° Prismatic (ubuntu 18.04 LTS (64 bit))<br />
+(https://github.com/prism-em/prismatic)<br />
+<br />
+Å† Install<br />
+1. git clone https://github.com/prism-em/prismatic.git<br />
+2. cd prismatic<br />
+3. mkdir build<br />
+4. cd build<br />
+5. cmake ../<br />
+6. make<br />
+7. sudo make install<br />
+<br />
+Å† help (command options)<br />
+1. /usr/local/bin/prismatic -h<br />
+<br />
+Å† Usage (BF-STEM Å‡ TEM image) (200 kV, 4 CPU)<br />
+1. /usr/local/bin/prismatic -i SI100.XYZ -E 200 -2D 0 6.5 -j 4 -t 2 4 26<br />
+2. python plot.py<br />
+Å¶ output file: output.h5<br />
+<br />
+Å† Usage (2D bright filed image: 0-10 mrad) (80 kV, 4 CPU)<br />
+1. /usr/local/bin/prismatic -i SI100.XYZ -2D 0 10 -o output.h5 -j 4 -t 2 4 26<br />
+2. python plot.py<br />
+Å¶ output file: output.h5<br />
+<br />
+Å† plot<br />
+1. gedit plot.py<br />
+-----<br />
+import h5py<br />
+import matplotlib.pyplot as plt<br />
+<br />
+f = h5py.File(&quot;output.h5&quot;,&quot;r&quot;)<br />
+<br />
+data = f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;].value<br />
+plt.imshow(data)<br />
+plt.show()<br />
+-----<br />
+2. sed -i 's/\r//g' plot.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place plot.py)<br />
+3. python plot.py<br />
+<br />
+Å† Memo:<br />
+#for k in f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;]:<br />
+# &nbsp;print k<br />
+#print f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;].value<br />
+------------------------------------------------------------------------------<br />
+Å° converter<br />
+<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Åû github</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">1. git clone&nbsp;https://github.com/by-student-2017/csh.git</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">2. cd csh/prismatic</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">3. ls</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; (you can see cif2xyz_pri and plot.py)</span><br />
+<br />
+Å† cif2xyz_pri (test version)<br />
+0. *.cif &gt; VESTA &gt; P1 symmtery &gt; *.cif<br />
+1. cif2xyz_pri<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cif tmp.cif<br />
+sed -i 's/(.*.)//g' tmp.cif<br />
+#<br />
+echo -n &gt; tmp.xyz<br />
+#cat /dev/null &gt; tmp.xyz<br />
+# cif (old version)<br />
+awk '{if(($3 ~/^[0-9].[0-9]+$/) &amp;&amp; ($4 ~/^[0-9].[0-9]+$/) &amp;&amp; ($6 != &quot;Biso&quot;)){printf &quot;%-10s %12.6f %12.6f %12.6f &nbsp; &nbsp; 0.00000 &nbsp; &nbsp; 0.00000 \n&quot;,$1, $3, $4, $5}}' tmp.cif &gt;&gt; tmp.xyz<br />
+# tmp.xyz (element, x, y, z, dummy=0.0000, dummy=0.0000)<br />
+# cif (new version)<br />
+awk '{if(($3 ~/^[0-9].[0-9]+$/) &amp;&amp; ($4 ~/^[0-9].[0-9]+$/) &amp;&amp; ($6 == &quot;Biso&quot;)){sub(&quot;\r&quot;,&quot;&quot;,$8); printf &quot;%-10s %12.6f %12.6f %12.6f %12.6f %12.6f \n&quot;,$8, $3, $4, $5, $7, $2}}' tmp.cif &gt;&gt; tmp.xyz<br />
+# tmp.xyz (element, x, y, z, B, occupation)<br />
+#<br />
+echo &quot;Title: ${filename}&quot; &nbsp;&gt; tmp.cfg<br />
+#<br />
+set a = `awk '{if($1==&quot;_cell_length_a&quot;){print $2}}' tmp.cif`<br />
+set b = `awk '{if($1==&quot;_cell_length_b&quot;){print $2}}' tmp.cif`<br />
+set c = `awk '{if($1==&quot;_cell_length_c&quot;){print $2}}' tmp.cif`<br />
+awk -v a=${a} -v b=${b} -v c=${c} '{if($1==&quot;_cell_length_c&quot;){printf &quot; %9.6f %9.6f %9.6f \n&quot;, a, b, c}}' tmp.cif &gt;&gt; tmp.cfg<br />
+#set alpha = `awk '{if($1==&quot;_cell_angle_alpha&quot;){print $2}}' tmp.cif`<br />
+#set beta &nbsp;= `awk '{if($1==&quot;_cell_angle_beta&quot;){print $2}}' tmp.cif`<br />
+#set gamma = `awk '{if($1==&quot;_cell_angle_gamma&quot;){print $2}}' tmp.cif`<br />
+#awk -v a=${a} -v b=${b} -v c=${c} &nbsp;-v alpha=${alpha} -v beta=${beta} -v gamma=${gamma} '{if($1==&quot;_cell_angle_gamma&quot;){printf &quot; %9.6f %9.6f %9.6f # %9.6f %9.6f %9.6f \n&quot;, a, b, c, alpha, beta, gamma}}' tmp.cif &gt;&gt; tmp.cfg<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.01 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+set ion_charge_list = (1.0 0.0 1.0 2.0 0.0 0.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 0.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 3.0 3.0 2.0 3.0 2.0 2.0 2.0 2.0 3.0 4.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0 7.0 3.0 3.0 2.0 1.0 2.0 3.0 4.0 3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 4.0 5.0 6.0 7.0 4.0 4.0 4.0 3.0 2.0 1.0 2.0 3.0 2.0 1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0 5.0 4.0 3.0 3.0 3.0 3.0 3.0 3.0 2.0 2.0 3.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0)<br />
+# https://www.sciencegeek.net/tables/PT_ions.pdf<br />
+#<br />
+set count = 1<br />
+foreach atom ($element_list)<br />
+&nbsp; set num = `grep -c -i ${atom} tmp.xyz`<br />
+&nbsp; if (${num} &gt; 0) then<br />
+&nbsp; &nbsp; #echo ${num}<br />
+&nbsp; &nbsp; #echo ${count}<br />
+&nbsp; &nbsp; set mass = `echo $mass_list[$count] | awk '{printf(&quot;%d&quot;,$1+0.5)}'`<br />
+&nbsp; &nbsp; #echo ${mass} &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; #echo ${atom} &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; # cif (old version) (x, y, z, occupancy, calculated DW-factor)<br />
+&nbsp; &nbsp; awk -v n=${atom} -v atomicn=${count} -v mass=${mass} -v a=${a} -v b=${b} -v c=${c} '{if(($1==n) &amp;&amp; ($5 == 0.0) &amp;&amp; ($6 == 0.0)){printf &quot;%d %12.6f %12.6f %12.6f 1.0 $12.6 \n&quot;, atomicn, $2*a, $3*b, $4*c, (((0.45*28)/mass)/(8*3.1415926^2))^(1/2)}}' tmp.xyz &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; # cif (new version) (x, y, z, occupancy, DW-factor)<br />
+&nbsp; &nbsp; if (&quot;$2&quot; == &quot;-rdw&quot;) then<br />
+&nbsp; &nbsp; &nbsp; #echo &quot;read DW-factor&quot;<br />
+&nbsp; &nbsp; &nbsp; awk -v n=${atom} -v atomicn=${count} -v a=${a} -v b=${b} -v c=${c} '{if(($1==n) &amp;&amp; ($5 != 0.0) &amp;&amp; ($6 != 0.0)){printf &quot;%d %12.6f %12.6f %12.6f %12.6f %12.6f \n&quot;, atomicn, $2*a, $3*b, $4*c, $6, ($5/(8*3.1415926^2))^(1/2)}}' tmp.xyz &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; #echo &quot;calculated DW-factor&quot;<br />
+&nbsp; &nbsp; &nbsp; awk -v n=${atom} -v atomicn=${count} -v mass=${mass} -v a=${a} -v b=${b} -v c=${c} '{if(($1==n) &amp;&amp; ($5 != 0.0) &amp;&amp; ($6 != 0.0)){printf &quot;%d %12.6f %12.6f %12.6f %12.6f %12.6f \n&quot;, atomicn, $2*a, $3*b, $4*c, $6, (((0.45*28)/mass)/(8*3.1415926^2))^(1/2)}}' tmp.xyz &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; endif<br />
+&nbsp; endif<br />
+&nbsp; @ count += 1<br />
+end<br />
+#<br />
+echo &quot;-1&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+#<br />
+rm -f -r tmp.xyz<br />
+mv tmp.cfg ${filename}.cfg<br />
+mv ${filename}.cfg ${filename}.xyz<br />
+---------<br />
+2. sed -i 's/\r//g' cif2xyz_pri<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cif2xyz_pri)<br />
+3. chmod +x cif2xyz_pri<br />
+4. ./cif2xyz_pri msc30<br />
+&nbsp; (./cif2xyz_pri msc30 -rdw)<br />
+Å¶ e.g., msc30.cif<br />
+<br />
+Å† Usage (BF-STEM Å‡ TEM image) (80 kV, 4 CPU)<br />
+1. /usr/local/bin/prismatic -i msc30.xyz -E 80 -2D 0 6.5 -j 4 -t 1 2 2<br />
+2. python plot.py<br />
+Å¶ output file: output.h5<br />
+Å¶ e.g., msc30.xyz<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

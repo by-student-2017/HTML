@@ -1,0 +1,301 @@
+Phonopy-Spectroscopy (https://github.com/JMSkelton/Phonopy-Spectroscopy)<br />
+------------------------------------------------------------------------------<br />
+■ Install (ubuntu 18.04 LTS (64 bit)) (20/Aug/2019)<br />
+(https://github.com/JMSkelton/Phonopy-Spectroscopy)<br />
+<br />
+□ phonopy (install)<br />
+・phonopy-1.4.1.tar.gz<br />
+0. sudo apt-get -y install python-dev python-numpy python-matplotlib python-yaml python-h5py<br />
+1. tar zxvf phonopy-1.4.1.tar.gz<br />
+2. cd phonopy-1.4.1<br />
+3. sudo python setup.py install<br />
+<br />
+□ Phonopy-Spectroscopy (install)<br />
+1. git clone https://github.com/JMSkelton/Phonopy-Spectroscopy.git<br />
+2. export PYTHONPATH=${PYTHONPATH}:$HOME/Phonopy-Spectroscopy<br />
+3. export PATH=${PATH}:$HOME//Phonopy-Spectroscopy/Scripts<br />
+4. phonopy-ir -h<br />
+5. phonopy-raman -h<br />
+------------------------------------------------------------------------------<br />
+■ Test<br />
+(ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Benzene-Derivatives (IR)<br />
+0. export PYTHONPATH=${PYTHONPATH}:$HOME/Phonopy-Spectroscopy<br />
+&nbsp; export PATH=${PATH}:$HOME//Phonopy-Spectroscopy/Scripts<br />
+1. cd Phonopy-Spectroscopy<br />
+2. cd Example<br />
+3. cd Benzene-Derivatives<br />
+◇ Benzene (Step-0.010)<br />
+4. cd Benzene<br />
+5. cd Step-0.010<br />
+6. cp ../BORN ./<br />
+&nbsp; cp ../POSCAR ./<br />
+5. phonopy-ir --linewidth=16.5 --spectrum_range=&quot;500 4000&quot;<br />
+&nbsp; (Oputput file: IR-PeakTable.dat, IR-Spectrum.dat)<br />
+6. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; plot &quot;IR-PeakTable.dat&quot; u 1:2 w i<br />
+7. q<br />
+8. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Normalized intensity (au)&quot;<br />
+&nbsp; plot &quot;IR-Spectrum.dat&quot; u 1:2 w l, &quot;IR-Spectrum.dat&quot; u 1:3 w l axis x1y2&nbsp;<br />
+9. q<br />
+<br />
+□ a-SiO2 (IR and Raman)<br />
+0. export PYTHONPATH=${PYTHONPATH}:$HOME/Phonopy-Spectroscopy<br />
+&nbsp; export PATH=${PATH}:$HOME//Phonopy-Spectroscopy/Scripts<br />
+1. cd Phonopy-Spectroscopy<br />
+2. cd Example<br />
+3. cd a-SiO2<br />
+4. phonopy-ir --ir_reps_yaml=&quot;irreps.yaml&quot; --linewidth_hdf5=&quot;kappa-m484848-g0.hdf5&quot; --linewidth_temperature=300<br />
+&nbsp; (Oputput file: IR-PeakTable.dat, IR-Spectrum.dat)<br />
+5. phonopy-raman -p --ir_reps_yaml=&quot;irreps.yaml&quot; --linewidth_hdf5=&quot;kappa-m484848-g0.hdf5&quot; --linewidth_temperature=300<br />
+&nbsp; (Oputput file: Raman-PeakTable.dat, Raman-Spectrum.dat)<br />
+6. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Gamma (cm^{-1})&quot;<br />
+&nbsp; plot &quot;Raman-PeakTable.dat&quot; u 1:2 w i, &quot;Raman-PeakTable.dat&quot; u 1:3 w i axis x1y2&nbsp;<br />
+7. q<br />
+8. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Normalized intensity (au)&quot;<br />
+&nbsp; plot &quot;Raman-Spectrum.dat&quot; u 1:2 w l, &quot;Raman-Spectrum.dat&quot; u 1:3 w l axis x1y2&nbsp;<br />
+9. q<br />
+<br />
+※ UserWarning: findfont: Font family [u'Times New Roman'] not found. Falling back to DejaVu Sans<br />
+&nbsp; sudo apt install msttcorefonts -qq<br />
+&nbsp; (OK &gt; YES)<br />
+&nbsp; rm ~/.cache/matplotlib -rf<br />
+------------------------------------------------------------------------------<br />
+■ Examples<br />
+(ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Benzene-Derivatives (IR)<br />
+0. export PYTHONPATH=${PYTHONPATH}:$HOME/Phonopy-Spectroscopy<br />
+&nbsp; export PATH=${PATH}:$HOME//Phonopy-Spectroscopy/Scripts<br />
+1. cd Phonopy-Spectroscopy<br />
+2. cd Example<br />
+3. cd Benzene-Derivatives<br />
+◇ Benzene (Step-0.005)<br />
+4. cd Benzene<br />
+・phonon frequencies and eigenvectors<br />
+5. phonopy -d --dim=&quot;1 1 1&quot; --amplitude=0.005<br />
+&nbsp; (input file: POSCAR)<br />
+&nbsp; (output file: POSCAR-*, SPOSCAR, phonopy_disp.yaml)<br />
+6. gedit INCAR<br />
+-----<br />
+ADDGRID = .TRUE.<br />
+ALGO = Fast<br />
+EDIFF = 1e-8<br />
+ENCUT = 800<br />
+ISIF = 2<br />
+ISMEAR = 0<br />
+IVDW = 11<br />
+LCHARG = .FALSE.<br />
+LREAL = .FALSE.<br />
+LWAVE = .FALSE.<br />
+NELM = 250<br />
+NSW = 0<br />
+PREC = Accurate<br />
+SIGMA = 0.01<br />
+SYSTEM = Benzene<br />
+-----<br />
+(※ cp ~/Phonopy-Spectroscopy/Examples/Benzene-Derivatives/VASP-Files/INCAR_Phonopy ./INCAR)<br />
+7. gedit KPOINTS<br />
+-----<br />
+Automatic 1x1x1<br />
+0<br />
+Gamma<br />
+&nbsp; 1 &nbsp;1 &nbsp;1<br />
+-----<br />
+(※ cp ~/Phonopy-Spectroscopy/Examples/Benzene-Derivatives/VASP-Files/KPOINTS ./)<br />
+8. run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk '{printf(&quot;%03d&quot;,$1)}'`<br />
+&nbsp; mkdir ${num}<br />
+&nbsp; cd ${num}<br />
+&nbsp; cp ../POSCAR-${num} ./POSCAR<br />
+&nbsp; cp ../INCAR ./<br />
+&nbsp; cp ../POTCAR ./<br />
+&nbsp; cp ../KPOINTS ./<br />
+&nbsp; $1<br />
+&nbsp; cp vasprun.xml ../vasprun-${num}.xml<br />
+&nbsp; cd ../<br />
+done<br />
+-----<br />
+9. chmod +x run<br />
+&nbsp; sed -i 's/\r//g' run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu run)<br />
+10. cp ~/vasp.5.4.1/potpaw_PBE/C/POTCAR ./POTCAR_C<br />
+&nbsp; cp ~/vasp.5.4.1/potpaw_PBE/H/POTCAR ./POTCAR_H<br />
+&nbsp; cat POTCAR_C POTCAR_H &gt; POTCAR<br />
+11. OMP_NUM_THREADS=1<br />
+&nbsp; ./run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 24<br />
+&nbsp; (please, replace 24 to max * of POSCAR-*)<br />
+12. phonopy -f vasprun-{001..024}.xml<br />
+13. phonopy --dim=&quot;1 1 1&quot; --fc-symmetry --mesh=&quot;1 1 1&quot; --eigenvectors<br />
+・Born effective-charge tensors<br />
+14. gedit INCAR<br />
+-----<br />
+ALGO = Fast<br />
+EDIFF = 1e-8<br />
+ENCUT = 800<br />
+ISIF = 2<br />
+ISMEAR = 0<br />
+IVDW = 11<br />
+LCHARG = .FALSE.<br />
+LEPSILON = .TRUE.<br />
+LREAL = .FALSE.<br />
+LWAVE = .FALSE.<br />
+NELM = 250<br />
+NSW = 0<br />
+PREC = Accurate<br />
+SIGMA = 0.01<br />
+SYSTEM = Benzene<br />
+-----<br />
+15. OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std<br />
+16. phonopy-vasp-born &gt; BORN<br />
+・generate the spectrum<br />
+17. phonopy-ir --linewidth=16.5 --spectrum_range=&quot;500 4000&quot;<br />
+&nbsp; (Oputput file: IR-PeakTable.dat, IR-Spectrum.dat)<br />
+18. gnuplot<br />
+&nbsp; set xrange[500:4000]<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; plot &quot;IR-PeakTable.dat&quot; u 1:2 w i<br />
+19. q<br />
+20. gnuplot<br />
+&nbsp; set xrange[500:4000]<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Normalized intensity (au)&quot;<br />
+&nbsp; plot &quot;IR-Spectrum.dat&quot; u 1:2 w l, &quot;IR-Spectrum.dat&quot; u 1:3 w l axis x1y2&nbsp;<br />
+21. q<br />
+----------(Raman) (test case)<br />
+22. phonopy-raman -d<br />
+23. gedit INCAR<br />
+-----<br />
+ALGO = Normal<br />
+#EDIFF = 1e-8<br />
+#ENCUT = 800<br />
+ISIF = 2<br />
+ISMEAR = 0<br />
+IVDW = 11<br />
+LASPH = .TRUE.<br />
+LCHARG = .FALSE.<br />
+LEPSILON = .TRUE.<br />
+LREAL = .FALSE.<br />
+LWAVE = .FALSE.<br />
+#NELM = 250<br />
+NSW = 0<br />
+PREC = Accurate<br />
+SIGMA = 0.01<br />
+#SYSTEM = Benzene<br />
+-----<br />
+24. gedit raman-run<br />
+-----<br />
+#!/bin/bash<br />
+<br />
+for ((i=1;i&lt;=$2;i++))<br />
+do<br />
+&nbsp; num=`echo $i | awk '{printf(&quot;%04d&quot;,$1)}'`<br />
+&nbsp; for ((j=1;j&lt;=$3;j++))<br />
+&nbsp; &nbsp; do<br />
+&nbsp; &nbsp; &nbsp; num2=`echo $j | awk '{printf(&quot;%03d&quot;,$1)}'`<br />
+&nbsp; &nbsp; &nbsp; mkdir ${num}.${num2}<br />
+&nbsp; &nbsp; &nbsp; cd ${num}.${num2}<br />
+&nbsp; &nbsp; &nbsp; cp ../Raman-POSCAR.${num}.${num2}.vasp ./POSCAR<br />
+&nbsp; &nbsp; &nbsp; cp ../INCAR ./<br />
+&nbsp; &nbsp; &nbsp; cp ../POTCAR ./<br />
+&nbsp; &nbsp; &nbsp; cp ../KPOINTS ./<br />
+&nbsp; &nbsp; &nbsp; $1<br />
+&nbsp; &nbsp; &nbsp; cp OUTCAR ../OUTCAR.${num}.${num2}<br />
+&nbsp; &nbsp; &nbsp; #cp vasprun.xml ../vasprun-${num}.${num2}.xml<br />
+&nbsp; &nbsp; &nbsp; cd ../<br />
+&nbsp; &nbsp; done<br />
+done<br />
+-----<br />
+25. chmod +x raman-run<br />
+&nbsp; sed -i 's/\r//g' raman-run<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu raman-run)<br />
+26. OMP_NUM_THREADS=1<br />
+&nbsp; ./raman-run &quot;mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std&quot; 36 2<br />
+27. rm -f -r OUTCAR.0005.* OUTCAR.0006.* OUTCAR.0004.*<br />
+&nbsp; (INFO: Automatically excluding bands 5, 6, 4 from displacement set (to override use --raman_bands).)<br />
+28. phonopy-raman -r OUTCAR.*<br />
+29. phonopy-raman -p<br />
+&nbsp; (Oputput file: Raman-PeakTable.dat, Raman-Spectrum.dat)<br />
+30. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; plot &quot;Raman-PeakTable.dat&quot; u 1:2 w i<br />
+31. q<br />
+32. phonopy-raman -p --linewidth=16.5 --linewidth_temperature=300<br />
+33. gnuplot<br />
+&nbsp; set xrange[500:4000]<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Normalized intensity (au)&quot;<br />
+&nbsp; plot &quot;Raman-Spectrum.dat&quot; u 1:2 w l, &quot;Raman-Spectrum.dat&quot; u 1:3 w l axis x1y2&nbsp;<br />
+32. q<br />
+<br />
+□ a-SiO2 (IR and Raman) (underconstracting)<br />
+0. export PYTHONPATH=${PYTHONPATH}:$HOME/Phonopy-Spectroscopy<br />
+&nbsp; export PATH=${PATH}:$HOME//Phonopy-Spectroscopy/Scripts<br />
+1. cd Phonopy-Spectroscopy<br />
+2. cd Example<br />
+3. cd a-SiO2<br />
+・Preparation<br />
+4. phonopy --dim=&quot;6 6 3&quot; --readfc --hdf5 --fc-symmetry --mesh=&quot;1 1 1&quot; --eigenvectors<br />
+5. phonopy --dim=&quot;6 6 3&quot; --readfc --hdf5 --fc-symmetry --irreps=&quot;0 0 0&quot;<br />
+6. phono3py --dim=&quot;2 2 2&quot; --dim_fc2=&quot;6 6 3&quot; --fc2 --fc3 -v --br --thm --mesh=&quot;48 48 48&quot; --write_gamma --gp=0<br />
+・IR spectrum<br />
+7. phonopy-ir --ir_reps_yaml=&quot;irreps.yaml&quot; --linewidth_hdf5=&quot;kappa-m484848-g0.hdf5&quot; --linewidth_temperature=300<br />
+&nbsp; (Oputput file: IR-PeakTable.dat, IR-Spectrum.dat)<br />
+・Raman spectrum<br />
+8. phonopy-raman -d --bands=&quot;4 5 6 7 8 9 11 12 13 14 15 17 18 20 21 22 23 25 26 27&quot;<br />
+9. OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std<br />
+10. phonopy-raman -r OUTCAR.*<br />
+11. phonopy-raman -p --ir_reps_yaml=&quot;irreps.yaml&quot; --linewidth_hdf5=&quot;kappa-m484848-g0.hdf5&quot; --linewidth_temperature=300<br />
+&nbsp; (Oputput file: Raman-PeakTable.dat, Raman-Spectrum.dat)<br />
+12. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Gamma (cm^{-1})&quot;<br />
+&nbsp; plot &quot;Raman-PeakTable.dat&quot; u 1:2 w i, &quot;Raman-PeakTable.dat&quot; u 1:3 w i axis x1y2&nbsp;<br />
+13. q<br />
+14. gnuplot<br />
+&nbsp; set xlabel &quot;v (cm^{-1})&quot;<br />
+&nbsp; set ylabel &quot;Intensity (e^2 amu^{-1})&quot;<br />
+&nbsp; set y2label &quot;Normalized intensity (au)&quot;<br />
+&nbsp; plot &quot;Raman-Spectrum.dat&quot; u 1:2 w l, &quot;Raman-Spectrum.dat&quot; u 1:3 w l axis x1y2&nbsp;<br />
+15. q<br />
+<br />
+※ UserWarning: findfont: Font family [u'Times New Roman'] not found. Falling back to DejaVu Sans<br />
+&nbsp; sudo apt install msttcorefonts -qq<br />
+&nbsp; (OK &gt; YES)<br />
+&nbsp; rm ~/.cache/matplotlib -rf<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] JMSkelton/Phonopy-Spectroscopy<br />
+&nbsp; https://github.com/JMSkelton/Phonopy-Spectroscopy<br />
+[2] Phonopy-Spectroscopy/Examples/Benzene-Derivatives/<br />
+&nbsp; https://github.com/JMSkelton/Phonopy-Spectroscopy/tree/master/Examples/Benzene-Derivatives<br />
+[3] Phonopy-Spectroscopy/Examples/a-SiO2/<br />
+&nbsp; https://github.com/JMSkelton/Phonopy-Spectroscopy/tree/master/Examples/a-SiO2<br />
+------------------------------------------------------------------------------

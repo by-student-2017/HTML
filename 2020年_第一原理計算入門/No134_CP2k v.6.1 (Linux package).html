@@ -1,0 +1,136 @@
+------------------------------------------------------------------------------<br />
+■ CP2k v.6.1<br />
+(ubuntu 20.04 LTS (64 bit) or debian 10.0 on windows 10 (64 bit))<br />
+(Edit: 10/Jun/2020)<br />
+<br />
+□ Install<br />
+1. sudo apt update<br />
+2. sudo apt install -y cp2k<br />
+<br />
+□ check<br />
+1. which cp2k<br />
+<br />
+□ help<br />
+1. cp2k --help<br />
+<br />
+□ example settings<br />
+1. cd $HOME<br />
+2. mkdir cp2k<br />
+3. cd cp2k<br />
+4. cp -r /usr/share/doc/cp2k/examples ./<br />
+5. cd examples<br />
+<br />
+□ jmol<br />
+1. sudo apt install -y jmol<br />
+<br />
+□ Data directory path<br />
+&nbsp; /usr/share/cp2k<br />
+<br />
+□ version (ubuntu case)<br />
+1. cp2k --version<br />
+&nbsp;CP2K version 6.1<br />
+&nbsp;SVN source code revision svn:18464<br />
+&nbsp;cp2kflags: libint fftw3 libxc elpa=201605 elpa_qr parallel mpi3 scalapack libderiv_max_am1=5 libint_max_am=6<br />
+<br />
+□ cp2k package info.<br />
+・ubuntu:&nbsp;https://packages.ubuntu.com/search?suite=default&sect;ion=all&amp;arch=any&amp;keywords=cp2k&amp;searchon=names<br />
+・Debian:&nbsp; https://packages.debian.org/ja/buster/cp2k<br />
+------------------------------------------------------------------------------<br />
+■ examples<br />
+<br />
+□ SCF [DIIS (Activate the DIIS based optimization procedure for BAND)]<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i C.inp | tee C.out<br />
+<br />
+□ MD (NVE) (H2O)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i H2O.inp | tee H2O.out<br />
+4. jmol H2O_OT-pos-1.xyz<br />
+<br />
+□ MD (NVE) (Ar)<br />
+1. cd ~/cp2k/examples<br />
+2. gzip -dc argon.inp.gz &gt; argon.inp<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i argon.inp | tee argon.out<br />
+5. jmol ar108-pos-1.xyz<br />
+<br />
+□ TDDFPT<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i H2O_tddfpt-s-1.inp | tee H2O_tddfpt-s-1.out<br />
+<br />
+□ QMMM (H2O)<br />
+1. cd ~/cp2k/examples<br />
+2. gedit H2O-qmmm-gauss-10.inp<br />
+-----(before)<br />
+&nbsp; &nbsp; BASIS_SET_FILE_NAME ../GTH_BASIS_SETS<br />
+&nbsp; &nbsp; POTENTIAL_FILE_NAME ../POTENTIAL<br />
+<br />
+&nbsp; &nbsp; MM_POTENTIAL_FILE_NAME ../MM_POTENTIAL<br />
+-----<br />
+-----(after)<br />
+&nbsp; &nbsp; BASIS_SET_FILE_NAME ./GTH_BASIS_SETS<br />
+&nbsp; &nbsp; POTENTIAL_FILE_NAME ./POTENTIAL<br />
+<br />
+&nbsp; &nbsp; MM_POTENTIAL_FILE_NAME ./MM_POTENTIAL<br />
+-----<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i H2O-qmmm-gauss-10.inp | tee H2O-qmmm-gauss-10.out<br />
+5. jmol H2O-qmmm-gauss-10-pos-1.xyz<br />
+<br />
+□ QMMM (Ar)<br />
+1. cd ~/cp2k/examples<br />
+2. gzip -dc Ar-qmmm.inp.gz &gt; Ar-qmmm.inp<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 cp2k -i Ar-qmmm.inp | tee Ar-qmmm.out<br />
+5. jmol ar108-pos-1.xyz<br />
+<br />
+□ Ewald (Ewald parameters controlling electrostatic only for CLASSICAL MM)<br />
+1. cd ~/cp2k/examples<br />
+2. gzip -dc H2O-32_ewald.inp.gz &gt; H2O-32_ewald.inp<br />
+3. set OMP_NUM_THREADS=1&nbsp;<br />
+4. mpirun -np 4 cp2k -i H2O-32_ewald.inp | tee H2O-32_ewald.out<br />
+5. jmol H2O-32_ewald-pos-1.xyz<br />
+<br />
+□ PINT (path integral run) + Nose (Nose-Hoover thermostats)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 cp2k -i h2o_pint_qs_nose.inp | tee h2o_pint_qs_nose.out<br />
+<br />
+□ HFX (Hartree-Fock exchange)<br />
+1. cd ~/cp2k/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. gedit H2O-hfx-1.inp<br />
+-----(before)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MAX_MEMORY &nbsp;10<br />
+-----<br />
+-----(after)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; MAX_MEMORY &nbsp;3500<br />
+-----<br />
+4. mpirun -np 4 cp2k -i H2O-hfx-1.inp | tee H2O-hfx-1.out<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Exercises<br />
+&nbsp; https://www.cp2k.org/exercises<br />
+[2] Gaussian and Augmented Plane Wave Method<br />
+&nbsp; https://pc2.uni-paderborn.de/fileadmin/pc2/cp2k_workshop/Tutorial_AIMD-XAS_and_NMR.pdf<br />
+------------------------------------------------------------------------------<br />
+■ DebiChem packages (ubuntu 18.04 LTS and Ubuntu 20.04 LTS)<br />
+&nbsp; (https://packages.ubuntu.com/search?keywords=debichem&amp;searchon=names)<br />
+・sudo apt install debichem-crystallography<br />
+・sudo apt install debichem-molecular-abinitio<br />
+・sudo apt install debichem-periodic-abinitio<br />
+・sudo apt install debichem-molecular-dynamics<br />
+・sudo apt install debichem-semiempirical<br />
+・sudo apt insatll debichem-cheminformatics<br />
+・sudo apt insatll debichem-analytical-biochemistry<br />
+・sudo apt insatll debichem-development<br />
+・sudo apt insatll debichem-input-generation-output-processing<br />
+・sudo apt insatll debichem-molecular-modelling<br />
+・sudo apt insatll debichem-tasks<br />
+・sudo apt insatll debichem-view-edit-2d<br />
+・sudo apt insatll debichem-visualisation<br />
+------------------------------------------------------------------------------&nbsp;

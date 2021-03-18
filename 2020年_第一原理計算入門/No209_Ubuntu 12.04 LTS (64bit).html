@@ -1,0 +1,2023 @@
+<p>&nbsp;&nbsp; ここでは、Ubuntu 12.04 LTS amd64 (64 bit版)をインストールし、第一原理計算コードをセットアップするまでを解説する。<br />
+------------------------------------------------------------------------------<br />
+■ 2016年1月追記<br />
+最新のPCで Ubuntu12.04.5 LST を使用したい場合<br />
+0. ifconfig<br />
+　lo しかなく、eth0の記述がないと思う。NIC(Network Interface Card)を認識していないことを示す。<br />
+1. lspci | grep &lsquo;Ethernet\|Network&rsquo;<br />
+&nbsp;Intel Corporation Device 15b8 と表示されたのでIntelからドライバをインストールする。<br />
+2. ネットで&quot;Intel Corporation Device 15b8&quot;を検索すると&quot;Ethernet Connection (2) I219-V&quot;が出てくるので、これで再度検索する。<br />
+3. &quot;Intel&reg; Ethernet Connection I218-V - ドライバーおよびソフトウェア&quot; &gt; *PCI-E ギガビット・ネットワーク・コネクション (Linux*) 用ネットワーク・アダプター・ドライバー<br />
+4. e1000e-3.3.3.tar をダウンロードして、USBなどに入れる<br />
+5. Ubuntuに e1000e-3.3.3.tar を入れる<br />
+6. tar e1000e-3.3.3.tar<br />
+7. cd e1000e-3.3.3/src<br />
+8. sudo make install<br />
+9. sudo modprobe -r e1000e<br />
+10. sudo modprobe e1000e<br />
+11. lsmod | grep e1000e<br />
+e1000e xxxxxxx 0 などと表示されればドライバーがダウンロードされている。<br />
+参考：<a href="http://rainbowdevil.jp/?p=1164">http://rainbowdevil.jp/?p=1164</a><br />
+------------------------------------------------------------------------------<br />
+■ PC<br />
+(※ Gigabitタイプ以上のネットワークカードが付けられると良い。オンボードでもGigabitになっていることもあるので、10 Gigabit以上でなければ特にネットワークカードを購入することもない場合もある）<br />
+(※&nbsp;<a href="http://classic.chem.msu.su/gran/gamess/index.html">http://classic.chem.msu.su/gran/gamess/index.html</a>&nbsp;,&nbsp;<a href="http://www.wien2k.at/reg_user/benchmark/">http://www.wien2k.at/reg_user/benchmark/</a>で調査してみると良い）<br />
+<br />
+DOSPARA Monarch 64GB<br />
+0. モニタ：none<br />
+1. OS: none<br />
+2. CPU: Intel Core i7-3820<br />
+3. CPUファン: 静音まんぞくコース<br />
+4.&nbsp;グリス：ダイヤモンドグリス<br />
+5. メモリ: DDR3 PC3-12800 8GB &times; 8枚<br />
+6. グラフィック: NVIDIA GeForce GT620 1GB<br />
+7. ハードディスク: 500 GB HDD<br />
+8. パーティション分割: none<br />
+9. 追加ハードディスク: none<br />
+10. 光学ドライブ: DVDスーパーマルチ<br />
+11. マザーボード：インテルX79 Express チップセットATXマザーボード<br />
+12. ブロードバンドポート：INTEL製LAN EXPI9301CT（これは必要ないかもしれない）<br />
+13. カードリーダー：none<br />
+14. Silverstone ST-ST75F-P (750W 静音電源 80PLUS SILVER)<br />
+------------------------------------------------------------------------------<br />
+■ PC<br />
+DOSPARA Slim Magnate GE Windows 7 model : 99,900 (tax 4,757) yen<br />
+0. モニタ：none<br />
+1. OS: none<br />
+2. CPU: Intel Core i7-4770S<br />
+3. CPUファン: 静音まんぞくコース<br />
+4.&nbsp;グリス：ダイヤモンドグリス, OC7<br />
+5. メモリ: DDR3 PC3-12800 4GB &times; 2枚<br />
+6. ハードディスク: SATA3 1 TB 7200rpm 32MB<br />
+7. パーティション分割: none<br />
+8. 追加ハードディスク: none<br />
+(Ubuntu 12.04.3 LTS amd64)<br />
+------------------------------------------------------------------------------<br />
+※ お上の方には、研究者が購入するPCを15?20万円程度まで消耗品扱いして頂けるようにして頂けると嬉しいです。3年程度経過すると陳腐化が激しいこの業界なので、購入したPCが10?20年の間、最新機器として扱えるというのであればよいのですが&hellip;&hellip;。大型計算機でも約4年に1度は設備を更新するというところもあるので、備品扱いする種類と金額をさらに合理的に細分化して頂けますと、緊急の場合に、研究をよりスムーズに進められるので嬉しいです。（現在はSSDやGPUがまだ高い&hellip;&hellip;。これが安くなれば&hellip;&hellip;）<br />
+------------------------------------------------------------------------------<br />
+並列計算のためのハブとケーブル<br />
+1. Giga スイッチングハブ。BUFFALO製の5ポートタイプを購入してみた。最新鋭のLANカードでないと10G BASEにならないので、広く普及していて最速の1000Mbps（1G BASE）が対応可能なハブにした。<br />
+2. LANケーブルはカテゴリー5e以後が良いとのこと。伝送帯域のHzが大きくノイズ対策が出来ている方が良さそうなので、Cat6a以後のものを選択。ここでは、奮発してCAT6を購入してみた。机の横にハブを置いて、PCを机の下や上に数台並べる場合には、ハブの位置を調節することでケーブルの長さが0.5mでも対処できたが、1m以上程度でも良かった気がした。<br />
+------------------------------------------------------------------------------<br />
+◆ Ubuntu 12.04 のインストール<br />
+1) google で 「riken linux」と入力して検索すると、下記のHPが得られる。<br />
+&nbsp;&nbsp;<a href="http://ftp.riken.go.jp/Linux/">http://ftp.riken.go.jp/Linux/</a>&nbsp;<br />
+2) 「ubuntu-iso/」&rarr;「CDs-Ubuntu/」&rarr;「ubuntu-12.04-desktop-amd64.iso」<br />
+3) 「ubuntu-12.04-desktop-amd64.iso」をダウンロードする。<br />
+4) Deep Burner (<a href="http://www.forest.impress.co.jp/lib/sys/hardcust/cddvdburn/deepburner.html">http://www.forest.impress.co.jp/lib/sys/hardcust/cddvdburn/deepburner.html</a>)などのISO形式で書き込みが可能なライティングソフトを用いて、ISO形式のOSインストールCDを作成する。<br />
+------------------------------------------------------------------------------<br />
+This setting is not usually need.<br />
+パーティションの分割（swap area がPCに搭載したメモリと同じ容量では足りない場合）<br />
+1. Install Ubuntu<br />
+2. Continue<br />
+3. advanced partitioning tool<br />
+4. /dev/sda1 を選択し、changeを押して範囲を小さくする。<br />
+&nbsp; (Primary)<br />
+&nbsp; ext4 jounrnaling file system<br />
+&nbsp; format the partition: check<br />
+&nbsp; Mount point: /<br />
+OKを押して続ける。新しいウインドウが出てもOKかcontinueで問題なく動作する。<br />
+5. swap areaを削除してfree spaceを大きくする。<br />
+6. 大きくしたfree spaceを選択してaddを押す。<br />
+&nbsp; Logical<br />
+&nbsp; Beginning<br />
+&nbsp; swap area<br />
+7. log in automatically<br />
+------------------------------------------------------------------------------<br />
+◆ Ubuntu 12.04 の終了と再起動<br />
+1) 「System」&rarr;「Shut Down...」<br />
+2) 「Shut Down」を選択すれば終了。「Restart」を選択すれば再起動される。<br />
+------------------------------------------------------------------------------<br />
+◆ Classic mode<br />
+1. sudo apt-get install gnome-session-fallback<br />
+2. sudo reboot<br />
+3. ログイン時に歯車のマークで GNOME Classic を選択<br />
+※ 筆者の場合、GNOME Classic&nbsp; &rarr; GNOME Classic (No effects) でclassic 表示に変わった。その後、GNOME Classic を選択するようにした。<br />
+Reference:&nbsp;<a href="http://pekotano.blogspot.jp/2012/03/ubuntu-1204-beta-1gnome-classic.html">http://pekotano.blogspot.jp/2012/03/ubuntu-1204-beta-1gnome-classic.html</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+◆ install needed ab-initio calculation soft<br />
+1) 「Applications」&rarr;「Accessories」&rarr;「Terminal」<br />
+1.5) sudo apt-get update<br />
+2) sudo apt-get install csh<br />
+3) sudo apt-get install tcsh<br />
+4) sudo apt-get install g++<br />
+5) sudo apt-get install gcc-multilib<br />
+6) sudo apt-get install gnuplot<br />
+7) sudo apt-get install tcl<br />
+8) sudo apt-get install tk<br />
+9) sudo apt-get install kwrite<br />
+10) sudo apt-get install kate<br />
+11) sudo apt-get install grace<br />
+* sudo apt-get install libstdc++5<br />
+<br />
+◆ install gfortran ( for company )<br />
+1) sudo apt-get install gfortran<br />
+<br />
+◆ recommend periodic table data<br />
+1) Periodic Table<br />
+2) Periodic table of the elements<br />
+3) Kalzium<br />
+4) Hephaestus<br />
+<br />
+◆ old version Intel Compiler install（ for student）<br />
+<a href="http://tech.ckme.co.jp/icc.shtml">http://tech.ckme.co.jp/icc.shtml</a>　<br />
+<a href="http://software.intel.com/en-us/articles/using-intel-compilers-for-linux-with-ubuntu/">http://software.intel.com/en-us/articles/using-intel-compilers-for-linux-with-ubuntu/</a>　<br />
+Please, select intel compiler version, and download it.<br />
+------------------------------------------------------------------------------<br />
+◆ Compiler :&nbsp;l_fcompxe_intel64_2011.13.367.tgz,&nbsp;l_ccompxe_intel64_2011.13.367.tgz<br />
+(Fortran : ifort, C : gcc )<br />
+1. tar zxvf&nbsp;l_fcompxe_intel64_2011.13.367.tgz<br />
+2. cd &nbsp;l_fcompxe_intel64_2011.13.367<br />
+3. ./install.sh<br />
+l_ccompxe_intel64_2011.13.367.tgz, too.<br />
+<br />
+in /home/.bashrc,<br />
+export PATH=$PATH:/home/user_name/intel/vtune_amplifier_xe_2011<br />
+export PATH=$PATH:/home/user_name/intel/inspector_xe_2011<br />
+source /home/user_name/intel/bin/compilervars.sh intel64<br />
+------------------------------------------------------------------------------<br />
+◆ Compiler : parallel_studio_xe_2013_update1_intel64.tgz<br />
+(Fortran : ifort, C : gcc )<br />
+1. tar zxvf&nbsp;parallel_studio_xe_2013_update1_intel64.tgz<br />
+2. cd &nbsp;parallel_studio_xe_2013_update1_intel64<br />
+3. ./install.sh<br />
+<br />
+in /home/.bashrc,<br />
+export PATH=$PATH:/home/user_name/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/home/user_name/intel/inspector_xe_2013<br />
+source /home/user_name/intel/bin/compilervars.sh intel64<br />
+------------------------------------------------------------------------------<br />
+◆ Compiler : parallel_studio_xe_2013_update3_intel64.tgz<br />
+(Fortran : ifort, C : icc )<br />
+□ インストール<br />
+1. tar zxvf parallel_studio_xe_2013_update3_intel64.tgz<br />
+2. cd parallel_studio_xe_2013_update3_intel64<br />
+3. sudo ./install.sh<br />
+4. 後は表示される英文に従っていく。<br />
+&nbsp; Please, select license file.<br />
+5. ifort -help &gt; ifort_option.txt<br />
+6. Please, see ifort_option.txt<br />
+□ 環境設定1 ( .bashrc in home)<br />
+# Intel Compiler ( Fortran &amp; C++ ) environmental setting<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+□ 環境設定2 ( .bashrc in root)<br />
+1. sudo emacs /root/.bashrc<br />
+&nbsp; or sudo kwrite /root/.bashrc ,etc.<br />
+# Intel Compiler ( Fortran &amp; C++ ) environmental setting<br />
+export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:/opt/intel/inspector_xe_2013<br />
+source /opt/intel/bin/compilervars.sh intel64<br />
+□ fftw3xf_intel.a compiling<br />
+0. bash<br />
+1. sudo bash<br />
+2. cd /opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/<br />
+3. make libintel64 compiler=intel<br />
+------------------------------------------------------------------------------<br />
+◆ Compiler :&nbsp;l_fcompxe_intel64_2013.5.192.tgz<br />
+(Fortran : ifort, C : gcc )<br />
+<span id="ctl00_MainContentPlaceHolder_lblNcomSda">Non-Commercial Software Development: </span><a href="https://registrationcenter.intel.com/RegCenter/NComForm.aspx?ProductID=1523">https://registrationcenter.intel.com/RegCenter/NComForm.aspx?ProductID=1523</a><br />
+see: <a tabindex="1"><span class="formTitle"><span id="ctl00_MainContentPlaceHolder___stdRegInfo___additionalDownloadsPrompt">Additional downloads, updates and versions.</span></span></a><br />
+1. tar zxvf&nbsp;l_fcompxe_intel64_2013.5.192.tgz<br />
+2. cd &nbsp;l_fcompxe_intel64_2013.5.192<br />
+3. ./install.sh<br />
+4. 3<br />
+5. Enter<br />
+6. accept<br />
+7.&nbsp; 1 ( using a serial number)<br />
+8.&nbsp; 1 ( Input [Your product serial number is: ] in e-mail to terminal)<br />
+9.&nbsp; 1 (Recommended)<br />
+10. Enter<br />
+<br />
+in /home/.bashrc,<br />
+export PATH=$PATH:$HOME/intel/vtune_amplifier_xe_2013<br />
+export PATH=$PATH:$HOME/intel/inspector_xe_2013<br />
+source $HOME/intel/bin/compilervars.sh intel64<br />
+------------------------------------------------------------------------------<br />
+◆ intel compiler 2016<br />
+fftw3xf compile<br />
+cd '/opt/intel/compilers_and_libraries_2016.2.181/linux/mkl/interfaces/fftw3xf'<br />
+sudo gedit makefile<br />
+which icc<br />
+-----before<br />
+_CC_intel = icc<br />
+-----after<br />
+_CC_intel = /opt/intel/compilers_and_libraries_2016.2.181/linux/bin/intel64/icc<br />
+-----<br />
+sudo make libintel64<br />
+<br />
+using<br />
+/opt/intel/compilers_and_libraries_2016.2.181/linux/mkl/interfaces/fftw3xf/libfftw3xf_intel.a<br />
+or<br />
+-L/opt/intel/compilers_and_libraries_2016.2.181/linux/mkl/interfaces/fftw3xf -lfftw3xf_intel<br />
+------------------------------------------------------------------------------<br />
+■ OpenMPI<br />
+OpenMPI version 1.4.5<br />
+□ インストール<br />
+1) <a href="http://www.open-mpi.org/">http://www.open-mpi.org/</a><br />
+2) tar zxvf openmpi-1.4.5.tar.gz<br />
+3) cd openmpi-1.4.5<br />
+4) Intel Compiler case<br />
+&nbsp; ./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+or ./configure -prefix=/home/user_name/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+5) make<br />
+6) sudo make install<br />
+or&nbsp; make install<br />
+□ 環境設定 ( .bashrc in home&nbsp; )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+or<br />
+export MPIROOT=/home/user_name/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+Please, change user_name<br />
+------------------------------------------------------------------------------<br />
+■ XCrySDen install<br />
+1) download: <a href="http://www.xcrysden.org/Download.html">http://www.xcrysden.org/Download.html</a><br />
+2) tar zxvf xc-1.5.25-linux_x86_64-semishared.tar.gz<br />
+3) cd XCrySDen-1.5.25-bin-semishared<br />
+4) ./xcConfigure<br />
+5) Enter<br />
+6) Enter<br />
+7) Enter<br />
+8) Do you have a CRYSTAL package ([y]es/[n]o): n<br />
+9) Is this correct ([y]es/[n]o): y<br />
+10) Enter<br />
+11) Would you like to add xcrysden icon to the desktop ([y]es/[n]o): n<br />
+12) space<br />
+13) Enter<br />
+14) space<br />
+15) Enter<br />
+16) bsah<br />
+* command: xcrysden<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2k install<br />
+◆ OpenMP ( ifort and icc version 13.1.1 )<br />
+1) mkdir WIEN2k_12<br />
+2) cd WIEN2k_12<br />
+3) cp $HOME/Downloads/WIEN2k_12.tar .<br />
+4) tar -xvf WIEN2k_12.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) ./siteconfig_lapw<br />
+9) I Linux (Intel ifort 12.0 compiler + mkl)<br />
+10) ifort, icc<br />
+11) Current settings:<br />
+&nbsp; O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX2,AVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+12) Shared Memory Architecture? (y/n): y<br />
+13) Do you have MPI and Scalapack installed and......(y/n): n<br />
+14) NMATMAX=18000、NUME=4000<br />
+&nbsp; formula<br />
+&nbsp; NMATMAX=&radic;(62 900 000 000 /10）/&radic;2=56080<br />
+&nbsp;&nbsp;&nbsp; but I set up 18000.<br />
+&nbsp; NUME=NMATMAX/10=5608<br />
+&nbsp;&nbsp;&nbsp; but I set up 4000<br />
+15) ./userconfig_lapw<br />
+16) .bashrc<br />
+&nbsp; export OMP_NUM_THREADS=4<br />
+17) bash<br />
+18) w2web<br />
+--------------------------------------------------------------------<br />
+◆ WIEN2k install（with ACML）<br />
+<br />
+◆ ACML install<br />
+1) mkdir ACML_5_2_0<br />
+2) cd ACML_5_2_0<br />
+3) tar zxvf acml-5-2-0-gfortran-64bit.tgz<br />
+4) sudo ./install-acml-5-2-0-gfortran-64bit.sh<br />
+5) .bashrc にて<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=/opt/acml5.2.0/gfortran64/lib<br />
+&nbsp; OpenMP case<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=/opt/acml5.2.0/gfortran64_mp/lib<br />
+6) bash<br />
+<br />
+◆ WIEN2k install（with ACML）<br />
+1) mkdir WIEN2k_11<br />
+2) cd WIEN2k_11<br />
+3) cp /home/username/Downloads/WIEN2k_12.tar .<br />
+4) tar -xvf WIEN2k_11.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) ./siteconfig_lapw<br />
+9) V<br />
+10) gfortran, gcc<br />
+11) Current settings:<br />
+&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options: -ffree-form -O2 -m64 -ffree-line-length-none<br />
+&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags: $(FOPT) -L/opt/acml5.2.0/gfortran64/lib<br />
+&nbsp;&nbsp; P&nbsp;&nbsp; Preprocessor flags: '-DParallel'<br />
+&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS): -lacml<br />
+12) Shared Memory Architecture? (y/n): y<br />
+13) Do you have MPI and Scalapack installed and......(y/n): n<br />
+14) ./userconfig_lapw<br />
+15) bash<br />
+16) w2web<br />
+<br />
+◆ WIEN2k install ( with ACML )<br />
+OpenMP<br />
+1) tar -xvf WIEN2k_11.tar<br />
+2) gunzip *.gz<br />
+3) chmod +x ./expand_lapw<br />
+4) ./expand_lapw<br />
+5) ./siteconfig_lapw<br />
+6) V<br />
+7) gfrotran, gcc<br />
+8) Current settings:<br />
+&nbsp;&nbsp; O&nbsp;&nbsp; Compiler options: -ffree-form -O2 -m64 -ffree-line-length-none -fopenmp<br />
+&nbsp;&nbsp; L&nbsp;&nbsp; Linker Flags: $(FOPT) -L/opt/acml5.2.0/gfortran64_mp/lib<br />
+&nbsp;&nbsp; P&nbsp;&nbsp; Preprocessor flags:&nbsp;'-DParallel'<br />
+&nbsp;&nbsp; R&nbsp;&nbsp; R_LIB (LAPACK+BLAS): -lacml_mp<br />
+9) Shared Memory Architecture? (y/n): y<br />
+10) Do you have MPI and Scalapack installed and......(y/n): n<br />
+11) ./userconfig_lapw<br />
+12) .bashrc<br />
+&nbsp; export OMP_NUM_THREADS=&nbsp;4<br />
+13) bash<br />
+14) w2web<br />
+※ 上記だとSO計算用のコンパイルでエラーが表示される。SOの計算をしなけば問題無さそうだ。<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2k install ( install fftw3 )<br />
+FFTW3 for WIEN2k<br />
+1) tar zxvf fftw-3.3.3.tar.gz<br />
+2) cd fftw-3.3.3<br />
+4) export CC=&quot;icc -m64 -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+5) export MPICC=&quot;mpicc -m64 -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+6) export F77=&quot;ifort -mcmodel=large -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;<br />
+7) ./configure --enable-mpi --enable-threads --enable-openmp<br />
+8) make<br />
+9) sudo make install<br />
+--------------------------------------------------------------------<br />
+■ WIEN2k install<br />
+OpenMP + OpenMPI + FFTW3<br />
+1) mkdir WIEN2k_12<br />
+2) cd WIEN2k_12<br />
+3) cp /home/username/Downloads/WIEN2k_12.tar .<br />
+4) tar -xvf WIEN2k_12.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) ./siteconfig_lapw<br />
+&nbsp; 1. I Linux (Intel ifort 12.0 compiler + mkl)<br />
+&nbsp; 2. ifort, icc<br />
+&nbsp; 3. O Compiler options: -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+OpenSSH and OpenMPI setting<br />
+&nbsp; 4. Shared Memory Architecture? (y/n):y<br />
+&nbsp; 5. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp; 6. Set MPI_REMOTE to 0 / 1:<br />
+&nbsp; 7. Your compiler: mpif90<br />
+&nbsp; 8. RP RP_LIB(SCALAPACK+PBLAS): -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64 -L/usr/local/lib -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3 $(R_LIBS)<br />
+&nbsp; 9. NMATMAX=18000、NUME=1800<br />
+&nbsp;&nbsp; formula<br />
+&nbsp;&nbsp;&nbsp;&nbsp; NMATMAX=&radic;(62 900 000 000 /10）/&radic;2=56080<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; but I set up 18000.<br />
+&nbsp;&nbsp;&nbsp;&nbsp; NUME=NMATMAX/10=5608<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; but I set up 1800.<br />
+6) ./userconfig<br />
+7) bash<br />
+8) w2web<br />
+------------------------------------------------------------------------------<br />
+■ VASP install<br />
+OpenMP+OpenMPI<br />
+A. vasp.5.lib compiling<br />
+1. tar zxvf vasp.5.lib.tar.gz<br />
+2. cd vasp.5.lib<br />
+3. cp makefile.linux_ifc_P4 makefile<br />
+4. kwrite makefile<br />
+&nbsp;or emacs makfeifle, etc.<br />
+&nbsp;&nbsp; change gcc to icc<br />
+&nbsp;&nbsp; change ifc to ifort<br />
+&nbsp;&nbsp; add CC = icc<br />
+&nbsp;&nbsp; CFLAGS = -O -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+&nbsp;&nbsp; FFLAGS = -O0 -FI -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+5. make<br />
+<br />
+B. vasp.5.2 compiling<br />
+1. tar zxvf vasp.5.2.12.tar.gz<br />
+2. cd vasp.5.2<br />
+3. cp makefile.linux_ifc_P4 makefile<br />
+4. kwrite makefile<br />
+&nbsp; or emacs makefile, etc.<br />
+&nbsp; 1) change ifc to ifort<br />
+&nbsp; 2) FFLAGS = &quot;-free -names lowercase -assume byterecl &quot;<br />
+&nbsp; 3) OFLAG=-O2 -ip -ftz -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+&nbsp; 4) BLAS= -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core \<br />
+-liomp5 -lpthread -lm<br />
+&nbsp; 5) LAPACK= -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core \<br />
+-liomp5 -lpthread -lm<br />
+&nbsp; 6) FFT3D= fftw3d.o fftw3dlib.o \<br />
+/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/libfftw3xf_intel.a<br />
+<br />
+&nbsp; under # fortran linker for mpi<br />
+&nbsp; 7) FC= mpif90 -openmp<br />
+&nbsp; 8) FCL= $(FC) -mkl<br />
+&nbsp; 9) CPP = $(CPP_) -DMPI -DHOST=\&quot;LinuxIFC\&quot; -DIFC \<br />
+-DCACHE_SIZE=4000 -DPGF90 -Davoidalloc -DNGZhalf \<br />
+-DMPI_BLOCK=8000 -DPROFILING<br />
+# -DRPROMU_DGEMV -DRACCMU_DGEMV<br />
+&nbsp; 10) SCA= /opt/intel/composer_xe_2013/mkl/lib/intel64/libmkl_scalapack_lp64.a \<br />
+/opt/intel/composer_xe_2013/mkl/lib/intel64/libmkl_blacs_openmpi_lp64.a<br />
+&nbsp; 11) LIB= -L../vasp.5.lib -ldmy \<br />
+../vasp.5.lib/linpack_double.o $(LAPACK) \<br />
+$(SCA) $(BLAS)<br />
+&nbsp; 12) FFT3D= fftmpiw.o fftmpi_map.o fftw3d.o fft3dlib.o \<br />
+/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf/libfftw3xf_intel.a<br />
+5. make<br />
+<br />
+C. pseudo potential (PAW)<br />
+a. LDA<br />
+1) mkdir potpaw_LDA<br />
+2) cd potpaw_LDA<br />
+3) cp $HOME/Downloads/potpaw_LDA.tgz .<br />
+4) tar zxvf potpaw_LDA.tgz<br />
+b. GGA (PBE)<br />
+1) mkdir potpaw_PBE<br />
+2) cd potpaw_PBE<br />
+3) cp $HOME/Downloads/potpaw_PBE.tgz .<br />
+4) tar zxvf potpaw_PBE.tgz<br />
+<br />
+* comment<br />
+※ link option: Please, see<br />
+/opt/intel/composer_xe_2013/Documentation/ja_JP/mkl/mkl_link_line_advisor.htm<br />
+or<br />
+<a href="file:///opt/intel/composer_xe_2013/Documentation/ja_JP/mkl/mkl_userguide/index.htm#GUID-F6E3AD73-ED3F-499E-A125-9570533F7B53.htm">file:///opt/intel/composer_xe_2013/Documentation/ja_JP/mkl/mkl_userguide/index.htm#GUID-F6E3AD73-ED3F-499E-A125-9570533F7B53.htm</a><br />
+※ -axCORE-AVX-I,CORE-AVX2,AVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 は自動で、そのCPUに最適なSSE命令の設定を行ってくれるオプションの指定方法。SSE: http://sourceforge.jp/magazine/09/09/07/0257257, AVX: <a href="http://www.isus.jp/article/compileroptimization/avx_part1/">http://www.isus.jp/article/compileroptimization/avx_part1/</a> &nbsp;などに説明がある。<br />
+------------------------------------------------------------------------------<br />
+■ phonopy install<br />
+<a href="http://phonopy.sourceforge.net/install.html">http://phonopy.sourceforge.net/install.html</a><br />
+<br />
+1) install Phthon libraries<br />
+sudo apt-get install python-dev<br />
+sudo apt-get install python-numpy<br />
+sudo apt-get install python-matplotlib<br />
+sudo apt-get install python-tk<br />
+sudo apt-get install python-lxml<br />
+sudo apt-get install pythonyaml<br />
+sudo apt-get install python-scipy<br />
+sudo apt-get install texlive<br />
+2) download phonopy source code: <a class="reference external" href="https://sourceforge.net/projects/phonopy/">https://sourceforge.net/projects/phonopy/</a><br />
+3) tar zxvf $HOME/Downloads/phonopy-1.6.4.tar.gz<br />
+4) kwrite .bashrc<br />
+&nbsp; export PYTHONPATH=$HOME/phonopy-1.6.4/lib64/python<br />
+5) bash<br />
+6) cd phonopy-1.6.4<br />
+7) python setup.py install&nbsp; --home=.<br />
+------------------------------------------------------------------------------<br />
+■ WIEN2PHON &amp; PHON<br />
+<br />
+◆ WIEN2PHON<br />
+1) mkdir WIEN2PHON<br />
+2) cd WIEN2PHON<br />
+3) tar zxvf $HOME/Downloads/WIEN2PHON.tgz<br />
+4) cd WIEN2POSCAR<br />
+5) kwrite Makefile<br />
+&nbsp; change ifc to ifort<br />
+&nbsp; LDFLAGS = #-L/usr/local/Linux_P4SSE2/lib/ -Vaxlib<br />
+6) make<br />
+7) cd ..<br />
+8) cd cellconv<br />
+9) kwrite Makefile<br />
+&nbsp; change ifc to ifort<br />
+&nbsp; LDFLAGS = #-L/usr/local/Linux_P4SSE2/lib/ -Vaxlib<br />
+10) make<br />
+* run<br />
+1) cp case.struct $HOME/WIEN2PHON/WIEN2POSCAR<br />
+2) WIEN2POSCAR ./case<br />
+<br />
+◆ PHON<br />
+<a href="http://www.homepages.ucl.ac.uk/~ucfbdxa/phon/">http://www.homepages.ucl.ac.uk/~ucfbdxa/phon/</a><br />
+1) mkdir PHON<br />
+2) cd PHON<br />
+3) tar xvf $HOME/Downloads/phon.1.35.tar.Z<br />
+4) cp ./incs/make.inc.linux_ifort ./make.inc<br />
+5) kwrite make.inc<br />
+&nbsp; OFLAG&nbsp; = -O3 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+6) make<br />
+* $HOME/PHON/src/phon<br />
+------------------------------------------------------------------------------<br />
+■ BoltzTraP install<br />
+1. rewrite boltztrap-1.2.2/src/makefile<br />
+&nbsp;&nbsp; FC=ifort<br />
+&nbsp;&nbsp; FOPT = -FR -mp1 -w -prec_div -pc80 -pad -align -DINTEL_VML -traceback -axAVX,SSE4.2,SSE4.1,SSSE3,SSE3<br />
+&nbsp;&nbsp; LDFLAGS = $(FOPT) -L$(MKLROOT)/lib/$(MKL_TARGET_ARCH) -pthread<br />
+&nbsp;&nbsp; LIBS = -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -openmp -lpthread<br />
+2. make<br />
+------------------------------------------------------------------------------<br />
+◆ cif2cell<br />
+sudo apt-get install python-setuptools<br />
+sudo apt-get install python-dev<br />
+sudo apt-get install imagemagick<br />
+sudo apt-get install graphicsmagick-imagemagick-compat<br />
+<br />
+PyCifRW library<br />
+PyCifRW-3.3.tar.gz<br />
+1) tar zxvf PyCifRW-3.3.tar.gz<br />
+2) cd PyCifRW-3.3<br />
+3) sudo python setup.py install<br />
+<br />
+cif2cell　<br />
+1) tar zxvf cif2cell-1.0.10.tar.gz<br />
+2) cd cif2cell-1.0.10<br />
+3) sudo python setup.py install<br />
+<br />
+cif2cell environmental setting<br />
+.bashrc<br />
+#cif2cell<br />
+export CIF2CELL=$HOME/cif2cell-1.0.10<br />
+PATH=&quot;$PATH:$CIF2CELL&quot;<br />
+<br />
+using<br />
+a) VASP: cif2cell -p vasp -f Ni20Mn3P6.cif --setup-all --no-reduce --vasp-print-species --vasp-cartesian-lattice-vectors --vasp-pseudo-libdir=$HOME/vasp/potpaw_PBE --vasp-format=5.<br />
+b) ABINIT: cif2cell -p abinit -f SrTiO3.cif -o SrTiO3.in<br />
+------------------------------------------------------------------------------<br />
+■ SPRKKR install<br />
+<br />
+■ xband<br />
+0) install<br />
+&nbsp; sudo apt-get install tclx<br />
+&nbsp; sudo apt-get install xterm<br />
+&nbsp; sudo apt-get install rasmol<br />
+1) mkdir sprkkr<br />
+2) cd sprkkr<br />
+3) mkdir band<br />
+4) cp $HOME/Downloads/xband_6.3.tar.gz ./band<br />
+3) cd band<br />
+4) tar -zxvf xband_6.3.tar.gz<br />
+5) .bashrc に下記を加える<br />
+# xband environment setting<br />
+export XBANDPATH=$HOME/sprkkr/band<br />
+export PATH=$PATH:$XBANDPATH:<br />
+export XLIB_SKIP_ARGB_VISUALS=1<br />
+6) bash<br />
+7) xband<br />
+<br />
+■ SPRKKR 6.3<br />
+1) unpack<br />
+&nbsp;&nbsp; cp $HOME/Downloads/sprkkr6.3.2pub20121219.tgz ./sprkkr<br />
+&nbsp;&nbsp; cd sprkkr<br />
+&nbsp;&nbsp; tar -zxvf sprkkr6.3.2pub20121219.tgz<br />
+2) cp make.inc_example make.inc<br />
+3) kwrite make.inc<br />
+&nbsp; ■ non parallel case<br />
+&nbsp; □ Intel compiler version 2013 (64bit type)<br />
+&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC = ifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = ifort $(FFLAGS) $(INCLUDE)<br />
+&nbsp; ■ parallel case<br />
+&nbsp; □ OpenMPI case<br />
+&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC = mpif90 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = mpif90 $(FFLAGS) $(INCLUDE)<br />
+4) make scfmpi（single type: make scf )<br />
+&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+5) この他にもプログラムを作成することができる<br />
+&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp; c) Makefile を見ると一応下記のコマンドがある<br />
+&nbsp;&nbsp;&nbsp; make genmpi, make embscfmpi, make chi<br />
+&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+※ 再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+<br />
+<br />
+■ SPRKKR 6.3 (Intel compiler 2016)<br />
+1) unpack<br />
+&nbsp;&nbsp; cp $HOME/Downloads/sprkkr6.3.2pub20121219.tgz ./sprkkr<br />
+&nbsp;&nbsp; cd sprkkr<br />
+&nbsp;&nbsp; tar -zxvf sprkkr6.3.2pub20121219.tgz<br />
+2) cp make.inc_example make.inc<br />
+3) kwrite make.inc<br />
+&nbsp; ■ parallel case<br />
+&nbsp; □ OpenMPI case (Dynamic link case)<br />
+&nbsp;&nbsp;&nbsp; LIB =&nbsp;&nbsp;&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread -lmkl_blacs_intelmpi_lp64 -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; LIBMPI =&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread -lmkl_blacs_intelmpi_lp64 -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -qopenmp -I${MKLROOT}/include/intel64/lp64 -I${MKLROOT}/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC&nbsp;&nbsp; = mpiifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = mpiifort&nbsp;&nbsp;&nbsp; $(FFLAGS) $(INCLUDE)<br />
+&nbsp; □ OpenMPI case (Static link case)<br />
+&nbsp;&nbsp;&nbsp; LIB =&nbsp;&nbsp;&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -ldl<br />
+#LIB = $(LIB_MKL)<br />
+&nbsp;&nbsp;&nbsp; LIBMPI =&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a ${MKLROOT}/lib/intel64/libmkl_scalapack_lp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a ${MKLROOT}/lib/intel64/libmkl_blacs_intelmpi_lp64.a -Wl,--end-group -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -qopenmp -I${MKLROOT}/include/intel64/lp64 -I${MKLROOT}/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC&nbsp;&nbsp; = mpiifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = mpiifort&nbsp;&nbsp;&nbsp; $(FFLAGS) $(INCLUDE)<br />
+4) make scfmpi（single type: make scf )<br />
+&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+5) この他にもプログラムを作成することができる<br />
+&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp; c) Makefile を見ると一応下記のコマンドがある<br />
+&nbsp;&nbsp;&nbsp; make genmpi, make embscfmpi, make chi<br />
+&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+※ 再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+<br />
+Reference<br />
+file:///opt/intel/documentation_2016/en/mkl/common/mkl_link_line_advisor.htm<br />
+-----<br />
+Intel&reg; Math Kernel Library (Intel&reg; MKL) Link Line Advisor v4.6&nbsp; &nbsp;<br />
+Select Intel&reg; product: &nbsp;&nbsp; &nbsp;Intel(R) Parallel Studio XE 2016<br />
+Select OS: &nbsp;&nbsp; &nbsp;Linux*<br />
+Select usage model of Intel&reg; Xeon Phi&trade; Coprocessor: &nbsp;&nbsp; &nbsp;Automatic Ofload<br />
+Select compiler: &nbsp;&nbsp; &nbsp;Intel(R) Fortran<br />
+Select architecture: &nbsp;&nbsp; &nbsp;Intel(R) 64<br />
+Select dynamic or static linking: Static or Dynamic<br />
+Select interface layer: &nbsp;&nbsp; &nbsp;LP64(32-bit integer)<br />
+Select threading layer: &nbsp;&nbsp; &nbsp;OpenMP threading<br />
+Select OpenMP library: &nbsp;&nbsp; &nbsp;Intel(R)(libiomp5)<br />
+Select cluster library: &nbsp;&nbsp; &nbsp;Cluster PARDISO (BLACS required)<br />
+&nbsp; ScaLAPACK (BLACS required)<br />
+&nbsp; BLACS<br />
+Select MPI library: &nbsp;&nbsp; &nbsp;Intel(R) MPI<br />
+Select the Fortran 95 interfaces:<br />
+&nbsp; BLAS95<br />
+&nbsp; LAPACK95<br />
+Link with Intel&reg; MKL libraries explicitly: &nbsp;&nbsp; &nbsp;check<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ Abinit install<br />
+<a href="http://www.youtube.com/watch?v=DppLQ-KQA68">http://www.youtube.com/watch?v=DppLQ-KQA68</a><br />
+<br />
+◆ OpenMPI + OpenMP<br />
+1) tar zxvf abinit-6.8.2.tar.gz<br />
+2) cd abinit-6.8.2<br />
+3) ./configure --enable-mpi --enable-openmp --enable-64bit-flags --enable-gui FC=mpif90 CC=mpicc CXX=mpicxx LDFLAGS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; LIBS=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot; --prefix=$HOME/abinit-6.8.2 FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; CFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; --with-dft-flavor=&quot;none&quot; --with-trio-flavor=netcdf+etsf_io+fox<br />
+4) make multi multi_nprocs=2<br />
+5) make install<br />
+mpirun -np 4 $HOME/abinit-6.8.2/bin/abinit <case.files> case.log<br />
+<br />
+◆ OpenMPI + OpenMP + FFTW3-MKL<br />
+1) tar zxvf abinit-6.8.2.tar.gz<br />
+2) cd abinit-6.8.2<br />
+3) ./configure --enable-mpi --enable-openmp --enable-64bit-flags --enable-gui FC=mpif90 CC=mpicc CXX=mpicxx LDFLAGS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; LIBS=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot; --prefix=$HOME/abinit-6.8.2 FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; CFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot;&nbsp; --with-dft-flavor=&quot;none&quot; --with-fft-flavor=fftw3-mkl --with-fft-libs=&quot;-L/opt/intel/composer_xe_2013/mkl/interfaces/fftw3xf -lfftw3xf_intel&quot; --with-trio-flavor=netcdf+etsf_io+fox<br />
+4) make multi multi_nprocs=2<br />
+5) make install<br />
+mpirun -np 4 $HOME/abinit-6.8.2/bin/abinit <case.files> case.log<br />
+<br />
+◆ OpenMPI + OpenMP + FFTW3(Netlib)<br />
+1) tar zxvf abinit-6.8.2.tar.gz<br />
+2) cd abinit-6.8.2<br />
+3) ./configure --enable-mpi --enable-openmp --enable-64bit-flags --enable-gui FC=mpif90 CC=mpicc CXX=mpicxx LDFLAGS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; LIBS=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot; --prefix=$HOME/abinit-6.8.2 FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; CFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 -no-ipo&quot; --with-dft-flavor=&quot;none&quot; --with-fft-flavor=fftw3 --with-fft-libs=&quot;-L/usr/local/lib -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3&quot; --with-trio-flavor=netcdf+etsf_io+fox<br />
+4) make multi multi_nprocs=2<br />
+5) make install<br />
+mpirun -np 4 $HOME/abinit-6.8.2/bin/abinit <case.files> case.log<br />
+<br />
+◆ OpenMPI + OpenMP (gfrotran)<br />
+1) tar zxvf abinit-7.6.4.tar.gz<br />
+2) cd abinit-7.6.4<br />
+3) ./configure --enable-mpi --enable-openmp --enable-64bit-flags FC=mpif90 CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=netcdf+etsf_io+fox<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+◆ OpenMPI + OpenMP (gfrotran)<br />
+libxc-2.0.3<br />
+0) sudo apt-get install dh-autoreconf<br />
+1) tar zxvf libxc-2.0.3<br />
+2) ./condifure<br />
+3) make<br />
+4) sudo make install<br />
+Libraries have been installed in: /opt/etsf/lib<br />
+Abinit<br />
+1) tar zxvf abinit-7.8.1.tar.gz<br />
+2) cd abinit-7.8.1<br />
+3) ./configure --enable-mpi --enable-openmp --enable-64bit-flags FC=mpif90.openmpi CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=netcdf+etsf_io+fox --with-dft-flavor=libxc<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun.openmpi -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+CPU: Intel&reg; Core&trade; i7-3820 CPU (SSE4.2, AVX, AES)<br />
+◆ OpenMPI + gfrotran<br />
++Abinit<br />
+1) tar zxvf abinit-7.8.1.tar.gz<br />
+2) cd abinit-7.8.1<br />
+3) ./configure --enable-mpi --enable-64bit-flags FC=mpif90 CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=&quot;netcdf+etsf_io+fox&quot; --with-dft-flavor=&quot;atompaw+libxc+wannier90&quot;<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun.openmpi -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330</a><br />
+Core-i7 / ubuntu 12.04 (64bits) / abinit 7.8.1 ( NO setting atlas, but it is very safety)<br />
+<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+create a &quot;ubuntu.ac&quot; file :</case.files></case.files></case.files></case.files></case.files></case.files></p>
+
+<dl class="codebox">
+	<dd><code>#prefix=&quot;/usr/local&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_trio_flavor=&quot;netcdf+etsf_io+fox&quot;<br />
+	#with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	#with_netcdf_libs=&quot;-L/usr/lib -lnetcdf -lnetcdff&quot;<br />
+	#with_etsf_io_incs=&quot;-I/usr/include&quot;<br />
+	#with_etsf_io_libs=&quot;-L/usr/lib -letsf_io_low_level -letsf_io_utils -letsf_io&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib/x86-64-linux-gnu/ -lfftw3 -lfftw3f&quot;<br />
+	with_linalg_flavor=&quot;atlas&quot;<br />
+	with_linalg_libs=&quot;-L/usr/lib64 -llapack -lf77blas -lcblas -latlas&quot;<br />
+	with_dft_flavor=&quot;atompaw+libxc&quot;<br />
+	#with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	#enable_test_timeout=&quot;yes&quot;<br />
+	#enable_gui_build=&quot;no&quot;</code></dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+make install<br />
+<br />
+cd tests<br />
+./runtests.py -j 4 fast</code><br />
+<code>./runtests.py paral -n 2 -j 2</code><br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330</a><br />
+Core-i7 / ubuntu 12.04 (64bits) / abinit 7.8.1 + atlas<br />
+Intel&reg; Core&trade; i7-3820 CPU @ 3.60GHz &times; 8<br />
+Release 12.04 (precise) 64-bit<br />
+<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+create a &quot;ubuntu.ac&quot; file :</p>
+
+<dl class="codebox">
+	<dd>#prefix=&quot;/usr/local&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_trio_flavor=&quot;netcdf+etsf_io+fox&quot;<br />
+	with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	with_netcdf_libs=&quot;-L/usr/lib -lnetcdf -lnetcdff&quot;<br />
+	#with_etsf_io_incs=&quot;-I/usr/include&quot;<br />
+	#with_etsf_io_libs=&quot;-L/usr/lib -letsf_io_low_level -letsf_io_utils -letsf_io&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib -lfftw3 -lfftw3f&quot;<br />
+	with_linalg_flavor=&quot;atlas&quot;<br />
+	with_linalg_libs=&quot;-L/usr/lib/atlas-base -llapack_atlas -lf77blas -lcblas -latlas -L/usr/lib -lblas -llapack&quot;<br />
+	with_dft_flavor=&quot;atompaw+libxc&quot;<br />
+	#with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	#enable_test_timeout=&quot;yes&quot;<br />
+	#enable_gui_build=&quot;no&quot;</dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+make install<br />
+<br />
+cd tests<br />
+./runtests.py -j 4 fast</code><br />
+<code>./runtests.py paral -n 2 -j 2</code><br />
+<br />
+<code>./runtests.py -j 4 fast case:</code><br />
+Test suite completed in 8.81 s (average time for test = 1.89 s, stdev = 1.89 s)<br />
+<br />
+<code>./runtests.py paral -n 2 -j 2</code> case:<br />
+Test suite completed in 81.28 s (average time for test = 1.75 s, stdev = 4.87 s)<br />
+t06, t53, absolute error<br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330</a><br />
+Core-i7 / ubuntu 12.04 (64bits) / abinit 7.8.1 + atlas + openmp<br />
+Intel&reg; Core&trade; i7-3820 CPU @ 3.60GHz &times; 8<br />
+Release 12.04 (precise) 64-bit<br />
+<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+create a &quot;ubuntu.ac&quot; file :<br />
+&nbsp;</p>
+
+<dl class="codebox">
+	<dd>#prefix=&quot;/usr/local&quot;<br />
+	enable_openmp=&quot;yes&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_trio_flavor=&quot;netcdf+etsf_io+fox&quot;<br />
+	with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	with_netcdf_libs=&quot;-L/usr/lib -lnetcdf -lnetcdff&quot;<br />
+	#with_etsf_io_incs=&quot;-I/usr/include&quot;<br />
+	#with_etsf_io_libs=&quot;-L/usr/lib -letsf_io_low_level -letsf_io_utils -letsf_io&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib -lfftw3 -lfftw3f -lfftw3_threads -lfftw3f_threads&quot;<br />
+	with_linalg_flavor=&quot;atlas&quot;<br />
+	with_linalg_libs=&quot;-L/usr/lib/atlas-base -llapack_atlas -lf77blas -lcblas -latlas -L/usr/lib -lblas -llapack&quot;<br />
+	with_dft_flavor=&quot;atompaw+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	#enable_test_timeout=&quot;yes&quot;<br />
+	#enable_gui_build=&quot;no&quot;</dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+make install<br />
+<br />
+cd tests<br />
+./runtests.py -j 4 fast</code><br />
+<code>./runtests.py paral -n 2 -j 2</code><br />
+<br />
+<code>./runtests.py -j 4 fast case:</code><br />
+Test suite completed in 8.74 s (average time for test = 1.84 s, stdev = 1.94 s)<br />
+t14, absolute error<br />
+<br />
+<code>./runtests.py paral -n 2 -j 2</code> case:<br />
+Test suite completed in 81.95 s (average time for test = 1.76 s, stdev = 5.01 s)<br />
+t06, t53, t73, t75, absulute error<br />
+<br />
+-----<br />
+error<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330</a><br />
+Core-i7 / ubuntu 12.04 (64bits) / abinit 7.8.1 + acml (<a class="download">acml-5-3-1-gfortran-64bit.tgz </a>)<br />
+Intel&reg; Core&trade; i7-3820 CPU @ 3.60GHz &times; 8<br />
+Release 12.04 (precise) 64-bit<br />
+<br />
+ACML<br />
+mkdir acml5.3.1<br />
+cd acml5.3.1<br />
+tar xvf&nbsp; acml-5-3-1-gfortran-64bit.tgz<br />
+sudo ./install-acml-5-3-1-gfortran-64bit.sh<br />
+<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+create a &quot;ubuntu.ac&quot; file :</p>
+
+<dl class="codebox">
+	<dd>#prefix=&quot;/usr/local&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_trio_flavor=&quot;netcdf+etsf_io+fox&quot;<br />
+	with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	with_netcdf_libs=&quot;-L/usr/lib -lnetcdf -lnetcdff&quot;<br />
+	#with_etsf_io_incs=&quot;-I/usr/include&quot;<br />
+	#with_etsf_io_libs=&quot;-L/usr/lib -letsf_io_low_level -letsf_io_utils -letsf_io&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib -lfftw3 -lfftw3f&quot;<br />
+	with_linalg_flavor=&quot;acml&quot;<br />
+	with_linalg_libs=&quot;-L/opt/acml5.3.1/gfortran64/lib -lacml -L/usr/lib -lblas -llapack&quot;<br />
+	with_dft_flavor=&quot;atompaw+libxc&quot;<br />
+	#with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	#enable_test_timeout=&quot;yes&quot;<br />
+	#enable_gui_build=&quot;no&quot;</dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+<br />
+cd tests<br />
+./runtests.py -j 4 fast</code><br />
+<code>./runtests.py paral -n 2 -j 2</code><br />
+<br />
+<code>make install</code><br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1391&amp;p=4330&amp;hilit=binaries#p4330</a><br />
+Core-i7 / ubuntu 10.04 or 12.04 (64bits) / abinit 6.8.x<br />
+<br />
+sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install fftw3 libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+<code>sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code></p>
+
+<p>create a &quot;ubuntu.ac&quot; file :</p>
+
+<dl class="codebox">
+	<dd><code>prefix=&quot;/usr/local&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	with_netcdf_libs=&quot;-L/usr/lib64 -lnetcdf -lnetcdff&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib64 -lfftw3&quot;<br />
+	with_linalg_flavor=&quot;atlas&quot;<br />
+	with_linalg_libs=&quot;-L/usr/lib64 -llapack -lf77blas -lcblas -latlas&quot;<br />
+	with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	enable_test_timeout=&quot;yes&quot;<br />
+	enable_gui_build=&quot;no&quot;</code></dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+make install</code><br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=2639&amp;p=8080&amp;hilit=binaries#p8080">http://forum.abinit.org/viewtopic.php?f=2&amp;t=2639&amp;p=8080&amp;hilit=binaries#p8080</a><br />
+Recipe for a x86-64 / ubuntu 13.04 (64bits) / abinit 7.6.3 :<br />
+<br />
+<code>sudo apt-get -y install gcc g++ gfortran<br />
+sudo apt-get -y install patch<br />
+sudo apt-get -y install libetsf-io-dev<br />
+sudo apt-get -y install libnetcdf-dev<br />
+sudo apt-get -y install libfftw3-dev<br />
+sudo apt-get -y install libatlas-base-dev&nbsp; libatlas3gf-base<br />
+sudo apt-get -y install liblapack3gf liblapack-dev<br />
+sudo apt-get -y install libblas3gf libblas-dev<br />
+sudo apt-get -y install openmpi-bin openmpi-common libopenmpi-dev</code><br />
+<br />
+create a &quot;ubuntu.ac&quot; file :</p>
+
+<dl class="codebox">
+	<dd><code>prefix=&quot;/usr/local&quot;<br />
+	enable_mpi=&quot;yes&quot;<br />
+	enable_mpi_io=&quot;yes&quot;<br />
+	with_mpi_prefix=&quot;/usr&quot;<br />
+	with_trio_flavor=&quot;netcdf+etsf_io&quot;<br />
+	with_netcdf_incs=&quot;-I/usr/include&quot;<br />
+	with_netcdf_libs=&quot;-L/usr/lib -lnetcdf -lnetcdff&quot;<br />
+	with_etsf_io_incs=&quot;-I/usr/include&quot;<br />
+	with_etsf_io_libs=&quot;-L/usr/lib -letsf_io_low_level -letsf_io_utils -letsf_io&quot;<br />
+	with_fft_flavor=&quot;fftw3&quot;<br />
+	with_fft_incs=&quot;-I/usr/include/&quot;<br />
+	with_fft_libs=&quot;-L/usr/lib/x86-64-linux-gnu/ -lfftw3 -lfftw3f&quot;<br />
+	with_linalg_flavor=&quot;atlas&quot;<br />
+	with_linalg_libs=&quot;-L/usr/lib64 -llapack -lf77blas -lcblas -latlas&quot;<br />
+	with_dft_flavor=&quot;atompaw+libxc&quot;<br />
+	#with_dft_flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;<br />
+	enable_gw_dpc=&quot;yes&quot;<br />
+	enable_maintainer_checks=&quot;no&quot;<br />
+	enable_test_timeout=&quot;yes&quot;<br />
+	enable_gui_build=&quot;no&quot;</code></dd>
+</dl>
+
+<p><code>./configure --with-config-file=&quot;./ubuntu.ac&quot;<br />
+make mj4<br />
+<br />
+cd tests<br />
+./runtests.py -j 4 fast</code><br />
+<code>./runtests.py paral -n 2 -j 2</code><br />
+<br />
+<code>make install</code><br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=3&amp;t=2728&amp;p=8397&amp;hilit=7.0.5+binary#p8397">http://forum.abinit.org/viewtopic.php?f=3&amp;t=2728&amp;p=8397&amp;hilit=7.0.5+binary#p8397</a><br />
+Abinit-7.0.5<br />
+<code>export FC=$MPICH/bin/mpiifort<br />
+export CC=$MPICH/bin/mpiicc<br />
+export CXX=$MPICH/bin/mpiicpc<br />
+./configure --prefix=/opt/abinit-$VER --enable-mpi --enable-mpi-io \<br />
+--with-linalg-incs=&quot;-I$INTEL_COMP/mkl/include&quot; \<br />
+--with-fft-flavor=&quot;fftw3-mkl&quot; --with-fft-incs=&quot;-I$INTEL_COMP/mkl/include/fftw&quot; \<br />
+--with-fft-libs=&quot;-L$INTEL_COMP/mkl/lib/intel64 -lfftw3xf_intel&quot; \<br />
+--with-linalg-flavor=&quot;mkl&quot; \<br />
+--with-linalg-libs=&quot;-L$INTEL_COMP/mkl/lib/intel64&nbsp; -Wl,--start-group&nbsp; -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -Wl,--end-group -liomp5 -lpthread -limf -lsvml -lirc&quot; \<br />
+--with-linalg-incs=&quot;-I$INTEL_COMP/mkl/include&quot; \<br />
+--with-dft-flavor=&quot;atompaw+bigdft+libxc+wannier90&quot;</code><br />
+<br />
+ifort 13.1.3<br />
+<code>--with-fft-flavor=&quot;fftw3&quot;&nbsp; \<br />
+--with-fft-libs=&quot;-L/opt/intel/mkl/lib/intel64 -Wl,--start-group&nbsp; -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -Wl,--end-group&quot;&nbsp; \<br />
+--with-linalg-flavor=&quot;mkl&quot;&nbsp; \<br />
+--with-linalg-libs=&quot;-L/opt/intel/mkl/lib/intel64 -Wl,--start-group&nbsp; -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -Wl,--end-group&quot;&nbsp; \</code><br />
+<br />
+-----<br />
+◆ <a href="http://forum.abinit.org/viewtopic.php?f=3&amp;t=2071&amp;p=7264&amp;hilit=acml#p7264">http://forum.abinit.org/viewtopic.php?f=3&amp;t=2071&amp;p=7264&amp;hilit=acml#p7264</a><br />
+<br />
+Linux 6.4, Intel Parallel Studio XE 2013 Update 3, OpenMPI-1.6.4.<br />
+&nbsp;</p>
+
+<dl class="codebox">
+	<dd><code>./configure FC=/usr/local/bin/mpif90 CC=icc --with-trio-flavor=&quot;none&quot; --with-dft-flavor=&quot;none&quot; --with-linalg-flavor=&quot;mkl&quot; --with-linalg-libs=&quot;-L/opt/intel/mkl/lib/intel64/ -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lmkl_blas95_lp64 -lmkl_lapack95_lp64&quot; --with-linalg-incs=&quot;-I/opt/intel/mkl/lib/intel64/&quot; --enable-mpi --with-fft-flavor=&quot;fftw3-mkl&quot; --with-fft-incs=&quot;-I/opt/intel/mkl/include/fftw&quot; --with-fft-libs=&quot;-L/opt/intel/mkl/interfaces/fftw3xf -lfftw3xf_intel&quot;</code></dd>
+</dl>
+
+<p>/opt/intel/mkl/interfaces/fftw3xf<br />
+<code>make libintel64 compiler=intel</code><br />
+<br />
+<code>enable_gw_dpc = yes<br />
+enable_mpi = yes<br />
+enable_mpi_io = yes<br />
+with_mpi_prefix = /usr/local/openmpi_intel13<br />
+with_dft_flavor = atompaw+bigdft+libxc+wannier90<br />
+with_trio_flavor = netcdf+etsf_io+fox<br />
+fcflags_opt_66_wfs = -O1 -xHost -g -extend-source -vec-report0 -noaltparam -nofpscomp<br />
+with_fft_flavor = fftw3<br />
+with_fft_libs = -L/opt/intel/composer_xe_2013.3.163/mkl/lib/intel64 -Wl,--start-group&nbsp; -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -Wl,--end-group<br />
+with_linalg_flavor = mkl<br />
+with_linalg_libs = -L/opt/intel/composer_xe_2013.3.163/mkl/lib/intel64 -Wl,--start-group&nbsp; -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -Wl,--end-group</code><br />
+<br />
+<code>./configure --with-config-file=./build.ac</code><br />
+-----<br />
+<br />
+◆ Memo<br />
+◆ ? OpenMPI + gfrotran + ACML(<a class="download">acml-5-3-1-gfortran-64bit-int64.tgz </a>)<br />
++ACML-5-3-1<br />
+1) mkdir acml<br />
+2) cd acml<br />
+3) tar zxvf acml-5-3-1-gfortran-64bit-int64.tgz<br />
+4) sudo ./install-acml-5-3-1-gfortran-64bit-int64.sh<br />
+5) accept<br />
+6) /opt/acml5.3.1<br />
+7)&nbsp; .bashrc<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.1/gfortran64_int64/lib<br />
+8) bash<br />
++Abinit<br />
+1) tar zxvf abinit-7.8.1.tar.gz<br />
+2) cd abinit-7.8.1<br />
+3) ./configure --enable-mpi --enable-64bit-flags FC=mpif90 CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=&quot;netcdf+etsf_io+fox&quot; --with-dft-flavor=&quot;atompaw+libxc+wannier90&quot; --with-linalg-flavor=acml --with-linalg-incs=&quot;-I/opt/acml5.3.1/gfortran64_int64/include&quot; --with-linalg-libs=&quot;-L/opt/acml5.3.1/gfortran64_int64/lib -lacml&quot;<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun.openmpi -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+CPU: Intel&reg; Core&trade; i7-3820 CPU (SSE4.2, AVX, AES)<br />
+◆ ? OpenMPI + OpenMP + gfrotran + ACML(<a class="download">acml-5-3-1-gfortran-64bit-int64.tgz </a>)<br />
++ACML-5-3-1<br />
+1) mkdir acml<br />
+2) cd acml<br />
+3) tar zxvf acml-5-3-1-gfortran-64bit-int64.tgz<br />
+4) sudo ./install-acml-5-3-1-gfortran-64bit-int64.sh<br />
+5) accept<br />
+6) /opt/acml5.3.1<br />
+7)&nbsp; .bashrc<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.1/gfortran64_int64/lib<br />
+8) bash<br />
++Abinit<br />
+1) tar zxvf abinit-7.8.1.tar.gz<br />
+2) cd abinit-7.8.1<br />
+3) ./configure --enable-mpi --enable-64bit-flags FC=mpif90 CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=&quot;netcdf+etsf_io+fox&quot; --with-dft-flavor=&quot;atompaw+libxc+wannier90&quot; --with-linalg-flavor=acml --with-linalg-incs=&quot;-I/opt/acml5.3.1/gfortran64_int64/include&quot; --with-linalg-libs=&quot;-L/opt/acml5.3.1/gfortran64_int64/lib -lacml&quot;<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun.openmpi -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+maybe standard = -O2 -mtune=native -march=native<br />
+<br />
+OpenMPI + gfrotran + ACML(<a class="download">acml-5-3-1-gfortran-64bit-int64.tgz </a>)+libxc-2.0.3<br />
++ACML-5-3-1<br />
+1) mkdir acml<br />
+2) cd acml<br />
+3) tar zxvf acml-5-3-1-gfortran-64bit-int64.tgz<br />
+4) sudo ./install-acml-5-3-1-gfortran-64bit-int64.sh<br />
+5) accept<br />
+6) /opt/acml5.3.1<br />
+7)&nbsp; .bashrc<br />
+&nbsp; export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.1/gfortran64_int64/lib<br />
+8) bash<br />
++libxc-2.0.3: <a href="http://www.tddft.org/programs/octopus/wiki/index.php/Libxc:download">http://www.tddft.org/programs/octopus/wiki/index.php/Libxc:download</a><br />
+0) sudo apt-get install dh-autoreconf<br />
+1) tar zxvf libxc-2.0.3<br />
+2) ./condifure<br />
+3) make<br />
+4) sudo make install<br />
+Libraries have been installed in: /opt/etsf/lib<br />
++Wannier90: <a href="http://www.wannier.org/download.html">http://www.wannier.org/download.html</a><br />
+0) gziped-tar<br />
+1) tar zxvf wannier90-2.0.0.tar.gz<br />
+2) wannier90-2.0.0<br />
+3) cp ./config/make.sys.gfort ./make.sys<br />
+&nbsp; gedit make.sys<br />
+&nbsp; COMMS&nbsp; = mpi<br />
+&nbsp; MPIF90 = mpif90<br />
+&nbsp; #LIBDIR = /rscratch/jry20/LIB/gfortran<br />
+&nbsp; #LIBS = -L$(LIBDIR)&nbsp; -llapack -lblas<br />
+&nbsp; LIBDIR = /opt/acml5.3.1/gfortran64_int64/lib<br />
+&nbsp; LIBS&nbsp;&nbsp; = -L$(LIBDIR) -lacml<br />
+4) make -v<br />
+&nbsp; OK: GNU Make 3.81<br />
+5) make<br />
+6) make lib<br />
+7) make w90vdw<br />
+8) make w90pov<br />
+recompile: make clean<br />
++Abinit<br />
+1) tar zxvf abinit-7.8.1.tar.gz<br />
+2) cd abinit-7.8.1<br />
+3) ./configure --enable-mpi --enable-64bit-flags FC=mpif90 CC=mpicc CXX=mpicxx&nbsp; --with-trio-flavor=&quot;netcdf+etsf_io+fox&quot; --with-dft-flavor=&quot;atompaw+libxc+wannier90&quot; --with-linalg-flavor=acml --with-linalg-incs=&quot;-I/opt/acml5.3.1/gfortran64_int64/include&quot;&nbsp; --with-linalg-libs=&quot;-L/opt/acml5.3.1/gfortran64_int64/lib -lacml&quot; --with-wannier90-bins=&quot;${HOME}/wannier90-2.0.0&quot;&nbsp; --with-wannier90-libs=&quot;-L${HOME}/wannier90-2.0.0 -lwannier&quot;<br />
+4) make multi multi_nprocs=4<br />
+5) sudo make install<br />
+mpirun.openmpi -np 4 /usr/local/bin/abinit <case.files> case.log<br />
+<br />
+See ~abinit/doc/build/config-template.ac for information<br />
+<br />
+Abinit Band Structure maker<br />
+1) cd $HOME/abinit-6.8.2/util/users<br />
+2) python AbinitBandStructureMaker.py case.out<br />
+3) python AbinitBandStructureMaker.py case.out.dbs<br />
+4) xmgrace case.out.dbs.agr<br />
+※ manual : $HOME/abinit-6.8.2/doc/users<br />
+<br />
++Wannier90 v1.2<br />
+1) tar zxvf wannier90-1.2.tar.gz<br />
+2) cd wannier90-1.2.tar.gz<br />
+3) cp ./config/make.sys.gfort ./make.sys<br />
+&nbsp; gedit make.sys<br />
+&nbsp; #LIBDIR = /usr/local/lib<br />
+&nbsp; #LIBS = -L$(LIBDIR)&nbsp; -llapack -lblas<br />
+&nbsp; LIBDIR = /opt/acml5.3.1/gfortran64_int64/lib<br />
+&nbsp; LIBS&nbsp;&nbsp; = -L$(LIBDIR) -lacml<br />
+4) make<br />
+5) make lib<br />
++Symmetry-Adapted Wannier Functions<br />
+0) Amodified version: <a href="http://www.wannier.org/download.html">http://www.wannier.org/download.html</a><br />
+1) tar zxvf w90_symmetry.tar.gz<br />
+2) cd w90_symmetry<br />
+3) cd src<br />
+4) gedit Make.inc<br />
+&nbsp; #FC=ifort<br />
+&nbsp; FC=gfortran<br />
+&nbsp; #DEBUG=-check bounds -traceback -fpe0<br />
+&nbsp; DEBUG=<br />
+5) make<br />
++Wannier90: <a href="http://www.wannier.org/download.html">http://www.wannier.org/download.html</a><br />
+0) gziped-tar<br />
+1) tar zxvf wannier90-2.0.0.tar.gz<br />
+2) wannier90-2.0.0<br />
+3) cp ./config/make.sys.gfort ./make.sys<br />
+&nbsp; gedit make.sys<br />
+&nbsp; COMMS&nbsp; = mpi<br />
+&nbsp; MPIF90 = mpif90<br />
+&nbsp; #LIBDIR = /rscratch/jry20/LIB/gfortran<br />
+&nbsp; #LIBS = -L$(LIBDIR)&nbsp; -llapack -lblas<br />
+&nbsp; LIBDIR = /opt/acml5.3.1/gfortran64_int64/lib<br />
+&nbsp; LIBS&nbsp;&nbsp; = -L$(LIBDIR) -lacml<br />
+4) make -v<br />
+&nbsp; OK: GNU Make 3.81<br />
+5) make<br />
+6) make lib<br />
+7) make w90vdw<br />
+8) make w90pov<br />
+recompile: make clean<br />
+------------------------------------------------------------------------------<br />
+■ BigDFT install ( I can not install it.)<br />
+<a href="http://bigdft.org/Wiki/index.php?title=BigDFT_website">http://bigdft.org/Wiki/index.php?title=BigDFT_website</a><br />
+<br />
+BigDFT（version 1.7 dev.28）<br />
+OpenMPI<br />
+1) tar xvf $HOME/Downloads/bigdft-1.7-dev.28.tar.gz2<br />
+2) cd bigdft-1.7-dev.28<br />
+3)<br />
+&nbsp; ◆ gfortran<br />
+&nbsp; ./configure CXX=g++ CC=gcc F77=gfortran FC=mpif90.openmpi FCFLAGS=&quot;-fbounds-check -O2 -Wall&quot; --with-ext-linalg=&quot;-llapack -lblas&quot; --with-ext-linalg-path=&quot;-L/usr/lib&quot; --with-libabinit-path=$HOME/abinit-6.8.2/lib<br />
+&nbsp; ◆ ifort<br />
+&nbsp; ./configure CXX=mpicxx CC=mpicc F77=mpif90 FC=mpif90 FCFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot; FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot; --with-ext-linalg-path=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; --with-ext-linalg=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot; --enable-minima-hopping --enable-pseudo --enable-devel-doc=no --prefix=$HOME/bigdft-1.7-dev.28<br />
+&nbsp; ◆ error in compiling with ifort<br />
+&nbsp; ! Font OT1/ptm/m/n/12=ptmr7t at 12.0pt not loadable: Metric (TFM) file not found.<br />
+4) make<br />
+5) cd tests<br />
+6) export run_parallel='mpirun -np 4'<br />
+7) make check<br />
+8) cd ..<br />
+9) sudo make install<br />
+※ --with-libabinit-path=$HOME/abinit-6.8.2/lib は無い方が良いかもしれない。<br />
+<br />
+BigDFT（version 1.6.0）<br />
+OpenMPI<br />
+1) tar zxvf $HOME/Downloads/bigdft-1.6.0.tar.gz<br />
+2) cd bigdft-1.6.0<br />
+3)<br />
+&nbsp; ◆ gfortran<br />
+&nbsp;&nbsp;&nbsp; ./configure CXX=g++ CC=gcc F77=gfortran FC=mpif90.openmpi FCFLAGS=&quot;-fbounds-check -O2 -Wall&quot; --with-ext-linalg=&quot;-llapack -lblas&quot; --with-ext-linalg-path=&quot;-L/usr/lib&quot; --with-libabinit-path=$HOME/abinit-6.8.2/lib<br />
+&nbsp; ◆ ifort<br />
+&nbsp;&nbsp;&nbsp; ./configure CXX=mpicxx CC=mpicc F77=mpif90 FC=mpif90 FCFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot;&nbsp; FFLAGS=&quot;-O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&quot; --with-ext-linalg-path=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t&quot; --with-ext-linalg=&quot;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm&quot;&nbsp; --enable-minima-hopping --enable-pseudo --enable-devel-doc=no --prefix=$HOME/bigdft-1.6.0<br />
+◆ error in compiling with ifort<br />
+&nbsp; ! Font OT1/ptm/m/n/12=ptmr7t at 12.0pt not loadable: Metric (TFM) file not found.<br />
+4) make<br />
+5) cd tests<br />
+6) export run_parallel='mpirun -np 4'<br />
+7) make check<br />
+8) cd ..<br />
+9) sudo make install<br />
+※ --with-libabinit-path=$HOME/abinit-6.8.2/lib は無い方が良いかもしれない。<br />
+------------------------------------------------------------------------------<br />
+■ PWscf<br />
+<br />
+◆ gfortran<br />
+OpenMPI + FFTW3<br />
+1) tar zxvf espresso-5.0.2.tar.gz<br />
+2) cd espresso-5.0.2<br />
+3) export CXX=&quot;g++ -m64&quot;<br />
+export CC=&quot;gcc -m64&quot;<br />
+export FC=&quot;gfortran -m64&quot;<br />
+export F77=&quot;gfortran -m64&quot;<br />
+export F90=&quot;gfortran -m64&quot;<br />
+4) ./configure MPIF90=&quot;/usr/bin/mpif90.openmpi -m64&quot; --enable-openmp --with-internal-blas --with-internal-lapack FFT_LIBS=&quot;-L/usr/lib -lfftw3&quot;<br />
+5) make all<br />
+実行方法<br />
+/usr/bin/mpirun.openmpi -machinefile /home/*/hosts -np 4 /home/*/espresso-5.0.2/bin/pw.x <atom.in> atom.out<br />
+<br />
+◆ ifort<br />
+OpenMPI ＋ OpenMP + MKL + FFTW3<br />
+1) tar zxvf espresso-4.3.2.tar.gz<br />
+2) cd espresso-4.3.2<br />
+3) ./configure MPIF90=mpif90 CXX=g++ CC=gcc FC=ifort F77=ifort F90=ifort --enable-openmp BLAS_LIBS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lifcore -lpthread -lsvml&quot; LAPACK_LIBS=&quot;-L/opt/intel/composer_xe_2013/mkl/lib/intel64 -lmkl_lapack95_lp64&quot; FFT_LIBS=&quot;-L/usr/local/lib -lfftw3 -lfftw3_mpi -lfftw3_threads -lfftw3_omp&quot; FFLAGS=&quot;-O2 -assume byterecl -g -traceback -par-report0 -vec-report0 -axSSE4.2,SSE4.1,SSSE3,SSE3 -mcmodel=large -i-dynamic -no-ipo&quot; CFLAGS=&quot;-O3 -m64&quot;<br />
+4) make all<br />
+※ この条件で check-pw.x.j を走らせると、551.5 s　(Core i7-2600K) となった。Reference が 851.06 なので約1.5倍の速度。<br />
+実行方法<br />
+1) export OMP_NUM_THREADS=2 を .bashrc に書き入れる。<br />
+2) /usr/local/openmpi/bin/mpirun -machinefile /home/*/hosts -np 4 /home/*/espresso-4.3.2/bin/pw.x <atom.in> atom.out<br />
+以上で、4 CPU * 2 threads = 8 processor cores の動作となる。<br />
+<br />
+◆ ifort<br />
+espresso-5.1.2 (OpenMPI ＋ MKL + FFTW3)<br />
+./configure<br />
+-----<br />
+BLAS_LIBS= -lmkl_intel_lp64 -lmkl_sequential -lmkl_core<br />
+LAPACK_LIBS=<br />
+SCALAPACK=-lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64<br />
+FFT_LIBS= -lfftw3<br />
+-----<br />
+make ph<br />
+make pwcond<br />
+make neb<br />
+make pp<br />
+make cp<br />
+make ld1<br />
+make upf<br />
+make tddfpt<br />
+make xspectra<br />
+make pwall<br />
+make gipaw<br />
+make w90<br />
+make want<br />
+make yambo<br />
+-----<br />
+./configure MPIF90=gfortran FC=gfortran<br />
+make pw<br />
+<br />
+references (Si, FCC, 2x2x2 supercell)<br />
+CPU: Core-i7-4770 (4 core)<br />
+qe-6.0<br />
+&nbsp; ./configure MPIF90=&quot;mpif90 -axSSE4.2,SSE4.1,SSSE3,SSE3&quot; MPICC=mpicc CXX=icpc CC=icc FC=&quot;ifort -axSSE4.2,SSE4.1,SSSE3,SSE3&quot; F77=&quot;ifort -axSSE4.2,SSE4.1,SSSE3,SSE3&quot; F90=&quot;ifort -axSSE4.2,SSE4.1,SSSE3,SSE3&quot; BLAS_LIBS=&quot;-L${MKLROOT}/lib/intel64 -lmkl_intel_lp64&nbsp; -lmkl_sequential -lmkl_core&quot; SCALAPACK_LIBS=&quot;-L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_blacs_openmpi_lp64&quot; FFT_LIBS=&quot;-L/opt/intel/compilers_and_libraries_2016/linux/mkl/interfaces/fftw3xf -lfftw3xf_intel&quot;<br />
+Si63Cu1 (FCC, 2x2x2 supercell, vc-relax, ecutwfc:50, ecutrho:400): 10h49m (mpirun -np 1)<br />
+<br />
+references (Si, FCC, 2x2x2 supercell)<br />
+CPU: E5-2640 v3 (8 core)<br />
+qe-6.0<br />
+./configure BLAS_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot; LAPACK_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot;&nbsp; FFT_LIBS=&quot;-L/usr/local/lib -lfftw3_mpi -lfftw3&quot;&nbsp; --without-scalapack<br />
+mpirun -np 16 case: 3m08.92s (si 2x2x2 primitive cell)<br />
+mpirun -np&nbsp;&nbsp; 8 case: 4m41.07s (si 2x2x2 primitive cell)<br />
+mpirun -np&nbsp;&nbsp; 8 case: 1d1h50m (si 3x3x3 primitive cell)<br />
+I recommend it.<br />
+Si63Co1 (FCC, 2x2x2 supercell, conventional cell, vc-relax, ecutwfc:50, ecutrho:400): 3h18m (mpirun -np 8)<br />
+-----<br />
+./configure MPIF90=&quot;mpif90 -m64 -mavx2&quot; MPICC=mpicc CXX=g++ CC=gcc FC=&quot;gfortran -m64 -mavx2&quot; F77=&quot;gfortran -m64 -mavx2&quot; F90=&quot;gfortran -m64 -mavx2&quot; BLAS_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot; LAPACK_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot;&nbsp; FFT_LIBS=&quot;-L/usr/local/lib -lfftw3_mpi -lfftw3&quot;&nbsp; --without-scalapack<br />
+mpirun -np 16 case: 3m11.81s (si 2x2x2 primitive cell)<br />
+There are many errors.<br />
+-----<br />
+./configure BLAS_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot; LAPACK_LIBS=&quot;-L/usr/local/atlas/lib -llapack -lf77blas -lcblas -latlas&quot;&nbsp; FFT_LIBS=&quot;-L/usr/local/lib -lfftw3_mpi -lfftw3_omp -lfftw3&quot;&nbsp; --without-scalapack --enable-openmp<br />
+export OMP_NUM_THREADS=2 + mpirun -np 8 case: 8m26.34s (si 2x2x2 primitive cell)<br />
+------------------------------------------------------------------------------<br />
+■ Phase install<br />
+<br />
+◆ OpenMPI (gfortran) + ACML 5.3.0 + FFTW3<br />
+0) software install<br />
+sudo apt-get install openmpi-bin<br />
+sudo apt-get install libopenmpi-dev<br />
+sudo apt-get install emacs<br />
+<br />
+◆ ACML<br />
+a. amcl-5-3-0-gfrotran-64bit.tgz<br />
+b. mkdir acml<br />
+c. cd acml<br />
+d. tar zxvf amcl-5-3-0-gfrotran-64bit.tgz<br />
+e. sudo ./install-acml-5-3-0-gfortran-64bit.sh<br />
+f. accept<br />
+g. /opt/acml5.3.0<br />
+h. .bashrc に export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/opt/acml5.3.0/gfortran64/lib を追加し、Terminal 上で bash を入力。<br />
+<br />
+◆ Phase<br />
+1. tar zxvf phase_v1100.tar.gz<br />
+2. cd phase_v1100<br />
+3. install.sh で sh configure を bash configure に書き換える<br />
+4. ./install.sh<br />
+5. 1) GNU Linux (EM64/AMD64)<br />
+6. 0) GNU compiler collection (gfortran)<br />
+7. 1) MPI parallel<br />
+8. 2) Open MPI<br />
+/usr<br />
+9. 1) AMD Core Math Library (ACML)<br />
+/opt/acml5.3.0/gfortran64/lib<br />
+10. 0) Built-in FFT libraries<br />
+11. Do you want to use DGEMM.. [no]<br />
+12. Do you want to edit the makefile... [yes]<br />
+&nbsp; emacs<br />
+&nbsp; F90 のgfortran をmpif90.openmpi に書き換える0<br />
+&nbsp; CC の gcc を mpicc.openmpi に書き換える<br />
+&nbsp; LINK のgfortran をmpif90.openmpi に書き換える<br />
+&nbsp; F90FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp; F90FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp; F77FLAGS の -I/usr/include を -I/usr/lib/openmpi/include に書き換える<br />
+&nbsp; F77FLAGS 行の最後に 、-O2 -march=nocona -pipe を追加する<br />
+&nbsp; CFLAGSの -O を -O2 -march=nocona -pipe に書き換える<br />
+&nbsp; LIBS の -I/usr/lib を -I/usr/lib/openmpi/lib に書き換える<br />
+13. Do you want to make PHASE now? [yes]<br />
+14. Do you want to check the installed programs? [yes]<br />
+15. /usr/bin/mpirun.openmpi -machinefile /home/*/hosts -np 4 /home/*/phase_v1100/bin/phase ne=1 nk=4<br />
+------------------------------------------------------------------------------<br />
+■ GPAW<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ exciting<br />
+<br />
+◆ ifort (omposer_xe_2013, update 3, intel64)<br />
+0) sudo apt-get install xsltproc<br />
+1) tar zxvf $HOME/Downloads/exciting.lithium.tar.gz<br />
+2) cd exciting<br />
+3) make<br />
+4) 7 ifort.XE<br />
+5) Build MPI binary ? yes<br />
+6) Build SMP lib binary (yes/No) yes<br />
+7) make<br />
+&nbsp; I rewrite make.inc with kwrite, because error occur.<br />
+8) kwirte make.inc<br />
+&nbsp; F90_OPTS = -O3 -ip -unroll&nbsp; -scalar_rep -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+&nbsp; F77_OPTS = -O3 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+#USE_SYS_LAPACK=ture<br />
+&nbsp; LIB_LPK = -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp; MPIF90=mpif90<br />
+&nbsp; SMP_LIBS= -mkl=parallel $(LIB_ARP) $(LIB_LPK) $(LIB_FFT) $(LIB_BZINT)<br />
+&nbsp; MPISMPF90_OPTS=$(SMPF90_OPTS)&nbsp; -DMPI -DMPIRHO -DMPISECBUILDMPI=false \<br />
+-axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+9) make<br />
+<br />
+◆ gfortran ( check Ubuntu 11.04 )<br />
+1) tar zxvf exciting.helium.2010.12.17.gz<br />
+2) cd exciting<br />
+3) make<br />
+4) 5 gfortran を選択<br />
+Enter the number of the platform that suites your system best: 5<br />
+5) Build MPI binary ? yes<br />
+Select the mechanism to include MPI interface variables<br />
+1 use MPI module (f90 interfaces) recommended if available<br />
+にて 1 を入力<br />
+6) Build SMP lib binary (yes/No) yes<br />
+bin の中には、excitingmpi, excitingser が生成されている。<br />
+------------------------------------------------------------------------------<br />
+■ CPMD<br />
+<br />
+◆ ifort<br />
+1) download CPMD : <a href="http://cpmd.org/">http://cpmd.org/</a><br />
+2) tar zxvf cpmd-v3_15_3.tgz<br />
+3) cd CPMD<br />
+4) CONFIGUREの中から適した環境のファイル名を探す<br />
+5) ./mkconfig.sh IFORT-AMD64-MPI-SMP-QMMM &gt; Makefile<br />
+Makefile において<br />
+FFLAGS = -c -pc64&nbsp; -O2 -unroll -heap-arrays 64 -openmp \<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&nbsp;<br />
+LFLAGS = -L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+-lmkl_lapack95_lp64 -lmkl_blas95_lp64 -lmkl_intel_lp64 \<br />
+-lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm -openmp \<br />
+-L/usr/local/lib -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3<br />
+5) make<br />
+<br />
+◆ gfortran ( check Ubuntu 11.04 )<br />
+1) download CPMD : <a href="http://cpmd.org/">http://cpmd.org/</a><br />
+2) tar zxvf cpmd-v3_15_1.tgz<br />
+3) cd CPMD<br />
+4) CONFIGUREの中から適した環境のファイル名を探す<br />
+./mkconfig.sh LINUX-i686-FEDORA-MPI &gt; Makefile<br />
+Makefile において<br />
+LFLAGS='-L/usr/lib/ -llapack -lblas -lfftw'<br />
+CC = /usr/local/openmpi/bin/mpicc<br />
+FC = /usr/local/openmpi/bin/mpif77<br />
+LD = /usr/local/openmpi/bin/mpif77<br />
+CPPFLAGS = -D__Linux -D__PGI -D__GNU -DFFT_FFTW -DPARALLEL -DMYRINET<br />
+mpifcc を /usr/local/openmpi/bin/mpicc へ<br />
+mpif77 を /usr/local/openmpi/bin/mpif90 へ<br />
+5) make<br />
+References<br />
+[1] <a href="https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf">https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf</a><br />
+<br />
+◆ ifort ( check Ubuntu 11.04 )<br />
+1) download CPMD : <a href="http://cpmd.org/">http://cpmd.org/</a><br />
+2) tar zxvf cpmd-v3_15_1.tgz<br />
+3) cd CPMD<br />
+4) CONFIGUREの中から適した環境のファイル名を探す<br />
+5) ./mkconfig.sh PC-IFC-MPI &gt; Makefile<br />
+Makefile において<br />
+FFLAGS で -axM -tpp6 を削除<br />
+LFLAGS = -L/home/*/intel/*/mkl/lib/ia32 -lmkl_blas95 -lmkl_lapack95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml -L/usr/lib -lfftw -lfftw_mpi<br />
+mpif77 を /usr/local/openmpi/bin/mpif90 へ<br />
+5) make<br />
+<br />
+References<br />
+[1] <a href="https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf">https://extras.csc.fi/chem/courses/cpmd/terminal-intro.pdf</a><br />
+------------------------------------------------------------------------------<br />
+■ CASINO<br />
+Plase, read FAQ<br />
+◆ ifort<br />
+CASINO（CASINO_v2.12.1_standard.tar.gz ）<br />
+1) tar zxvf CASINO_v2.12.1_standard.tar.gz<br />
+2) cd CASINO<br />
+3) ./install<br />
+&nbsp; Auto-detect valid CASINO_ARCHs for this machine<br />
+&nbsp; linuxpc-ifort-parallel<br />
+4) [q] Save configuration and quit the installer<br />
+5) source ~/.bashrc<br />
+6) make OpenmpShm<br />
+<br />
+◆ gfortran ( check Ubuntu 11.04 )<br />
+CASINO（CASINO_v2.6_standard.tar.tar）<br />
+1) tar zxvf CASINO*<br />
+2) cd CASINO<br />
+3) .bashrc にて下記を加える。QMC_ARCH ではREADME_ARCHから選択する。<br />
+CASINO/arch/make.inc の中にも対応する名称が.inc付きで書かれている。<br />
+export QMC_ARCH=&quot;linuxpc-gcc-parallel&quot;<br />
+export PATH=$PATH:$HOME/CASINO/bin_qmc<br />
+4) bash<br />
+5) make<br />
+<br />
+◆ ifort ( check Ubuntu 11.04 )<br />
+CASINO（CASINO_v2.6_standard.tar.tar）<br />
+1) tar zxvf CASINO*<br />
+2) cd CASINO<br />
+3) .bashrc にて下記を加える。QMC_ARCH ではREADME_ARCHから選択する。<br />
+CASINO/arch/make.inc の中にも対応する名称が.inc付きで書かれている。<br />
+export QMC_ARCH=&quot;linuxpc-ifort-parallel&quot;<br />
+export PATH=$PATH:$HOME/CASINO/bin_qmc<br />
+4) bash<br />
+5) make<br />
+------------------------------------------------------------------------------<br />
+◆ install needed ab-initio calculation soft ( more detail )<br />
+<br />
+◆ Intel Compiler install（ for student ）<br />
+Intel Compiler<br />
+1) google で 「Non-commercial Intel」と入力して検索すると、下記のHPが得られる。<br />
+&nbsp;<a href="http://software.intel.com/en-us/articles/non-commercial-software-development/">http://software.intel.com/en-us/articles/non-commercial-software-development/</a>&nbsp;<br />
+2回目以降は下記のHPが便利（Accept を押す必要は無い）：<a href="https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190">https://registrationcenter.intel.com/RegCenter/MySerialNumbers.aspx?sn=NDM4-KTX8LJ9G&amp;EmailID=publicadressinukai%40yahoo.co.jp&amp;Sequence=987190</a>&nbsp;<br />
+2) Accept を押して、必要事項を記入する。<br />
+3) Product for x86_64-bit development にチェックを入れて、Download Now を押す。（最新版で上手くいかない場合は、右下にあるversion の選択を 11.0 にすると良い）<br />
+4) 必要事項を記入したときのメールアドレスに添付されている ライセンスファイルをダウンロードして、「Places」&rarr;「Home folder」の中に置く。<br />
+5) 「Applications」&rarr;「System Tools」&rarr;「Terminal」 でコマンドを入力できるようにする<br />
+6) tar zxvf と入力後、「Downloads」のフォルダを開いて、ダウンロードしたファイルをマウスで左クリックしながら「Terminal」 へ入れる。その後に、Enterを押す。<br />
+7) 「Applications」&rarr;「System Tools」&rarr;「Terminal」&nbsp;<br />
+8) cd と入力後、「parallel_studio_xe_2011...」のファイルを左クリックしながら「Terminal」 へ入れる。<br />
+9) ./install.sh<br />
+10) 「2. Install as current user to limit access to user level* 」を選択。<br />
+11) 「Press &quot;Enter&quot; key to continue or &quot;q&quot; to quit: 」でEnterを入力。<br />
+12) 「1. Skip prerequisites [default] 」を選択。<br />
+13) 「space」 を押し続け、最後に 「accept」と入力してEnterを押す。<br />
+14) 「3. I want to activate either remotely, or by using a license file, or by using a<br />
+license manager」を選択。<br />
+15) 「2. Use a license file」 を選択。<br />
+16) 「Applications」&rarr;「System Tools」&rarr;「Terminal」 で新しく開いた「Terminal」の中に、ライセンスファイルを入れる。' 'の中をコピーする。<br />
+17) 前の「Terminal」に戻って、ペーストし、Enter を押す。<br />
+18) 「Press &quot;Enter&quot; key to continue:」でEnterを押す。<br />
+19) 「1. Start installation Now」を選択。<br />
+20) 「Would you like to overwrite this directory? ( Yes/No ) [ Yes ] :」でEnterを押す。<br />
+21) 「1. Skip prerequisites [default]」を選択。<br />
+22) 「Please type a selection or press &quot;Enter&quot; to accept default choice [q]:」でqを押す。<br />
+23) cd $home<br />
+24) emaces .bashrc にて最後の行に下記を書き入れる（user_nameのところが人により異なる）。<br />
+&nbsp; export PATH=$PATH:/opt/intel/vtune_amplifier_xe_2011<br />
+&nbsp; export PATH=$PATH:/opt/intel/inspector_xe_2011<br />
+&nbsp; source /opt/intel/bin/compilervars.sh intel64<br />
+&nbsp; ※ version 11.0 などでは、左欄のコンパイラの設定の　Intel Fortran : を参考にすると良い。<br />
+25) bash　にて変更を反映させる（再起動させてもよい）。<br />
+26) ifort -v にてFortran　コンパイラの動作確認を兼ねてVersion情報を表示させる。<br />
+27) icc -v にてC コンパイラの動作確認を兼ねてVersion情報を表示させる。<br />
+<br />
+------------------------------------------------------------------------------<br />
+◆ 第一原理計算に必要なライブラリの設定?（Parallel set up）<br />
+◇ gfortran case<br />
+OpenMPI<br />
+1) 「Applications」&rarr;「Ubuntu Software Center」で、右上にある検索の欄で、「OpenMPI」を入力して対応するソフトをインストール。<br />
+または、sudo apt-get install を用いてインストール。（左欄のandLinuxを参照）<br />
+------------------------------------------------------------------------------<br />
+◆ 並列計算を実行する前に必要なrshの設定<br />
+1) 「Applications」&rarr;「Ubuntu Software Center」<br />
+2) 右上にある検索の欄で、「rsh-server」を入力して対応するソフトを探す。<br />
+3) 下側にインストールするソフトの候補が現れるので、それをクリックして現れる「Install」を押してインストールする。<br />
+4) 右上にある検索の欄で、「rsh-client」「rsh-redone-client」を入力して、先と同様にインストールする。<br />
+5) rpm -qa rsh-server, rpm -qa xinetd<br />
+rsh-server, xinetdがインストールされていることを確認する<br />
+6) sudo apt-get install sysv-rc-conf<br />
+7) sudo sysv-rc-conf rsh on<br />
+ブート時に rsh を自動的に起動するように設定する<br />
+8) sudo sysv-rc-conf rlogin on<br />
+ブート時にrloginを自動的に起動するように設定する<br />
+9) /sbin/service xinetd restart<br />
+ブート時にxinetd を自動的に起動するように設定する<br />
+10) ホームディレクトリに .rhosts ファイルへ通信するマシン全てとlocalhost.localdomain を記述<br />
+kwrite ~/.rhosts または　emacs ~/.rhosts<br />
+localhost.localdomain<br />
+localhost<br />
+host1<br />
+host2<br />
+11) .rhosts のパーミッションを600にする。chmod 600 ~/.rhosts<br />
+12) rsh の動作確認<br />
+&nbsp; rsh localhost.localdomain hostname<br />
+&nbsp; rsh localhost hostname<br />
+上記の設定では、複数台のPCで動作しないので、下記のHPを参考にしながら、対策方法を探す。<br />
+/etc/pam.d/rsh /etc/pam.d/rlogin の編集をまず試してみるか？<br />
+もし、ファイアーウォールの設定を元に戻したければ、sudo ufw reset とすればよい。VNCは動作するようになる。<br />
+参考HP :<br />
+[1] <a href="http://mase.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?CentOS5%A4%C7rsh%A4%F2%CD%AD%B8%FA%A4%CB%A4%B9%A4%EB">http://mase.itc.nagoya-u.ac.jp/~hirano/pukiwiki/index.php?CentOS5%A4%C7rsh%A4%F2%CD%AD%B8%FA%A4%CB%A4%B9%A4%EB</a><br />
+[2] <a href="https://forums.ubuntulinux.jp/viewtopic.php?id=12631">https://forums.ubuntulinux.jp/viewtopic.php?id=12631</a><br />
+[3] <a href="https://wiki.ubuntulinux.jp/UbuntuTips/DedicatedServer/Ufw">https://wiki.ubuntulinux.jp/UbuntuTips/DedicatedServer/Ufw</a><br />
+[4] <a href="http://static.s59.xrea.com/pukiwiki/index.php?Ubuntu%A4%C7%CE%CC%BB%D2%B2%BD%B3%D8%B7%D7%BB%BB%A4%F2%BB%CF%A4%E1%A4%EB(2">http://static.s59.xrea.com/pukiwiki/index.php?Ubuntu%A4%C7%CE%CC%BB%D2%B2%BD%B3%D8%B7%D7%BB%BB%A4%F2%BB%CF%A4%E1%A4%EB(2</a>)<br />
+[5] <a href="http://www.proton.jp/main/unix/rsh.html">http://www.proton.jp/main/unix/rsh.html</a><br />
+------------------------------------------------------------------------------<br />
+◆ hosts<br />
+localhost.localdomain cpu=2<br />
+localhost cpu=4<br />
+host1<br />
+host2<br />
+------------------------------------------------------------------------------<br />
+◆ 並列計算を実行する前に必要な .mpd.conf の設定<br />
+ホームフォルダでの設定　（PWscfで必要）<br />
+1) mpd &amp;<br />
+2) cd $HOME<br />
+3) touch .mpd.conf<br />
+4) chmod 600 .mpd.conf<br />
+5) emacs .mpd.conf で下記を書き入れる。*****はPCにより異なると思う。<br />
+&nbsp;&nbsp; MPD_SECRETWORD=*****<br />
+6) mpd &amp;<br />
+------------------------------------------------------------------------------<br />
+第一原理計算に必要なライブラリの設定?（Library set up）<br />
+◆ gfortran case<br />
+<br />
+A) 「Applications」&rarr;「Ubuntu Software Center」で、右上にある検索の欄で、下記の項目を入力して対応するソフトをインストール。<br />
+1) 「build-essential」<br />
+2) 「libblas-dev」<br />
+3) 「liblapack-dev」<br />
+4) 「libfftw3」<br />
+5) 「libfftw3-dev」<br />
+<br />
+◇ parallel calculation for gfortran<br />
+1) 「blacs」 ※ -test 付いたものはインストールしなくてよい<br />
+2) 「scalapack」　※ -test 付いたものはインストールしなくてよい<br />
+B) 「Applications」&rarr;「Accessories」&rarr;「Terminal」<br />
+1) sudo apt-get install build-essential<br />
+2) sudo apt-get install libblas-dev<br />
+3) sudo apt-get install liblapack-dev<br />
+4) sudo apt-get install libfftw3<br />
+5) sudo apt-get install libfftw3-dev<br />
+6) sudo apt-get install libblacs-mpi1<br />
+7) sudo apt-get install libblacs-mpi-dev<br />
+8) sudo apt-get install libscalapack-mpi1<br />
+9) sudo apt-get install libscalapack-mpi-dev<br />
+<br />
+PVM<br />
+1) sudo apt-get install blacs1-pvm<br />
+2) sudo apt-get install blacs-pvm-dev<br />
+3) sudo apt-get install libscalapack-pvm1<br />
+4) sudo apt-get install libscalapack-pvm-dev<br />
+<br />
+◆ MKL library ( version 11.0 )<br />
+fftw3<br />
+1) cd opt/intel/Compiler/11.0/084/mkl/interfaces/fftw3xf<br />
+2) sudo bash<br />
+3) make libem64t<br />
+blas95<br />
+1) cd /home/mkl/interfaces/blas95<br />
+2) sudo bash<br />
+3) make libem64t<br />
+lapack95<br />
+1) cd /home/mkl/interfaces/lapack95<br />
+2) sudo bash<br />
+3) make libem64t<br />
+<a href="http://tsubame.gsic.titech.ac.jp/docs/guides/tsubame2/html/programming.html">http://tsubame.gsic.titech.ac.jp/docs/guides/tsubame2/html/programming.html</a><br />
+------------------------------------------------------------------------------<br />
+■ EXC （準備中）<br />
+OpenMPI<br />
+1) tar zxvf&nbsp;<br />
+2) cd&nbsp;<br />
+3) ./configure F90=mpif90 F90FLAGS=&quot;-O2&quot; CC=gcc --with-fftw3=&quot;/usr/lib/libfftw3.a&quot; --with-blas=&quot;/usr/lib/libblas.a&quot; --with-lapack=&quot;/usr/lib/liblapack.a&quot;&nbsp;<br />
+4) make&nbsp;<br />
+5) make tests<br />
+6) make install<br />
+------------------------------------------------------------------------------<br />
+■ DP （準備中）<br />
+OpenMPI<br />
+1) tar zxvf<br />
+2) cd&nbsp;<br />
+3) ./configure<br />
+4) make<br />
+5) make tests<br />
+6) make install<br />
+------------------------------------------------------------------------------<br />
+■ Yambo<br />
+◆ gfortran の場合（業者様向け &amp; 学生様向け）<br />
+（NetCDF無しの場合）　（*はユーザー名にして下さい）<br />
+(/home/centos5/PWscfでexpresso-4.3.2を解凍した場合)<br />
+1) tar zxvf yambo-3.2.4-rev.17.tar.gz<br />
+2) cd yambo-3.2.4-r.855<br />
+3) ./configure F77=gfortran FC=gfortran F90=gfortran MPIF=/usr/local/openmpi/bin/mpif90 MPICC=/usr/local/openmpi/bin/mpicc --with-iotk='/home/*/espresso-4.3.2/iotk' --with-p2y=4.0<br />
+4) make yambo interfaces ypp<br />
+5) [X] PW (4.0) supportかを確認する。<br />
+<br />
+◆ Intel Compiler をインストールする場合（学生様向け）<br />
+（NetCDF無しの場合）（*はユーザー名にして下さい）<br />
+(/home/centos5/PWscfでexpresso-4.3.2を解凍した場合)<br />
+1) tar zxvf yambo-3.2.4-rev.17.tar.gz<br />
+2) cd yambo-3.2.4-r.855<br />
+3) ./configure F77=ifort FC=ifort F90=ifort MPIF=/usr/local/openmpi/bin/mpif90 MPICC=/usr/local/openmpi/bin/mpicc --with-iotk='/home/*/espresso-4.3.2/iotk' --with-p2y=4.0<br />
+4) make yambo interfaces ypp<br />
+5) [X] PW (4.0) supportかを確認する。<br />
+-----------------------------------------------------------------------------<br />
+■ MEMO<br />
+<br />
+PWscf: <a href="http://qe-forge.org/gf/download/frsrelease/116/403/espresso-5.0.2.tar.gz">espresso-5.0.2.tar.gz</a><br />
+PWgui: <a href="http://www-k3.ijs.si/kokalj/pwgui/download/pwgui-5.0.2-linux-x86_64.tgz">pwgui-5.0-linux-x86_64.tgz</a><br />
+PAW: <a href="http://theossrv1.epfl.ch/Main/Pseudopotentials">http://theossrv1.epfl.ch/Main/Pseudopotentials</a> &nbsp;-&gt; <a class="urllink" href="http://theossrv1.epfl.ch/uploads/Main/NoBackup/pbe.0.3.1.tgz" rel="nofollow">pbe.0.3.1.tgz</a><br />
+<br />
+Abinit: <a href="http://www.abinit.org/downloads/source-packages/abinit-1/releases/7.6.4">ABINIT 7.6.4</a><br />
+PAW: <a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a> &nbsp;-&gt; <a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a><br />
+<br />
+■ Abinit test case<br />
+<a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a> &nbsp;-&gt; C.GGA_PBE-JTH-paw.xml<br />
+<br />
+tpaw1_1.files<br />
+----------<br />
+tpaw1_1.in<br />
+tpaw1_1.out<br />
+tpaw1_1i<br />
+tpaw1_1o<br />
+tpaw1_1tmp<br />
+./C.GGA_PBE-JTH-paw.xml<br />
+----------<br />
+<br />
+tpaw1_2.files (リリース 12.04 (precise) 64-bit, Intel&reg; Core&trade; i7-2700K CPU @ 3.50GHz &times; 8 )<br />
+◆ OpenMPI + OpenMP (gfrotran) case<br />
+highest speed: export OMP_NUM_THREADS=1 + mpirun -np 4 /usr/local/bin/abinit <tpaw1_2.files<br><br />
+Resutls<br />
+------------------<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp; &nbsp;Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16.5&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16.6<br />
+mpirun -np 2 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.1&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.1<br />
+mpirun -np 2 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.0&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.1<br />
+mpirun -np 4 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10.7&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10.7<br />
+mpirun -np 5 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.6&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.6<br />
+------------------<br />
+export OMP_NUM_THREADS=2<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 21.3&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13.8<br />
+mpirun -np 2 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15.8&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.2<br />
+mpirun -np 3 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15.3&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11.1<br />
+mpirun -np 4 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 15.6&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.2<br />
+------------------<br />
+export OMP_NUM_THREADS=3<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 26.5&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13.2<br />
+------------------<br />
+export OMP_NUM_THREADS=4<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 32.4&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.9<br />
+mpirun -np 2 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 27.9&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12.9<br />
+------------------<br />
+export OMP_NUM_THREADS=6<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 50.8&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 13.9<br />
+------------------<br />
+export OMP_NUM_THREADS=8<br />
+mpirun -np 1 /usr/local/bin/abinit <tpaw1_2.files<br> &nbsp;&nbsp; Proc.&nbsp;&nbsp; 0 individual time (sec): cpu=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 91.5&nbsp; wall=&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 18.3<br />
+------------------<br />
+ngkpt 6 6 6<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+------------------<br />
+<br />
+QE-ABINIT<br />
+0. <a href="http://qe-forge.org/gf/project/q-e/frs/?action=FrsReleaseBrowse&amp;frs_package_id=32">http://qe-forge.org/gf/project/q-e/frs/?action=FrsReleaseBrowse&amp;frs_package_id=32</a><br />
+&nbsp; or <a href="http://qe-forge.org/gf/project/q-e/frs/?action=FrsReleaseBrowse&amp;frs_package_id=32">http://qe-forge.org/gf/project/q-e/frs/?action=FrsReleaseBrowse&amp;frs_package_id=32</a><br />
+1. tar zxvf QE-ABINIT.tar.gz<br />
+2. cd QE*<br />
+3. patch -p0 -d &lt; QE-ABINIT-diff<br />
+----------------------------------------------------------------------------<br />
+----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>PC (for GCC-4.8)<br />
+Release 12.04 (precise) 64-bit<br />
+Kernel Linux 3.8.0-29-generic<br />
+GNOME 3.4.2<br />
+Memory: 7.5 GiB<br />
+Processor: Intel&reg; Core&trade; i7-4770S CPU @ 3.10GHz &times; 8<br />
+Available disk space: 856.9 GiB</tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></tpaw1_2.files<br></atom.in></atom.in></case.files></case.files></case.files></p>
+
+<p>----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>GCC-4.8<br />
+sudo apt-get install python-software-properties<br />
+sudo add-apt-repository ppa:ubuntu-toolchain-r/test<br />
+sudo apt-get update sudo apt-get install gcc-4.8<br />
+sudo update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-4.8 50<br />
+sudo apt-get update sudo apt-get install g++-4.8<br />
+sudo update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-4.8 50<br />
+sudo apt-get update sudo apt-get install gfortran-4.8<br />
+sudo update-alternatives --install /usr/bin/gfortran gfortran /usr/bin/gfortran-4.8 50<br />
+References<br />
+[1] http://askubuntu.com/questions/271388/how-to-install-gcc-4-8<br />
+[2] http://askubuntu.com/questions/428198/getting-installing-gcc-g-4-9-on-ubuntu<br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> OpenMPI</span> (GCC-4.8)</p>
+
+<div>1. download: http://www.open-mpi.org/</div>
+
+<p>2. tar zxvf $HOME/Downloads/openmpi-1.8.4.tar.gz<br />
+3. cd open*<br />
+4. ./configure -prefix=/usr/local/openmpi<br />
+5. make<br />
+6. sudo make install<br />
+□ ( gedit ~/.bashrc&nbsp; )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>FFTW3 (GCC-4.8)<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">1.&nbsp;</span><a href="http://www.fftw.org/download.html" style="color: rgb(102, 68, 0); font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; text-decoration: none;">http://www.fftw.org/download.html</a><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.fftw.org/fftw-3.3.4.tar.gz" style="color: rgb(170, 0, 0); line-height: normal; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; text-decoration: none;">fftw-3.3.4.tar.gz</a><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">2. tar zxvf $HOME/Downloads/fftw-3.3.4.tar</span>.gz<br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">3. cd fft*</span><br />
+<br />
+4. <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">./configure&nbsp;&nbsp;F77=&quot;gfortran -m64 -mtune=native </span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -ftree-vectorize -ffast-math -fno-protect-parens </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot; CC=&quot;gcc -O2 -ffast-math -m64 -ftree-vectorize&nbsp;-mtune=native&nbsp;</span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-funroll-all-loops </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot;&nbsp;MPICC=&quot;mpicc -O2 -ffast-math -m64&nbsp;-ftree-vectorize</span><code>&nbsp;</code><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-mtune=native&nbsp;</span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-funroll-all-loops </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot; </span>--enable-silent-rules --enable-sse2 --enable-avx --enable-mpi --enable-openmp --enable-threads<br />
+5. make<br />
+6. make check<br />
+7. sudo make install<br />
+<br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">4. ./configure&nbsp;&nbsp;F77=&quot;gfortran -m64 -mtune=native </span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-O2 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -ftree-vectorize -ffast-math -fno-protect-parens </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot; CC=&quot;gcc -O2 -ffast-math -m64 -ftree-vectorize&nbsp;-mtune=native&nbsp;</span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-funroll-all-loops </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot;&nbsp;MPICC=&quot;mpicc -O2 -ffast-math -m64&nbsp;-ftree-vectorize</span><code>&nbsp;</code><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-mtune=native&nbsp;</span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-funroll-all-loops </span>-mieee-fp<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&quot; </span>--enable-silent-rules --enable-sse2 --enable-avx --enable-mpi --enable-openmp --enable-threads --enable-float<br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">5. make<br />
+6. make check</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">7. sudo make install</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">※ </span>--enable-float -&gt; libfftw3f.a<br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>LAPACK (GCC-4.8)<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">1.&nbsp;</span><a href="http://www.netlib.org/lapack/" style="color: rgb(102, 68, 0); font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; text-decoration: none;">http://www.netlib.org/lapack/</a><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp;-&gt;&nbsp;</span><a href="http://www.netlib.org/lapack/lapack-3.5.0.tgz" style="color: fuchsia; line-height: normal; font-family: Georgia, serif; text-decoration: none;">lapack-3.5.0.tgz</a><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">2. tar -zxvf $HOME/Downloads/lapack-3.5.0.tgz<br />
+3. cp lapack*<br />
+4. cp make.inc.example make.inc<br />
+5. gedit make.inc</span><br />
+&nbsp; OPTS &nbsp; &nbsp; = -O2 -frecursive -m64 <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-fstack-arrays -fsignaling-nans -funroll-all-loops&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-ftree-vectorize -ffast-math -fno-protect-parens</span> -mieee-fp <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-mtune=native </span>-march=native<br />
+&nbsp; CFLAGS = -O3&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-ffast-math -m64 -ftree-vectorize</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> -funroll-all-loops</span> -mieee-fp <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-mtune=native&nbsp;</span>-march=native<br />
+6. make blaslib<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">7. make lapacklib<br />
+8. sudo ln -s ~</span>/<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">lapack-3.5.0/librefblas.a /usr/local/lib/libblas.a</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; sudo ln -s ~</span>/<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">lapack-3.5.0</span>/<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">liblapack.a /usr/local/lib/liblapack.a</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">※ コンパイルし直すときは、その前に make clean を入力する。</span><br />
+------------------------------------------------------------------------------<br />
+■ ATLAS (GCC-4.8)<br />
+1. download: http://math-atlas.sourceforge.net/<br />
+2. tar xvjf $HOME/Downloads/atlas3.10.2.tar.bz2<br />
+3. cd ATLAS<br />
+4. mkdir BUILD<br />
+5. cd BUILD<br />
+6.<code> sudo apt-get install cpufrequtils</code><br />
+7. ../configure -b 64&nbsp; -C ic gcc -F ic '-O3 -fpic' -C if gfortran -F if&nbsp; '-O3 -fpic' -Fa al -fpic --with-netlib-lapack-tarfile=$HOME/Downloads/lapack-3.5.0.tgz<br />
+8. make<br />
+9. make check<br />
+10. make ptcheck<br />
+11. make time<br />
+12. sudo make install<br />
+<br />
+<span style="font-family: monospace;">□ link</span><br />
+/usr/local/atlas/lib<br />
+libatlas.a&nbsp; libcblas.a&nbsp; libf77blas.a&nbsp; liblapack.a&nbsp; libptcblas.a&nbsp; libptf77blas.a</p>
+
+<div class="line number1 index0 alt2"><br />
+<span style="font-family: monospace;">□ using</span><br />
+<code class="bash plain">-Wl,-rpath=</code><code class="bash string">/usr/local/atlas/lib</code> <code class="bash plain">-L</code><code class="bash string">/usr/local/atlas/lib</code> <code class="bash plain">-llapack -lf77blas -latlas</code></div>
+
+<p><br />
+[1] http://www2.rikkyo.ac.jp/web/tokiwa/menu/bioLib/library/python/atlas.html (icc and ifort)<br />
+[2] http://sourceforge.net/p/math-atlas/support-requests/856/<br />
+[3] http://d.hatena.ne.jp/saket/20121121/1353475324 (Ubuntu12.04)<br />
+[4] http://www-als.ics.nitech.ac.jp/~suzumura/dev_tips/dev_tips2.html (Japanese)<br />
+[5] http://askubuntu.com/questions/20271/how-do-i-set-the-cpu-frequency-scaling-governor-for-all-cores-at-once (CPU THROTTLING OFF)<br />
+[6] http://askubuntu.com/questions/523640/how-i-can-disable-cpu-frequency-scaling-and-set-the-system-to-performance<br />
+[7] http://www.jsces.org/Issue/Journal/pdf/nakata-0411.pdf<br />
+[8] http://www.abc-lib.org/MyHTML/paper/Taikai2004-03%28Kinoshita%29.pdf<br />
+------------------------------------------------------------------------------<br />
+■ GotoBLAS (GCC-4.8)<br />
+1. download: https://www.tacc.utexas.edu/research-development/tacc-software/gotoblas2<br />
+2. tar zxvf $HOME/Downloads/GotoBLAS2-1.13.tar.gz<br />
+3. cd GotoBLAS2<br />
+4. cat /proc/cpuinfo<br />
+5. gedit Makefile.rule<br />
+6. ./quickbuild.64bit<br />
+7. sudo&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">ln -s </span> <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">~</span>/GotoBLAS2/libgoto2.a /usr/local/lib/libgoto2.a<br />
+<br />
+<span style="font-family: monospace;">□ using</span><br />
+gfortran -o case case.f -L/usr/local/lib -lgoto2 -lpthread<br />
+<br />
+※1 最大スレッド数は goto_set_num_threads（整数）で指定<br />
+※2 GotoBLAS include automatically LAPACK<br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>OpenBLAS (GCC-4.8)<br />
+1. download: http://www.openblas.net/ -&gt; TAR<br />
+2. tar zxvf <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">$HOME/Downloads/</span>xianyi-OpenBLAS-v0.2.13-0-g51ce5ef.tar.gz<br />
+3. cd xia*<br />
+4. gedit GotoBLAS_02QuickInstall.txt<br />
+5. make<br />
+6. sudo make install<br />
+&nbsp;or sudo make PREFIX=/usr/local/ install<br />
+<br />
+&nbsp;OpenBLAS build complete. (BLAS CBLAS LAPACK LAPACKE)<br />
+<br />
+&nbsp; OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... Linux&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; Architecture&nbsp;&nbsp;&nbsp;&nbsp; ... x86_64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... 64bit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; C compiler&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... GCC&nbsp; (command line : gcc)<br />
+&nbsp; Fortran compiler ... GFORTRAN&nbsp; (command line : gfortran)<br />
+&nbsp; Library Name&nbsp;&nbsp;&nbsp;&nbsp; ... libopenblas_haswellp-r0.2.13.a (Multi threaded; Max num-threads is 8)<br />
+<br />
+To install the library, you can run &quot;make PREFIX=/path/to/your/installation install&quot;.<br />
+<br />
+<span style="font-family: monospace;">□ using</span><br />
+gfortran -o case case.f -L/opt/OpenBLAS/lib -lopenblas -lpthread<br />
+&nbsp;or gfortran -o case case.f -L/usr/local/lib -lopenblas -lpthread<br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>ScaLAPACK<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> (+BLACS)</span> (GCC-4.8)<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">1. download: </span><a href="http://www.netlib.org/scalapack/" style="color: blue; font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; text-decoration: none;">http://www.netlib.org/scalapack/</a><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">2. tar zxvf $HOME/Downloads/scalapack-2.0.2.tgz</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">3. cd sca*</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">4. cp SLmake.inc.example SLmake.inc</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">5. gedit SLmake.inc</span><br />
+&nbsp; FCFLAGS &nbsp; &nbsp; &nbsp; = -O3 <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native </span>-march=native <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-ftree-vectorize -ffast-math -fno-protect-parens</span> -mieee-fp<br />
+&nbsp; CCFLAGS &nbsp; &nbsp; &nbsp; = -O3&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">-ffast-math -m64 -ftree-vectorize&nbsp;-mtune=native&nbsp;</span>-march=native<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> -funroll-all-loops</span> -mieee-fp<br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libblas.a</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/liblapack.a</span><br />
+&nbsp; or<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libgotoblas2.a</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libgotoblas2.a</span><br />
+&nbsp; or<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libopenblas.a</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libopenblas.a</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">6. make lib</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">7. sudo&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">ln -s ~/scalapack-2.0.2/libscalapack.a /usr/local/lib/libscalapack.a</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">※ コンパイルし直すときは、その前に make clean を入力する。</span><br />
+-----------------------------------------------------------------------------<br />
+■<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;"> </span>ACML<br />
+<span style="font-family: monospace;">□</span> ACML 4.4.0 (gfortran , gcc)<br />
+0) download: http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/ -&gt; <a href="http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/acml-archive-downloads/">Archived Downloads</a><br />
+1) mkdir acml4.4.0<br />
+2) cd acml4.4.0<br />
+3) tar zxvf $HOME/Downloads/acml-4-4-0-gfortran-64bit1.tgz<br />
+4) sudo ./install-acml-4-4-0-gfortran-64bit.sh<br />
+6) gedit ~/.bashrc<br />
+export LD_LIBRARY_PATH=/opt/acml4.4.0/gfortran64_mp/lib:$LD_LIBRARY_PATH<br />
+<br />
+<span style="font-family: monospace;">□</span> ACML 5.3.1 (gfortran , gcc)<br />
+1. download: http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/ -&gt; Downloads -&gt; Get the <a href="http://developer.amd.com/tools-and-sdks/cpu-development/amd-core-math-library-acml/acml-downloads-resources/#download">latest downloads</a> from the table below.<br />
+2. mkdir ACML-5.3.1<br />
+3. cd ACML-5.3.1<br />
+4. tar zxvf $HOME/Downloads/acml-5-3-1-gfortran-64bit.tgz<br />
+5. sudo ./install-acml-5-3-1-gfortran-64bit.sh<br />
+6. gedit ~/.bashrc<br />
+&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=/opt/acml5.3.1/gfortran64_mp/lib:$LD_LIBRARY_PATH<br />
+7. bash<br />
+------------------------------------------------------------------------------<br />
+■ XcrySDen<br />
+1) download: <a href="http://www.xcrysden.org/Download.html">http://www.xcrysden.org/Download.html</a><br />
+2) tar zxvf $HOME/Downloads/xc-1.5.23-linux_x86_64-semishared.tar.gz<br />
+3) cd XCr*<br />
+4) ./xcConfigure<br />
+5) Do you have a CRYSTAL package ([y]es/[n]o): n<br />
+6) Is this correct ([y]es/[n]o): y<br />
+7) Would you like to add xcrysden icon to the desktop ([y]es/[n]o): n<br />
+8) bsah<br />
+* command: xcrysden<br />
+------------------------------------------------------------------------------<br />
+■ VESTA<br />
+1. download: http://jp-minerals.org/vesta/jp/<br />
+2. tar xjf $HOME/Downloads/VESTA-x86_64.tar.bz2<br />
+check<br />
+3. ./VESTA<br />
+-----------------------------------------------------------------------------<br />
+■ WIEN2k (OpenMP + OpenMPI + FFTW3 + Netlib Lapack blas + GotoBLAS + {Scalapack + OpenBLAS}) (GCC-4.8)<br />
+1) mkdir WIEN2k_14<br />
+2) cd WIEN2k_14<br />
+3) cp <span style="font-family: Verdana;">$HOME/Downloads/</span>WIEN2k_14.2.tar .<br />
+4) tar xvf WIEN2k_14.2.tar<br />
+5) gunzip *.gz<br />
+6) chmod +x ./expand_lapw<br />
+7) ./expand_lapw<br />
+8) continue (y/n) y<br />
+9) ./siteconfig_lapw<br />
+10) continue or stop (c/s) c<br />
+11) Specify a system<br />
+&nbsp; 1. v<br />
+&nbsp; 2. gfortran, gcc<br />
+&nbsp; 3. <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif;">Current settings:</span><br />
+&nbsp;O&nbsp;&nbsp; Compiler options:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -ffree-form -O2 -ffree-line-length-none -mpc80 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -march=native -ftree-vectorize -ffast-math -fno-protect-parens -mieee-fp<br />
+&nbsp;F&nbsp;&nbsp; FFTW options:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -DFFTW3 -I/usr/local/include<br />
+&nbsp;L&nbsp;&nbsp; Linker Flags:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(FOPT) -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3 -L/usr/local/lib<br />
+&nbsp;P&nbsp;&nbsp; Preprocessor flags&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '-DParallel<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -llapack -lblas -lgoto2 -lpthread -fopenmp<br />
+&nbsp;FL&nbsp; FFTW_LIBS:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -lfftw3_mpi -lfftw3 -L/usr/local/lib<br />
+&nbsp; 4. Shared Memory Architecture? (y/n):y<br />
+&nbsp; 5. (like taskset -c). Enter N / your_specific_command:<br />
+&nbsp; 6. Set MPI_REMOTE to 0 / 1:<br />
+&nbsp; 7. Your compiler: mpif90<br />
+&nbsp; 8. &nbsp;Current settings:<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFTW_LIB + FFTW_OPT&nbsp;&nbsp;&nbsp; : -lfftw3_mpi -lfftw3 -L/usr/local/lib&nbsp; +&nbsp; -DFFTW3 -I/usr/local/include (already set)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; RP&nbsp; RP_LIB(SCALAPACK+PBLAS): -L/usr/local/lib -lscalapack $(R_LIBS)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; FP&nbsp; FPOPT(par.comp.options): -ffree-form -O2 -ffree-line-length-none -mpc80 -fstack-arrays -m64 -fsignaling-nans -funroll-all-loops -mtune=native -march=native -ftree-vectorize -ffast-math -fno-protect-parens -mieee-fp<br />
+&nbsp;&nbsp;&nbsp;&nbsp; MP&nbsp; MPIRUN commando&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : mpirun -np _NP_ -machinefile _HOSTS_ _EXEC_<br />
+12) a<br />
+13) ./userconfig<br />
+14) bash<br />
+15) w2web<br />
+<br />
+SRC_lapwso/modules.F<br />
+&lt; INTEGER,allocatable :: rc_index(:,:,:)<br />
+&lt; integer,allocatable :: rc_index_up(:,:,:),rc_index_dn(:,:,:)<br />
+-----<br />
+&gt; LOGICAL,allocatable :: rc_index(:,:,:)<br />
+&gt; logical,allocatable :: rc_index_up(:,:,:),rc_index_dn(:,:,:)<br />
+<br />
+TiC:&nbsp; start (Fri Jan 23 22:22:07 JST 2015) with lapw0 (40/99 to go) -&gt;&nbsp; cycle 9 (Fri Jan 23 22:22:25 JST 2015) (32/91 to go) = 18 s<br />
+para:&nbsp; start (Fri Jan 23 22:24:43 JST 2015) with lapw0 (40/99 to go) -&gt;&nbsp; cycle 9 (Fri Jan 23 22:25:25 JST 2015) (32/91 to go) = 32 s<br />
+export OMP_NUM_THREADS=1 -&gt; export OMP_NUM_THREADS=4:&nbsp; start (Fri Jan 23 22:27:36 JST 2015) with lapw0 (40/99 to go) -&gt; cycle 9 (Fri Jan 23 22:27:53 JST 2015) (32/91 to go) = 17 s<br />
+<br />
+other success setting ( test TiC: 17 - 18 s )<br />
+-----<br />
+&nbsp;L&nbsp;&nbsp; Linker Flags:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(FOPT) -lfftw3_mpi -lfftw3_omp -lfftw3_threads -lfftw3 -L/usr/local/lib -Wl,-rpath=/usr/local/lib<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -llapack -lblas -lopenblas -lpthread -fopenmp<br />
+-----<br />
+<br />
+other success setting ( test TiC: 17 - 18 s )<br />
+-----<br />
+&nbsp;L&nbsp;&nbsp; Linker Flags:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(FOPT) -L/usr/local/lib -Wl,-rpath=/usr/local/lib<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -llapack -lopenblas -lpthread -fopenmp<br />
+-----<br />
+Cu5Zn8:(export OMP_NUM_THREADS=4 case)&nbsp; start (Sat Jan 24 09:49:10 JST 2015) with lapw0 (40/99 to go) -&gt;&nbsp; cycle 15 (Sat Jan 24 10:28:16 JST 2015) (26/85 to go) = 38 m 54 s / 15 cycles = 155.6 / cycle = 3 min / cycle<br />
+<br />
+other success setting ( test TiC: 17 - 18 s )<br />
+-----<br />
+&nbsp;L&nbsp;&nbsp; Linker Flags:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(FOPT) -L/usr/local/lib -Wl,-rpath=/usr/local/lib -L/usr/local/atlas/lib -Wl,-rpath=/usr/local/atlas/lib<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -llapack -lf77blas -latlas<br />
+-----</p>
+
+<p><br />
+umsuccess<br />
+-----<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -llapack -lgoto2 -lpthread -fopenmp<br />
+-----<br />
+&nbsp;L&nbsp;&nbsp; Linker Flags:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $(FOPT)&nbsp; -I/opt/acml5.3.1/gfortran64_mp/include -L/usr/local/lib -Wl,-rpath=/usr/local/lib -L/opt/acml5.3.1/gfortran64_mp/lib -Wl,-rpath=opt/acml5.3.1/gfortran64_mp/lib<br />
+&nbsp;R&nbsp;&nbsp; R_LIB (LAPACK+BLAS):&nbsp;&nbsp;&nbsp;&nbsp; -lacml_mp -fopenmp<br />
+<br />
+Program received signal SIGSEGV: Segmentation fault - invalid memory reference.<br />
+Backtrace for this error:<br />
+#0 0x2AAEA2F46597<br />
+#1 0x2AAEA2F46BAE<br />
+#2 0x2AAEA39B214F<br />
+#3 0x2AAEA14ED0C5<br />
+-----</p>
+------------------------------------------------------------------------------

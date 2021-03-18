@@ -1,0 +1,118 @@
+! ---------------------------------------------<br />
+program elk_3Dplot2VESTA ! (plot3dFile, title)<br />
+&nbsp;&nbsp;&nbsp; ! Fortran 90 version<br />
+&nbsp;&nbsp;&nbsp; ! compile<br />
+&nbsp;&nbsp;&nbsp; !&nbsp;&nbsp; gfortran elk_3Dplot2VESTA<br />
+&nbsp;&nbsp;&nbsp; ! using<br />
+&nbsp;&nbsp;&nbsp; !&nbsp;&nbsp; ./a.out<br />
+&nbsp;&nbsp;&nbsp; ! Reference: Eike Schwier, &quot;3D Visualization of electron density in VESTA&quot;, 2012-11-16.<br />
+<br />
+&nbsp;&nbsp;&nbsp; character(9):: plot3dFile = &quot;RHO3D.OUT&quot; ! plot3dFile<br />
+&nbsp;&nbsp;&nbsp; character(12):: title = &quot;generic_name&quot; ! title<br />
+&nbsp;&nbsp;&nbsp; real(8):: aB = 1.0 ! 0.52917720859 ! stay in bohr for VESTA compatibility with GEOMETRY.OUT<br />
+<br />
+&nbsp;&nbsp;&nbsp; real(8):: a1, a2, a3 ! components of 1. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: b1, b2, b3 ! components of 2. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: c1, c2, c3 ! components of 3. lattice vector<br />
+<br />
+&nbsp;&nbsp;&nbsp; real(8):: dunit<br />
+&nbsp;&nbsp;&nbsp; character(1):: selec_unit<br />
+<br />
+&nbsp;&nbsp;&nbsp; dunit = 1.0<br />
+&nbsp;&nbsp;&nbsp; write(6,*) &quot;1: e/Bohr^3,&nbsp; 2: e/Angstrom^3&quot;<br />
+&nbsp;&nbsp;&nbsp; read(5,*) selec_unit<br />
+&nbsp;&nbsp;&nbsp; if( selec_unit == &quot;2&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; dunit = 6.748334 !1/(0.52917720859**3)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) &quot;2: e/Angstrom^3 ( = 6.748334 * e/Bohr^3)&quot;<br />
+&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(6,*) &quot;1: e/Bohr^3&quot;<br />
+&nbsp;&nbsp;&nbsp; end if<br />
+<br />
+&nbsp;&nbsp;&nbsp; call elk_read_geo(a1,a2,a3,b1,b2,b3,c1,c2,c3)<br />
+<br />
+&nbsp;&nbsp;&nbsp; call elk_3Ddata_inout(a1,a2,a3,b1,b2,b3,c1,c2,c3, aB, plot3dFile, title, dunit)<br />
+&nbsp; &nbsp;<br />
+end program elk_3Dplot2VESTA<br />
+<br />
+<br />
+subroutine elk_read_geo(a1,a2,a3,b1,b2,b3,c1,c2,c3)<br />
+&nbsp;&nbsp;&nbsp; ! ################################################<br />
+&nbsp;&nbsp;&nbsp; ! BEGIN - read GEOMETRY.OUT<br />
+&nbsp;&nbsp;&nbsp; ! ################################################<br />
+&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp; real(8):: a1, a2, a3 ! components of 1. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: b1, b2, b3 ! components of 2. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: c1, c2, c3 ! components of 3. lattice vector<br />
+&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp; character(12):: GEOfile = &quot;GEOMETRY.OUT&quot;<br />
+&nbsp;&nbsp;&nbsp; character(12):: line<br />
+<br />
+&nbsp;&nbsp;&nbsp; integer:: g<br />
+&nbsp;&nbsp;&nbsp; open(1, file = GEOfile)<br />
+&nbsp;&nbsp;&nbsp; do g=0, 20<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1,'(12a)') line<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(line(1:5) == &quot;atoms&quot;) exit<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if(line(1:4) == &quot;avec&quot;) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1,'(3(f14.9, 4x))' ) a1, a2, a3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1,'(3(f14.9, 4x))' ) b1, b2, b3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(1,'(3(f14.9, 4x))' ) c1, c2, c3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; end if<br />
+&nbsp;&nbsp;&nbsp; end do&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp; &nbsp;<br />
+&nbsp;&nbsp;&nbsp; return<br />
+&nbsp;<br />
+end subroutine elk_read_geo<br />
+<br />
+<br />
+subroutine elk_3Ddata_inout(a1,a2,a3,b1,b2,b3,c1,c2,c3, aB, plot3dFile, title, dunit)<br />
+&nbsp;&nbsp;&nbsp; ! ################################################<br />
+&nbsp;&nbsp;&nbsp; ! BEGIN - read &quot;3D data&quot;.OUT<br />
+&nbsp;&nbsp;&nbsp; ! ################################################<br />
+<br />
+&nbsp;&nbsp;&nbsp; character(9):: plot3dFile<br />
+&nbsp;&nbsp;&nbsp; character(12):: title<br />
+&nbsp;&nbsp;&nbsp; real(8):: aB<br />
+<br />
+&nbsp;&nbsp;&nbsp; real(8):: a1, a2, a3 ! components of 1. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: b1, b2, b3 ! components of 2. lattice vector<br />
+&nbsp;&nbsp;&nbsp; real(8):: c1, c2, c3 ! components of 3. lattice vector<br />
+<br />
+&nbsp;&nbsp;&nbsp; real(8):: dunit<br />
+<br />
+&nbsp;&nbsp;&nbsp; character(12):: dumpStr<br />
+&nbsp;&nbsp;&nbsp; integer:: numX, numY, numZ<br />
+&nbsp;&nbsp;&nbsp; real(8):: dumpVar, intensity<br />
+&nbsp;&nbsp;&nbsp; integer:: g<br />
+<br />
+&nbsp;&nbsp;&nbsp; Open (2, file=plot3dFile)<br />
+&nbsp;&nbsp;&nbsp; read(2,'(3(1x,i5),12a)') numX, numY, numZ, dumpStr ! get number of grid points in the x,y and z direction of plot 3D<br />
+<br />
+&nbsp;&nbsp;&nbsp; Open (3, file=&quot;RHO3D.GRD&quot;)<br />
+&nbsp;&nbsp;&nbsp; write(6,*) &quot;Output file: RHO3D.GRD&quot;<br />
+&nbsp;&nbsp;&nbsp; write(3,*) title<br />
+&nbsp;&nbsp;&nbsp; write(3,'(3(f7.5,1x), 3(f6.3, 1x))') &amp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sqrt(a1**2.0+a2**2.0+a3**2.0)*aB, sqrt(b1**2.0+b2**2.0+b3**2.0)*aB, sqrt(c1**2.0+c2**2.0+c3**2.0)*aB, &amp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; elk_vec2ang(b1,b2,b3,c1,c2,c3), elk_vec2ang(a1,a2,a3,c1,c2,c3), elk_vec2ang(a1,a2,a3,b1,b2,b3)<br />
+&nbsp;&nbsp;&nbsp; write(3,'(3(i5,1x))') numX, numY, numZ<br />
+<br />
+&nbsp;&nbsp;&nbsp; do g=1, int(numX*numY*numZ)<br />
+<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; read(2,'(4e18.14)') dumpVar, dumpVar, dumpVar, intensity<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; write(3,*) intensity * dunit<br />
+<br />
+&nbsp;&nbsp;&nbsp; end do<br />
+<br />
+end subroutine elk_3Ddata_inout<br />
+<br />
+<br />
+function elk_vec2ang(x1,x2,x3,y1,y2,y3)<br />
+<br />
+&nbsp;&nbsp;&nbsp; real(8):: x1,x2,x3,y1,y2,y3<br />
+&nbsp;&nbsp;&nbsp; real(8):: pi<br />
+<br />
+&nbsp;&nbsp;&nbsp; pi = acos(-1.0d0)<br />
+&nbsp;&nbsp;&nbsp; elk_vec2ang = (360/2/pi)*acos( ( x1*y1 + x2*y2 + x3*y3 ) / ( sqrt(x1**2.0+x2**2.0+x3**2.0) * sqrt(y1**2.0+y2**2.0+y3**2.0) ) )<br />
+<br />
+end function elk_vec2ang<br />
+! ---------------------------------------------

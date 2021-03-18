@@ -1,0 +1,506 @@
+-----------------------------------------------------------------------------<br />
+■ hotcent and tango<br />
+(https://gitlab.com/mvdb/hotcent/)<br />
+(debian 10.0 on windows 10 (64 bit))<br />
+(Edit: 2/Sep/2020)<br />
+&nbsp; Calculating one- and two-center Slater-Koster integrals, based on parts of the Hotbit code.<br />
+<br />
+□ hotcent (github)<br />
+1. cd ~
+<div>2. git clone https://github.com/by-student-2017/hotcent-2Sep2020.git</div>
+
+<div>3. mv hotcent-2Sep2020 hotcent</div>
+
+<div>4. cd hotcent</div>
+
+<div>5. chmod +x install.sh</div>
+
+<div>6. ./install.sh</div>
+<br />
+□ tango (github)<br />
+1. cd ~
+<div>2. git clone https://github.com/by-student-2017/tango-2Sep2020.git</div>
+
+<div>3. mv tango-2Sep2020 tango</div>
+
+<div>4. cd tango</div>
+
+<div>5. chmod +x install.sh</div>
+
+<div>6. ./install.sh<br />
+<br />
+□ For &quot;ubuntu 18.04 LST&quot;<br />
+1.&nbsp;sudo apt install -y python3-pip<br />
+&nbsp;&nbsp;pip3 install scipy --upgrade</div>
+<br />
+□ Examples (hotcent)<br />
+1. cd ~/hotcent/examples<br />
+2. python3 test.py<br />
+<br />
+□ Tutorial -1- (hotcent)<br />
+(<a href="https://gitlab.com/mvdb/hotcent/-/blob/master/tutorials/tutorial_1.ipynb">https://gitlab.com/mvdb/hotcent/-/blob/master/tutorials/tutorial_1.ipynb</a>)<br />
+1. cd ~/hotcent/tutorials<br />
+<span class="token s">2.&nbsp;</span>python3 tutorial-step1.py<br />
+&nbsp; (DFTB+ calculation test: Si daiamond structure)<br />
+<span class="token s">3.&nbsp;</span>python3 tutorial-step2.py<br />
+&nbsp; (Parametrization for Si: Atomic eigenvalues)<br />
+&nbsp; (use 'atomic' DFT calculator in Hotcent)<br />
+<span class="token s">4.&nbsp;</span>python3 tutorial-step3-1.py<br />
+<span class="token s">&nbsp; or&nbsp;</span>python3 tutorial-step3-2.py<br />
+&nbsp; (Parametrization for Si: Atomic Hubbard values)<br />
+5. python3 tutorial-step4.py<br />
+&nbsp; (Electronic parameters: two-center integrals)<br />
+&nbsp; (you can get 'repulsionless' SKF file (Si-Si_no_repulsion.skf) )<br />
+<br />
+□ Tutorial -2- (hotcent)<br />
+(<a href="https://gitlab.com/mvdb/hotcent/-/blob/master/tutorials/tutorial_2.ipynb">https://gitlab.com/mvdb/hotcent/-/blob/master/tutorials/tutorial_2.ipynb</a>)<br />
+1. cd ~/hotcent/tutorials<br />
+2. python3 tutorial-step5.py<br />
+&nbsp;&nbsp; (evince bs_gpaw.png)<br />
+&nbsp;&nbsp; (Reference data) (you can get &quot;bs_gpaw.json&quot;)<br />
+3. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-17.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+&nbsp;&nbsp;</span>export PYTHONPATH=$HOME/hotcent:$PYTHONPATH<br />
+<span class="token s">4.&nbsp;</span>python3 tutorial-step6.py<br />
+5. mv Si-Si.skf Si-Si_no_repulsion.skf<br />
+<br />
+□ Tutorial -3- (tango)<br />
+(<a href="https://gitlab.com/mvdb/tango/-/blob/master/tutorial/tutorial.ipynb">https://gitlab.com/mvdb/tango/-/blob/master/tutorial/tutorial.ipynb</a>)<br />
+1. cd ~/tango/tutorial<br />
+2. python3 run_gpaw_diamond_si.py<br />
+&nbsp; (DFT energies) (you can get &quot;gpawout_diamond.txt&quot;)<br />
+3. python3 tutorial-step1.py<br />
+&nbsp; (you can get &quot;training.db&quot;)<br />
+4. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+&nbsp;&nbsp;</span>export PYTHONPATH=$HOME/tango:$PYTHONPATH<br />
+<span class="token s">5.&nbsp;</span>python3 tutorial-step2.py<br />
+&nbsp; (Two-body repulsion)<br />
+6<span class="token s">.&nbsp;</span>python3 tutorial-step3.py (failed)<br />
+&nbsp; (Transferability test: flat and buckled silicene)<br />
+7. python3 tutorial-step4.py<br />
+&nbsp; (Tranferability test: 'zigzag-dumbbell' silicene)<br />
+8. python3 tutorial-step5.py (failed)<br />
+&nbsp; (Global optimization and DFTB)<br />
+<br />
+□ examples (Si7) (tango) (cp2k_shell) (failed???)<br />
+1. cd ~/tango/examples/si7<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/cp2k_shell.sopt/mpirun -np 4 cp2k_shell.popt/g' cp2k_calc.py<br />
+4. sed -i 's/cp2k_shell.sopt/mpirun -np 4 cp2k_shell.popt/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+7. python3 master_4cpu.py<br />
+<br />
+□ examples (carbon) (tango) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/carbon<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (TiO2) (tango) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/tio2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (CaOH<sub>2</sub>) (tango) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/caoh2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (PdO) (tango) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/pdo<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (PdOH<sub>2</sub>) (tango) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/pdoh2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ test (C, dimer) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_c_dimer<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+<span class="token s">4.&nbsp;</span>python3 test.py<br />
+<br />
+□ test (graphene and N2) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_graphene_n2<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+<span class="token s">4.&nbsp;</span>python3 test.py<br />
+<br />
+□ test (MgO) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_mgo_cluster<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+5. python3 test.py<br />
+<br />
+□ test (Si) (hotcent &amp; tango &amp; CP2k) (failed???)<br />
+1. cd ~/tango/tests/test_si_bulk<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export ASE_CP2K_COMMAND=&quot;mpirun -np 2 cp2k_shell.popt&quot;<br />
+<span class="token s">4.&nbsp;</span>sed -i 's/cp2k_shell.sopt/mpirun -np 2 cp2k_shell.popt/g' cp2k_calc.py<br />
+5. python3 master.py<br />
+<br />
+□ test Si (QE + GBRV (<a href="https://www.physics.rutgers.edu/gbrv/">https://www.physics.rutgers.edu/gbrv/</a>))<br />
+1. cd&nbsp;~/tango/tests/test_si_bulk<br />
+2.&nbsp;python3 generate_skf.py<br />
+3. cp ~/tango/tango/calculators/qe_calc.py ./<br />
+4. mkdir pseudo ; cd pseudo<br />
+5.&nbsp;wget https://www.physics.rutgers.edu/gbrv/si_pbe_v1.uspp.F.UPF<br />
+6. cd ..<br />
+7. export&nbsp;NCORES=2<br />
+&nbsp;&nbsp;export ESPRESSO_PSEUDO=~/tango/tests/test_si_bulk/pseudo<br />
+8. gedit master.py<br />
+-----(before)<br />
+from cp2k_calc import CP2KCalculator<br />
+<br />
+DftCalc=CP2KCalculator<br />
+-----(after)<br />
+#from cp2k_calc import CP2KCalculator<br />
+from qe_calc import QECalculator<br />
+<br />
+#DftCalc=CP2KCalculator<br />
+DftCalc=QECalculator<br />
+-----<br />
+9. python3 master.py<br />
+-----------------------------------------------------------------------------<br />
+■ hotcent and tango<br />
+(https://gitlab.com/mvdb/hotcent/)<br />
+(debian 10.0 on windows 10 (64 bit))<br />
+(Edit: 2/Sep/2020)<br />
+&nbsp; Calculating one- and two-center Slater-Koster integrals, based on parts of the Hotbit code.<br />
+<br />
+□ ASE<br />
+1. sudo apt update<br />
+2. sudo apt install -y python3-ase<br />
+<br />
+□ LibXC (v.4.3.4)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake gcc g++ build-essential<br />
+&nbsp; sudo apt install -y python3-dev python3-distutils python3-setuptools<br />
+&nbsp; cd ~<br />
+2. wget https://www.tddft.org/programs/libxc/down/4.3.4/libxc-4.3.4.tar.gz<br />
+3. tar zxvf libxc-4.3.4.tar.gz<br />
+4. cd ~/libxc-4.3.4<br />
+5. sudo python3 setup.py install<br />
+&nbsp; (/usr/lib/python3/dist-packages)<br />
+<br />
+□ Install (hotcent) (gitlab)<br />
+0. sudo apt install -y git<br />
+&nbsp; sudo apt install -y python3-dev python3-distutils python3-setuptools<br />
+&nbsp; cd ~<br />
+1. git clone https://gitlab.com/mvdb/hotcent<br />
+2. export PYTHONPATH=$PWD/hotcent:$PYTHONPATH<br />
+3. cd ~/hotcent<br />
+4. python3 setup.py build_ext --inplace<br />
+&nbsp; (python3 setup.py build_ext --inplace --use-cython)<br />
+<br />
+□ Examples<br />
+1. cd ~/hotcent/examples<br />
+2. python3 test.py<br />
+<br />
+□ DFTB+ 19.1 (binary version)<br />
+1. cd ~<br />
+2. wget https://github.com/dftbplus/dftbplus/releases/download/19.1/dftbplus-19.1.executables.x86_64-linux.tar.xz<br />
+3. tar xf dftbplus-19.1.executables.x86_64-linux.tar.xz<br />
+4. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+<br />
+□ Parameter set &quot;pbc-0-3&quot;<br />
+1. cd <span class="token s">~/</span>dftbplus-19.1.x86_64-linux<br />
+2. wget http://www.dftb.org/fileadmin/DFTB/public/slako/pbc/pbc-0-3.tar.xz<br />
+3. tar xf pbc-0-3.tar.xz<br />
+4. export DFTB_PREFIX<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/pbc-0-3/&quot;</span><br />
+<br />
+□ Tutorial -1-<br />
+1. cd ~/hotcent/tutorials<br />
+2. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+&nbsp; </span>export DFTB_PREFIX<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/pbc-0-3/&quot;<br />
+3. </span>python3 tutorial-step1.py<br />
+&nbsp; (DFTB+ calculation test: Si daiamond structure)<br />
+<span class="token s">4. </span>python3 tutorial-step2.py<br />
+&nbsp; (Parametrization for Si: Atomic eigenvalues)<br />
+&nbsp; (use 'atomic' DFT calculator in Hotcent)<br />
+<span class="token s">5. </span>python3 tutorial-step3-1.py<br />
+<span class="token s">&nbsp; or </span>python3 tutorial-step3-2.py<br />
+&nbsp; (Parametrization for Si: Atomic Hubbard values)<br />
+6. python3 tutorial-step4.py<br />
+&nbsp; (Electronic parameters: two-center integrals)<br />
+&nbsp; (you can get 'repulsionless' SKF file (Si-Si_no_repulsion.skf) )<br />
+<br />
+□ DFTB+ 17.1 (binary version)<br />
+(need &quot;Tutorial -2-&quot;)<br />
+1. cd ~<br />
+2. wget https://www.dftbplus.org/fileadmin/DFTBPLUS/public/dftbplus/17.1/dftbplus-17.1.x86_64-linux.tar.xz<br />
+3. tar xf dftbplus-17.1.x86_64-linux.tar.xz<br />
+4. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-17.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+<br />
+□ ASE (v.3.19.3)</span><br />
+<span class="token s">(need </span> &quot;Tutorial -2-&quot; and TANGO)<br />
+<span class="token s">1. cd ~<br />
+2. </span>wget https://gitlab.com/ase/ase/-/archive/3.19.3/ase-3.19.3.tar.gz<br />
+3. tar zxvf ase-3.19.3.tar.gz<br />
+4. export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+<br />
+□ Tutorial -2-<br />
+0. sudo apt install -y gpaw<br />
+&nbsp; export PYTHONPATH=$HOME/ase:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase/bin:$PATH<br />
+1. cd ~/hotcent/tutorials<br />
+2. python3 tutorial-step5.py<br />
+&nbsp;&nbsp; (evince bs_gpaw.png)<br />
+&nbsp;&nbsp; (Reference data) (you can get &quot;bs_gpaw.json&quot;)<br />
+3. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-17.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+&nbsp; </span>export PYTHONPATH=$HOME/hotcent:$PYTHONPATH<br />
+<span class="token s">4. </span>python3 tutorial-step6.py<br />
+5. mv Si-Si.skf Si-Si_no_repulsion.skf<br />
+<br />
+□ TANGO (gitlab)<br />
+(https://gitlab.com/mvdb/tango/-/tree/master/tutorial)<br />
+(CP2k or PWscf (tango.calculators.qe_calc.py) are OK !)<br />
+1. cd ~<br />
+2. git clone https://gitlab.com/mvdb/tango.git<br />
+3. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+<br />
+□ DFT code<br />
+1. sudo apt install -y gpaw cp2k quantum-espresso<br />
+-----information (/usr/bin)<br />
+cp2k<br />
+cp2k.popt<br />
+cp2k_shell<br />
+cp2k_shell.popt<br />
+pw.x<br />
+-----<br />
+<br />
+□ Tutorial -3- (TANGO)<br />
+(https://gitlab.com/mvdb/tango/-/blob/master/tutorial/tutorial.ipynb)<br />
+1. cd ~/tango/tutorial<br />
+2. python3 run_gpaw_diamond_si.py<br />
+&nbsp; (DFT energies) (you can get &quot;gpawout_diamond.txt&quot;)<br />
+3. python3 tutorial-step1.py<br />
+&nbsp; (you can get &quot;training.db&quot;)<br />
+4. export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;<br />
+&nbsp; </span>export PYTHONPATH=$HOME/tango:$PYTHONPATH<br />
+<span class="token s">5. </span>python3 tutorial-step2.py<br />
+&nbsp; (Two-body repulsion)<br />
+6<span class="token s">. </span>python3 tutorial-step3.py (failed)<br />
+&nbsp; (Transferability test: flat and buckled silicene)<br />
+7. python3 tutorial-step4.py<br />
+&nbsp; (Tranferability test: 'zigzag-dumbbell' silicene)<br />
+8. python3 tutorial-step5.py (failed)<br />
+&nbsp; (Global optimization and DFTB)<br />
+<br />
+□ examples (Si7) (TANGO) (cp2k_shell) (failed???)<br />
+1. cd ~/tango/examples/si7<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/cp2k_shell.sopt/mpirun -np 4 cp2k_shell.popt/g' cp2k_calc.py<br />
+4. sed -i 's/cp2k_shell.sopt/mpirun -np 4 cp2k_shell.popt/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+7. python3 master_4cpu.py<br />
+<br />
+□ examples (carbon) (TANGO) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/carbon<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (TiO2) (TANGO) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/tio2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (CaOH<sub>2</sub>) (TANGO) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/caoh2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (PdO) (TANGO) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/pdo<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ examples (PdOH<sub>2</sub>) (TANGO) (cp2k_shell.popt)<br />
+1. cd ~/tango/examples/pdoh2<br />
+2. cp master.py master_4cpu.py<br />
+3. sed -i 's/np 20/np 4/g' master_4cpu.py<br />
+(5. sed -i 's/max_select=20/max_select=4/g' master_4cpu.py)<br />
+(6. sed -i 's/number_of_go_runs=20/number_of_go_runs=4/g' master_4cpu.py)<br />
+4. python3 master_4cpu.py<br />
+<br />
+□ test (C, dimer) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_c_dimer<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+<span class="token s">4. </span>python3 test.py<br />
+<br />
+□ test (graphene and N2) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_graphene_n2<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+<span class="token s">4. </span>python3 test.py<br />
+<br />
+□ test (MgO) (hotcent &amp; tango &amp; DFTB+)<br />
+1. cd ~/tango/tests/test_mgo_cluster<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export DFTB_COMMAND<span class="token o">=</span><span class="token s">&quot;$HOME/</span>dftbplus-19.1.x86_64-linux<span class="token s">/bin/dftb+&quot;</span><br />
+5. python3 test.py<br />
+<br />
+□ test (Si) (hotcent &amp; tango &amp; CP2k) (failed???)<br />
+1. cd ~/tango/tests/test_si_bulk<br />
+2. export PYTHONPATH=~/hotcent:$PYTHONPATH<br />
+3. python3 generate_skf.py<br />
+4. export PYTHONPATH=~/tango:$PYTHONPATH<br />
+&nbsp; export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+&nbsp; export ASE_CP2K_COMMAND=&quot;mpirun -np 2 cp2k_shell.popt&quot;<br />
+<span class="token s">4. </span>sed -i 's/cp2k_shell.sopt/mpirun -np 2 cp2k_shell.popt/g' cp2k_calc.py<br />
+5. python3 master.py<br />
+------------------------------------------------------------------------------<br />
+■ Information<br />
+<br />
+□ Bremen university [I1]<br />
+1. ONECENT<br />
+2. TWOCENT<br />
+3. EREPFIT<br />
+<br />
+□ other methods<br />
+1. Hotcent [I3]<br />
+2. TANGO [I4]<br />
+<br />
+□ ???<br />
+・TBFIT:&nbsp;https://github.com/Infant83/TBFIT<br />
+・skprogs:&nbsp;https://github.com/dftbplus/skprogs<br />
+<br />
+□ DFTB+ [I5]<br />
+-----<br />
+we plan to release the parameterisation tools in the autumn release 19.2 this year. As they were used mostly internally so far (or given away to colaboration partners), their user interface is not as robust as I would wish and I want to fix that before letting users to make parameters with it. Especially, they should be robust enough of preventing users from making trivial mistakes without noticing it.<br />
+<br />
+For sure, Maximes way of using Hotbit to generate a parametrisation is a possible alternative, so you may give it a try, if you want to start immediately.<br />
+-----<br />
+<br />
+[I1] [DFTB-Plus-User] slater koster parameters (skf files)<br />
+&nbsp; https://mailman.zfn.uni-bremen.de/pipermail/dftb-plus-user/2019/002959.html<br />
+[I2] https://github.com/pekkosk/hotbit<br />
+[I3] https://gitlab.com/mvdb/hotcent<br />
+[I4] https://gitlab.com/mvdb/tango<br />
+[I5] https://mailman.zfn.uni-bremen.de/pipermail/dftb-plus-user/2019/002961.html<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] M. Van den Bossche, J. Chem. Phys. A. 2019, 123 (13), 3038-3045 (doi).<br />
+&nbsp; https://pubs.acs.org/doi/10.1021/acs.jpca.9b00927<br />
+[2] SlaterKosterTable<br />
+&nbsp; https://docs.quantumatk.com/manual/Types/SlaterKosterTable/SlaterKosterTable.html<br />
+[3] Atomistix ToolKit Reference Manual<br />
+&nbsp; https://quantumwise.com/documents/manuals/ATK-2014/ReferenceManual/index.html/ref.slaterkostertable.html<br />
+[4] Appendix: Atomic data<br />
+&nbsp; https://quantumwise.com/documents/manuals/ATK-2014/ReferenceManual/index.html/chap.atomicdata.html#sect2.atomicdata.se.sk<br />
+[5]&nbsp;Table of Contents 1 Slater-Koster tight-binding<br />
+&nbsp; https://docs.quantumatk.com/_downloads/slater_koster.pdf<br />
+[6] <a class="pathentry first" href="https://trac.cc.jyu.fi/projects/hotbit/wiki" title="WikiStart の表示">wiki:</a><a class="pathentry" href="https://trac.cc.jyu.fi/projects/hotbit/wiki/Parametrization" title="Parametrization の表示">Parametrization</a><br />
+&nbsp; https://trac.cc.jyu.fi/projects/hotbit/wiki/Parametrization<br />
+[7] Scripts: electrostatic integrals and Slater-Koster table derivatives, see dissertation, Gaussian Tight Binding Study of Ultrafast Electron Dynamics, for details.<br />
+&nbsp; https://figshare.com/articles/Scripts_electrostatic_integrals_and_Slater-Koster_table_derivatives_see_dissertation_Gaussian_Tight_Binding_Study_of_Ultrafast_Electron_Dynamics_for_details_/6246877<br />
+[8] The empirical tight-binding code tbe<br />
+&nbsp; https://www.questaal.org/docs/code/tbe/<br />
+[9] TBFIT<br />
+&nbsp; https://github.com/Infant83/TBFIT<br />
+[10] Parametrization<br />
+&nbsp; http://www.dftbaby.chemie.uni-wuerzburg.de/DFTBaby/mdwiki.html#!WIKI/parametrization.md<br />
+[11] DFTB with ASE: From Zero to Hero<br />
+&nbsp; https://ase-workshop.materialsmodeling.org/tutorials/dftb/<br />
+------------------------------------------------------------------------------<br />
+□ ASE (Release notes)<br />
+(https://wiki.fysik.dtu.dk/ase/releasenotes.html#releasenotes)<br />
+<br />
+<span class="token s">□ ASE (development version)</span><br />
+<span class="token s">(need </span> &quot;Tutorial -2-&quot; and TANGO)<br />
+<span class="token s">1. cd ~<br />
+2. </span>git clone https://gitlab.com/ase/ase.git<br />
+3. export PYTHONPATH=$HOME/ase:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase/bin:$PATH<br />
+<br />
+<span class="token s">□ ASE (v.3.20.1)</span><br />
+<span class="token s">(need </span> &quot;Tutorial -2-&quot; and TANGO)<br />
+<span class="token s">1. cd ~<br />
+2. </span>wget https://gitlab.com/ase/ase/-/archive/3.20.1/ase-3.20.1.tar.gz<br />
+3. tar zxvf ase-3.20.1.tar.gz<br />
+4. export PYTHONPATH=$HOME/ase-3.20.1:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.20.1/bin:$PATH<br />
+<br />
+□ ASE (v.3.20)<br />
+1. sudo apt install -y gdebi<br />
+&nbsp; cd ~<br />
+2. wget http://ftp.br.debian.org/debian/pool/main/p/python-ase/python3-ase_3.20.1-1_all.deb<br />
+3. sudo gdebi python3-ase_3.20.1-1_all.deb<br />
+<br />
+<span class="token s">□ ASE (v.3.19.3)</span><br />
+<span class="token s">(need </span> &quot;Tutorial -2-&quot; and TANGO)<br />
+<span class="token s">1. cd ~<br />
+2. </span>wget https://gitlab.com/ase/ase/-/archive/3.19.3/ase-3.19.3.tar.gz<br />
+3. tar zxvf ase-3.19.3.tar.gz<br />
+4. export PYTHONPATH=$HOME/ase-3.19.3:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.19.3/bin:$PATH<br />
+<br />
+<span class="token s">□ ASE (v.3.18.2)</span><br />
+<span class="token s">(need </span> &quot;Tutorial -2-&quot; and TANGO)<br />
+<span class="token s">1. cd ~<br />
+2. </span>wget https://gitlab.com/ase/ase/-/archive/3.18.2/ase-3.18.2.tar.gz<br />
+3. tar zxvf ase-3.18.2.tar.gz<br />
+4. export PYTHONPATH=$HOME/ase-3.18.2:$PYTHONPATH<br />
+&nbsp; export PATH=$HOME/ase-3.18.2/bin:$PATH<br />
+------------------------------------------------------------------------------

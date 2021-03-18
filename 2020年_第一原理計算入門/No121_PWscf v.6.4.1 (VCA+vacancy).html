@@ -1,0 +1,149 @@
+------------------------------------------------------------------------------<br />
+Å° PWscf v.6.4.1 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Note:&nbsp;has_gipaw=&quot;false&quot; is needed !!! (for USPP)<br />
+<br />
+Å† Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y gcc g++ build-essential gfortran patch wget libopenblas-dev libfftw3-dev libfftw3-mpi-dev libopenmpi-dev libscalapack-openmpi-dev<br />
+1. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+2. tar zxvf qe-6.4.1.tar.gz<br />
+3. cd q-e-qe-6.4.1<br />
+4. wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+5. patch -p1 --merge &lt; backports-6.4.1.diff<br />
+6. ./configure FCFLAGS=&quot;-mtune=native&quot;<br />
+7. make pwall<br />
+8. sudo make install<br />
+&nbsp; (/usr/local/bin/pw.x)<br />
+Å¶ When you failed, you sould set FCFLAGS=&quot;-mtune=native&quot;<br />
+<br />
+Å† virtual_v2_vac.x (under constracting)<br />
+1. ~/q-e-qe-6.4.1/upftools<br />
+2. cp virtual_v2.f90 virtual_v2_vac.f90<br />
+3. sed -i &quot;s/(1-x)/0.0/g&quot; virtual_v2_vac.f90<br />
+4. sed -i &quot;s/(1.d0-x)/0.d0/g&quot; virtual_v2_vac.f90<br />
+5. gedit Makefile<br />
+-----<br />
+all : tldeps casino2upf.x cpmd2upf.x fhi2upf.x fpmd2upf.x \<br />
+&nbsp; &nbsp; &nbsp;ncpp2upf.x oldcp2upf.x read_upf_tofile.x rrkj2upf.x upf2casino.x \<br />
+&nbsp; &nbsp; &nbsp;uspp2upf.x vdb2upf.x virtual_v2.x virtual_v2_vac.x interpolate.x fix_upf.x<br />
+<br />
+virtual_v2_vac.x: virtual_v2_vac.o $(OBJS) $(QEMODS) $(LIBOBJS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; $(LD) $(LDFLAGS) -o $@ \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; virtual_v2_vac.o $(OBJS) $(QEMODS) $(LIBOBJS) $(QELIBS)<br />
+-----<br />
+6. make<br />
+<br />
+Note: not recommend USPP, need to check carefully.&nbsp; (under constracting)<br />
+Å† (x Ni + 0.0 Ni) ultra-soft psuedo-potential (PSlibrary case)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. wget http://www.quantum-espresso.org/upf_files/Ni.pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+4. ~/q-e-qe-6.4.1/upftools/virtual_v2_vac.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ni.pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; Input PP file # &nbsp;2 in UPF format &gt; Ni.pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+5.(for example,)<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.9<br />
+6. mv NewPseudo.UPF Ni09.pbe-n-rrkjus_psl.UPF<br />
+------------------------------------------------------------------------------<br />
+Å° Examples<br />
+<br />
+Å† SrTiO3-x<br />
+--------------------<br />
+Åû settings<br />
+1. git clone&nbsp;https://github.com/by-student-2017/q-e-qe-6.4.1-vca.git<br />
+2. cd ~/q-e-qe-6.4.1/upftools<br />
+3. cp -r ~/q-e-qe-6.4.1-vca/upftools/* ./<br />
+4. make<br />
+<br />
+Åû&nbsp;python setting<br />
+1. sudo apt install -y python<br />
+2. chmod +x pwout2in.py<br />
+<br />
+Åû&nbsp;Run<br />
+1. cd&nbsp;sequential-run-auto-vac-band-dos-ph-lat<br />
+2. cp&nbsp;O.pbe-n-rrkjus_psl.1.0.0.UPF 1.UPF<br />
+3. gedit x.dat<br />
+4. chmod +x run.csh<br />
+5. ./run.csh<br />
+<br />
+Åû&nbsp;Note -1-<br />
+1.UPF = Xx1.00000.UPF, X=1.0<br />
+2.UPF = Xx0.00000.UPF, X=0.0<br />
+<br />
+Åû&nbsp;Note -2- (x.dat)<br />
+X.XXXXX<br />
+Y.YYYYY<br />
+Z.ZZZZZ<br />
+...<br />
+<br />
+Åû&nbsp;Note -3- (mass.dat)<br />
+First Line: mass of 1.UPF<br />
+Second Line: mass of 2.UPF<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+Å° virtual_v2.f90<br />
+<br />
+Å† line 170-177<br />
+&nbsp; ! pp_header<br />
+&nbsp; INTEGER :: upf_iexch, upf_icorr, upf_igcx, upf_igcc<br />
+&nbsp; INTEGER :: upf_lmax, upf_mesh, upf_nbeta, upf_ntwfc<br />
+&nbsp; real(8) :: upf_zp, upf_ecutrho, upf_ecutwfc, upf_etotps<br />
+&nbsp; LOGICAL :: upf_nlcc<br />
+&nbsp; real(8), ALLOCATABLE :: upf_ocw(:)<br />
+&nbsp; CHARACTER(len=2), ALLOCATABLE :: upf_elsw(:)<br />
+&nbsp; INTEGER, ALLOCATABLE :: upf_lchiw(:)<br />
+<br />
+Å† line 255-261<br />
+&nbsp; upf_mesh = upf(1)%mesh<br />
+&nbsp; upf_nbeta = upf(1)%nbeta+upf(2)%nbeta<br />
+&nbsp; upf_ntwfc = upf(1)%nwfc<br />
+&nbsp; upf_nlcc &nbsp;= upf(1)%nlcc.or.upf(2)%nlcc<br />
+&nbsp; upf_ecutrho = upf(1)%ecutrho<br />
+&nbsp; upf_ecutwfc = upf(1)%ecutwfc<br />
+&nbsp; upf_etotps &nbsp;= upf(1)%etotps<br />
+<br />
+Å† line 268 (zp = Z_valence)<br />
+&nbsp;&nbsp;&nbsp; upf_zp &nbsp; &nbsp;= &nbsp;x * upf(1)%zp + (1.d0-x) * upf(2)%zp<br />
+<br />
+Å† line 320-326<br />
+&nbsp; Jivtesh - if the mesh of the first atom extends to a larger radius than the mesh of the second atom, then, for those radii that are greater than the maximum radius of the second atom, the local potential of the second atom is calculated using the expression v_local = (-2)*Z/r instead of using the extrapolated value. This is because, typically extrapolation leads to positive potentials. This is implemented in lines 240-242.<br />
+<br />
+Å† line 367-369<br />
+&nbsp; SdG - when the meshes of the two pseudo are different the ikk2 limits for the beta functions of the second one must be set properly. This is done in lines 273-277.<br />
+<br />
+Å† line 544-545<br />
+&nbsp; Jivtesh - The wavefunctions are calculated to be the average of the wavefunctions of the two atoms - lines 365-366.<br />
+<br />
+Å† line 576-580<br />
+&nbsp; ! pp_info<br />
+&nbsp; ! pp_header<br />
+&nbsp; upf_vca%lmax = upf_lmax<br />
+&nbsp; upf_vca%nlcc = upf_nlcc<br />
+&nbsp; upf_vca%zp = upf_zp<br />
+<br />
+Å† UPF format<br />
+&nbsp;&nbsp;http://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format<br />
+------------------------------------------------------------------------------<br />
+Å†&nbsp;[Pw_forum] How to create a new pseudo potential with virtual.x?<br />
+(https://lists.quantum-espresso.org/pipermail/users/2012-August/024672.html )<br />
+Dear Yuewen: I'd like to quote a paragraph from L. Vitos' book &quot;Computational quantum mechanics for materials engineers - the EMTO method and applications&quot; at the beginning of page 9: &quot;This simple model (VCA method) suffers from numerous weaknesses, e.g., it is unable to describe correctly the bond proportion and volume effects, and its application has been limited to alloys with nearly identical chemical species.&quot; So, it is difficult to &quot;exam&quot; whether your mixed potential works well. You may just do some works and compare your results with other persons. If you wanna use VCA to calculate the energies of alloys, I think Prof. S. de Gironcoli's PRL papers and his Ph.D dissertation are the best.<br />
+<br />
+Agreed! Just in case, the PhD is here:<br />
+http://library.epfl.ch/en/theses/?nr=1087<br />
+<br />
+<br />
+Å†&nbsp;Paolo Giannozzi&nbsp;<br />
+(https://pw-forum.pwscf.narkive.com/J511P3x5/virtual-x-and-vca-problem)<br />
+&nbsp; VCA may (or may not) work for the electronic structure, but I doubt it will work for phonons, especially if the difference in mass is significant and especially for phonon branches that have significantly different energies in the case of pure atoms. You may assume that the mass of the virtual atom is equal to the weighted average of the two masses, with no warranty. Code &quot;dynmat.x&quot; allows to use the force constants (that do not depend upon masses) of the virtual crystal into a supercell of &quot;real&quot; atoms with different masses. Not sure it is suitable for your case, and not sure still works: it was written 20 or so years ago, used for phonons in GaAS/AlAs superlattices and GaAsAl alloys in which such &quot;mass approximaton&quot; works well: Phys. Rev. B 41, 3870 (1990), Phys. Rev. Lett. 65, 84 (1990).<br />
+<br />
+Å†&nbsp;Virtual Crystal Approximation for InGaAs random alloy simulations<br />
+(https://docs.quantumatk.com/tutorials/vca_for_ingaas/vca_for_ingaas.html)<br />
+Å†&nbsp;H Q Yang et al 2015 J. Phys.: Conf. Ser. 574 012048<br />
+(https://iopscience.iop.org/article/10.1088/1742-6596/574/1/012048/pdf)<br />
+<br />
+Å† <a href="https://www.google.co.jp/url?sa=t&amp;rct=j&amp;q=&amp;esrc=s&amp;source=web&amp;cd=&amp;ved=2ahUKEwjm88jKgIjqAhVKyYsBHalxBMEQFjAEegQIBRAB&amp;url=https%3A%2F%2Fmie-u.repo.nii.ac.jp%2Findex.php%3Faction%3Dpages_view_main%26active_action%3Drepository_action_common_download%26item_id%3D12268%26item_no%3D1%26attribute_id%3D17%26file_no%3D1%26page_id%3D13%26block_id%3D21&amp;usg=AOvVaw32lGtHA-mxCxDsSHwDrycT">Master thesis</a> (Japanese)<br />
+<br />
+Å† VCA and PCC<br />
+(https://forum.abinit.org/viewtopic.php?f=7&amp;t=2469 )<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,1024 @@
+------------------------------------------------------------------------------<br />
+■ Google Colaboratory (firefox on windows10)<br />
+(Edit: 7/Jul/2020)<br />
+<br />
+□ Install (I recommend firefox or safary)<br />
+1. Google Account &gt; Google apps (like ::: on the top right) &gt; Drive<br />
+2. New &gt; Folder &gt; [MI]<br />
+3. (right click) MI &gt; Open with &gt; Connect more apps &gt; colaboratory<br />
+4. Install<br />
+5. (double left click) MI<br />
+6. New &gt; More &gt; Google Colaboratory<br />
+(7. (double left click) &nbsp;Google Colaboratory) (Next time)<br />
+<br />
+□ Usage<br />
+1. (double left click) Google Colaboratory<br />
+2. !apt update<br />
+3. [|&gt;] or [Ctrl+Enter]<br />
+<br />
+□ Install ASE<br />
+1. !pip install ase<br />
+<br />
+□ Install PWscf (MKL + Netlib fftw3)<br />
+0. %cd /content<br />
+1. !apt install -y gcc g++ build-essential gfortran libfftw3-dev<br />
+2. !wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+3. !tar zxvf qe-6.4.1.tar.gz<br />
+4. %cd q-e-qe-6.4.1<br />
+&nbsp; !wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+&nbsp; !patch -p1 --merge &lt; backports-6.4.1.diff<br />
+5. !./configure<br />
+6. !make pwall<br />
+※(Memo) !apt install -y gcc g++ build-essential gfortran libopenmpi-dev libblas-dev liblapack-dev libopenblas-dev libfftw-3-3 libfftw3-dev libopenmpi-dev libscalapack-openmpi-dev git cmake<br />
+<br />
+◇ environment settings (PWscf)<br />
+1. import os<br />
+&nbsp; os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']<br />
+2. <font color="#000025">!</font><span style="color: #000000;">echo&nbsp;$PATH<br />
+3. !pw.x</span><br />
+<br />
+□ Save PWscf binary<br />
+1. from google.colab import drive<br />
+&nbsp; drive.mount('/content/drive')<br />
+2. (Enter your authorization code:)<br />
+&nbsp; (click XXX...)&nbsp;Go to this URL in a browser: XXX...<br />
+&nbsp; (click Allow)<br />
+&nbsp; (copy &amp; paste)<br />
+3. %cd /content<br />
+4. !zip -r /content/drive/'My Drive'/q-e-qe-6.4.1.zip ./q-e-qe-6.4.1&nbsp;<br />
+<br />
+□ Pull PWscf binary<br />
+1. from google.colab import drive<br />
+&nbsp; drive.mount('/content/drive')<br />
+2. !cp /content/drive/'My Drive'/q-e-qe-6.4.1.zip ./<br />
+3. !unzip ./q-e-qe-6.4.1.zip<br />
+4. import os<br />
+&nbsp; os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']<br />
+5. !pip install ase<br />
+<br />
+□ python + R (2 threads) [R1] (no check)<br />
+%load_ext rpy2.ipython<br />
+!apt -qq install r-cran-data.table<br />
+require(data.table)<br />
+setDTthreads(2)<br />
+%%script R --vanilla --quiet<br />
+x &lt;- 1:5<br />
+sum(x)<br />
+<br />
+□ R (BLAS, GPU) [R1] (no check)<br />
+%%bash<br />
+echo &quot;NVBLAS_LOGFILE nvblas.log<br />
+NVBLAS_CPU_BLAS_LIB /usr/lib/x86_64-linux-gnu/libopenblas.so<br />
+NVBLAS_GPU_LIST ALL&quot; &gt; /etc/nvblas.conf<br />
+mv /usr/local/bin/R /usr/local/bin/R_<br />
+echo '#!/bin/sh<br />
+LD_PRELOAD=/usr/local/cuda-10.0/targets/x86_64-linux/lib/libnvblas.so NVBLAS_CONFIG_FILE=/etc/nvblas.conf /usr/local/bin/R_ &quot;$@&quot;' &gt; /usr/local/bin/R<br />
+chmod +x /usr/local/bin/R<br />
+<br />
+□ Information<br />
+・Library path<br />
+&nbsp; /usr/lib/x86_64-linux-gnu<br />
+・MKL, python2.7, python3.6 and R<br />
+&nbsp; /usr/local/lib<br />
+&nbsp; (you can find&nbsp;mkl_msg.cat, etc)<br />
+・OpenMPI<br />
+&nbsp;&nbsp;/usr/lib/x86_64-linux-gnu/openmpi/include<br />
+・CUDA<br />
+&nbsp;&nbsp;/usr/local/cuda<br />
+&nbsp;&nbsp;/usr/local/cuda-10.0<br />
+&nbsp;&nbsp;/usr/local/cuda-10.1<br />
+<br />
+□ GPU<br />
+1.&nbsp;(double left click) &nbsp;Google Colaboratory) (Next time)<br />
+2. Runtime &gt; Change runtime type &gt; GPU or TPU<br />
+※ TPU for machine learning.<br />
+<br />
+□ check library<br />
+1. (double left click) Google Colaboratory<br />
+2. !pip list<br />
+<br />
+□ check speck<br />
+1. (double left click) Google Colaboratory<br />
+2. !apt install -y lshw<br />
+3.&nbsp;!lshw -class processor<br />
+4.&nbsp;!cat /proc/cpuinfo | grep processor<br />
+-----(This mean 2 processor)<br />
+processor &nbsp; &nbsp;: 0<br />
+processor &nbsp; &nbsp;: 1<br />
+-----<br />
+<span style="color: #000000;">5.&nbsp;!cat /proc/cpuinfo<br />
+-----(This mean 2 CPU, 1 core for 1 CPU)<br />
+cpu family &nbsp; &nbsp;: 6<br />
+model &nbsp; &nbsp; &nbsp; &nbsp;: 79<br />
+model name &nbsp; &nbsp;: Intel(R) Xeon(R) CPU @ 2.20GHz<br />
+cpu MHz &nbsp; &nbsp; &nbsp; &nbsp;: 2200.142<br />
+cache size &nbsp; &nbsp;: 56320 KB<br />
+physical id &nbsp; &nbsp;: 0<br />
+cpu cores&nbsp;&nbsp; &nbsp;: 1<br />
+-----<br />
+6.&nbsp;!lsb_release -a<br />
+-----<br />
+Description:&nbsp;&nbsp; &nbsp;Ubuntu 18.04.3 LTS<br />
+Codename:&nbsp;&nbsp; &nbsp;bionic<br />
+-----<br />
+7.&nbsp;!lspci | grep -i nvidia<br />
+-----<br />
+00:04.0 3D controller: NVIDIA Corporation GP100GL [Tesla P100 PCIe 16GB] (rev a1)<br />
+-----</span><br />
+<br />
+□ From PC to Google Colab<br />
+from google.colab import files<br />
+uploaded = files.upload()<br />
+<br />
+□ From Google Colab to PC<br />
+from google.colab import files<br />
+files.download('case.csv')<br />
+<br />
+□ From Google Colab to PC<br />
+!zip -r /content/file.zip /content/Folder_To_Zip<br />
+from google.colab import files<br />
+files.download(&quot;/content/file.zip&quot;)<br />
+<br />
+□ Note<br />
+&nbsp; I have NOT applied for donations, financial support or joint research from &ldquo;Google&rdquo;.&nbsp;<br />
+&nbsp; If I had something to do with &quot;Google,&quot; I would have created a useful tool for material informatics, and enhanced the potential of various calculation codes and tools for creating potential. That said, I want to join &quot;Google&quot; and develop a general-purpose AI as &quot;New&nbsp;Manhattan project (New Laboratory for the Development of Substitute Materials)&quot; with J.D. B.H.Obama 2.&nbsp;You can think of it as a joke. Because it's a &quot;BIG AMERICAN&quot; dream story.<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[GC1] Google Colaboratoryを使って無料で第一原理計算<br />
+&nbsp; https://qiita.com/cometscome_phys/items/a31ab8a4a4f7217a70ff<br />
+[GC2] 第一原理計算高速チュートリアル<br />
+&nbsp; https://cometscome.github.io/DFT/build/Fast/fast/<br />
+[R1]&nbsp;Google ColaboratoryでRを使う<br />
+&nbsp;&nbsp;https://www.marketechlabo.com/google-colaboratory-with-r/<br />
+[R2] 2 Google ColaboratoryでR言語を使う<br />
+&nbsp;&nbsp;https://htsuda.net/stats/colab.html<br />
+[D1]&nbsp;Google Colabのファイルのアップロードとダウンロード&nbsp;<br />
+&nbsp;&nbsp;https://note.com/npaka/n/n0b942a95ca5b#gr4RC<br />
+------------------------------------------------------------------------------<br />
+■ xTB<br />
+<br />
+□ Install<br />
+!wget https://github.com/grimme-lab/xtb/archive/v6.3.2.tar.gz<br />
+!tar zxvf v6.3.2.tar.gz<br />
+%cd xtb-6.3.2<br />
+import os<br />
+os.environ['FC'] = &quot;gfortran -O2 -mtune=native&quot;<br />
+os.environ['CC'] = &quot;gcc&quot;<br />
+!mkdir build<br />
+%cd build<br />
+!cmake -DCMAKE_BUILD_TYPE=Release ..<br />
+!make<br />
+!ctest<br />
+%cd ../<br />
+!make -C build install<br />
+<br />
+◇ ctest results<br />
+-----<br />
+100% tests passed, 0 tests failed out of 83<br />
+Total Test time (real) = &nbsp;13.87 sec<br />
+-----<br />
+<br />
+◇ environment settings<br />
+import os<br />
+os.environ['XTBHOME'] = &quot;/content/xtb-6.3.2&quot;<br />
+os.environ['XTBPATH'] = os.environ['XTBHOME']+&quot;/build:&quot;+os.environ['XTBHOME']<br />
+os.environ['PATH'] = os.environ['XTBHOME']+&quot;/build:&quot;+os.environ['PATH']<br />
+os.environ['LDLP'] =&nbsp;os.environ['XTBHOME']+&quot;/include:&quot;+os.environ['XTBHOME']+&quot;/scripts&quot;<br />
+os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH']+&quot;:&quot;+os.environ['LDLP']<br />
+os.environ['PYTHONPATH'] = os.environ['PYTHONPATH']+&quot;:&quot;+os.environ['XTBHOME']+&quot;/python&quot;<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/xtb-6.3.2.zip ./xtb-6.3.2<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/xtb-6.3.2.zip ./<br />
+!unzip ./xtb-6.3.2.zip<br />
+%cd /content/xtb-6.3.2<br />
+import os<br />
+os.environ['XTBHOME'] = &quot;/content/xtb-6.3.2&quot;<br />
+os.environ['XTBPATH'] = os.environ['XTBHOME']+&quot;/build:&quot;+os.environ['XTBHOME']<br />
+os.environ['PATH'] = os.environ['XTBHOME']+&quot;/build:&quot;+os.environ['PATH']<br />
+os.environ['LDLP'] = os.environ['XTBHOME']+&quot;/include:&quot;+os.environ['XTBHOME']+&quot;/scripts&quot;<br />
+os.environ['LD_LIBRARY_PATH'] = os.environ['LD_LIBRARY_PATH']+&quot;:&quot;+os.environ['LDLP']<br />
+os.environ['PYTHONPATH'] = os.environ['PYTHONPATH']+&quot;:&quot;+os.environ['XTBHOME']+&quot;/python&quot;<br />
+!pip install ase<br />
+<br />
+□ Parallel calculation settings<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2,1&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+<br />
+□ Help<br />
+!xtb --help<br />
+------------------------------------------------------------------------------<br />
+■ DFTB+<br />
+<br />
+□ Install<br />
+!apt install -y libarpack2-dev libopenblas-dev<br />
+!git clone https://github.com/dftbplus/dftbplus.git<br />
+%cd dftbplus<br />
+!git submodule update --init --recursive<br />
+!./utils/get_opt_externals ALL<br />
+!mkdir _build<br />
+%cd _build<br />
+!cmake -DWITH_DFTD3=true -DWITH_TRANSPORT=true -DFYPP_FLAGS=&quot;-DTRAVIS&quot; -DWITH_ARPACK=true -DCMAKE_TOOLCHAIN_FILE=../sys/gnu.cmake ..<br />
+!make<br />
+!make install<br />
+※ Download dftd3? [y/N] y<br />
+<br />
+□ Test<br />
+%cd /content/dftbplus/_build<br />
+!ctest<br />
+<br />
+◇ test results<br />
+-----<br />
+100% tests passed, 0 tests failed out of 242<br />
+Total Test time (real) = 289.95 sec<br />
+-----<br />
+<br />
+□ dptools setting<br />
+%cd /content/dftbplus/tools/dptools<br />
+!python3 setup.py install<br />
+<br />
+□ environment setting<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/dftbplus/_build/_install/bin:&quot;+os.environ['PATH']<br />
+os.environ['PATH'] = &quot;/content/dftbplus/tools/misc:&quot;+os.environ['PATH']<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/dftbplus.zip ./dftbplus<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/dftbplus.zip ./<br />
+!unzip ./dftbplus.zip<br />
+%cd /content/dftbplus<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/dftbplus/_build/_install/bin:&quot;+os.environ['PATH']<br />
+os.environ['PATH'] = &quot;/content/dftbplus/tools/misc:&quot;+os.environ['PATH']<br />
+!apt install -y libarpack2-dev libopenblas-dev<br />
+%cd /content/dftbplus/tools/dptools<br />
+!python3 setup.py install<br />
+!pip install ase<br />
+<br />
+□ Parallel calculation settings<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+<br />
+□ check<br />
+!dftb+<br />
+------------------------------------------------------------------------------<br />
+■ PWscf<br />
+<br />
+□ Install<br />
+!apt install -y gcc g++ build-essential gfortran libfftw3-dev<br />
+!wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+!tar zxvf qe-6.4.1.tar.gz<br />
+%cd q-e-qe-6.4.1<br />
+!wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+!patch -p1 --merge &lt; backports-6.4.1.diff<br />
+!./configure --enable-omp<br />
+!make all<br />
+<br />
+※ Instation error case<br />
+!make clean<br />
+!make pwall<br />
+<br />
+◇ environment settings<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/q-e-qe-6.4.1.zip ./q-e-qe-6.4.1&nbsp;<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/q-e-qe-6.4.1.zip ./<br />
+!unzip ./q-e-qe-6.4.1.zip<br />
+%cd&nbsp;/content/q-e-qe-6.4.1<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']<br />
+!apt install -y gcc g++ build-essential gfortran libfftw3-dev<br />
+!pip install ase<br />
+<br />
+□ examples<br />
+!git clone&nbsp;https://github.com/by-student-2017/ase-esamples.git<br />
+%cd /content/ase-esamples/PWscf<br />
+・Cu<br />
+%cd /content/ase-esamples/PWscf/Cu<br />
+!cat qe-Cu.py<br />
+(copy &amp; paste)<br />
+・Si<br />
+%cd /content/ase-esamples/PWscf/Si<br />
+!cat qe-Si.py<br />
+(copy &amp; paste)<br />
+・NaCl (LBFG, structure optimization)<br />
+%cd /content/ase-esamples/PWscf/NaCl<br />
+!cat qe-NaCl.py<br />
+(copy &amp; paste)<br />
+・SnTe<br />
+%cd /content/ase-esamples/PWscf/SnTe<br />
+!cat qe-SnTe.py<br />
+(copy &amp; paste)<br />
+・SnTe (spin orbit coupling)<br />
+%cd /content/ase-esamples/PWscf/SnTe-SOC<br />
+!cat qe-SnTe-SOC.py<br />
+(copy &amp; paste)<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root pw.x &lt; espresso.pwi<br />
+-----(OpenMPI + python) (failed ???)<br />
+import subprocess<br />
+subprocess.call(['mpirun', '-np', '2', '--allow-run-as-root', 'pw.x', '&lt;', 'espresso.pwi'])<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ abinit<br />
+<br />
+□ Install<br />
+!wget https://www.abinit.org/sites/default/files/packages/abinit-8.10.3.tar.gz<br />
+!tar zxvf abinit-8.10.3.tar.gz<br />
+%cd abinit-8.10.3<br />
+!./configure<br />
+!make<br />
+<br />
+◇ Test<br />
+%cd /content/abinit-8.10.3<br />
+!make check<br />
+<br />
+◇ Test results<br />
+-----<br />
+Suite &nbsp; failed &nbsp;passed &nbsp;succeeded &nbsp;skipped &nbsp;disabled &nbsp;run_etime &nbsp;tot_etime<br />
+fast &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp; 1 &nbsp; &nbsp; &nbsp; &nbsp; 10 &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp; &nbsp; &nbsp; &nbsp; 0 &nbsp; &nbsp; &nbsp;69.72 &nbsp; &nbsp; &nbsp;70.51<br />
+Completed in 70.82 [s]. Average time for test=6.34 [s], stdev=13.52 [s]<br />
+Summary: failed=0, succeeded=10, passed=1, skipped=0, disabled=0<br />
+-----<br />
+<br />
+□ Install (after test)<br />
+!make install<br />
+<br />
+□ check version<br />
+!/usr/local/bin/abinit --version<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/abinit-8.10.3.zip ./abinit-8.10.3<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/abinit-8.10.3.zip ./<br />
+!unzip ./abinit-8.10.3.zip<br />
+%cd /content/abinit-8.10.3<br />
+!make install<br />
+!pip install ase<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root abinit &lt; case.files<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ elk<br />
+<br />
+□ elk (OpenMP only)<br />
+!wget https://versaweb.dl.sourceforge.net/project/elk/elk-6.8.4.tgz<br />
+!tar zxvf elk-6.8.4.tgz<br />
+%cd elk-6.8.4<br />
+!./setup<br />
+!sed -i 's/-fopenmp/-fopenmp -m64 -I\/usr\/local\/lib\/include/g' make.inc<br />
+!sed -i 's/lapack.a blas.a/-lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lpthread -lm -ldl/g' make.inc<br />
+!make<br />
+※ 2. GNU Fortran (gfortran) with OpenMP<br />
+<br />
+◇ test (OpenMP only)<br />
+%cd tests<br />
+!./test.sh<br />
+<br />
+□ elk (OpenMPI)<br />
+!wget https://versaweb.dl.sourceforge.net/project/elk/elk-6.8.4.tgz<br />
+!tar zxvf elk-6.8.4.tgz<br />
+%cd elk-6.8.4<br />
+!./setup<br />
+!sed -i 's/gfortran/mpif90/g' make.inc<br />
+!sed -i 's/-fopenmp/-fopenmp -m64 -I\/usr\/local\/lib\/include/g' make.inc<br />
+!sed -i 's/lapack.a blas.a/-lmkl_gf_lp64 -lmkl_gnu_thread -lmkl_core -lgomp -lpthread -lm -ldl/g' make.inc<br />
+!make<br />
+※ 2. GNU Fortran (gfortran) with OpenMP<br />
+<br />
+◇ test (OpenMPI)<br />
+%cd tests<br />
+!./test-mpi.sh<br />
+<br />
+◇ environment settings<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/elk-6.8.4/src:&quot;+os.environ['PATH']<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/elk-6.8.4.zip ./elk-6.8.4<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/elk-6.8.4.zip ./<br />
+!unzip ./elk-6.8.4.zip<br />
+%cd /content/elk-6.8.4<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/elk-6.8.4/src:&quot;+os.environ['PATH']<br />
+!pip install ase<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI)<br />
+!mpirun -np 2 --allow-run-as-root elk &lt; case.in<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ nwchem<br />
+<br />
+□ Install<br />
+!apt install -y curl &nbsp;python3-dev gfortran &nbsp;mpi-default-bin mpi-default-dev libopenblas-dev ssh<br />
+!curl -LJO https://github.com/nwchemgit/nwchem/releases/download/v7.0.0-release/nwchem-data_7.0.0-3_all.ubuntu_bionic.deb<br />
+!curl -LJO https://github.com/nwchemgit/nwchem/releases/download/v7.0.0-release/nwchem_7.0.0-3_amd64.ubuntu_bionic.deb<br />
+!dpkg -i nwchem-data_7.0.0-3*_bionic.deb<br />
+!dpkg -i nwchem_7.0.0-3*_bionic.deb<br />
+<br />
+□ test<br />
+%cd /content<br />
+!mkdir nwchem<br />
+%cd nwchem&nbsp;<br />
+!git clone https://github.com/by-student-2017/nwchem-examples-7.0.0.git<br />
+!mv nwchem-examples-7.0.0 examples<br />
+%cd /content/nwchem/examples<br />
+!set OMP_NUM_THREADS=1<br />
+<br />
+・H2O (SCF)<br />
+!nwchem h2o_scf.nw | tee h2o_scf.out<br />
+<br />
+・H2O (Geometory Optimization)<br />
+!nwchem h2o_opt.nw | tee h2o_opt.out<br />
+<br />
+・H2O (B3LYP)<br />
+!nwchem h2o-b3lyp-disp.nw | tee h2o-b3lyp-disp.out<br />
+<br />
+・H2O (TDDFT)<br />
+!nwchem h2o_bnl2007_tddft.nw | tee h2o_bnl2007_tddft.out<br />
+<br />
+・H2O (CIS/6-31G*)<br />
+!nwchem h2o_core.nw | tee h2o_core.out<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root&nbsp;nwchem case.nw | tee case.out<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ cp2k (v.5.1)<br />
+<br />
+□ Install<br />
+%cd /etc/apt/sources.list.d<br />
+!wget http://packages.mccode.org/debian/mccode-bionic.list<br />
+!apt update<br />
+!apt install -y cp2k<br />
+<br />
+◇ test<br />
+%cd /content<br />
+!mkdir cp2k<br />
+%cd cp2k<br />
+!cp -r /usr/share/doc/cp2k/examples ./<br />
+%cd examples<br />
+!set OMP_NUM_THREADS=1<br />
+<br />
+・SCF<br />
+!cp2k -i C.inp | tee C.out<br />
+<br />
+・TDDFPT<br />
+!cp2k -i H2O_tddfpt-s-1.inp | tee H2O_tddfpt-s-1.out<br />
+<br />
+・QMMM (H2O)<br />
+!sed -i 's/..\/GTH_BASIS_SETS/.\/GTH_BASIS_SETS/g' H2O-qmmm-gauss-10.inp<br />
+!sed -i 's/..\/POTENTIAL/.\/POTENTIAL/g' H2O-qmmm-gauss-10.inp<br />
+!sed -i 's/..\/MM_POTENTIAL/.\/MM_POTENTIAL/g' H2O-qmmm-gauss-10.inp<br />
+!cp2k -i H2O-qmmm-gauss-10.inp | tee H2O-qmmm-gauss-10.out<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root&nbsp;cp2k -i case.inp | tee case.out<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ lammps (12 Dec 2018)<br />
+<br />
+□ Install<br />
+!add-apt-repository -y ppa:gladky-anton/lammps<br />
+!add-apt-repository -y ppa:openkim/latest<br />
+!apt update<br />
+!apt install -y lammps-stable<br />
+!apt install -y lammps-stable-data<br />
+!apt install -y openkim-models<br />
+!apt install -y lammps-stable-doc<br />
+<br />
+◇ example settings<br />
+%cd /content<br />
+!mkdir lammps-stable<br />
+%cd lammps-stable<br />
+!cp -r /usr/share/doc/lammps-stable-doc/examples ./<br />
+%cd /content/lammps-stable/examples<br />
+<br />
+・Monte Carlo (MC)<br />
+%cd /content/lammps-stable/examples/MC<br />
+!lmp_stable -in in.mc<br />
+<br />
+・Airebo potential<br />
+%cd /content/lammps-stable/examples/airebo<br />
+!lmp_stable -in in.airebo<br />
+<br />
+・MEAM potential<br />
+%cd /content/lammps-stable/examples/meam<br />
+!apt install -y gzip<br />
+!gzip -d data.meam.gz<br />
+!lmp_stable -in in.meam<br />
+<br />
+・COMB potential (Si)<br />
+%cd /content/lammps-stable/examples/comb<br />
+!lmp_stable -in in.comb.Si<br />
+!lmp_stable -in in.comb.Si.elastic<br />
+<br />
+・COMB potential (Cu2O)<br />
+%cd /content/lammps-stable/examples/comb<br />
+!apt install -y gzip<br />
+!gzip -d data.Cu2O.gz<br />
+!lmp_stable -in in.comb.Cu2O.elastic<br />
+<br />
+◇ Information<br />
+※ potential path<br />
+&nbsp; %cd /usr/share/lammps-stable/potentials<br />
+※ !apt-cache show lammps-*<br />
+------------------------------------------------------------------------------<br />
+■ lammps (stable)<br />
+<br />
+□ Install<br />
+!wget https://lammps.sandia.gov/tars/lammps-3Mar20.tar.gz<br />
+!tar zxvf lammps-3Mar20.tar.gz<br />
+%cd lammps-3Mar20<br />
+!mkdir build<br />
+%cd build&nbsp;<br />
+!cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake<br />
+!cmake --build .<br />
+※&nbsp;https://lammps.sandia.gov/doc/Packages_details.html<br />
+<br />
+◇ example settings<br />
+!add-apt-repository ppa:gladky-anton/lammps<br />
+!add-apt-repository ppa:openkim/latest<br />
+!apt update<br />
+!apt install -y lammps-stable-doc<br />
+%cd /content/lammps-3Mar20<br />
+!cp -r /usr/share/doc/lammps-stable-doc/examples ./<br />
+%cd examples<br />
+<br />
+・Monte Carlo (MC)<br />
+%cd /content/lammps-3Mar20/examples/MC<br />
+!/content/lammps-3Mar20/build/lmp -in in.mc<br />
+<br />
+・Airebo potential<br />
+%cd /content/lammps-3Mar20/examples/airebo<br />
+!/content/lammps-3Mar20/build/lmp -in in.airebo<br />
+<br />
+・MEAM potential<br />
+%cd /content/lammps-3Mar20/examples/meam<br />
+!apt install -y gzip<br />
+!gzip -d data.meam.gz<br />
+!/content/lammps-3Mar20/build/lmp&nbsp;-in in.meam<br />
+<br />
+・COMB potential (Si)<br />
+%cd /content/lammps-3Mar20/examples/comb<br />
+!/content/lammps-3Mar20/build/lmp&nbsp;-in in.comb.Si<br />
+!/content/lammps-3Mar20/build/lmp -in in.comb.Si.elastic<br />
+<br />
+・COMB potential (Cu2O)<br />
+%cd /content/lammps-3Mar20/examples/comb<br />
+!apt install -y gzip<br />
+!gzip -d data.Cu2O.gz<br />
+!/content/lammps-3Mar20/build/lmp -in in.comb.Cu2O.elastic<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root&nbsp;/content/lammps-3Mar20/build/lmp -in in.lmp<br />
+-----<br />
+<br />
+◇ environment settings<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/lammps-3Mar20/build:&quot;+os.environ['PATH']<br />
+<br />
+※&nbsp;Pair style 'reax' has been removed from LAMMPS after the 12 December 2018 version<br />
+------------------------------------------------------------------------------<br />
+■ lammps (7 Dec 2018)<br />
+<br />
+□ Install<br />
+!wget https://lammps.sandia.gov/tars/lammps-22Aug18.tar.gz<br />
+!tar zxvf lammps-22Aug18.tar.gz<br />
+%cd lammps-22Aug18<br />
+!wget https://lammps.sandia.gov/patches/patch.31Aug18<br />
+!patch -bp1 &lt; patch.31Aug18<br />
+!wget https://lammps.sandia.gov/patches/patch.5Sep18<br />
+!patch -bp1 &lt; patch.5Sep18<br />
+!wget https://lammps.sandia.gov/patches/patch.18Sep18<br />
+!patch -bp1 &lt; patch.18Sep18<br />
+!wget https://lammps.sandia.gov/patches/patch.10Oct18<br />
+!patch -bp1 &lt; patch.10Oct18<br />
+!wget https://lammps.sandia.gov/patches/patch.24Oct18<br />
+!patch -bp1 &lt; patch.24Oct18<br />
+!wget https://lammps.sandia.gov/patches/patch.9Nov18<br />
+!patch -bp1 &lt; patch.9Nov18<br />
+!wget https://lammps.sandia.gov/patches/patch.15Nov18<br />
+!patch -bp1 &lt; patch.15Nov18<br />
+!wget https://lammps.sandia.gov/patches/patch.27Nov18<br />
+!patch -bp1 &lt; patch.27Nov18<br />
+!wget https://lammps.sandia.gov/patches/patch.7Dec18<br />
+!patch -bp1 &lt; patch.7Dec18<br />
+%cd src<br />
+!make purge<br />
+!make package-update<br />
+%cd ..<br />
+!mkdir build<br />
+%cd build&nbsp;<br />
+!cmake -D BUILD_MPI=on -D PKG_USER-REAXC=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake<br />
+!cmake --build .<br />
+※ https://lammps.sandia.gov/doc/Packages_details.html<br />
+<br />
+◇ example settings<br />
+!add-apt-repository ppa:gladky-anton/lammps<br />
+!add-apt-repository ppa:openkim/latest<br />
+!apt update<br />
+!apt install -y lammps-stable-doc<br />
+%cd /content/lammps-22Aug18<br />
+!cp -r /usr/share/doc/lammps-stable-doc/examples ./<br />
+%cd examples<br />
+<br />
+◇ environment settings<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/lammps-22Aug18/build:&quot;+os.environ['PATH']<br />
+<br />
+□ Save<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+%cd /content<br />
+!zip -r /content/drive/'My Drive'/lammps-22Aug18.zip ./lammps-22Aug18<br />
+<br />
+□ Pull<br />
+from google.colab import drive<br />
+drive.mount('/content/drive')<br />
+!cp /content/drive/'My Drive'/lammps-22Aug18.zip ./<br />
+!unzip ./lammps-22Aug18.zip<br />
+%cd /content/lammps-22Aug18<br />
+import os<br />
+os.environ['PATH'] = &quot;/content/lammps-22Aug18/build:&quot;+os.environ['PATH']<br />
+!pip install ase<br />
+<br />
+・ReaxFF<br />
+%cd /content/lammps-22Aug18/examples/reax<br />
+!lmp -in in.reaxc.rdx<br />
+<br />
+・ReaxFF (AuO)<br />
+%cd /content/lammps-22Aug18/examples/reax/AuO<br />
+!lmp -in in.AuO<br />
+<br />
+・ReaxFF (FC)<br />
+%cd /content/lammps-22Aug18/examples/reax/FC<br />
+!lmp -in in.FC<br />
+<br />
+・ReaxFF (FeOH3)<br />
+%cd /content/lammps-22Aug18/examples/reax/FeOH3<br />
+!lmp -in in.FeOH3<br />
+<br />
+・ReaxFF (ZnOH2)<br />
+%cd /content/lammps-22Aug18/examples/reax/ZnOH2<br />
+!lmp -in in.ZnOH2<br />
+<br />
+・ReaxFF (CHO)<br />
+%cd /content/lammps-22Aug18/examples/reax/CHO<br />
+!lmp -in in.CHO<br />
+<br />
+・ReaxFF (VOH)<br />
+%cd /content/lammps-22Aug18/examples/reax/VOH<br />
+!lmp -in in.VOH<br />
+<br />
+・ReaxFF (HNS)<br />
+%cd /content/lammps-22Aug18/examples/reax/HNS<br />
+!lmp -in in.reaxc.hns<br />
+<br />
+・ReaxFF (AB)<br />
+%cd /content/lammps-22Aug18/examples/reax/AB<br />
+!lmp -in in.AB<br />
+<br />
+・ReaxFF (RDX)<br />
+%cd /content/lammps-22Aug18/examples/reax/RDX<br />
+!lmp -in in.RDX<br />
+<br />
+・Monte Carlo (MC)<br />
+%cd /content/lammps-22Aug18/examples/MC<br />
+!lmp -in in.mc<br />
+<br />
+・Airebo potential<br />
+%cd /content/lammps-22Aug18/examples/airebo<br />
+!lmp -in in.airebo<br />
+<br />
+・MEAM potential<br />
+%cd /content/lammps-22Aug18/examples/meam<br />
+!apt install -y gzip<br />
+!gzip -d data.meam.gz<br />
+!lmp -in in.meamc<br />
+<br />
+・COMB potential (Si)<br />
+%cd /content/lammps-22Aug18/examples/comb<br />
+!lmp -in in.comb.Si<br />
+!lmp -in in.comb.Si.elastic<br />
+<br />
+・COMB potential (Cu2O)<br />
+%cd /content/lammps-22Aug18/examples/comb<br />
+!apt install -y gzip<br />
+!gzip -d data.Cu2O.gz<br />
+!lmp -in in.comb.Cu2O.elastic<br />
+<br />
+□ parallel calculation<br />
+-----(OpenMP case)<br />
+import os<br />
+os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;2&quot;<br />
+os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;2&quot;<br />
+-----(OpenMPI case)<br />
+!mpirun -np 2 --allow-run-as-root lmp -in in.lmp<br />
+-----
+<div><span style="font-size: 14px;">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size: 14px;">■ potfit</span></div>
+
+<div><span style="font-size: 14px;">Google Colaboratory (firefox on windows10)</span></div>
+
+<div><span style="font-size: 14px;">(https://www.potfit.net/wiki/doku.php)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">□ Install</span></div>
+
+<div><span style="font-size: 14px;">!apt update</span></div>
+
+<div><span style="font-size: 14px;">!apt install -y wget gcc g++ build-essential liblapacke-dev libopenmpi-dev</span></div>
+
+<div><span style="font-size: 14px;">%cd /content</span></div>
+
+<div><span style="font-size: 14px;">!wget https://www.potfit.net/download/potfit-20200520.tar.gz</span></div>
+
+<div><span style="font-size: 14px;">!tar zxvf potfit-20200520.tar.gz</span></div>
+
+<div><span style="font-size: 14px;">%cd /content/potfit</span></div>
+
+<div><span style="font-size: 14px;">!./waf --help</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i pair -m apot --check-c-compiler=clang</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">□ other settings</span></div>
+
+<div><span style="font-size: 14px;">・Stillinger-Weber potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i stiweb -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・Tersoff potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i tersoff -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・modified Tersoff potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i tersoffmod -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・eam potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i eam -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・eam potential + MPI</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i eam -m apot --enable-mpi</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (potfit_apot_eam_mkl_mpi)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・eam potential + MPI + stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i eam -m apot --enable-mpi --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (potfit_apot_eam_mkl_mpi_stress)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・eam potential + stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i eam -m apot --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・two-band eam potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i tbeam -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・meam potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i meam -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・adp potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i adp -m apot</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・adp potential + MPI</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i adp -m apot --enable-mpi</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (potfit_apot_adp_mkl_mpi)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・adp potential + MPI + stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i adp -m apot --enable-mpi --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (potfit_apot_adp_mkl_mpi_stress)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・adp potential + stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i adp -m apot --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・stress option</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i pair -m apot --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・tabulated potential</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -i pair -m tab</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・kim potential</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)</span></div>
+
+<div><span style="font-size: 14px;">!add-apt-repository ppa:openkim/latest</span></div>
+
+<div><span style="font-size: 14px;">!apt update</span></div>
+
+<div><span style="font-size: 14px;">!apt install libkim-api-dev openkim-models</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -m kim</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">・kim potential + stress option</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; (https://openkim.org/doc/usage/obtaining-models/#ubuntu_linux)</span></div>
+
+<div><span style="font-size: 14px;">!add-apt-repository ppa:openkim/latest</span></div>
+
+<div><span style="font-size: 14px;">!apt update</span></div>
+
+<div><span style="font-size: 14px;">!apt install libkim-api-dev openkim-models</span></div>
+
+<div><span style="font-size: 14px;">!./waf configure -m kim --enable-stress</span></div>
+
+<div><span style="font-size: 14px;">!./waf build</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">◇ envirnmental settings</span></div>
+
+<div><span style="font-size: 14px;">import os</span></div>
+
+<div><span style="font-size: 14px;">os.environ['PATH'] = &quot;/content/potfit/bin:&quot;+os.environ['PATH']</span></div>
+
+<div><span style="font-size: 14px;">os.environ['PATH'] = &quot;/content/potfit/util:&quot;+os.environ['PATH']</span></div>
+------------------------------------------------------------------------------<br />
+■ PWscf (GPU version) (under constructing)<br />
+(https://gitlab.com/QEF/q-e-gpu/-/releases)<br />
+(https://gitlab.com/QEF/q-e-gpu/-/wikis/home)<br />
+<br />
+□ Install (PGI compiler)<br />
+(https://www.pgroup.com/products/community.htm)<br />
+1.&nbsp;!wget https://download.pgroup.com/secure/pgilinux-2019-1910-x86-64.tar.gz?sX5d7nI3o1gSPwLo9WaalEv53SCmdtBrDo9f3J3Kv_Lba70IVxQLcQ6I3TXuGHnV1S3E1MVAZw1g0iHHwfgukNEdKjclrQx25CX8-IpgDnsmaqCGCopKxUtmIo9MQw5WidCcBUI-<br />
+&nbsp; <span style="color: #0000ff;">!</span><span style="color: #000000;">mv&nbsp;</span><span style="color: #a31515;">'pgilinux-2019-1910-x86-64.tar.gz?sX5d7nI3o1gSPwLo9WaalEv53SCmdtBrDo9f3J3Kv_Lba70IVxQLcQ6I3TXuGHnV1S3E1MVAZw1g0iHHwfgukNEdKjclrQx25CX8-IpgDnsmaqCGCopKxUtmIo9MQw5WidCcBUI-'</span><span style="color: #000000;">&nbsp;pgilinux-</span><span style="color: #098658;">2019</span><span style="color: #000000;">-</span><span style="color: #098658;">1910</span><span style="color: #000000;">-x86-</span><span style="color: #098658;">64.</span><span style="color: #000000;">tar.gz</span><br />
+2. !tar zxvf pgilinux-2019-1910-x86-64.tar.gz<br />
+&nbsp;&nbsp;!rm -f -r pgilinux-2019-1910-x86-64.tar.gz<br />
+3.&nbsp;%cd install_components<br />
+4. ./install<br />
+&nbsp; (input Enter key on [])<br />
+&nbsp; [accept]<br />
+&nbsp; Please choose install option: [1]<br />
+&nbsp; Installation directory? [/opt/pgi] (input Enter key on [])<br />
+&nbsp; Do you wish to update/create links in the 2019 directory? (y/n)&nbsp;[y]<br />
+&nbsp;&nbsp; (input Enter key on [])<br />
+&nbsp;&nbsp;Do you want to install Open MPI onto your system? (y/n) [y]<br />
+&nbsp; Do you want to enable NVIDIA GPU support in Open MPI? (y/n) [y]<br />
+&nbsp; Do you wish to obtain permanent license key or configure license service? (y/n) [n]<br />
+&nbsp; Do you want the files in the install directory to be read-only? (y/n) [y]<br />
+<br />
+□ Install (PWscf)<br />
+1. !wget https://gitlab.com/QEF/q-e-gpu/-/archive/qe-gpu-6.5a2/q-e-gpu-qe-gpu-6.5a2.tar.gz<br />
+2. !tar zxvf q-e-gpu-qe-gpu-6.5a2.tar.gz<br />
+3.&nbsp;%cd q-e-gpu-qe-gpu-6.5a2<br />
+4. !nvidia-smi<br />
+&nbsp; from tensorflow.python.client import device_lib<br />
+&nbsp; device_lib.list_local_devices()<br />
+5. !./configure --with-cuda=/usr/local/cuda --with-cuda-runtime=10.1 --with-cuda-cc=60 --enable-openmp --enable-parallel=no --with-scalapack=no F90=&quot;/opt/pgi/linux86-64/19.10/bin/pgfortran&quot;<br />
+6. !make pw<br />
+------------------------------------------------------------------------------

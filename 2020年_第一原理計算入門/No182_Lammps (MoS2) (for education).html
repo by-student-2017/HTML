@@ -1,0 +1,95 @@
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">Å° Lammps (MoS2) (MoS REBO potential)&nbsp;(for education)</span></div>
+
+<div><span style="font-size:14px">(Edit: Dec/30/2020)</span></div>
+
+<div>&nbsp;</div>
+
+<div>Åû install (easy method)&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10)</div>
+
+<div><span style="font-size:14px">1. git clone <a href="https://github.com/by-student-2017/lammps_MoS_REBO.git">https://github.com/by-student-2017/lammps_MoS_REBO.git</a></span></div>
+
+<div><span style="font-size:14px">2. cd lammps_MoS_REBO</span></div>
+
+<div><span style="font-size:14px">3. chmod +x install.sh</span></div>
+
+<div><span style="font-size:14px">4. ./install.sh</span></div>
+
+<div>&nbsp;</div>
+
+<div>Åû run (easy method) (elastic at any temperature)</div>
+
+<div><span style="font-size:14px">1. cd lammps_MoS_REBO/utorial_elastic_Temp_MoS2</span></div>
+
+<div><span style="font-size:14px">2. chmod +x run.sh</span></div>
+
+<div><span style="font-size:14px">3. ./run.sh</span></div>
+
+<div>&nbsp;</div>
+
+<div>Åû install (conventional method)</div>
+
+<div>&nbsp;(ubuntu 18.04 LTS (64 bit) on windows10)</div>
+
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. wget https://lammps.sandia.gov/tars/lammps-3Mar20.tar.gz</span></div>
+
+<div><span style="font-size:14px">3. tar zxvf lammps-3Mar20.tar.gz</span></div>
+
+<div><span style="font-size:14px">4. cd ~</span></div>
+
+<div><span style="font-size:14px">5. wget https://research.matse.psu.edu/sinnott/sites/research.matse.psu.edu.sinnott/themes/custom/fb/css/files/MoS_REBO_fordistribution.zip</span></div>
+
+<div><span style="font-size:14px">6. sudo apt install unzip</span></div>
+
+<div><span style="font-size:14px">7. unzip MoS_REBO_fordistribution.zip&nbsp;</span></div>
+
+<div><span style="font-size:14px">8. cp pair_rebomos.cpp ~/lammps-3Mar20/src</span></div>
+
+<div><span style="font-size:14px">9. cp pair_rebomos.h ~/lammps-3Mar20/src</span></div>
+
+<div><span style="font-size:14px">10. cd lammps-3Mar20</span></div>
+
+<div><span style="font-size:14px">11. mkdir build</span></div>
+
+<div><span style="font-size:14px">12. cd build</span></div>
+
+<div><span style="font-size:14px">13. cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake</span></div>
+
+<div><span style="font-size:14px">14. cmake --build .</span></div>
+
+<div>&nbsp;</div>
+
+<div>Åû run (thermal conductivity)</div>
+
+<div><span style="font-size:14px">1. cd ~/lammps_MoS_REBO/tutorial_thermal_MoS2</span></div>
+
+<div><span style="font-size:14px">2. ~/lammps-3Mar20/build/lmp &lt; in.lmp</span></div>
+
+<div>&nbsp;</div>
+
+<div>Åû run (elastic at any temperature)</div>
+
+<div><span style="font-size:14px">1. cd ~/lammps_MoS_REBO/utorial_elastic_Temp_MoS2</span></div>
+
+<div><span style="font-size:14px">2. ~/lammps-3Mar20/build/lmp &lt; in.elastic</span></div>
+
+<div><span style="font-size:14px">3. python3 compliance_python3.py</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû in.lmp</span></div>
+
+<div><span style="font-size:14px">pair_style&nbsp; &nbsp; &nbsp; rebomos</span></div>
+
+<div><span style="font-size:14px">pair_coeff&nbsp; &nbsp; &nbsp; * * MoS.REBO.set5b M S</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû References</span></div>
+
+<div><span style="font-size:14px">[1] <a href="https://research.matse.psu.edu/sinnott/software">https://research.matse.psu.edu/sinnott/software</a></span></div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>

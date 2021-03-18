@@ -1,0 +1,474 @@
+PWscf 6.4 (Car-Parrinello method)<br />
+(Note: Car-Parrinello method is used in semiconductors and insulators.[16] ensemble-DFT for Metal.[17])<br />
+--------------------------------------------------------------------------------<br />
+■ PWscf (compiling)<br />
+<br />
+◇ PWscf (Install, gfortran)<br />
+0. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+&nbsp; wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install gnuplot<br />
+1. tar zxvf qe-6.4.1.tar.gz<br />
+2. cd q-e-qe-6.4.1<br />
+3. patch -p1 --merge &lt; backports-6.4.1.diff<br />
+4. ./configure<br />
+5. make pwall<br />
+6. make cp<br />
+<br />
+※ Memo (User tools)<br />
+(https://www.quantum-espresso.org/resources/tools)<br />
+※ &quot;PAW not implemented&quot; (Jul/25/2018)<br />
+※ &quot;PAW not implemented&quot; (q-e-qe-6.4.1)<br />
+※ Car?Parrinello Molecular Dynamics (CPMD Tutorial)<br />
+&nbsp; http://www.apsi.me/Science/Presentations/Taiwan-juillet-2005/lectures/lecture-intro.pdf<br />
+※ 私の勉強不足で2019年でもCPでのPAWは未実装です。CPMDもUSのポテンシャルを使うのでどちらのコードが良いかという判断は難しいです。 &nbsp;一般論となり大変申し訳ありませんが、<br />
+1. PWscfとCPMDのExampleで実際に計算したいものに近い例が存在する方を利用してください<br />
+2. 計算したい系に近いものが論文で扱われているもの<br />
+&nbsp; (論文で例があるのは素晴らしいことですが、それを容易に再現できるかは......。そんなことが容易にできるなら私の苦労やHPやYoutube動画は必要ない)<br />
+3. PWscfのCPで得られた構造を用いてPWscfのMDでPAWを行えばより精度は高くなると考えられますので、そこまで計算したいという方はPWscf。もちろん、CPMDで得られた構造を用いてPWscfのMDでも良いです。ただ、取り扱うコードが増えると勉強にはなりますが苦労は増大するので悩ましいところです。<br />
+------------------------------------------------------------------------------<br />
+■ Example<br />
+<br />
+□ SiO2<br />
+1. cd ~/q-e-qe-6.4.1/CPV/examples<br />
+2. cd example01<br />
+3. ./run_example<br />
+<br />
+□ SiO2<br />
+1. cd ~/q-e-qe-6.4.1/test-suite<br />
+2. cd cp_sio2<br />
+3. gedit sio2-us-lda-1.in<br />
+(add pseudo_dir in &quot;&amp;control section)&nbsp;<br />
+(sio2-us-lda-1.in, sio2-us-lda-2.in, sio2-us-lda-3.in and sio2-us-lda-4.in are same)<br />
+-----before<br />
+&nbsp;&amp;control<br />
+&nbsp; &nbsp; calculation='cp',<br />
+&nbsp; &nbsp; restart_mode='from_scratch',<br />
+&nbsp; &nbsp; nstep=20, iprint=20, isave=20,<br />
+&nbsp; &nbsp; dt=5.0,<br />
+&nbsp; &nbsp; ndr=90, ndw=91,<br />
+&nbsp; &nbsp; prefix='sio2'<br />
+&nbsp; &nbsp; verbosity='medium'<br />
+&nbsp;/<br />
+-----<br />
+-----after<br />
+&nbsp;&amp;control<br />
+&nbsp; &nbsp; calculation='cp',<br />
+&nbsp; &nbsp; restart_mode='from_scratch',<br />
+&nbsp; &nbsp; nstep=20, iprint=20, isave=20,<br />
+&nbsp; &nbsp; dt=5.0,<br />
+&nbsp; &nbsp; ndr=90, ndw=91,<br />
+&nbsp; &nbsp; prefix='sio2'<br />
+&nbsp; &nbsp; verbosity='medium'<br />
+&nbsp; &nbsp; pseudo_dir='./'<br />
+&nbsp;/<br />
+-----<br />
+4. cp ~/q-e-qe-6.4.1/pseudo/O.pz-rrkjus.UPF ./<br />
+&nbsp;cp ~/q-e-qe-6.4.1/pseudo/Si.pz-vbc.UPF ./<br />
+5. mpirun -np 4 ~/q-e-qe-6.4.1/bin/cp.x &lt; sio2-us-lda-1.in | tee sio2-us-lda-1.out<br />
+(5.5 rm -f -r sio2.*)<br />
+6. mpirun -np 4 ~/q-e-qe-6.4.1/bin/cp.x &lt; sio2-us-lda-2.in | tee sio2-us-lda-2.out<br />
+(6.5 rm -f -r sio2.*)<br />
+7. mpirun -np 4 ~/q-e-qe-6.4.1/bin/cp.x &lt; sio2-us-lda-3.in | tee sio2-us-lda-3.out<br />
+(7.5 rm -f -r sio2.*)<br />
+8. mpirun -np 4 ~/q-e-qe-6.4.1/bin/cp.x &lt; sio2-us-lda-4.in | tee sio2-us-lda-4.out<br />
+<br />
+◇ plot (show input structure)<br />
+0. sudo apt install xcrysden<br />
+1. xcrysden --pwi sio2-us-lda-1.in<br />
+<br />
+◇ data<br />
+1. ../extract-cp.x sio2-us-lda-1.out<br />
+&nbsp; ../extract-cp.x sio2-us-lda-2.out<br />
+&nbsp; ../extract-cp.x sio2-us-lda-3.out<br />
+&nbsp; ../extract-cp.x sio2-us-lda-4.out<br />
+&nbsp; e1 = total energy [eV]<br />
+&nbsp; s1 = total stress<br />
+&nbsp; v1u = energy [eV] for up spin<br />
+&nbsp; v1d = energy [eV] for down spin<br />
+&nbsp; t1 = Averaged Physical Quantities<br />
+<br />
+◇ output file<br />
+・sio2.cel<br />
+&nbsp; lattice constatnt for every cycle<br />
+・sio2.pos<br />
+&nbsp; position for every cycle<br />
+・sio2.vel<br />
+&nbsp; velocity for every cycle<br />
+・sio2.str<br />
+&nbsp; stress for every cycle<br />
+・sio2.eig<br />
+&nbsp; Eigenvalues (eV) for every cycle<br />
+・sio2.evp<br />
+&nbsp; pressure, etc<br />
+<br />
+※ calculation step<br />
+1. time step &nbsp;5.0*2.4189 * 10^-17 = 1.20945e-16 s = 0.120945 fs<br />
+&nbsp; fix ion<br />
+&nbsp; start<br />
+2. time step 15.0*2.4189 * 10^-17 = 3.62835e-16 s = 0.362835 fs<br />
+&nbsp; damped dynamics is used to optimise the cell ( Parrinello-Rahman method ).<br />
+&nbsp; restart<br />
+3. time step 12.0*2.4189 * 10^-17 = 2.90268e-16 s = 0.290268 fs<br />
+&nbsp; 300 K, 100 MPa, verlet method<br />
+&nbsp; standard Verlet algorithm is used to propagate the cell ( Parrinello-Rahman method )<br />
+&nbsp; nose thermostat 6.6666 THz<br />
+&nbsp; vc-cp calculation<br />
+4. time step 12.0*2.4189 * 10^-17 = 2.90268e-16 s = 0.290268 fs<br />
+&nbsp; (calculate step 3 one more)<br />
+&nbsp; vc-cp calculation restart<br />
+※ If you want atmospheric pressure, set &quot;press = 0.001&quot; in sio2-us-lda-3.in and sio2-us-lda-4.in.<br />
+<br />
+※ input file (show defference, see - and + line)<br />
+&nbsp; diff -u sio2-us-lda-1.in sio2-us-lda-2.in<br />
+&nbsp; diff -u sio2-us-lda-2.in sio2-us-lda-3.in<br />
+&nbsp; diff -u sio2-us-lda-3.in sio2-us-lda-4.in<br />
+&nbsp; diff -y sio2-us-lda-2.in sio2-us-lda-3.in<br />
+------------------------------------------------------------------------------<br />
+□ converter<br />
+<br />
+◇ pwo2vasp<br />
+1. gedit pwo2vasp<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.out tmp.out<br />
+echo &quot;${filename}&quot; &gt; tmp.vasp<br />
+echo &quot;1.0&quot; &nbsp;&gt;&gt; tmp.vasp<br />
+set cell_line = `awk '{if($1==&quot;CELL_PARAMETERS&quot;){printf &quot;%i&quot;,NR}}' tmp.out`<br />
+awk -v n=${cell_line} 'NR==(n+1){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.out &gt;&gt; tmp.vasp<br />
+awk -v n=${cell_line} 'NR==(n+2){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.out &gt;&gt; tmp.vasp<br />
+awk -v n=${cell_line} 'NR==(n+3){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.out &gt;&gt; tmp.vasp<br />
+#<br />
+set num_atoms = `awk '{if($3==&quot;atoms&quot;){print $5}}' tmp.out`<br />
+set pos_line = `awk '{if($1==&quot;ATOMIC_POSITIONS&quot;){printf &quot;%i&quot;,NR}}' tmp.out`<br />
+set total_atoms = 0<br />
+set atomic_symbol = &quot;&quot;<br />
+foreach i (${num_atoms})<br />
+&nbsp; @ total_atoms += ${i}<br />
+&nbsp; set atomic_symbol = ${atomic_symbol}&quot; &quot;`awk -v n=${pos_line} -v ne=${total_atoms} 'NR==(n+ne){print $1}' tmp.out`<br />
+end<br />
+echo &quot; ${atomic_symbol} &quot; &gt;&gt; tmp.vasp<br />
+echo &quot; ${num_atoms} &quot; &gt;&gt; tmp.vasp<br />
+#<br />
+#set total_atoms = `echo &quot;${num_atoms}&quot; | sed &quot;s/ / + /g&quot; | bc -l`<br />
+echo &quot;cartesian&quot; &gt;&gt; tmp.vasp<br />
+awk -v n=${pos_line} -v ne=${total_atoms} '(NR&gt;=(n+1) &amp;&amp; NR&lt;=(n+ne)){print $2*0.529177, $3*0.529177, $4*0.529177}' tmp.out &gt;&gt; tmp.vasp<br />
+mv tmp.vasp ${filename}.vasp<br />
+-----<br />
+2. sed -i 's/\r//g' pwo2vasp<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place pwo2vasp)<br />
+3. ./pwo2vasp sio2-us-lda-4<br />
+&nbsp; (e.g., sio2-us-lda-4.out)<br />
+&nbsp; (sio2-us-lda-4.vasp &gt; VESTA)<br />
+<br />
+◇ pwo2vasp_series<br />
+1. gedit pwo2vasp_series<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.out tmp.out<br />
+mkdir series<br />
+#<br />
+set num_atoms = `awk '{if($3==&quot;atoms&quot;){print $5}}' tmp.out`<br />
+set pos_line = `awk '{if($1==&quot;ATOMIC_POSITIONS&quot;){printf &quot;%i&quot;,NR}}' tmp.out`<br />
+set total_atoms = 0<br />
+set atomic_symbol = &quot;&quot;<br />
+foreach i (${num_atoms})<br />
+&nbsp; @ total_atoms += ${i}<br />
+&nbsp; set atomic_symbol = ${atomic_symbol}&quot; &quot;`awk -v n=${pos_line} -v ne=${total_atoms} 'NR==(n+ne){print $1}' tmp.out`<br />
+end<br />
+#<br />
+cp *.pos tmp.pos<br />
+cp *.cel tmp.cel<br />
+set total_step = `wc -l tmp.cel | awk '{print $1/4}'`<br />
+set step = 1<br />
+while (${step} &lt;= ${total_step})<br />
+&nbsp; set cp_step = `awk -v n=${step} 'NR==((n-1)*4+1){print $1}' tmp.cel`<br />
+&nbsp; #echo &quot;${cp_step}&quot;<br />
+&nbsp; #<br />
+&nbsp; echo &quot;${filename}, step:${cp_step}&quot; &gt; tmp.vasp<br />
+&nbsp; echo &quot;1.0&quot; &nbsp;&gt;&gt; tmp.vasp<br />
+&nbsp; awk -v n=${step} 'NR==(n*4-2){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.cel &gt;&gt; tmp.vasp<br />
+&nbsp; awk -v n=${step} 'NR==(n*4-1){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.cel &gt;&gt; tmp.vasp<br />
+&nbsp; awk -v n=${step} 'NR==(n*4){print &quot; &quot;, $1*0.529177, $2*0.529177, $3*0.529177}' tmp.cel &gt;&gt; tmp.vasp<br />
+&nbsp; #<br />
+&nbsp; echo &quot; ${atomic_symbol} &quot; &gt;&gt; tmp.vasp<br />
+&nbsp; echo &quot; ${num_atoms} &quot; &gt;&gt; tmp.vasp<br />
+&nbsp; echo &quot;cartesian&quot; &gt;&gt; tmp.vasp<br />
+&nbsp; #<br />
+&nbsp; awk -v n=${step} -v ne=${total_atoms} '(NR&gt;=((n-1)*(ne+1)+2) &amp;&amp; NR&lt;=((n-1)*(ne+1)+ne+1)){print $1*0.529177, $2*0.529177, $3*0.529177}' tmp.pos &gt;&gt; tmp.vasp<br />
+&nbsp; #<br />
+&nbsp; cp tmp.vasp ./series/${filename}&quot;_&quot;${cp_step}.vasp<br />
+&nbsp; #<br />
+&nbsp; @ step += 1<br />
+end<br />
+rm -f -r tmp.out tmp.cel tmp.pos<br />
+-----<br />
+2. sed -i 's/\r//g' pwo2vasp_series<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place pwo2vasp_series)<br />
+(2.5 rm -f -r series)<br />
+3. ./pwo2vasp_series sio2-us-lda-4<br />
+&nbsp; (e.g., sio2-us-lda-4.out)<br />
+4. cd series<br />
+5. vesta -open sio2-us-lda-4_10.vasp<br />
+&nbsp; vesta -ropen sio2-us-lda-4_20.vasp<br />
+<br />
+※ 上記の2種類を自作したが、[ http://www.iiserpune.ac.in/~smr2626/hands_on/week1/july5/ ]を参照するともっと良いかもしれない。<br />
+------------------------------------------------------------------------------<br />
+□ keywords and parameters<br />
+(https://www.quantum-espresso.org/Doc/INPUT_CP.html)<br />
+<br />
+※ parameters (non-default value)<br />
+・O2: emass=900.0, emass_cutoff=2.8<br />
+&nbsp; ion_dynamics='none', tranp(2)=.true., amprp(1)=0.6, ion_damping=0.1, ion_radius=1.0<br />
+&nbsp; dt = 12.0<br />
+・Si: emass=800.0, emass_cutoff=2.0<br />
+&nbsp; ion_dynamics='none', tranp(2)=.true., amprp=0.1, ion_radius=0.8<br />
+&nbsp; qcutz = 12.0, q2sigma = 4.0, ecfixed = 12.0<br />
+&nbsp; dt = 5.0<br />
+・SiO2: emass=700.0, emass_cutoff=3, electron_damping=0.2, ampre=0.01, ion_radius=1.0<br />
+&nbsp; qcutz=150.0, q2sigma=2.0, &nbsp;ecfixed=16.0<br />
+&nbsp; ion_temperature='nose', tempw=300, fnosep=6.6666<br />
+&nbsp; dt = 5.0 &nbsp;(cp)<br />
+&nbsp; dt = 12.0 (vc-cp)<br />
+&nbsp; &nbsp; cell_temperature='nose', temph=300., fnoseh=8.6071, press=1.0<br />
+・H: emass=500.0, emass_cutoff=3, ampre=0.01, ion_radius=1.0<br />
+&nbsp; dt = 8.0<br />
+・H2O: electron_damping=0.2<br />
+&nbsp; ion_dynamics='none', tranp(2)=.true., amprp=0.2, ion_radius=0.8<br />
+&nbsp; dt = 3.0<br />
+&nbsp; (other cp case) dt=3.0, emass=700.0, emass_cutoff=3, fnosep=37.22179, tempw=800<br />
+&nbsp; &nbsp; ortho_eps=1.e-10, electron_damping=0.15<br />
+・NH3: electron_damping=0.3, ion_radius=0.8<br />
+&nbsp; dt = 5.0<br />
+・C4H6: emass=350.0, electron_damping=0.15<br />
+&nbsp; dt = 4.0<br />
+・BaTiO3[14]: emass_cutoff=3.0<br />
+&nbsp; dt = 3.0<br />
+・Al[17]: emass_cutoff=3.0, ampre = 0.02<br />
+&nbsp; dt = 125<br />
+&nbsp; fnosep=4.0, tempw=500.0<br />
+&nbsp; occupations= 'ensemble', smearing='cs', degauss=0.018,<br />
+&nbsp; orthogonalization = 'Gram-Schmidt', startingwfc = 'random', tcg = .true.,passop= 0.3,<br />
+&nbsp; n_inner = 2, lambda_cold = 0.03, niter_cold_restart = 2<br />
+&nbsp; ◇ ensemble-DFT (metalic system)<br />
+&nbsp; &nbsp; calculation = 'cp'<br />
+&nbsp; &nbsp; occupations= 'ensemble'&nbsp;<br />
+&nbsp; &nbsp; tcg = .true.<br />
+&nbsp; &nbsp; passop= 0.3<br />
+&nbsp; &nbsp; maxiter = 250<br />
+(※ emass_cutoff = 4 - 7 for ensemble-DFT case [17] )<br />
+(※ nr1b = 20 - 24 - 28 [17])<br />
+(※ n_inner = 2 - 8 [17])<br />
+(※ lambda_cold: The value is close to 0.03, smaller for large and complicated metallic systems. [17])<br />
+※ grep -r keyword *<br />
+&nbsp; 上記のコマンドで keyword のある内容を表示できる<br />
+※ The minimum frequency of the fictitious electronic dynamics scales like sqrt(E_gap/emass) [16]<br />
+※ 多くのtutorialでディフォルトのemass=400.0が使われている。cpは半導体や絶縁体で使われる。金属は難しい。<br />
+&nbsp; CPMD v.4.3.0 もEMASS=400 (a.u.)がディフォルトになっている。<br />
+※ PWscf の cp.x ではParrinello-RahmanまたはWentzcovitchに対応してディフォルトでセルに対する仮想質量(wmass)が設定される。<br />
+※ BaTiO3の入力ファイルの例が文献[14]にある。<br />
+※ dt = 1.D0 (a.u.) がディフォルト。CPMD v.4.3.0 では 5 (a.u.)がディフォルトになっている。<br />
+※ fnosep: https://lists.quantum-espresso.org/pipermail/users/2008-April/008633.html<br />
+&nbsp; この例だと、重水(D2O)での温度変化は 800 cm^-1 近くなので、800 * 0.03 = 24.0 と fnosep を設定すればよいと書かれている。フォノンが影響しているとすると、重い元素ほどcm^-1は小さくなるので、概算だと下記のようになるか？<br />
+*******************************<br />
+&nbsp; 組:換算質量 M: fnosep<br />
+&nbsp;H-O:ca.0.9482: ca.37.2<br />
+Si-O:ca.10.195: &nbsp;ca.6.7<br />
+Al-Al:ca.13.49: &nbsp;ca.4.0<br />
+仮-仮:ca.108:仮 &nbsp;ca.1.0<br />
+概算値 fnosep = 0.01024+36.189*exp(-(M-0.9482)/5.0085) + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp;fnoseh = (0.01024+36.189*exp(-(M-0.9482)/5.0085))*1.1^3 + 1<br />
+------------------------------------------------------------------------------<br />
+□ keywords (manual)<br />
+(https://www.quantum-espresso.org/Doc/INPUT_CP.html)<br />
+<br />
+・ndr<br />
+&nbsp; (Default: 50)<br />
+&nbsp; input file<br />
+&nbsp; e.g., ndr93 &lt;- sio2_93.save (input file)<br />
+<br />
+・ndw<br />
+&nbsp; (Default: 50)<br />
+&nbsp; output file<br />
+&nbsp; e.g., ndw94 -&gt; sio2_94.save (output file)<br />
+<br />
+・dt&nbsp;<br />
+&nbsp; (Default: 1.0 or 1.D0)<br />
+&nbsp; time step for molecular dynamics, in Hartree atomic units<br />
+&nbsp; (1 a.u.=2.4189 * 10^-17 s : beware, PW code use Rydberg atomic units, twice that much!!!)<br />
+<br />
+・nr1b, nr2b, nr3b<br />
+&nbsp; dimensions of the &quot;box&quot; grid for Ultrasoft pseudopotentials must be specified if Ultrasoft PP are present<br />
+<br />
+・ecfixed, qcutz, q2sigma<br />
+&nbsp; (ecfixd, Default: 0.0)<br />
+&nbsp; (qcutz, Default: 0.0)<br />
+&nbsp; (q2sigma, Default: 0.1)<br />
+&nbsp; ecfixed, qcutz, q2sigma: &nbsp;parameters for modified functional to be used in variable-cell molecular dynamics (or in stress calculation).&nbsp;<br />
+&nbsp; &quot;ecfixed&quot; is the value (in Rydberg) of the constant-cutoff; &quot;qcutz&quot; and &quot;q2sigma&quot; are the height and the width (in Rydberg) of the energy step for reciprocal vectors whose square modulus is greater than &quot;ecfixed&quot;. In the kinetic energy, G^2 is replaced by G^2 + qcutz * (1 + erf ( (G^2 - ecfixed)/q2sigma) )<br />
+&nbsp; See: M. Bernasconi et al, J. Phys. Chem. Solids 56, 501 (1995)<br />
+<br />
+・ortho_max<br />
+&nbsp; (Default: 20)<br />
+&nbsp; maximum number of iterations for orthonormalization<br />
+&nbsp; meaningful only if orthogonalization = 'ortho'<br />
+<br />
+・emass<br />
+&nbsp; (Default: 2.5 or 2.5D0)<br />
+&nbsp; effective electron mass in the CP Lagrangian, in atomic units<br />
+&nbsp; ( 1 a.u. of mass = 1/1822.9 a.m.u. = 9.10939 * 10^-31 kg )<br />
+<br />
+・emass_cutoff<br />
+&nbsp; (Default: 2.5 or 2.5D0)<br />
+&nbsp; mass cut-off (in Rydberg) for the Fourier acceleration effective mass is rescaled for &quot;G&quot; vector components with kinetic energy above &quot;emass_cutoff&quot;<br />
+<br />
+・ion_dynamics<br />
+&nbsp; Specify the type of ionic dynamics.<br />
+&nbsp; For constrained dynamics or constrained optimisations add the CONSTRAINTS card (when the card is present the SHAKE algorithm is automatically used).<br />
+&nbsp; 'none' &nbsp; &nbsp;: ions are kept fixed<br />
+&nbsp; 'sd' &nbsp; &nbsp; &nbsp;: steepest descent algorithm is used to minimize ionic configuration<br />
+&nbsp; 'cg' &nbsp; &nbsp; &nbsp;: conjugate gradient algorithm is used to minimize ionic configuration<br />
+&nbsp; 'damp' &nbsp; &nbsp;: damped dynamics is used to propagate ions<br />
+&nbsp; 'verlet' &nbsp;: standard Verlet algorithm is used to propagate ions<br />
+<br />
+・ion_temperature<br />
+&nbsp; (Default: 'not_controlled')<br />
+&nbsp; 'nose' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; : control ionic temperature using Nose-Hoover thermostat &nbsp;see parameters &quot;fnosep&quot;, &quot;tempw&quot;, &quot;nhpcl&quot;, &quot;ndega&quot;, &quot;nhptyp&quot;<br />
+&nbsp; 'rescaling' &nbsp; &nbsp; &nbsp;: control ionic temperature via velocities rescaling. see parameter &quot;tolp&quot;<br />
+&nbsp; 'not_controlled' : ionic temperature is not controlled<br />
+<br />
+・tempw<br />
+&nbsp; (Default: 300.0 or 300.D0)<br />
+&nbsp; value of the ionic temperature (in K) forced by the temperature control.<br />
+&nbsp; meaningful only with &quot; ion_temperature /= 'not_controlled' &quot;or when the initial velocities are set to 'random' &quot;ndega&quot; controls number of degrees of freedom used in temperature calculation<br />
+<br />
+・fnosep<br />
+&nbsp; (Default: 0.0 or 1.D0)<br />
+&nbsp; oscillation frequency of the nose thermostat (in THz)<br />
+&nbsp; [note that 3 THz = 100 cm^-1]<br />
+&nbsp; meaningful only with &quot; ion_temperature = 'nose' &quot; for Nose-Hoover chain one can set frequencies of all thermostats ( fnosep = X Y Z etc. ) If only first is set, the defaults for the others will be same.<br />
+&nbsp; 10 THz = 1000/10 fs = 1/10 ps = 4.13567*10 meV = 33.35640952*10 cm^-1<br />
+<br />
+・ion_radius(i), i=1,ntyp<br />
+&nbsp; (Default: 0.5 a.u. for all species)<br />
+&nbsp; ion_radius(i): pseudo-atomic radius of the i-th atomic species used in Ewald summation. Typical values: between 0.5 and 2.<br />
+&nbsp; Results should NOT depend upon such parameters if their values are properly chosen. See also &quot;iesr&quot;.<br />
+<br />
+・cell_dynamics<br />
+&nbsp; (Default: 0.1 or 0.1D0)<br />
+&nbsp; set how cell should be moved<br />
+&nbsp; 'none' &nbsp; &nbsp; &nbsp;: cell is kept fixed<br />
+&nbsp; 'sd' &nbsp; &nbsp; &nbsp; &nbsp;: steepest descent algorithm is used to optimise the cell<br />
+&nbsp; 'damp-pr' &nbsp; : damped dynamics is used to optimise the cell ( Parrinello-Rahman method ).<br />
+&nbsp; 'pr' &nbsp; &nbsp; &nbsp; &nbsp;: standard Verlet algorithm is used to propagate the cell ( Parrinello-Rahman method ).<br />
+<br />
+・cell_temperature<br />
+&nbsp; 'nose' &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;: control cell temperature using Nose thermostat see parameters &quot;fnoseh&quot; and &quot;temph&quot;.<br />
+&nbsp; 'rescaling' &nbsp; &nbsp; &nbsp; : control cell temperature via velocities rescaling.<br />
+&nbsp; 'not_controlled' &nbsp;: cell temperature is not controlled.<br />
+<br />
+・temph<br />
+&nbsp; (Default: 0.0 or 0.D0)<br />
+&nbsp; value of the cell temperature (in K) forced by the temperature control.<br />
+&nbsp; meaningful only with &quot; cell_temperature /= 'not_controlled' &quot;<br />
+<br />
+・fnoseh<br />
+&nbsp; (Default: 1.0 or 1.D0)<br />
+&nbsp; oscillation frequency of the nose thermostat (in THz)<br />
+&nbsp; meaningful only with &quot; cell_temperature = 'nose' &quot;<br />
+&nbsp; 10 THz = 1000/10 fs = 1/10 ps = 4.13567*10 meV = 33.35640952*10 cm^-1<br />
+<br />
+・press<br />
+&nbsp; (Default: 0.0 or 0.D0)<br />
+&nbsp; Target pressure [kbar] in a variable-cell md or relaxation run.<br />
+&nbsp; 0.001 kbar = 1 bar = 101325 Pa = 1013.25 hPa = 1 atm = 0.1 MPa = 1013.25 mbar = 760 Torr<br />
+------------------------------------------------------------------------------<br />
+□ References<br />
+<br />
+※ 森下 徹也 先生の記事（雑誌「アンサンブル」に記載）を読むと良い。J-STAGEで読める。<br />
+<br />
+[1] Input File Description&nbsp;<br />
+&nbsp; Program: cp.x / CP / Quantum Espresso (version: 6.4)<br />
+&nbsp; https://www.quantum-espresso.org/Doc/INPUT_CP.html<br />
+[2] 時間刻み幅 &Delta;t の値は、どの程度にすればよいですか？<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2080<br />
+&nbsp; E = (1/2)*k*(r - r0)^2<br />
+&nbsp; s = 2*&pi;*sqrt(m/k)<br />
+&nbsp; k for H-H: 5.7*10^2 [N/m]<br />
+&nbsp; m = 1.67*10^-24 [kg]<br />
+&nbsp; s = 2*3.14*sqrt(1.67*10^-27/(5.7*10^2)) = 1.07*10^-14 [s] = 10.7 [fs]<br />
+&nbsp; dt = s/5 = 10.7/5 = 0.215 [fs] (About 6 digits of internal energy)<br />
+&nbsp; ※ 文献を読むとCPMDでは古典MDの1/10の値にするのが良いようです。<br />
+[3] 能勢法の仮想質量の設定方法は？<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2084<br />
+&nbsp; The smaller the virtual mass, the shorter the vibration period of temperature change.<br />
+&nbsp; It is good to try and experiment with various values.<br />
+&nbsp; nev calculation (T [K]) &gt; s = t / f<br />
+&nbsp; f = number of temperature oscillations (per t)<br />
+&nbsp; m = (g*kb*T*s^2)/(2*&pi;^2)<br />
+&nbsp; kb = 1.38e-23 [J/K], T [K], s [s], m [kg]<br />
+&nbsp; [J] = [kg*m^2/s^2]<br />
+&nbsp; Degree of freedom, g ≒ 3*N*6.02*10^23 [1/mol]<br />
+&nbsp; N = number of atoms [mol]<br />
+&nbsp; ※ VASPの場合、能勢法の仮想質量に対応するパラメータ SMASSを0と指定すると、40 time stepのデータで仮想質量が指定される。詳しくは、こちら「https://cms.mpi.univie.ac.at/wiki/index.php/SMASS」を参照。<br />
+[4] パリネロ・ラーマン法の仮想質量の設定方法は？<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2085<br />
+&nbsp; ・emass of Parrinello-Rahman method ?<br />
+&nbsp; The smaller the virtual mass, the shorter the vibration period of the pressure change.<br />
+&nbsp; It is good to try and experiment with various values.<br />
+&nbsp; nev calculation &gt; s = t / f<br />
+&nbsp; m = (3*L*s^2)/(4*&pi;^2 * k)<br />
+&nbsp; L [m], s [s], k [1/Pa]=[m^2/N]=[m*s^2/kg] (Compression rate)]<br />
+&nbsp; #&nbsp;<br />
+&nbsp; L = V^(1/3) = (4.98*8.5*5.03) = 5.97 [Å], &nbsp;s = 116.18 [fs] = 8.6071 [THz] (fnoseh ?), 95*10^-11 [1/Pa] (SiO2)<br />
+&nbsp; ※ PWscf の cp.x ではディフォルトでParrinello-RahmanとWentzcovitchの仮想質量が設定される。<br />
+[5] Ewald法に関係するパラメータの設定を変更するには？<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2082<br />
+&nbsp; In order to reduce the calculation time, the &ldquo;space cutoff distance&rdquo; and the &ldquo;reciprocal lattice space cutoff distance&rdquo; are made as small as possible.<br />
+&nbsp; The larger the &ldquo;determine the speed of convergence in real space and reciprocal lattice space&rdquo; value, the faster the convergence in real space.<br />
+&nbsp; When real space convergence is slow (&quot;determining the speed of convergence in real space and reciprocal lattice space&quot; is small), the internal energy cannot be obtained with sufficient accuracy if the cut-off distance in real space is small.<br />
+[6] カットオフ距離は、どのように設定すればいいのですか？<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2053<br />
+[7] 設定したステップ数だけ計算する前に、計算が途中終了してしまう。<br />
+&nbsp; https://faq.jp.fujitsu.com/app/answers/detail/a_id/2116<br />
+[8] Nose熱浴における仮想質量の決定方法<br />
+&nbsp; http://toshihiro-kaneko.tonkotsu.jp/files/article_mass_thermostat.pdf<br />
+[9] 分子動力学<br />
+&nbsp; http://www.openmx-square.org/openmx_man3.8jp/node59.html<br />
+[10] 4.3 分子動力学における能勢熱浴とシンプレクティック数値積分<br />
+&nbsp; http://www.jspf.or.jp/Journal/PDF_JSPF/jspf2015_03/jspf2015_03-199.pdf<br />
+[11] Nose-Hoover algorithm&nbsp;<br />
+&nbsp; http://phycomp.technion.ac.il/~phsorkin/thesis/node42.html<br />
+[12] fix nvt command<br />
+&nbsp; https://lammps.sandia.gov/doc/fix_nh.html<br />
+[13] カー・パリネロ分子動力<br />
+&nbsp; https://www.researchgate.net/publication/272349625_Car-Parrinello_Molecular_Dynamics_Method_kaparinerofenzidonglixuef<br />
+[14] Quantum Espresso Car-Parrinello user-tutorial<br />
+&nbsp; https://aiida-core.readthedocs.io/en/v0.4.1/examples/cp_tutorial.html<br />
+[15] Molecular?dynamics:? doing?it?by?Car....<br />
+&nbsp; https://www.quantum-espresso.org/resources/tutorials/shanghai-2013/hands-on-aimd/slides_cp3.pdf<br />
+&nbsp; ※ emass : mass*1823<br />
+[16] [Pw_forum] How to adjust emass,dt and cutoff in cp.x calculation?<br />
+&nbsp; https://lists.quantum-espresso.org/pipermail/users/2006-April/003986.html<br />
+[17] 4.4 Advanced usage<br />
+&nbsp; https://www.quantum-espresso.org/Doc/cp_user_guide/node11.html<br />
+[18] Hands-on Tutorial on Electronic Structure Computations:&nbsp;<br />
+&nbsp; https://www.quantum-espresso.org/resources/tutorials/shanghai-2013/hands-on-aimd/cp-tutorial1.pdf<br />
+[19] Car-Parrinello Molecular Dynamics&nbsp;<br />
+&nbsp; http://www.iiserpune.ac.in/~smr2626/hands_on/week1/july5/tutorial_md1.htm<br />
+&nbsp; http://www.iiserpune.ac.in/~smr2626/hands_on/week1/july5/ (important)<br />
+[20] Materials Simulations Theory And Numerics, Summer School, 2014.<br />
+&nbsp; http://www.iiserpune.ac.in/~smr2626/hands_on/ (Important)<br />
+&nbsp; 1. mkdir PWscf_hands_on_2014<br />
+&nbsp; 2. cd PWscf_hands_on_2014<br />
+&nbsp; 3. wget -r -l inf -k -np -R JPG http://www.iiserpune.ac.in/~smr2626/hands_on/<br />
+-----------------------------------------------------------------------------<br />
+&nbsp;

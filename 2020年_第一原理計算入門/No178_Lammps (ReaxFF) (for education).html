@@ -1,0 +1,563 @@
+Lammps ReaxFF for education (windows 10 (64 bit))<br />
+(Edit: Feb/14/2021)<br />
+------------------------------------------------------------------------------<br />
+■ lammps<br />
+<br />
+□ インストール方法<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="https://rpm.lammps.org/windows/admin/64bit/LAMMPS-64bit-18Jun2019.exe">LAMMPS-64bit-18Jun2019.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[&quot;C:\Program Files\LAMMPS 64-bit 18Jun2019\bin\lmp_serial.exe&quot; -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります<br />
+<br />
+□ 描画ソフト<br />
+&nbsp;・gnuplot（<a href="http://www.gnuplot.info">http://www.gnuplot.info</a>/）<br />
+&nbsp; <a href="http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php">http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php</a><br />
+・Ovito（<a href="https://www.ovito.org/windows-downloads/">https://www.ovito.org/windows-downloads/</a>）<br />
+※ web上に情報がありますので、お手数をおかけしますが、そちらをご参照ください<br />
+------------------------------------------------------------------------------<br />
+■ 分子動力学シミュレーション<br />
+<br />
+□ 入力ファイルのダウンロード<br />
+&nbsp; &nbsp; by-student-2017 の lammps_education_reaxff_win (<a href="https://github.com/by-student-2017/lammps_education_reaxff_win">https://github.com/by-student-2017/lammps_education_reaxff_win</a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
+&nbsp;&nbsp;<br />
+□ シミュレーションの実行<br />
+1. 各種のフォルダの中にあるrun.batをダブルクリックすれば計算が走る<br />
+2. cfgをOvitoで開けば構造が得られる<br />
+3. plotと記載のあるファイルをダブルクリックすれば図が得られる<br />
+&nbsp; ※ 温度が目的の値になっているか、エネルギーが一定の値になっているかを確認してみてください<br />
+※ 以上の手順は、ポテンシャルの種類を変えて原子の情報を書きかえれば他の材料でも同様に計算が可能です（Avogadroなどのフリーソフトを用いて構造のファイルを作られる方もいます）<br />
+<br />
+◇ 構造ファイルdata.XXXの作り方<br />
+1. AvogadroやVESTAで構造を作成しvaspの形式で出力する<br />
+2. 作成したvasp形式のファイルをOvitoで読み込む<br />
+3. Ovito上で、Export File<br />
+&nbsp; -&gt; [LAMMPS Data File (*)] -&gt; data.XXX<br />
+&nbsp; -&gt; LAMMPS atom style: charge -&gt; OK -&gt; OK<br />
+<br />
+□ basic<br />
+&nbsp; lammpsのexamplesにあるreaxをOvitoの出力に対応するようにしました。基本的にはbasicのフォルダを用いて勉強すればよいです。heatと付いたものは3000 Kまで温度を上げるものです（特に、RDXでは分子が分解します。species.reaxcにその結果が示されます）<br />
+<br />
+□ surface<br />
+&nbsp; 論文に近い構造を準備しました。これを参考に複雑な構造にも進んでみてください<br />
+<br />
+□ cluster<br />
+&nbsp; こちらはテストバージョンです。クラスターの例が記載されています。クラスターを作り、分子を配置するbashスクリプトも含めてあります（これはLinuxで動作します）。Auは構造データのみです。Pdは論文ではGCMCですが他の方法にしてあります。<br />
+　No.5のAlとC<sub>2</sub>H<sub>4</sub>の反応は確率過程のため、短時間でシミュレーションをするためにC<sub>2</sub>H<sub>4</sub>を2500 Kにしています。Alは300 Kから始まる。最終的にC<sub>2</sub>H<sub>4</sub>は2500 Kから300 Kになるようにしています。<br />
+　構造やエネルギーはReaxFFで得られます。一方、電子構造はDFTB+や第一原理計算を用いてください。XAFSはFDMNESなどを用います。<br />
+※ No.5のAlクラスターの論文では2500 Kで15 psと書かれているが、私の作成したクラスターがわずかに論文より大きいためか境界で繋がってしまう。それに加え、反応熱が生じてしまって2500 Kに保持するのが難しい（論文の864原子でも45Ax45Ax45Aは小さすぎるのではないかな？）。似た傾向にはなりそうだがもっと良い入力ファイルと構造を模索する必要がある。<br />
+<br />
+□ gcmc（非常に長い計算時間が必要です）<br />
+&nbsp; こちらはテストバージョンです。現在のところ、構造ファイル（例えばdata.chon）にGCMCで増減させる対象の原子の[原子種と原子座標]が1つは記載されていることが必要。分子の状態でGCMCできていないのでラジカルになっている。CVDでラジカルの原子を供給している状況なら対応するかもしれない。<br />
+&nbsp; ReaxFF-GCMCのwindows版を入れておきました（私のPCのスペックが低くて十分にテストできていません）。参照元は[<a href="https://github.com/tsenftle/ReaxFF-GCMC">https://github.com/tsenftle/ReaxFF-GCMC</a>]となりますので、それをLinuxやスパコンで動かしてみるのも良いかもしれません。<br />
+<br />
+□ advance<br />
+・ReaxFF-SiliconPolymers<br />
+&nbsp;&nbsp;windows版としました（私のPCのスペックが低くて十分にテストできていません）。1_reaxffのポテンシャルファイルの作成では対応するコードが無いため動作しない。<br />
+<br />
+□ tutorial<br />
+&nbsp; tutorial_と付いたファイルはZTCに興味のある方だけ試せば良いです<br />
+<br />
+□ others<br />
+・<a href="http://iqcc.udg.edu/~marcel/workshop/">ADF Workshop Barcelona 2008 (udg.edu)</a><br />
+&nbsp; &nbsp;Manuals: &gt; <a href="http://iqcc.udg.edu/~marcel/workshop/">Reaxff</a> &gt; <a href="http://iqcc.udg.edu/~marcel/workshop/manuals/reaxff/reaxff-users-manual-2002.pdf">ReaxFF Users manual 2002</a><br />
+・<a href="https://www.scm.com/about-us/news-agenda/adf-hands-on-workshops/advanced-2-day-reaxff-workshop/">Advanced 2-day ReaxFF workshops</a><br />
+・<a href="https://magics.usc.edu/workshop/courseware/">MAGICS Workshop</a><br />
+・<a href="https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=1644&amp;context=etds">PARAMETRIC STUDY OF REAXFF SIMULATION PARAMETERS FOR MOLECULAR DYNAMICS MODELING OF REACTIVE CARBON GASES (mtu.edu)</a><br />
+&nbsp; Lammpsの入力ファイルの例が記載されている<br />
+・<a href="https://mitocw.ups.edu.ec/courses/materials-science-and-engineering/3-021j-introduction-to-modeling-and-simulation-spring-2012/part-i-lectures-readings/">Part I: Particle and Continuum Methods</a> at MITOPEMCOURSEWARE<br />
+------------------------------------------------------------------------------<br />
+■ ReaxFFの特徴<br />
+<br />
+□ 主な計算対象 [1]<br />
+・「反応」と「破壊」が扱える<br />
+・反応性が高い有機物<br />
+・有機物のずり変形下での鎖の切断と再結合<br />
+・有機-無機の界面での吸着的な挙動<br />
+・シリコン基板の酸化<br />
+・架橋ポリマーの応力歪み曲線<br />
+※ ReaxFFにあまり高い期待は抱いてはいけない<br />
+※&nbsp;注意事項などは[<a href="https://www.scm.com/faq/reaxff-faq/">ReaxFF FAQ - Software for Chemistry &amp; Materials Software for Chemistry &amp; Materials (scm.com)</a>]を参照するとよい<br />
+※ NHC=Nos&eacute;-Hoover chain, MTK=Martyna-Tobias-Kleinの略（詳しくは[<a href="https://www.scm.com/doc/AMS/Tasks/Molecular_Dynamics.html">Molecular dynamics &mdash; AMS 2020 documentation (scm.com)</a>]を参照）<br />
+<br />
+□ 取り扱う情報 [1]<br />
+・保持する情報は、原子座標のみ<br />
+・電荷（charge）は、charge equilibration (QEq)法<br />
+&nbsp; 原子配置に応じて毎ステップ評価される<br />
+&nbsp; QEq -&gt; E(coulomb)<br />
+・ボンド結合情報は、毎ステップ判定する<br />
+<br />
+□ ポイント [1]<br />
+・古典MDと比較してReaxFFは約10倍遅い<br />
+・第一原理計算のVASPと比較してReaxFFは約1000倍速い<br />
+・ゴム樹脂の架橋反応は、触媒が必要となり、確率過程のため膨大な計算時間が必要<br />
+・ポリエチレンの高速破壊は実用的<br />
+・反応を人為的に促進した力場も作ることは可能（私には難しい）<br />
+<br />
+□ ReaxFFでの力場パラメータ [1]<br />
+・第一原理計算（DFT）の計算結果を用いて多変量パラメータを決定<br />
+・変数が多すぎて簡単には作れない。準安定が多い<br />
+・パラメータの数<br />
+&nbsp; General parameter: 39<br />
+&nbsp; Atomic parameter: 32<br />
+&nbsp; Interatomic parameter: 6/atom-pair, 16/bond, 7/angle, 7/torsion, 4/atom-pair (hydrogen bonds)<br />
+※ パラメータについての情報は[<a href="https://www.scm.com/doc/ReaxFF/ffield_descrp.html">Force field format specification &mdash; ReaxFF 2020 documentation (scm.com)</a>]と[<a href="https://www.scm.com/wp-content/uploads/ReaxFF-users-manual-2002.pdf">ReaxFF-users-manual-2002.pdf (scm.com)</a>]に記載されている<br />
+<br />
+□ ReaxFFでの力場パラメータの構築や再フィット<br />
+&nbsp; 探索方法は粒子群最適化（PSO）などが用いられる（力場の開発支援ツールはMCFFoptやCMA-ES。Youtubeに関連動画がある。MCFFoptやCMA-ESは商用であるため私には手が出ない。いまはVASPを所有する研究室にも所属していない）<br />
+&nbsp; 非商用だと以下のコードが該当する。Alと有機物の場合は論文でも報告されているEZFFを検討すると良いだろう。<br />
+・EZFF<br />
+&nbsp; <a href="https://github.com/arvk/EZFF">https://github.com/arvk/EZFF</a><br />
+&nbsp; <a href="https://ezff.readthedocs.io/en/latest/">https://ezff.readthedocs.io/en/latest/</a><br />
+&nbsp; <a href="https://arxiv.org/ftp/arxiv/papers/2009/2009.14470.pdf">https://arxiv.org/ftp/arxiv/papers/2009/2009.14470.pdf</a><br />
+&nbsp; <a href="https://www.sciencedirect.com/science/article/pii/S235271102100008X">https://www.sciencedirect.com/science/article/pii/S235271102100008X</a><br />
+・ReaxFF-Optimization<br />
+&nbsp; <a href="https://github.com/winterPack/ReaxFF-Optimization/tree/1.1">https://github.com/winterPack/ReaxFF-Optimization/tree/1.1</a><br />
+・parametrization-clean-cdaksha<br />
+&nbsp; <a href="https://github.com/cdaksha/parametrization_clean">https://github.com/cdaksha/parametrization_clean</a><br />
+&nbsp; <a href="https://pypi.org/project/parametrization-clean-cdaksha/">https://pypi.org/project/parametrization-clean-cdaksha/</a><br />
+・I-ReaxFF<br />
+&nbsp; <a href="https://github.com/fenggo/I-ReaxFF">https://github.com/fenggo/I-ReaxFF</a><br />
+・python-reaxff<br />
+&nbsp; <a href="https://github.com/jkitchin/python-reaxff">https://github.com/jkitchin/python-reaxff</a><br />
+・PCA<br />
+&nbsp; <a href="https://core.ac.uk/download/pdf/18600654.pdf">https://core.ac.uk/download/pdf/18600654.pdf</a><br />
+<br />
+□ 入力ファイル [1]<br />
+・units real<br />
+・atom_style charge<br />
+&nbsp; charge: atomic + charge<br />
+&nbsp; Full: atomic + molecular + charge<br />
+・Bond, Angleなどの定義はない（Atomsのみ）<br />
+・Mol（分子番号）の概念はない<br />
+・他のファイルからReaxFF用にするには、AtomsでのMolの部分を削除、Bonds以降を削除する。他の力場で作成したファイルは、力場間のギャップがあるので、極低温に急冷した構造を使うのが良い<br />
+<br />
+□ REAXとREAXCの違い [1]<br />
+・REAX: 昔の実装（Fortranで作成）<br />
+・USER-REAXC: 新しい実装（C++で作成）。通常はこちらを用いる<br />
+<br />
+□ reax/cとparam.qeq [1]<br />
+・reax/cはparam.qeqの代わりにpair_coeffで指定したffield-fileから電荷の情報を取り出す。例えば、以下の部分が該当する<br />
+&nbsp; ----------<br />
+&nbsp; fix 2 all qeq/reax 1 0.0 10.0 1e-6&nbsp;reax/c<br />
+&nbsp; ffield-fileから電荷の情報が取得される<br />
+&nbsp; ----------<br />
+&nbsp; fix 2 all qeq/reax 1 0.0 10.0 1e-6 param.qeq<br />
+&nbsp; param.qeqのファイルが必要。以下の2つのURLに情報が記載されている。<br />
+&nbsp; ・<a href="https://github.com/openbabel/openbabel/blob/master/data/qeq.txt">openbabel/qeq.txt at master &middot; openbabel/openbabel (github.com)</a><br />
+&nbsp; ・<a href="https://lammps.sandia.gov/threads/msg22633.html">Re: [lammps-users] Some questions for &ldquo;fix qeq/reax&rdquo; command (sandia.gov)</a><br />
+&nbsp; ----------<br />
+<br />
+□ lmp_control [1]<br />
+・ディフォルトの設定では巨大なファイルが形成されるため以下のように出力を減らす<br />
+----------<br />
+write_freq&nbsp;1000<br />
+traj_titl&nbsp;XXX ! (no while spaces)<br />
+atom_info&nbsp;1<br />
+atom_forces&nbsp;0<br />
+atom_velocities&nbsp;0<br />
+bond_info&nbsp;0<br />
+angle_info&nbsp;0<br />
+----------<br />
+<br />
+□ fix reax/c/bonds [1]<br />
+・ボンド情報のファイルへの出力<br />
+・対AtomIDでの出力（内容はself-explanatory）<br />
+<br />
+□ fix reax/c/species [1]<br />
+・分子種別の統計情報（ボンドに基づく情報）<br />
+・原子記号を正しく表示するにはelementの設定が必要<br />
+・カットオフで定義したボンドを追加することも可能<br />
+<br />
+□ 論文で発表されているReaxFFの入手方法<br />
+・<a href="http://kiff.vfab.org/">KIFF (vfab.org)</a>&nbsp;の ReaxFF (51)で、ReaxFFポテンシャルと論文のリンク先が一覧で示されている<br />
+・論文の<a href="https://pubs.acs.org/doi/10.1021/jp1080302">Supporting Information</a>にReaxFFのデータが記載されていることもある。<a href="https://aip.scitation.org/doi/suppl/10.1063/1.4774332">SUPPLEMENTAL</a>から<a href="https://aip.scitation.org/doi/suppl/10.1063/1.4774332/suppl_file/supportinformation_reaxff.pdf">supportinformation_reaxff.pdf</a>となる手順が必要なサイトもある。これらは無料である。これらをテキストファイルなどにコピー&amp;ペーストしてffield.reaxcといったファイル名にして保存して用いればよい<br />
+・<a href="https://www.scm.com/doc/ReaxFF/Included_Forcefields.html">Included force fields &mdash; ReaxFF 2020 documentation (scm.com)</a><br />
+&nbsp; &nbsp;SCMのリンクから上記と同様の方法でポテンシャルファイルを入手できる<br />
+・<a href="https://digitalcommons.mtu.edu/cgi/viewcontent.cgi?article=1644&amp;context=etds">PARAMETRIC STUDY OF REAXFF SIMULATION PARAMETERS FOR MOLECULAR DYNAMICS MODELING OF REACTIVE CARBON GASES (mtu.edu)</a><br />
+&nbsp; p.17-18に一覧が表示されている。p.33の文献欄を参考に上記と同様の方法でポテンシャルファイルを入手できる<br />
+・<a href="https://www.ctcms.nist.gov/potentials/">Interatomic Potentials Repository (nist.gov)</a><br />
+&nbsp; Ce-O, C-H-O, Li-Sのファイルが存在（今後も追加される可能性がある）<br />
+※ 全ての入力ファイルも一緒に公開してくれていたらさらに良かったのだが。日本を含め諸外国はKIFFを超えて欲しい（SCM社を超えられたら凄いけど）。AIの予算はついてもAI用のデータ構築に必要な基礎研究への予算は実際にはついていないことが良くわかる。DFTB+や2NN MEAMを含め産業利用に重要でもあるのだが理解者はいない<br />
+<br />
+□&nbsp;ffield.reaxでエラーが出る場合<br />
+(ERROR: Missing parameter(s) in line 10.0000 2.5000 4.0000 0.0000 0.0000 5.00009999.9999 0.0000)<br />
+(まだ色々とチェックできていないので注意)<br />
+1.&nbsp;[! Nr of atoms; ]の左にある数を一つ減らす。<br />
+&nbsp;&nbsp;例えば、下記の5なら4にする。<br />
+&nbsp; -----------(before)<br />
+&nbsp; 5 ! Nr of atoms;&nbsp;<br />
+&nbsp; -----------(after)<br />
+&nbsp; 4 ! Nr of atoms;&nbsp;<br />
+&nbsp; -----------<br />
+2. Xに関する行を削除<br />
+&nbsp; -----------<br />
+&nbsp; X -0.1000 2.0000 1.0080 2.0000 0.0000 0.0100 -0.1000 6.0000<br />
+&nbsp; 10.0000 2.5000 4.0000 0.0000 0.0000 5.00009999.9999 0.0000<br />
+&nbsp; -0.1000 0.0000 -2.3700 8.7410 13.3640 0.6690 0.9745 0.0000<br />
+&nbsp; -11.0000 2.7466 1.0338 2.0000 2.8793 0.0000 0.0000 0.0000<br />
+&nbsp; -----------<br />
+<br />
+□ 論文を参照してDFTとReaxFFの距離とポテンシャルの比較をすることが大切<br />
+　発表された論文での原子間距離に対するポテンシャルの変化を見ると、原子核近傍から最安定距離まではDFTと比較的良く一致している（遠距離近傍も比較的よく一致）（※ 全範囲がDFTと比べてズレているものもある。Alに関する論文を参照するとよい）。一方、最安定から遠距離までのポテンシャルはReaxFFの方が浅くなっているものがある。この場合、十分に距離を取った構造や最安定の構造はDFTと比較的良くあうことになる。一方で、安定構造から距離を離していく（基板から原子を引っ張っていく）ような場合には、DFTよりも最初は強い力が必要で、その後、弱い力で引き離していく挙動となる。同様に、基板から分子を引き離す場合は、DFTよりも浅いポテンシャルで弱い力で引き離される傾向になる（吸着エネルギーもDFTよりも小さい値になる）。予測精度を上げたい場合は、論文の図を見たり、実際に距離をいくつか変えてDFTとの差を調べ、ReaxFFではどのように考えれば良いかを検討するようにする。例えば、気になる構造をReaxFFで得て、DFTで距離を変えたエネルギーを3点以上計算してモースポテンシャルなどで近似し、ReaxFFの結果を補正したりする。計算資源がある場合は、EZFFを用いてReaxFFを目的の系に対応するようにパラメーターをフィットし直すという方法もあります。<br />
+　吸着エネルギーなどを計算したい場合は、[<a href="https://pubs.acs.org/doi/10.1021/jp411015a">dx.doi.org/10.1021/jp411015a</a> | J. Phys. Chem. C 2014, 118, 4967&minus;4981]などが参考になる。Reaction coordinateとrelative energyの曲線がDFTと似たものになっているので十分だと思いますけどね（これが全く違って真逆だったりランダムな曲線だったらダメですけど。別の話になるが、<a href="https://www.tu-chemnitz.de/physik/CPHYS/Conferences/EL/EL2010/presentations/schonfelder.t.10.reactive.0701.pdf">炭素系の化学反応</a>は十数kcal/mol内に収まっている（10 kcal/mol = 0.434 eV）。ReaxFFで0.4 eV程度の差となった構造に対してはDFTを用いることになる。DFTの形成エネルギーは実験値と0.1 eV程度に収まる傾向があることは忘れないで欲しい（DFTとMP2は近い計算精度であることも覚えておくと良い）。化学的精度である1 kcal/mol=0.0434 eV程度が必要な場合はCCSD(T)などを検討することが必要になる）。必要なところだけDFTというのが賢い選択だと思います。過去の実験や経験、その他の情報があれば、AIでなくても賢い研究者なら真の解釈に近づけると思いますけどね（AIには負けますか？ ならAIが上司でいいですよね。貴殿の存在意義は何ですか？ DFTの例になりますが、DFTでバンドギャップの絶対値が実験値と違う時代に東工大の細野先生がどうしていたか講演を聴いて学んでみてください。絶対値に固執していた若い頃の自分が恥ずかしくなり、革新的な業績をあげる研究者というのはこういうものなのだと思ったものです）。<br />
+　熱伝導やフォノンは原子間距離に対するポテンシャルがDFTと異なると違ってくるので、熱伝導の予測にはあまり高い期待を抱かないでトライすると良いのではないでしょうか。論文を見て原子間距離に対するポテンシャルがDFTとかなり一致していたら期待を高められます。ReaxFFの話ではないですが、結晶の場合はニューラルネットワークを用いたDeePMD-kitによるポテンシャルとAlamodeを用いて計算すると上手くいくかもしれません（MnSi<sub>&gamma;</sub>系など）。<br />
+　対応するパラメーターがあれば、ReaxFFだけでなく、DFTB+やxTB, MOPACなどでも検討してみてください。特に質量分析（MS）の結果を予測するには膨大な数の計算が必要になるのでDFTではなく、xTBを用いた方法などを検討することが必要になってくる（<a href="https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/movies_grimme/qceims">QCEIMS and movies from QCEIMS trajectories</a>）（ReaxFFで可能かは私はまだ試していない）。<br />
+※ 私の経験では各種の実験の物性値は同じ条件で作製と測定をしても&plusmn;10%程度の差がある。DFTは良く合う条件で実験値の&plusmn;10%程度となる。古典MDは良く合う条件でDFTと&plusmn;20%程度の差。古典MDでは絶対値でDFTの0.5倍や2倍の値になることもある。どういう条件で実験値に近くなるのかといったことや相対値で議論して同じ結論になるのかどうかなど経験を積み重ねて賢い研究をして欲しい。ちなみに、DFTB+やxTBではDFTとの差が&sigma;値で論文として議論されている。若い方はこのようなことを学びながら研究者として成長していって欲しい。AIが注目されている時代において統計を扱った議論ができていないのは、私自身の勉学が足りていない証拠でもあり反省している。<br />
+<br />
+□ 結合の種類と形成要因 [2]<br />
+（エネルギー範囲の単位はkcal/mol（=0.04337 eV）。Tは運動エネルギー）
+<table border="1" cellpadding="5" cellspacing="0" rules="all" style="width: 521.991px;">
+	<tbody>
+		<tr>
+			<td style="width: 110px; text-align: center;">種類</td>
+			<td style="width: 190px; text-align: center;">形成要因</td>
+			<td style="width: 80px; text-align: center;">エネルギー範囲</td>
+			<td style="width: 90px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">化学結合</td>
+			<td style="width: 190px; text-align: center;">&nbsp;</td>
+			<td style="width: 80px; text-align: center;">&nbsp;</td>
+			<td style="width: 90px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">共有結合</td>
+			<td style="width: 190px; text-align: center;">軌道混成によるT減少</td>
+			<td style="width: 80px; text-align: center;">50 - 200</td>
+			<td style="width: 90px; text-align: center;">H-H</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">配位結合</td>
+			<td style="width: 190px; text-align: center;">軌道混成によるT減少（と分子間力）</td>
+			<td style="width: 80px; text-align: center;">1 - 100</td>
+			<td style="width: 90px; text-align: center;">Mg<sup>2+</sup>(H<sub>2</sub>O)<sub>6</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">イオン結合</td>
+			<td style="width: 190px; text-align: center;">電荷間の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">10 - 100</td>
+			<td style="width: 90px; text-align: center;">Na<sup>+</sup>Cl<sup>-</sup></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">金属結合</td>
+			<td style="width: 190px; text-align: center;">軌道混成+擬縮退効果によるT減少</td>
+			<td style="width: 80px; text-align: center;">1 - 20</td>
+			<td style="width: 90px; text-align: center;">-Fe-Fe-</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">水素結合</td>
+			<td style="width: 190px; text-align: center;">1電子移動励起配置混合によるT減少</td>
+			<td style="width: 80px; text-align: center;">1 - 10</td>
+			<td style="width: 90px; text-align: center;">(H<sub><font size="2">2</font></sub>O<sub><font size="2">2</font></sub>)<sub><font size="2">2</font></sub></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">分子間力</td>
+			<td style="width: 190px; text-align: center;">&nbsp;</td>
+			<td style="width: 80px; text-align: center;">&nbsp;</td>
+			<td style="width: 90px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">イオン・双極子</td>
+			<td style="width: 190px; text-align: center;">電荷・分極の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">1 - 15</td>
+			<td style="width: 90px; text-align: center;">Na<sup><font size="2">+</font></sup>・H<sub>2</sub>O</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">イオン・誘起双極子</td>
+			<td style="width: 190px; text-align: center;">電荷・励起分極の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">0.1 - 1</td>
+			<td style="width: 90px; text-align: center;">Na<sup>+</sup>・C<sub>6</sub>H<sub>6</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">分散力</td>
+			<td style="width: 190px; text-align: center;">励起分極・励起分極の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">0.1 - 10</td>
+			<td style="width: 90px; text-align: center;">Ar-Ar</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">双極子・双極子</td>
+			<td style="width: 190px; text-align: center;">分極・分極の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">0.1 - 4</td>
+			<td style="width: 90px; text-align: center;">SO<sub>2</sub>-SO<sub>2</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">双極子・誘起双極子</td>
+			<td style="width: 190px; text-align: center;">分極・励起分極の静電相互作用</td>
+			<td style="width: 80px; text-align: center;">0.1 - 1</td>
+			<td style="width: 90px; text-align: center;">HCl・C<sub>6</sub>H<sub>6</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">疎水効果</td>
+			<td style="width: 190px; text-align: center;">&nbsp;</td>
+			<td style="width: 80px; text-align: center;">&nbsp;</td>
+			<td style="width: 90px; text-align: center;">&nbsp;</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">疎水結合</td>
+			<td style="width: 190px; text-align: center;">エントロピーによる統計力学的安定性</td>
+			<td style="width: 80px; text-align: center;">&lt; 3</td>
+			<td style="width: 90px;">タンパク質間</td>
+		</tr>
+	</tbody>
+</table>
+※ 上記にこだわって研究への柔軟性を欠かないこと。思考がより柔軟な研究者に「この系では上手くいくのか！」や「こんな考え方が！」と思わせられる結果を報告されて何もしなかった（頭っでっかちであった）ことを悔いることになる。<br />
+<br />
+□ 時間スケール [1]<br />
+・アト秒（10<sup>-18</sup>秒）：電子の運動<br />
+・フェムト秒（10<sup>-15</sup>秒）：分子の振動<br />
+　水のような分子は10<sup>-14</sup>秒ぐらいで1回振動する<br />
+・フェムト秒から十ピコ秒：溶液らしい性質が現われる時間スケール<br />
+　温度が下がると運動時間スケールは100ピコ秒程度から数百ナノ秒まで一気に遅くなる<br />
+　ATPを合成するという化学反応のダイナミクス自体はフェムト秒の振動がきっかけになる<br />
+・100ナノ秒：水素結合の組み替え運動（-40℃くらいまで凍らない過冷却状態）<br />
+　分子内や分子間の振動は温度にあまり依存しないが、クラスタリングや水素結合の組み替えは温度に依存する<br />
+　単純な系でも、温度を変えると運動の空間スケールや時間スケールが変わり、特異な熱力学的な性質が生まれることがある<br />
+・マイクロ秒：酵素反応における酵素の構造変化<br />
+・ミリ秒から秒：タンパク質の動き（メカニカルな運動）<br />
+　タンパク質やDNAのような高分子は、基本的に長さに依存して、どんどん遅い時間スケールで運動するようになる。おそらく、タンパク質が高分子であるという特性が遅さに影響を与えているのでしょう<br />
+　単純な系でも、温度を変えると運動の空間スケールや時間スケールが変わり、特異な熱力学的な性質が生まれることがある<br />
+<br />
+□&nbsp;CCSD(T) [1]<br />
+・cc-pCVQZ以上では、1 kacl/mol誤差内の化学的精度が期待できる（簡単な閉殻分子からなる等電子対化学反応熱に対する平均絶対誤差の基底関数依存性）。<br />
+・原子化エネルギーに対する正規分布関数を見ると、CCSD(T)-F12法では2 kJ/molの精度で原子化エネルギーを計算することが可能である。<br />
+・化学的精度（数 kcal/molのオーダー）[2]<br />
+<br />
+□ 各種計算法での比較<br />
+# ReaxFF<br />
+・T. Qi et al., J. Phys. Chem. A 118 (2014) 5355-5357.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/pdf/10.1021/jp505594b">https://pubs.acs.org/doi/pdf/10.1021/jp505594b</a><br />
+　dx.doi.org/10.1021/jp505594b<br />
+・A. Strachan, et al, J. Chem. Phys, 122 (2005) 054502.<br />
+&nbsp;&nbsp;<a href="https://core.ac.uk/download/pdf/186856699.pdf">https://core.ac.uk/download/pdf/186856699.pdf</a><br />
+・A. C. T. van Duin et al.,&nbsp;J. Phys. Chem. A 105 (2001) 9396-9409. (<a href="https://faculty.virginia.edu/CompMat/mse524/articles/vanDuin-JPCA01.pdf">No Job Name (virginia.edu)</a>)<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/10.1021/jp004368u">ReaxFF:&thinsp; A Reactive Force Field for Hydrocarbons | The Journal of Physical Chemistry A (acs.org)</a><br />
+・O.&nbsp;Rahaman et al., J. Phys. Chem. B 115 (2010) 249-261.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/10.1021/jp108642r">https://pubs.acs.org/doi/10.1021/jp108642r</a><br />
+&nbsp;&nbsp;<a href="http://europepmc.org/article/PMC/3042430">Development of a ReaxFF reactive force field for glycine and application to solvent effect and tautomerization. - Abstract - Europe PMC</a><br />
+・<a href="http://www.mathcces.rwth-aachen.de/_media/3teaching/0classes/archiv/015_ces_seminar_moleculardynamics.pdf">MODELING AND SIMULATINGREACTIVE MOLECULAR DYNAMICS USING REAXFF</a><br />
+・L. W. Bertels et al.,&nbsp;<br />
+&nbsp;&nbsp;<a href="https://escholarship.org/content/qt1xb596rm/qt1xb596rm_noSplash_7e06610ae8e5be7d81f6f0dc56f00496.pdf?t=qleikd">qt1xb596rm_noSplash_7e06610ae8e5be7d81f6f0dc56f00496.pdf (escholarship.org)</a><br />
+&nbsp;&nbsp;<a href="https://escholarship.org/uc/item/1xb596rm">Benchmarking the Performance of the ReaxFF Reactive Force Field on Hydrogen Combustion Systems. (escholarship.org)</a><br />
+・CHEMISTRY &amp; MATERIALS WITH THE AMSTERDAM MODELING SUITE (<a href="https://docs.google.com/viewerng/viewer?url=https://vdocuments.mx/google-reader?url%3Dec25f98d217dc114a5fc9076eb1800d61bdabf9f2f9dc391b31c06fe109bba4c56a7e13ec16137ec9be2b979a11a2a593e5dbcfd63d235c201d99a994bc522b02CIlKel8vtVYFfrBm0ePcNx4efl81UVYTh0x3b7pa/mbWafToF9pjwwpWyaHSs9uc0NLF7xvaBxzGI8rtBchdZ9TQzqlr0xHjhU9/mWDoNSUStKYdW4xgyFM6dQvIxQvnDzjc1wrdZju36vIPqO4yg%3D%3D">google-reader</a>)<br />
+・B. Damirchi et al.,&nbsp;<i>J. Phys. Chem. C</i>&nbsp;2020, 124, 37, 20488-20497.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/10.1021/acs.jpcc.0c03509">https://pubs.acs.org/doi/10.1021/acs.jpcc.0c03509</a><br />
+&nbsp; (<a href="https://pubs.acs.org/doi/suppl/10.1021/acs.jpcc.0c03509/suppl_file/jp0c03509_si_001.pdf">Supporting Information</a>)<br />
+・Y. Wang et al.,&nbsp;&nbsp;J. Phys. Chem. C 2020, 124, 18, 10007-10015.<br />
+&nbsp;&nbsp;https://pubs.acs.org/doi/10.1021/acs.jpcc.0c01645<br />
+&nbsp; (<a href="https://pubs.acs.org/doi/suppl/10.1021/acs.jpcc.0c01645/suppl_file/jp0c01645_si_001.pdf">Supporting Information</a>)&nbsp;&nbsp;<br />
+# DFTB, xTB<br />
+・J. C. Kromann et al., ACS Omega 3 (2018) 4372-4377.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/pdf/10.1021/acsomega.8b00189">https://pubs.acs.org/doi/pdf/10.1021/acsomega.8b00189</a><br />
+&nbsp;&nbsp;DOI: 10.1021/acsomega.8b00189<br />
+・C. Bannwarth et al.,&nbsp;J. Chem. Theory Comput. 15 (2019) 1652-1671.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/pdf/10.1021/acs.jctc.8b01176">https://pubs.acs.org/doi/pdf/10.1021/acs.jctc.8b01176</a><br />
+&nbsp; DOI: 10.1021/acs.jctc.8b01176<br />
+・S. Grimme et al.,&nbsp;J. Chem. Theory Comput. 13 (2017) 1989-2009.<br />
+&nbsp;&nbsp;<a href="https://pubs.acs.org/doi/10.1021/acs.jctc.7b00118">https://pubs.acs.org/doi/10.1021/acs.jctc.7b00118</a><br />
+<br />
+[1] 日本化学会『巨大分子系の計算化学』化学同人<br />
+[2] 山口兆ら『錯体化学会選書10 金属錯体の量子・計算化学』三共出版<br />
+[3] ショール、ステッケル『密度汎関数理論入門』吉岡書店<br />
+※ 2012年の様子を見ると、DFT（構造最適化）&rarr; cc-pCVQZ(or cc-pVQZ)以上の基底関数 + CCSD(T)（一点計算）が良いようだ。計算結果が化学的精度に近づいてきている。<br />
+------------------------------------------------------------------------------<br />
+■ ZTCに関する基礎的な計算<br />
+（ReaxFF ポテンシャルを用いた分子動力学シミュレーション）<br />
+<br />
+□ tutorial_1_temp_and_press<br />
+&nbsp; 温度や圧力を変えたときの構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の 298.0の値を変えれば温度が、300.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 298.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 300.0 # 30 MPa (bar units)<br />
+<br />
+□ tutorial_2_strain<br />
+&nbsp; 歪ませたときの構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の 0.05の値を変えればx軸方向に単位胞が伸びます。縮める場合は負の小さな値にしてみてください。<br />
+&nbsp; variable &nbsp; &nbsp;Erate index 0.05 # 1/(0.5 fs), if Erate &lt; 0.0 (compress)<br />
+<br />
+□ tutorial_3_melt_and_cool<br />
+&nbsp; 温度を上げた後に冷やした場合の構造の変化のシミュレーション<br />
+&nbsp; in.lmpファイル中の下の2000.0や1600.0, 1273.0の値を変えると温度が変化します。このファイルの設定の例では、2000.0 K 以下での利用を推奨します<br />
+&nbsp; variable &nbsp; &nbsp;tempm index 2200.0 # K (heat)<br />
+&nbsp; variable &nbsp; &nbsp;temph index 1600.0 # K (cool No.1)<br />
+&nbsp; variable &nbsp; &nbsp;tempc index 1273.0 # K (cool No.2)<br />
+※ この例ではあまり見た目が面白くありませんが、密度の低い状態で炭素をまばらに配置すると結晶の核ができていく様子を確認することができます<br />
+<br />
+□ tutorial_4_thermal<br />
+&nbsp; 熱伝導率の計算<br />
+&nbsp; in.lmpファイル中の下の 298.0の値を変えれば温度が、300.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 298.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 300.0 # 30 MPa (bar units)<br />
+&nbsp; log.lammpsファイルの最後の方に、熱伝導率（average conductivity）が記載されています。温度（K,）の後に記載されているのは数密度（Number density）です。log.lammpsでStep数が増えていくと、v_Jxやv_Jyやv_Jzは0、v_k11やv_k22やv_k33はおおむね一定の値になっているかも確認してみてください<br />
+※ これは定性的または半定量的な熱伝導率の評価として利用されます<br />
+<br />
+□ tutorial_5_viscosity<br />
+&nbsp; 粘性率（粘性係数、粘度とも呼ばれる）の計算<br />
+&nbsp; in.lmpファイル中の下の 898.0の値を変えれば温度が、10.0の値を変えれば圧力が変わります<br />
+&nbsp; variable &nbsp; &nbsp;temp index 898.0 # K<br />
+&nbsp; variable &nbsp; &nbsp;pres index 10.0 # 1.0 MPa (bar units)<br />
+&nbsp; log.lammpsファイルの最後の方に、粘性率（average viscosity）が記載されています。温度（K,）の後に記載されているのは数密度（Number density）です。log.lammpsでStep数が増えていくと、&quot;v_pxy v_pxz v_pyz v_v11 v_v22 v_v33&quot;はおおむね一定の値になっているかも確認してみてください<br />
+※ これは定性的または半定量的な粘性率の評価として利用されます<br />
+<br />
+※ 炭素と水素と酸素で計算したい場合は、reaxFFを用いると可能になる。ポテンシャルのファイルの情報は、NIST（<a href="https://www.ctcms.nist.gov/potentials/system/C/#C-H-O">https://www.ctcms.nist.gov/potentials/system/C/#C-H-O</a>）に記載されている。NISTで計算されているポテンシャルを用いて、上記の入力ファイルを書きかえればC-H-OだけでなくC-SiやC-Cu, C-Fe, B-C-Nといった元素の組み合わせでも定性的または半定量的な予測が可能になります。<br />
+------------------------------------------------------------------------------<br />
+■ 発展（ReaxFF ポテンシャルを用いた分子動力学シミュレーション）<br />
+&nbsp; これらはreaxFFのポテンシャルを用いているため、上の例で用いているaireboポテンシャルよりも計算時間が多くかかります。使い方は上と同様です。<br />
+<br />
+□ tutorial_1_ch<br />
+&nbsp; CH用の入力ファイルの例です。data.ch を書き換えると他の炭化水素（C, Hからなる物質）でも計算が可能です。<br />
+<br />
+□ tutorial_1_cho<br />
+&nbsp; CHO用の入力ファイルの例です。data.cho を書き換えると他の炭水化物（C, H, Oからなる物質）でも計算が可能です。<br />
+<br />
+□ tutorial_1_chon_rdx<br />
+&nbsp; CHON用の入力ファイルの例です。data.chon を書き換えると他のC, H, O, Nからなる物質でも計算が可能です。<br />
+&nbsp; rdx(トリメチレントリニトロアミン)用の計算例としてlammpsのExamplesに置かれています（tatb=トリアミノトリニトロベンゼンの例も同じ場所に置かれています）。<br />
+<br />
+□ tutorial_4_ch_thermal<br />
+&nbsp; 熱伝導率計算（C-H用）<br />
+<br />
+□ tutorial_4_cho_thermal<br />
+&nbsp; 熱伝導率計算（C-H-O用）<br />
+<br />
+□ tutorial_4_chon_thermal<br />
+&nbsp; 熱伝導率計算（C-H-O-N用）<br />
+<br />
+※ 構成元素による分類は（<a href="http://www.book-stack.com/browsing/9784785377175t.pdf">http://www.book-stack.com/browsing/9784785377175t.pdf</a>）を参照するとよいです。<br />
+※ 発展でのCH用のものはZBL補正（原子間の高エネルギー衝突のための補正）のためか上の例やCHO, CHONの例とは明確に異なった結果を示します（Hが移動しやすい結果になっている。そのため、NEVの設定で熱伝導率を計算したが、これだけ熱伝導率が一桁から二桁程度大きい値になっている）。RDFも二重に出力されている（CHONも同様）。<br />
+※ CHO用のファイルのparam.qeqはCHOの順に書き換えています。<br />
+------------------------------------------------------------------------------<br />
+■ 赤外スペクトル<br />
+<br />
+□ pythonのインストール<br />
+1. python(<a href="https://www.python.org/downloads">https://www.python.org/downloads</a>)から Release version と書かれたところから下にある Python 3.8.1 をクリックします。Windows x86-64 executable installer をクリックして保存します。<br />
+2. ダウンロードした python-3.8.1-amd64.exe をダブルクリックします。<br />
+3. Add Python 3.8 to PATH にもチェックを入れます。<br />
+4. Install Now をクリックします。<br />
+5. shift を押しながら右クリックして PowerShellウインドウを開きます。そして、下記をコピー&amp;ペーストします。<br />
+&nbsp; python -m pip install numpy<br />
+&nbsp; python -m pip install scipy<br />
+&nbsp; python -m pip install matplotlib<br />
+&nbsp; python -m pip install pandas<br />
+&nbsp; python -m pip install scikit-learn<br />
+&nbsp; python -m pip install opencv-contrib-python<br />
+上から3つまで必要ですが、今後、機械学習などを使うことになるでしょうから、この時点でインストールしておきます。<br />
+<br />
+□ IR spectra [IR1]<br />
+1. git clone https://github.com/EfremBraun/calc-ir-spectra-from-lammps.git<br />
+2. cd calc-ir-spectra-from-lammps<br />
+3. &quot;C:\Program Files\LAMMPS 64-bit 18Jun2019\bin\lmp_serial.exe&quot; -in in.infrared<br />
+4. python calc-ir-spectra.py<br />
+&nbsp; IR-zoom-spectra.pngを開くとスペクトルが得られます。 in.infraredでの最後の run の数値を大きくするとよりよいスペクトルが得られます。in.infraredの中に書かれているコメントを読むと良いです。ただし、12時間などという多くの時間が必要になります。O KのIRで良ければ計算条件にもよりますがMOPACを用いた方が綺麗なスペクトルをより短い時間で計算できます。<br />
+<br />
+□ tutorial_6_ch_IR<br />
+&nbsp; 赤外スペクトルの計算（C-H-O用のものでdata.choの酸素を除いて使っています。C-H-O-N用でも同様に計算が可能だと思われます<br />
+&nbsp; 上の例（&quot;IR spectra&quot;）が成功したら次のようにすると赤外スペクトルが計算できます。<br />
+1. run.bat をダブルクリック<br />
+2. plot_IR.gpl をダブルクリック<br />
+3. plot_IR_4000.gpl をダブルクリック<br />
+<br />
+□ tutorial_6_cho_IR<br />
+&nbsp; 赤外スペクトルの計算（C-H-O用）<br />
+&nbsp; 上の例（&quot;IR spectra&quot;）が成功したら次のようにすると赤外スペクトルが計算できます。<br />
+1. run.bat をダブルクリック<br />
+2. plot_IR.gpl をダブルクリック<br />
+3. plot_IR_4000.gpl をダブルクリック<br />
+<br />
+□ tutorial_6_chon_IR<br />
+&nbsp; 赤外スペクトルの計算（C-H-O-N用）<br />
+&nbsp; 上の例（&quot;IR spectra&quot;）が成功したら次のようにすると赤外スペクトルが計算できます。<br />
+1. run.bat をダブルクリック<br />
+2. plot_IR.gpl をダブルクリック<br />
+3. plot_IR_4000.gpl をダブルクリック<br />
+<br />
+※ これらの計算は非常に長い時間が必要になります。Step 1.を走らせて帰る気持ちでいる方が良いでしょう。スペクトルをよりシャープにしたければ、最後のrunの値をより大きな値にします。<br />
+※ IR-と付いたファイルがあると上手く動作しないことがあります。その場合は、IR-と付いたファイルを削除してください。Linux OSのUbuntuでそれが発生しました。<br />
+※ [IR-zoom-spectra-quantumcorrection.png] をダブルクリックして図を表示しても良いですし、IR-data.txt（の1列目と最後の列）を使ってExcelなどで図を描くこともできます。<br />
+※ 横軸はスケーリングファクターを掛けて実験値をより合うようにするのも良いかと思います。<br />
+------------------------------------------------------------------------------<br />
+■ Surface<br />
+<br />
+□ 各方位での構造<br />
+　Au(111)などの構造は、Material Projectでの下の方にあるSurfacesで、Slabでのcif形式のファイルを取得できます。VESTAなどでVASP形式（Cartesian座標）で5原子層か7原子層に書き換えて、その上に吸着させる有機物、さらに10Å以上の何もない真空層となるようにします（真空層は上下の合計で10ÅでもOKです）。<br />
+<br />
+□ FCC -&gt; (111)<br />
+&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
+----------<br />
+Rotation matrix P | Origin shift p<br />
+-0.5 -0.5 -1.0 | 0.0&nbsp;<br />
+-0.5&nbsp; 0.5 -1.0 | 0.0<br />
+&nbsp;1.0&nbsp; 0.0 -1.0 | 0.0<br />
+----------<br />
+&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
+<br />
+□ AvogadroによるCartesian座標のvasp形式ファイルの書き換え&nbsp;<br />
+&nbsp; [*.xyz -&gt; Avogadro -&gt; Build -&gt; Cartesian Editor... -&gt; XYZ, coords only]（最後の構造の一覧はコピー（Ctrl+C）できる。それをvasp形式のファイルに張り付ける。原子種と原子数、場合によっては格子定数も含めて書き換えればよい。<br />
+------------------------------------------------------------------------------<br />
+■ Cluster<br />
+<br />
+□ unit cell -&gt; 12x12x12 supercell<br />
+&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
+----------<br />
+Rotation matrix P | Origin shift p<br />
+12.0 0.0 0.0 | 0.0&nbsp;<br />
+&nbsp;0.0 12.0 0.0 | 0.0<br />
+&nbsp;0.0&nbsp; 0.0 12.0 | 0.0<br />
+----------<br />
+&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
+&nbsp; File &gt; Export Data... &gt; VASP (POSCAR;*.vasp) &gt; Cartesian coordinates<br />
+<br />
+□&nbsp;linux_bash_tool<br />
+(*.vaspから球状のクラスターを切り出す)<br />
+1. gedit settings.txt<br />
+----------<br />
+| rcut | &nbsp;x y z of new origin &nbsp;| center of coord. x y z |<br />
+&nbsp; 20.0 &nbsp; &nbsp; 30.0 &nbsp;30.0 &nbsp;30.0 &nbsp; &nbsp; &nbsp;20.856439590 20.856439590 20.856439590<br />
+----------<br />
+※ クラスターの半径: rcut = 20 Angstrom<br />
+※ 作られるクラスターの中心座標 [x y z of new origin]: x=30.0 y=30.0 z=30.0 [Angstrom]<br />
+&nbsp; cell size: x=30.0*2, y=30.0*2, z=30.0*2<br />
+※ *.vaspでの中心となる原子の座標 [center of coord. x y z]<br />
+2. chmod +x rcut.sh<br />
+3. ./rcut.sh<br />
+※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
+<br />
+□&nbsp;linux_bash_tool_add_mol<br />
+(*.vaspから球状のクラスターを切り出して等間隔に分子を並べる)<br />
+1. gedit settings.txt<br />
+----------<br />
+| rcut | &nbsp;x y z of new origin &nbsp;| center of coord. x y z |<br />
+&nbsp; 15.0 &nbsp; &nbsp; 22.5 &nbsp;22.5 &nbsp;22.5 &nbsp; &nbsp; &nbsp;20.856439590 20.856439590 20.856439590<br />
+<br />
+| rcut for molecule |<br />
+&nbsp; 18.0<br />
+| number of mesh (x y z) |<br />
+&nbsp; 8.0 &nbsp;8.0 &nbsp;8.0<br />
+| number of molecule posision line |<br />
+&nbsp; 8<br />
+| molecule position |<br />
+C &nbsp; &nbsp; &nbsp; -2.3957918956 &nbsp; &nbsp; &nbsp;0.1343219911 &nbsp; &nbsp; -0.0000003101 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+C &nbsp; &nbsp; &nbsp; -0.8837339390 &nbsp; &nbsp; &nbsp;0.1343221227 &nbsp; &nbsp; &nbsp;0.0000000026 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -2.7801633561 &nbsp; &nbsp; &nbsp;0.7533004398 &nbsp; &nbsp; -0.8161768892 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -2.7801636208 &nbsp; &nbsp; &nbsp;0.5316624055 &nbsp; &nbsp; &nbsp;0.9441390489 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -2.7801633567 &nbsp; &nbsp; -0.8819968808 &nbsp; &nbsp; -0.1279631117 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -0.4993624785 &nbsp; &nbsp; &nbsp;1.1506410049 &nbsp; &nbsp; &nbsp;0.1279627229 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -0.4993622138 &nbsp; &nbsp; -0.2630183668 &nbsp; &nbsp; -0.9441393248 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+H &nbsp; &nbsp; &nbsp; -0.4993624779 &nbsp; &nbsp; -0.4846562606 &nbsp; &nbsp; &nbsp;0.8161766311 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+----------<br />
+※ 分子を中心から配置しない距離（半径）: rcut = 20 Angstrom<br />
+※ セルの分割数 [number of mesh (x y z)]<br />
+2. chmod +x&nbsp;add_mol.sh<br />
+3. ./add_mol.sh<br />
+※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
+※ クラスターと追加する分子に同じ元素があると処理が複雑になるので、mol.xyzとAvogadroを用いて*.vaspを書き換えてください<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+[1]&nbsp; 兵庫県立大 lammpsセミナー<br />
+[2]&nbsp;<a href="https://lammps.sandia.gov/threads/msg77306.html">Re: [lammps-users] ffield.reaxc (sandia.gov)</a><br />
+[3] ReaxFF/AMBER&mdash;A Framework for Hybrid Reactive/Nonreactive Force Field Molecular Dynamics Simulations<br />
+&nbsp; <a href="https://pubs.acs.org/doi/10.1021/acs.jctc.0c00874">https://pubs.acs.org/doi/10.1021/acs.jctc.0c00874</a><br />
+[4] ReaxFF potential of ZnO/IRMOF-10<br />
+&nbsp;&nbsp;<a href="http://www.rsc.org/suppdata/cc/c0/c0cc01132k/c0cc01132k.pdf">http://www.rsc.org/suppdata/cc/c0/c0cc01132k/c0cc01132k.pdf</a><br />
+------------------------------------------------------------------------------

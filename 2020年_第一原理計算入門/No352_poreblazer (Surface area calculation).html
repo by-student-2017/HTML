@@ -1,0 +1,215 @@
+&nbsp; poreblazer:&nbsp;<a href="https://github.com/SarkisovGroup/PoreBlazer">https://github.com/SarkisovGroup/PoreBlazer</a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;surface area calculator<br />
+・PoreBlazer:&nbsp;<a href="https://github.com/SarkisovGroup/PoreBlazer">https://github.com/SarkisovGroup/PoreBlazer</a><br />
+・RASPA2:&nbsp;<a href="https://ccs-psi.org/node/20">https://ccs-psi.org/node/20</a><br />
+&nbsp;&nbsp;<a href="https://github.com/numat/RASPA2">https://github.com/numat/RASPA2</a><br />
+・Zeo++:&nbsp;<a href="http://www.zeoplusplus.org/">http://www.zeoplusplus.org/</a>
+
+<div><span style="font-size: 14px;">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size: 14px;">■ PoreBlazer v4.0+ (Edit: Dec/09/2020)</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; &nbsp;(ubuntu 18.04 LTS or Debian 10.0 on Windows 10)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">□ Install</span></div>
+
+<div><span style="font-size: 14px;">1. cd ~</span></div>
+
+<div><span style="font-size: 14px;">2. git clone https://github.com/by-student-2017/PoreBlazer-v4.0.git</span></div>
+
+<div><span style="font-size: 14px;">3. cd PoreBlazer-v4.0</span></div>
+
+<div><span style="font-size: 14px;">4. chmod +x ./install.sh</span></div>
+
+<div><span style="font-size: 14px;">5. ./install.sh<br />
+<br />
+□ Examples (ZTC)</span><br />
+1.&nbsp;cd ~/PoreBlazer-v4.0<br />
+2. cd Examples<br />
+3. cd ZTC<br />
+4. chmod +x ./run.sh<br />
+5. ./run.sh<br />
+<br />
+<span style="font-size: 14px;">□ cif2cell installation<br />
+1.&nbsp;</span>cd ~/PoreBlazer-v4.0<br />
+2. chmod +x ./install_cif2cell.sh<br />
+3. ./install_cif2cell.sh</div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">□ Calculation</span></div>
+
+<div><span style="font-size: 14px;">1. cd ~/PoreBlazer-v4.0</span></div>
+
+<div><span style="font-size: 14px;">2. cd Examples/seq</span></div>
+
+<div><span style="font-size: 14px;">3. chmod +x ./run.sh</span></div>
+
+<div><span style="font-size: 14px;">4. ./run.sh<br />
+&nbsp; (you can get results.txt and results.csv for&nbsp;machine learning)<br />
+&nbsp; (Please, put cif files into cif directory.)</span></div>
+<br />
+□ References<br />
+[1] Move (mp4): https://pubs.acs.org/doi/suppl/10.1021/acs.chemmater.0c03575/suppl_file/cm0c03575_si_002.mp4<br />
+[2] L. Sarkisov et al.,&nbsp;<span style="left: 199.465px; top: 314.578px; font-size: 15px; font-family: sans-serif; transform: scaleX(0.760401);">Chem. Mater.</span><span style="left: 278.08px; top: 314.578px; font-size: 15px; font-family: sans-serif; transform: scaleX(0.7364);">&nbsp;32 (2020) 9849</span><span style="left: 361.985px; top: 310.228px; font-size: 15px; font-family: monospace;">&minus;</span><span style="left: 370.016px; top: 314.578px; font-size: 15px; font-family: sans-serif; transform: scaleX(0.743345);">9867.</span><br />
+&nbsp; ChemRix, 2020.; doiorg/10.26434/chemrxiv.12923558.v1 (Open access)<br />
+&nbsp; https://pubs.acs.org/doi/abs/10.1021/acs.chemmater.0c03575<br />
+[3]&nbsp;L. Sarkisov et al.,&nbsp;<a href="http://www.tandfonline.com/doi/abs/10.1080/08927022.2011.592832" style="color: rgb(92, 85, 57); text-decoration-line: none; font-family: Abel, sans-serif; font-size: 15px;" target="_blank">Molecular Simulation, 37 (2011)&nbsp;1248-1257</a>.<br />
+------------------------------------------------------------------------------<br />
+■ PoreBlazer v4.0 (Edit: Dec/08/2020)<br />
+&nbsp; (<a href="https://github.com/SarkisovGroup/PoreBlazer">https://github.com/SarkisovGroup/PoreBlazer</a>)<br />
+<br />
+□ Install (ubuntu 18.04 LTS on Windows 10)<br />
+1. git clone https://github.com/SarkisovGroup/PoreBlazer
+<div><span style="font-size: 14px;">2. cd PoreBlazer</span></div>
+
+<div><span style="font-size: 14px;">3. cd src<br />
+4.&nbsp;</span>cp Makefile_gfort Makefile<br />
+<span style="font-size: 14px;">5. make<br />
+<br />
+□ Examples (ZIF-8) (on ubuntu 18.04 LTS)<br />
+1. unzip&nbsp;</span>case_studies.zip<br />
+2. cd case_studies<br />
+3. cd ZIF8<br />
+4.&nbsp;../../src/poreblazer.exe &lt; input.dat | tee results.txt<br />
+5. cat&nbsp;summary.dat<br />
+<br />
+□ Download and Run (Windows10)<br />
+1.&nbsp;Download ZIP (https://github.com/SarkisovGroup/PoreBlazerI<br />
+2.&nbsp;(unpack)&nbsp;PoreBlazer-main.zip<br />
+3. (go to)&nbsp;PoreBlazer-main<br />
+4.&nbsp;(go to)&nbsp;Windows<br />
+5. (go to)&nbsp;HKUST1<br />
+6. (double-click) run.bat<br />
+7. (see) results.txt or summary.dat</div>
+------------------------------------------------------------------------------<br />
+■&nbsp;poreblazer&nbsp;<span style="font-size: 14px;">v3.0.5 (Edit: Dec/07/2020)<br />
+&nbsp; (</span><a href="https://github.com/richardjgowers/poreblazer">https://github.com/richardjgowers/poreblazer</a>)<br />
+<br />
+□ Feature
+<div><span style="font-size: 14px;">- Accessible surface area (with Nitrogen atom as a probe)</span></div>
+
+<div><span style="font-size: 14px;">- Geometric pore size distribution</span></div>
+
+<div><span style="font-size: 14px;">- Structure density</span></div>
+
+<div><span style="font-size: 14px;">- Helium pore volume</span></div>
+
+<div><span style="font-size: 14px;">- Maximum pore size</span></div>
+
+<div><span style="font-size: 14px;">- Pore limiting diameter</span></div>
+<br />
+□ Install (ubuntu 18.04 LTS on windows10)<br />
+0. cd ~<br />
+1. git clone&nbsp;<span style="font-size: 14px;">https://github.com/richardjgowers/poreblazer.git<br />
+2.&nbsp;cd poreblazer/src</span><br />
+3. make<br />
+(you can get&nbsp;<span style="font-size: 14px;">poreblazer.exe)</span><br />
+<br />
+□ Example (HKUST1)<br />
+1. cd ~/poreblazer/HKUST1<br />
+2.&nbsp;<span style="font-size: 14px;">vi defaults.dat<br />
+-----(before)</span>
+
+<div><span style="font-size: 14px;">UFF.atoms</span></div>
+
+<div><span style="font-size: 14px;">2.58, 10.22, 3.314, 298</span></div>
+
+<div><span style="font-size: 14px;">12.8, 500</span></div>
+
+<div><span style="font-size: 14px;">0.2</span></div>
+
+<div><span style="font-size: 14px;">20.0, 0.25</span></div>
+
+<div><span style="font-size: 14px;">21908391</span></div>
+<span style="font-size: 14px;">-----<br />
+-----(after) (this version need vis_opstion (integer) =&nbsp;</span>vusalization options: 1 -xyz, 2 - grd, 3 - both; 0 - none)
+
+<div><span style="font-size: 14px;">UFF.atoms</span></div>
+
+<div><span style="font-size: 14px;">2.58, 10.22, 3.314, 298</span></div>
+
+<div><span style="font-size: 14px;">12.8, 500</span></div>
+
+<div><span style="font-size: 14px;">0.2</span></div>
+
+<div><span style="font-size: 14px;">20.0, 0.25</span></div>
+
+<div><span style="font-size: 14px;">21908391<br />
+1</span></div>
+<span style="font-size: 14px;">-----</span><br />
+3. ~/poreblazer/src<span style="font-size: 14px;">/poreblazer.exe &lt; input.dat</span><br />
+4.&nbsp;cat results_gfort<br />
+-----(you can get data)
+<div><span style="font-size: 14px;">&nbsp;System volume in A^3:&nbsp; &nbsp; &nbsp; &nbsp;18280.821</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;System mass, g/mol:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 9674.208</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;System density, g/cm^3:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;0.879</span></div>
+&nbsp;
+
+<div><span style="font-size: 14px;">&nbsp;Helium volume in A^3:&nbsp; &nbsp; &nbsp; &nbsp;13708.967</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;Helium volume in cm^3/g:&nbsp; &nbsp; &nbsp; &nbsp; 0.853</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size: 14px;">&nbsp;Geometric (point accessible) volume in A^3:&nbsp; &nbsp; &nbsp; &nbsp;12929.701</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;Geometric (point accessible) volume in cm^3/g:&nbsp; &nbsp; &nbsp; &nbsp; 0.805</span></div>
+&nbsp;
+
+<div><span style="font-size: 14px;">&nbsp;Accessible surface area in A^2:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 3069.24</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;Accessible surface area per volume in m^2/cm^3:&nbsp; &nbsp; &nbsp; 1678.94</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;Accessible surface area per mass in m^2/g:&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1910.59</span></div>
+-----<br />
+5. cat time_cpu_gfortran<br />
+6.&nbsp;gnuplot<br />
+&nbsp; set ylabel &quot;Derivative distribution function, dV(r)/dr&quot;<br />
+&nbsp; set xlabel &quot;Pore width, d / Angstrom&quot;<br />
+&nbsp;&nbsp;plot &quot;psd.txt_gfortran&quot; w l<br />
+7. gnuplot
+<div><span style="font-size: 14px;">&nbsp; set ytics nomirror<br />
+&nbsp;&nbsp;</span>set y2tics</div>
+&nbsp; set y2label &quot;Volume Fraction&quot;<br />
+&nbsp; set ylabel &quot;Derivative distribution function, dV(r)/dr&quot;<br />
+&nbsp; set xlabel &quot;Pore width, d / Angstrom&quot;<br />
+&nbsp; plot &quot;psd.txt_gfortran&quot; w l, &quot;psd_cumulative.txt&quot; u 1:2 axis x1y2 w l<br />
+<br />
+◇ cif -&gt; xyz file<br />
+・ATEN (good and free soft):&nbsp;<a href="https://www.projectaten.com/aten">https://www.projectaten.com/aten</a><br />
+&nbsp; Aten-2.1.9.exe (Win32) (Windows installer)<br />
+&nbsp; 1. Open &gt; Filter (cif) &gt;&nbsp;HKUST1.cif &gt; Open<br />
+&nbsp; 2. Save As &gt;&nbsp;HKUST1.xyz &gt; Save<br />
+・VESTA (need check carefully)<br />
+&nbsp; HKUST1.cif<br />
+&nbsp; 1. Edit &gt; Bonds ... &gt; Do not search atoms beyond the boundary (of all atoms) (on Boundary mode)&nbsp; &gt; OK<br />
+&nbsp; 2. Objects &gt; Boundary... &gt; x(max) = y(max) = z(max) = 0.9999<br />
+&nbsp; 3. File &gt; Export Data... &gt; XYZ file (*.xyz)<br />
+&nbsp; 4. Do you want to save hidden atoms too? (no)<br />
+・cif2cell (<a href="https://github.com/by-student-2017/cif2cell-informal">GitHub - by-student-2017/cif2cell-informal</a>)<br />
+&nbsp; 1.&nbsp;cif2cell -p xyz -f HKUST1.cif<br />
+<br />
+◇ Attention
+<div><span style="font-size: 14px;">- The current upper pore diameter is set to 20 A.&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">&nbsp; Change it in the defaults.dat if you anticipate larger pores&nbsp; in the system</span><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;poreblazer&nbsp;v3.0.2&nbsp;(Edit: Dec/07/2020)<br />
+&nbsp;&nbsp;http://www.homepages.ed.ac.uk/lsarkiso/Research.html<br />
+<br />
+□ download<br />
+1. click &quot;<a href="http://www.homepages.ed.ac.uk/lsarkiso/poreblazer_v3.0.2_d.zip" style="color: rgb(92, 85, 57); text-decoration-line: none; font-family: Abel, sans-serif; font-size: 15px;">PB_v3.0.2</a>&quot;<br />
+2. unzip&nbsp;poreblazer_v3.0.2_d.zip<br />
+<br />
+□ Run (tested on windows10)<br />
+1. cd WinXP\HKUST1<br />
+2. run.bat<br />
+&nbsp; (wait a few minutes)<br />
+3. (you can get results.txt and psd.txt)</div>
+------------------------------------------------------------------------------

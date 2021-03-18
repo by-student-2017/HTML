@@ -1,0 +1,129 @@
+------------------------------------------------------------------------------<br />
+■ potfit (need &quot;intel MKL&quot;)<br />
+(ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(https://www.potfit.net/wiki/doku.php)<br />
+(Edit: 28/Jul/2020)<br />
+<br />
+□ Install<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y git<br />
+&nbsp; cd ~<br />
+1. git clone&nbsp;<span style="font-size: 14px;">https://github.com/by-student-2017/potfit_table_pwscf.git</span><br />
+2. cd ~/potfit_table_pwscf<br />
+3. chmod +x run_pwscf_potfit_table<br />
+※ Please, set PATH of potfit and PWscf.<br />
+<br />
+□ Run<br />
+1&nbsp;cd ~/potfit_table_pwscf<br />
+2. export OMP_NUM_THREADS=1<br />
+3. gedit table<br />
+-----(This table is test case) (Note: this code does not set same cif name.)
+<div><span style="font-size: 14px;">| Structure(cif) | XxYxZ | W | Tmin | Tmax | NT | Vmax(%) | NV(odd) | wiht force | N(MD) |</span></div>
+
+<div><span style="font-size: 14px;">------------------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size: 14px;">Configurations with attributed forces (MD calculation)</span></div>
+
+<div><span style="font-size: 14px;">fcc_Al_md.cif&nbsp; &nbsp; &nbsp; &nbsp;2 1 1&nbsp; &nbsp;1&nbsp; &nbsp; 300&nbsp; &nbsp; 300&nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1&nbsp; &nbsp; &nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;50</span></div>
+
+<div><span style="font-size: 14px;">bcc_Al_md.cif&nbsp; &nbsp; &nbsp; &nbsp;2 1 1&nbsp; &nbsp;1&nbsp; &nbsp; 300&nbsp; &nbsp; 300&nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1&nbsp; &nbsp; &nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;50</span></div>
+
+<div><span style="font-size: 14px;">&nbsp;</span></div>
+
+<div><span style="font-size: 14px;">Configurations without attributed forces (SCF calculation)</span></div>
+
+<div><span style="font-size: 14px;">fcc_Al_scf.cif&nbsp; &nbsp; &nbsp; 2 2 2&nbsp; 15&nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1&nbsp; &nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0</span></div>
+
+<div><span style="font-size: 14px;">bcc_Al_scf.cif&nbsp; &nbsp; &nbsp; 2 2 2&nbsp; 15&nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; 1&nbsp; &nbsp; &nbsp; 6&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1&nbsp; &nbsp; &nbsp; &nbsp; 0&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 0</span></div>
+-----<br />
+4. ./run_pwscf_potfit_table Al eam 100<br />
+&nbsp; (e.g., Al, EAM potential, k-resolution=100(In this case, allmost 1 k point calculation))<br />
+&nbsp; or<br />
+&nbsp; ./run_pwscf_potfit_table Al eam<br />
+&nbsp; (e.g., Al, EAM potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_pwscf_potfit_table Mg_H eam<br />
+&nbsp; (e.g., Mg_H, EAM potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_pwscf_potfit_table Mg_H adp<br />
+&nbsp; (e.g., Mg_H, ADP potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_pwscf_potfit_table Mg_Ni_H eam<br />
+&nbsp; (e.g., Mg_Ni_H, EAM potential)<br />
+&nbsp; or<br />
+&nbsp; ./run_pwscf_potfit_table Mg_Ni_H adp<br />
+&nbsp; (e.g., Mg_Ni_H, ADP potential)<br />
+5. cat output_table<br />
+&nbsp; (Vmin and Vmax are Volume (Angstrom^3) unit)<br />
+<br />
+※ Mg-H system<br />
+・D.E. Smirnova et al., Computational Materials Science, 154, 295-302. DOI: 10.1016/j.commatsci.2018.07.051.<br />
+-----<br />
+A^3 = Angstrom^3<br />
+<br />
+configurations with attributed forces<br />
+hcp Mg, &nbsp; &nbsp;21 type, &nbsp; &nbsp;180 atoms, weight 1-6, &nbsp;300-900 &nbsp;K, 14.3-22.8 A^3<br />
+bcc Mg, &nbsp; &nbsp; 5 type, &nbsp; &nbsp;128 atoms, weight &nbsp; 1, &nbsp;300-600 &nbsp;K, 12.0-22.3 A^3<br />
+liquid Mg, &nbsp;9 type, &nbsp; &nbsp;128 atoms, weight &nbsp; 1, 1000-2800 K, 14.9-21.4 A^3<br />
+Mg + H &nbsp; , &nbsp;3 type, 108+Ha atoms, weight &nbsp; 1, &nbsp;400-800 &nbsp;K, 17.5-18.0 A^3<br />
+alpha-MgH2, 4 type, &nbsp; &nbsp;216 atoms, weight &nbsp; 1, &nbsp;400-800 &nbsp;K, 29.4-31.0 A^3<br />
+gamma-MgH2, 1 type, &nbsp; &nbsp;216 atoms, weight &nbsp; 1, &nbsp; &nbsp; &nbsp;500 &nbsp;K, &nbsp; &nbsp; &nbsp;29.6 A^3<br />
+pure H, &nbsp; &nbsp; 2 type, &nbsp; &nbsp; 64 atoms, weight &nbsp; 1, &nbsp; &nbsp; 1000 &nbsp;K, 20.0-25.0 A^3<br />
+<br />
+configurations without attributed forces<br />
+hcp Mg, &nbsp; &nbsp; 1 type, &nbsp; &nbsp; 96 atoms, weight &nbsp;15, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.80 A^3<br />
+fcc Mg, &nbsp; &nbsp; 1 type, &nbsp; &nbsp;108 atoms, weight &nbsp;35, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.90 A^3<br />
+hcp Mg, &nbsp; &nbsp; 3 type, &nbsp; &nbsp; 96 atoms, weight &nbsp; 1, &nbsp; &nbsp; &nbsp; &nbsp;0 &nbsp;K, &nbsp; &nbsp; 22.85 A^3<br />
+-----<br />
+e.g., rewrite &quot;#W&quot; value on *.config, then &quot;potfit_apot_adp_mkl param_file&quot;<br />
+<br />
+◇ cif data (material project)<br />
+-----<br />
+Mg2NiH4: https://materialsproject.org/materials/mp-697331/ (Formation Energy / Atom: -0.326 eV)<br />
+MgNiH3: https://materialsproject.org/materials/mp-1017629/ (Formation Energy / Atom: -0.244 eV)<br />
+MgNiH: https://www.materialsproject.org/materials/mp-1008881/ (Formation Energy / Atom: -0.239 eV)<br />
+-----<br />
+Mg2Ni: https://materialsproject.org/materials/mp-2137/ (Formation Energy / Atom: -0.171 eV)<br />
+MgH2(P4_2/mnm,136): https://materialsproject.org/materials/mp-23710/<br />
+MgH2(Pbcn,60): https://materialsproject.org/materials/mp-23711/<br />
+-----<br />
+Ni: https://materialsproject.org/materials/mp-23/<br />
+Mg(R-3m,166): https://materialsproject.org/materials/mp-1094122/<br />
+Mg(P6_3/mmc,194): https://materialsproject.org/materials/mp-153/<br />
+Mg(Im-3m,229): https://materialsproject.org/materials/mp-110/<br />
+-----<br />
+※ データ数が足りないなど問題があると下記のような情報が表示される。<br />
+[WARNING] F does not depend on the 1. parameter (a) of the 13. potential.<br />
+[WARNING] Fit impossible!<br />
+Precision not reached!<br />
+<br />
+※ PWscf (*.*.out) &gt; potfit &gt; making EAM or ADP potentials &gt; lammps<br />
+※ https://software.intel.com/en-us/mkl (from 2015/Aug/31))<br />
+&nbsp; Intel MKL は 2015年8月31日から無償で利用できるようになった。OpenBLASやNetlib, ACMLが利用できない場合は特に助かる。AMDのCPUの場合はOpenBLASの選択はいまだに外せない？<br />
+※ keyword &quot;write_lammps 1&quot; output &quot;pair&quot;, &quot;sw&quot;, &quot;tersoff&quot;, &quot;eam&quot; or &quot;adp&quot;<br />
+&nbsp; see http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf (Japanese)<br />
+[8] Potentials generated with potfit (https://www.potfit.net/wiki/doku.php?id=potentials:main) では準結晶のAl-Mn-PdやAl-Co-Niの例もあって驚く。準結晶に対してEAMで論文が出ているのは嬉しい。SiO2やAl2O3, MgOはdipoleで作られて検討されている。<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 原子間ポテンシャルについて<br />
+&nbsp; http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf<br />
+[2] 解析的に求めたEAMポテンシャルの力の実装<br />
+[3] 固体系における原子間ポテンシャルパラメータ最適化ソフトウェアの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia/77/783/77_783_2026/_pdf/-char/ja<br />
+[4] 分子動力学法における原子間ポテンシャルパラメー タの最適化<br />
+[5] アモルファス金属に対する経験的原子間ポテンシャルの適用性評価&nbsp;<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/img/graduation-thesis/2006m_nikkuni.pdf<br />
+[6] CFDEMproject/LAMMPS<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/tools/eam_database<br />
+[7] NIST (Interatomic Potentials Repository)<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Pt/<br />
+[8] lammps / potentials / W_zhou.eam.alloy<br />
+&nbsp; https://github.com/lammps/lammps/blob/master/potentials/W_zhou.eam.alloy<br />
+[9] Zhou X. W., R. A. Johnson, and H. N. G. Wadley, Phys. Rev. B. 69, 144113 (2004)<br />
+[10] &nbsp;X. W. Zhou, H. N. G. Wadley, R. A. Johnson, D. J. Larson, N. Tabat, A. Cerezo, A. K. Petford-Long, G. D. W. Smith, P. H. Clifton, R. L. Martens, and T. F. Kelly, Acta Mater. 49, 4005 (2001).<br />
+[11] &nbsp;H. N. G. Wadley, X. Zhou, R. A. Johnson, and M. Neurock, Prog. Mater. Sci. 46, 329 (2001).<br />
+[12] [9.8. eam database tool] and [9.9. eam generate tool]<br />
+&nbsp; http://www.afs.enea.it/software/lammps/doc17/html/Section_tools.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

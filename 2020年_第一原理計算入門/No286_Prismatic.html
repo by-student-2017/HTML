@@ -1,0 +1,666 @@
+Prismatic (http://prism-em.com/)<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1-3]<br />
+<br />
+・Dr. Probe<br />
+&nbsp; TEM/STEMの像シミュレーション<br />
+&nbsp; http://www.er-c.org/barthel/drprobe/<br />
+・ QSTEM<br />
+&nbsp; TEM/STEMの像シミュレーション<br />
+&nbsp; https://www.physics.hu-berlin.de/en/sem/software/software_qstem<br />
+&nbsp; https://github.com/QSTEM/QSTEM<br />
+・PyQSTEM<br />
+&nbsp; https://github.com/jacobjma/PyQSTEM<br />
+・Prismatic<br />
+&nbsp; http://prism-em.com/<br />
+・EELSMODEL<br />
+&nbsp; http://www.eelsmodel.ua.ac.be/<br />
+<br />
+・ ReciPro<br />
+&nbsp; 電子回折パターンのシミュレーション<br />
+&nbsp; http://pmsl.planet.sci.kobe-u.ac.jp/~seto/?page_id=19&amp;lang=ja<br />
+・ EDA<br />
+&nbsp; 電子回折パターンのシミュレーション<br />
+&nbsp; http://www-gbs.eps.s.u-tokyo.ac.jp/kogure/EDANA/EDA/EDANA_E.htm<br />
+<br />
+・ VESTA<br />
+&nbsp; 結晶構造のモデリングと可視化<br />
+&nbsp; http://jp-minerals.org/vesta/jp/<br />
+・ ImageJ (Win, Linux, Mac)<br />
+&nbsp; NIHが公開している画像と解析ソフト。DMファイルも扱える<br />
+・ GMS (Gatan Microscopy Suite) (Win)<br />
+&nbsp; Free-offline版<br />
+<br />
+[1] 便利なフリーウェア<br />
+&nbsp; https://aem-www.imr.tohoku.ac.jp/便利なフリーウェア/<br />
+[2] Advanced Data Processing and Simulations<br />
+&nbsp; https://www.superstem.org/learn/resources<br />
+[3] Electron Microscopy Software<br />
+&nbsp; http://jiam.utk.edu/facilities/microscopy/software.php<br />
+[4] STEM Simulation Codes<br />
+&nbsp; http://prism-em.com/resources-sim-codes/<br />
+------------------------------------------------------------------------------<br />
+■ Prismatic (Windows 10 (64 bit))<br />
+(http://prism-em.com/installers/)<br />
+<br />
+□ Install<br />
+・Windows<br />
+&nbsp; Prismatic-v1.1.msi &gt; ダウンロード<br />
+1. Prismatic-v1.1.msi<br />
+2. All [Next&gt;] &gt; Close<br />
+<br />
+□ test<br />
+1. prismatic-gui<br />
+------------------------------------------------------------------------------<br />
+■ Prismatic (ubuntu 18.04 LTS (64 bit))<br />
+(https://github.com/prism-em/prismatic)<br />
+<br />
+□ Install<br />
+1. git clone https://github.com/prism-em/prismatic.git<br />
+2. cd prismatic<br />
+3. mkdir build<br />
+4. cd build<br />
+5. cmake ../<br />
+6. make<br />
+7. sudo make install<br />
+<br />
+□ help (command options)<br />
+1. /usr/local/bin/prismatic -h<br />
+<br />
+□ Usage (BF-STEM ≒ TEM image) (200 kV, 4 CPU)<br />
+1. /usr/local/bin/prismatic -i SI100.XYZ -E 200 -2D 0 6.5 -j 4 -t 2 4 26<br />
+2. python plot.py<br />
+※ output file: output.h5<br />
+<br />
+□ Usage (2D bright filed image: 0-10 mrad) (80 kV, 4 CPU)<br />
+1. /usr/local/bin/prismatic -i SI100.XYZ -2D 0 10 -o output.h5 -j 4 -t 2 4 26<br />
+2. python plot.py<br />
+※ output file: output.h5<br />
+<br />
+□ plot<br />
+1. gedit plot.py<br />
+-----<br />
+import h5py<br />
+import matplotlib.pyplot as plt<br />
+<br />
+f = h5py.File(&quot;output.h5&quot;,&quot;r&quot;)<br />
+<br />
+data = f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;].value<br />
+plt.imshow(data)<br />
+plt.show()<br />
+-----<br />
+2. sed -i 's/\r//g' plot.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place plot.py)<br />
+3. python plot.py<br />
+<br />
+□ Memo:<br />
+#for k in f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;]:<br />
+# &nbsp;print k<br />
+#print f[&quot;4DSTEM_simulation/data/realslices/annular_detector_depth0000/realslice&quot;].value<br />
+------------------------------------------------------------------------------<br />
+■ Tutorials (http://prism-em.com/tutorial/)<br />
+<br />
+□ GUI TUTORIAL<br />
+◇ 1 - Download atomic coordinate files.<br />
+・nanoparticle: (http://prism-em.com/data/atoms_deca_cartesian_x_y_z_ID.csv)<br />
+・amorphous carbon substrate: (http://prism-em.com/data/atoms_amorCarbon_50nmCube_x_y_z_ID.csv)<br />
+◇ 2 - Construct unified atomic model in Matlab.<br />
+(http://prism-em.com/data/build_scene_deca_tilted_on_amorphous_carbon.m)<br />
+1. matlab<br />
+(build_scene_deca_tilted_on_amorphous_carbon.m)<br />
+----add<br />
+&nbsp; xyzSub = csvread('atoms_amorCarbon_50nmCube_x_y_z_ID.csv')<br />
+&nbsp; xyzNP &nbsp;= csvread('atoms_deca_cartesian_x_y_z_ID.csv')<br />
+----<br />
+----modify (convolve2 function)<br />
+&nbsp; potSub = conv2(potSub,k,'same');<br />
+&nbsp; potNP = conv2(potNP,k,'same');<br />
+----<br />
+2. build_scene_deca_tilted_on_amorphous_carbon<br />
+◇ 3 - Export coordinates in .xyz format for Prismatic.<br />
+(http://prism-em.com/data/writeXYZ.m)<br />
+3. cellDim = [100 100 80];<br />
+4. writeXYZ('AuDeca_amorCarbon.xyz',...<br />
+'Atomic coordinates for decahedral nanoparticle on amorphous carbon',...<br />
+cellDim,ans(:,4),ans(:,1:3).*repmat(cellDim,[size(ans,1) 1]),1,0.08);<br />
+◇ 4 - Import atoms into Prismatic and set parameters.<br />
+5. prismatic-gui<br />
+6. Load Coords &gt; AuDeca_amorCarbon.xyz &gt; Open<br />
+7. Calculate Potentials<br />
+&nbsp; &gt; Potential &gt; (2nd line) Min: 40 &gt; [check] Square Root Intensity<br />
+8. PRISM Interpolation factors<br />
+&nbsp; X 20, Y 20<br />
+◇ 5 - Test PRISM vs Multislice accuracy.<br />
+9. Probe Analyzer<br />
+&nbsp; X(Å) 50, Y(Å) 50<br />
+&nbsp; Calculate<br />
+10. PRISM Interpolation factors<br />
+&nbsp; X 10, Y 10 (simulation case)<br />
+&nbsp; X &nbsp;5, Y &nbsp;5 (publication cas: Pearson correlation over 99%)<br />
+11. Probe Analyzer<br />
+&nbsp; Calculate<br />
+&nbsp; [check] Log Scale<br />
+◇ 6 - Run PRISM simulation, save 3D output as .mrc.<br />
+12. Output File [C:\Users\username\Desktop\pris_test\DecaSimulation.mrc]<br />
+&nbsp; Num Threads [2/3 * CPUs]<br />
+13. Full Calculation<br />
+&nbsp; (wait for a long time)<br />
+◇ 7 - Generate final image outputs.<br />
+14. Output<br />
+&nbsp; Virtual Detectors<br />
+&nbsp; &nbsp; Inner &nbsp;0 [mrad], Outer &nbsp;20 [mrad] (bright field (BF) image)<br />
+&nbsp; &nbsp; Inner 11 [mrad], Outer &nbsp;20 [mrad] (annular bright field (ABF) image)<br />
+&nbsp; &nbsp; Inner 21 [mrad], Outer &nbsp;40 [mrad] (annular dark field (ADF) image)<br />
+&nbsp; &nbsp; Inner 61 [mrad], Outer 104 [mrad] (high angle annular dark field (HAADF) image)<br />
+&nbsp; [C:\Users\username\Desktop\pris_test\img.mrc] &gt; Save Current Image<br />
+<br />
+◇ Fiji<br />
+1. Fiji.app\ImageJ-win64.exe<br />
+2. File &gt; Open &gt; img.mrc<br />
+<br />
+◇ DigitalMicrograph<br />
+1. GMS 3<br />
+2. File &gt; Open &gt; [All Files] img.mrc &gt; Open<br />
+<br />
+□ SUPERSTEM TUTORIAL<br />
+◇ 2 - Download coordinates, load into Prismatic<br />
+・(http://prism-em.com/data/SuperSTEM/barium_neodymium_titanate_0_1_0.xyz)<br />
+1. prismatic-gui<br />
+2. Load Coords &gt; barium_neodymium_titanate_0_1_0.xyz &gt; Open<br />
+◇ 3 - Microscope parameters and simulation settings.<br />
+3. Pixel Size: X 0.1, Y 0.1<br />
+&nbsp; Energy (keV): 100<br />
+&nbsp; Potential Bound (Å): 2<br />
+4. Probe semiangle (mrads): 30<br />
+&nbsp; Probe alpha limit (mra: 32<br />
+&nbsp; C1 = C3 = C5 = 0<br />
+&nbsp; Random Seed: 16479 (atoms moving)<br />
+&nbsp; # of FP: 1<br />
+&nbsp; Slice Thickness (Å): 2<br />
+&nbsp; Angle Step (mrads): 1 (default value)<br />
+5. PRISM Interpolation factors: X &nbsp;4, Y 4<br />
+&nbsp; Probe Step (Å): X 0.2, Y 0.2<br />
+&nbsp; Probe Tilt (mrads): X 0, Y 0<br />
+&nbsp; Scan Window (fractional): min 0, max 0.99999 (X and Y)<br />
+6. Calcuulate Potentials<br />
+7. Potential<br />
+&nbsp; 2nd Min: 4<br />
+&nbsp; [check] Square Root Intensity<br />
+8. Probe Analyer<br />
+&nbsp; X (Å): 11.1, Y (Å): 0<br />
+&nbsp; Calculate<br />
+&nbsp; [check] Log Scale<br />
+9. Tile Cells: Y 2<br />
+&nbsp; Calculate<br />
+10. PRISM Interpolation factors: X 10, Y 10<br />
+&nbsp; Tile Cells: Z 13 (= 100 Å)<br />
+&nbsp; Calculate<br />
+◇ 6 - Examine PRISM vs multislice accuracy.<br />
+11. Tile Cells: X 2, Y 4, Z 26<br />
+&nbsp; PRISM Interpolation Factors: X 4, Y 4<br />
+&nbsp; Calculate<br />
+&nbsp; [uncheck] Log Scale<br />
+◇ 7 - Run simulations using the PRISM algorithm.<br />
+12. Scan Window (fractional): min 0, max 0.1 (X and Y)<br />
+&nbsp; Algorithm [check] Multislice (on Calculation Settings)<br />
+&nbsp; Full Calculation<br />
+13. Scan Window (fractional): min 0, max 0.99999 (X and Y)<br />
+&nbsp; Algorithm [check] PRISM (on Calculation Settings)<br />
+&nbsp; Full Calculation<br />
+14. Output<br />
+◇ 8 - Save simulation results, save output images.<br />
+15. Tile Cells: X 2, Y 4, Z 52<br />
+&nbsp; PRISM Interpolation Factors: X 2, Y 2<br />
+&nbsp; Full Calculation<br />
+16. Inner 60, Outer 92 [mrads]<br />
+&nbsp; [C:\Users\username\Desktop\pris_test\BaNdTiO_image.mrc] &gt; Save Current Image<br />
+&nbsp; (dark field image)<br />
+<br />
+◇ Fiji<br />
+1. Fiji.app\ImageJ-win64.exe<br />
+2. File &gt; Open &gt; BaNdTiO_output.mrc<br />
+<br />
+◇ DigitalMicrograph<br />
+1. GMS 3<br />
+2. File &gt; Open &gt; [All Files] BaNdTiO_output.mrc &gt; Open<br />
+<br />
+◇ *.xyz (Å unit, except &quot;1st line&quot; and &quot;atomic number&quot;)<br />
+・1st line: comment<br />
+・2nd line: cell dimensions (x y z)&nbsp;<br />
+・3rd or later: &quot;atomic number&quot; &nbsp;x &nbsp;y &nbsp;z &nbsp;occupancy &nbsp;&quot;RMS thermal vibration (typical 0.05 - 0.1)&quot;<br />
+<br />
+※ 日本語がアドレスにあると動かないので注意<br />
+------------------------------------------------------------------------------<br />
+■ Information<br />
+<br />
+□ BF(明視野), ABF(環状明視野), ADF（環状暗視野)<br />
+&nbsp; 例えば、200 kVの装置などにおける検出領域の例としては下記の文献がある<br />
+[1] http://microscopy.or.jp/jsm/wp-content/uploads/publication/kenbikyo/46_1/pdf/46-1-55.pdf<br />
+&nbsp; BF: 0 - 4 mrad<br />
+&nbsp; ABF: 11 - 22 mrad<br />
+&nbsp; HAADF: 81 - 228 mrad<br />
+&nbsp; Probe: 22 mrad (half)<br />
+&nbsp; 200 kV<br />
+[2] https://www.jstage.jst.go.jp/article/jvsj2/54/4/54_4_248/_pdf/-char/ja<br />
+&nbsp; JEM-ARM200F<br />
+&nbsp; ABF: 11 - 22 mrad<br />
+&nbsp; HAADF: 90 - 170 mrad<br />
+&nbsp; Probe: 22 mrad (half), 20 pA, probe diameter = 0.1 nm<br />
+[3] https://www.jim.or.jp/journal/m/pdf3/48/12/622.pdf<br />
+&nbsp; JEM-2100<br />
+&nbsp; TEM: 1.4 mrad<br />
+&nbsp; BF-STEM: 6.5 mrad<br />
+&nbsp; DF-STEM: 150 mrad<br />
+[4] https://www.nipponsteel.com/tech/report/nssmc/pdf/408-02.pdf<br />
+&nbsp; Titan 80 - 300 Cubed<br />
+&nbsp; EELS: 15 mrad, sample drift 0.3 nm, Electron beam convergence angle 24 mrad<br />
+[5] https://www.jeol.co.jp/words/emterms/search_result.html?keyword=%E7%92%B0%E7%8A%B6%E6%98%8E%E8%A6%96%E9%87%8E%E6%B3%95<br />
+&nbsp; 加速電圧： 200 kV、 入射電子線の収束角： 半角22 mrad<br />
+&nbsp; HAADF-STEM像: 検出器の取り込み角は半角90 - 170 mrad<br />
+&nbsp; &nbsp; &alpha; 25 mrad程度、&beta;1 ? 50 mrad、&beta;2 ? 200 mrad<br />
+&nbsp; ABF-STEM像: 検出器の取り込み角は半角11 - 22 mrad<br />
+&nbsp; &nbsp; &alpha; 25 mrad程度, &beta;1 13 mrad程度、&beta;2 25 mrad程度<br />
+※ BF-STEM像はTEM像と等価なコントラストが得られる<br />
+------------------------------------------------------------------------------<br />
+□ Important information<br />
+・Ideally we want the error relative to multislice to be &lt;1%, or even &lt;0.1%, but this may not always be possible due to limited calculation times. Thus when choosing a value for f, we must balance accuracy against the time we are willing to alot for a given calculation.<br />
+・Overall, this interpolation factor of 10 would be sufficiently accurate for an exploratory simulation, but probably not for a publication. Thus, we will halve the interpolation again to improve the accuracy further. Set both the x and y direction intepolation factors to 5, and then click the calculate button on the image panel.&nbsp;<br />
+・We will also leave the thermal effects box checked, even though we are performing a single frozen phonon simulation.<br />
+・Better atomic contrast (especially for weakly scattering atoms) can be obtained with an annular bright field (ABF).<br />
+<br />
+・qmax = 1 / (2 * pixcel size)<br />
+&nbsp; qmax [Å]<br />
+&nbsp; pixcel size [Å]<br />
+・alpha max = relativistic electron wavelength / (4 * pixel size)<br />
+&nbsp; alpha max [rad]<br />
+&nbsp; relativistic electron wavelength [Å]<br />
+&nbsp; &nbsp; 300 kV = 0.0196875 [Å]<br />
+&nbsp; &nbsp; 200 kV = 0.0250793 [Å]<br />
+&nbsp; &nbsp; 120 kV = 0.0334921 [Å]<br />
+&nbsp; &nbsp; &nbsp;80 kV = 0.0417572 [Å]<br />
+&nbsp; pixcel size [Å]<br />
+・Potential Bound [Å] 2 (reasonable accuracy)<br />
+<br />
+・The next value is the # of FP, which means &ldquo;number of frozen phonon (FP) configurations.&rdquo; These multiple FP configurations are used to average the scattering pathways due to thermal motion of the atoms over multiple simulations. All high accuracy simulations should use multiple FPs, and typically the more the better. I recommend using (at a minimum) 8 FPs for thick samples, and 32 FPs for thin samples. For this tutorial, we will use 1 FP configuration.<br />
+・The next value is Slice Thickness which defines the spacing of potential slices used in the atomic potentials. A smaller value here will make the simulation more accurate, while a larger value will speed up the simulation. For this simulation we will use a typical value of 2 Angstroms. The last value in this column is Detector Angle Step, which is used for the 3D simulation output to specify the width of each annular bin used in the output integration. The 3D output is a series of concentric rings for different scattering angles, recorded for each probe position. This value should be small enough to allow any necessary virtual detector to be constructed from the simulation. We will use the default value of 1 mrad.<br />
+・The final group of simulation settings deals with the PRISM interpolation factors, the STEM probe positions and tilts. We will be changing these settings later, but for now set PRISM Interpolation Factors to 4 for both x and y. The spacing of STEM probes is set by the Probe Step box, which we will set to 0.2 Angstroms. Probe Tilt should be set to 0 mrads for both x and y, and the Scan Window should run from 0 to 0.9999 for both x and y. This will create a square grid of STEM probes that will cover the entire field of view. The reason to not set the maximum range to 1.0 is that if the probe step can be evenly divided into the simulation cell size, we would duplicate the probe located at 0.0 with the probe located at 1.0, due to the periodicity of the simulation.<br />
+・Note that it is very important to remember the difference between Pixel Size and Probe Step settings, both in units of Angstroms. The Pixel Size setting refers to the sampling of pixels for the atomic potentials, the STEM probes, and the various numerical operator functions used during the simulation. By contrast, Probe Step refers only to the spacing of the STEM probes, and no other parts of the simulation. Later in the tutorial, we will for example run simulations consisting of only single STEM probe positions.<br />
+・Note that the individual atomic columns do not form round peaks - why? The answer is two-fold: first, what you are seeing is the randomly generated atomic displacements due to thermal motions (Debye-Waller effect). Relativistic electrons move much faster than ions in solid materials. To the electron beam, the ions appear to have (semi) random shifts &ldquo;frozen&rdquo; in, due to the large number of of phonons present in the material at any given time. Technically speaking, each electron will see a different frozen phonon configuration, but simulating this is impractical. Instead we use a number of &ldquo;frozen phonon (FP) configurations&rdquo; and sum the results incoherently. To see this in action, try changing Random Seed to different values, and then clicking on Calculate Potentials again. For example on my laptop, changing the seed value gives these potentials:<br />
+・There is a second reason why these shifts are so obvious - because the sample is extremely thin (&lt;8 Angstroms). Because we are not yet tiling the cell along the beam direction, each atomic column has only a small number of atoms along the beam direction. This is why more FP configurations are needed when running a simulation of a thin sample. Thicker samples will &ldquo;average out&rdquo; the atomic shifts to a greater degree. Note that all simulations used for quantitative analysis should still use multiple FP configurations, and more will always be more accurate. However we should also remember that we are not truly modeling the thermal motion of phonons inside a sample when we use random atomic shifts. Including correlations of the phonon wavevectors requires a much more accurate set of atomic positions, for example those calculated using molecular dynamics.<br />
+・The first problem with the simulation is that the cell is far too small, especially along the horizontal direction. Even a sub-Angstrom STEM probe will have tails reaching a diameter of 1 nm. Thus we must prevent wraparound errors due to periodicity, where the probe tails self-interact. Prismatic includes a build in tool to examine these possible issues, and you can reach it by clicking on the Probe Analyzer tab in the upper left.<br />
+・Generally for atomic resolution simulations, I suggest unit cell dimensions of at least 20 Angstroms. However as we will see next, this guideline is often insufficient for thick simulation cells.&nbsp;<br />
+・the total size of the simulation required to hold the probe after delocalization / scattering is determined by your own tolerance for the wraparound error for a given simulation. If the degree of error is too high, the simple solution is to increase the size of the field of view.&nbsp;<br />
+・If multislice can be run quickly enough, I definitely recommend using it. It has the additional advantage that we do not need to worry about the errors introduced by using an interpolation factor that is too large.<br />
+------------------------------------------------------------------------------<br />
+■ Tutorials (http://prism-em.com/tutorial/)<br />
+<br />
+[1] Decahedral Nanoparticle<br />
+&nbsp; http://prism-em.com/tutorial/<br />
+[2] Tutorial by Colin Ophus<br />
+&nbsp; http://prism-em.com/tutorialSuperSTEM/<br />
+[3] Prismatic - Python and Bash<br />
+&nbsp; http://prism-em.com/tutorialPython/<br />
+[4] Prismatic Source Code Walkthrough<br />
+&nbsp; http://prism-em.com/source-code/<br />
+[5] Installing Prismatic<br />
+&nbsp; http://prism-em.com/installation/<br />
+------------------------------------------------------------------------------<br />
+■ Matlab R2019a<br />
+<br />
+build_scene_deca_tilted_on_amorphous_carbon.m<br />
+-----<br />
+function [atoms,cellDim,Irgb] = ...<br />
+&nbsp; &nbsp; build_scene_deca_tilted_on_amorphous_carbon(xyzSub,xyzNP)<br />
+&nbsp; &nbsp;&nbsp;<br />
+xyzSub = csvread('atoms_amorCarbon_50nmCube_x_y_z_ID.csv')<br />
+xyzNP &nbsp;= csvread('atoms_deca_cartesian_x_y_z_ID.csv')<br />
+<br />
+% Input variables<br />
+% xyzSub &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% (x,y,z) coordinates of substrate in A<br />
+% xyzNP &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % (x,y,z) coordinates of nanoparticle in A<br />
+dr = 0.1;<br />
+sigma = 2;<br />
+shiftNP = [50 50 60.2]; &nbsp; &nbsp; % nanoparticle (x,y,z)<br />
+rMin = 3; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % minimum atomic separation<br />
+theta = [0 -30 0]*pi/180; &nbsp; % three angles for ZXZ rotation<br />
+ID_NP = 78; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % atomic number of NP<br />
+ID_Sub = 6; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % atomic number of the substrate<br />
+cellSub = [50 50 50]; &nbsp; &nbsp; &nbsp; % Substrate cell size<br />
+<br />
+<br />
+% Tile 2x2 in xy, permuting dimensions to avoid tiling artifacts<br />
+atomsSub = [ ...<br />
+&nbsp; &nbsp; xyzSub(:,[1 2 3])+repmat([0 0 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[2 1 3])+repmat([cellSub(1) 0 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[3 1 2])+repmat([0 cellSub(2) 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[2 1 3])+repmat([cellSub(1:2) 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; ];<br />
+cellDim = [2*cellSub(1:2) cellSub(3)];<br />
+<br />
+% nanoparticle (NP)<br />
+xyzNP = xyzNP(:,1:3);<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; xyzNP(:,a0) = xyzNP(:,a0) - mean(xyzNP(:,a0));<br />
+end<br />
+% Rotate and translate NP<br />
+m = [cos(theta(1)) -sin(theta(1)) 0;<br />
+&nbsp; &nbsp; sin(theta(1)) cos(theta(1)) 0;<br />
+&nbsp; &nbsp; 0 0 1];<br />
+xyzNP = (m'*xyzNP')';<br />
+m = [1 0 0;<br />
+&nbsp; &nbsp; 0 cos(theta(2)) -sin(theta(2));<br />
+&nbsp; &nbsp; 0 sin(theta(2)) cos(theta(2))];<br />
+xyzNP = (m'*xyzNP')';<br />
+m = [cos(theta(3)) -sin(theta(3)) 0;<br />
+&nbsp; &nbsp; sin(theta(3)) cos(theta(3)) 0;<br />
+&nbsp; &nbsp; 0 0 1];<br />
+xyzNP = (m'*xyzNP')';<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; xyzNP(:,a0) = xyzNP(:,a0) + shiftNP(a0);<br />
+end<br />
+<br />
+% Make plots<br />
+Nxy = cellDim(1:2)/dr;<br />
+xInd = mod(round(atomsSub(:,1)/dr),Nxy(1))+1;<br />
+yInd = mod(round(atomsSub(:,2)/dr),Nxy(2))+1;<br />
+potSub = accumarray([xInd yInd],ones(size(atomsSub,1),1),Nxy);<br />
+% smoothing<br />
+k = fspecial('gaussian',2*ceil(3*sigma)+1,sigma);<br />
+potSub = conv2(potSub,k,'same');<br />
+potSub = potSub - min(potSub(:));<br />
+potSub = potSub / max(potSub(:));<br />
+% Np<br />
+xInd = mod(round(xyzNP(:,1)/dr),Nxy(1))+1;<br />
+yInd = mod(round(xyzNP(:,2)/dr),Nxy(2))+1;<br />
+potNP = accumarray([xInd yInd],ones(size(xyzNP,1),1),Nxy);<br />
+potNP = conv2(potNP,k,'same');<br />
+potNP = sqrt(potNP);<br />
+% potNP = sqrt(potNP);<br />
+potNP = potNP - min(potNP(:));<br />
+potNP = potNP / max(potNP(:));<br />
+<br />
+% RGB output image<br />
+Irgb = zeros(Nxy(1),Nxy(2),3);<br />
+Irgb(:,:,1) = potNP;<br />
+Irgb(:,:,2) = potSub/2;<br />
+Irgb(:,:,3) = potSub/2;<br />
+<br />
+figure(1)<br />
+clf<br />
+imagesc(Irgb)<br />
+axis equal off<br />
+colormap(gray(256))<br />
+set(gca,'position',[0 0 1 1])<br />
+<br />
+% Delete substrate atoms<br />
+del = false(size(atomsSub,1),1);<br />
+r2 = rMin^2;<br />
+for a0 = 1:size(atomsSub,1)<br />
+&nbsp; &nbsp; if ( &nbsp; &nbsp;min((atomsSub(a0,1)-xyzNP(:,1)).^2 ...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + (atomsSub(a0,2)-xyzNP(:,2)).^2 ...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + (atomsSub(a0,3)-xyzNP(:,3)).^2) &lt; r2)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; del(a0)= &nbsp;true;<br />
+&nbsp; &nbsp; end<br />
+end<br />
+atomsSub(del,:) = [];<br />
+<br />
+% Combine atoms<br />
+atoms = [[atomsSub ones(size(atomsSub,1),1)*ID_Sub];<br />
+&nbsp; &nbsp; [xyzNP ones(size(xyzNP,1),1)*ID_NP]];<br />
+<br />
+% scatter plot<br />
+figure(2)<br />
+clf<br />
+v = (1:size(atoms,1))';<br />
+hold on<br />
+s = mod(v,1) == 0 &amp; atoms(:,4) == ID_NP;<br />
+scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'r.')<br />
+s = mod(v,10) == 0 &amp; atoms(:,4) == ID_Sub;<br />
+scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'g.')<br />
+hold off<br />
+axis equal<br />
+view([1 0 0])<br />
+box on<br />
+<br />
+<br />
+<br />
+cellDim(3) = ceil(max(atoms(:,3))/2)*2;<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; atoms(:,a0) = atoms(:,a0) / cellDim(a0);<br />
+end<br />
+end<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ Matlab (windows 10 (64 bit))<br />
+・matlab_R2019a_glnxa64.zip<br />
+1. mkdir matlab_R2019a<br />
+2. cd matlab_R2019a<br />
+3. unzip matlab_R2019a_glnxa64.zip<br />
+4. sudo ./install<br />
+5. [check] Create symbolic links to MATLAB scripts in:<br />
+&nbsp; /usr/local/bin<br />
+6. [Next&gt;]<br />
+------------------------------------------------------------------------------<br />
+■ Octave (windows 10 (64 bit))<br />
+(https://www.gnu.org/software/octave/#install)<br />
+<br />
+□ Install<br />
+Windows-64 (recommended)&nbsp;<br />
+・octave-5.1.0-w64-installer.exe<br />
+1. octave-5.1.0-w64-installer.exe &gt; Yes<br />
+2. All [NExt&gt;] &gt; [Install] &gt; [Finish]<br />
+3. All [Next]<br />
+<br />
+□ GUI TUTORIAL<br />
+◇ 1 - Download atomic coordinate files.<br />
+・nanoparticle: (http://prism-em.com/data/atoms_deca_cartesian_x_y_z_ID.csv)<br />
+・amorphous carbon substrate: (http://prism-em.com/data/atoms_amorCarbon_50nmCube_x_y_z_ID.csv)<br />
+◇ 2 - Construct unified atomic model in Matlab.<br />
+(http://prism-em.com/data/build_scene_deca_tilted_on_amorphous_carbon.m)<br />
+1. GNU Octave (GUI)<br />
+(build_scene_deca_tilted_on_amorphous_carbon.m)<br />
+----add<br />
+&nbsp; xyzSub = csvread('atoms_amorCarbon_50nmCube_x_y_z_ID.csv')<br />
+&nbsp; xyzNP &nbsp;= csvread('atoms_deca_cartesian_x_y_z_ID.csv')<br />
+----<br />
+----modify (convolve2 function)<br />
+&nbsp; potSub = conv2(potSub,k,'same');<br />
+&nbsp; potNP = conv2(potNP,k,'same');<br />
+----<br />
+----modify (convolve2 function)<br />
+% % scatter plot<br />
+% figure(2)<br />
+% clf<br />
+% v = (1:size(atoms,1))';<br />
+% hold on<br />
+% s = mod(v,1) == 0 &amp; atoms(:,4) == ID_NP;<br />
+% scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'r.')<br />
+% s = mod(v,10) == 0 &amp; atoms(:,4) == ID_Sub;<br />
+% scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'g.')<br />
+% hold off<br />
+% axis equal<br />
+% view([1 0 0])<br />
+% box on<br />
+----<br />
+2. pkg load image<br />
+3. build_scene_deca_tilted_on_amorphous_carbon<br />
+4. cellDim = [100 100 80];<br />
+5. writeXYZ('AuDeca_amorCarbon.xyz',...<br />
+'Atomic coordinates for decahedral nanoparticle on amorphous carbon',...<br />
+cellDim,ans(:,4),ans(:,1:3).*repmat(cellDim,[size(ans,1) 1]),1,0.08);<br />
+※ You can get &quot;AuDeca_amorCarbon.xyz&quot; (structrure input file)<br />
+◇ 4 - Import atoms into Prismatic and set parameters.<br />
+6. prismatic-gui<br />
+<br />
+□ View on VESTA<br />
+1. AuDeca_amorCarbon.xyz<br />
+2. input number of atom (1st line)<br />
+3. remove -1 (end line)<br />
+4. place Z to element (1st row)<br />
+------------------------------------------------------------------------------<br />
+■ Octave 5.1.0<br />
+<br />
+build_scene_deca_tilted_on_amorphous_carbon.m<br />
+-----<br />
+function [atoms,cellDim,Irgb] = ...<br />
+&nbsp; &nbsp; build_scene_deca_tilted_on_amorphous_carbon(xyzSub,xyzNP)<br />
+&nbsp; &nbsp;&nbsp;<br />
+xyzSub = csvread('atoms_amorCarbon_50nmCube_x_y_z_ID.csv')<br />
+xyzNP &nbsp;= csvread('atoms_deca_cartesian_x_y_z_ID.csv')<br />
+<br />
+% Input variables<br />
+% xyzSub &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% (x,y,z) coordinates of substrate in A<br />
+% xyzNP &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % (x,y,z) coordinates of nanoparticle in A<br />
+dr = 0.1;<br />
+sigma = 2;<br />
+shiftNP = [50 50 60.2]; &nbsp; &nbsp; % nanoparticle (x,y,z)<br />
+rMin = 3; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % minimum atomic separation<br />
+theta = [0 -30 0]*pi/180; &nbsp; % three angles for ZXZ rotation<br />
+ID_NP = 78; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % atomic number of NP<br />
+ID_Sub = 6; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % atomic number of the substrate<br />
+cellSub = [50 50 50]; &nbsp; &nbsp; &nbsp; % Substrate cell size<br />
+<br />
+<br />
+% Tile 2x2 in xy, permuting dimensions to avoid tiling artifacts<br />
+atomsSub = [ ...<br />
+&nbsp; &nbsp; xyzSub(:,[1 2 3])+repmat([0 0 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[2 1 3])+repmat([cellSub(1) 0 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[3 1 2])+repmat([0 cellSub(2) 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; xyzSub(:,[2 1 3])+repmat([cellSub(1:2) 0],[size(xyzSub,1) 1]);<br />
+&nbsp; &nbsp; ];<br />
+cellDim = [2*cellSub(1:2) cellSub(3)];<br />
+<br />
+% nanoparticle (NP)<br />
+xyzNP = xyzNP(:,1:3);<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; xyzNP(:,a0) = xyzNP(:,a0) - mean(xyzNP(:,a0));<br />
+end<br />
+% Rotate and translate NP<br />
+m = [cos(theta(1)) -sin(theta(1)) 0;<br />
+&nbsp; &nbsp; sin(theta(1)) cos(theta(1)) 0;<br />
+&nbsp; &nbsp; 0 0 1];<br />
+xyzNP = (m'*xyzNP')';<br />
+m = [1 0 0;<br />
+&nbsp; &nbsp; 0 cos(theta(2)) -sin(theta(2));<br />
+&nbsp; &nbsp; 0 sin(theta(2)) cos(theta(2))];<br />
+xyzNP = (m'*xyzNP')';<br />
+m = [cos(theta(3)) -sin(theta(3)) 0;<br />
+&nbsp; &nbsp; sin(theta(3)) cos(theta(3)) 0;<br />
+&nbsp; &nbsp; 0 0 1];<br />
+xyzNP = (m'*xyzNP')';<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; xyzNP(:,a0) = xyzNP(:,a0) + shiftNP(a0);<br />
+end<br />
+<br />
+% Make plots<br />
+Nxy = cellDim(1:2)/dr;<br />
+xInd = mod(round(atomsSub(:,1)/dr),Nxy(1))+1;<br />
+yInd = mod(round(atomsSub(:,2)/dr),Nxy(2))+1;<br />
+potSub = accumarray([xInd yInd],ones(size(atomsSub,1),1),Nxy);<br />
+% smoothing<br />
+k = fspecial('gaussian',2*ceil(3*sigma)+1,sigma);<br />
+potSub = conv2(potSub,k,'same');<br />
+potSub = potSub - min(potSub(:));<br />
+potSub = potSub / max(potSub(:));<br />
+% Np<br />
+xInd = mod(round(xyzNP(:,1)/dr),Nxy(1))+1;<br />
+yInd = mod(round(xyzNP(:,2)/dr),Nxy(2))+1;<br />
+potNP = accumarray([xInd yInd],ones(size(xyzNP,1),1),Nxy);<br />
+potNP = conv2(potNP,k,'same');<br />
+potNP = sqrt(potNP);<br />
+% potNP = sqrt(potNP);<br />
+potNP = potNP - min(potNP(:));<br />
+potNP = potNP / max(potNP(:));<br />
+<br />
+% RGB output image<br />
+Irgb = zeros(Nxy(1),Nxy(2),3);<br />
+Irgb(:,:,1) = potNP;<br />
+Irgb(:,:,2) = potSub/2;<br />
+Irgb(:,:,3) = potSub/2;<br />
+<br />
+figure(1)<br />
+clf<br />
+imagesc(Irgb)<br />
+axis equal off<br />
+colormap(gray(256))<br />
+set(gca,'position',[0 0 1 1])<br />
+<br />
+% Delete substrate atoms<br />
+del = false(size(atomsSub,1),1);<br />
+r2 = rMin^2;<br />
+for a0 = 1:size(atomsSub,1)<br />
+&nbsp; &nbsp; if ( &nbsp; &nbsp;min((atomsSub(a0,1)-xyzNP(:,1)).^2 ...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + (atomsSub(a0,2)-xyzNP(:,2)).^2 ...<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + (atomsSub(a0,3)-xyzNP(:,3)).^2) &lt; r2)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; del(a0)= &nbsp;true;<br />
+&nbsp; &nbsp; end<br />
+end<br />
+atomsSub(del,:) = [];<br />
+<br />
+% Combine atoms<br />
+atoms = [[atomsSub ones(size(atomsSub,1),1)*ID_Sub];<br />
+&nbsp; &nbsp; [xyzNP ones(size(xyzNP,1),1)*ID_NP]];<br />
+<br />
+% % scatter plot<br />
+% figure(2)<br />
+% clf<br />
+% v = (1:size(atoms,1))';<br />
+% hold on<br />
+% s = mod(v,1) == 0 &amp; atoms(:,4) == ID_NP;<br />
+% scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'r.')<br />
+% s = mod(v,10) == 0 &amp; atoms(:,4) == ID_Sub;<br />
+% scatter3(atoms(s,1),atoms(s,2),atoms(s,3),'g.')<br />
+% hold off<br />
+% axis equal<br />
+% view([1 0 0])<br />
+% box on<br />
+<br />
+cellDim(3) = ceil(max(atoms(:,3))/2)*2;<br />
+for a0 = 1:3<br />
+&nbsp; &nbsp; atoms(:,a0) = atoms(:,a0) / cellDim(a0);<br />
+end<br />
+end<br />
+-----<br />
+------------------------------------------------------------------------------<br />
+■ PyPrismatic (ubuntu 18.04 LTS (64 bit)) (github) (failed)<br />
+(https://github.com/prism-em/prismatic)<br />
+<br />
+□ Install<br />
+0. sudo apt-get install libhdf5-serial-dev<br />
+&nbsp; sudo apt-get install libboost-all-dev<br />
+&nbsp; sudo apt install python-h5py<br />
+&nbsp; pip install boost --user<br />
+&nbsp; pip3 install boost<br />
+1. git clone https://github.com/prism-em/prismatic.git<br />
+2. cd prismatic<br />
+3. cd build<br />
+4. cmake ../<br />
+5. make<br />
+6. sudo make install<br />
+7. cd ..<br />
+8. python setup.py install<br />
+9. pip3 install -r requirements.txt<br />
+10. sudo python3 setup.py build_ext --include-dirs=/usr/local/boost_1_60_0 install<br />
+(GPU version)<br />
+10. sudo python3 setup.py build_ext --include-dirs=/usr/local/boost_1_60_0:/usr/local/cuda-8.0/include --library-dirs=/usr/local/cuda-8.0/lib64 install --enable-gpu<br />
+※ /usr/local/lib/python3.6/dist-packages/PyPrismatic-1.2.0-py3.6.egg-info<br />
+<br />
+□ Install<br />
+1. pip3 install pyprismatic<br />
+<br />
+export CPLUS_INCLUDE_PATH=/usr/local/boost_1_60_0:/usr/local/cuda-8.0/include:$CPLUS_INCLUDE_PATH<br />
+export LIBRARY_PATH=/usr/local/cuda-8.0/lib64:$LIBRARY_PATH<br />
+<br />
+□ test<br />
+1. cd prismatic<br />
+2. gedit run.py<br />
+-----<br />
+import pyprismatic as pr<br />
+meta = pr.Metadata(filenameAtoms=&quot;SI100.XYZ&quot;, E0=200e3)<br />
+meta.tileX = meta.tileY = meta.tileZ = 1<br />
+meta.go()<br />
+-----<br />
+3. python3 run.py<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

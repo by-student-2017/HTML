@@ -1,0 +1,59 @@
+------------------------------------------------------------------------------<br />
+Å° Siesta v.4.0 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://departments.icmab.es/leem/siesta/)<br />
+(https://gitlab.com/siesta-project)<br />
+<br />
+Å† Install (OpenMPI)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y make g++ gcc build-essential gfortran libopenmpi-dev libopenblas-dev<br />
+2. git clone https://gitlab.com/siesta-project/siesta.git<br />
+3. cd siesta<br />
+4. cd Obj<br />
+5. sh ../Src/obj_setup.sh<br />
+6. cp gfortran.make arch.make<br />
+7. gedit arch.make<br />
+-----<br />
+FC = mpif90<br />
+COMP_LIBS = libsiestaLAPACK.a libsiestaBLAS.a -lopenblas<br />
+-----<br />
+8. make<br />
+Å¶ cpu(AVX) case: FFLAGS = -O2 -fPIC -ftree-vectorize -mavx<br />
+<br />
+Å† Test<br />
+1. cd $HOME/siesta/Tests<br />
+2. make SIESTA=&quot;mpirun -np 4 ~/siesta/Obj/siesta&quot;<br />
+------------------------------------------------------------------------------<br />
+Å† lattice-dynamics<br />
+1. git clone https://gitlab.com/siesta-project/analysis-tools/lattice-dynamics.git<br />
+2. cd ~/lattice-dynamics/src<br />
+3. make<br />
+------------------------------------------------------------------------------<br />
+Å† core-level-shifts (underconstructing)<br />
+1. git clone https://gitlab.com/siesta-project/analysis-tools/core-level-shifts.git<br />
+2. ~/core-level-shifts/InitialState<br />
+&nbsp; gfortran -o CoReLeVeLs.x volcel.f precision.F past.f90 types.F90 spher_harm.f interpola.f90 doabinit.f90 dosiesta.f90 principal.f90 c2f.f<br />
+------------------------------------------------------------------------------<br />
+Å° Siesta v.4.1 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://departments.icmab.es/leem/siesta/)<br />
+(https://gitlab.com/siesta-project)<br />
+<br />
+Å† Install (OpenMPI)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y make g++ gcc build-essential gfortran libopenmpi-dev libopenblas-dev<br />
+2. git clone https://gitlab.com/siesta-project/siesta.git<br />
+3. cd siesta<br />
+4. cd Obj<br />
+5. sh ../Src/obj_setup.sh<br />
+6. cp gfortran.make arch.make<br />
+7. gedit arch.make<br />
+-----<br />
+FC = mpif90<br />
+COMP_LIBS = libsiestaLAPACK.a libsiestaBLAS.a -lopenblas<br />
+-----<br />
+8. make<br />
+Å¶ cpu(AVX) case: FFLAGS = -O2 -fPIC -ftree-vectorize -mavx<br />
+<br />
+Å† Test<br />
+1. cd $HOME/siesta/Tests<br />
+2. make SIESTA=&quot;mpirun -np 4 ~/siesta/Obj/siesta&quot;<br />
+------------------------------------------------------------------------------

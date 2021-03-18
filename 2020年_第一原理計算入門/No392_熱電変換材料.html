@@ -1,0 +1,647 @@
+<p>　ここでは熱電変換材料の研究に関する情報を掲示しておく。<br />
+　熱電学会誌での講座を[<a href="http://www.thermoelectrics.jp/journal.html">http://www.thermoelectrics.jp/journal.html</a>]から読むことができます。熱電材料を取り扱う方は一度読んでおくと良いでしょう。<br />
+--------------------------------------------------------------------------------<br />
+※ 佐宗哲郎『強相関電子系の物理（増補版）』も見ておくとよい。<br />
+<br />
+■ 基本的な理論的背景<br />
+□ ゼーベック係数 S [T1]<br />
+・系の自由エネルギーがいたるところで等しいとした場合のS<br />
+&nbsp; &mu;(T<sub>1</sub>) + e*V<sub>th</sub>(T<sub>1</sub>) = &mu;(T<sub>2</sub>) + e*V<sub>th</sub>(T<sub>2</sub>) より、<br />
+&nbsp; S = [ V<sub>th</sub>(T<sub>1</sub>) - V<sub>th</sub>(T<sub>2</sub>)] / [ T<sub>1</sub> - T<sub>2</sub> ]<br />
+&nbsp; T1 &rarr; T2 の極限で、<br />
+&nbsp; S = - (1/e) * (&part;&mu; / &part;T ) ＝(1/e) * (s/N)<br />
+&nbsp; ここで、s はエントロピー、N は電子の数である。<br />
+<br />
+・ボルツマン輸送方程式の導出のための幾つかの式[T1]<br />
+&nbsp; 電流密度 j = L<sub>11</sub> * E + L<sub>12</sub> * (-&nabla;T)<br />
+&nbsp; 熱流密度 q = L<sub>21</sub> * E + L<sub>22</sub> * (-&nabla;T)<br />
+&nbsp; ここで、Eは電場、-&nabla;Tは温度勾配、L<sub>ij</sub>は輸送係数（テンソル）である。簡単のために立方晶を考え、L<sub>ij</sub>をスカラーとして扱うことにすると、ゼーベック係数は電流密度ゼロでの電場と温度勾配の比で与えられる。<br />
+&nbsp;&nbsp;S = E / &nabla;T = L<sub>12</sub> / L<sub>11</sub><br />
+&nbsp; L<sub>21</sub>はペルチェ係数&Pi;=S*Tに関係し、<br />
+&nbsp; &Pi;= S*T=L<sub>21</sub> / L<sub>11</sub><br />
+&nbsp; 温度勾配がなく、電流密度 j が有限であれば式から電場Eを消去して、<br />
+&nbsp; q = (L<sub>21</sub> / L<sub>11</sub>) * j = S*T * j<br />
+&nbsp; q/Tはエントロピーの流れである。熱起電力は電子の運ぶエントロピーとみなせる。したがって、Sが電子のエントロピーと深く関係していることが式から理解できる。<br />
+<br />
+・ボルツマン輸送方程式<br />
+&nbsp; S = [1/(e*T)]*[&int;e^2 * Ek * vk^2 * &tau;* (-&part;f/&part;E) d^3k ]/[&int;e^2 * vk^2 * &tau;* (-&part;f/&part;E) d^3k ] - &mu;/(e*T)&nbsp;<br />
+&nbsp; ここで、Ekは波数kの電子のエネルギー、vkは波数kにおける速度、&tau;は緩和時間、fはフェルミディラック分布<br />
+　※ エネルギーフィルタリングを予測するには、積分する範囲を 0 からではなく、フィルタリングするエネルギーからにすればよい。フィルタリングの障壁の高さは誘電率に逆比例する。<br />
+　※ パラボリックなバンド構造（{<span class="st">?</span>k}<sup>2</sup>/2m）であれば、ボルツマン輸送方程式からドゥルーデの式が得られる。&sigma;やkは偶関数の成分のみ残る。そのため、DOSが化学ポテンシャル &mu;近傍で一次関数(y=ax+b)で表現できる場合、DOS(&mu;)に比例する。そして、kel(T)=L&sigma;T -S<sup>2</sup>&sigma;<sup>-1</sup>Tが得られる。L&sigma;Tはヴィーデマン・フランツ則の部分。-S<sup>2</sup>&sigma;<sup>-1</sup>Tを計算すると金属では無視できる大きさ。半導体では無視できないが、値が負になることもあり、ウィーデマン・フランツ則の部分だけで計算されることが多い。<br />
+　※ 試料にヒビが入るような脆い試料はゼーベック係数が高いことがある。これはもしかしたら、幾つかの相が析出していることによって、相安定性が低く、そして、脆くなっているとともに、電子構造におけるフィルタリングの効果が出ているからかもしれない。ショットキー障壁などの障壁も考慮してみてはどうだろうか。<br />
+<br />
+・ ペルティエ係数&Pi;、電流をj、熱流をqとして計算される磁場存在下のゼーベック係数<br />
+&nbsp; j = - 2*q / h^3 * ∬(&nabla;pE・G)&part;ｆ０/&part;E dSp dE<br />
+&nbsp; q = - 2 / h^3 * ∬(E-EF)*(&nabla;pE・G)&part;ｆ０/&part;E dSp dE<br />
+&nbsp; q = &Pi; * j　&larr;熱量q はペルティエ係数&Pi; * ｊと等しいと考えている。<br />
+&nbsp; S = &Pi; / T &larr;熱電能とペルティエ係数の関係式<br />
+&nbsp; G = - (&tau;*[A-rq*&tau;*B&times;A + (rq*&tau;)<sup>2</sup> * B ( B・A)] / [(1+(rq*&tau;)<sup>2</sup> *B・B])&nbsp;<br />
+&nbsp; ここで、A=A0+A1*E, A0=q*Fe-T&nabla;r(EF/T), A1=-&nabla;rT/T, rq=q/m, P = m*&nabla;pE で pi = m*&part;E/&part;piの関係である。<br />
+<br />
+・外場や温度勾配のある場合での固体中の電子の速度と電流の補正項を考慮したボルツマン方程式[T7,T8]<br />
+&nbsp; S = ( &alpha; - &beta;*&gamma;) / (1+&beta;^2)<br />
+&nbsp; ここで、&alpha; は補正項の無いボルツマン方程式によるゼーベック係数。&alpha;、&beta;、&gamma;はそれぞれ&alpha;xx, &sigma;xx, &alpha;xyを&sigma;xxで割った値である。<br />
+<br />
+・ 電気化学ポテンシャルでのゼーベック係数（以下の式はj=0とする）[T6]<br />
+&nbsp; 高温側の電子は運動エネルギーが低温側の電子よりも大きく、このため平均して低温側に移動する。従って、高温端が低温端よりも正に帯電して熱起電力が発生する。このとき温度勾配&nabla;Tに対する電気ポテンシャルの勾配&nabla;Veの比をゼーベック係数といいSで表す。<br />
+&nbsp; S = &nabla;Ve / &nabla;T&nbsp;= - &nabla;&mu;/ (e*&nabla;T) = -&nabla;(K-e*Ve) / (e*&nabla;T)&nbsp;<br />
+&nbsp; もし、材料が一様性を有すれば、化学ポテンシャル K は一定となり、上式から消える。<br />
+<br />
+・ハイクスの式（高温極限でのゼーベック係数）<br />
+&nbsp; S = - &mu;/(e*T) = (1/e) * &part;s/&part;N<br />
+&nbsp; ここで、s はエントロピー、N は電子数。<br />
+・ハイクスの式の拡張（小椎八重）<br />
+&nbsp; S = (kb / q) * ( ln (ga/gb)*[p/(1-p)] )<br />
+&nbsp;ここで、gaはAイオンの縮退度、gbはBイオンの縮退度、qはAイオンとBイオンの価数の差、pはAイオンの濃度である。スピンエントロピーを計算してga/gbの比率からゼーベック係数を計算する。ga/gbの比でSはプラスにもマイナスにもなることが理解できる。<br />
+[ES1] W. Koshibae et al., Phys. Rev. B 62 (2000) 6869.<br />
+※ NaxCoO2 は　BoltzTraP で非常に良い一致をしている。多くの金属の場合 10-20 % で一致するが、それよりもよい値で一致している。H. J. Xiang and D. J. Singh, Phys. Rev. B 76 (2007) 195111.<br />
+<br />
+・モットの計算式<br />
+&nbsp; <em>S</em>=((&pi;*k)^2) * m * T / ( 3*(&pi;^2)*n ) ^ (2/3) * (h / (2*&pi;) ) * |e|&nbsp;<br />
+&nbsp; ここで、nはキャリアー濃度、mはキャリアーの有効質量、kはボルツマン定数である。ボルツマン方程式の結果をゾンマーフェルト展開して得られる。<br />
+&nbsp;&nbsp;<em>S</em>=(-&pi;<sup>2</sup>/3) * (k<sub>B</sub><sup>2</sup>T/e) * (1/N(E<sub>F</sub>)) * [&part;N(E) / &part;E ]<sub>E=EF</sub><br />
+&nbsp; 上記の形式を良く見ると思います。これらのモットの計算式の成立条件には下記の3つ<br />
+　? only for electrons<br />
+　? Boltzman (weak impurity scattering)<br />
+　? T&nbsp;&rarr; 0 (低温展開の第一項のみ）&nbsp;<br />
+　となっているが、binary phaseでのbeyond boltzmanでも似た傾向になる。実験屋としてはそういう考え方があるという程度で十分でしょう。さらに簡略化すると下記のようになる。<br />
+　<em>S</em> &prop;[ &part;DOS(E) / &part;E ]&nbsp;&larr;ボルツマン方程式から得られる結果をゾンマーフェルト展開すると得られる。<br />
+&nbsp; 上記の計算後、EをE<sub>F</sub>の値にする。大雑把に言うと、SはE<sub>F</sub>におけるDOSの接線の傾きに比例する。そのため、量子井戸や2次元電子ガス（Tow Dimentional Electron Gas : 2DEG)を作製すればS値が増強される。<br />
+<br />
+・ゴールドシュミット：ギャップ Eg = 2 * e * |S<sub>max</sub>| * T<sub>max</sub><br />
+<br />
+□ エントロピー[T6]<br />
+1. エントロピーは内部エネルギー、体積及び粒子数に依存する状態量で、系群の全エントロピーは、個々のエントロピーの総和である<br />
+2. エントロピーは熱平衡状態のみで定義される<br />
+3. 孤立系のエントロピーは増加するのみで最大値に到達する傾向を示し、その状態では温度や濃度などに関する全ての空間的な差は消滅する<br />
+系全体のエントロピー変化は次式で与えられる。<br />
+&nbsp; &Delta;S = &Delta;Sm + &Delta;Sl + &Delta;Se<br />
+ここで、&Delta;Smは磁場印加によるエントロピー変化である。&Delta;Slは格子振動項で格子エントロピー変化である。&Delta;Seは電子項である（非常に小さい）。<br />
+[SE1] <a href="http://maildbs.c.u-tokyo.ac.jp/~fukatsu/_userdata/HO_CondMat_3_050712.pdf">http://maildbs.c.u-tokyo.ac.jp/~fukatsu/_userdata/HO_CondMat_3_050712.pdf</a><br />
+[SE2] <a href="http://www.phys.aoyama.ac.jp/~w3-furu/lecs/SSPC2001.pdf">http://www.phys.aoyama.ac.jp/~w3-furu/lecs/SSPC2001.pdf</a><br />
+・原子数（または体積）が大きいほど、エントロピーが大きい傾向<br />
+<br />
+□ 緩和時間と散乱因子<br />
+&nbsp; 緩和時間: &tau;(E) = &tau;<sub><font size="2">0</font></sub>*[(hk)<sup><font size="2">2</font></sup>/2m<sup><font size="2">*</font></sup>)]^(r-1/2) [T5]<br />
+&nbsp; 緩和時間: &tau;(E) = &tau;<sub><font size="2">0</font></sub>(T)*[E/(k<sub><font size="2">B</font></sub>*T)]^(r-1/2) [T4]<br />
+&nbsp; ここで、rは散乱因子。緩和時間&tau;はエネルギー依存性を持っており、その依存性は粒子散乱過程によって異なる。主たる散乱過程は、原子格子と荷電粒子との熱衝突散乱とイオン化不純物とのクーロン力による散乱である。前者は高温であるほど激しくなる過程であるから、温度の上昇、すなわち粒子エネルギーEの増加と共に&tau;は減少する。また、後者はEが大きいほどクーロン力の作用は弱まるから、温度の上昇と共に&tau;は増加する。解析の結果によると、次のようになる。<br />
+&nbsp; &tau; = &tau;<sub><font size="2">0 </font></sub>* E<sup>b</sup><br />
+原子格子散乱で b =-0.5、イオン化不純物散乱でb=1.5である。BoltzTraPでは下記の式になる。<br />
+&tau;(E, T) = &tau;<sub><font size="2">0</font></sub>*exp{(r-0.5d0)*log([(E-E<sub><font size="2">0</font></sub>)/(k<sub><font size="2">B</font></sub>*T)]*[T<sub><font size="2">0</font></sub>/T])}<br />
+ここで、r は 0の場合 acoustic phonons, 2の場合 ionized impurities である。<br />
+　&tau;はVe-ph（電子-フォノン相互作用）やVimp（不順部によるもの）に影響を受ける。&tau;?&lt;&phi;i|Ve-ph|&phi;j&gt;や&lt;&phi;i|Vimp|&phi;j&gt;などと考えてみる。ザイマンのテキストなどを見ると良い。<br />
+※ 理論計算としては 1.0 * 10<sup>-14</sup> s が緩和時間としてよく使われる(日本熱電学会や日本金属学会の熱電材料の学会発表など)。2016年では「実験の電気伝導度/理論の電気伝導度=緩和時間」として緩和時間を求めてから出力因子（PF）やZTを報告している例も見受けられている。<br />
+<br />
+□ 無次元熱電変換性能指数<br />
+・無次元熱電変換性能指数 ZT = ( (S^2) * &sigma; / &kappa; ) * T&nbsp;<br />
+&nbsp; ここで、Sはゼーベック係数、&sigma;は導電率、&kappa;は熱伝導率、Tは絶対温度。<br />
+<br />
+□ フォノンドラッグ<br />
+&nbsp; S = ?Cl / ne = (k/e) * (4&pi;^2/5) * (T/&Theta;)^3<br />
+ここで、Clは格子比熱、&Theta;はデバイ温度。<br />
+<br />
+□ デバイ温度<br />
+　&theta; = (hv/k<sub>B</sub>) * (3&rho;N<sub>A</sub>/4&pi;M)<br />
+ここで、hはプランク定数、k<sub><font size="2">B</font></sub>はボルツマン定数、N<sub>A</sub>はアボガドロ数、Mは平均原子数。<br />
+moleあたりにするには、formular unitの数で割ることを忘れないように。<br />
+[1] <a href="http://www.crl.nitech.ac.jp/~ida/education/kotaikagaku/1/1.pdf">http://www.crl.nitech.ac.jp/~ida/education/kotaikagaku/1/1.pdf</a><br />
+[2] <a href="http://tdl.libra.titech.ac.jp/hkshi/xc/contents/pdf/116607999/13">http://tdl.libra.titech.ac.jp/hkshi/xc/contents/pdf/116607999/13</a>&nbsp;<br />
+[3] <a href="http://www.phonon.t.u-tokyo.ac.jp/resource/aketo_b2014.pdf">http://www.phonon.t.u-tokyo.ac.jp/resource/aketo_b2014.pdf</a><br />
+<br />
+□ 磁場によるゼーベック係数の増加 [T6]<br />
+&nbsp; 温度勾配がx方向にある場合にz方向へ磁界 Bzを書けた場合、Bzの2乗に関連してゼーベック係数が増大する。<br />
+&nbsp;&nbsp;G = - (&tau;*[A-rq*&tau;*B&times;A + (rq*&tau;)<sup>2</sup> * B ( B・A)] / [(1+(rq*&tau;)<sup>2</sup> *B・B])&nbsp;<br />
+&nbsp; ここで、A=A0+A1*E, A0=q*Fe-T&nabla;r(EF/T), A1=-&nabla;rT/T, rq=q/m<br />
+&nbsp; 上式でベクトル積B&times;Aの項は、磁界が電界や温度勾配の方向と直交しているときに働き、磁界に関する主要項である。これに対し、スカラ積B・Aの項は両者が平行しているときに作用する項で強さとしては十分弱いと考えられる。<br />
+&nbsp; ボルツマン方程式では Bに関する項のみf0ではなくfを使う。f0を使うと消滅してしまうため。このことは、磁界は熱平衡では何の作用も及ぼさず、非平衡状態の粒子に対してのみ作用することを意味する。<br />
+<br />
+□ 化学ポテンシャル [T6]<br />
+&nbsp; P * dV が物理的仕事であれば、K * dN は化学的仕事と考えることができる。すなわちP*dVとのアナロジーからKは物質粒子Nの流れを発生させる圧力を導くものと考えられる。このことより、Kを化学ポテンシャルと名づけられた。2つの系の化学ポテンシャルが等しい、すなわちK1=K2なら物質の流れは停止し、熱平衡になる。<br />
+<br />
+□ 電気化学ポテンシャル[T6]<br />
+&nbsp; &mu;= K - e * V<br />
+&nbsp; これは化学ポテンシャルと電気ポテンシャルの和である（後者に負号が付くのは電子が負の電荷を持つため）。換言すると、電子を動かすときに必要な仕事は化学的仕事K（粒子移動に関係）と電気的仕事（-e)Vの和でなければならない。熱平衡状態では電気化学ポテンシャルはフェルミ・エネルギーに等しい。<br />
+<br />
+□ 一般化されたオームの法則[T6]<br />
+&nbsp; e * J =&nbsp;&sigma; (d&mu;/dx)<br />
+&nbsp; ここで、&mu;を化学ポテンシャルではなく、電気化学ポテンシャルとすると下記の式が得られる。<br />
+&nbsp; e * J = &sigma; * [ dk/dx - e * dV/dx ) or J = (&sigma;/e)*(dK/dx) + &sigma; * F<br />
+&nbsp; 化学的力と電気的力の両者が存在しているときに有用となる。電荷のみの運動によって生成される電流は電気ポテンシャルの勾配のみによって決まるが、電荷と質量の両者を考慮した粒子による電流は、電気化学ポテンシャルの勾配に依存することが分かる。<br />
+<br />
+□ 電気伝導度<br />
+A. ドゥルーデ理論：古典論に基づく。<br />
+B. ボルツマン方程式： 基本的には古典論に基づいているが、分布関数としてフェルミ分布関数を用いていること、そして、緩和時間&tau;を遷移確率の計算から求めることに量子論を取り入れることで、半古典論と呼ばれる。<br />
+C. 線形応答理論： &tau;<sup>-1</sup>は2次摂動で計算されるが、&sigma;&prop;&tau;であるため、&sigma;の計算は2次摂動では不十分である。電気伝導度に対してこのような摂動展開を間違いなく実行できる理論が線形応答理論である。この理論をグリーン関数を用いて表現し、電子の散乱の効果を近似的に取り入れることによって、電気伝導度に対する系統的摂動計算が可能となる。この取り扱いでは、ボルツマン理論で取り入れることが困難であったミクロな電子状態も自動的に取り込まれる。<br />
+D. 久保-グリーンウッド公式（Kubo-Greenwood formula)： 振動数に依存した電気伝導度の一般的表式に対して、直流伝導度を得るために&omega;&rarr;0の極限をとり、0 K, &part;f/&part;&epsilon; = -&delta;(&epsilon;-&epsilon;p)を用いたもので、T=0 Kかつ1粒子近似の範囲内でどんな問題にも適応できる。<br />
+E. ランダウアー公式（Landauer formula）： 電気抵抗を特徴付ける系の長さが平均自由行程程度になると、電気伝導に量子性が現れる。量子伝導の特徴は、久保公式（久保-グリーンウッド公式）よりも透過係数を用いて議論するランダウアー公式の方が理解しやすい。<br />
+&nbsp; 強磁性金属において、&uarr;スピン電子と&darr;スピン電子が独立に電気抵抗に寄与すると考えてよい。そのため、電気伝導度に対するドゥルーデ公式はスピンごとに成立する。<br />
+第4講 金属の基本物性の電子論： <a href="http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf">http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf</a>&nbsp;も参考になる。<br />
+◇&nbsp;電気伝導度における軌道の影響<br />
+「電気伝導を考えるにあたっては、電気伝導が主としてspバンドによって担われていることを知る必要がある。fバンドは基本的に散乱にしか寄与しないと考えてよい。dバンドは電気伝導に寄与するが、一方、大きな散乱を生み出す原因でもある。dバンドは本来、d波共鳴準位が結晶格子上に並ぶことによってできた状態であり、共鳴の中心付近で大きな散乱断面積を持っている。これらが周期的に並んでいる限り電気抵抗は生じないが、少しでも周期性が乱れると大きな散乱効果となって電気抵抗に寄与する。<br />
+　さらに、物質の磁性が主としてdバンドによって引き起こされることを思い起こせば、磁性と伝導の間に強い相関が生じることが理解できる。例えば、磁性の空間的な揺らぎは強い電子散乱を引き起こす。また磁性合金においては、上向きスピンバンドの伝導と下向きスピンバンドの伝導の様子が全く異なるということが起きる。（省略）<br />
+　電気伝導を制御するための重要なファクターの1としてフェルミ面の制御がある。これは合金化やドーピング技術を用いてなされる。これらによって、バンド中のフェルミエネルギーの位置が変わったり、新たなバンドが生じたりする。それとともに、フェルミ面の電子の性格が変わることも重要である。すなわち、d成分やsp成分の割合が変化することが伝導に大きな影響を与える。散乱の影響がこのようなフェルミ面を作る電子の性格にもよることは上で述べたが、それだけではなく散乱は電子のエネルギーにもよっている。これらの原因によってフェルミ面が変化すればフェルミ面上の電子の寿命は変化する。また1枚のフェルミ面上でも寿命は決して一定ではなく、特に、遷移金属では場所によって大きく変化する。<br />
+　これらの複数個の要素を考えて、物質の電気伝導を考えれば、ある程度の予測をすることはできる。しかし、電気伝導が思わぬ振る舞いをすることはあり、これは計算を行っても物理的解釈がつかず、機構の解明が困難な場合もある」（赤井久純/白井光雲、「密度汎関数法の発展」、シュプリンガー・ジャパン）<br />
+※ バンド分散を見て、電子の有効質量から電気伝導を考察することがあるが、バンド分散図は特定の方向のみに対してプロットされたものであるので、他の方向などでどのようなバンドの変化をしているかを調べておくことが大切である。他の方位で有効質量が小さいと、その小さい有効質量のバンドが伝導を主に担う場合もある。（例えば、1/m<sub>ave</sub>&nbsp;?&nbsp;&nbsp;1/m<sub>hevy</sub> + 1/m<sub>ｌight</sub> + ・・・ ）<br />
+<br />
+□&nbsp;電気抵抗の温度変化<br />
+&rho;(T) /&rho;(300 K)= a + b * T + exp(&Delta;E/T) [ER1]<br />
+&rho;(T) = &rho;<sub><font size="2">0</font></sub> + &rho;<sub><font size="2">1</font></sub>*ln(T) + &rho;2 * (T/&theta;<sub><font size="2">D</font></sub>)<sup><font size="2">n</font></sup> * &Sigma;&int;<sup><font size="2">&theta;</font><sub><font size="1">D</font></sub><font size="2">/T</font></sup><sub><font size="2">0</font></sub>&nbsp; x<sup><font size="2">n</font></sup> * e<sup><font size="2">-kx</font></sup> dx [ER2]<br />
+&nbsp; The first term &rho;<sub><font size="2">0</font></sub> is the residual resistivity independent of temperature, the second term represents temperature dependent spin scattering, and the last term arises from the electron&ndash;phonon interaction. &theta;<sub><font size="2">D </font></sub>is the Debye temperature.<br />
+&sigma;(T) = &sigma;<sub><font size="2">０</font></sub> + &sigma;<sub><font size="2">1</font></sub> * T<sup><font size="2">1/2</font></sup> + &sigma;<sub><font size="2">2</font></sub> * exp(-E<sub><font size="2">G</font></sub>/2k<sub><font size="2">B</font></sub>T) [ER3]　（&larr;これは電気伝導度）<br />
+&rho;(T) = &rho;<sub><font size="2">imp</font></sub> + a * T<sup><font size="2">2</font></sup> + b * T<sup><font size="2">5</font></sup> + c * T [ER4]<br />
+&nbsp; R<sub><font size="2">imp</font></sub>は不純物によって決まる最低の電気抵抗で温度に依存しない。電子と電子の散乱がT<sup><font size="2">2</font></sup>, フォノンによる電子の散乱がT<sup><font size="2">5</font></sup>に比例する。<br />
+&rho;(T) = &rho;(0) + A *&nbsp;(T/&theta;<sub><font size="2">D</font></sub>)<sup><font size="2">n</font></sup> * &int;<sup><font size="2">&theta;</font><sub><font size="1">D</font></sub><font size="2">/T</font></sup><sub><font size="2">0</font></sub>&nbsp; x<sup><font size="2">n</font></sup>&nbsp;/ [(e<sup><font size="2">x</font></sup> - 1)(1- e<sup><font size="2">-x</font></sup>)] dx [ER5]<br />
+&nbsp; &rho;(0) is the residual resistivity due to defect scattering, A is a constant that depends on the velocity of electrons at the Fermi surface, the Debye radius and the number density of electrons in the metal. n is an integer that depends upon the nature of interaction:<br />
+n=5 implies that the resistance is due to scattering of electrons by phonons (as it is for simple metals)<br />
+n=3 implies that the resistance is due to s-d electron scattering (as is the case for transition metals)<br />
+n=2 implies that the resistance is due to electron&ndash;electron interaction.<br />
+[ER1] A. Slebarski et al., J. Phys.: condens. Matter 18 (2006) 10319.; <a href="http://iopscience.iop.org/0953-8984/18/46/002">http://iopscience.iop.org/0953-8984/18/46/002</a><br />
+[ER2] M. Vasundhara and V. Srinivas, Phys. Rev. B 77 (2008) 224415.; <a href="http://journals.aps.org/prb/abstract/10.1103/PhysRevB.77.224415">http://journals.aps.org/prb/abstract/10.1103/PhysRevB.77.224415</a><br />
+[ER3]<br />
+[ER4] 電気抵抗<span dir="auto">, wikipedia (Japanese)</span><br />
+[ER5] <span dir="auto">Electrical resistivity and conductivity, wikipedia (English); </span><a href="http://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity">http://en.wikipedia.org/wiki/Electrical_resistivity_and_conductivity</a><br />
+[ER6] M. Vasundhara et al., J. Phys.: Condens. Matter 17 (2005) 6025.; <a href="http://iopscience.iop.org/0953-8984/17/38/008">http://iopscience.iop.org/0953-8984/17/38/008</a><br />
+[ER7] Heat transfer physics, wikpedia(English); <a href="http://en.wikipedia.org/wiki/Heat_transfer_physics">http://en.wikipedia.org/wiki/Heat_transfer_physics</a><br />
+<br />
+□ 動的平均場理論[B1]<br />
+&nbsp; 希土類化合物など、局在性の強い電子系に対して有効である。<br />
+<br />
+□ 近藤効果[B3]<br />
+&nbsp; 貴金属にFeやMnなど磁気モーメントをもつ不純物を微少量添加した系では、低温において電気抵抗率が異常な温度依存性（電気抵抗極小）を示す。伝導電子のスピンと不純物スピンとの間にはたはく相互作用を3次摂動で計算すると電気抵抗率にlogTの黄項が現れることを近藤（1964年)がはじめて示したため、近藤効果と呼ばれている。これは低温において、伝導電子のスピンと不純物スピンとが強く結合するためである。比熱や帯磁率の温度依存性にも異常が現れる。<br />
+<br />
+□ ハーフメタル<br />
+&nbsp; 多数スピンの電子が金属的であるのに対し、少数スピンの電子が半導体的である物質。少数スピンのDOSに対してはフェルミ面においてエネルギーギャップが存在する。<br />
+1. ハーフメタル強磁性体の0 Kにおける磁気モーメントは整数である。今、多数スピンと少数スピンの電子数をn&uarr;, n&darr;とすると全電子数はn = n&uarr; + &nbsp;n&darr;である。磁気モーメント&mu;m は&mu;m = &nbsp;n&uarr;&nbsp;-&nbsp;&nbsp;n&darr; で与えられる（単位は&mu;B)。ハーフメタルの場合、少数スピンバンドは閉じられているので、n&darr;は整数である。したがって、ハーフメタルの磁気モーメントは整数となる。<br />
+2. 低温における自発磁化の温度変化がスピン波の励起によって支配される。自発磁化はMx(T)はT^(3/2)に比例して変化する。<br />
+3. フェルミレベルの位置に関係すが基本的に強磁場磁化率がゼロになる。<br />
+4. 多数スピンのバンドを圧力の作用により広げても、多数スピンを占有する電子は少数スピンバンドを占有できないので0 Kにおける自発磁化の圧力係数はゼロになる。<br />
+<br />
+□ キュリー温度<br />
+&nbsp; その温度以上では強磁性の性質が失われ、常磁性に変わる。ちなみに、Feは1043 Kである。フェリ磁性体のマグネタイト（Fe<sup>2+</sup>OFe<sup>3+</sup><sub>2</sub>O<sub>3</sub>）は858 K。<br />
+<br />
+□ 比熱 Cp<br />
+Cp = &gamma;*T (電子成分）&nbsp;+ &beta; * T^3&nbsp; (格子成分）<br />
+　ここで、&gamma;は格子比熱定数と呼ばれ、フェルミディラック統計を用いて、&int;<sub>0</sub><sup>&infin;</sup>[(&epsilon; - &epsilon;<sub>F</sub>) * D(&epsilon;) * df<sub>FD</sub>/dT]d&epsilon; = (&pi;<sup>2</sup>/3) * D(&epsilon;<sub>F</sub>) * k<sub>B</sub><sup>2</sup> * T となる。&beta;はデバイの比熱理論（デバイ模型）を用いて 9 * N * k<sub>B</sub> * (T/&theta;<sub><font size="2">D</font></sub>) * &int;<sub>0</sub><sup>T/&theta;<sub><font size="2">D</font></sub></sup>[(x<sup>4</sup>*e<sup>x</sup>)/(e<sup>x</sup>-1)<sup>2</sup>]dx&nbsp;で、T&lt;&lt;&theta;<sub><font size="2">D</font></sub> の場合は、(12/5) * &pi;<sup>4</sup> * N * k<sub>B</sub> * &theta;<sub>D</sub><sup>-3</sup>と得られる。[&beta; * T^3]は高温だと3 * N * k<sub><font size="2">B </font></sub>= 3* Rに近づく（デュロン・プティの法則）。<br />
+※ &beta;はアインシュタイン模型でも良いが、低温ではデバイ温度の方が良い一致を示す。<br />
+※ 下記のwikipediaのデバイ模型の欄に書かれているが、絶縁体だと格子成分のみでも良い近似になる。金属だと電子成分が無視できなくなり、十分に低温だと電子成分が支配的になる。<br />
+※ 論文では上記に類似した積分が書かれることが多いが、「ボース・アインシュタイン統計にエネルギーを掛けて積分した形（さらにヤコビヤンを使って直交座標から球座標の積分の計算に変換する）なのであまり気負う必要は無い」と私は勝手に思っている。&int;<sub><font size="2">0</font></sub><sup><font size="2">T/&theta;</font><sub><font size="2">D</font></sub></sup>[(x<sup><font size="2">4</font></sup>*e<sup><font size="2">x</font></sup>)/(e<sup><font size="2">x</font></sup>-1)<sup><font size="2">2</font></sup>]dx&nbsp;の形は良く見る。<br />
+<a href="http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf">http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf</a><br />
+Wikipedia(デバイ模型）：<a href="https://ja.wikipedia.org/wiki/%E3%83%87%E3%83%90%E3%82%A4%E6%A8%A1%E5%9E%8B">https://ja.wikipedia.org/wiki/%E3%83%87%E3%83%90%E3%82%A4%E6%A8%A1%E5%9E%8B</a><br />
+<br />
+□ 格子比熱 Cplatt<br />
+　Cpの温度変化はDebyeモデルから与えられる式にほぼ従う。通常3d遷移金属系金属間化合物の場合、Debye温度が300?400 K程度になることが多いので、室温付近では Dulong-Petit則として知られる一定の値への漸近を示す。この値はモル当たりで気体定数Rの３倍程度である。Cp の単位には注意すること。&quot;mole formula unit&quot;がある。<br />
+<br />
+□ 電子比熱 Cpel<br />
+WIEN2kの出力ファイルでは下記の英語をよく読むこ。<br />
+「Gamma in mJ/(mol cell K**2). (Divide by number of formula units in cell to get it per mole only)」<br />
+moleあたりの値にするには化学式単位数で割れと書いてある。デバイ温度の計算でも単位の違いに注意すること。<br />
+<br />
+□ 熱伝導[T10-T17]<br />
+　絶縁体の熱伝導はフォノンによて支配され、デバイ温度以上では、デバイ温度の3乗に比例し、温度に反比例する。フォノンは不純物や各種の欠陥で散乱され、熱伝導率が低下する。AlNでは、高温になるとフォノンの平均自由行程が粒界や欠陥などの外因よりも、結晶自体の非調和振動によって支配されるために、単結晶と焼結体の差はほとんどなくなるようになるが、1500 Kを超えると理論値より実測値の方が輻射などの影響のため、熱伝導率が高くなる。<br />
+　音速により比熱と熱伝導率を推測する方法（稲葉誠二ら、日本金属学会誌 65 (2001) 680.）がある。<br />
+　Deby-Callaway [T21] などが熱伝導率の解釈に使われたりする。<br />
+　熱伝導率の予測には摂動分子動力学法(<a href="http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf">http://www.jim.or.jp/journal/j/pdf3/69/01/61.pdf</a>)などが使われる。<br />
+　熱伝導率 = 熱拡散率 * 比熱容量 * 密度<br />
+　-----<br />
+　熱伝導率 k = k<sub>el</sub> （電子） + k<sub>ph </sub>（フォノン）<br />
+&nbsp;&nbsp; k<sub>ph</sub> = k<sub>D</sub> + k<sub>h</sub> = デバイモデル + ホッピングモデル<br />
+　デバイモデル： 低温側にピークがあり、高温側で減少する。<br />
+　ホッピングモデル： k<sub>h</sub> = k<sub>0h</sub> * exp ( -E<sub>h</sub> / {K<sub>B</sub> * T}) となり、温度の上昇で値が増加する。<br />
+&nbsp;&nbsp; ※ k<sub><font size="2">ph</font></sub>が温度の上昇で増加する理由としては下記が考えられる。<br />
+　・ホッピングモデル<br />
+　・界面のコンタクトが温度上昇により良くなる<br />
+　・ヴィーデマン・フランツ則の仮定が崩れる場合<br />
+　・歪みの緩和<br />
+　-----<br />
+・T &lt; &theta;<sub>D</sub>：量子効果が出てくる。高いTHzは低温で効く。<br />
+※ &theta;<sub><font size="2">D</font></sub>は物理的に結合の硬さを示す。特に置換元素の計算ではmole単位で揃えるためにセル（スーパーセルを考えて）中の化学式単位で割る。<br />
+・kが高い：ノーマル過程が重要になる。<br />
+・マティーセンの規則：1/&tau;　= &Sigma;(1/&tau;）となること。<br />
+・オースティン、カルテック、Minnich（カリフォルニア工科大）、Sakataの論文も見ておくと良い。<br />
+◇ 非調和<br />
+　現実の結晶の格子ポテンシャルには、非調和項と呼ばれる3次以上の高次の項が必ず存在する。この非調和項によってフォノンが散乱されることにより、フォノンの寿命や平均自由行程は有限になる。非調和項の大きさが、格子の熱伝導率を決定付ける最も基本的な要因の一つとなっている。（省略）格子ポテンシャルの非調和項は欠陥の全く無い結晶であっても必ず存在する。<br />
+　2原子間に働くポテンシャル V(r) を展開すると、r<sup>2</sup>のある項が調和項、r<sup>3</sup>以上の項が非調和項となる。調和項では、フォノンは無限大の寿命を持つ。一方、r<sup><font size="2">3</font></sup>以上の項である非調和項は、フォノンが有限の寿命を持つことになる（有限温度においては平衡点がr=0からずれるため、熱膨張の原因になる）。（省略）欠陥のない結晶の場合、フォノンの散乱に関する最も基本的な要因の一つは、原子間ポテンシャルの非調和項である。<br />
+<a href="http://flex.phys.tohoku.ac.jp/riron/ronbun/m14mizu.pdf">http://flex.phys.tohoku.ac.jp/riron/ronbun/m14mizu.pdf</a><br />
+<br />
+□ 最低熱伝導率[T18, T19]<br />
+　フォノン熱伝導率は格子比熱、音速、平均自由行程の積で表される。ドーピングや微細組成制御は平均自由行程を短縮できるが、平均自由行程は原子間隔以下にはできないため、各物質には固有の最低熱伝導率kminが存在する。<br />
+　kmin 　?　1.04 * k<sub>B</sub> *&nbsp;M<sup>-1/2</sup> * B<sup>1/2</sup> * V<sup>-1/6</sup><br />
+　ここで、Mは原子の平均質量、Vは原子1個あたりの体積<br />
+<br />
+□ 平均音速[T20]<br />
+　平均音速 v　?　0.87 * 縦波の音速 = 0.87 * &radic;(B * V/M)<br />
+　ここで、Bは体積弾性率、Mは原子の平均質量、Vは原子1個あたりの体積<br />
+・k<sub><font size="2">ph&nbsp;</font></sub>= (1/3) * Cp * v * l<sub><font size="2">ph</font></sub><br />
+l<sub><font size="2">ph</font></sub>は平均自由行程。フォノン間相互作用であるウムクラップ過程によって、100 K 以上でl<sub><font size="2">ph</font></sub>が数十から数百nm程度に減少する。<br />
+<br />
+□ 熱伝導率の低減<br />
+・音速の低下<br />
+・フォノン散乱<br />
+　非調和振動、不純物（質量差、格子歪み）、結晶粒界<br />
+<br />
+□ 音響・光学モードと熱伝導率の関係<br />
+・音速 &prop; 1/&radic;M, Mは質量<br />
+・音響モード：&nbsp;&omega; = 2 * &radic;(K/M) * |sin(ka/2)| = a * &radic;(K/M) * |k| = 音速 * |k|<br />
+・光学モードの数（3次元） = 3(N-1), Nはセル中の原子数<br />
+・光学モードはほとんど熱を伝えない。<br />
+・非調和振動の効果： フォノンのモードが互いにエネルギーをやりとして遷移する（ウムクラップ過程）。<br />
+・モードが密集しているほど遷移し易い。<br />
+・光学モードのエネルギーが低くなって、音響モードと重なると、熱伝導率が低下する。<br />
+・低い&omega;(THz)に多くのモードが密集している方が良い。<br />
+・Fe<sub>2</sub>VAlのフォノン分散図： V. Kanchana et al., Phys. Rev. B 80 (2009) 125108.<br />
+・Bi<sub>2</sub>Te<sub>3</sub>のフォノン分散図： J. O. Jenkins et al., Phys. Rev. B 5 (1972) 3171.<br />
+・フォノン分散関係&nbsp;: 音速（群速度）、非調和振動<br />
+<br />
+□ Klemensの理論： P. G. Klemens, Proc. Phys. Soc. London Sect. A 68 (1955) 1113.<br />
+・1/フォノンの緩和時間＝1/&tau; &prop; S<sup>2</sup>, S<sup>2</sup> = S<sub>1</sub><sup>2</sup> + (S<sub>2</sub><sup>2</sup> + S<sub>3</sub><sup>2</sup>)<sup>2</sup><br />
+・質量が関係する項： S<sub>1</sub> = ?M / M * (1/2) * (1/&radic;3)<br />
+・結合の強さが関係する項： S<sub>2</sub> = &delta;(v<sup>2</sup>) / v<sup>2</sup> * (1/&radic;6)<br />
+・格子歪が関係する項： S3 = -Q * &gamma; * ?R / R * &radic;(2/3)<br />
+　原子半径の違いから見積れる： Scattering by Point Imperfection<br />
+<br />
+□ M. Mikami et al, J. Appl. Phys. 111 (2012) 093710.<br />
+・1/&gamma; &prop; &Gamma;, &Gamma; = &Sigma;x<sub>i </sub>[{(M-M<sub>i</sub>)/M}<sup>2</sup> + &epsilon;{(&delta;-&delta;<sub>i</sub>)/&delta;}<sup>2</sup>]<br />
+・klemensの理論を使うと、格子歪みの効果の方が質量差の効果より大きい。<br />
+<br />
+□ 熱伝導率の計算方法（レーザーフラッシュ）<br />
+・熱伝導率[W/mK] = 熱拡散率[cm<sup>2</sup>/s] * 比熱[J/gK] * 密度[g/cm<sup>3</sup>]<br />
+ここで、J = W * s<br />
+※ レーザーフラッシュでの誤差<br />
+・熱伝導率：11%程度（&plusmn;5.5%程度）<br />
+・熱拡散率：3%（&plusmn;1.5%程度）<br />
+・比熱（ばらつきも測定日に依存）：10%程度（&plusmn;5%程度）<br />
+-----------<br />
+※ 関連情報として、ゼーベック係数の測定装置であるZEM-3の誤差<br />
+・同じ試料を複数回測定したときの差：&plusmn;1.2%<br />
+・試料を冷やすタイプのオザワよりも、暖めるタイプのZEM-3の方がゼーベック係数が高く出る傾向<br />
+・ゼーベック係数を得るための最適な?T=2.5?3 Kと言われる。<br />
+<br />
+□ 非弾性散乱（IXS）<br />
+・音速、非調和振動、不純物に関係するデータが取得できる。<br />
+・h&omega;/2&pi; = h&omega;<sub>2</sub>/2&pi; - h&omega;<sub>1</sub>/2&pi;<br />
+・Q = |q2-q1| = 4&pi;/&lambda; * sin&theta;<br />
+・0 meV が弾性散乱のピーク、そこから離れたところにフォノンのモードのピークが現れる。<br />
+・ピーク幅は、質量と歪み（この手法では質量と歪みは分離できない）、緩和時間と装置の分解能に関係する。<br />
+・測定時間： 4本/1日 (1度の測定で4本とれる。単結晶だと測定時間が短くなる）<br />
+・真空と大気はカプトン膜で隔てられている。<br />
+・使用する入射光のエネルギー、例えば、20 keVに吸収のピークがある物質は&times;<br />
+・試料の厚みは数mm, 透過は重元素があると0.数mm？<br />
+<br />
+□ 蛍光ホログラフィー<br />
+・格子歪みに関するデータが取得できる。<br />
+・結晶性が高くなくても良い。<br />
+・軽元素（Caなど）は、発生する蛍光X線のエネルギーが小さくて大気に吸収されてしまうのに加え、検出器の配置が試料側に近くなりすぎて、測定が難しくなる。周囲を真空にするか、軽元素（He）などで満たすことで対処できそうである。<br />
+<br />
+□ XAFS<br />
+・ バックスキャッタリングから周囲の原子配置の情報を得る。<br />
+・ 第一近接はOK, 第ニや第三近接は難しくなる。<br />
+<br />
+□ 比熱と電子構造の関係<br />
+<a href="http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf">http://www38.tok2.com/home/shigaarch/PDF/ets4.pdf</a><br />
+<br />
+□ クラーク数<br />
+　地表付近に存在する元素の割合を質量パーセントで表したもの。wikipediaを見ると良い。<br />
+<br />
+□ クヌッセン数<br />
+・クヌッセン数 = lph / 界面間隔<br />
+・拡散熱輸送：クヌッセン数が小、界面の影響が小、光学フォノン<br />
+・弾道熱輸送：クヌッセン数が大、界面の影響が大、音響フォノン<br />
+・クヌッセン数が大きいと界面の影響が大<br />
+※ lel &lt; 界面間隔 &lt; lph<br />
+<br />
+□ 第一原理計算状態図と材料設計<br />
+◇ 平衡状態図を求めるとは、対象とする系に出現可能な相の自由エネルギーを求めるということと等価である。<br />
+◇ 系の自由エネルギー = 内部エネルギー + エントロピー<br />
+◇ 第一原理エネルギー計算は、極めて高い精度で相安定性を再現し得る。<br />
+◇ 理論計算においてエントロピー項を考慮して状態図を描く下記の問題を生じる<br />
+・規則-不規則変態温度が高温度側にズレる<br />
+・規則相単相領域が狭い<br />
+・固溶体単相領域が狭すぎる<br />
+　このような問題の最大の原因は、格子変形を一様変形のみに限定し、局所変形を導入していないことにある。このようにすると、固溶体やstoichiometryからずれた規則相の内部エネルギーが過大に評価される。この効果は原子サイズが大きく異なるような系でより顕著に現れてくる。<br />
+◇ 一般に結晶格子は、温度が高くなると熱膨張するが、これは高温では格子が柔らかくなることに対応している。柔らかい格子上では、たとえ大きさの異なる元素を局所緩和を許さずに配列するにしても、堅い格子上に配列するよりもエネルギーの増大は抑制されるはずである。<br />
+◆その他の傾向<br />
+・原子半径やイオン半径：原子間距離に関係<br />
+　原子半径やイオン半径の差が15%以下なら元素置換できるといわれている<br />
+　ランタノイド収縮で： La<sup>3+</sup> &gt; Lu<sup>3+</sup><br />
+　高いスピンの方が半径長い：Mn<sup>2+</sup>(high spin) &gt; Mn<sup><font size="2">2+</font></sup>(low spin)<br />
+　原子核が同じなら、価電子数や配位数が小で、イオン半径が小<br />
+　陰イオン &gt; 中性原子 &gt; 陽イオン<br />
+　陽イオン：高価数ほど小さくなる。配位数が小さいほど小さくなる。<br />
+　d<sup>4</sup> ?d<sup>8</sup>の遷移金属：原子半径はほとんど同じ<br />
+・電気陰性度：共有結合<br />
+　電気陰性度の差が大きいとイオン結合的、小さいと金属や共有結合的<br />
+　電気陰性度の差が小さい元素だと電気抵抗（&rho;）が小さい傾向<br />
+・バンドギャップ（閉殻になればできる可能性が高い）<br />
+　価電子帯がsやpで構成（d<sup>0</sup>やd<sup>10</sup>）：8電子則、18電子則（価電子がその数でちょうど閉殻になる）<br />
+　dバンドが埋っていない場合は、結晶構造によってdバンドが大きく変化する（結晶場と呼ばれて表ができている）<br />
+　それらを考慮しながら閉殻を作るようにsやpの電子を持つ元素を配置するればバンドギャップが出来る可能性が高い<br />
+・DOSで見たときに傾きが急峻なもの（局在的な軌道で構成される）はドープし辛い<br />
+　逆に緩やかな傾きのもの（自由電子的な軌道で構成される）はドープしやすい<br />
+・重い原子ほどdバンドのエネルギー的な幅の広がりは大きくなる（DOSで見たときに広いエネルギー範囲に広がる傾向）<br />
+・周期律表で原子番号の大きい方にいくほどバンドのエネルギーは低くなる（バンドが束縛エネルギー側になる）<br />
+<br />
+□ ギブス-トムソン効果<br />
+析出物が球と仮定。2&gamma;V&beta;/r だけエネルギーが不利になる。これを利用して、目的の系に置換をさせやすくする。<br />
+メカニカルアロイング（MA）だと非平衡になり、エネルギーが高く広くブロードな曲線を描く。拡散では、short そして、longの順に低エネルギーへ。<br />
+※ 間違っていたらごめんなさい。SiにSbを入れるときなどに考慮される。<br />
+<br />
+□ 析出物の生成自由エネルギー　<br />
+析出物の生成自由エネルギー = 析出物の体積 * ( 体積での自由エネルギー + 歪での自由エネルギー) + 界面での自由エネルギー<br />
+・連続析出物では「界面での自由エネルギー」が最低<br />
+・不連続析出物では「析出物の体積 * ( 体積での自由エネルギー + 歪での自由エネルギー)」が最低<br />
+※ 間違っていたらごめんなさい。経験的に、Cu-Ni-Siなどだと、ビッカース硬さ(Hv)での連続から不連続への変化は 450℃で10h近辺に。Al-Mg-Siで200℃だと500h近辺か。常温でミュオンスピン緩和が50min, 磁化が150min程度か。<br />
+<br />
+□ XRDとTEM（特にシリカを見るとき）<br />
+XRDがいつもよりブロードになった &rarr; 結晶子サイズが200 nm 以下より小さくなるほどブロード<br />
+XRDで特定の2&theta;で強度が弱い &rarr; 選択配向の影響<br />
+TEMで見えていてXRDで見えない &rarr; アモルファス化<br />
+<br />
+□ 複合ペースト（ユニットを作る際に用いられる）<br />
+・Ag&nbsp;+ 酸化物（例えば、Ga3Co4O9粉末）&rarr; 複合ペースト<br />
+・B（ボロン）で熱衝撃性が改善<br />
+・InGaを用いてモジュールを作ることもあるようです<br />
+<br />
+□ コンポジット<br />
+・コンポジット化して、Sはほぼそのままの値で、&rho;が減少して性能が向上？<br />
+<br />
+□ 実用化のための試験<br />
+・急性毒性試験<br />
+・エームズ試験<br />
+など<br />
+<br />
+References<br />
+[T1] 寺崎一郎、Netsu Sokutei 31 (4) 164-171.; <a href="http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf">http://www.netsu.org/j+/Jour_J/pdf/31/31-4-164.pdf</a><br />
+[T2] <a href="http://iroha.scitech.lib.keio.ac.jp:8080/sigma/bitstream/handle/10721/667/document.pdf?sequence=1">http://iroha.scitech.lib.keio.ac.jp:8080/sigma/bitstream/handle/10721/667/document.pdf?sequence=1</a><br />
+[T3] <a href="http://dspace.wul.waseda.ac.jp/dspace/bitstream/2065/5385/3/Honbun-4106.pdf">http://dspace.wul.waseda.ac.jp/dspace/bitstream/2065/5385/3/Honbun-4106.pdf</a><br />
+[T4] K. Durczewski and M. Ausloos, Phys. Rev. B 61 (2000) 5303.<br />
+[T5] T. Okuda, et al., Phys. Rev. B 63 (2001) 113104.<br />
+[T6] 小川吉彦、&quot;熱電変換システム設計のための解析&quot;、森北出版株式会社<br />
+[T7] G. Sundaram et al., Phys. Rev. B 59 (1999) 14915.; <a href="http://prb.aps.org/pdf/PRB/v59/i23/p14915_1">http://prb.aps.org/pdf/PRB/v59/i23/p14915_1</a><br />
+[T8] Di Xiao et al., Phys. Rev. Lett. 97 (2006) 026603.; <a href="http://prl.aps.org/pdf/PRL/v97/i2/e026603">http://prl.aps.org/pdf/PRL/v97/i2/e026603</a><br />
+[T9] <a href="http://ttf.pc.uec.ac.jp/home/tips/sc.html">http://ttf.pc.uec.ac.jp/home/tips/sc.html</a><br />
+[T10] 日本熱測定学会・応用熱測定研究グループ、『応用熱分析』、日刊工業新聞社<br />
+[T11] 応用物理、Vol.82 (2013) 917.<br />
+[T12] J. Callaway, Phys. Rev. 113 (1959) 1046..<br />
+[T13] J. Callaway and H. C. von Baeyer, Phys. Rev. 120 (1960) 1149.<br />
+[T14] P. G. Klemens, Proc. Phys. Soc., London, Sect. A 68 (1959) 1113.<br />
+[T15] R. Berman, F. E. Simon, and J. Wilks, Nature 168 (1951) 277.<br />
+[T16]&nbsp;M. G. Holland, Phys. Rev. 132 (1963) 2641.<br />
+[T17] D. G. Cahill et al., Phys. Rev. B 46 (1992) 6131.<br />
+[T18] H. K. Lyeo et al., Appl. Phys. Lett. 89 (2006) 151904.; <a href="http://scitation.aip.org/content/aip/journal/apl/89/15/10.1063/1.2359354">http://scitation.aip.org/content/aip/journal/apl/89/15/10.1063/1.2359354</a><br />
+[T19] 第11回日本熱電学会予稿集&nbsp;<br />
+[T20] Clarke D. R., Surf. Coat. Technol., 163-164 (2003) 67.; <a href="http://www.sciencedirect.com/science/article/pii/S0257897202005935">http://www.sciencedirect.com/science/article/pii/S0257897202005935</a><br />
+[T21] A. Sharma et al., Phy. Rev. B 83 (2011) 235209.; <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.83.235209">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.83.235209</a><br />
+[T22] 第一原理計算状態図と材料設計への応用：<a href="https://www.jstage.jst.go.jp/article/materia1962/31/7/31_7_626/_pdf">https://www.jstage.jst.go.jp/article/materia1962/31/7/31_7_626/_pdf</a>&nbsp;<br />
+※ 応用物理 Vol.85 (2016) p.710-715.には「熱物性（熱拡散率、比熱）測定のコツ」の記事がある<br />
+--------------------------------------------------------------------------------<br />
+■ 重要な点<br />
+・ SrTiO3の主成分は原子量の軽い酸素である。したがって、熱伝導の大部分を担うフォノンの周波数が重金属に比べて大きく、そのため比較的熱伝導率が大きいという、熱電材料としては致命的な弱点がある。<br />
+・Si-Ge系固溶体のように、フォノンを効率よく散乱するような不純物を混ぜる、あるいは欠陥や空隙などの界面を導入することによって熱伝導率を低減する手法が提案されている。<br />
+・結晶格子を歪ませる（熱伝導率を低下させるために部分置換を行うと生じる可能性がある）と、キャリア電子の伝導パスが乱れ、キャリア緩和時間が激減（＝移動度が低下）するという新たな問題が発生する場合がある。<br />
+・SrTiO3の低熱伝導化には結晶格子ひずみを導入する必要があるが、格子ひずみの導入に伴うS^2*&sigma;値の減少が同時に起こるため、低熱伝導化によるZT値の向上は困難。<br />
+□ 酸化物での探索の経験より得られる材料探索の勘所<br />
+・高い電気伝導率 &sigma;のある材料から高いゼーベック Sとなるように探索していくのがよい。<br />
+・Sを維持しつつ&sigma;を上げるのは難しい。<br />
+・Sを3倍にするのは難しいが、&sigma;は1から2桁下がる。<br />
+<br />
+■ 熱電特性の向上手法<br />
+A. フォノン散乱の増大<br />
+&nbsp; 析出物、粒界、積層欠陥によるフォノン散乱<br />
+B. キャリア制御<br />
+&nbsp; 粒界による低エネキャリア散乱、超格子構造による電子閉じ込め効果<br />
+C. ナノテクノジーの利用<br />
+&nbsp; 形状を3D&rarr;2D&rarr;1D&rarr;0Dとすることで、状態密度の形状を変化させて高いゼーベック係数を得る。例えば、「結晶の厚み＞電子での平均自由行程 &amp; フォノンでの平均自由行程」の関係を結晶の厚みを薄くしたり低次元化することで、「電子での平均自由行程＞結晶の厚み＞フォノンでの平均自由行程」の関係に変える。<br />
+※ Phonon Grass-Electron Crystal (PGEC)<br />
+<br />
+■ ボルツマン輸送方程式における緩和時間近似での問題<br />
+&nbsp; Seebeck 係数は主に緩和時間近似を用い、さらに緩和時間を一定にして Boltzmann 方程式を解くことで求められてきた。これは電子の緩和過程がフェルミ面上で単一でかつ一定の緩和時間で記述できるとした場合に成立する近似である。[6]<br />
+<br />
+■ Numann-Koppの理論[B2]<br />
+&nbsp; 格子熱伝導率klと物質の平均原子量Mとの間には次の関係がある。<br />
+&nbsp; kl = A * v * l / M<br />
+ここで、Aは定数、vは音速、はフォノンの平均自由行程である。また、Debyeの理論による kl=(1/3) * C * v * l から、C = 3 * A / M が得られる。<br />
+※ この他、共有結合型の化合物に比べて、イオン結合化合物は同じMでも桁違いにkｌが小さい。共有結合型材料は、共有結合電子を介在して原子核間が強く結合する。このため、フォノン振動が原子間を容易に伝播するので格子熱伝導率が大きい。これに対して、イオン結合は価電子のやり取りで生じるクーロン力で原子間が結合しているので原子核間の結合は弱く、格子によるフォノン伝播は良好でなく、格子熱伝導率は小さい。熱伝導率を減らすには、平均原子量が大きく、かつイオン結合している材料を探すことが求められる。<br />
+<br />
+■ 移動度[B2]<br />
+&nbsp; 移動度も大きくしなければならない。移動度&mu;は電子の格子散乱過程では&mu;&prop;（m<sup>*</sup>/m<sub>0</sub>)^(-3/2)であり、イオン化不純物散乱では&mu; &prop; (m<sup>* </sup>/ m<sub>0&nbsp;</sub>)^(-1/2)である。ここでm<sup>*</sup>は有効質量、m<sub>0</sub>は自由電子質量である。これより、電子有効質量m*は材料の電子散乱形式によって異なり、格子散乱過程では小さい方が好ましく、イオン化不純物散乱では大きいほうが好ましい。<br />
+※ 電子と正孔では移動度が異なるので、それも考慮に入れておく必要がある。電子と正孔とではゼーベック係数の符号が異なることも記憶しておかれたい。<br />
+<br />
+■ ギャップのある材料の場合[B2]<br />
+&nbsp; （省略）ギャップが0.2eV以上ではゼーベック係数が（省略）の一定値になる。ギャップが大きい半導体は電極部のオーミック接触性が良くないので、できれば小さい方が望ましい。これらのことより、ギャップは0.2?0.3 eV程度の範囲の半導体が熱電材料として望ましいと言える。<br />
+<br />
+■ 超格子型熱電半導体[B2]<br />
+&nbsp; 1個の電子が運ぶ熱エネルギーは高エネルギー電子ほど大きい。超格子型半導体では、特定のエネルギー・レベルにしか電子が存在しない。このため、高エネルギー電子の割合を増やすことができる。これが超格子型熱電材料が着目されている理由である。しかし、高温状態で使えば、この特徴は弱められる。従って、このような材料は本質的に低温状態で使うべきものであろう。<br />
+<br />
+■ 研究<br />
+a) スーパーセルを用いた不純物ドープでの性能の変化<br />
+b) 有機材料（導電性高分子や金属錯体高分子など）での探索<br />
+c) 有機-無機ハイブリッドでの探索<br />
+&nbsp; 熱伝導率の低い有機分子の影響で、Sは低下するが、ZTは増大する。（層間に絶縁性有機物をはさんで2次元的に伝導電子を閉じ込めることでSの増大も期待されるが、上手くいくかは不明）<br />
+d) 人工超格子<br />
+e)&nbsp;電界誘起2次元電子ガス<br />
+f) 金属粒子をナノコンポジット化<br />
+&nbsp; 還元剤（糖還元、NaBH4など）を用いてナノ微粒子を作り、アニールして試料に完全に着ける。パワーファクターが増大する報告がある。<br />
+g) 多晶や酸化物などを入れてp型のゼーベック係数を増加させる。[7]<br />
+h) etc<br />
+<br />
+参考文献<br />
+[1] <a href="http://sces.th.phy.saitama-u.ac.jp/~saso/lectures/Niigata02.pdf">http://sces.th.phy.saitama-u.ac.jp/~saso/lectures/Niigata02.pdf</a>　<br />
+[2] <a href="http://www.cybernet.co.jp/quantumwise/document/products/catalog/0801024stokbro.pdf">http://www.cybernet.co.jp/quantumwise/document/products/catalog/0801024stokbro.pdf</a>　<br />
+[3] <a href="http://ccmp1.phys.metro-u.ac.jp/~tatara/tatara/090611_kyoto/gf.pdf">http://ccmp1.phys.metro-u.ac.jp/~tatara/tatara/090611_kyoto/gf.pdf</a>　<br />
+[4] 戸嶋直樹、「化学」、67 (2012) 37.<br />
+[5] 太田裕道、応用物理、81 (2012) 740.<br />
+[6] <a href="http://www.ess.sci.osaka-u.ac.jp/pdf/Sotsuken/2010master.pdf">http://www.ess.sci.osaka-u.ac.jp/pdf/Sotsuken/2010master.pdf</a><br />
+[7] <a href="http://www.jim.or.jp/journal/j/pdf3/62/11/1075.pdf">http://www.jim.or.jp/journal/j/pdf3/62/11/1075.pdf</a><br />
+[8] 日本熱電学会 計算＆データ研究会<br />
+<br />
+基本をおさえるための重要な文献（下記の記述は特にこれらの参考文献を用いた）<br />
+[B1] 鹿又武、「機能材料としてのホイスラー合金」、内田老鶴圃<br />
+[B2] 小川吉彦、「熱電変化システム設計のための解析」、森北出版<br />
+[B3] 井上順一郎ら、「スピントロニクス 基礎編」、共立出版<br />
+<br />
+メモ<br />
+・&mu;B =Le/&radic;(2&pi;mkT) * exp(-Ea/kT)<br />
+logを取って1/Tでプロットし、傾きがEa（ポテンシャル障壁）, 切片が障壁間隔になる。<br />
+結晶粒：フォノン、結晶子系：電子<br />
+--------------------------------------------------------------------------------<br />
+■ 実験手法の基礎知識<br />
+<br />
+□ 単分散LaドープSrTiO3 (一辺 13 nmで粒子のばらつきの小さいナノキューブ)[T19]<br />
+　Sr(OH)<sub>2</sub>・八水和物、La(OH)<sub>3</sub>を水に溶解し、Ti源として Titanium bis(ammonium lactate)dihydroxide(TALH)を添加した。添加剤としてヒドラジン、t-ブチルアミン、界面活性剤としてオレイン酸を用い、NaOHを添加して塩基性にした。この際、pH, 加熱温度などを調整することにより、平均粒径、粒径の分布を調整した。合成したナノキューブをトルエンに分散させ、基板上に滴下し、UV照射しながら乾燥させることで粒子膜を作製している。ディップコーディング法によりナノキューブが配列した粒子膜を作製し、作製した粒子膜を1000℃以上、H<sub>2</sub>/Arの還元雰囲気下で熱処理している。<br />
+※ 水熱合成法で作られているようです。Nbなどでも例があるようです。もしかすると水和物がれば他のドープも可能？<br />
+※ 通常の水熱合成だと50-100 nmの粒径になってしまう。恐らく、界面活性剤が効いて粒径が小さい可能性がある。<br />
+<br />
+□ 複雑な試料作製を行う理由<br />
+　アーク炉（融点の高いものを溶かすため） &rarr; 高周波炉 &rarr; ロール（別の相が取れにくいため） &rarr; SPS(細かくした後、固めるため)<br />
+<br />
+□ Raman<br />
+・ 粒径が大きいと &Gamma;点におけるRamanシフトくらいになる<br />
+・ レーザーのパワーを変えるとRamanがシフトするのは熱の影響のため<br />
+<br />
+□ 同時ドーピング<br />
+　ドナーとアクセプターの同時添加により下記などの効果が得られる。<br />
+・ クーロン反発の緩和 &rarr; 固溶度の増加<br />
+・ 散乱機構の変化 &rarr; キャリア移動度の増加<br />
+T. Yamamoto et al., Phys. B 30-303 (2001) 155-162.; <a href="http://www.sciencedirect.com/science/article/pii/S0921452601004215"><font color="#0000ff">http://www.sciencedirect.com/science/article/pii/S0921452601004215</font></a>&nbsp;<br />
+<br />
+□ 2次元物質<br />
+・ 大量の水とアミン（膨潤を促す）： オスモティック膨潤を調べるとよい。<br />
+・ 層状物質の酸化物で二次元化が成されている<br />
+・ 得られた2次元物質は、価数の総和が0ではないが、これは熱力学的に安定であるためである。（周りがジャージを補っていることも考えられる）<br />
+・ 2元化した物質を積層させるためには、交互吸着法（超音波を用いてキャピテーションにより無駄な部分を可能な限り除くことも行われる）やラングミュア・プロジェット（LB）法で可能になる<br />
+・ 膜厚は、1層1層を積層させる毎に、紫外可視近赤外分光光度計における吸収強度を測定することで、確認することができる。<br />
+※ XRDにおいてラウエ関数に基づくサテライトピークが存在するかも調べてみるとよい。<br />
+--------------------------------------------------------------------------------<br />
+■ 実験手法の基礎<br />
+□ レーザーフラッシュ法 [1,2]<br />
+　レーザー光を瞬間熱源としたパルス加熱法による熱拡散率測定法。熱容量も測定できる。<br />
+　薄円板上の試料の片方の表面を、レーザー光のようなパルス状の光源により、瞬間照射し、その加熱によって生じる試料裏面の温度変化を温度センサにより測定し、その応答曲線を解析して熱拡散率を求める方法。<br />
+　円板試料（直径10mm前後、厚さ1-2mm）の表面に均一にパルス光を瞬間照射する。試料の裏面の温度上昇から試料の熱拡散率&alpha;は次式で求めることができる。<br />
+　&alpha;＝1.37 * L^2 / (&pi;^2 * t(1/2) ) = 0.139 * L^2&nbsp;/ t (1/2)<br />
+　ここでLは試料の厚さ、t(1/2)はレーザー照射後、試料の裏面温度が最高値&Delta;Tmの1/2に達するまでの時間を表す。<br />
+　試料の比熱容量Cpと密度&rho;が既知であれば、試料の熱伝導率&kappa;は次式により算出できる。<br />
+　&kappa; = &alpha; * Cp * &rho;&nbsp;<br />
+　※ レーザーフラッシュ（LF）法は、約10%の精度<br />
+□ 熱線法または非定常細線法<br />
+　非定常法による熱伝導率測定の一方法。無限大近似の均質で、一定温度に保持された試料内に金属細線を張り、これに微小な一定電流を通じた際に生ずる細線自体の温度上昇を測定し、次式から試料の熱伝導率を算出する方法。<br />
+　&kappa; = 2.303 * (I^2 * R / &Delta;T） * log(t2/t1) [w/mK]<br />
+　ここで、I, R, &Delta;T, t2, t1はそれぞれ細線に流した電流、細線の電気抵抗、&Delta;Tは時間t1から時間t2までの時間に昇温した温度上昇度。<br />
+　均質な断熱材、耐火煉瓦、ガラスなどの熱伝導率測定に用いられる。<br />
+□ DSCによる比熱測定 [3-10]<br />
+　&nbsp;Dulong-Petit則による3RよりもDSCによる比熱の方が大きくなるのは、Dulong-Petit則において比熱における電子成分が考慮されていないことが考えられる。<br />
+[1] 日本熱測定学会・応用熱測定研究グループ、『応用熱分析』、日刊工業新聞社<br />
+[2] <a href="http://nsst.nssmc.com/research_support/bussei_Thermal_laser.html">http://nsst.nssmc.com/research_support/bussei_Thermal_laser.html</a><br />
+[3] <a href="http://www.ube-ind.co.jp/usal/documents/p245_141.htm">http://www.ube-ind.co.jp/usal/documents/p245_141.htm</a><br />
+[4] <a href="http://kikakurui.com/k7/K7123-2012-01.html">http://kikakurui.com/k7/K7123-2012-01.html</a><br />
+[4] <a href="http://www.iic-hq.co.jp/library/pdf/045_06.pdf"><font color="#0000ff">http://www.iic-hq.co.jp/library/pdf/045_06.pdf</font></a><br />
+[5] <a href="http://www.therm-info.com/uploads/TMDSCApplications.pdf">http://www.therm-info.com/uploads/TMDSCApplications.pdf</a><br />
+[6] <a href="http://www.nittech.co.jp/M12/pdf/M1227.pdf">http://www.nittech.co.jp/M12/pdf/M1227.pdf</a><br />
+[7] <a href="http://www.hitachi-hitec-science.com/documents/technology/thermal_analysis/column_01.pdf">http://www.hitachi-hitec-science.com/documents/technology/thermal_analysis/column_01.pdf</a><br />
+[8] <a href="http://www.netsu.org/j%2B/Jour_J/pdf/33/33-3-06.pdf">http://www.netsu.org/j%2B/Jour_J/pdf/33/33-3-06.pdf</a><br />
+[9] <a href="http://www.djklab.com/contents/exam/zairyo/dsc/">http://www.djklab.com/contents/exam/zairyo/dsc/</a><br />
+[10] <a href="http://www.nmij.jp/~nmijclub/netsu/docimgs/kato_20080207.pdf">http://www.nmij.jp/~nmijclub/netsu/docimgs/kato_20080207.pdf</a><br />
+--------------------------------------------------------------------------------<br />
+■ 分類<br />
+・A<sub>3</sub>B; Fe<sub>3</sub>Al; D0<sub>3</sub><br />
+・ABC; TiNiSn; C1b<br />
+・A<sub>2</sub>BC; Fe<sub>2</sub>VAl; L2<sub>1</sub>&nbsp;<br />
+<a href="http://j-parc.jp/researcher/MatLife/ja/meetings/MLFsympo/old/3rdMLFSympo/O4-1_Yasuda.pdf">http://j-parc.jp/researcher/MatLife/ja/meetings/MLFsympo/old/3rdMLFSympo/O4-1_Yasuda.pdf</a><br />
+--------------------------------------------------------------------------------<br />
+■ フルホイスラー（X<sub>2</sub>YZの分子式を持つ典型的規則合金; X,Y元素は3d, 4d, 5d遷移金属とランタノイド金属とアクチノイド金属、Z元素はs,p元素）<br />
+結晶構造： L2<sub>1</sub>, Fm-3m (225)<br />
+・ホイスラー相の安定性はY元素が周期律表の右側になるほど低下する。Fe-V-Al系状態図は未だ決定されていない。<br />
+・Fe2VAlは温度低下に伴って電気抵抗率が上昇、いわゆる半導体的挙動を示す。室温における電気抵抗率は0.7?0.8m&Omega;cm程度である。これに対して、Vの一部をTiで置換した場合(Fe2(V,Ti)Al)及びAlの一部をSiで置換した場合（Fe2V(Al,Si)), いずれも元素置換によって電気抵抗率が急激に減少することが観測されている。Fe2(V,Ti)Alにおいては+70&mu;V/K程度（p型）、Fe2V(Al,Si)においては-130&mu;V/K程度（n型）のゼーベック係数の絶対値増大と電気抵抗率の低下とが同時に達成されたことになる。<br />
+・Fe2VAlの室温における熱伝導率は合金の作製方法にも依存するが、15?30 W/mKとされている。Bi-Te系熱電変換材料の熱伝導率は1 W/mK程度であるから、一桁、あるいはそれ以上高い。<br />
+・Fe2VAlにおけるAlの一部をSiまたはGeで置換した場合の熱伝導率がNishinoらによって報告されている。これによると、Si, Geいずれの場合も置換によって熱伝導率が低下するが、原子量の大きなGeの方が効果が高く、20原子%のGe置換によって26 W/mKから11 W/mKへと大幅な低下が観測されている。Geの置換によって電気抵抗率が低下するため、keは増大するものの、それを上回るkphの低下によってトータルの熱伝導率（k=ke+kph)は低下する。<br />
+・Fe2VAlにおけるFeの一部をPt, Co, Rh, Ir, Reといった元素で置換して熱伝導率を低下させた場合、その中でもIrで置換した場合が最も効果が高く、6原子%の置換で8 W/mK程度まで熱伝導率が低下することが報告されている。<br />
+・Buschowらの報告によれば、Fe<sub>2</sub>TiAlはキュリー温度123 K, 4.2 Kにおける磁気モーメント0.11&mu;<sub>B</sub>/f.u.の強磁性体である。Fe<sub>2</sub>VAlとFe<sub>2</sub>VGaはフェルミレベル付近に擬ギャップを持つ常磁性半金属である。<br />
+・Fe<sub>2</sub>VSiは約123 Kにおける構造相変態と同時に常磁性から反強磁性に転移する。Buschowとvan EngenはFe2CrAlがL21構造を持ち、強磁性体であることを報告している。キュリー温度は246 K, 4.2　Kにおける1分子当たりの磁気モーメントは1.67&mu;Bである。一方、ZhangらはFe<sub>2</sub>CrAlの結晶構造はB2構造であると報告している。Fe<sub>2</sub>CrAl, Fe<sub>2</sub>CrGaの結晶構造と磁性については、今後の課題である。<br />
+・Fe<sub>2</sub>CoGa, Fe<sub>2</sub>NiAl, Fe<sub>2</sub>NiGaは全て強磁性体であるが、これらの合金の詳しい磁気特性は不明である。<br />
+・Co<sub>2</sub>YZ(Y=Ti,Zr,Nb)の光電子分光の実験結果とバンド計算の結果は一致せず、実測のバンド幅は計算から得たバンド幅よりも狭くなっていた。このことから、Co<sub>2</sub>YZ合金の3d電子は遍歴的ではあるが電子相関の強い状態にあると推定された。<br />
+・ホイスラー合金Fe<sub>2</sub>VASiとD0<sub>3</sub>型構造を持つ、Fe<sub>3</sub>Siの昆晶(Fe<sub>1-x</sub>V<sub>x</sub>)<sub>3</sub>Siの電気抵抗率の温度変化が報告されている。D0<sub>3</sub>型構造はL2<sub>1</sub>構造と非常に似た結晶構造で、A, B, Cサイトを同じ原子が占有するとその構造はD0<sub>3</sub>構造となる。Fe3SiのFe原の一部をV原子に置換すると、V原子は優先的にBサイトを占有する。Fe<sub>3</sub>Siはキュリー温度が823 Kの強磁性体である。<br />
+・Slater-Pauling則（軌道磁気モーメントの影響を無視していることに注意）： ： スピン磁気モーメント Ms (&mu;<sub>B</sub>)&nbsp;= 価電子数 Nv - 24<br />
+・ホイスラー相を含む金属間化合物は一般に脆く、ホイスラー系形状記憶合金は加工性の改善が常に懸念されている。大抵の場合、脆さの原因は結晶粒界であるため、結晶粒界が存在しない単結晶材料を利用するか、結晶粒界に第2相を析出させて粒界の強化をするような組織制御が行われる。最近では、粉末冶金法による加工性改善も報告されている。<br />
+<br />
+■ ハーフホイスラー（XYZの分子式を持つ典型的規則合金; X,Yが遷移金属、Z元素はs,p元素）<br />
+結晶構造： C1<sub>b</sub>, F-43m<br />
+・F. G. Aliev らは、MgAgAs型結晶構造（C1b構造、ハーフホイスラー構造）を持つMNiSn(M=Ti, Zr, Hf)が半導体的挙動を示すことを電気的測定や光学測定によって見いだし、0.1?0.2 eV程度のバンドギャップを観測した。<br />
+・これらの合金の熱伝導率は作製方法によってバラツキがあるもののおおむね8?17 W/mKと高く、この低減が当初からの課題であった。<br />
+・同属元素以外の元素で微量置換する場合、より電子数が多い元素で置換するとフェルミ準位の位置が上がって電子伝導性が増すため、このような添加（ドープ）のことをnドープと呼ぶ。一方、これと反対に電子数が少ない元素で微量置換するとフェルミ準位の位置が下がってホール伝導性が増すためpドープと呼ばれる。M(Ti,Zr,Hf)の一部をNb, V, Taで置換するのはnドープである。<br />
+・Bhattacharya らは TiNi(Sn,Sb) とTi0.5Zr0.5Ni(Sn,Sb)の熱伝導機構を詳細に検討し、前者は粒界散乱が支配的であるのに対して後者はTiとZrの原子量のバラツキによる散乱が支配的であること結論付けている。<br />
+・ChenらはPd置換合金とZrO2の粉末を混合し、放電プラズマ焼結によってバルク化することで熱伝導率のさらなる低下を試み、9体積%ZrO2を添加した試料において、室温で3.4 W/mKまで低下させることに成功。800 Kで ZT=0.75が得られている。<br />
+・Bhattacharya らは TiNiSnにおけるSnの一部をSbで置換（nドープ)することによって、650 Kにて6.9*10^-3 W/mKという高い出力因子を得ている。さらに、TiNi(Sn,Sb)に対してボールミルと衝撃圧縮法を併用することで、ハーフホイスラー結晶粒子を1&mu;m以下に微細化したバルク体が得られ、格子熱伝導率(kph)を約10 W/mKから3.7 W/mKに低減できることを示した。<br />
+・700 KでZT=1.5が得られている報告がある。<br />
+S. Sakurada and N. Shutoh, Appl. Phys. Lett. 86 (2005) 082105.<br />
+N. Shutoh and S. Sakurada, J. Alloys Compd. 389 (2005) 204-208.<br />
+・Slater-Pauling則（軌道磁気モーメントの影響を無視していることに注意）： スピン磁気モーメント Ms (&mu;<sub>B</sub>)&nbsp;= 価電子数 Nv - 18<br />
+<br />
+■ ホイスラー構造に関連したbcc規則構造<br />
+a) A2, Im-3m (W)<br />
+b) B2, Pm-3m (CsCl), X(Y,Z)<br />
+c) D0<sub>3</sub>, Fm-3m (BiF3) , X<sub>3</sub>Z<br />
+d) L2<sub>1</sub>, Fm-3m (Cu2MnAl) , X<sub>2</sub>YZ<br />
+e) Cl<sub>b</sub>, F-43m, (MgAgAs), ZYZ<br />
+&nbsp; ホイスラー構造は位相のズレた四つの面心立方（fcc)副格子からなる面心立方晶であるが、原子種を無視すれば体心立方晶の規則相として理解できる。<br />
+&nbsp; ホイスラー合金にはA2やB2といった2種類の&quot;不規則相&quot;があり、高温領域で規則-不規則変態を有する合金系は少なくない。フルホイスラー構造の規則-不規則変態を示す合金も存在する。ハーフホイスラー構造は、構成元素における2：1：1から1：1：1への化学量論組成からのずれにより、導入される空孔の規則配列により形成される。このような観点から、ハーフホイスラー相は「非化学量論フルホイスラー相の規則相」ということもできる。<br />
+&nbsp; 現実のホイスラー合金では、以上のように各副格子サイトに対し占有する原子種が決まっているわけではなく、温度によって溶質元素のサイト占有率（長範囲規則度）が変化するとともに、化学量論組成からのずれにより空孔やアンチサイト原子等の点欠陥濃度が大きく変化することを理解しておく必要がある。<br />
+<br />
+■ フルホイスラー合金の規則-不規則変態<br />
+&nbsp; ホイスラー構造は体心立方格子を基本にした規則相である。この規則相の規則-不規則変態を熱力学的に取り扱うには、四つの副格子を取り入れた統計熱力学的な解析が必要である。統計熱力学では、近年クラスター変分法など、精度の高いエントロピー近似を取り入れた手法も発展している。bcc格子を基本としたA2/B2/L21間の変態挙動に対しては、むしろ最も単純なブラッグ-ウィリアムズ-ゴルスキー(BWG)近似が実験結果とよく一致することが知られている。<br />
+&nbsp; 工業的に材料を取り扱う場合、相の安定性評価に容易に利用できる自由エネルギーが、温度と圧力を変数とするギブスエネルギー(G)である。ギブスエネルギーは、化学的結合エネルギーに起因するエンタルピー(H)、状態の乱雑さを示すエントロピー(S)、温度(T)を用いて次式で示される。<br />
+&nbsp; G = H - TS<br />
+&nbsp; 温度変化による相変態（転移）は、相によってHやSが異なることによって生じる。例えば、&alpha;,&beta;2相関でH&alpha;<hβかつsα<sβであれば、低温で安定相だったαが、昇温により、よりエントロピーの大きなβ相に変態する。<br> &nbsp; 低温で安定だったX2YZ-L21ホイスラー相は、温度の上昇と共により規則性の低いX(Y,Z)-B2相を経由して完全ランダムな配列を持つA2相へと逐次変態する。規則-不規則変態では、常に高温側が不規則性の高い構造となることがわかる。その理由は、それぞれの有するエントロピーに起因する。統計熱力学では、エントロピーはボルツマンの式<br />
+&nbsp; S= kB * ln (W)<br />
+によって与えられる。ここで、kBはボルツマン定数、Wは有し得るミクロな状態の組み合わせ数である。規則構造では、異種原子の配列の仕方は制約されるが、不規則構造では何通りもの配列の仕方が存在する。したがって、常にS規則相<s不規則相となるのである。bwg近似によれば、規則-不規則変態温度や規則性の度合い（長距離範囲度）は、合金の組成や温度の関数として与えられる。実験においてしばしば取り上げられるxy-xz(50 l21=""> &nbsp; TtB2/L21 = [ (24 * WYZ)/kB ] * fz * (0.5 - fz)<br />
+ここで、WYZは互いに第2隣接に位置するY-Z原子間の化学的交換相互作用エネルギーであり、第2隣接にあるi-j結合エネルギー&epsilon;ij を用いて、<br />
+&nbsp; WYZ = &epsilon;YY + &epsilon;ZZ - 2 * &epsilon;YZ<br />
+によって定義されている。BWG近似においては、50 at% X断面のTtB2/L21は、Z組成に対し25% Zを頂点とする放物線で与えられることが分かる。<br />
+&nbsp; B2/L21規則-不規則変態に先立つA2/B2規則-不規則変態の変態温度TtA2/B2が十分に高くない場合には、BWG近似での式を得るための仮定に反するためTtB2/L21が低温に押し下げられる。NiAl, CoAl, FeAlのTtA2/B2は、それぞれ3400 K, 3300 K, 1600 K程度と見積もられることから、Fe-Ti-AlではTtA2/B2が十分高くないためTtB2/L21が低温に押し下げられたと考えられる。<br />
+&nbsp; 第2隣接Ti-Al原子間相互作用はホスト元素Xに大きく影響を受ける。<br />
+&nbsp; B2/L21規則-不規則変態温度TtB2/L21が、合金系により大きく異なる点に注意が必要である。すなわち、In, Ga, Al系のTtB2/L21がNi-Mn-Sn系に比べて極端に低いという点である。Ni-Mn-Sn系は規則-不規則変態温度が高いため、高温での溶体化熱処理のみでも簡単に規則度の高いL21相を得ることができ、マルテンサイト変態や磁気変態は、熱処理履歴にあまり影響を受けない。一方、Al系はB2/L21規則-不規則変態温度が非常に低いため急冷により容易にB2相が凍結され、時効によって初めてL21相が得られる。SnとAlの中間程度のTtB2/L21を有するInやGa系では、B2領域から急冷しても冷却中にL21相に規則化するが、その規則度はあまり高くないため、高い規則度を得るためにL21安定域である623-723 Kでの熱処理が必要になる（TtB2/L21 はSn &gt; In &gt; Ga &gt; Al の傾向になる）。<br />
+&nbsp; Al系においては、B2相は反強磁性を示すのに対し、L21相に規則化させることで強磁性に変化することが知られている。ホイスラー合金系では、規則状態（度）によりマルテンサイト変態や磁気特性が大きく変化するため、Sn系以外では熱処理温度や焼入速度に気を遣う必要がある。<br />
+&nbsp; GaやMnを多く含有する合金は、試料作製時にそれらの酸化や蒸発などにより濃度変化が生じやすい。単結晶試料の作製時など、長時間の熱処理にあたっては目的の組成になっているか十分注意する必要がある。つまり、試料作製時の組成変化や熱処理条件によってもたらされる規則度の違いによって、同じ仕込み組成であっても得られた変態温度が大きく食い違う場合がある。<br />
+&nbsp; マルテンサイト変態およびキュリー温度は、低温で時効を行い、十分に高い規則度を持つと考えられる試料の結果を作用するとよい。<br />
+<br />
+■ 重要な3次元系状態図<br />
+&nbsp; ホイスラー合金の多くは、組成比2：1：1以外の非化学量論組成にわたって存在する。また、化学量論組成を有するからといって、必ずしもホイスラー相が単相として安定に存在するとは限らない。そこで、基本的に重要なのが合金を溶解・熱処理する場合に必要となる高温度域における合金状態図（相図）である。ホイスラー合金は、3成分以上の元素からなるので、必然的に3元系状態図が重要となる。<br />
+&nbsp; 相の平衡状態を与える&quot;ギブスの相律（示強性変数の自由度F = 成分の数 - 相の数 + 2）{&larr; +2 は温度Tと圧力Pの2つの示強性からきている｝&quot;によれば、等温・等圧状態における3元系合金の相の自由度Fは、単相でF=2、2相でF=1、3相でF=0となる。したがって、3元系等温状態図上の3相共存状態は、合金組成に依存せず画一的に定まっている。すなわち、3相共存域は平衡する3相の合金濃度同士を直線で結んでできた三角形の領域となり、相の組成は三角形の各頂点組成に対応する。<br />
+&nbsp; 平衡状態図はバルク試料における最終安定状態を与えるのであり、スパッタなどの非平衡プロセス材では、高温での熱処理を行わない限り必ずしも平衡状態図と一致しないことに注意が必要である。<br />
+&nbsp; ホイスラー構造は体心立方格子を基本にした規則相である。この規則相の規則-不規則変態を熱力学的に取り扱うには、四つの副格子を取り入れた統計熱力学的な解析が必要である。統計熱力学では、近年クラスター変分法など、精度の高いエントロピー近似を取り入れた手法も発展している。bcc格子を基本としたA2/B2/L21間の変態挙動に対しては、単純なブラッグ-ウィリアムズ-ゴルスキー（BWG）近似が実験結果とよく一致することが知られている。<br />
+&nbsp; 多くのホイスラー合金は単純な金属間化合物というより、幅広い固溶度（存在組成域）を持ち規則-不規則変態を示す等、金属的な特徴を色濃く示すため、相平衡・相変態の観点からも非常に興味深い材料であると言える。<br />
+<br />
+■ ホイスラー合金の回折強度線<br />
+&nbsp; ホイスラー合金の結晶構造は立方対称性を持つ。合金内の鉄族遷移金属の軌道磁気モーメントは大部分消失しているので合金内の磁気異方性エネルギーは小さい。Y, Z原子が完全無秩序化すると結晶構造はL21（Fm-3m）からCsCl型のB2構造（空間群 Pm-3m)に変化する。X, Y, Z原子が完全無秩序化するとA2構造になり、全ての規則格子線が消失する。<br />
+&nbsp; 構造因子F = &Sigma;fn * exp [ 2&pi;i( h*xn + k*yn + l*zn)]<br />
+&nbsp; F(111) = | 4 [ (fa - fc)^2 + (fb - fd)^2 ]^(1/2)|<br />
+&nbsp; F(200) = | 4 [ fa - fb+ fc - fd ] |, (h + k + l)/2 =2n+1 (n::整数）<br />
+&nbsp; F(220) = | 4 [ fa&nbsp;+ fb+ fc&nbsp;+ fd ] |, (h + k + l)/2 =2n (n::整数）<br />
+&nbsp; fa, fb, fc, fd はそれぞれA (0, 0, 0), B(1/4, 1/4, 1/4), C(1/2, 1/2, 1/2), D(3/4, 3/4, 3/4) サイトを占める原子の平均の原子散乱因子である。<br />
+&nbsp; F(220)は原子散乱因子の和であり、回折線強度は原子秩序に依存しない。F(220)にで代表される回折線は基本線と呼ばれる。<br />
+&nbsp; F(111)とF(200)は原子散乱因子の差の項を含むので、回折線強度は原子秩序に依存し、F(111), F(200)に代表される回折線は規則格子線と呼ばれる。<br />
+&nbsp; ホイスラー合金は温度の上昇に伴い、L21構造からB2型構造に相変態する。B2k型構造に変態すると上式から分かるように、(111)で代表される回折線は消失する。F(200)とF(220)を見るとわかるように、ホイスラー合金を構成するX, Y, Z原子の原子散乱因子に差がある場合には、規則格子線の強度が強く現れる。回折角が増大すると、個々の電子によって散乱された波は次第に位相が合わなくなり、原子散乱因子が減少する。また、原子散乱因子は入射X線の波長にも依存する。合金を構成する原子の原子番号が接近している場合、(220)のような基本線の回折強度に比べて(111), (200)のような規則格子線の回折強度は非常に弱く、X線回折実験によって結晶構造を決定することは困難である。その場合に有効な方法は粉末中性子線回折実験である。結晶構造解析に中性子回折が用いられる理由は、実験に使用される熱中性子の波長が結晶内原子間距離と同じオーダーであることによる。<br />
+<br />
+■ ホイスラー合金の中性子線回折<br />
+&nbsp; 中性子回折の回折線強度は構造因子の2乗に比例し、構造式は下記の式で表される。<br />
+&nbsp; Fn(hkl)=&Sigma;bn * exp [ 2&pi;i( h*xn + k*yn + l*zn)]<br />
+&nbsp; X線での原子散乱因子fが核散乱因子bに置き換えられている。X線は原子内電子によって散乱されるので、散乱ポテンシャルの広がりはX線の波長と同程度である。中性子は核力によて散乱される。核力の及ぶ範囲は約10^-12cmで中性子回折に用いる中性子の波長に比べ著しく小さい。したがって核による散乱ポテンシャルの広がりが中性子の波長に比べて著しく小さいので、核は幾何学的点と見なされ中性子による核散乱は拡散乱角に無関係になる。中性子散乱の特徴の一つは、核散乱振幅が負になり得ることである。もう一つの特徴は中性子回折実験に使う程度のエネルギーを持つ中性子に対して核散乱振幅が乱雑な値を持つことである。X2YZホイスラー合金のX線および中性子回折実験により、A, Cサイトを優先的に占有するX原子は周期表においてY原子よりも右側に位置していることが明らかになっている。一般に中性子の物質透過能は大きいので真の吸収の影響はあまり顕著に現れない。ただし、Li, B, Cl, Rh, In, Ir, Cd元素、希土類元素などの吸収断面積は大きいので、回折実験には長時間の測定が必要となる。ホイスラー合金の磁気特性は原子秩序に強く依存するので作製した試料の結晶評価は大切である。<br />
+&nbsp; 磁気モーメントは偏極中性子回折実験、スピン波は非弾性中性子回折実験により観測できる。<br />
+<br />
+■ ホイスラー合金の伝導特定<br />
+&nbsp; 一般に金属磁性体の抵抗率は以下のように散乱機構の異なる抵抗率の和として表される（マティーセン則｛Mattiessen rule｝）。<br />
+&nbsp; &rho;(T) = &rho;0 + &rho;ph(T) + &rho;mag(T)<br />
+&nbsp; ここで、&rho;0は不純物による抵抗で、&rho;phは格子振動による抵抗、&rho;magは磁気散乱による抵抗である。なお、電子が互いにクーロン相互作用を及ぼす結果生じる電子-電子散乱も抵抗に寄与するが、これは一般には小さい。<br />
+&nbsp; 電気伝導度の計算においては、散乱ポテンシャルV(r)を与えて、入射波exp(ik・r)が散乱ポテンシャルによって散乱され、exp(iK'・r）の波動に移り変わるときの散乱マトリックス<k'|v(r)|k>を求め、それから遷移確率、次に緩和時間を求めることになる。不純物による散乱の場合には散乱ポテンシャルは不純物の相互作用でり、計算結果は不純物による抵抗率が温度に依存しないことを示す。&rho;0は残留抵抗率と呼ばれ、不純物濃度に比例する。室温における抵抗率を&rho;(RT)とすると、&rho;(RT)/&rho;0は残留抵抗比（RRR: Residual Resistance Ratiko)と呼ばれ、物質の純度の目安となっている。<br />
+&nbsp; 電子は格子振動（フォノン）によっても散乱する。電子-格子相互作用を与えて、金属の格子振動による散乱の項&rho;phを計算するとデバイ温度以上では&rho;phは温度Tに比例し、低温でT^5に比例する（フォノン散乱による抵抗の温度依存性は、ブロッホ・グリューナイゼン則｛Bloch-Gruneisen rule｝）。<br />
+&nbsp; &rho;magは磁気散乱による項である。局在電子系では、伝導電子は局在してい配列している原子の3d磁気モーメントの乱雑さによって散乱されるので、T=0 Kで&rho;magはゼロである。低温ではスピン波による散乱が主流となる。温度の上昇に伴い、磁気モーメントのゆらぎが増加するので&rho;magは温度に対して上昇し、常磁性状態では一定となる。伝導電子が磁気モーメントと相互作用する結果生じるものであるため、この相互作用を、伝導電子のスピンと磁気モーメントを担う局在スピン（d電子またはf電子のスピン）との間の相互作用として表したものをs-d相互作用（またはs-f相互作用）と呼ぶ。高温における&rho;magは、伝導電子がこれらの相互作用のため散乱を受けるとする取り扱いがよい近似となる。このような散乱をs-d散乱（またはs-f散乱）という。なお、非磁性金属中の磁性不純物は近藤効果を示し、特異な温度依存性を与える。<br />
+&nbsp; 伝導電子と母体の局在スピンSとの間にRKKY相互作用が働くと仮定すると、&rho;magは以下のようになる。<br />
+&nbsp; &rho;mag = (3&pi;m*^2/(N * e^2 * (h/2&pi;)^2 )*(S-)*(S++1)*J^2 / EF<br />
+&nbsp; ここで、m*は伝導電子の有効質量、Nは単位体積中の原子数、は母体の平均のスピン数すなわち平均磁化、Jは伝導電子のスピンと局在スピンとの交換相互作用、EFは伝導電子のフェルミエネルギーである。T=0 KではS=となり、&rho;mag=0となる。温度上昇とともには小さくなり&rho;magは増大する。T=Tcで=0となるため&rho;magは最大となる。T&gt;Tcの常磁性領域ではこの値は最大で一定になり、この一定の抵抗値はスピン不規則散乱と呼ばれる。<br />
+&nbsp; kataokaは、局在スピンを持つ強磁性金属において、スピン揺らぎが電子を散乱することによって生じる電気抵抗をボルン近似で計算し、そのキャリア数依存性、スピンゆらぎ振幅依存性を理論的に調べている。この計算結果によると、少数キャリア強磁性金属では、常磁性領域における抵抗率の負の温度依存性および磁気転移温度での抵抗率の急激な変化が現れやすくなる。また、磁気的相変化が起きる臨界組成濃度領域においては、磁気転移温度付近で通常よりさらに大きい巨大スピンゆらぎが起きることが予想されるが、この巨大スピンゆらぎによる電子の散乱が、電気抵抗の温度依存性をさらに顕著にする。したがって、Kataok理論に基づくと、転移温度付近からの温度上昇に伴う抵抗の現象はスピンゆらぎが減少することの結果として理解されることであり、常磁性領域での金属-非金属転移を仮定する必要はない。<br />
+<br />
+■&nbsp;XPSやXANESなど<br />
+&nbsp; 内殻レベルシフト量 &Delta;E<sub>B</sub> = &Delta;&mu; - K * &Delta;Q + &Delta;V<sub>M </sub>- &Delta;E<sub>R</sub><br />
+&nbsp; ここで、&Delta;&mu;は化学ポテンシャルシフト、&Delta;Qは原子内での価電子数の変化（内殻正孔と価電子の間に働くクーロン力の変化を生み、化学シフトの原因となる）、Kは内殻正孔と価電子との結合定数、&Delta;V<sub>M</sub>はマーデルングポテンシャルの変化、&Delta;E<sub>R</sub>は内殻正孔が存在する光電子放出状態の終状態におけるエネルギー緩和を表す。全ての構成元素について同様の内殻シフトが観測されていることから、化学シフトよりも化学ポテンシャルシフトの方が大きいと考えられる場合もある。<br />
+&nbsp; 構成する原子の比率を変えて総電子数が減っても全ての構成原子が高い束縛エネルギーに変化している場合には、リジッドバンド（剛体バンド）的に考えるのではなく、電子構造が変化して、フェルミ端近傍に擬ギャップが形成されていると考えると上手く内殻シフトを説明できる場合がある（例えば、Fe<sub>3-x</sub>V<sub>x</sub>Si）。<br />
+&nbsp; 上記の式が詳細な解析の方法になるが、多くの場合、光電子分光（XPS）やXANESなどでの解析の場合、A原子からB原子へ電子が移動していれば、A原子の内殻準位（例えば、よく測定されるのは1sや2sや2pなど）は核に引かれて高い束縛エネルギー側へとシフトする。一方、B原子は電子を貰い受けて、核に引かれる力が弱くなり、B原子の内殻準位は低い束縛エネルギー側へとシフトする。これはある原子の価数の変化と対応付けることも可能で、XANESの測定から作製した価数を明らかにすることなどが行われる。<br />
+&nbsp; XPSでの内殻のスペクトルは、ピーク分離をすることで、どの原子がどのような構造で他の原子と結合しているかなどが明らかになる場合もある。ピーク分離（これはデコンボリューションと呼ばれる）は、フォークト関数（Voigt関数｛ガウス関数とローレンツ関数の畳み込み｝）や、金属の場合はDoniach-Sunjicの式が用いられる。ガウス関数は装置による分布の広がり、ローレンツ関数は内殻の寿命により測定したエネルギーの分布の広がにに対応する。<br />
+&nbsp; 当然ながら、実際の測定では装置と内殻の寿命による影響を受けるからそれを畳み込みしたVoigt関数が使われる。Voigt関数でのガウス関数の成分とローレンチアンの成分は標準試料などで測定して決定し、ガウス関数の成分だけは固定するということも考えられるだろう。Doniach-Sunjicの式は、金属であれば内殻正孔のscreeningがフェルミレベル近傍の電子正孔対励起によって行われ、それに伴って内殻準位のスペクトルが高い束縛エネルギー側に裾を引き、非対称になる[XF1]形状を上手くフィッティングできる。<br />
+&nbsp; デコンボリューションはその成分（Voigt関数など）を増やせばフィッティングは良くなるが、成分を増やした理由は考えておく必要がある。通常は単純な系からスタートし、表面にある原子を付けた場合や置換した場合などで、実験条件を一つずつ変えながら（実験パラメータを一つ変えるだけにする）、フィッティングでの成分を1つずつ増やしたりする（ただ、表面のつき方や複数考えられたり、置換した原子の位置が複数考えられて周りの原子の様子が変わる場合には、それだけ成分の数を増やしたりする）。多変量解析のような幾つも実験条件を変えるようなことはしなようにする（なぜならば、結果と原因が明確でなくなり、推定となってしまうため。推定では論文は通らない）。<br />
+[XF1] <a href="https://gair.media.gunma-u.ac.jp/dspace/bitstream/10087/3004/1/p047.pdf">https://gair.media.gunma-u.ac.jp/dspace/bitstream/10087/3004/1/p047.pdf</a><br />
+<br />
+■&nbsp;強磁性形状記憶合金<br />
+&nbsp; 温度、磁場、電場など、外場を与えて変位や力などの機械的なアウトプットに変換する材料は、アクチュエーター材料と呼ばれる。代表的なアクチュエーターとして、圧電材料、磁歪材料、形状記憶合金があげられるが、中でも形状記憶合金は発生可能な歪や力が大きく、発生エネルギー密度は圧電材料・磁歪材料の約1000倍と非常に強力である。しかしながら、動作が材料の熱伝導で律速されるため、動作速度が低いという欠点があった。<br />
+&nbsp; 1996年にMITの研究グループにより、Ni2MnGaという物質が、00.15%にも及ぶ磁場誘起歪を生じることが発見され、それがきっかけとなって強磁性形状記憶合金の研究が飛躍的に加速した。この強磁性形状記憶合金は、磁場により変位を制御できることから、高速応答が可能な磁場駆動アクチュエーターへの応用展開が期待される。<br />
+&nbsp; 強磁性形状記憶合金は、合金の結晶構造が、高温では立方晶であるのに対し、冷却しある温度に達すると、立方晶からずれて複雑な構造に相転移を起こす。この構造相転移はマルテンサイト変態と呼ばれる。<br />
+<br />
+■&nbsp;磁性<br />
+&nbsp; ホイスラー合金がハーフメタルに特徴的なバンド構造を持つ起源については、最隣接位置を占める異種の磁性原子の3d軌道間の混成が重要な役割を果たしていると指摘されている。大きな磁気モーメントを持つ原子の3d軌道は、スピンの向きに応じて顕著なエネルギー分離を示す。その結果、多数スピンに対しては、原子の3d軌道は低いエネルギー側に押し下げられ、混成している再隣接位置を占める異種の磁性原子の3d軌道とともにバンド幅の広い金属的な原子状態を形成する。一方、少数スピンに対しては、高エネルギー側に押し上げられた原子の3d軌道を主成分とする結合軌道からなる価電子バンドの間にエネルギーギャップが生じ、半導体的な電子状態が形成される。通常の半導体の場合と同様に、このエネルギーギャップにフェルミ準位が位置することで、電子系のエネルギー利得がもたらされる。<br />
+&nbsp; 高スピン偏極ホイスラー合金には、室温よりもずっと高い強磁性転移温度（キュリー温度）を示すものが多く、室温で動作するスピントロニクス素子への応用に適していると考えられている。この高いキュリー温度は、最隣接位置を占める異種磁性原子の3d軌道間にはたらく強い磁気的相互作用によりもたらされる。高スピン偏極ホイスラー合金のキュリー温度を系統的に整理すると、自発磁化との間に正の相関を示すことが知られている。すなわち自発磁化の大きな（または価電子数の多い）ホイスラー合金を選択すれば、同時にキュリー温度も高いことが期待できる。<br />
+&nbsp; ハーフメタルはスピントロニクス材料として理想的ではあるが、現実には、原子配列不規則性、表面・界面、電子相関、温度上昇に伴う磁気モーメントの熱ゆらぎなど、さまざまな要因により、スピン偏極率が低下してしまうことが指摘されている。<br />
+&nbsp; Fe3-xVxSi(0=<x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839 k=""> &nbsp; Fe2VSiには上記のL21ホイスラー型構造以外に、1373 K以上の高温から溶融急冷して合成すると、低温相より複雑な構造である&alpha;-Mn(A12)構造のFe2VSiができることが知られている。51VのNMRスペクトルにおいて、シフトが温度変化しない信号と温度を下げると負の方向にシフトが変化する二つの信号が観測され、&alpha;-Mn中のNMRの場合と似ていることが報告されている。<br />
+&nbsp; 同様の系Fe2VAl、Fe2VGaにおいては磁気不純物による強磁性が議論されており、これらも複雑である。核磁気緩和率の温度変化は金属的でないことが報告されている。<br />
+&nbsp; C1b構造のCoVSbはバンド計算によるとV原子が1&mu;Bの磁気モーメントを持ち、Co原子はモーメントをほとんど持たないハーフメタル強磁性体と予言された。しかし実験的には、CoVSbのキュリー温度や磁気モーメントの値は試料に強く依存し、Tc は11?58 Kの範囲に散らばり、CoVSb当たりの磁気モーメントは0.036?0.18&mu;Bの範囲に散らばっていた。この原因はCo原子とV原子の原子秩序の乱れによるものと考えられている。普通より少し温度の高い850 ℃でアニールして合成されたCoVSbの試料に対し中性子回折の実験が行われ、低温での磁気モーメントは小さく、V原子の位置には磁気モーメントがほとんどないことが報告された。この試料と同じ方法で合成されたCoVSb の試料に対しNMRの結果が報告された。室温での鋭い51Vのスピンエコーとやや幅の広い59Coで-34.9 kOe/&mu;B, 51Vで -15.7 kOe/&mu;Bと求められ、Co原子の方がV原子よりもより磁気的であった。4.2 Kではゼロ磁場で30, 63, 82 MHzにピークを持ち10?20 MHzの広い幅の信号が観測されたが、磁場掃引スペクトルにおいて非磁性のV原子および非磁性のCo原子からの信号と幅の広い121,123Sbからの信号も観測された。これらのことからCoVSiの強磁性はミクロなスケールでは非常に複雑なことが明らかとなった。<br />
+&nbsp; 化学量論的組成のフルホイスラー合金においてもCo2FeSiのように原子配列が乱れにくいものとCo2FeAl, Fe2VSiのように乱れやすいものがあることが明らかとなった。CoVSb等空孔位置のあるハーフホイスラー合金も原子配列が乱れやすい。原子配列が乱れにくく、少し乱れてもハーフメタルの性質を失わないホイスラー合金がスピントロニクス材料の本命となるであろうと考えられる。<br />
+&nbsp; Co基フルホイスラー合金中の59Coにおける正の超微細磁場の起源が起動磁場によるものではなく伝導電子の大きな分極によるものであることは実験的には問題ないと言ってよいであろう。ただ理論計算値と実験値は完全には一致していないので、さらなる理論的研究が望まれる。なぜCo原子の軌道磁気モーメントは消失するのであろうか。八面体位置のCo2+イオンでは軌道磁気モーメントが残るがフルホイスラー合金Co2YZ中のCoの場合、YとZが違うので、四面体位置の配位子場に相当し、軌道一重項の場合に対応するのかもしれない。</x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839><br />
+<x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839 k="">--------------------------------------------------------------------------------</x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839><br />
+<br />
+<x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839 k=""></x=<1))系の51vのnmrは、niculescuらによって詳しく調べられた。fe3siはd03型の構造を持ち、tc=839></k'|v(r)|k></s不規則相となるのである。bwg近似によれば、規則-不規則変態温度や規則性の度合い（長距離範囲度）は、合金の組成や温度の関数として与えられる。実験においてしばしば取り上げられるxy-xz(50></hβかつsα<sβであれば、低温で安定相だったαが、昇温により、よりエントロピーの大きなβ相に変態する。<br><strike>--------------------------------------------------------------------------------</strike></p>

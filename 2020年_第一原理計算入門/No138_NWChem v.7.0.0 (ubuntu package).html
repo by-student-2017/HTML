@@ -1,0 +1,431 @@
+------------------------------------------------------------------------------<br />
+■ NWChem v.7.0.0 (ubuntu 20.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(Edit: 9/Jun/2020)<br />
+<br />
+□ Install<br />
+1. sudo apt update<br />
+2. sudo apt install -y nwchem<br />
+<br />
+□ check<br />
+1. which nwchem<br />
+<br />
+□ example settings<br />
+1. cd $HOME<br />
+2. mkdir nwchem<br />
+3. cd nwchem<br />
+4. cp -r /usr/share/doc/nwchem/examples ./<br />
+or<br />
+□ examples (from github)<br />
+1. cd $HOME<br />
+2. mkdir nwchem<br />
+3. cd nwchem&nbsp;<br />
+(3.5. sudo apt install -y git)<br />
+4. git clone&nbsp;https://github.com/by-student-2017/nwchem-examples-7.0.0.git<br />
+5. mv nwchem-examples-7.0.0 examples<br />
+<br />
+□ jmol<br />
+1. sudo apt install -y jmol<br />
+<br />
+□ XLaunch (WSL case)<br />
+・ubuntu side<br />
+1. sudo apt-get update<br />
+2. sudo apt-get install -y xfce4-terminal<br />
+3. sudo apt-get install -y xfce4<br />
+・windows side<br />
+1. get VcXsrv Windows X Server from<br />
+&nbsp; https://sourceforge.net/projects/vcxsrv/<br />
+------------------------------------------------------------------------------<br />
+■ examples<br />
+<br />
+□ H2O (SCF)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_scf.nw | tee h2o_scf.out<br />
+<br />
+□ H2O (non-SCF)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o-noscf.nw | tee h2o-noscf.out<br />
+<br />
+□ H2O (relativistic) (douglas-kroll method)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_dk.nw | tee h2o_dk.out<br />
+<br />
+□ H2O (Geometory Optimization)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_opt.nw | tee h2o_opt.out<br />
+<br />
+□ H2O (B3LYP)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o-b3lyp-disp.nw | tee h2o-b3lyp-disp.out<br />
+<br />
+□ H2O (LC-PBE)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o-lcpbe.nw | tee h2o-lcpbe.out<br />
+<br />
+□ H2O (HSE06)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o-camb3lyp-pol-cdfit.nw | tee h2o-camb3lyp-pol-cdfit.out<br />
+<br />
+□ H2O (B2PLYP) (DFT+MP2)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_dftmp2.nw | tee h2o_dftmp2.out<br />
+<br />
+□ H2O (TDDFT)<br />
+1. cd ~/nwchem/examples<br />
+2. gedit&nbsp;h2o-td.nw<br />
+-----(before)<br />
+memory total 800 stack 400 heap 50 global 350 mb<br />
+-----<br />
+-----(after)<br />
+#memory total 800 stack 400 heap 50 global 350 mb<br />
+-----<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 nwchem h2o-td.nw | tee h2o-td.out<br />
+<br />
+□ H2O (TDDFT)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_bnl2007_tddft.nw | tee h2o_bnl2007_tddft.out<br />
+<br />
+□ H2O (TDDFT) (core hole)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_core_hole.nw | tee h2o_core_hole.out<br />
+(4.&nbsp;mpirun -np 4 nwchem&nbsp;h2o_core_hole_repop.nw | tee&nbsp;h2o_core_hole_repop.out<br />
+<br />
+□ H2O (CIS/6-31G*)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_core.nw | tee h2o_core.out<br />
+<br />
+□ H2O (Raman) (normal) (BP86/aug-cc-pVDZ)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_raman_1.nw | tee h2o_raman_1.out<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency [cm^{-1}]&quot;<br />
+&nbsp; set ylabel &quot;S [Ang^4/amu]&quot;<br />
+&nbsp; plot &quot;h2o_raman_1.normal&quot; every ::18 u 1:2 w l<br />
+<br />
+□ H2O (Raman) (resonance) (BP86/aug-cc-pVDZ)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_raman_2.nw | tee h2o_raman_2.out<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency [cm^{-1}]&quot;<br />
+&nbsp; set ylabel &quot;S [a.u.]&quot;<br />
+&nbsp; plot &quot;h2o_raman_2.resonance&quot; every ::18 u 1:2 w l t &quot;total&quot;,&nbsp;&quot;h2o_raman_2.resonance&quot; every ::18 u 1:3 w l t &quot;real part&quot;,&nbsp;&quot;h2o_raman_2.resonance&quot; every ::18 u 1:4 w l t &quot;imaginary part&quot;<br />
+<br />
+□ H2O (Raman) (normal) (BP86/aug-cc-pVTZ)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_raman_3.nw | tee h2o_raman_3.out<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency [cm^{-1}]&quot;<br />
+&nbsp; set ylabel &quot;S [Ang^4/amu]&quot;<br />
+&nbsp; plot &quot;h2o_raman_3.normal&quot; every ::18 u 1:2 w l<br />
+<br />
+□ H2O (Raman) (resonance) (BP86/aug-cc-pVTZ)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_raman_4.nw | tee h2o_raman_4.out<br />
+4. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency [cm^{-1}]&quot;<br />
+&nbsp; set ylabel &quot;S [a.u.]&quot;<br />
+&nbsp; plot &quot;h2o_raman_4.resonance&quot; every ::18 u 1:2 w l t &quot;total&quot;,&nbsp;&quot;h2o_raman_4.resonance&quot; every ::18 u 1:3 w l t &quot;real part&quot;,&nbsp;&quot;h2o_raman_4.resonance&quot; every ::18 u 1:4 w l t &quot;imaginary part&quot;<br />
+<br />
+□ H2O (Raman) (B3LYP/6-31G*) (low 350 ; high 1700)<br />
+1. cd ~/nwchem/examples<br />
+2. gedit&nbsp;h2o_raman_5.nw<br />
+-----(before)<br />
+memory global 3000 heap 1000 stack 1000 mb<br />
+-----<br />
+-----(after)<br />
+#memory global 3000 heap 1000 stack 1000 mb<br />
+-----<br />
+3. set OMP_NUM_THREADS=1<br />
+4. mpirun -np 4 nwchem h2o_raman_5.nw | tee h2o_raman_5.out<br />
+5. gnuplot<br />
+&nbsp; set xlabel &quot;Frequency [cm^{-1}]&quot;<br />
+&nbsp; set ylabel &quot;S [Ang^4/amu]&quot;<br />
+&nbsp; plot &quot;h2o_raman_5.normal&quot; every ::16 u 1:2 w l<br />
+<br />
+□ H2O (Response)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3.&nbsp;mpirun -np 4 nwchem h2o-response.nw | tee h2o-response.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Properties<br />
+<br />
+□ H2O (Vibrational SCF)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3.&nbsp;mpirun -np 4 nwchem h2o_vscf.nw | tee h2o_vscf.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/VSCF<br />
+<br />
+□ H2O (Nudged Elastic Band (NEB) and Zero Temperature String (ZTS) Methods)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3.&nbsp;mpirun -np 4 nwchem h2o_zts.nw | tee h2o_zts.out<br />
+4. jmol&nbsp;h2o_zts_dat.string_final.xyz<br />
+5. less h2o_zts_dat.string_epath &nbsp;<br />
+Ref:&nbsp;https://www5.hp-ez.com/hp/calculations/page426<br />
+<br />
+□&nbsp; Me-CH2 (QM/MM (ONIOM method) )<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem Me-CH2.nw | tee Me-CH2.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Release66:ONIOM<br />
+<br />
+□&nbsp; Rh-(CO)2Cp (QM/MM (ONIOM method) )<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem&nbsp;Rh-COCO.nw | tee&nbsp;Rh-COCO.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Release66:ONIOM<br />
+<br />
+□ tetra-dimethyl-amino-ethylene (TAME)&nbsp;<br />
+&nbsp; (QM/MM (ONIOM method)+MP2+MP2+CCSD(T))<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem TAME.nw | tee TAME.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Release66:ONIOM<br />
+※ The input file was added with H on Avogadro (GUI).<br />
+<br />
+□ Anthracene (QM/MM (ONIOM method) + LDA + B3LYP )<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem&nbsp;anthracene.nw | tee&nbsp;anthracene.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Release66:ONIOM<br />
+<br />
+□ H2O (QM/MM (ONIOM method) + B3LYP + TDDFT)<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web/QMMM_Excited_States<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem&nbsp;wtr-tddft.nw | tee&nbsp;wtr-tddft.out<br />
+<br />
+□ ClOH (QM/MM (ONIOM method) + NEB)<br />
+1. cd ~/nwchem/examples<br />
+(1.5.&nbsp;sudo apt install -y wget)<br />
+2. wget&nbsp;http://www.nwchem-sw.org/images/QMMM_NEB_example1.tgz<br />
+3. tar zxvf&nbsp;QMMM_NEB_example1.tgz<br />
+4. set OMP_NUM_THREADS=1<br />
+5.&nbsp;mpirun -np 4 nwchem&nbsp;neb-0.nw | tee&nbsp;neb-0.out<br />
+or<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;QMMM-ONIOM-web/QMMM_NEB_example_with_path_limits<br />
+3. tar zxvf&nbsp;QMMM_NEB_example1.tgz<br />
+4. set OMP_NUM_THREADS=1<br />
+5.&nbsp;mpirun -np 4 nwchem&nbsp;neb-0.nw | tee&nbsp;neb-0.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/QMMM_NEB_example_with_path_limits<br />
+<br />
+□ H2O (Correlation consistent Composite Approach (ccCA))<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_ccca.nw | tee h2o_ccca.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/Release61:CCCA<br />
+<br />
+□ N2 (MP2 optimization and CCSD(T))<br />
+1.&nbsp;cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem &nbsp;N2-MP2-opt-to-CCSDT.nw | tee N2-MP2-opt-to-CCSDT.out<br />
+or<br />
+1.&nbsp;cd ~/nwchem/examples<br />
+2. cat &lt;&lt; EOF &gt; n2-mp2-opt-to-ccsdt.nw<br />
+start n2&nbsp;<br />
+<br />
+geometry<br />
+&nbsp; symmetry d2h<br />
+&nbsp; n 0 0 0.542<br />
+end<br />
+<br />
+basis spherical<br />
+&nbsp; n library cc-pvtz<br />
+end<br />
+<br />
+mp2<br />
+&nbsp; freeze core<br />
+end<br />
+<br />
+task mp2 optimize<br />
+<br />
+ccsd<br />
+&nbsp; freeze core<br />
+end<br />
+<br />
+task ccsd(t)<br />
+EOF<br />
+3. cat n2-mp2-opt-to-ccsdt.nw<br />
+&nbsp; (Ref:&nbsp;http://www.nwchem-sw.org/index.php/Sample)<br />
+4. set OMP_NUM_THREADS=1<br />
+5. mpirun -np 4 nwchem n2-mp2-opt-to-ccsdt.nw | tee n2-mp2-opt-to-ccsdt.out<br />
+<br />
+□ H2O (CI+PT geometry optimization)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_selci.nw | tee h2o_selci.out<br />
+<br />
+□ H2O (PBE0)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_rpbe0_cg.nw | tee h2o_rpbe0_cg.out<br />
+<br />
+□ H2O (HSE03)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o-hse-srhf.nw | tee h2o-hse-srhf.out<br />
+<br />
+□ H2O (SSB-D)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem&nbsp;h2o-ssb-d.nw | tee&nbsp;h2o-ssb-d.out<br />
+Ref: http://www.nwchem-sw.org/index.php/Release61:Density_Functional_Theory_for_Molecules#SSB-D_functional<br />
+<br />
+□ H2O (RODFT)<br />
+1. cd ~/nwchem/examples<br />
+2. set OMP_NUM_THREADS=1<br />
+3. mpirun -np 4 nwchem h2o_rodft.nw | tee h2o_rodft.out<br />
+Ref:&nbsp;https://www.hpc.co.jp/chem/software/gaussian/gaussian_nyumon/crib11/<br />
+<br />
+□ SiC (PAW potential, periodic bounary calculation, PSPW)<br />
+1. cd ~/nwchem/examples<br />
+2. cd&nbsp;PSPW-web<br />
+3. set OMP_NUM_THREADS=1<br />
+4.&nbsp;mpirun -np 4 nwchem SiC-opt.nw | tee SiC-opt.out<br />
+Ref:&nbsp;http://www.nwchem-sw.org/index.php/PSPW<br />
+<br />
+□ learn more<br />
+・http://www.nwchem-sw.org/index.php/Sample<br />
+・https://github.com/nwchemgit/nwchem/tree/master/examples<br />
+・http://www.nwchem-sw.org/index.php/ONIOM<br />
+・http://www.nwchem-sw.org/index.php/PSPW<br />
+・http://www.nwchem-sw.org/index.php/Qmmm_example4<br />
+------------------------------------------------------------------------------<br />
+■ DebiChem packages (ubuntu 18.04 LTS and Ubuntu 20.04 LTS)<br />
+&nbsp; (https://packages.ubuntu.com/search?keywords=debichem&amp;searchon=names)<br />
+・sudo apt install debichem-crystallography<br />
+・sudo apt install debichem-molecular-abinitio<br />
+・sudo apt install debichem-periodic-abinitio<br />
+・sudo apt install debichem-molecular-dynamics<br />
+・sudo apt install debichem-semiempirical<br />
+・sudo apt insatll debichem-cheminformatics<br />
+・sudo apt insatll debichem-analytical-biochemistry<br />
+・sudo apt insatll debichem-development<br />
+・sudo apt insatll debichem-input-generation-output-processing<br />
+・sudo apt insatll debichem-molecular-modelling<br />
+・sudo apt insatll debichem-tasks<br />
+・sudo apt insatll debichem-view-edit-2d<br />
+・sudo apt insatll debichem-visualisation<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] NWChem 6.8.1のWSLへのインストール<br />
+&nbsp; https://pc-chem.info/blog/535<br />
+[2] NWChemをコンパイルして動かす<br />
+&nbsp; http://kivantium.hateblo.jp/entry/2019/04/15/183436<br />
+[3] Compiling NWChem - NWChem<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Compiling_NWChem<br />
+[4] Compile NWChem with Intel 2017 (MPI + MKL)<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Special:AWCforum/st/id2370/Compile_NWChem_with_Intel_2017_%28....html<br />
+[5] NWChem-6.8 for LX<br />
+&nbsp; https://ccportal.ims.ac.jp/node/2039<br />
+[6] Linux Cluster<br />
+&nbsp; https://linuxcluster.wordpress.com/2018/10/12/compiling-with-nwchem-6-8-with-intel-mpi-2018u3/<br />
+[7] NWChem入門してみた<br />
+&nbsp; https://ameblo.jp/r-you-1/entry-12038956905.html<br />
+[8] NWChem Tutorial<br />
+&nbsp; https://wiki.alcf.anl.gov/images/b/bc/NWChem_tutorial.pdf<br />
+[9] Tutorial Slides<br />
+&nbsp; https://github.com/nwchemgit/nwchem/wiki/Tutorial-Slides<br />
+[10] Tutorial Athens2018<br />
+&nbsp; https://github.com/nwchemgit/nwchem/wiki/Tutorial-Athens2018<br />
+[11] Introduction To NWChem<br />
+&nbsp; https://www.msi.umn.edu/sites/default/files/IntroNWChem.pdf<br />
+[12] 2012 NWChem Workshop, June 8-9<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/schedule.php<br />
+&nbsp; ------------------------------<br />
+・Basic Introduction of Computational Chemistry<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/1_Basic_Introduction_of_Computational_Chemistry.pdf<br />
+・Basic introduction of NWChem software &nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/2_NWChem_Intro.pdf<br />
+&nbsp; http://institute.loni.org/NWChem2012/documents/2_NWChem_Intro.pdf<br />
+・NWChem: Hartree-Fock, Density Functional Theory, Time-Dependent Density Functional Theory&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/3_NWChem_DFT_TDDFT.PDF<br />
+・NWChem: Coupled Cluster Method &nbsp;(Tensor Contraction Engine)&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/4_NWChem_CC_TCE.pptx.pdf<br />
+・Relativity, Spectroscopy and the EMSL Basis Set Library&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/5_NWChem_Relativity_Spectroscopy_BSE.PDF<br />
+・NWChem: Molecular Dynamics and QM/MM&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012//6_NWChem_MD_QMMM.PDF<br />
+&nbsp; http://institute.loni.org/NWChem2012/documents/6_NWChem_MD_QMMM.pdf<br />
+&nbsp; http://scc.acad.bg/ncsa/articles/library/Library2016_Supercomputers-at-Work/NWChem_6.6/NWChem_MD_QMMM.pdf<br />
+・NWChem: Planewave Density Functional Theory&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/7_NWChem_NWPW.PDF<br />
+・Critical Discussion of Recent NWChem Articles&nbsp;<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/8_critical_discussion.pdf<br />
+・Parallelization and benchmark<br />
+&nbsp; https://www.a-star.edu.sg/Portals/35/docs/nwchem_2012/9_parallelization_benchmarks.pdf<br />
+&nbsp; ------------------------------<br />
+・Example I: Total energy, geometry optimization, and frequency calculation of Benzene within B3LYP using the DFT module.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/dft-session1.pdf<br />
+・Transition-State Searching with NWChem. Example: dielsalder.nw<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/dielsalder.pdf<br />
+・Example I: Total energy of Benzene within Hartree-Fock approximation.<br />
+&nbsp; Example II: Structural optimization of benzene within the Hartree-Fock approximation.&nbsp;<br />
+&nbsp; Example III: Frequency calculation of benzene within the Hartree-Fock approximation.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/hf-session1.pdf<br />
+・Example I: MP2 calculations for Benzene.<br />
+&nbsp; Example II: Structural optimization of benzene within the MP2 approximation.<br />
+&nbsp; Example III: Frequency calculation of benzene within the MP2 approximation.<br />
+&nbsp; Example IV: Comparisons between three different MP2 programs in NWChem.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/mp2-session.pdf<br />
+・Example I: Total energy of Benzene within MP2 approximation.<br />
+&nbsp; Example II: Structural optimization of benzene within the Hartree-Fock approximation.<br />
+&nbsp; Example III: Frequency calculation of benzene within the Hartree-Fock approximation.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/mp2-session1.pdf<br />
+・Example I: Coupled-cluster calculations for the water molecule.<br />
+&nbsp; Example II: Coupled-cluster calculations for the methyl radical.<br />
+&nbsp; Example III: Coupled-cluster calculations of the excitation energies of the water molecule.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/tce-session.pdf<br />
+・Example: Thermodynamics.<br />
+&nbsp; http://www.institute.loni.org/NWChem2012/documents/thermo-session.pdf<br />
+&nbsp; ------------------------------<br />
+[14] Quantum Chemistry Workshop (Advanced) 2014<br />
+&nbsp; Excitation Energies and Excited State Densities&nbsp;<br />
+&nbsp; http://www.training.prace-ri.eu/uploads/tx_pracetmo/QCAdv.pdf<br />
+[15] Quantum Chemistry Workshop (Advanced) 2015<br />
+&nbsp; Excitation Energies and Excited State Densitie<br />
+&nbsp; http://www.training.prace-ri.eu/uploads/tx_pracetmo/excitationEnergies.pdf<br />
+[16] Quantum Chemistry Workshop (Advanced) 2016<br />
+&nbsp; Excitation Energies and Excited State Densities<br />
+&nbsp; https://events.prace-ri.eu/event/455/attachments/369/543/QC-workshop-advanced.pdf<br />
+[17] Quantum Chemistry Workshop (Advanced) 2017<br />
+&nbsp; Excitation Energies and Excited State Densitie<br />
+&nbsp; https://events.prace-ri.eu/event/560/attachments/491/706/QC-workshop-advanced.pdf<br />
+[18] CIS, TDHF, TDDFT&nbsp;<br />
+&nbsp; http://www.nwchem-sw.org/index.php/Release61:Excited-State_Calculations<br />
+[19] Electronic Structure Calculations in Quantum Chemistry<br />
+&nbsp; http://www.hpc.lsu.edu/training/weekly-materials/2011%20Fall/ElecStruc-2011-11-16.pdf<br />
+[20] NWChem: Parameter Sweep and Pre/Post-processing<br />
+&nbsp; https://balsam.readthedocs.io/en/latest/tutorial/nwchem.html<br />
+[21] NWChem 6.5 &nbsp;Installation Best Practices&nbsp;<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWChem_6.5InstallationBestPractices.pdf<br />
+[22] NWChem Performance Benchmark and Profiling<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWchem_Analysis_Intel_x5670.pdf<br />
+&nbsp; http://www.hpcadvisorycouncil.com/pdf/NWchem_Analysis_Intel.pdf<br />
+[23] QM/MM分子動力学法による生体機能解析<br />
+&nbsp; https://www2.ccs.tsukuba.ac.jp/workshop/sympo-080424/file/tateno.pdf<br />
+[24] Generator of AIM Wavefunction files NWCHEM [WFN / WFX]<br />
+&nbsp; https://sites.google.com/site/alvarovazquezmayagoitia/goals/codes/nwchem-notes/generator-of-aim-wavefunction-files-nwchem<br />
+[25] Computational Chemistry Software<br />
+&nbsp; http://timn.ho.ua/ccs/<br />
+------------------------------------------------------------------------------

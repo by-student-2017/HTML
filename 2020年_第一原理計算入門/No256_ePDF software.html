@@ -1,0 +1,955 @@
+ePDF software<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1]<br />
+<br />
+・SUePDF<br />
+&nbsp; <a href="https://osf.io/c2jq8/">https://osf.io/c2jq8/</a><br />
+・eRDF Analyser&nbsp;<br />
+&nbsp; <a href="https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005">https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005</a><br />
+・ePDF tools<br />
+&nbsp; <a href="https://data.mendeley.com/datasets/ff94wp42wd/1">https://data.mendeley.com/datasets/ff94wp42wd/1</a><br />
+<br />
+・Radial Profile plugin (ImageJ)<br />
+&nbsp; <a href="https://imagej.nih.gov/ij/plugins/radial-profile.html">https://imagej.nih.gov/ij/plugins/radial-profile.html</a><br />
+・Diffraction ring profiler<br />
+&nbsp; <a href="https://github.com/bcolsen/diffraction-ring-profiler">https://github.com/bcolsen/diffraction-ring-profiler</a><br />
+&nbsp; <a href="https://code.google.com/archive/p/diffraction-ring-profiler/">https://code.google.com/archive/p/diffraction-ring-profiler/</a><br />
+・ProcessDiffraction<br />
+&nbsp; <a href="https://www.energia.mta.hu/~labar/ProcDif.htm">https://www.energia.mta.hu/~labar/ProcDif.htm</a><br />
+<br />
+[1] Electron Pair-Distribution Function (ePDF) Analysis&nbsp;<br />
+&nbsp; <a href="https://www.uni-ulm.de/fileadmin/website_uni_ulm/hrem/Outreach/ePDF_lecture_notes.pdf">https://www.uni-ulm.de/fileadmin/website_uni_ulm/hrem/Outreach/ePDF_lecture_notes.pdf</a><br />
+[2] ePDF tools, a processing and analysis package of the atomic pair distribution function for electron diffraction<br />
+&nbsp; <a href="https://www.sciencedirect.com/science/article/pii/S0010465518304119">https://www.sciencedirect.com/science/article/pii/S0010465518304119</a><br />
+[3] Workshop on ePDF 2018<br />
+&nbsp; <a href="https://ecaelectronsig.wordpress.com/school/electron-pair-distribution-function-analysis/">https://ecaelectronsig.wordpress.com/school/electron-pair-distribution-function-analysis/</a><br />
+------------------------------------------------------------------------------<br />
+■ SUePDF (Windows 10 (64 bit))<br />
+(<a href="https://osf.io/c2jq8/">https://osf.io/c2jq8/</a>)<br />
+<br />
+□ Install<br />
+1. SUePDF_Installer.exe<br />
+2. [Next(N)&gt;]<br />
+3. [check] Create a desktop icon<br />
+4. All [Next(N)&gt;] &gt; [Install] &gt; [Finish]<br />
+<br />
+□ Matlab Compiler Runtime (MCR) R2015a が既にインストールされている場合<br />
+1. SUePDF_portable.zip を解凍<br />
+2. SUePDF<br />
+3. SUePDF.exe<br />
+<br />
+□ Usage (1D data)<br />
+(Example pattern.dm3 in ePDFtools)<br />
+0. 2D data &gt; ImageJ or Diffraction ring profiler &gt; 1D data<br />
+1. SUePDF<br />
+2. [INPUT BROWSER] &gt; *.lst (e.g, Au_1.txt)<br />
+&nbsp; (cut low x, e.g, cut x &lt; 1.0)<br />
+-----<br />
+2.5. [CALIBRATION] &gt; (click main peak, e.g., Au fcc (111))&nbsp;<br />
+&nbsp; &gt; 2.35 Å = Au fcc (111)<br />
+-----<br />
+3. Chemical Information<br />
+&nbsp; Z: Au<br />
+&nbsp; Molar ratios: 1.0<br />
+&nbsp; Valences: 0<br />
+4. Enter Electron energy (keV): 200 &gt; Calculate Electron Scattering Factor<br />
+5. BACKGROUND SUB<br />
+&nbsp; (click) pre-peak and tail<br />
+&nbsp; NR: 4 (Usually, 3 - 8)<br />
+&nbsp; NF: 9 (Usually, 5 - 15)<br />
+&nbsp; OK<br />
+-----<br />
+5.1. CORRECT S(Q) &gt; Click at a point (marked as blue *)<br />
+&nbsp; &gt; djust the slide bar (or [Auto optimization]) &gt; OK<br />
+&nbsp; (It is needed when the tail of S(Q) does not oscillate well around 1)<br />
+5.2. FILTER HF-NOISE &gt; e.g. 50 r(Å)<br />
+&nbsp; (set r(Å) to reduce noise at high Q)<br />
+5.3. [check] Nano- &gt; Diameter (nm): 5.00; Select Shape; Spheres<br />
+&nbsp; &gt; Calculate Nanoparticle Form Factor<br />
+&nbsp; (use it for nanoparticle)<br />
+-----<br />
+6. NORMALIZE PDFS &gt; (click) end of first peak<br />
+&nbsp; &gt; input density (e.g. Au fcc 0.0589) &gt; OK<br />
+&nbsp; &gt; (click) start of first peak &gt; G(r)<br />
+-----<br />
+◇ OUTPUT MANAGEMENT (coordination number)<br />
+7. OORDINATION &gt; move &quot;&lt; □ &gt;&quot; to set peak range &gt; OK<br />
+&nbsp;(in my case, Integration value: 10.1511)<br />
+-----<br />
+◇ Kinematical ED reconstruction<br />
+7. (click) diffraction pattern (on the bottom left) &gt; OK<br />
+-----<br />
+◇ Save<br />
+7. Save all...<br />
+-----<br />
+※ I recommend SUePDF_GUIv1.0-2015_Manual.pdf (https://osf.io/c2jq8/#!)<br />
+<br />
+□ Input file (1D profile data)<br />
+&nbsp; s-values (Å^-1), &nbsp;intensity I(Q)<br />
+※ Q = 2&pi;s<br />
+※ 2D data &gt; Radial Profile plugin (ImageJ), Crisp or Diffraction ring profiler &gt; 1D data<br />
+※ (*.txt, *.lst, *.rtf, *.dat, etc)<br />
+※ xはpixelや他の値でもOK（ピークでのdの値が分かればSUePDFで校正できる）<br />
+<br />
+[1] SUePDF: a program to obtain qu-antitative pair distribution functions from electron diffraction data<br />
+&nbsp; http://journals.iucr.org/j/issues/2017/01/00/pd5085/<br />
+[2] SUePDF: a program to obtain quantitative pair distribution functions from electron diffraction data<br />
+&nbsp; http://journals.iucr.org/j/issues/2017/01/00/pd5085/pd5085.pdf<br />
+[3] Electron Pair-Distribution Function (ePDF) Analysis<br />
+&nbsp; https://www.uni-ulm.de/fileadmin/website_uni_ulm/hrem/Outreach/ePDF_lecture_notes.pdf<br />
+------------------------------------------------------------------------------<br />
+■ eRDF Analyser (Windows 10 (64 bit))<br />
+(https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005)<br />
+<br />
+□ Install (ver. 1)<br />
+(https://github.com/eRDFAnalyser/MATLABv1/releases/tag/v1.0)<br />
+1. eRDFAnalyser_mcr.exe<br />
+2. [Next(N)&gt;]<br />
+3. [check] Create a desktop icon<br />
+4. All [Next(N)&gt;] &gt; Yes &gt; [Next(N)&gt;] &gt; [Install(N)]<br />
+5. [Finish]<br />
+<br />
+□ Install (ver. 2)<br />
+(https://github.com/eRDFAnalyser/MATLABv1/releases/tag/v1.0)<br />
+1. eRDFAnalyser_web.exe<br />
+2. 詳細情報 &gt; 実行<br />
+3. [Next(N)&gt;]<br />
+4. [check] Create a desktop icon<br />
+5. All [Next(N)&gt;] &gt; Yes &gt; [Next(N)&gt;] &gt; [Install(N)]<br />
+6. [Finish]<br />
+<br />
+□ Test_data<br />
+(https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005)<br />
+1. SOFTX-D-17-00005-master.zip を解凍<br />
+2. SOFTX-D-17-00005-master<br />
+&nbsp; Test_data<br />
+<br />
+□ Usage (1D data)<br />
+1. eRDFAnalyser<br />
+・Diffraction Data<br />
+2. ds Calibraton factor: 0.00167 [Å^-1/pixel]&nbsp;<br />
+&nbsp; (ds = dq/2&pi;)<br />
+3. Load intensity profile &gt; Open &gt; Amorphous_SiO2_azav_0.00167.txt &gt; All [OK]<br />
+4. (click) Data Cursor<br />
+&nbsp; (click on Azimuthally Averaged Intensity Profile)<br />
+&nbsp; Start: [143] to End: [2474]<br />
+&nbsp; Calibrate and plot selected data range<br />
+&nbsp; (remove hgih noise area, check &quot;Selected Data Range&quot;)<br />
+・RDF plot<br />
+5. Parametrisation: [Lobato]<br />
+&nbsp; Element 1 [14.Si], Atomic Ratio 1<br />
+&nbsp; Element 2 [ 8. O], Atomic Ratio 2<br />
+&nbsp; [check] Full q range<br />
+&nbsp; Auto Fit<br />
+6. Manual Fit<br />
+&nbsp; Fit at q: 26.4 (click &quot;+&quot; or &quot;-&quot;)<br />
+&nbsp; &nbsp; (※ Fit I(q) and I(q)fitted near high q(Å^-1))<br />
+&nbsp; N: 7700 (click &quot;+&quot; or &quot;-&quot;)<br />
+&nbsp; &nbsp; (※ reduce ripple of G(r) near short r(Å) range)<br />
+&nbsp; Damping: 0.3<br />
+&nbsp; r(max): 20 Å, dr: 0.01 Å<br />
+<br />
+□ Usage (2D data)<br />
+1. eRDFAnalyser<br />
+・Diffraction Data<br />
+2. ds Calibraton factor: 0.00167 [Å^-1/pixel]&nbsp;<br />
+&nbsp; (ds = dq/2&pi;)<br />
+3. Load diffraction patern:<br />
+&nbsp; [check] Amorphous &gt; Open &gt; Amorphous_SiO2_DP_0.00167.txt &gt; All [OK]<br />
+&nbsp; (Amorphous_SiO2_DP_0.00167.zip)<br />
+4. (left-click (hold) and mask beam stopper area)<br />
+5. match cirlce on green/black edge (green/black/blue)<br />
+&nbsp; Double-click inside the marker&nbsp;<br />
+&nbsp; Continue with selection<br />
+&nbsp; Yes save data &gt; (select folder, e.g. Amorphous_SiO2_DP_0.00167s) &gt; &nbsp;All [OK]<br />
+6. (click) Data Cursor<br />
+&nbsp; (click on Azimuthally Averaged Intensity Profile)<br />
+&nbsp; Start: [82] to End: [1487]<br />
+&nbsp; Calibrate and plot selected data range<br />
+&nbsp; (remove hgih noise area, check &quot;Selected Data Range&quot;)<br />
+・RDF plot<br />
+7. Parametrisation: [Lobato]<br />
+&nbsp; Element 1 [14.Si], Atomic Ratio 1<br />
+&nbsp; Element 2 [ 8. O], Atomic Ratio 2<br />
+&nbsp; [check] Full q range<br />
+&nbsp; Auto Fit<br />
+8. Manual Fit<br />
+&nbsp; Fit at q: 15.6 (click &quot;+&quot; or &quot;-&quot;)<br />
+&nbsp; &nbsp; (※ Fit I(q) and I(q)fitted near high q(Å^-1))<br />
+&nbsp; N: 7050 (click &quot;+&quot; or &quot;-&quot;)<br />
+&nbsp; &nbsp; (※ reduce ripple of G(r) near short r(Å) range)<br />
+&nbsp; Damping: 0.3<br />
+&nbsp; r(max): 20 Å, dr: 0.01 Å<br />
+<br />
+[1] Help &gt; Open User Manual (PDF)<br />
+[2] User Manual for eRDF Analyser v1.0 (2017)<br />
+&nbsp; https://erdfanalyser.github.io/MATLABv1/<br />
+※ 未だ手順を完全に確認していないが、これで得られたG(r)をPDFguiやRMC++に入れて分析すればよいように思える。<br />
+------------------------------------------------------------------------------<br />
+■ eRDF Analyser (ubuntu 18.04 LTS (64 bit))<br />
+(https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005)<br />
+<br />
+□ Install<br />
+(https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005)<br />
+1. git clone https://github.com/ElsevierSoftwareX/SOFTX-D-17-00005.git<br />
+2. cd SOFTX-D-17-00005<br />
+<br />
+□ Usage<br />
+1. matlab<br />
+2. RDF_Analyser_GUI<br />
+3. OK<br />
+------------------------------------------------------------------------------<br />
+■ ePDFtools (Windows 10 (64 bit))<br />
+(https://data.mendeley.com/datasets/ff94wp42wd/1)<br />
+<br />
+□ Gatan Microscopy Suite (Windows 10 (64 bit))<br />
+◇ Step 1<br />
+(http://www.gatan.com/installation-instructions#Step1)<br />
+1. SI Viewer<br />
+2. Intended Use: Dead RMC file from Dr. Probe.<br />
+&nbsp; Keep me informed about news and promotions from Gatan: No<br />
+3. Submit<br />
+4. Save<br />
+5. GATAN_FREE_Offline_3.2.0_64-Bit_Suite_SI_Viewer_0.zip<br />
+◇ Step 2<br />
+(https://gatan.sharefile.com/share/view/sa9b5f88294f46ae9/fob127fd-e3f6-42c7-a0bb-ff1277ad1074)<br />
+1. Archive<br />
+2. GMS 3.x<br />
+3. GMS_3_3_0_R1_64-Bit.exe<br />
+4. download<br />
+5. GMS_3_3_0_R1_64-Bit.exe<br />
+6. Destination folder<br />
+&nbsp; GATAN_FREE_Offline_3.2.0_64-Bit_Suite_SI_Viewer_0<br />
+7. Install &gt; Yes to All<br />
+8. LicenseInstaller.exe (GATAN_FREE_Offline_3.2.0_64-Bit_Suite_SI_Viewer_0)<br />
+9. Setup.exe (GATAN_FREE_Offline_3.2.0_64-Bit_Suite_SI_Viewer_0)<br />
+10. Install &gt; All [Next&gt;] and [Yes]<br />
+11. Finish<br />
+(C:\Program Files\Gatan\DigitalMicrograph.exe)<br />
+<br />
+□ Install<br />
+(https://data.mendeley.com/datasets/ff94wp42wd/1)<br />
+1. ePDFtools.tar.gz を解凍<br />
+2. ePDFtools<br />
+3. ePDF Tools.gtk を C:\Program Files\Gatan\Plugins に入れる<br />
+4. GMS 3<br />
+5. ePDF Tools &gt; Scattering factors<br />
+&nbsp; Scattering factor.txt<br />
+<br />
+□ Usage (Video tutorial of ePDF tools.wmv)<br />
+(now testing)<br />
+1. GMS 3 &gt; File &gt; Open &gt; Example pattern.dm3<br />
+&nbsp; &gt; ePDF Tools &gt; Scattering factors &gt; [All Files] &nbsp;Scattering factor.txt<br />
+&nbsp; &gt; ePDF Tools &gt; ePDF calculator 2017<br />
+2. Composition<br />
+&nbsp; Symb. [Au], At.% [1.0]<br />
+&nbsp; kV: 200.0<br />
+&nbsp; Dens.; 19.3 [g/cm^3]<br />
+&nbsp; r_max: 20.0 [?]<br />
+&nbsp; Size: 2000 [pixels]<br />
+3. Center (Image processing) &gt; (click) image &gt; [space]&nbsp;<br />
+4. Output<br />
+&nbsp; Center is: (719.001, 480.141) (in my case)<br />
+5. Profile (on Image processing)&nbsp;<br />
+6. Calc. &gt; Scatt.<br />
+7. &nbsp;&lt;f2&gt; &gt; 1st range &gt; BG &gt; Ctrl + Tick &gt; next narrow area (every time)<br />
+8. (click) + ( edge [BG]) &gt; delete<br />
+9. F(Q)<br />
+&nbsp; (Move) N, c (to make the least oscillationsin G(r))<br />
+&nbsp; (Move)&nbsp;<br />
+10. (click) D: Intensity (window) &gt; G(r)<br />
+11. range (1st density peak) &gt; Calib &gt; delete<br />
+12. -&gt;G(r) &gt; range (on RDF) &gt; Data<br />
+------------------------------------------------------------------------------<br />
+■ Radial Profile plugin (ImageJ) (Windows 10 (64 bit))<br />
+&nbsp; https://imagej.nih.gov/ij/plugins/radial-profile.html<br />
+<br />
+□ Download and Install<br />
+(https://imagej.nih.gov/ij/plugins/download/Radial_Profile.class)<br />
+1. ImageJ\plugins\Graphics<br />
+2. (put) Radial_Profile.class<br />
+<br />
+□ Usage<br />
+1. ImageJ<br />
+2. File &gt; Open &gt; Example pattern.dm3<br />
+3. (click-left (hold), draw square<br />
+4. Plugins &gt; Graphics &gt; Radial Profile &gt; OK<br />
+5. (fit ring and squere)<br />
+6. Plugins &gt; Graphics &gt; Radial Profile<br />
+&nbsp; &gt; Radius (pixels): larger value (e.g. 480)<br />
+7. [check] Use Spatial Calibration &gt; OK<br />
+8. Save... &gt; Au_1.csv<br />
+&nbsp; (List &gt; Ctrl+A &gt; notepad Au_1.lst &gt; copy&amp;past)<br />
+<br />
+※ e.g.,<br />
+&nbsp; X center (pixes): 719.00<br />
+&nbsp; Y center (pixes): 481.00<br />
+&nbsp; Radius (pixels): 203.00 &gt; 480.00<br />
+<br />
+※ Example pattern.dm3 (from ePDFtools)<br />
+※ remove 1st line (X Y), and rename Au_1.csv to Au_1.lst<br />
+※ BGを引くときのために小さいXの部分は幾らか除いておくことをオススメする<br />
+------------------------------------------------------------------------------<br />
+■ Diffraction ring profiler (Windows 10 (64 bit))<br />
+(https://github.com/bcolsen/diffraction-ring-profiler)<br />
+<br />
+□ Download and Install<br />
+・CCTBX<br />
+(http://cci.lbl.gov/cctbx_build/)<br />
+1. Download CCTBX<br />
+&nbsp; dev-1783/<br />
+&nbsp; &nbsp; cctbx-installer-dev-1783-intel-windows-x86_64.zip を C:\Users\&lt;user_name&gt;\ に解凍する<br />
+・ Diffraction ring profiler<br />
+(https://github.com/bcolsen/diffraction-ring-profiler/releases)<br />
+2. Older release<br />
+&nbsp; Diffraction_Ring_Profiler_1.7_Windows.zip を解凍<br />
+<br />
+□ Usage<br />
+(https://github.com/bcolsen/diffraction-ring-profiler/wiki/How-to-&amp;-Screenshots)<br />
+1. diffraction_ring_profiler.exe<br />
+2. Pattern &gt; Open &gt; Au_100cm.tif &gt; Open<br />
+3. Mark Rings &gt; (click 3 points on a ring)<br />
+4. Edit &gt; Preferences &gt; set<br />
+5. Tools &gt; Calibration &gt; radius 1: 2.35 &gt; Calibrate &gt; Close)<br />
+6. Profile<br />
+7. Tools &gt; Recenter(Sharpen Peaks)&nbsp;<br />
+8. Profile<br />
+-----&gt; (SUePDF)<br />
+9. Tools &gt; Polar Pattern<br />
+10. Tools &gt; Background Subtract<br />
+&nbsp; (click 5-points)<br />
+11. Edit &gt; Profiles Preferences<br />
+&nbsp; Scattering Vector Limit: 1.2<br />
+&nbsp; Set<br />
+12. Profile &gt; Open GDIS Simulation &gt; au_peak.txt &gt; Open<br />
+13. Edit &gt; Simulation Label<br />
+&nbsp; d-spacing 1: 2.35 Å [111]<br />
+&nbsp; d-spacing 2: 2.04 Å [200]<br />
+&nbsp; d-spacing 3: 1.44 Å [220]<br />
+&nbsp; d-spacing 4: 1.23 Å [311]<br />
+&nbsp; d-spacing 5: 1.02 Å [222]<br />
+&nbsp; Edit Labels<br />
+14. Profile &gt; Open GDIS Profile Sim &gt; au_pro.txt &gt; Open<br />
+15. Tools &gt; Make a Ring Figure<br />
+&nbsp; (Drag the labels to reposition)<br />
+<br />
+[1] How-to (I recommend &quot;How-to.&quot;)<br />
+&nbsp; https://github.com/bcolsen/diffraction-ring-profiler/wiki/How-to-&amp;-Screenshots<br />
+------------------------------------------------------------------------------<br />
+■ ProcessDiffraction (Windows 10 (64 bit)) (undercnstructing)<br />
+(https://www.energia.mta.hu/~labar/ProcDif.htm)<br />
+<br />
+□ Install<br />
+1. (管理者として実行) StartMe.exe&nbsp;<br />
+&nbsp; Unpack all files to:<br />
+&nbsp; &nbsp; C:\Program Files\ProcessDiffraction_setup_data<br />
+&nbsp; [check] Confirm overwrites<br />
+&nbsp; OK<br />
+2. setup.exe (in C:\Program Files\ProcessDiffraction_setup_data)<br />
+3. OK &gt; change [C:\Program Files\ProcessDiffraction\] &gt; PC mark &gt; OK<br />
+&nbsp;&gt; ProcessDiffraction &gt; continue &gt; All [Yes] &gt; OK<br />
+4. (start menu) ProcessDiffraction<br />
+&nbsp; C:\Program Files\ProcessDiffraction\ProcessDiffraction_V8_7.1_Q.exe<br />
+・1st time<br />
+5. Yes &gt; Select Drive &quot;c:[Windows]&quot; &gt; All [OK]<br />
+&nbsp; (C:\ProcessDiffractionData)<br />
+・2nd or later<br />
+5. No &gt; &nbsp;All [OK]<br />
+<br />
+□ Examples<br />
+1. Example_Files_to_Manual.exe<br />
+&nbsp; Unpack all files to:<br />
+&nbsp; &nbsp; C:\ProcessDiffractionData\Examples<br />
+&nbsp; OK<br />
+<br />
+□ Papers<br />
+1. For_Reading_&amp;_Referencing.zip を解凍<br />
+<br />
+□ Usage<br />
+1. ProcessDiffraction<br />
+&nbsp; No &gt; OK &gt; OK<br />
+2. About ProcessDiffraction<br />
+&nbsp; OK<br />
+3. File &gt; Load a new Project together with its pictures(s)<br />
+&nbsp; [All Files (*.*)] Cu-kalibr_883.tif &gt; Open<br />
+&nbsp; (or TiN_3xQ842.IPC)<br />
+&nbsp; (*.tiff, *.bmp, *.IPC, etc)<br />
+4. Microscope parameters<br />
+&nbsp; Accelerating voltage: 200 [kV]<br />
+&nbsp; Camera length: 883 [mm]<br />
+5. Resolution of image recording<br />
+&nbsp; [check] Film (or print) digitized: 300 [Pixels/inch]<br />
+6. [check] Data in File are inverted values<br />
+&nbsp; [check: Show it as in File<br />
+7. OK<br />
+8. Overlay &gt; [check] Reference circle (Ellipse)<br />
+&nbsp; Picture<br />
+&nbsp; &nbsp; R [pixels] 143.5<br />
+&nbsp; Centr_Xpixels 478.6<br />
+&nbsp; Centr_Ypixels 456.5<br />
+&nbsp; Nagbufucation 0.828<br />
+8. Calculate distribution<br />
+9. Show All<br />
+10. Marker &gt; Show more Marker &gt; Old Marker Sources &gt; from Text-files (*.XRD)<br />
+&nbsp; &gt; Cu_fcc.xrd &gt; Open<br />
+11. Process &gt; Calculate Background<br />
+&nbsp; Select BKG shape: log-Normal<br />
+&nbsp; Source of data to fit BKG to [Gross]<br />
+&nbsp; (Doubleclick on 4 Background (BKG) points)<br />
+&nbsp; OK<br />
+12. Process &gt; Calculate Net Peaks<br />
+------------------------------------------------------------------------------<br />
+■ Variables [1,2]<br />
+<br />
+◇ For nanoparticles<br />
+・spdiameter (Å単位)<br />
+&nbsp; 粒子径による強度の減衰<br />
+・stepcut (Å単位)<br />
+&nbsp; PDFがゼロに切り捨てられるr値<br />
+<br />
+◇ Data set parameters<br />
+・qmax (Å^-1単位)<br />
+&nbsp; 実験パラメータ<br />
+&nbsp; フーリエ変換ステップで使用される有限データ範囲<br />
+・qdamp (Å^-1単位)<br />
+&nbsp; Qの分解能が限られていることによるPDFのガウス分布の減衰<br />
+&nbsp; B(r) = exp{-(rQdamp)^2/2}<br />
+・qbroad (Å^-1単位)<br />
+&nbsp; 高いQ値でのノイズの増加によるPDFピークの広がり<br />
+&nbsp; (significant for wide r-ranges)<br />
+<br />
+◇ Refined Parameters:<br />
+・dscale<br />
+&nbsp; スケールファクター<br />
+・pscale<br />
+&nbsp; 位相のスケールファクター<br />
+&nbsp; dscaleと相関しているので同時に使用するのは注意<br />
+・lat, x(n), y(n), z(n)<br />
+&nbsp; 結晶格子とサイトnの位置（x,y,z）<br />
+・occ(n)<br />
+&nbsp; サイトnの占有率<br />
+・uij(n) (Å^2単位)<br />
+&nbsp; 原子nの異方的変位テンソルの要素<br />
+<br />
+◇ Peak width parameters<br />
+・delta1 (Å単位)<br />
+&nbsp; (1/r)でのピークの先鋭化<br />
+&nbsp; high temperature case<br />
+・delta2 (Å^2単位)<br />
+&nbsp; (1/r^2)でのピークの先鋭化<br />
+&nbsp; low temperature case<br />
+・sratio (ディフォルト: 1)<br />
+&nbsp; 結合原子のシグマ比。結合原子の相関運動(correlated motion)を説明するPDFピーク幅の減少係数<br />
+・rcut (Å単位)<br />
+&nbsp; sratioでの鋭化係数を適用するための半径カットオフ<br />
+<br />
+[1] 5.3 List of PDFfit2 variables<br />
+&nbsp; https://www.diffpy.org/doc/pdfgui/index.html<br />
+[2] NOMAD Modeling of the PDF: Hands-on PDFgui Exercises<br />
+&nbsp; https://neutrons.ornl.gov/sites/default/files/PDF_hands_on_examples_NOMAD.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Fundamental information<br />
+<br />
+・動径分布関数（Radial Distribution Function, RDF): R(r) [1]<br />
+&nbsp; R(r) dr : 半径rで厚さdrの球殻にある対を組む原子の数<br />
+<br />
+・RDF (radial distribution function) [6]<br />
+&nbsp; R(r) = 4*&pi;*r^2*&rho;0*g(r)&nbsp;<br />
+<br />
+・二体分布関数: g(r) [1]<br />
+&nbsp; g(r) = R(r)/(4*&pi;*r^2*&rho;0)<br />
+&nbsp; &rho;0: 原子数密度<br />
+&nbsp; 距離rの位置に原子がいる確率<br />
+<br />
+・原子対相関関数PDF: G(r) [1]<br />
+&nbsp; G(r) = 4*&pi;*r*&rho;0*[g(r)-1]<br />
+&nbsp; 結晶性物質を扱う人はG(r)を解析に用いることが多い<br />
+<br />
+・2体相関分布関数（Pair-Distribution Function, PDF) [4]<br />
+&nbsp; G(r) = 4*&pi;*r*&rho;0*[g(r)-1]<br />
+&nbsp; g(r)と同じ名前であるので間違えないよう注意が必要<br />
+<br />
+・二体分布関数(atomic Pair Distribution Function, PDF) [1,2]<br />
+&nbsp; G(r) = (2/&pi;)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ<br />
+<br />
+・Atomic PDF [3]<br />
+&nbsp; G(r) = 4*&pi;*r*[&rho;(r)-&rho;0]<br />
+&nbsp; &rho;0: average density<br />
+<br />
+・Atomic form factors [3]<br />
+&nbsp; Calculating a PDF from an atomistic model<br />
+&nbsp; G(r) = &Sigma;ij{[bi*bj/&lt;b&gt;^2]*&delta;(r-rij)}-4*&pi;*r*&rho;0<br />
+&nbsp; Z for x-rays, b for neutrons<br />
+&nbsp; &rho;0: average density<br />
+<br />
+・Modeling nanoscale morphology in real space [3]<br />
+&nbsp; G(r) = (2/&pi;)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ = 4*&pi;*r*[&rho;(r)-&rho;0*&gamma;0(r)]<br />
+&nbsp; &gamma;0(r): particle shape function<br />
+<br />
+・Reduced PDF = total correction function t(r) [6]<br />
+&nbsp; t(r) = 4*&pi;*r*&rho;0*g(r)<br />
+<br />
+・differential correlation function d(r) [6]<br />
+&nbsp; d(r) = 4*&pi;*r*&rho;0*[g(r) - 1]<br />
+<br />
+・reduced density: &rho;(r) [6]<br />
+&nbsp; &rho;(r) =&rho;0*g(r)<br />
+<br />
+◇ Mathematical basis of the PDF [1,4]<br />
+&nbsp; 解析に十分なデータを取るには大きなQが必要(例えば Q &gt; 20 ? 30 Å^-1)<br />
+&nbsp; 短波長（大きなエネルギー）の中性子やX線を用いる<br />
+&nbsp; 例： Q ? 30 Å^-1 -&gt; &lambda; ? 0.4 Å -&gt; E ? 31 keV<br />
+&nbsp; Qmax= 30-50 ?-1 (X-ray Synchrotron )<br />
+&nbsp; Qmax= 10-23 ?-1 (electrons)<br />
+<br />
+◇ Synchrotron X-rays [5]<br />
+・f: proportional to Z (atomic number)<br />
+&nbsp; poor sensitivity to light elements<br />
+&nbsp; f: decreases with Q = 4*&pi;*sin(&theta;)/&lambda;<br />
+・sample amount ? 100 mg<br />
+・acquisition time<br />
+&nbsp; ? 5 hours for point detector<br />
+&nbsp; ? 10 secounds for area detector<br />
+&nbsp; ? 0.1 secounds a-Si area detector<br />
+<br />
+◇ Neutrons [5]<br />
+・b: flucuates with Z<br />
+&nbsp; sensitive to light elements<br />
+&nbsp; b: constant with Q<br />
+・sample amount ? 5 - 10 g<br />
+・acquisition time<br />
+&nbsp; ? 2 - 5 hours, possibly longer<br />
+&nbsp; (much faster at the latest neutron souces, e.g. Oak Ridge Laboratory, Tennessee)<br />
+<br />
+[1] X線中性子PDF解析による結晶性物質の局所構造解析 [2]<br />
+&nbsp; http://pfwww.kek.jp/pf-seminar/AOT1/presenfiles/kodama.pdf<br />
+[2] 焼き入れ速度が V Ti Zr の 水素吸蔵特性に与える影響<br />
+&nbsp; https://www.jim.or.jp/journal/j/pdf3/79/03/131.pdf<br />
+[3] Atomic Pair Distribution Function (PDF) Analysis<br />
+&nbsp; https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf<br />
+[4] 結晶PDF（Pair Distribution Function）解析で観る短配位中距離構造の世界<br />
+&nbsp; http://www.jssrr.jp/journal/pdf/28/p117.pdf<br />
+[5] Analysis of Local Structure by Atomic Pair Distribution Function<br />
+&nbsp; http://www.fhi-berlin.mpg.de/acnew/department/pages/teaching/pages/teaching__wintersemester__2016_2017/elena_willinger__analysis_of_local_structure_by_atomic_pair_distribution_function__170203.pdf<br />
+[6] Radial Distribution Function from Electron Diffraction Patterns<br />
+&nbsp; http://www.globalsino.com/EM/page1426.html<br />
+[7] SUePDF_GUIv1.0-2015_Manual.pdf (Very good !)<br />
+&nbsp; https://osf.io/c2jq8/#!<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Electron Pair-Distribution Function (ePDF) Analysis&nbsp;<br />
+&nbsp; https://www.uni-ulm.de/fileadmin/website_uni_ulm/hrem/Outreach/ePDF_lecture_notes.pdf<br />
+[2] ePDF tools, a processing and analysis package of the atomic pair distribution function for electron diffraction<br />
+&nbsp; https://www.sciencedirect.com/science/article/pii/S0010465518304119<br />
+[3] Workshop on ePDF 2018<br />
+&nbsp; https://ecaelectronsig.wordpress.com/school/electron-pair-distribution-function-analysis/<br />
+[4] 電子線動径分布解析法によるAuナノ粒子の構造解析<br />
+&nbsp; https://www.ube-ind.co.jp/usal/documents/m201_900.htm<br />
+[5] 相変化光記録材料の電子線構造解析<br />
+&nbsp; https://www.jstage.jst.go.jp/article/materia1994/46/10/46_10_652/_pdf<br />
+[6] アモル フ ァス合金 の電子線構造解析<br />
+&nbsp; https://www.jstage.jst.go.jp/article/materia1994/44/1/44_1_24/_pdf<br />
+[7] 非晶質合金の電子線局所構造解析手法とその応用に関する研究<br />
+&nbsp; https://www.nims.go.jp/mmu/pdf/D-ohkubo.pdf<br />
+[8] 金属ガラスの電子線局所構造解析<br />
+&nbsp; http://microscopy.or.jp/jsm/wp-content/uploads/publication/kenbikyo/45_4/pdf/45-4-250.pdf<br />
+[9] 気相法で作製したアモルファスゲルマニウム薄膜の構造変化と結晶化<br />
+&nbsp; http://microscopy.or.jp/jsm/wp-content/uploads/publication/kenbikyo/52_3/pdf/52-3-166.pdf<br />
+------------------------------------------------------------------------------<br />
+■ important information<br />
+<br />
+□ eRDF Analyer<br />
+・In statistical mechanics, a pair correlation or distribution function (PDF) describes the probability of finding a neighbouring particle at a distance r from a reference particle. Radial distribution function is an example of such a function, which is experimentally accessible through diffraction experiments using X-rays, neutrons or electrons. This enables characterisation of structural order of material systems e.g. defects in crystals, nanocrystallinity or medium-range order in nanoparticles, and short-range order in amorphous materials or glasses.&nbsp;<br />
+・While diffraction data from X-rays and neutrons has been widely used in PDF analysis with the exception of synchrotron techniques, their scattering cross-section is too small for the study of atomic short-range order within nanovolumes of materials. Electron diffraction is particularly useful in this regard. Radial distribution function and its associated reduced density function (RDF) analysis of electron diffraction intensities or electron energy loss spectra can provide information on average interatomic distances and average coordination.<br />
+・The output from eRDF Analyser can be directly used as input into Reverse Monte Carlo (RMC) software for refinements of atomic models based on diffraction data. This version only produces the RDF G(r) and not the radial distribution function J(r).<br />
+<br />
+□ SUePDF<br />
+・Because electron scattering intensity dies off faster than X-rays intensity, the recommended Qmax for electron data is around 10-15 ?-1 for PDF analysis, lower than the typical values for X-rays synchrotron data (~30 - 50 ?-1).<br />
+・SUePDF is a computer program to extract the quantitative PDF from electron (powder) diffraction data which can be obtained in facile Transmission Electron Microscopy (TEM) experiments.<br />
+・This procedure is recommended because ED data usually contain high-frequency noises which are more visible at high Q values as spiky oscillation.&nbsp;<br />
+・The nanoparticle form factor takes into account the size and shape of the sample and quantify how much they affect the normalized PDF. For bulk sample this factor is unity.&nbsp;<br />
+<br />
+□ アモルファス合金の電子線構造解析<br />
+・エネルギーフィルター（インコラム式、オメガ型）により非弾性散乱を除去した弾性散乱強度（Elastic Intensity）<br />
+・非弾性散乱は主にプラズモン励起によるが、低散乱角強度および第1、第2ピーク付近の強度に影響する<br />
+・エネルギーフィルターの収差に起因して、無ひずみで得られる回折強度分布は、通常、散乱ベクトルQ?120nm^-1程度までであり（Q=4&pi;sin&theta;/&lambda;）, Q?100 nm^-1以上の高散乱角では非弾性散乱強度はほぼ無視できる。このため、広いQベクトルに渡る散乱強度分布I(Q)は、Q=120 nm^-1まではエネルギーフィルターの強度データ、Q=120 nm^1以上のI(Q)についてはフィルターなしの強度データを用いた。<br />
+・軽元素に関する原子相関が得られるのも電子構造解析の利点である<br />
+・g(r)から配位数の正確な情報を得ることは困難であるが、リバースモンテカルロ計算による構造モデル化によって部分相関（例えば、Fe-Fe, Fe-Zrなど）が得られ、局所構造の解析が可能になる。<br />
+・非弾性散乱を含んだ強度の解析と、含まない弾性散乱のみの強度解析では、g(r)のピーク位置に関してはほとんど変化がないが、非弾性散乱を含んだ強度の場合、サブピークに関連した原子相関が増大し、配位数を40%程度過剰に見積もることが判明しており、配位数を含めた精密解析には、弾性散乱強度解析が不可欠である。<br />
+・実際にデータ処理を行う上で、IBG(Q)が適切でない場合、還元干渉関数Qi(Q)が不正確になり、その結果として、特にg(r)においてr=0近くの本来相関が現れない領域に偽のピークが現れる。この領域の誤差が大きいということは、他の領域にも誤差が含まれているというこおであり、リバースモンテカルロ計算や、配位数の算出にも影響する。よって、r=0近傍でg(r)=0になるようにIBG(Q)を修正する。<br />
+・電子線動径分布解析を行う上で、試料内での電子線多重散乱もまた問題となる。この多重散乱を十分に軽減でき、散乱強度を運動学的強度レベルまで抑え込める試料厚さについて、Pd-Si, Fe-Zr-B, La-Al-Niアモルファス合金を用いた実験ならびに計算機シミュレーションにより調べた。直径約20 nmの領域からの制限視野回折実験では、いずれの薄膜試料でも、試料端からある程度の厚さ領域までの散乱強度分布は変化が無いが、厚さとともに次第にハローリング強度の低下、高散乱角側の強度減衰などが見られた。この強度分布に変化が見られない厚さが運動学的強度の厚さ範囲である。<br />
+・厚さとともに干渉関数S(Q)のピーク強度の減少、減衰の傾向が確認される<br />
+・膜厚の増加によって、動径分布関数の第1ピークがブロードになる傾向が確認される。これは、高散乱領域での強度の減衰によるものである。<br />
+・場所により強度分布が変化しない薄い試料領域からの回折強度分布を測定する必要がある。なお、試料厚さの測定はアモルファス試料の場合は容易でないが、EELSスペクトルからのプラズモン平均自由行程から推定する方法が考えられる。電子線解析用のTEM試料には、上述のように電子回折での多重散乱を極力避ける意味でアモルファス厚さが10?20 nmのものを必要とする。<br />
+・RMC計算では、実際の密度、組成に従う初期構造モデルを乱数により作成する場合が多いが、初期構造から大きく変わることなくフィッティングが落ち着く場合が多いので、なるべく現実に即したモデルが重要であり、分子動力学（結晶を融解して急冷）等を用いて作成することで、特有の化学的・幾何学的短距離・中距離秩序構造を初期構造の中で考慮することは有効な方法であると考えられる。また、ナノスケールでの相分離が明瞭の場合は、最初から可能性のある相分離構造モデルを作成することにより、良いRMCフィッティング結果が得られる可能性が高い。また、RMCによって得られる結果の統計的なバラツキを評価するために、複数の初期構造モデルについてRMC計算を遂行し、結果の比較を行うことも重要である。<br />
+・例えば、2500個原子モデルで、一回の移動距離を最大0.01 nm程度とし、10万回以上の繰り返し（各原子について平均40回以上の試行）を行った。ここで初期構造モデルの組成、密度等が不適切であると、実験2体分布関数を再現することは困難になる。<br />
+・中心原子とその隣接原子に関する2原子間垂直2等分面をつくり、面交線を繋いでできる多面体がVorooi多面体である。多面体でのi角（i=3,4,5,...）の面を構成する面の数niの並びをVorono indexと呼び(n3, n4, n5, ...)のように表示する。<br />
+------------------------------------------------------------------------------<br />
+■ Example data<br />
+<br />
+□ Au_1.txt<br />
+(from pattern.dm3 in ePDFtools by using of ImageJ)<br />
+-----<br />
+0.0530,18749.047<br />
+0.1061,18756.250<br />
+0.1591,18948.068<br />
+0.2121,19075.000<br />
+0.2651,19127.322<br />
+0.3182,19114.643<br />
+0.3712,19054.812<br />
+0.4242,19099.812<br />
+0.4772,18442.654<br />
+0.5303,14126.825<br />
+0.5833,9455.542<br />
+0.6363,6978.327<br />
+0.6893,5632.174<br />
+0.7424,4811.355<br />
+0.7954,4175.388<br />
+0.8484,3666.125<br />
+0.9015,3286.222<br />
+0.9545,2936.924<br />
+1.0075,2644.135<br />
+1.0605,2408.875<br />
+1.1136,2204.350<br />
+1.1666,2017.327<br />
+1.2196,1864.569<br />
+1.2726,1726.947<br />
+1.3257,1602.587<br />
+1.3787,1498.229<br />
+1.4317,1394.589<br />
+1.4847,1296.795<br />
+1.5378,1214.757<br />
+1.5908,1141.426<br />
+1.6438,1073.247<br />
+1.6969,1013.838<br />
+1.7499,961.177<br />
+1.8029,908.763<br />
+1.8559,867.940<br />
+1.9090,826.479<br />
+1.9620,786.535<br />
+2.0150,754.812<br />
+2.0680,724.485<br />
+2.1211,697.938<br />
+2.1741,671.984<br />
+2.2271,650.335<br />
+2.2801,628.591<br />
+2.3332,609.906<br />
+2.3862,590.100<br />
+2.4392,572.309<br />
+2.4923,554.917<br />
+2.5453,540.153<br />
+2.5983,526.591<br />
+2.6513,512.278<br />
+2.7044,499.914<br />
+2.7574,485.300<br />
+2.8104,473.388<br />
+2.8634,462.118<br />
+2.9165,452.688<br />
+2.9695,444.118<br />
+3.0225,438.371<br />
+3.0755,431.540<br />
+3.1286,424.788<br />
+3.1816,421.419<br />
+3.2346,420.323<br />
+3.2877,419.507<br />
+3.3407,420.255<br />
+3.3937,422.539<br />
+3.4467,428.899<br />
+3.4998,437.608<br />
+3.5528,449.254<br />
+3.6058,467.754<br />
+3.6588,496.652<br />
+3.7119,539.943<br />
+3.7649,603.661<br />
+3.8179,696.446<br />
+3.8709,825.834<br />
+3.9240,990.377<br />
+3.9770,1225.199<br />
+4.0300,1600.840<br />
+4.0831,2170.213<br />
+4.1361,2854.500<br />
+4.1891,3238.318<br />
+4.2421,2908.339<br />
+4.2952,2172.869<br />
+4.3482,1609.796<br />
+4.4012,1306.939<br />
+4.4542,1125.355<br />
+4.5073,1010.715<br />
+4.5603,948.997<br />
+4.6133,933.616<br />
+4.6663,965.473<br />
+4.7194,1043.623<br />
+4.7724,1136.527<br />
+4.8254,1173.953<br />
+4.8785,1100.566<br />
+4.9315,932.469<br />
+4.9845,754.904<br />
+5.0375,622.516<br />
+5.0906,525.816<br />
+5.1436,454.613<br />
+5.1966,403.572<br />
+5.2496,363.034<br />
+5.3027,332.316<br />
+5.3557,311.469<br />
+5.4087,295.675<br />
+5.4617,283.684<br />
+5.5148,274.535<br />
+5.5678,268.601<br />
+5.6208,263.831<br />
+5.6739,258.995<br />
+5.7269,255.865<br />
+5.7799,252.238<br />
+5.8329,248.155<br />
+5.8860,245.158<br />
+5.9390,241.960<br />
+5.9920,239.998<br />
+6.0450,238.358<br />
+6.0981,238.381<br />
+6.1511,239.337<br />
+6.2041,242.022<br />
+6.2571,247.314<br />
+6.3102,255.593<br />
+6.3632,270.132<br />
+6.4162,291.899<br />
+6.4693,322.055<br />
+6.5223,363.658<br />
+6.5753,421.279<br />
+6.6283,499.383<br />
+6.6814,625.133<br />
+6.7344,825.553<br />
+6.7874,1089.182<br />
+6.8404,1326.839<br />
+6.8935,1345.139<br />
+6.9465,1111.025<br />
+6.9995,836.389<br />
+7.0525,643.011<br />
+7.1056,528.074<br />
+7.1586,452.008<br />
+7.2116,394.173<br />
+7.2647,353.826<br />
+7.3177,325.594<br />
+7.3707,307.664<br />
+7.4237,298.603<br />
+7.4768,295.582<br />
+7.5298,298.620<br />
+7.5828,308.881<br />
+7.6358,327.422<br />
+7.6889,356.514<br />
+7.7419,395.937<br />
+7.7949,453.532<br />
+7.8479,539.112<br />
+7.9010,662.093<br />
+7.9540,831.214<br />
+8.0070,997.672<br />
+8.0601,1054.700<br />
+8.1131,939.668<br />
+8.1661,750.120<br />
+8.2191,614.171<br />
+8.2722,545.474<br />
+8.3252,517.944<br />
+8.3782,502.396<br />
+8.4312,464.029<br />
+8.4843,393.108<br />
+8.5373,325.955<br />
+8.5903,276.298<br />
+8.6433,244.881<br />
+8.6964,223.627<br />
+8.7494,206.325<br />
+8.8024,193.535<br />
+8.8555,183.185<br />
+8.9085,174.616<br />
+8.9615,167.467<br />
+9.0145,162.129<br />
+9.0676,157.110<br />
+9.1206,153.085<br />
+9.1736,149.988<br />
+9.2266,147.705<br />
+9.2797,146.304<br />
+9.3327,144.975<br />
+9.3857,145.897<br />
+9.4387,147.395<br />
+9.4918,149.710<br />
+9.5448,154.095<br />
+9.5978,159.177<br />
+9.6509,163.778<br />
+9.7039,167.100<br />
+9.7569,165.510<br />
+9.8099,161.486<br />
+9.8630,156.767<br />
+9.9160,152.762<br />
+9.9690,150.223<br />
+10.0220,150.450<br />
+10.0751,152.302<br />
+10.1281,156.215<br />
+10.1811,163.786<br />
+10.2341,174.716<br />
+10.2872,189.859<br />
+10.3402,212.752<br />
+10.3932,245.086<br />
+10.4463,289.273<br />
+10.4993,348.852<br />
+10.5523,410.127<br />
+10.6053,442.103<br />
+10.6584,431.222<br />
+10.7114,402.668<br />
+10.7644,392.929<br />
+10.8174,397.197<br />
+10.8705,386.431<br />
+10.9235,345.504<br />
+10.9765,288.398<br />
+11.0295,239.272<br />
+11.0826,206.059<br />
+11.1356,182.541<br />
+11.1886,165.289<br />
+11.2417,153.315<br />
+11.2947,144.641<br />
+11.3477,138.378<br />
+11.4007,134.304<br />
+11.4538,133.259<br />
+11.5068,133.213<br />
+11.5598,136.452<br />
+11.6128,141.353<br />
+11.6659,149.911<br />
+11.7189,161.820<br />
+11.7719,178.992<br />
+11.8249,200.128<br />
+11.8780,217.256<br />
+11.9310,218.430<br />
+11.9840,202.768<br />
+12.0371,179.314<br />
+12.0901,160.214<br />
+12.1431,146.229<br />
+12.1961,137.697<br />
+12.2492,132.370<br />
+12.3022,129.518<br />
+12.3552,129.970<br />
+12.4082,133.223<br />
+12.4613,139.612<br />
+12.5143,148.589<br />
+12.5673,156.639<br />
+12.6203,159.872<br />
+12.6734,154.289<br />
+12.7264,142.491<br />
+12.7794,128.799<br />
+12.8325,117.711<br />
+12.8855,108.517<br />
+12.9385,101.659<br />
+12.9915,96.650<br />
+13.0446,92.264<br />
+13.0976,89.618<br />
+13.1506,87.851<br />
+13.2036,86.810<br />
+13.2567,85.639<br />
+13.3097,85.761<br />
+13.3627,85.767<br />
+13.4157,86.924<br />
+13.4688,87.890<br />
+13.5218,89.982<br />
+13.5748,92.705<br />
+13.6279,96.489<br />
+13.6809,100.854<br />
+13.7339,104.017<br />
+13.7869,105.545<br />
+13.8400,104.469<br />
+13.8930,102.627<br />
+13.9460,101.690<br />
+13.9990,102.905<br />
+14.0521,105.342<br />
+14.1051,109.648<br />
+14.1581,117.732<br />
+14.2111,129.629<br />
+14.2642,145.506<br />
+14.3172,162.661<br />
+14.3702,177.066<br />
+14.4233,180.372<br />
+14.4763,174.164<br />
+14.5293,163.132<br />
+14.5823,153.497<br />
+14.6354,141.957<br />
+14.6884,128.620<br />
+14.7414,115.698<br />
+14.7944,105.472<br />
+14.8475,98.137<br />
+14.9005,92.652<br />
+14.9535,88.126<br />
+15.0065,84.593<br />
+15.0596,82.822<br />
+15.1126,81.884<br />
+15.1656,81.773<br />
+15.2187,82.093<br />
+15.2717,83.075<br />
+15.3247,84.324<br />
+15.3777,83.869<br />
+15.4308,82.850<br />
+15.4838,81.012<br />
+15.5368,79.326<br />
+15.5898,76.830<br />
+15.6429,76.044<br />
+15.6959,75.936<br />
+15.7489,76.936<br />
+15.8019,78.897<br />
+15.8550,81.485<br />
+15.9080,84.134<br />
+15.9610,85.250<br />
+16.0141,84.515<br />
+16.0671,81.717<br />
+16.1201,78.620<br />
+16.1731,75.286<br />
+16.2262,71.594<br />
+16.2792,68.018<br />
+16.3322,64.985<br />
+16.3852,62.587<br />
+16.4383,61.159<br />
+16.4913,58.883<br />
+16.5443,57.775<br />
+16.5973,57.201<br />
+16.6504,56.609<br />
+16.7034,56.833<br />
+16.7564,56.727<br />
+16.8095,57.056<br />
+16.8625,57.022<br />
+16.9155,56.992<br />
+16.9685,57.217<br />
+17.0216,57.600<br />
+17.0746,58.616<br />
+17.1276,60.643<br />
+17.1806,63.009<br />
+17.2337,66.541<br />
+17.2867,70.438<br />
+17.3397,74.193<br />
+17.3927,76.546<br />
+17.4458,77.262<br />
+17.4988,75.891<br />
+17.5518,73.446<br />
+17.6049,70.749<br />
+17.6579,67.588<br />
+17.7109,64.473<br />
+17.7639,62.103<br />
+17.8170,60.520<br />
+17.8700,59.603<br />
+17.9230,59.551<br />
+17.9760,60.282<br />
+18.0291,61.712<br />
+18.0821,64.085<br />
+18.1351,66.617<br />
+18.1881,68.732<br />
+18.2412,69.126<br />
+18.2942,67.774<br />
+18.3472,65.677<br />
+18.4003,63.729<br />
+18.4533,62.756<br />
+18.5063,62.285<br />
+18.5593,63.259<br />
+18.6124,64.241<br />
+18.6654,63.978<br />
+18.7184,63.099<br />
+18.7714,60.621<br />
+18.8245,57.527<br />
+18.8775,54.634<br />
+18.9305,51.796<br />
+18.9835,49.321<br />
+19.0366,47.661<br />
+19.0896,38.485<br />
+-----<br />
+------------------------------------------------------------------------------

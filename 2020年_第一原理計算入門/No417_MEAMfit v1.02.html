@@ -1,0 +1,241 @@
+<div>
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">Å° MEAMfit v1.02 (github and modified code version)</span></div>
+
+<div><span style="font-size:14px">(Edit: Dec/29/2020)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû Install (ubuntu 18.04 LTS (64 bit) or Debian 10.0 on windows10)</span></div>
+
+<div><span style="font-size:14px">0. sudo apt install git csh gfortran</span></div>
+
+<div><span style="font-size:14px">1. git clone <a href="https://github.com/by-student-2017/MEAMfit-v102.git">https://github.com/by-student-2017/MEAMfit-v102.git</a></span></div>
+
+<div><span style="font-size:14px">2. cd MEAMfit-v102/src</span></div>
+
+<div><span style="font-size:14px">3. csh installmeam</span></div>
+
+<div><span style="font-size:14px">(you can get MEAMfit)</span></div>
+
+<div>
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">Å° MEAMfit v1.02</span></div>
+
+<div><span style="font-size:14px">(Edit: Jun/2/2021)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû Select Packages (setup-x86_64.exe)</span></div>
+
+<div><span style="font-size:14px">-----(View [Full], Search)</span></div>
+
+<div><span style="font-size:14px">git 2.30.0-1</span></div>
+
+<div><span style="font-size:14px">tcsh 6.22.02-1</span></div>
+
+<div><span style="font-size:14px">gcc-gfortran 10.2.0-1</span></div>
+
+<div><span style="font-size:14px">make 4.3-1</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû Install (Cygwin64 Terminal)</span></div>
+
+<div><span style="font-size:14px">1. git clone <a href="https://github.com/by-student-2017/MEAMfit-v102-Cygwin64.git">https://github.com/by-student-2017/MEAMfit-v102-Cygwin64.git</a></span></div>
+
+<div><span style="font-size:14px">2. cd MEAMfit-v102-Cygwin64/src</span></div>
+
+<div><span style="font-size:14px">3. csh installmeam</span></div>
+
+<div><span style="font-size:14px">(you can get MEAMfit.exe)</span></div>
+</div>
+</div>
+</div>
+</div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">Å° MEAMfit v1.02 (original version)</span></div>
+
+<div><span style="font-size:14px">(Edit: Dec/28/2020)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû Install&nbsp;</span>(ubuntu 18.04 LTS (64 bit) or Debian 10.0 on windows10)</div>
+
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. mkdir MEAMfit_v1_2</span></div>
+
+<div><span style="font-size:14px">3. cd MEAMfit_v1_2</span></div>
+
+<div><span style="font-size:14px">4. wget https://data.mendeley.com/public-files/datasets/6w75ct75cb/files/488bfb8d-f47b-479b-8e8f-f6fed02e4d1f/file_downloaded</span></div>
+
+<div><span style="font-size:14px">5. mv file_downloaded MEAMfit_v1_2.tar.gz</span></div>
+
+<div><span style="font-size:14px">6. tar zxvf MEAMfit_v1_2.tar.gz</span></div>
+
+<div><span style="font-size:14px">7. gedit installmeam</span></div>
+
+<div><span style="font-size:14px">------</span></div>
+
+<div><span style="font-size:14px">#case Linux:</span></div>
+
+<div><span style="font-size:14px">#&nbsp; #linux using intel compiler</span></div>
+
+<div><span style="font-size:14px">#&nbsp; set FC='ifort'</span></div>
+
+<div><span style="font-size:14px">#&nbsp; set FFLAGS = '-g -assume byterecl -fltconsistency -fpconstant -real-size 64 -O3'</span></div>
+
+<div><span style="font-size:14px">#&nbsp; set FLIB&nbsp; &nbsp;= ' '</span></div>
+
+<div><span style="font-size:14px">#&nbsp; set LNKFLG = ' '</span></div>
+
+<div><span style="font-size:14px">#&nbsp; breaksw</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">case Linux:</span></div>
+
+<div><span style="font-size:14px">&nbsp; #linux using intel compiler</span></div>
+
+<div><span style="font-size:14px">&nbsp; set FC = 'gfortran'</span></div>
+
+<div><span style="font-size:14px">&nbsp; set FFLAGS = '-mtune=native -O3 -fimplicit-none -fdefault-integer-8'</span></div>
+
+<div><span style="font-size:14px">&nbsp; set FLIB&nbsp; &nbsp;= ' '</span></div>
+
+<div><span style="font-size:14px">&nbsp; set LNKFLG = '-static '</span></div>
+
+<div><span style="font-size:14px">&nbsp; breaksw</span></div>
+
+<div><span style="font-size:14px">------</span></div>
+
+<div><span style="font-size:14px">8. gedit source.f90</span></div>
+
+<div><span style="font-size:14px">-----(Line: 11460)</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp; !integer seed(12) !Changed from 8</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp; integer seed(99) !Changed from 12 (old 8)</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">9. csh installmeam</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû check version</span></div>
+
+<div><span style="font-size:14px">1. cd ~/MEAMfit_v1_2/src</span></div>
+
+<div><span style="font-size:14px">2. ./MEAMfit -h</span></div>
+
+<div>&nbsp;</div>
+
+<div>
+<div><span style="font-size:14px">Åû Test (step 1)</span></div>
+
+<div><span style="font-size:14px">ÅEEAM energy optimization</span></div>
+
+<div><span style="font-size:14px">1. cd ~/MEAMfit_v1_2/SampleCalculation/Input/EAM</span></div>
+
+<div><span style="font-size:14px">2. ../../../src/MEAMfit</span></div>
+
+<div><span style="font-size:14px">&nbsp; (you can get fitdbse)</span></div>
+
+<div><span style="font-size:14px">3. gedit fitdbse</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">&nbsp; 2 # Files | Configs to fit | Quantity to fit | Weights</span></div>
+
+<div><span style="font-size:14px">vasprun1.xml&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1-348&nbsp; &nbsp;Fr&nbsp; &nbsp; &nbsp; 1</span></div>
+
+<div><span style="font-size:14px">vasprun2.xml&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;1-322&nbsp; &nbsp;Fr&nbsp; &nbsp; &nbsp; 1</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">4. ../../../src/MEAMfit</span></div>
+
+<div><span style="font-size:14px">&nbsp; (you can get settings)</span></div>
+
+<div><span style="font-size:14px">5. gedit settings</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">&nbsp;TYPE=EAM</span></div>
+
+<div><span style="font-size:14px">&nbsp;CUTOFF_MAX=4.4</span></div>
+
+<div><span style="font-size:14px">&nbsp;NTERMS=2</span></div>
+
+<div><span style="font-size:14px">&nbsp;NTERMS_EMB=3</span></div>
+
+<div><span style="font-size:14px">&nbsp;STOPTIME=24</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">6. ../../../src/MEAMfit</span></div>
+
+<div><span style="font-size:14px">&nbsp; (you can get potential files (potparas_best# (where # runs from 1Å]10))) (MEAMfit format)</span></div>
+
+<div><span style="font-size:14px">7. cat bestoptfuncs</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Check that the smallest Rfit is ~ 0.12.)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû Test (step 2)</span></div>
+
+<div><span style="font-size:14px">ÅECheck EAM potential using testingÅ]set</span></div>
+
+<div><span style="font-size:14px">1. cd ~/MEAMfit_v1_2/SampleCalculation/Input/EAM</span></div>
+
+<div><span style="font-size:14px">2. cd Test</span></div>
+
+<div><span style="font-size:14px">3. cp ../potparas_best1 potparas_EAM</span></div>
+
+<div><span style="font-size:14px">4. ../../../../src/MEAMfit</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû lammps EAM format</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div><span style="font-size:14px">&nbsp; LAMMPS files can also be generated by running MEAMfit in noÅ]optimization mode using a potparas_best# file as an input (add &ldquo;POTFILEIN=potparas_best1&rdquo; and &ldquo;NOOPT=true&rdquo; to the &lsquo;settings&rsquo; file for example). In this case a file of the form XY.eam.alloy (with no _#) will be produced.</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">Åû manual</span></div>
+
+<div><span style="font-size:14px">1. cd ~/MEAMfit_v1_2</span></div>
+
+<div><span style="font-size:14px">2. evince MEAMfitUserGuide.pdf</span></div>
+
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">Å° source.f90 (Cygwin64 version from github)</span></div>
+
+<div><span style="font-size:14px">L9141: subroutine readoutcarenergy</span></div>
+
+<div><span style="font-size:14px">L9309: subroutine readoutcarforces</span></div>
+
+<div><span style="font-size:14px">L9471: subroutine readposcar</span></div>
+
+<div><span style="font-size:14px">L9813: subroutine readsettings</span></div>
+</div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span>---</div>
+</div>

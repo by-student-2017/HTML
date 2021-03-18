@@ -1,0 +1,723 @@
+<p>　ここでは、無料のライブラリの利用方法を解説していく。多くの第一原理計算コードでは、BLASやLAPACK、Intel MKLやAMD&nbsp;ACMLのセットアップが必要となる<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）<br />
+・Library : <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mE5JKtME1PBzAH6lZU5k2Tq">https://www.youtube.com/playlist?list=PL9r3BfacS1mE5JKtME1PBzAH6lZU5k2Tq</a><br />
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+<br />
+<a href="http://azalea.s35.xrea.com/blas/whatIsBlas.html">http://azalea.s35.xrea.com/blas/whatIsBlas.html</a>,&nbsp;<a href="http://www.mlab.ice.uec.ac.jp/~ej-sib/index.html">http://www.mlab.ice.uec.ac.jp/~ej-sib/index.html</a> も参考にされるとよい<br />
+<a href="https://wiki.gentoo.org/wiki/GCC_optimization/ja#-march">https://wiki.gentoo.org/wiki/GCC_optimization/ja#-march</a> も参考にされるとよい<br />
+&nbsp;</p>
+
+<p>下記の数値計算ライブラリのHPや文献も見ておくとよい。<br />
+[1] <a href="http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=%BF%F4%C3%CD%B7%D7%BB%BB%A5%E9%A5%A4%A5%D6%A5%E9%A5%EA">http://www.rcs.arch.t.u-tokyo.ac.jp/kusuhara/fswiki/wiki.cgi?page=%BF%F4%C3%CD%B7%D7%BB%BB%A5%E9%A5%A4%A5%D6%A5%E9%A5%EA</a><br />
+[2] <a href="http://www.jsces.org/Issue/Journal/pdf/nakata-0411.pdf">http://www.jsces.org/Issue/Journal/pdf/nakata-0411.pdf</a><br />
+[3] <a href="http://www.is.doshisha.ac.jp/text/basic/Linpack20090921.pdf">http://www.is.doshisha.ac.jp/text/basic/Linpack20090921.pdf</a><br />
+[4] <a href="http://sourceforge.jp/magazine/08/12/24/123237">http://sourceforge.jp/magazine/08/12/24/123237</a><br />
+[5] <a href="http://www.xlsoft.com/jp/products/intel/perflib/mkl/lin/Getting_Started_lin.htm">http://www.xlsoft.com/jp/products/intel/perflib/mkl/lin/Getting_Started_lin.htm</a><br />
+[6] <a href="http://web.kudpc.kyoto-u.ac.jp/hpc/intel">http://web.kudpc.kyoto-u.ac.jp/hpc/intel</a><br />
+[7] <a href="http://157.82.240.165/~yousuke/keisannki/faq.html">http://157.82.240.165/~yousuke/keisannki/faq.html</a></p>
+
+<p>------------------------------------------------------------------------------<br />
+色々と調べた結果、下記の傾向があるように思われる（左側の方が計算速度が速い）。</p>
+
+<p>Intel MKL&gt;=GotoBlas (OpenBLAS) &gt;=&nbsp; ATLAS &gt;= BLAS (ACML?はBLASより速い？)</p>
+
+<p>OpenMPI &gt;= MPICH2 &gt;= MPICH or OpenMP &gt;= 自動並列化（-parallel など）</p>
+
+<p>※ FFT も Intel MKL の方が速いという報告もあるため、Intel MKL での FFT のコンパイル方法も簡単に説明する。</p>
+
+<p>------------------------------------------------------------------------------<br />
+□ BLAS &amp; LAPACK<br />
+LAPACK :&nbsp;<a href="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</a><br />
+1) tar -zxvf lapack-3.5.0.gz<br />
+2) cd lapack-3.5.0<br />
+3)<br />
+◇ gfortran<br />
+&nbsp; cp make.inc.example make.inc<br />
+◇ ifort<br />
+&nbsp; cp ./INSTALL/make.inc.ifort make.inc<br />
+4) make blaslib<br />
+5) make lapacklib<br />
+6) sudo or su<br />
+7)<br />
+&nbsp; ln -s /home/username/lapack-3.5.0/librefblas.a /usr/local/lib/libblas.a<br />
+&nbsp; ln -s /home/username/lapack-3.5.0/liblapack.a /usr/local/lib/liblapack.a<br />
+-----<br />
+□ BLAS &amp; LAPACK<br />
+LAPACK :&nbsp;<a href="http://www.netlib.org/lapack/">http://www.netlib.org/lapack/</a>　<br />
+<br />
+gfortranの場合<br />
+1) tar -zxvf lapack-3.3.0.gz<br />
+2) cd lapack-3.3.0<br />
+3) cp make.inc.example make.inc<br />
+4) make blaslib<br />
+5) make lapacklib<br />
+6) sudo or su<br />
+パスワードを入力<br />
+7) cp blas_LINUX.a /usr/lib/libblas.a<br />
+&nbsp;&nbsp;&nbsp; cp lapack_LINUX.a /usr/lib/liblapack.a<br />
+&nbsp; または<br />
+&nbsp; ln -s blas_LINUX.a /usr/lib/libblas.a<br />
+&nbsp; ln -s lapack_LINUX.a /usr/lib/liblapack.a<br />
+<br />
+Intel Fortran Compilerの場合<br />
+1) cp ./INSTALL/make.inc.ifort make.inc<br />
+2) make blaslib<br />
+3) make lapacklib<br />
+4) sudo or su<br />
+パスワードを入力<br />
+5) gfortranと区別を付けたい場合は、<br />
+&nbsp; cp blas_LINUX.a /usr/local/lib/libblas.a<br />
+&nbsp; cp lapack_LINUX.a /usr/local/lib/liblapack.a<br />
+&nbsp; または<br />
+&nbsp; ln -s blas_LINUX.a /usr/local/lib/libblas.a<br />
+&nbsp; ln -s lapack_LINUX.a /usr/local/liblapack.a<br />
+&nbsp;&nbsp;などとするのもよいだろう。</p>
+
+<p>&nbsp;</p>
+
+<p>gfortran + atlas の場合&nbsp;（予め下記にあるATLASをセットアップしておく）<br />
+1) tar -zxvf lapack-3.3.1.gz<br />
+2) cd lapack-3.3.1<br />
+3) cp make.inc.example make.inc<br />
+4) make.inc を下記のように書き換える<br />
+&nbsp;&nbsp;&nbsp; #BLASLIB = ../../blas$(PLAT).a<br />
+&nbsp;&nbsp;&nbsp; BLASLIB = /usr/local/atlas/lib/libf77blas.a /usr/local/atlas/lib/libatlas.a<br />
+5) make lapacklib<br />
+6) sudo su<br />
+パスワードを入力<br />
+7) cp lapack_LINUX.a /usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+&nbsp; または<br />
+&nbsp; ln -s lapack_LINUX.a /usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+<br />
+使用方法（調査中）<br />
+&nbsp; gfortran case.f -L/usr/lib -lblas -llapack<br />
+&nbsp; ifort case.f -L/usr/local/lib -lblas -llapack<br />
+<br />
+Windows の場合は下記を参照すると良い。<br />
+<a href="http://www.dvxa.org/">http://www.dvxa.org/</a><br />
+<a href="http://icl.cs.utk.edu/lapack-for-windows/lapack/#libraries">http://icl.cs.utk.edu/lapack-for-windows/lapack/#libraries</a><br />
+------------------------------------------------------------------------------<br />
+□ LAPACK95<br />
+LAPACK95 : <a href="http://www.netlib.org/lapack95/">http://www.netlib.org/lapack95/</a>&nbsp;<br />
+1) tar zxvf lapack95.gz<br />
+2) cd LAPACK95<br />
+3) mkdir LAPACK95_modules<br />
+4) LAPAC95中のmake.incを下記のようにする。<br />
+&nbsp;&nbsp;&nbsp; FC =&nbsp;gfortran<br />
+&nbsp; FC1 =&nbsp;gfortran<br />
+&nbsp;&nbsp;&nbsp; OPTS0 = -O3<br />
+5) cd SRC<br />
+&nbsp;&nbsp;&nbsp; SRC中のREADME.txtをから得たいライブラリのコマンドを入力する。例えば、<br />
+&nbsp;&nbsp;make single_double_complex_dcomplex<br />
+6) LAPAC95内にLAPAC95.aが生成されている。<br />
+7) cd ..<br />
+8) sudo su<br />
+パスワードを入力<br />
+9) cp lapack95.a /usr/lib/liblapac95.a<br />
+&nbsp;&nbsp;&nbsp; cp lapack95_modules/* /usr/lib<br />
+Intel Fortran CompilerでLAPACK, LAPACK95をコンパイルする : <a href="http://www.obihiro.ac.jp/~suzukim/masuda/ifc_lapack31.html">http://www.obihiro.ac.jp/~suzukim/masuda/ifc_lapack31.html</a><br />
+<br />
+使用方法（調査中）<br />
+gfortran case.f -L/usr/lib -llapack95<br />
+ifort case.f -L/usr/lib -llapack95<br />
+<br />
+------------------------------------------------------------------------------<br />
+□ GotoBLAS<br />
+注意：後藤氏はWindows HPC にヘッドハンティングされたため開発は終了。下記のHPによるとMKLかACMLを使ってくださいとのこと。<br />
+<a href="http://blog.goo.ne.jp/nakatamaho/e/61d0cfbe1222364a3ef70505dce4f463">http://blog.goo.ne.jp/nakatamaho/e/61d0cfbe1222364a3ef70505dce4f463</a><br />
+ただ、整備がなされているHPがあることを知った。<br />
+https://www.tacc.utexas.edu/research-development/tacc-software/gotoblas2<br />
+<a href="http://www.okada.jp.org/RWiki/?R%A4%C8GotoBLAS">http://www.okada.jp.org/RWiki/?R%A4%C8GotoBLAS</a><br />
+<br />
+GotoBLAS : <a href="http://www.tacc.utexas.edu/resources/software/">http://www.tacc.utexas.edu/resources/software/</a>　<br />
+<a href="http://www.utexas.edu/news/2006/04/12/tacc/">http://www.utexas.edu/news/2006/04/12/tacc/</a><br />
+<a href="http://www.tacc.utexas.edu/tacc-projects/gotoblas2/downloads">http://www.tacc.utexas.edu/tacc-projects/gotoblas2/downloads</a><br />
+1) tar zxvf GotoBLAS2-1.13_bsd.tar.gz<br />
+2) cd GotoBLAS2<br />
+3) cat /proc/cpuinfo<br />
+4) gedit Makefile.rule<br />
+&nbsp; a) 64 bit のPCの場合は、BINARY=64 の前の # を除く。<br />
+&nbsp; b) cat /proc/cpuinfo で出力された processer の行が複数あればMakefile.ruleで USE_THREAD=0 の前の # を除いて、USE_THREAD=1&nbsp;にする。（自動で設定してくれるので、良く分からなければそのままでよい）</p>
+
+<p>&nbsp; c) OpenMP のスレッド毎にシングルスレッドモードでGotoBLASを呼びだすには、#を除いて、USE_OPENMP=1 にする。</p>
+
+<p>&nbsp;&nbsp;d) どうしてもgfortranにしたい場合は、FC = gfortran の前の#を除く。<br />
+&nbsp; e) 64 bit の場合は BINARY=64 の前の#を除く。<br />
+5) ./quickbuild.32bit<br />
+&nbsp; 64bitの場合は下記のようにする。 下記のHPで解説されているuname -a は便利。<br />
+&nbsp; uname -a と入力して x86_64 とあれば64bit計算が可能で下記のようにする。<br />
+&nbsp; ./quickbuild.64bit<br />
+6) sudo su<br />
+&nbsp;&nbsp; パスワード<br />
+7) cp libgoto2_core2p-r1.13.a /usr/local/lib/libgoto2.a&nbsp;<br />
+※1 最大スレッド数は goto_set_num_threads（整数）で指定<br />
+※2 LAPACKも自動的にダウンロードされる。<br />
+※3 Core2 までしかReadme に記述が無いので、corei7 でATLASよりも速くなるかは不明。<br />
+使用方法<br />
+&nbsp;&nbsp; gfortran -o case case.f -L/usr/local/lib -lgoto2　-lpthread<br />
+参考HP : <a href="http://www.kkaneko.com/rinkou/linux/cblaslinux.html">http://www.kkaneko.com/rinkou/linux/cblaslinux.html</a>　<br />
+&nbsp; Which architectures are supported?<br />
+&nbsp;&nbsp; Supported architectures include:<br />
+&nbsp;&nbsp; x86 family: Intel Pentium 3, Intel Pentium 4, Intel Core2, AMD Athlon, AMD Opteron<br />
+&nbsp;&nbsp; x86_64 family: Intel Pentium 4, Intel Core2, AMD Opteron<br />
+参考HP : <a href="http://www.tacc.utexas.edu/tacc-projects/gotoblas2/faq">http://www.tacc.utexas.edu/tacc-projects/gotoblas2/faq</a><br />
+<a href="http://blog.goo.ne.jp/nakatamaho/e/61d0cfbe1222364a3ef70505dce4f463">http://blog.goo.ne.jp/nakatamaho/e/61d0cfbe1222364a3ef70505dce4f463</a><br />
+<br />
+SurviveGotoBLAS2: <a href="http://prs.ism.ac.jp/~nakama/SurviveGotoBLAS2/">http://prs.ism.ac.jp/~nakama/SurviveGotoBLAS2/</a><br />
+1. tar zxvf SurviveGotoBLAS2*<br />
+2. cd survivegotoblas2<br />
+3. 後は上記と同じ。<br />
+4. lapack のversionを変えたい場合は、LAPACK_VERSION = 3.3.1 などにして前の#を除く。&nbsp;<br />
+5. sudo cp libgoto2_*r3.14.a /usr/local/lib/libgoto2.a<br />
+sudo cp libgoto2_*r3.14_blas.a /usr/local/lib/libgoto2_blas.a<br />
+sudo cp libgoto2_*r3.14_cblas.a /usr/local/lib/libgoto2_cblas.a<br />
+sudo cp libgoto2_*r3.14_lapack.a /usr/local/lib/libgoto2_lapack.a<br />
+使用方法<br />
+gfortran -o case case.f -L/usr/local/lib -lgoto2 -lgoto2 -lgoto2_blas -lgoto2_lapack<br />
+------------------------------------------------------------------------------<br />
+□ OpenBLAS (+lapack)<br />
+1. download: http://www.openblas.net/ -&gt; TAR<br />
+2. tar zxvf xianyi-OpenBLAS-v0.2.13-0-g51ce5ef.tar.gz<br />
+3. cd xia*<br />
+4. make BINARY=64 CC=&quot;gcc -m64&quot; FC=&quot;gfortran -m64&quot;<br />
+&nbsp; or make BINARY=64 CC=&quot;gcc -m64&quot; FC=&quot;gfortran -m64&quot; USE_THREAD=4<br />
+5. su<br />
+6. make PREFIX=/usr/local install<br />
+<br />
+Resutls<br />
+----- after make BINARY=64 CC=&quot;gcc -m64&quot; FC=&quot;gfortran -m64&quot;<br />
+&nbsp;OpenBLAS build complete. (BLAS CBLAS LAPACK LAPACKE)<br />
+<br />
+&nbsp; OS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... Linux&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; Architecture&nbsp;&nbsp;&nbsp;&nbsp; ... x86_64&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; BINARY&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... 64bit&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+&nbsp; C compiler&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ... GCC&nbsp; (command line : gcc -m64)<br />
+&nbsp; Fortran compiler ... GFORTRAN&nbsp; (command line : gfortran -m64)<br />
+&nbsp; Library Name&nbsp;&nbsp;&nbsp;&nbsp; ... libopenblas_sandybridgep-r0.2.13.a (Multi threaded; Max num-threads is 8)<br />
+----- after make PREFIX=/usr/local install<br />
+Generating openblas_config.h in /usr/local/include<br />
+Generating f77blas.h in /usr/local/include<br />
+Generating cblas.h in /usr/local/include<br />
+Copying LAPACKE header files to /usr/local/lib<br />
+Copying the static library to /usr/local/lib<br />
+Copying the shared library to /usr/local/lib<br />
+Generating OpenBLASConfig.cmake in /usr/local/cmake<br />
+Install OK!<br />
+-----<br />
+<br />
+Usage<br />
+-lopenblas -L/usr/local/lib<br />
+<br />
+see GotoBLAS_02QuickInstall.txt<br />
+[1] http://www.hnagata.net/archives/198#more-198<br />
+[2] https://github.com/xianyi/OpenBLAS/wiki/Installation-Guide<br />
+[3] https://github.com/xianyi/OpenBLAS<br />
+[4] http://www.lindonslog.com/linux-unix/compile-r-openblas-source-guide/<br />
+------------------------------------------------------------------------------<br />
+CBLAS<br />
+CBLAS : <a href="http://www.netlib.org/blas/blast-forum/">http://www.netlib.org/blas/blast-forum/</a><br />
+1) tar zxvf cblas.gz<br />
+2) cd CBLAS<br />
+3) cp Makefile.LINUX Makefile.in または ln -s Makefile.LINUX Makefile.in<br />
+&nbsp;&nbsp;&nbsp; 前者の場合はMakefile.in で、後者の場合はMakefile.LINUXで<br />
+&nbsp;&nbsp;&nbsp; BLLIB =&nbsp;/usr/lib/libblas.a と書き換える。<br />
+4) make all　<br />
+5) cd /lib/<br />
+6) sudo su<br />
+7) cp cblas_LINUX.a /usr/local/lib/libcblas.a<br />
+使用方法<br />
+&nbsp;gcc case.c -L/usr/lib -lcblas （調査中）<br />
+<br />
+GotoBLASと関連させるには参考HPに従って make all 前にファイルを書き換える。<br />
+&nbsp;&nbsp; cp Makefile.LINUX Makefile.in と上記でした場合は Makefile.inで下記とする。<br />
+&nbsp;&nbsp;&nbsp; BLLIB = /usr/lib/libgoto2.a -lpthread -lgomp<br />
+ln -s Makefile.LINUX Makefile.in と上記でした場合は Makefile.LINUXで下記とする。<br />
+&nbsp;&nbsp;&nbsp; BLLIB = /usr/lib/libgoto2.a -lpthread -lgomp<br />
+&nbsp; また、quickbuild.64bitとした場合はCFLAGSとFFLAGSに-m64を付ける。<br />
+使用方法<br />
+&nbsp; gcc case.c -L/usr/lib -lcblas -lgoto2 -lpthread （調査中）<br />
+参考HP : <a href="http://www.kkaneko.com/rinkou/linux/cblaslinux.html">http://www.kkaneko.com/rinkou/linux/cblaslinux.html</a>　<br />
+<a href="http://tokida.sakura.ne.jp/Hobbies/computer/Lapack.htm">http://tokida.sakura.ne.jp/Hobbies/computer/Lapack.htm</a>　<br />
+<a href="http://www.vi.cs.is.nagoya-u.ac.jp/watanabe-lab/graduates/01year/hiroyuki/lab/clapack/index.html">http://www.vi.cs.is.nagoya-u.ac.jp/watanabe-lab/graduates/01year/hiroyuki/lab/clapack/index.html</a>　<br />
+<a href="http://www.alab.t.u-tokyo.ac.jp/~bond/doc/clapack.html">http://www.alab.t.u-tokyo.ac.jp/~bond/doc/clapack.html</a>　<br />
+<br />
+------------------------------------------------------------------------------<br />
+CLAPACK<br />
+CLAPACK : <a href="http://www.netlib.org/clapack/">http://www.netlib.org/clapack/</a><br />
+1) tar zxvf clapack-3.1.1.1.gz<br />
+2) cd CLAPACK-3.1.1.1<br />
+3) cp make.inc.example make.inc<br />
+4) make f2clib<br />
+5) make blaslib<br />
+&nbsp; 上記で blas_LINUX.a が作成される。<br />
+6) cd SRC<br />
+7) make<br />
+&nbsp; 上記で lapack_LINUX.a が作成される。<br />
+8) cd ../TESTING/MATGEN<br />
+9) make<br />
+10) cd ../../<br />
+11) sudo su<br />
+&nbsp; パスワード<br />
+12) cp blas_LINUX.a /usr/lib/libcblas.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp lapack_LINUX.a /usr/lib/libclapack.a<br />
+&nbsp;&nbsp;&nbsp; cp F2CLIBS/libf2c.a /usr/lib/libf2c.a<br />
+使用方法<br />
+gcc case.c -L/usr/lib -lcblas -lclapack -lf2c (調査中）<br />
+参考HP : <a href="http://tokida.sakura.ne.jp/Hobbies/computer/Lapack.htm">http://tokida.sakura.ne.jp/Hobbies/computer/Lapack.htm</a><br />
+<a href="http://www.vi.cs.is.nagoya-u.ac.jp/watanabe-lab/graduates/01year/hiroyuki/lab/clapack/index.html">http://www.vi.cs.is.nagoya-u.ac.jp/watanabe-lab/graduates/01year/hiroyuki/lab/clapack/index.html</a><br />
+<a href="http://www.alab.t.u-tokyo.ac.jp/~bond/doc/clapack.html">http://www.alab.t.u-tokyo.ac.jp/~bond/doc/clapack.html</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+LAPACK++ (調査中）<br />
+LAPACK++ : <a href="http://math.nist.gov/lapack++/">http://math.nist.gov/lapack++/</a>&nbsp;<br />
+1) tar zxvf Lapackpp1_1a.tgz<br />
+2) cd Lapackpp1_1a<br />
+3) make libs<br />
+4) makefile.def で下記のように書き換える。<br />
+&nbsp; BLAS_LIB =&nbsp;/usr/lib/libcblas.a<br />
+&nbsp;&nbsp;LAPACK_LIB =&nbsp;/usr/lib/libclapack.a<br />
+5) make all<br />
+&nbsp;&nbsp;6) sudo su<br />
+7) cp&nbsp;libblas++.a /usr/local/lib/libblas++.a<br />
+&nbsp;&nbsp;&nbsp; cp liblapack++.a /usr/local/lib/liblapack++.a<br />
+&nbsp;&nbsp;&nbsp; cp liblamatrix++.a /usr/local/lib/liblamatrix++.a<br />
+<br />
+LAPACKPP : <a href="http://sourceforge.net/projects/lapackpp/files/">http://sourceforge.net/projects/lapackpp/files/</a><br />
+1) tar zxvf lapackpp-2.5.2.tar.gz<br />
+2) cd lapackpp-2.5.2<br />
+3) sudo su<br />
+4) ./configure<br />
+5) make<br />
+6) make install<br />
+参考HP : <a href="http://www3.bpe.es.osaka-u.ac.jp/~yumikura/rough_paper/RP_contents/lapackpp.html">http://www3.bpe.es.osaka-u.ac.jp/~yumikura/rough_paper/RP_contents/lapackpp.html</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+ATLAS<br />
+1) ATLAS : <a href="http://math-atlas.sourceforge.net/">http://math-atlas.sourceforge.net/</a><br />
+2) tar -xvf&nbsp;atlas3.8.4.tar.bz2<br />
+3) cd ATLAS<br />
+4) mkdir ATLAS_BUILD<br />
+5) cd ATLAS_BUILD<br />
+6) /home/*/ATLAS/configure -b 32<br />
+&nbsp; 64 bit の場合は、-b 64 にする。<br />
+7) make<br />
+8) make check<br />
+9) make ptcheck<br />
+10) make time<br />
+11) su<br />
+12)&nbsp;make&nbsp;install&nbsp;<br />
+&nbsp; 下記のように格納先を指定しても良いだろう。（make install で/usr/local/atlas/libに入れられる）<br />
+sudo cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libcblas.a /usr/local/atlas/lib/libcblas.a<br />
+&nbsp; sudo cp $(HOME)/ATLAS/ATLAS_BUILD/lib/liblapack.a /usr/local/atlas/lib/liblapack.a<br />
+&nbsp;&nbsp;sudo cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libf77blas.a /usr/local/atlas/lib/libf77blas.a<br />
+&nbsp; sudo cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libtstatlas.a /usr/local/atlas/lib/libtstatlas.a<br />
+&nbsp; sudo cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libatlas.a /usr/local/atlas/lib/libatlas.a<br />
+または<br />
+&nbsp; ln -s cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libcblas.a /usr/local/atlas/lib/libcblas.a<br />
+&nbsp; ln -s cp $(HOME)/ATLAS/ATLAS_BUILD/lib/liblapack.a /usr/local/atlas/lib/liblapack.a<br />
+&nbsp;&nbsp;ln -s cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libf77blas.a /usr/local/atlas/lib/libf77blas.a<br />
+&nbsp; ln -s cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libtstatlas.a /usr/local/atlas/lib/libtstatlas.a<br />
+&nbsp; ln -s cp $(HOME)/ATLAS/ATLAS_BUILD/lib/libatlas.a /usr/local/atlas/lib/libatlas.a<br />
+&nbsp; などとするのもよいだろう。</p>
+
+<p>　参考HP : <a href="http://www.kkaneko.com/rinkou/linux/atlaslinux.html">http://www.kkaneko.com/rinkou/linux/atlaslinux.html</a><br />
+<a href="http://www.tmps.org/index.php?ATLAS%A1%A4MKL%A1%A4ACML%A4%F2%CD%D1%A4%A4%A4%BFGSL%A4%CE%B9%E2%C2%AE%B2%BD">http://www.tmps.org/index.php?ATLAS%A1%A4MKL%A1%A4ACML%A4%F2%CD%D1%A4%A4%A4%BFGSL%A4%CE%B9%E2%C2%AE%B2%BD</a><br />
+<a href="http://www.eml.hiroshima-u.ac.jp/member/staff/tamaki/LTI-Lib/index.php?LAPACK%2BATLAS">http://www.eml.hiroshima-u.ac.jp/member/staff/tamaki/LTI-Lib/index.php?LAPACK%2BATLAS</a><br />
+<a href="http://www.cmpt.phys.tohoku.ac.jp/~otsuki/lapack.html">http://www.cmpt.phys.tohoku.ac.jp/~otsuki/lapack.html</a><br />
+<a href="http://www.mlab.ice.uec.ac.jp/~ej-sib/numerical/numerical_lapack_faq.html">http://www.mlab.ice.uec.ac.jp/~ej-sib/numerical/numerical_lapack_faq.html</a></p>
+
+<p><br />
+gfortran の場合 （ATLASで自動的にlapackがインストール出来ない場合）<br />
+1) tar -zxvf lapack-3.3.1.gz<br />
+2) cd lapack-3.3.1<br />
+3) cp make.inc.example make.inc<br />
+4)&nbsp;#BLASLIB = ../../blas$(PLAT).a&nbsp;&larr;# を前に付けて、改行して下記を加える。<br />
+&nbsp;&nbsp;&nbsp; BLASLIB = /usr/local/atlas/lib/libf77blas.a /usr/local/atlas/lib/libatlas.a<br />
+&nbsp;&nbsp;&nbsp; スレッド版は下記のようにする<br />
+&nbsp;&nbsp;&nbsp; BLASLIB = /usr/local/atlas/lib/libptf77blas.a /usr/local/atlas/lib/libatlas.a</p>
+
+<p>5) make<br />
+6) sudo su<br />
+&nbsp; パスワードを入力<br />
+7)&nbsp;cp lapack_LINUX.a /usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; スレッド版: cp lapack_LINUX.a /usr/local/atlas/lib/libptlapack_netlib_atlas.a<br />
+&nbsp; または<br />
+&nbsp; ln -s lapack_LINUX.a /usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; スレッド版: ln -s lapack_LINUX.a /usr/local/atlas/lib/libptlapack_netlib_atlas.a<br />
+------------------------------------------------------------------------------<br />
+Intel MKL<br />
+参考HP : <a href="http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html">http://interface.t.u-tokyo.ac.jp/home/teru/wien2k.html</a><br />
+11.0以降はコンパイラにmklも付属している(左記の欄のWIEN2kも参照)。<br />
+&nbsp;&nbsp;下記にはMKLだけをダウンロードした場合での方法を記す。<br />
+1) tar zxvf&nbsp;l_mkl_10.3.5.220_ia32.tgz<br />
+2) cd l_mkl_10.3.5.220_ia32<br />
+3) ./install.sh<br />
+4)&nbsp;.bashrc にパスを書き込む。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;source /home/*/intel/composerxe-2011.5.220/bin/compilervars_global.sh ia32<br />
+5) bash<br />
+&nbsp; インストールした後に、FFTなどをコンパイルするには下記のようにする。<br />
+&nbsp; 1) cd /home/*/intel/*/mkl/interfaces<br />
+&nbsp; 2) cd ライブラリを作成したいディレクトリ<br />
+&nbsp; 3) make を入力すると更に追加するコマンドが表示される<br />
+&nbsp; 4) make コマンド1 コマンド2 コマンド3 ...... と入力するとコンパイルがなされる。<br />
+&nbsp; 5) ライブラリは コンパイルの後の ar: creating に書かれている。<br />
+&nbsp; ※ マニュアルは /home/*/intel/composerxe-2011.5.220/Documentation/en_US/MKL/<br />
+&nbsp; にて、mkl_manual や mkl_userguide での hh_goto.htm を選択すればよい。<br />
+参考文献（OpenMP）: <a href="http://jp.xlsoft.com/documents/intel/compiler/527J-001.pdf">http://jp.xlsoft.com/documents/intel/compiler/527J-001.pdf</a><br />
+------------------------------------------------------------------------------<br />
+AMD&nbsp;ACML<br />
+AMD ACML : <a href="http://developer.amd.com/cpu/Libraries/acml/pages/default.aspx">http://developer.amd.com/cpu/Libraries/acml/pages/default.aspx</a>&nbsp;<br />
+用いたいコンパイラの名称の付いたacmlをダウンロードする。<br />
+gfortranでは下記のようになる。他のコンパイラも手順は同様。<br />
+1) tar zxvf acml-4-4-0-gfortran-32bit.gz<br />
+2) cd acml-4-4-0-gfortran-32bit<br />
+3) su （CentOSの場合）または sudo （Ubuntuの場合）<br />
+4) ./install-acml-4-4-0-gfortran-32bit.sh<br />
+参考HP: <a href="http://d.hatena.ne.jp/msr_humpy/20120421/1335025888">http://d.hatena.ne.jp/msr_humpy/20120421/1335025888</a><br />
+<a href="http://amddevcentral.com/tools/cpu/acml/onlinehelp/Documents/Linking_002fLinux.html">http://amddevcentral.com/tools/cpu/acml/onlinehelp/Documents/Linking_002fLinux.html</a><br />
+------------------------------------------------------------------------------<br />
+FFTW2 &amp; FFTW3<br />
+FFTW : <a href="http://www.fftw.org/">http://www.fftw.org/</a>&nbsp;<br />
+<br />
+FFTW2<br />
+gfortran, gcc の場合<br />
+1) tar zxvf fftw-2.1.5.tar.gz<br />
+2) cd fftw-2.1.5<br />
+3) ./configure<br />
+4) make<br />
+5) sudo su<br />
+6) make install<br />
+&nbsp;&nbsp;<br />
+&nbsp;&nbsp;OpenMPの場合[1]<br />
+&nbsp; 1) export CC=&quot;gcc -m64&quot;<br />
+&nbsp; 2) export F77=&quot;ifort -mcmodel=large -i-dynamic&quot;<br />
+&nbsp; 3) ./configure --with-openmp --enable-threads --with-gcc<br />
+&nbsp; 4) make<br />
+&nbsp; 5) sudo su<br />
+&nbsp; 6) make install<br />
+<br />
+&nbsp; OpenMPIの場合[2]<br />
+&nbsp; 1) export CC=&quot;gcc -m64&quot;<br />
+&nbsp; 2) export F77=&quot;ifort -mcmodel=large -i-dynamic&quot;<br />
+&nbsp; 3) ./configure --enable-mpi&nbsp;--enable-threads --with-gcc<br />
+&nbsp; 4) make<br />
+&nbsp; 5) sudo su<br />
+&nbsp; 6) make install<br />
+<br />
+FFTW3<br />
+gfortran, gcc の場合<br />
+1) tar zxvf fftw-3.3.tar.gz<br />
+2) cd fftw-3.3<br />
+3) ./configure （gromacs 用には ./configure --enable-threads --enable-float ）<br />
+4) make<br />
+5) sudo su<br />
+6) make install<br />
+<br />
+&nbsp;&nbsp;OpenMPの場合[1]<br />
+&nbsp; 1) export CC=&quot;gcc -m64&quot;<br />
+&nbsp; 2) export F77=&quot;ifort -mcmodel=large -i-dynamic&quot;<br />
+&nbsp; 3) ./configure --enable-threads --enable-openmp<br />
+&nbsp; 4) make<br />
+&nbsp; 5) sudo su<br />
+&nbsp; 6) make install<br />
+<br />
+&nbsp; OpenMPIの場合[2]<br />
+&nbsp; 1) export CC=&quot;gcc -m64&quot;<br />
+&nbsp; 2) export MPICC=&quot;mpicc -m64&quot;<br />
+&nbsp; 3) export F77=&quot;ifort -mcmodel=large -i-dynamic&quot;<br />
+&nbsp; 4) ./configure --enable-mpi --enable-threads --enable-openmp<br />
+&nbsp; 5) make<br />
+&nbsp; 6) sudo su<br />
+&nbsp; 7) make install<br />
+<br />
+References<br />
+[1] <a href="http://tekitobibouroku.blog42.fc2.com/blog-entry-44.html">http://tekitobibouroku.blog42.fc2.com/blog-entry-44.html</a><br />
+[2] <a href="http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html">http://dft-blog.natanzon.eu/2010/03/parallel-compilation-of-wien2k-on-intel.html</a><br />
+[3] <a href="http://www.kkaneko.com/rinkou/linux/fftw3linux.html">http://www.kkaneko.com/rinkou/linux/fftw3linux.html</a><br />
+[4] <a href="http://decafish.blog.so-net.ne.jp/2007-10-06">http://decafish.blog.so-net.ne.jp/2007-10-06</a><br />
+※インストール方法は、INSTALLを参照すればよい。<br />
+------------------------------------------------------------------------------<br />
+並列化の理解には下記のHPが役に立つ<br />
+<a href="http://www.kobitosan.net/ike/parallel/">http://www.kobitosan.net/ike/parallel/</a><br />
+------------------------------------------------------------------------------<br />
+OpenMP<br />
+OpenMP : <a href="http://openmp.org/wp/">http://openmp.org/wp/</a><br />
+例えば、<a href="http://openmp.org/wp/openmp-compilers/">http://openmp.org/wp/openmp-compilers/</a> にあるC言語のファイルを用いて下記のようにテストすればよい。<br />
+&nbsp; 1) hello.c という名称の新規ファイルを作成する<br />
+2) HP（http://openmp.org/wp/openmp-compilers/）にある灰色の枠をコピー&amp;ペースト<br />
+&nbsp; 3) ターミナル上で、下記を打ち込む<br />
+&nbsp;&nbsp;&nbsp; GUN Cの場合 gcc -fopenmp hello.c<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Intel Cの場合 icc -openmp hello.c<br />
+4) a.out と入力して実行すると、<br />
+&nbsp;&nbsp;&nbsp; Hello from thread 0, nthreads 2<br />
+&nbsp;&nbsp;&nbsp; Hello from thread 1, nthreads 2<br />
+&nbsp;&nbsp;&nbsp; 上記のような結果が出力される。<br />
+&nbsp;5) これらが出力されれば、共有メモリ型並列計算を目指したコンパイルが可能となる。<br />
+文献HP：<a href="http://tech.ckme.co.jp/openmp.shtml">http://tech.ckme.co.jp/openmp.shtml</a><br />
+解説記事：<a href="http://jp.xlsoft.com/documents/intel/compiler/525J-001.pdf">http://jp.xlsoft.com/documents/intel/compiler/525J-001.pdf</a><br />
+------------------------------------------------------------------------------<br />
+OpenMPI<br />
+1) <a href="http://www.open-mpi.org/">http://www.open-mpi.org/</a><br />
+2) tar zxvf openmpi-1.4.3.tar.gz<br />
+3) cd openmpi-1.4.3<br />
+4) コンパイラにより下記のように設定<br />
+&nbsp;&nbsp; a) gfortran, gcc の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure -prefix=/usr/local/openmpi CXX=g++ CC=gcc FC=gfortran F90=gfortran F77=gfortran<br />
+&nbsp;&nbsp;&nbsp;b) Intel Compiler の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+5) make<br />
+6) sudo su<br />
+7) make all install<br />
+8) 環境変数の設定<br />
+&nbsp; a) .bahsrc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export MPIROOT=/usr/local/openmpi<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export PATH=$MPIROOT/bin:$PATH<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+&nbsp; b) /etc/ld.so.conf　内に openmpi.conf を作成し、/usr/local/openmpi/lib を書き入れる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; /sbin/ldconfig を実行<br />
+&nbsp; c) ホームディレクトリの .rhosts&nbsp;へ マシン名を書き入れる（rshを利用する場合に必要）。例えば下記のようにする。<br />
+&nbsp; localhost.localdomain<br />
+&nbsp; d) ホームディレクトリの hosts&nbsp;へ マシン名　cpu=コア数 を書き入れる（sshを利用する場合に必要）。例えば下記のようにする。&nbsp;（cpu= で駄目な場合は slots= か？）<br />
+&nbsp; localhost.localdomain cpu=2<br />
+&nbsp; e) /usr/local/openmpi/etc/openmpi/mca-params.conf という名称のファイルを作り、plm_rsh_agent=rsh を書き込む。.bashrcに上記の名称のPATHを通しておく。<br />
+※ ubuntu などでは、/usr/local/ の部分を /opt/ や /home/ユーザー名 に変えたりする。<br />
+参考文献：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-33.html">http://nitrogen14.blog51.fc2.com/blog-entry-33.html</a><br />
+<a href="http://blog.livedoor.jp/rootan2007/archives/51117338.html">http://blog.livedoor.jp/rootan2007/archives/51117338.html</a><br />
+<a href="http://nowait.seesaa.net/article/182003087.html">http://nowait.seesaa.net/article/182003087.html</a><br />
+<a href="http://macwiki.sourceforge.jp/wiki/index.php/MPI">http://macwiki.sourceforge.jp/wiki/index.php/MPI</a><br />
+<a href="http://www.cs.hiroshima-u.ac.jp/~yasuaki/dokuwiki/mpi:open_mpi">http://www.cs.hiroshima-u.ac.jp/~yasuaki/dokuwiki/mpi:open_mpi</a><br />
+<a href="http://isc-w3.jaist.ac.jp/iscenter/index.php?id=336">http://isc-w3.jaist.ac.jp/iscenter/index.php?id=336</a><br />
+<a href="http://blog.goo.ne.jp/sdpaninf/e/0d34877b706112e4313e72f3cb7fcf06">http://blog.goo.ne.jp/sdpaninf/e/0d34877b706112e4313e72f3cb7fcf06</a><br />
+<a href="http://blogs.yahoo.co.jp/white18okozyo/26148983.html">http://blogs.yahoo.co.jp/white18okozyo/26148983.html</a>&nbsp;<br />
+<a href="http://d.hatena.ne.jp/mog_la/20091225">http://d.hatena.ne.jp/mog_la/20091225</a><br />
+<a href="http://docs.oracle.com/cd/E27069_01/html/E28031/ggxsd.html">http://docs.oracle.com/cd/E27069_01/html/E28031/ggxsd.html</a>&nbsp;<br />
+<a href="http://d.hatena.ne.jp/mog_la/20091225">http://d.hatena.ne.jp/mog_la/20091225</a>　<br />
+<a href="http://www2.rikkyo.ac.jp/web/tokiwa/menu/bioLib/parallel/mpi/openmpi.html">http://www2.rikkyo.ac.jp/web/tokiwa/menu/bioLib/parallel/mpi/openmpi.html</a><br />
+CentOS 6 などにおいて、yumでインストールした場合は下記を参考にして、探したいファイルがどこにあるかを調べると良い。<br />
+<a href="http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/openmpi-1.4.1-4.3.el6.i686.rpm.html">http://pkgs.org/centos-6-rhel-6/centos-rhel-i386/openmpi-1.4.1-4.3.el6.i686.rpm.html</a><br />
+------------------------------------------------------------------------------<br />
+MPICH<br />
+MPICH : <a href="http://www.mcs.anl.gov/research/projects/mpich2/downloads/index.php?s=downloads">http://www.mcs.anl.gov/research/projects/mpich2/downloads/index.php?s=downloads</a><br />
+一番下にあるMPICH-1をクリックするとダウンロードできる。<br />
+1) tar -zxvf mpich-1.2.7p1.tar.gz<br />
+2) cd mpich-1.2.7p1<br />
+3) sudo su<br />
+4) コンパイラにより下記のように設定<br />
+&nbsp; a) gfortran, gcc の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure -prefix=/usr/local/mpich -opt=-O2 -c++=g++ -cc=gcc -fc=gfortran&nbsp;-f90=gfortran&nbsp;-f77=gfortran --with-arch=LINUX<br />
+&nbsp; b) Intel Compiler の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;./configure -prefix=/usr/local/mpich -opt=-O2 -c++=icpc -cc=icc -fc=ifort&nbsp;-f90=ifort&nbsp;-f77=ifort --with-arch=LINUX<br />
+5) make<br />
+6) make install<br />
+7) /usr/local/mpich/share/machines.LINUX にMPIで利用するマシン名の一覧を記入<br />
+8) 上記のprefixにした場合は、/usr/local/mpich/bin/mpif90 でコンパイルが可能になる<br />
+超並列計算研究会 : <a href="http://www.is.doshisha.ac.jp/SMPP/">http://www.is.doshisha.ac.jp/SMPP/</a>&nbsp;<br />
+&nbsp; <a href="http://www.alde.co.jp/information/mpichcompilation/">http://www.alde.co.jp/information/mpichcompilation/</a><br />
+※ 3) はrootであれば必要ない。<br />
+※ intel fortranでコンパイルする場合は、--prefix=/usr/local/lib/lam など異なったディレクトリにデータを格納するようにするのも良いだろう。-c++や-ccは、それぞれg++やgccにするかfortranしか必要なければ省略してもよい。<br />
+&nbsp; ※ 完全なSMP単体の場合 3) ./configure -prefix=/usr/local/mpich -opt=-O2 -c++=icpc -cc=icc -fc=ifort -f90=ifort -f77=ifort --with-arch=LINUX&nbsp;-comm=shared　となる（調査中）。<br />
+<br />
+設定後に次の作業も行っておくと良い（ Fedora, CentOS ）<br />
+rsh-severとxinetdがインストールされているかどうか確認する。<br />
+rpm -qa rsh-sever<br />
+rpm -qa xinetd<br />
+起動時にrshを自動起動するようにする。<br />
+/sbin/chkconfig rsh on<br />
+起動時にrloginを自動起動するようにする。<br />
+/sbin/chkconfig rlogin on<br />
+起動時にxinetdを自動起動するようにする。<br />
+/sbin/service xinetd restart<br />
+.rhostsのファイルをホームディレクトリなどに並列計算するPC全てに作成する。<br />
+-------------<br />
+localhost<br />
+host1<br />
+host2<br />
+host3<br />
+-------------<br />
+chmod 600 ?/.rhosts<br />
+<br />
+rsh localhost ホスト名<br />
+rsh host1 ホスト名<br />
+<br />
+下記の方法は著者が成功した方法<br />
+MPICHを導入し、rshでデータ通信させる<br />
+1) root で .rhosts 名のファイルを作り、その中にhost nameを記入<br />
+2) /etc の hosts にhost nameを記入<br />
+3) /etc の hosts.equiv にhost nameを記入<br />
+<br />
+------------------------------------------------------------------------------<br />
+MPICH2<br />
+MPICH2 : <a href="http://www.mcs.anl.gov/research/projects/mpich2/">http://www.mcs.anl.gov/research/projects/mpich2/</a>&nbsp;<br />
+&nbsp;&nbsp;MPICH2を導入し、rshでデータを通信させる<br />
+------------------------------------------------------------------------------<br />
+LAM (sudo apt-get install で lam 関係を入れればgfortranでは必要ないかもしれない）<br />
+&nbsp; 1) <a href="http://www.lam-mpi.org/">http://www.lam-mpi.org/</a> , <a href="http://www.lam-mpi.org/7.1/download.php">http://www.lam-mpi.org/7.1/download.php</a><br />
+&nbsp; 2) tar zxvf lam-7.1.4.tar.gz<br />
+&nbsp;&nbsp;3) cd lam-7.1.4<br />
+&nbsp; 4) sudo su<br />
+&nbsp; 5) コンパイラにより下記のように設定<br />
+&nbsp;&nbsp;&nbsp; a) gfortran, gcc の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure CC=gcc CXX=g++ FC=gfortran --prefix=/usr/lib/lam<br />
+&nbsp;&nbsp;&nbsp;&nbsp;b) Intel Compiler の場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;./configure CC=icc CXX=icpc FC=ifort --prefix=/usr/lib/lam<br />
+&nbsp; 6) make<br />
+&nbsp; 7) make install<br />
+※ intel fortranでコンパイルする場合は、--prefix=/usr/local/lib/lam など異なったディレクトリにデータを格納するようにするのも良いだろう。<br />
+参考文献: <a href="http://biokids.org/?AMBER%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://biokids.org/?AMBER%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a><br />
+------------------------------------------------------------------------------<br />
+BLACS&nbsp;<br />
+BLACS :&nbsp;<a href="http://www.netlib.org/blacs/">http://www.netlib.org/blacs/</a><br />
+1) tar zxvf mpiblacs.tgz<br />
+2) gunzip -c mpiblacs-patch03.tgz | tar xvf -<br />
+3) cd BLACS<br />
+4) cp BMAKES/Bmake.MPI-LINUX Bmake.inc<br />
+5) gedit Bmake.inc<br />
+&nbsp; BTOPdir = $(HOME)/BLACS　&larr;解凍したアドレスにする<br />
+&nbsp; mpichの場合はそのままで良いが、openmpi の場合は下記のようになる。<br />
+&nbsp; MPIdir = /usr/local/openmpi<br />
+&nbsp; MPILIBdir =<br />
+&nbsp; MPIINCdir =&nbsp;($MPIdir)/include<br />
+&nbsp; MPILIB =<br />
+&nbsp; TRANSCOMM =-DUseMpi2<br />
+&nbsp; F77 = /usr/local/openmpi/bin/mpif77<br />
+&nbsp; CC&nbsp;= /usr/local/openmpi/bin/mpicc<br />
+&nbsp; CCFLAGS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = -O2<br />
+6) make mpi<br />
+7) sudo or su<br />
+&nbsp; ln -s /home/username/BLACS/LIB/blacs_MPI-LINUX-0.a /usr/local/lib/libblacs.a<br />
+&nbsp; ln -s /home/username/BLACS/LIB/blacsF77init_MPI-LINUX-0.a /usr/local/lib/libblacsF77init.a<br />
+&nbsp; ln -s /home/username/BLACS/LIB/blacsCinit_MPI-LINUX-0.a /usr/local/lib/libblacsCinit.a<br />
+参考<br />
+<a href="http://www.open-mpi.org/faq/?category=mpi-apps">http://www.open-mpi.org/faq/?category=mpi-apps</a><br />
+<a href="http://blog.hpcsystems.com/?p=39">http://blog.hpcsystems.com/?p=39</a><br />
+<a href="http://pelios.csx.cam.ac.uk/~mc321/siesta.html">http://pelios.csx.cam.ac.uk/~mc321/siesta.html</a><br />
+<br />
+ScaLAPACK<br />
+ScaLAPACK : http://www.netlib.org/scalapack/scalapack_home.html<br />
+1) tar zxvf&nbsp;scalapack.tgz<br />
+2) cd scalapack-1.8.0<br />
+3) cp INSTALL/SLmake.LINUX SLmake.inc<br />
+4) gedit SLmake.inc<br />
+&nbsp;&nbsp;&nbsp;&nbsp;home = $(HOME)/scalapack-1.8.0&nbsp;&larr;解凍したアドレスにする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;BLACSdir = $(HOME)/BLACS/LIB　&larr;上記で解凍したアドレスにする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;SMPLIB&nbsp; =&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;#SMPLIB&nbsp;= $(PVM_ROOT)/lib/$(PLAT)/libpvm3.a -lnsl -lsocket<br />
+&nbsp;&nbsp;&nbsp;&nbsp;F77&nbsp;= /usr/local/openmpi/bin/mpif77<br />
+&nbsp;&nbsp;&nbsp; CC&nbsp;&nbsp;= /usr/local/openmpi/bin/mpicc&nbsp;<br />
+&nbsp;&nbsp;&nbsp; CCFLAGS&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = -O2<br />
+&nbsp;&nbsp;&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libblas.a<br />
+&nbsp;&nbsp;&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/liblapack.a<br />
+&nbsp;&nbsp;&nbsp; ◇ sudo apt-get install や yum install などのライブラリの場合 （ライブラリは作成された）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BLASLIB = /usr/lib/libblas.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LAPACKLIB&nbsp;= /usr/lib/liblapack.a<br />
+&nbsp;&nbsp;&nbsp; ◇ ATLASを用いる場合 （ライブラリは作成された）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BLASLIB = /usr/local/atlas/lib/libf77blas.a /usr/local/atlas/lib/libatlas.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LAPACKLIB&nbsp;= /usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+&nbsp;&nbsp;&nbsp; ◇ GotoBLASを用いる場合 （ライブラリは作成された）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; BLASLIB = /usr/local/lib/libgoto2.a<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LAPACKLIB&nbsp;= /usr/local/lib/libgoto2.a<br />
+5) make lib<br />
+6) sudo or su<br />
+&nbsp;&nbsp;ln -s /home/username/scalapack-1.8.0/libscalapack.a /usr/local/lib/libscalapack.a<br />
+参考HP<br />
+<a href="http://www.open-mpi.org/faq/?category=mpi-apps">http://www.open-mpi.org/faq/?category=mpi-apps</a><br />
+<br />
+scalapack_installer<br />
+&nbsp; scalapack_installer：<a href="http://www.netlib.org/scalapack/">http://www.netlib.org/scalapack/</a><br />
+&nbsp; 1) tar zxvf scalapack_installer.tgz<br />
+&nbsp; 2) cd scalapack_installer_0.96<br />
+&nbsp; 3) &nbsp;ライブラリで下記のように選択する<br />
+&nbsp;&nbsp;&nbsp; Netlibを用いる場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; python setup.py --f90=gfortran --downblas --downblacs --downlapack<br />
+&nbsp;&nbsp;&nbsp; ATLASを用いる場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; python setup.py --f90=gfortran&nbsp; --blaslib=&quot;/usr/local/atlas/lib/libf77blas.a /usr/local/atlas/lib/libatlas.a&quot; --downblacs --lapacklib=/usr/local/atlas/lib/liblapack_netlib_atlas.a<br />
+&nbsp;&nbsp;&nbsp; GotoBLASを用いる場合<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; python setup.py --f90=gfortran&nbsp; --blaslib=&quot;/usr/local/lib/libgoto2.a -lpthread -fopenmp&quot;&nbsp;--downblacs --lapacklib=/usr/local/lib/libgoto2.a<br />
+&nbsp;</p>
+
+<p>□ ScaLAPACK (BLACS)<br />
+ScaLAPACK : <a href="http://www.netlib.org/scalapack/">http://www.netlib.org/scalapack/</a><br />
+1) tar zxvf&nbsp;scalapack.tgz<br />
+2) cd scalapack-2.0.2<br />
+3) cp SLmake.inc.example SLmake.inc<br />
+4) gedit SLmake.inc<br />
+&nbsp; BLASLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/libblas.a<br />
+&nbsp; LAPACKLIB&nbsp;&nbsp;&nbsp;&nbsp; = /usr/local/lib/liblapack.a<br />
+5) make lib<br />
+6) sudo or su<br />
+&nbsp;&nbsp;ln -s /home/username/scalapack-2.0.2/libscalapack.a /usr/local/lib/libscalapack.a<br />
+※ ScaLapack ( is including Blacs )<br />
+------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>spglib<br />
+1. download: http://spglib.sourceforge.net/<br />
+2. tar zxvf spglib-1.6.0.tar.gz<br />
+3. cd spglib*<br />
+4. export LIBS=&quot;-lgomp&quot;<br />
+5. export CFLAGS=&quot;-fopenmp&quot;<br />
+6. ./configure<br />
+7.&nbsp; make<br />
+--------------------------------------------------------------------------------</p>
+
+<p>CPUに対するgfortran でのオプション<br />
+&nbsp; gfortran -mtune=native -march=native &lt;- auto setting<br />
+&nbsp; Intel Core2 CPU with 64-bit extensions: gfortran -mtune=core2&nbsp; -march=core2 -m64<br />
+&nbsp; Intel Core i7 CPU with 64-bit extensions: gfortran -mtune=corei7&nbsp; -march=corei7 -m64<br />
+参考HP: <a href="http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html">http://gcc.gnu.org/onlinedocs/gcc/i386-and-x86_002d64-Options.html</a><br />
+CPUに対するIntel Compilerでのオプション （調査中）<br />
+&nbsp; Intel Core2 CPU with 64-bit extensions: ifort -axT<br />
+&nbsp; Core i : ifort -xsse2 -axsse4.2<br />
+&nbsp;&nbsp;Core2 45nm : ifort -xsse2 -axsse4.1<br />
+&nbsp; Core2 65nm : ifort -xsse2 -axssse3<br />
+&nbsp; 当たり障りの無い設定 : ifort -axSSE4.2,SSE4.1,SSSE3,SSE3</p>
+
+<p>参考HP: <a href="http://biokids.org/?Intel%20Compiler%2F%A5%B3%A5%F3%A5%D1%A5%A4%A5%EB%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3">http://biokids.org/?Intel%20Compiler%2F%A5%B3%A5%F3%A5%D1%A5%A4%A5%EB%A5%AA%A5%D7%A5%B7%A5%E7%A5%F3</a><br />
+<a href="http://biokids.org/?AMBER%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB">http://biokids.org/?AMBER%2F%A5%A4%A5%F3%A5%B9%A5%C8%A1%BC%A5%EB</a><br />
+<a href="http://sourceforge.jp/magazine/09/09/07/0257257/2">http://sourceforge.jp/magazine/09/09/07/0257257/2</a><br />
+Intel クイックリファレンスガイド：<a href="http://jp.xlsoft.com/documents/intel/compiler/qr_guide_jp.pdf">http://jp.xlsoft.com/documents/intel/compiler/qr_guide_jp.pdf</a><br />
+<a href="http://web.kudpc.kyoto-u.ac.jp/hpc/intel">http://web.kudpc.kyoto-u.ac.jp/hpc/intel</a><br />
+------------------------------------------------------------------------------<br />
+附録：ライブラリ利用例（caseはプログラム名）<br />
+CentOS 5.5 (64bit), CPU&nbsp;AMD製</p>
+
+<p><a href="http://wwweic.eri.u-tokyo.ac.jp/computer/manual/altix/prog/prog1.html">http://wwweic.eri.u-tokyo.ac.jp/computer/manual/altix/prog/prog1.html</a><br />
+---------------------------<br />
+Intel ifort + Intel MKL (non-commercial and personal use free)<br />
+<br />
+ifort -parallel -O2 -check all -warn declarations -CB -fpe0 -traceback case.f -L/opt/intel/Compiler/11.1/072/mkl/lib/em64t -I/opt/intel/Compiler/11.1/072/mkl/include -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -o case<br />
+<br />
+ifort -O2 -check all -warn declarations -CB -fpe0 -traceback case.f -L/opt/intel/Compiler/11.1/072/mkl/lib/em64t -I/opt/intel/Compiler/11.1/072/mkl/include -lmkl_intel_lp64 -lmkl_sequential -lmkl_core -lpthread -o case<br />
+<br />
+ifort -parallel -O2 -check all -warn declarations -CB -fpe0 -traceback case.f -L/opt/intel/Compiler/11.1/072/mkl/lib/em64t -I/opt/intel/Compiler/11.1/072/mkl/include -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -o case<br />
+<br />
+ifort -O2 -check all -warn declarations -CB -fpe0 -traceback case.f -L/opt/intel/Compiler/11.1/072/mkl/lib/em64t -I/opt/intel/Compiler/11.1/072/mkl/include -lmkl_intel -lmkl_sequential -lmkl_core -lpthread -o case<br />
+<br />
+---------------------------<br />
+gfortran + Intel MKL (non-commercial and personal use free)<br />
+<br />
+gfortran -O2 case.f -L/opt/intel/Compiler/11.1/072/mkl/lib/em64t -I/opt/intel/Compiler/11.1/072/mkl/include -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -o case<br />
+<br />
+---------------------------<br />
+Intel ifort + AMD MKL (non-commercial and personal use free)<br />
+<br />
+ifort -O2 -check all -warn declarations -CB -fpe0 -traceback case.f -static -L/opt/acml4.4.0/ifort64/lib -lacml -o case<br />
+<br />
+---------------------------<br />
+gfortran + AMD MKL (all free)<br />
+<br />
+gfortran -O2 case.f -static -L/opt/acml4.4.0/gfortran64/lib -lacml -o case<br />
+<br />
+------------------------------------------------------------------------------</p>
+
+<p>ScaLAPACK, LAPACK, BLACS and ATLAS on OpenMPI &amp; gfortran installation</p>
+
+<p><a href="http://www.slajerek.demon.pl/others/tutorial/ScaLAPACK/">http://www.slajerek.demon.pl/others/tutorial/ScaLAPACK/</a></p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<p>ScaLAPACK, LAPACK, BLACS and&nbsp;GotoBlas on OpenMPI &amp; gfortran installation</p>
+
+<p sizcache="5" sizset="0">------------------------------------------------------------------------------</p>

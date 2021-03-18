@@ -1,0 +1,82 @@
+　ここではBigDFTを用いた基本的な計算からEELS及びXANES（Z+1近似）の計算までを解説する。<br />
+-------------------------------------------------------------------------------<br />
+■ 利点<br />
+　Adaptivityとは、例えば原子核近傍のような関数の変化の激しい箇所に重点的に計算点を配し、変化の穏やかな部分は粗い計算点ですませる、というような技法です。この技法を押し進めることで、内殻の電子までも陽に取り扱う、いわゆる「全電子計算」が可能となり、有限要素法とウエーブレット法では具体的な実装も進められてきました。ガウス型関数は数学的には完全系を成しておらず、基底関数どうしが線形従属となってしまうために系統的に精度を向上させることが困難であることが知られています。「ウエーブレットは完全系を成す量子化学計算の新たな基底になるかもしれない」という関野氏の講演は印象的でした。（Torrent, No.9 (2014) 5.）<br />
+-------------------------------------------------------------------------------<br />
+■ BigDFT : <a href="http://inac.cea.fr/L_Sim/BigDFT/">http://inac.cea.fr/L_Sim/BigDFT/</a><br />
+(1.5.1はコンパイルが途中で止まった。1.4.0をお勧めしたい）<br />
+1) tar zxvf bigdft-1.4.0.tar.gz<br />
+2) cd bigdft-1.4.0<br />
+<br />
+◆ gfortranの場合　（gfortran でBLAS, LAPACKをコンパイルすることが必要)<br />
+3) &nbsp;./configure<br />
+4) &nbsp;make<br />
+5)&nbsp; make install<br />
+<br />
+◆ Intel Fortran Compilerの場合<br />
+3) ./configure FC=ifort --with-ext-linalg=&quot;-lmkl_intel -lmkl_sequential -lmkl_core -lpthread&quot; --with-ext-linalg-path=&quot;-L/opt/intel/Compiler/11.1/069/mkl/lib/32&quot;<br />
+4) make<br />
+5)&nbsp;make install<br />
+srcの中に実行ファイルが出来ていれば成功である。<br />
+参考文献: <a href="http://inac.cea.fr/L_Sim/BigDFT/install.html">http://inac.cea.fr/L_Sim/BigDFT/install.html</a><br />
+-------------------------------------------------------------------------------<br />
+■ BigDFT （version 1.5.2）<br />
+1) tar zxvf /home/*/Downloads/bigdft-1.5.2.tar.gz<br />
+2) cd bigdft-1.5.2<br />
+<br />
+◆ gfortranの場合　（gfortran でBLAS, LAPACKをコンパイルすることが必要)<br />
+3) ./configure CXX=g++ CC=gcc F77=gfortran FC=mpif90.openmpi FCFLAGS=&quot;-fbounds-check -O2 -Wall&quot; --with-ext-linalg=&quot;-llapack -lblas&quot; --with-ext-linalg-path=&quot;-L/usr/lib&quot; --with-libabinit-path=&quot;/home/*/abinit-6.8.1/lib&quot;<br />
+<br />
+◆ Intel Fortran Compilerの場合<br />
+3) ./configure CXX=icpc CC=icc F77=ifort FC=/usr/local/openmpi/bin/mpif90 FCFLAGS=&quot;-O2&quot; --with-ext-linalg=&quot;-lmkl_intel -lmkl_sequential -lmkl_core -lpthread&quot; --with-ext-linalg-path=&quot;-L/home/*/intel/*/mkl/lib/ia32&quot; --with-libabinit-path=&quot;/home/*/abinit-6.8.1/lib&quot;<br />
+4) make<br />
+5) cd tests<br />
+6) export run_parallel='mpirun -np 2'<br />
+7) make check<br />
+8) cd ..<br />
+9) sudo make install<br />
+※ --with-libabinit-path=&quot;/home/*/abinit-6.8.1/lib&quot; は無い方が良いかもしれない。<br />
+&nbsp;-------------------------------------------------------------------------------<br />
+■ BigDFT （version 1.6.0）<br />
+1) tar zxvf /home/*/Downloads/bigdft-1.6.0.tar.gz<br />
+2) cd bigdft-1.6.0<br />
+<br />
+◆ gfortranの場合1<br />
+3) ./configure CC=gcc CXX=g++ F77=gfortran FC=mpif90.openmpi CFLAGS=&quot;-g -O2 -m64&quot; CXXFLAGS=&quot;-g -O2 -m64&quot; FCFLAGS=&quot;-g -O2 -m64&quot; FFLAGS=&quot;-g -O2 -m64&quot; --enable-minima-hopping --enable-dgemmsy<br />
+<br />
+◆ gfortranの場合2<br />
+3) ./configure CC=&quot;gcc -m64&quot; CXX=&quot;g++ -m64&quot; F77=&quot;gfortran-m64&quot; FC=&quot;mpif90.openmpi -m64&quot; --enable-minima-hopping --enable-dgemmsy<br />
+4) make<br />
+5) cd tests<br />
+6) export run_parallel='mpirun -np 4'<br />
+7) make check<br />
+8) cd ..<br />
+9) sudo make install<br />
+※ --with-libabinit-path=&quot;/home/*/abinit-6.8.1/lib&quot; は無い方が良いかもしれない。<br />
+※&nbsp;make checkの結果で一部failedが出るが、デフォルトの設定でも同様な結果となる為、このまま使用する。<br />
+--------------------------------------------------------------------------------<br />
+Tutrial:&nbsp;<br />
+&nbsp; <a href="http://www.scc.acad.bg/ncsa/articles/library/BigDFT%20%20Tutorial%202011/BigDFT%20Tutorial.pdf">http://www.scc.acad.bg/ncsa/articles/library/BigDFT%20%20Tutorial%202011/BigDFT%20Tutorial.pdf</a>&nbsp;<br />
+pusudo potentials(GTH or HGH types を探す)<br />
+&nbsp; <a href="http://www.abinit.org/downloads/psp-links/pseudopotentials">http://www.abinit.org/downloads/psp-links/pseudopotentials</a><br />
+&nbsp;<br />
+◆ SCF計算<br />
+1. posinp.xyz を作成する。<br />
+2. bigdft | tee case.out<br />
+3. ディフォルトの入力ファイルが作成されるので書き換える。<br />
+4.&nbsp;cp default.dft case.dft<br />
+&nbsp; ・case.dft を開いて、 ixc のある行の最初をLDAならば1、PBEならば11にする。<br />
+&nbsp;&nbsp;・nspin=1 non-spin polarization, mpol=total magnetic moment&nbsp;&nbsp;&nbsp;とある行の最初の数字を non spin polarized system&nbsp;なら 1, spin polarized system&nbsp;なら 2,&nbsp;&nbsp;non-collinear magnetic system&nbsp;なら&nbsp;4 を指定。<br />
+5.&nbsp;cp&nbsp;posinp.xyz case.xyz<br />
+6.&nbsp;mpirun -np 4&nbsp;bigdft | tee case.out<br />
+<br />
+◆ XANES計算（調査中、pesudoプログラムが最新版では上手く動作しないので解決するまでお待ち下さい）<br />
+1. atom atom.dat<br />
+2. pseudo input.dat<br />
+3. python pawpatchfit.py 0 2 30<br />
+4. cat psppar.P psudopaw &gt; psppar.P_1s<br />
+5. mpirun -np 4 bigdft | tee case.out<br />
+6. mpirun -np 4 abscalc<br />
+<br />
+◆ NEB計算<br />
+-------------------------------------------------------------------------------

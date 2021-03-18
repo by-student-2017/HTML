@@ -1,0 +1,1012 @@
+<p>&nbsp; ここではMCDの計算が可能なSPRKKRコードと計算方法を解説する<br />
+------------------------------------------------------------------------------<br />
+・Note: SCFが上手く収束しない場合<br />
+&nbsp;&nbsp;SCF-mixing parameterとなるMIXをMIX=0.0001やMIX=0.00001と設定して非常にゆっくり収束させる<br />
+------------------------------------------------------------------------------<br />
+・Please, see &quot;hoc16_tasksheet&quot; on <a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=845&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=845&amp;lang=en</a><br />
+・User guid's:&nbsp;<a href="https://warwick.ac.uk/fac/sci/physics/staff/academic/bell/lab/castep/sprkkr/spr-krr_vm_guide.pdf">Microsoft Word - SPR-KRR VM guide (warwick.ac.uk)</a><br />
+------------------------------------------------------------------------------<br />
+■ 動画（クリエイティブコモンにしています）<br />
+・Youtube動画： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mE_g8YwEEqTbawTRYo8cSTb">https://www.youtube.com/playlist?list=PL9r3BfacS1mE_g8YwEEqTbawTRYo8cSTb</a></p>
+
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mE_g8YwEEqTbawTRYo8cSTb" width="560"></iframe></div>
+<br />
+・計算例： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mHlZOmAwSpOGX9CtW4ljA2L">https://www.youtube.com/playlist?list=PL9r3BfacS1mHlZOmAwSpOGX9CtW4ljA2L</a>
+
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mHlZOmAwSpOGX9CtW4ljA2L" width="560"></iframe></div>
+<br />
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+------------------------------------------------------------------------------<br />
+■ 計算中に止まってしまう場合<br />
+　EMINの値を変更してください。例えば、EMINを-2.0から-1.0にするなどです。これは準内殻がEMINに近いと価電子帯近傍での電子数の計算が上手くできないことに起因します。<br />
+　<a href="https://warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf">https://warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf</a>　の15ページに、赤字で書かれています。英文を読んだだけではよくわからないと思いますが、これは先ほど説明したことを言っています。<br />
+------------------------------------------------------------------------------<br />
+■ Akai-KKRとSPR-KKRの違い（27/Sep/2016）<br />
+◇ オススメのコードは？<br />
+・最初に扱うのはAkai-KKRの方が良いです。なぜならば、コンパイルし易いのと、計算での収束性が良いこと、バンド分散の計算も安定していることが挙げられます。<br />
+・マニアックな計算をしたいという方はSPR-KKRです。フルポテンシャル法が使えるので、水素原子が入るような隙間が沢山ある結晶構造の計算に適しています。<br />
+（Akai-KKRもそうですが、マフィンティンポテンシャルを使う場合は、水素原子が入りそうな隙間には原子番号0の原子を指定して計算の精度を高めることができます。GaAsやZrNiSnなどが代表例）<br />
+※ 注意点として、SPR-KKRはマニュアルを読んだだけでは分からないことが多くあります。セミナーの内容を調べたり、開発者に相談したりする苦労も必要になります。<br />
+<br />
+◇ Akai-KKRとSPR-KKRが出来ること<br />
+・CPA計算が可能（単位胞で元素置換した系の計算が可能）<br />
+・SCFとDOSの計算が可能<br />
+・全エネルギーやスピンモーメントを計算可能<br />
+　得られたデータから相の安定性や形成エネルギーを算出可能<br />
+<br />
+◇ Akai-KKRが得意<br />
+・収束が安定している<br />
+・バンド分散の計算が安定している<br />
+<br />
+◇ SPR-KKRが可能なこと<br />
+・非等価な原子位置（Akai-KKRでのnatmに対応）を十数以上入力可能<br />
+（Fe2VAlのnatmは4なのでAkai-KKRでも十分余裕がある）<br />
+・WIEN2kのように空間群から入力ファイルを作れる<br />
+・フルポテンシャル計算が可能<br />
+・LDA+U, GGA+Uが計算可能<br />
+・数多くの物性が計算可能（XAS, XPS(core-level and valence band), ARPES, XES, MXO, AES）<br />
+　Residual Resistivity of Alloys, Spin- and Orbital Momentsなど<br />
+　<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7">http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7</a><br />
+　や<br />
+　<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en">http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en</a><br />
+　のマニュアルを見ると良い。<br />
+・クラスターや界面の計算が可能<br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>MCDが計算可能なコード<br />
+1) SPRKKR :&nbsp;<a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1&amp;lang=en</a><br />
+2)&nbsp;WIEN2k : <a href="http://www.wien2k.at/">http://www.wien2k.at/</a><br />
+3) AkaiKKR : <a href="http://kkr.phys.sci.osaka-u.ac.jp/jp/">http://kkr.phys.sci.osaka-u.ac.jp/jp/</a><br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>SPRKKR 6.3&nbsp;( Fedora18 x86_64 Xfce, CentOS 6.4 x86_64 minimal Desktop で確認 ）<br />
+1)&nbsp;download Foxit Reader : <a href="http://www.click-assist.com/blog/compare.php">http://www.click-assist.com/blog/compare.php</a>　<br />
+2)&nbsp;下記 SPRKKR HPより LicenseファイルをダウンロードしFoxit J-Reader で開く<br />
+&nbsp;&nbsp;<a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1&amp;lang=en</a><br />
+3)&nbsp;必要事項を記入し、編集&rarr;画像を追加&rarr;枠で囲って画像を挿入して、SAVE<br />
+4)&nbsp;License ファイルのpdfを下記HPを参考にして送る<br />
+&nbsp;&nbsp;<a href="http://www.post.japanpost.jp/navi/main.html">http://www.post.japanpost.jp/navi/main.html</a><br />
+5) H. Ebert 教授から SPR-KKRがあなたの研究に役立つかどうかを考察して頂けるので、簡潔な文章でどんな物質のどんな結果を得たいかを教えて欲しいとメールが送られてくることがある。丁寧に返答する。<br />
+　どういうことを書けば良いかというと、あなたがこれから用いる&rdquo;予定&rdquo;の試料について書くのと、「元素置換の計算がSPR-KKRは得意」、「GUIのxbandでは界面やクラスターなどの計算が行い易いように整備されている」、「グリーン関数法を用いたバンド計算法でLDA+U計算が可能」、「XMCDやXAFSの計算が可能」、「XPS(core-level and valence band), ARPES, XES, MXO, AES、Residual Resistivity of Alloys, Spin- and Orbital Momentsなどが計算可能」という他のコードにはあまりない特徴があるためと記述すればよい。<br />
+6) Ph. D. だとMr. 扱いだという御話をある方から聞きました<br />
+&nbsp; Ph. D の場合はアドヴァイザーのサインが追加で必要になる<br />
+7) web上で登録をするとメールにてコードが送られてくる<br />
+<br />
+■ Attention !: Linux を 日本語版で使用している場合の注意<br />
+　日本語などのフォントの文字が入力されているとエラーとなります。<br />
+　特に case.pot ファイルの冒頭にある HEADER の後に 日本語などのフォントの文字が無いかを調べてください。日本語などのフォントが存在する場合はその部分を削除します。<br />
+<br />
+■ On CentOS 6.4 x86_64 minimal Desktop,&nbsp;&nbsp;Openmpi calculation is success.<br />
+execution time for last iteration （Core i7-2700K）<br />
+1&nbsp;CPU: 44.709 sec<br />
+4 CPU(-np 4): 12.377 sec<br />
+<br />
+■ xband<br />
+0) install<br />
+&nbsp; yum install tk<br />
+&nbsp; yum install tcl<br />
+&nbsp; yum install tclx<br />
+&nbsp;&nbsp;yum install gnuplot<br />
+&nbsp; yum install grace<br />
+&nbsp; yum install xterm<br />
+&nbsp; yum install python-argparse<br />
+1) mkdir&nbsp;sprkkr<br />
+2) cd sprkkr<br />
+3) mkdir xband<br />
+4) cd xband<br />
+5) cp $HOME/Downloads/xband_6.3.tar.gz .<br />
+6) tar -zxvf&nbsp;xband_6.3.tar.gz<br />
+7) gedit ~/.bashrc<br />
+&nbsp;&nbsp; export XBANDPATH=$HOME/sprkkr/xband<br />
+&nbsp;&nbsp; export PATH=$PATH:$XBANDPATH:<br />
+&nbsp;&nbsp; export XLIB_SKIP_ARGB_VISUALS=1<br />
+----------<br />
+gfortran case<br />
+8) gedit geometry/Makefile：FC=ifort -&gt;&nbsp;FC=gfortran-4.9<br />
+&nbsp;&nbsp; gedit graphics/makefile：linuxFC=ifort -&gt;&nbsp;linuxFC=gfortran-4.9, linux-gnuFC = ifort -&gt; linux-gnuFC = gfortran-4.9, FC=ifort -O2 -&gt; FC=gfortran-4.9 -O2<br />
+&nbsp;&nbsp; gedit spheres/makefile：linuxFC=ifort -&gt;&nbsp;linuxFC=gfortran-4.9, FC=ifort -O2 -&gt; FC=gfortran-4.9 -O2<br />
+&nbsp;&nbsp; gedit symmetry/makefile：linuxFC = ifort -&gt; linuxFC = gfortran-4.9, FC=ifort -&gt;&nbsp;FC=gfortran-4.9 -O2<br />
+9) bash<br />
+10) xband<br />
+----------<br />
+Intel fortran case<br />
+8) xband<br />
+----------<br />
+<br />
+■ OpenMPI ( success Fedora18 x86_64 Xfce, CentOS 6.4 x86_64&nbsp;minimal Desktop )<br />
+※ OpenMPIは1.4.5 シリーズのヴァージョンを用いると良いだろう。<br />
+・私の場合、Ubuntu12.04 x84.64では上手くインストール出来なかった。<br />
+・CentOS 6.4 x84_64,&nbsp; minimal Desktop ではインストールに成功。<br />
+・Fedora18 x84_64, Xfce ではインストールに成功。<br />
+□ インストール<br />
+1) http://www.open-mpi.org/<br />
+2) tar zxvf openmpi-1.4.5.tar.gz<br />
+3) cd openmpi-1.4.5<br />
+4) コンパイラにより下記のように設定<br />
+&nbsp;&nbsp; ・gfortran case<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure -prefix=/usr/local/openmpi CXX=g++ CC=gcc FC=gfortran F90=gfortran F77=gfortran<br />
+&nbsp;&nbsp; ・ifort case<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort<br />
+5) make<br />
+6) sudo (Ubuntu, Debian) or su (CentOS, Fedora)<br />
+7) make all install<br />
+□ 環境設定 (&nbsp; .bashrc in home and root directory )<br />
+# OpenMPI environmental setting<br />
+export MPIROOT=/usr/local/openmpi<br />
+export PATH=$MPIROOT/bin:$PATH<br />
+export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH<br />
+export MANPATH=$MPIROOT/share/man:$MANPATH<br />
+<br />
+■ SPRKKR&nbsp;6.3<br />
+1)&nbsp;unpack<br />
+&nbsp; cp $HOME/Downloads/sprkkr6.3*.tgz ./sprkkr<br />
+&nbsp; cd sprkkr<br />
+&nbsp; tar -zxvf sprkkr6.3*.tgz<br />
+2) cp make.inc_example make.inc<br />
+3) kwrite make.inc<br />
+&nbsp;&nbsp; ■ non parallel case（64bitの場合は左欄にあるWIEN2kを参考にするとよい）<br />
+&nbsp;&nbsp; □ 32 bit type OS (Now, I do not try this case.)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/Compiler/11.0/084/mkl/lib/32 -lmkl_blas95 -lmkl_lapack95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&nbsp; \<br />
+&nbsp;&nbsp; -diag-disable remark ### for ifort<br />
+&nbsp;&nbsp; □ 64 bit type OS&nbsp; (Now, I do not try this case.)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/Compiler/11.0/084/mkl/lib/em64t -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&nbsp; \<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -diag-disable remark ### for ifort<br />
+&nbsp;&nbsp; □ Intel compiler version 2013 (64bit type) (Now, I do not try this case.)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+&nbsp; &nbsp;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+&nbsp;&nbsp; -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&nbsp; \&nbsp;<br />
+&nbsp;&nbsp;&nbsp;-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp;□ gfortran ( success Fedora18 x84_64 Xfce )<br />
+&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/usr/lib -llapack -lblas (Ubuntu11.04 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LIB=-L/usr/lib64 -llapack -lblas (Fedora18 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FFLAGS =&nbsp; -O2<br />
+&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE= -I/usr/lib/openmpi/include&nbsp;(Ubuntu11.04 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;INCLUDE = -I/usr/local/openmpi/include&nbsp;(Fedora18 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;FC =&nbsp;gfortran -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;LINK =&nbsp;gfortran&nbsp;$(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp; ■ parallel case<br />
+&nbsp;&nbsp; □ OpenMPI case (<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=4&amp;func=startdown&amp;id=155&amp;lang=de">http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=4&amp;func=startdown&amp;id=155&amp;lang=de</a>&nbsp;)<br />
+&nbsp;&nbsp; ・Intel compiler version 2013 (64bit type) ( success Fedora18 x86_64 Xfce, CentOS 6.4 x86_64 minimal Desktop, but&nbsp;I&nbsp;look like&nbsp;that SPRKKR6.3MPI on Fedora18 x86_64 Xfce stop calculation by mpi. under exam)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \<br />
+&nbsp;&nbsp;&nbsp;-lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 \<br />
+&nbsp;&nbsp; -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/local/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2&nbsp; \<br />
+&nbsp;&nbsp; -diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC = mpif90 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LINK = mpif90 $(FFLAGS) $(INCLUDE)&nbsp;&nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp; ・gfortran case (Now, I do not try this case.)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/usr/lib -llapack -lblas (Ubuntu11.04 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LIB=-L/usr/lib64 -llapack -lblas (Fedora18 case)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FFLAGS =&nbsp; -O2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE = -I/usr/lib/openmpi/include<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FC = mpif90.openmpi -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LINK = mpif90.openmpi $(FFLAGS) $(INCLUDE)<br />
+4) make scfmpi（single type: make scf )<br />
+&nbsp;&nbsp; 上記の作業で binary が作成される。PCが 4 core の場合は下記となる<br />
+&nbsp;&nbsp;&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+5) この他にもプログラムを作成することができる<br />
+&nbsp;&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp;&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp;&nbsp; c) Makefile を見ると一応下記のコマンドがある<br />
+&nbsp;&nbsp;&nbsp;&nbsp; make genmpi, make embscfmpi, make chi,<br />
+&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+※ 再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+<br />
+■ SPRKKR 6.3 (Intel compiler 2016)<br />
+1) unpack<br />
+&nbsp;&nbsp; cp $HOME/Downloads/sprkkr6.3*.tgz ./sprkkr<br />
+&nbsp;&nbsp; cd sprkkr<br />
+&nbsp;&nbsp; tar -zxvf sprkkr6.3*.tgz<br />
+2) cp make.inc_example make.inc<br />
+3) kwrite make.inc<br />
+&nbsp; ■ parallel case<br />
+&nbsp; □ OpenMPI case (Dynamic link case)<br />
+&nbsp;&nbsp;&nbsp; LIB =&nbsp;&nbsp;&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread -lmkl_blacs_intelmpi_lp64 -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; LIBMPI =&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -L${MKLROOT}/lib/intel64 -lmkl_scalapack_lp64 -lmkl_intel_lp64 -lmkl_core -lmkl_intel_thread -lmkl_blacs_intelmpi_lp64 -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -qopenmp -I${MKLROOT}/include/intel64/lp64 -I${MKLROOT}/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC&nbsp;&nbsp; = mpiifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = mpiifort&nbsp;&nbsp;&nbsp; $(FFLAGS) $(INCLUDE)<br />
+&nbsp; □ OpenMPI case (Static link case)<br />
+&nbsp;&nbsp;&nbsp; LIB =&nbsp;&nbsp;&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a -Wl,--end-group -lpthread -lm -ldl<br />
+#LIB = $(LIB_MKL)<br />
+&nbsp;&nbsp;&nbsp; LIBMPI =&nbsp;&nbsp; ${MKLROOT}/lib/intel64/libmkl_blas95_lp64.a ${MKLROOT}/lib/intel64/libmkl_lapack95_lp64.a ${MKLROOT}/lib/intel64/libmkl_scalapack_lp64.a -Wl,--start-group ${MKLROOT}/lib/intel64/libmkl_intel_lp64.a ${MKLROOT}/lib/intel64/libmkl_core.a ${MKLROOT}/lib/intel64/libmkl_intel_thread.a ${MKLROOT}/lib/intel64/libmkl_blacs_intelmpi_lp64.a -Wl,--end-group -lpthread -lm -ldl<br />
+&nbsp;&nbsp;&nbsp; INCLUDE = -qopenmp -I${MKLROOT}/include/intel64/lp64 -I${MKLROOT}/include<br />
+&nbsp;&nbsp;&nbsp; FFLAGS = -O2 -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2 \<br />
+-diag-disable remark ### for ifort<br />
+&nbsp;&nbsp;&nbsp; FC&nbsp;&nbsp; = mpiifort -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp;&nbsp;&nbsp; LINK = mpiifort&nbsp;&nbsp;&nbsp; $(FFLAGS) $(INCLUDE)<br />
+4) make scfmpi（single type: make scf )<br />
+&nbsp; mpirun -np 4 kkrscf6.3MPI *.inp &gt; OUTPUT<br />
+5) この他にもプログラムを作成することができる<br />
+&nbsp; a) make all<br />
+&nbsp;&nbsp;&nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp; b) make allmpi<br />
+&nbsp;&nbsp;&nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp; c) Makefile を見ると一応下記のコマンドがある<br />
+&nbsp;&nbsp;&nbsp; make genmpi, make embscfmpi, make chi<br />
+&nbsp;&nbsp;&nbsp; make opm, make opmmpi, make spec<br />
+※ 再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+<br />
+* gitstamp.sh error case (expect English)<br />
+error: LANG=C date<br />
+correct: LANG=E date<br />
+<br />
+Reference<br />
+file:///opt/intel/documentation_2016/en/mkl/common/mkl_link_line_advisor.htm<br />
+-----<br />
+Intel&reg; Math Kernel Library (Intel&reg; MKL) Link Line Advisor v4.6&nbsp; &nbsp;<br />
+Select Intel&reg; product: &nbsp;&nbsp; &nbsp;Intel(R) Parallel Studio XE 2016<br />
+Select OS: &nbsp;&nbsp; &nbsp;Linux*<br />
+Select usage model of Intel&reg; Xeon Phi&trade; Coprocessor: &nbsp;&nbsp; &nbsp;Automatic Ofload<br />
+Select compiler: &nbsp;&nbsp; &nbsp;Intel(R) Fortran<br />
+Select architecture: &nbsp;&nbsp; &nbsp;Intel(R) 64<br />
+Select dynamic or static linking: Static or Dynamic<br />
+Select interface layer: &nbsp;&nbsp; &nbsp;LP64(32-bit integer)<br />
+Select threading layer: &nbsp;&nbsp; &nbsp;OpenMP threading<br />
+Select OpenMP library: &nbsp;&nbsp; &nbsp;Intel(R)(libiomp5)<br />
+Select cluster library: &nbsp;&nbsp; &nbsp;Cluster PARDISO (BLACS required)<br />
+&nbsp; ScaLAPACK (BLACS required)<br />
+&nbsp; BLACS<br />
+Select MPI library: &nbsp;&nbsp; &nbsp;Intel(R) MPI<br />
+Select the Fortran 95 interfaces:<br />
+&nbsp; BLAS95<br />
+&nbsp; LAPACK95<br />
+Link with Intel&reg; MKL libraries explicitly: &nbsp;&nbsp; &nbsp;check<br />
+-----<br />
+<br />
+下記のHPにも利用方法が記述されている。<br />
+[1] <a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en</a>　（終わりの方に xband の使い方が解説されている）<br />
+[2] <a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=22%3Aexamples&amp;catid=1&amp;Itemid=7&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=22%3Aexamples&amp;catid=1&amp;Itemid=7&amp;lang=en </a><br />
+[3] <a href="http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=10&amp;catid=4&amp;Itemid=7&amp;lang=en">http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=10&amp;catid=4&amp;Itemid=7&amp;lang=en</a><br />
+<br />
+■ SPRKKRの利用方法<br />
+□ xband 6.3 を用いた方法<br />
+※ 灰色になって入力できなくなった場合には、unlockのボタンを押すとよい。<br />
+setting<br />
+1) xband<br />
+&nbsp; w_font_select で 0 font と表示される場合は、全て any にして、下の欄に表示される好きなフォンを選択して、accept を数回押してみるとよい。<br />
+2) SET PREFERENCES のPROG_PATH0 -default path で、SPRKKRの実行ファイルが入っているフォルダを指定<br />
+<br />
+□ calculation<br />
+1) xband<br />
+2) DIRECTORIES で計算する系のフォルダを指定する<br />
+&nbsp; A. select directory<br />
+&nbsp; B. directry name に記入<br />
+&nbsp; C. create new + chnage directry を押す<br />
+&nbsp; D. close&nbsp;+ create system を押すと CREATE SYSTEM になる<br />
+3) CREATE SYSTEM を選択（ CIRECTORIES&nbsp;で close + create system を押すとここに移る）<br />
+&nbsp; A. name of system-file でファイル名を入力<br />
+&nbsp; B. Structure type か Space group のどちらかを入力<br />
+&nbsp; C. set lattice parameter で a, b, c軸の格子定数を入力し、CONFIRMを押す<br />
+&nbsp; D. Angstrom単位の場合は、convert を押して、bohr単位にする<br />
+&nbsp; E. input OK---GO ON<br />
+&nbsp; E. set up via Space Group で原子のサイトを選択する<br />
+&nbsp; G. click line to specify occupation 各座標が書かれたラインを選択すると Specify occupation for site のパネルが出る<br />
+&nbsp;&nbsp;&nbsp; ・ 各サイトの占有率が1の場合<br />
+&nbsp;&nbsp;&nbsp; a) specify occupant で原子を選択する<br />
+&nbsp;&nbsp;&nbsp; b) CLOSE<br />
+&nbsp;&nbsp;&nbsp; ・ 各サイトの占有率が1でない場合 (CPA calculation case)<br />
+&nbsp;&nbsp;&nbsp; a) number of occupants (atom types) on site<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同じサイトに占有する原子数を記述<br />
+&nbsp;&nbsp;&nbsp; b) concentration of occupant&nbsp;で占有率を変える（こちらを先に全て指定する）<br />
+&nbsp;&nbsp;&nbsp; c) 次に specify occupant で原子を選択する<br />
+&nbsp;&nbsp;&nbsp; d) CLOSE<br />
+&nbsp; H. suppress symmetry, set same R_WS for all spheres, adjust R_WS by scaling, (calculate R_WS + empty spheres の後に OK--RUN)、show structure を押す<br />
+&nbsp; I. Visualizer で表示したいソフトを選択して、run visualizerを押す。<br />
+&nbsp;&nbsp;&nbsp; (case.xcrysdenなどが出来る。XCrySDenなどで開いてみるとよい。例えば、unit cell repeated along primitive axes を押した後に XCrySDenを押す) -&gt; CLOSE<br />
+&nbsp; J. DONE - RETURN<br />
+4) SELECT / MODIFY<br />
+&nbsp; A. select directory で 計算する系のフォルダを指定する<br />
+&nbsp; B. 右にあるfile list (.sys)を選択する<br />
+&nbsp; C. 更に右に case.pot がある場合はそれも選択する<br />
+&nbsp; D. close<br />
+5) select and run program package<br />
+&nbsp; A. SPR-KKRを選択<br />
+&nbsp; B. select directroy で計算する系のフォルダを指定する<br />
+&nbsp; C. system で create input を押す<br />
+&nbsp; D. Create input file で SCFやDOS, XAS(EXPERT MODE)やEKREL( band dispersion )を選択し、&quot;write inpfile quit&quot; or &quot;write+edit input quit&quot;を押す。<br />
+　E. EXPERT MODE&nbsp;で SCF を再度選択するとSCFVXCで交換相関ポテンシャルを指定できるのでPBEにする。<br />
+　　擬ギャップ系や半導体及び絶縁体である場合は、EXPERT MODE にして control で LLOYD を指定する。<br />
+　　FP(Full Potential)計算にしたい場合は、EXPERT MODE で control でFULLPOT、SP-SRELを指定する（ASAからFP計算になる）。LDA+U計算の場合にはxbandのEXPERT MODEでLDA+Uを指定の後、case.inpを編集してMODEの欄に SP-SRELを書き加える。Scalar-relativistic（スカラー相対論） までがFPで計算可能である場合がある為（エラーの記述を良く読むと良い）。<br />
+&nbsp;&nbsp;&nbsp; SCF calculation case: P NKTAB 50<br />
+&nbsp;&nbsp;&nbsp; DOS calculation case: P NKTAB 200, NE 600, EMIN -0.2 -&gt; 0.05, EMAX 1.0 -&gt; 1.25, Im(E) 0.001<br />
+&nbsp;&nbsp;&nbsp; LDA+U(EXPERT MODE) case: REL -&gt; LDA+U<br />
+　　&nbsp; (Niでは、SCF -&gt; XASを選択するだけで、MCDの結果が出力された)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ・次回からの計算では、どのポテンシャルファイルを用いるかを聞かれる。下記を選択する。<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONTINUE and overwrite case.pot_new　（SCF から DOS や XASの場合）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; CONTINUE and non overwrite case.pot (上記以外)<br />
+　　LLOYD: <a href="http://www2.warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf">http://www2.warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf</a>&nbsp;<br />
+　　LLOYD: <a href="http://iopscience.iop.org/0953-8984/17/35/005/pdf/0953-8984_17_35_005.pdf">http://iopscience.iop.org/0953-8984/17/35/005/pdf/0953-8984_17_35_005.pdf</a><br />
+&nbsp; F. select | edit input-file で case.inpを選択する<br />
+&nbsp;&nbsp;&nbsp; SCF計算は case_SCF.inp, XAS計算はcase_XAS.inpになる<br />
+&nbsp; G. SCF計算の場合は kkrscf6.30, DOSやCLXPSやXASやXMOの場合はkkrgen6.3.0,&nbsp; EXAFSの場合はclugen6.3.0 Resistivityはkkrchi6.3.0を選択<br />
+&nbsp;&nbsp;&nbsp;&nbsp; select program path でパスを指定し、create job file を選択する<br />
+&nbsp; H. job-file menu が出来る<br />
+&nbsp;&nbsp;&nbsp;&nbsp; edit で開いて source の前に # を書き入れる。次のcdの前にも # を入れる。 -np 8 を -np 4 に変更する。MPIMPIと二度続けて書かれている場合はMPIにする。そして、 &gt; 以後の記述を &gt; も含めて削除。<br />
+&nbsp; H. job-file menu で run<br />
+&nbsp; (上手く動かない場合は、コンソールやターミナルで、計算する系のフォルダに入り、case_SCF.job や case_XAS.job のコマンドを入力すればよい)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 出力ファイルは、case.job.out となる。<br />
+6) 上記5)から再び続け、DOSやXASを計算させる<br />
+7) select and run program package で PLOTを選択<br />
+&nbsp; A. 左の欄から計算した系のファイルを選択する<br />
+&nbsp; B. 右の欄で計算したいファイルを選択する<br />
+&nbsp; C. 最も右の欄に結果をプロットできるファイルが出来る<br />
+&nbsp; xmgrace がある場合は、図が表示される<br />
+<br />
+※ NKTAB gives density of k-points<br />
+※ For 2D systems take care of slow convergence<br />
+&nbsp; use smaller SCFMIX and MIXRHO.<br />
+<br />
+■ Important information<br />
+SPRKKR calculation : spin-polarized calculation (default)<br />
+NREL = non-relativistic mode<br />
+SREL = scalar-relativistic mode<br />
+SP-REL = spin-polarized scalar-relativistic mode<br />
+REL = relativistic mode (default)<br />
+<br />
+■ Create input file (EXPERT MODE)<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>SCF case<br />
+TASK: SCF<br />
+SCFVXC:&nbsp;PBE<br />
+Hamiltonian: REL -&gt; LDA+U で AMF or AALのどちらかを選択する。edit で MODEに SP-SREL を追加。<br />
+NKTAB: 50<br />
+CONTROL: FULPOT, LLOYD (擬ギャップ系、半導体、絶縁体の場合にチェックを入れる）<br />
+NE: 600 （調査中、EFが気になる場合）<br />
+※ AMFだとWIEN2kを用いた論文で報告されているUを用いてもそれほど変な値が出力されないので、AMFがおススメである。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>E-k relation case<br />
+TASK: EKREL<br />
+KPATH 4 (= Gammpa -&gt; X point )<br />
+NE: 200<br />
+NK: 50<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>E-k relation (Bloch spectral function) case<br />
+TASK: BLOCHSF<br />
+KPATH 4 (= Gammpa -&gt; X point )<br />
+EMIN: 0.05<br />
+EMAX: 1.25<br />
+NE: 200<br />
+NK: 50<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>E-k relation (Bloch spectral function) case (2D MAP)<br />
+k-k-plot: select<br />
+TASK: BLOCHSF<br />
+EMIN: 0.05<br />
+EMAX: 1.25<br />
+NK1:260<br />
+NK2: 260<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>DOS case ( no search EF case)<br />
+TASK: DOS<br />
+NE: 600 (私の記憶だとWIEN2kではだいたい 0.027 eV 程度の刻みになっている。600だと近い値になる）<br />
+EMIN: 0.05<br />
+EMAX: 1.25<br />
+Im(E): 0.001 (0.0003 だと恐らくWIEN2kの結果に近づくと思う。調査中)<br />
+NKTAB: 250<br />
+OUTPUT: WRKAPDOS, WRPOLAR<br />
+※ EXPERT MODE では LDA+U を指定できるが、LDA+Uを指定（記述）しなくても結果は変わらない。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・BLOCHSF (</span><font face="Verdana">KPATH = 4, </font><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">Gamma - X point), kkrgen6.3MPI<br />
+MODE SP-SREL<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; LLOYD<br />
+TAU BZINT= POINTS NKTAB= 250<br />
+ENERGY GRID={3} NE={5000}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ImE=0.001 Ry&nbsp; EMIN=0.05&nbsp; EMAX=1.25 Ry<br />
+TASK BSF<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;NK =&nbsp;60 KPATH = 4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; FULLPOT</span><br />
+データは、ps の方が綺麗に描画されるかもしれない。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>CLXPS case<br />
+TASK: CLXPS<br />
+NKTAB: 250<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>VBXPS case<br />
+TASK: VBXPS<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>XAS (=XANES, EXAFS) case<br />
+TASK: XAS<br />
+NE: 600 (XANES)<br />
+EMAX: 1.5 (XANES)<br />
+Im(E): 0.001 (XANES)<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>XMO (resonant X-ray magneto-optical properties) case<br />
+TASK: XMO<br />
+<br />
+■ MEMO<br />
+SCF: kkrscf6.3MPI<br />
+DOS, CLXPS, VBXPS, XAS, XMO: kkrgen6.3MPI<br />
+SIGMA (=resistivity): kkrchi6.3MPI<br />
+XANES: kkrgen6.3MPI<br />
+EXAFS: clugen6.3MPI<br />
+<br />
+■ Version 6.3<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>XC potential: MJW, VWN, VBH, LDA+U, (PBE ?)<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>ASA ( while Full Potential versuib is in the near future)<br />
+Ref.: <a href="http://www2.warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf">http://www2.warwick.ac.uk/fac/sci/physics/news/events/kkr_greens/programme/minar.pdf</a>&nbsp;<br />
+<br />
+■ subroutine<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>kkrmain.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>specmain.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>mod_calcmode.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>excmjw.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>excvwn.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>excvbh.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>excpbe.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>init_mod_rmesh_fullpot.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>init_mod_types_fullpot.f<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span>spec_potfull_spkkr.f<br />
+<br />
+■ convert xmgrace to gnuplot (python script)<br />
+arg2gpt -f grace_file.arg<br />
+Ref.: <a href="http://www.larrucea.eu/agr2gpt-convert-xmgrace-gnuplot-mathplotlib/">http://www.larrucea.eu/agr2gpt-convert-xmgrace-gnuplot-mathplotlib/</a>&nbsp;&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ SPRKKR 5.4&nbsp;( Ubuntu 11.04で確認 ）<br />
+1) download Foxit Reader : http://www.click-assist.com/blog/compare.php　<br />
+2) 下記 SPRKKR HPより LicenseファイルをダウンロードしFoxit J-Reader で開く<br />
+&nbsp;&nbsp; http://olymp.cup.uni-muenchen.de/index.php?option=com_content&amp;view=frontpage&amp;Itemid=1&amp;lang=en<br />
+3) 必要事項を記入し、編集&rarr;画像を追加&rarr;枠で囲って画像を挿入して、SAVE<br />
+4) License ファイルのpdfを下記HPを参考にして送る<br />
+&nbsp;&nbsp; http://www.post.japanpost.jp/navi/main.html<br />
+5) H. Ebert 教授から SPR-KKRがあなたの研究に役立つかどうかを考察して頂けるので、簡潔な文章でどんな物質のどんな結果を得たいかを教えて欲しいとメールが送られてくることがある。丁寧に返答する。<br />
+6) Ph. D. だとMr. 扱いだという御話をある方から聞きました<br />
+&nbsp;&nbsp; Ph. D の場合はアドヴァイザーのサインが追加で必要になる<br />
+7) web上で登録をするとメールにてコードが送られてくる<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>xband<br />
+1) mkdir SPRKKR<br />
+2) その中に xband_231209b.tar.gz を入れる<br />
+3) cd SPRKKR<br />
+4) tar zxvf xband*<br />
+5) .bashrc に下記を加える<br />
+&nbsp; export XBANDPATH=$HOME/SPRKKR/xband<br />
+&nbsp; export PATH=$PATH:$XBANDPATH:&nbsp;<br />
+6) gfortranのコンパイルを用いている場合は下記のようにする。<br />
+&nbsp; geometryのファイルでのmakefile：FC=ifort をFC=gfortran<br />
+&nbsp; graphicのファイルでのmakefile：FC=ifort を FC=gfortran<br />
+&nbsp; spheresのファイルでのmakefile：FC=ifort を FC=gfortran<br />
+&nbsp; symmetryのファイルでのmakefile：FC=ifort を FC=gfortran<br />
+7) xband<br />
+※&nbsp;上手く動作しない場合は、Ubuntuの場合、下記のコマンドを入力してみる。<br />
+sudo apt-get install tk<br />
+&nbsp;<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>LAM<br />
+1)&nbsp;<a href="http://www.lam-mpi.org/">http://www.lam-mpi.org/</a>&nbsp;,&nbsp;<a href="http://www.lam-mpi.org/7.1/download.php">http://www.lam-mpi.org/7.1/download.php</a><br />
+2)&nbsp;tar zxvf lam-7.1.4.tar.gz<br />
+3) cd lam-7.1.4<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">4) コンパイラにより下記のように設定&nbsp;</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp; ・</span>gfortran case<br />
+&nbsp; &nbsp; &nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">./configure&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">CC=gcc</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;CXX=g++ &nbsp;FC=gfortran &nbsp;</span>--prefix=/usr/local/lam<br />
+<span style="background-color: rgb(255, 255, 255);">&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">ifort case</span><br />
+&nbsp; &nbsp; ./configure CC=icc CXX=icpc FC=ifort --prefix=/usr/local/lam<br />
+5) make<br />
+6)&nbsp;sudo (Ubuntu, Debian) or su (CentOS, Fedora)<br />
+7) make install<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■ OpenMPI</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">OpenMPIは1.4.5 シリーズのヴァージョンを用いると良いだろう。&nbsp;</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・私の場合、Ubuntu12.04 x84.64では上手くインストール出来なかった。</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・CentOS 6.4 x84_64, &nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">minimal Desktop&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">ではインストール</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">に成功</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">。</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・Fedora18</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;x84_64,</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;Xfce&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">ではインストールに成功</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">。</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□ インストール</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">1)&nbsp;</span><a href="http://www.open-mpi.org/" style="color: rgb(102, 68, 0); font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">http://www.open-mpi.org/</a><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">2) tar zxvf openmpi-1.4.5.tar.gz</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">3) cd openmpi-1.4.5</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">4) コンパイラにより下記のように設定&nbsp;</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp; ・</span>gfortran case<br />
+&nbsp; &nbsp; &nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">./configure -prefix=/usr/local/openmpi CXX=g++ CC=gcc FC=gfortran F90=gfortran F77=gfortran</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp; </span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">ifort case</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp;./configure -prefix=/usr/local/openmpi CXX=icpc CC=icc FC=ifort F90=ifort F77=ifort</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">5) make</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+6)&nbsp;sudo (Ubuntu, Debian) or su (CentOS, Fedora)<br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">7) make all install</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□ 環境設定 ( &nbsp;.bashrc in home and root directory )</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);"># OpenMPI environmental setting</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">export MPIROOT=/usr/local/openmpi</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">export PATH=$MPIROOT/bin:$PATH</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">export LD_LIBRARY_PATH=$MPIROOT/lib:$LD_LIBRARY_PATH</span><br style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);" />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">export MANPATH=$MPIROOT/share/man:$MANPATH</span><br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■ gfortran type lapack and blas</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">Ubuntu 11.04<br />
+1) sudo apt-get install blas-dev<br />
+2) sudo apt-get install lapack-dev</span><br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">Fedora18</span><br />
+1) yum install blas<br />
+2) yum install lapack<br />
+3) yum install lapack-devel<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>SPRKKR ( unsuccess gfortran )<br />
+0) copy PUB5.4_091223_10h59.tar.gz to /home/SPRKKR<br />
+1) unpack<br />
+&nbsp; gunzip zxvf&nbsp;PUB5.4_091223_10h59.tar.gz<br />
+&nbsp; tar -xvf&nbsp;PUB5.4_091223_10h59.tar<br />
+2) rewrite make.inc<br />
+<span style="background-color: rgb(255, 255, 255);">&nbsp;&nbsp;</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■</span>&nbsp;non parallel case（64bitの場合は左欄にあるWIEN2kを参考にするとよい）<br />
+&nbsp;&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;32 bit type OS<br />
+&nbsp; &nbsp; &nbsp;LIB=-L/opt/intel/Compiler/11.0/084/mkl/lib/32 -lmkl_blas95 -lmkl_lapack95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml<br />
+&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;64 bit type OS&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;</span>(Now, I do not try this case.)<br />
+&nbsp; &nbsp; &nbsp;LIB=-L/opt/intel/Compiler/11.0/084/mkl/lib/em64t -lmkl_blas95_lp64 -lmkl_lapack95_lp64 -lmkl_intel_lp64 -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml &nbsp; &nbsp;&nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; INCLUDE =&nbsp;-I/usr/local/openmpi/include<br />
+&nbsp; &nbsp; &nbsp;FFLAGS = &nbsp;-assume byterecl &nbsp; -assume 2underscores -O2 \
+<div>&nbsp; -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2</div>
+&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">Intel compiler version 2013 (64bit type)&nbsp;</span>( unsuccess Fedora18 Xfce, CentOS6.4 )<br />
+&nbsp; &nbsp; &nbsp;LIB=<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \</span>
+
+<div style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp;&nbsp;-lmkl_blas95_lp64&nbsp;-lmkl_lapack95_lp64 -lmkl_intel_lp64&nbsp;\<br />
+&nbsp; -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm<br />
+&nbsp; &nbsp;&nbsp; <span style="font-family: sans-serif;">INCLUDE =&nbsp;-I/usr/local/openmpi/include</span><br />
+&nbsp; &nbsp; &nbsp;FFLAGS = &nbsp;-assume byterecl &nbsp; -assume 2underscores -O2 \</div>
+
+<div>&nbsp; -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2</div>
+&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■</span>&nbsp;parallel case<br />
+&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;LAM case&nbsp;&nbsp;( success: Ubuntu 11.04 32bit)<br />
+&nbsp; &nbsp; LIB = -L/opt/intel/Compiler/11.1/080/mkl/lib/32 -lmkl_intel_lapack -lmkl_intel_blas -lmkl_intel -lmkl_intel_thread -lmkl_core -lguide -lpthread<br />
+&nbsp; &nbsp; LIBMPI = -L/usr/local/lam/lib -llammpi++ -llammpio -llamf77mpi -lmpi -llam<br />
+&nbsp; &nbsp; INCLUDE = -I/usr/local/lam/include<br />
+&nbsp; &nbsp; FC =&nbsp;/usr/local/lam/bin/mpif77 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp; &nbsp; LINK = /usr/local/lam/bin/mpif77 $(FFLAGS) $(INCLUDE)<br />
+&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;OpenMPI case (<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=4&amp;func=startdown&amp;id=155&amp;lang=de">http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=4&amp;func=startdown&amp;id=155&amp;lang=de</a> )<br />
+&nbsp;&nbsp; <span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・</span><span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">Intel compiler version 2013 (64bit type)&nbsp;</span>( unsuccess Fedora18 Xfce,&nbsp;CentOS6.4)<br />
+&nbsp; &nbsp; &nbsp;&nbsp;LIB=<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">-L/opt/intel/composer_xe_2013/mkl/lib/intel64/em64t \</span>
+
+<div style="background-color: rgb(255, 255, 255);"><font face="verdana, tahoma, ＭＳ ゴシック, ＭＳ Ｐゴシック, ヒラギノ角ゴ Pro W3, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif">&nbsp;&nbsp;-lmkl_blas95_lp64&nbsp;-lmkl_lapack95_lp64 -lmkl_intel_lp64&nbsp;\</font><br />
+<font face="verdana, tahoma, ＭＳ ゴシック, ＭＳ Ｐゴシック, ヒラギノ角ゴ Pro W3, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif">&nbsp; -lmkl_intel_thread -lmkl_core -liomp5 -lpthread -lm</font><br />
+&nbsp; &nbsp; &nbsp; INCLUDE =&nbsp;-I/usr/local/openmpi/include</div>
+&nbsp; &nbsp; &nbsp; FFLAGS = &nbsp;-assume byterecl &nbsp; -assume 2underscores -O2 \
+
+<div>&nbsp; -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2</div>
+&nbsp; &nbsp; &nbsp; FC = mpif90 -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp; &nbsp; &nbsp; LINK = mpif90 $(FFLAGS) $(INCLUDE)&nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp;<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">・gfortran case&nbsp;</span>(Now, I do not try gfortran.)&nbsp;( unsuccess Fedora18 Xfce )<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">&nbsp; &nbsp; &nbsp;&nbsp;</span>LIB=<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">-L/usr/lib -llapack -lblas (Ubuntu11.04 case)<br />
+&nbsp; &nbsp; &nbsp; LIB=-L/usr/lib64 -llapack -lblas (Fedora18 case)</span><br />
+<span style="background-color: rgb(255, 255, 255);"><font face="verdana, tahoma, ＭＳ ゴシック, ＭＳ Ｐゴシック, ヒラギノ角ゴ Pro W3, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif">&nbsp; &nbsp; &nbsp;&nbsp;FFLAGS = &nbsp;-assume byterecl &nbsp; -assume 2underscores -O2</font></span><br />
+&nbsp; &nbsp; &nbsp; INCLUDE =&nbsp;-I/usr/lib/openmpi/include<br />
+&nbsp; &nbsp; &nbsp; FC = mpif90.openmpi -c $(FFLAGS) $(INCLUDE)<br />
+&nbsp; &nbsp; &nbsp; LINK = mpif90.openmpi $(FFLAGS) $(INCLUDE)<br />
+3)&nbsp;make scfmpi（並列化しない場合は、make scf)<br />
+&nbsp; 上記の作業で binary が作成される。PCが 4 core の場合は下記となる<br />
+&nbsp; &nbsp;mpirun -np 4 kkrscf5.4MPI INPUT&gt;OUTPUT<br />
+4) この他にもプログラムを作成することができる<br />
+&nbsp; a)&nbsp;make&nbsp;all<br />
+&nbsp; &nbsp; gen, scf, embgen, embscf が作成される<br />
+&nbsp; b) make&nbsp;allmpi<br />
+&nbsp; &nbsp; scfmpi, embscfmpi, specmpi が作成される<br />
+&nbsp; c)&nbsp;Makefile を見ると一応下記のコマンドがある<br />
+&nbsp; &nbsp; make genmpi, make embscfmpi, make chi,<br />
+&nbsp; &nbsp; make opm, make opmmpi, make spec<br />
+※&nbsp;再度コンパイルする場合には、再度コンパイルする前に make clean を入力。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>SPRKKRの利用方法（編集中）<br />
+□&nbsp; xband 5.3 を用いた方法<br />
+灰色になって入力できなくなった場合には、unlockのボタンを押すとよい。<br />
+1)&nbsp;cd band<br />
+2) xband<br />
+&nbsp; w_font_select&nbsp;で 0 font&nbsp;と表示される場合は、全て any にして、下の欄に表示される好きなフォンを選択して、accept を数回押してみるとよい。<br />
+3) SET PREFERENCES のPROG_PATH0 -default path で、 SPRKKRの実行ファイルが入っているフォルダを指定<br />
+4)&nbsp;DIRECTORIES&nbsp;で計算する系のフォルダを指定する<br />
+&nbsp; A. directry name に記入<br />
+&nbsp; B. create new + chnage directry を押す<br />
+&nbsp;&nbsp;C. close + create system を押すと CREATE SYSTEM になる<br />
+5)&nbsp;CREATE SYSTEM を選択（ CIRECTORIES で close + create system を押すとここに移る）<br />
+&nbsp;&nbsp;A. name of system-file でファイル名を入力<br />
+&nbsp;&nbsp;B. Structure type か Space group のどちらかを入力<br />
+&nbsp;&nbsp;C. set lattice parameter&nbsp;で a, b, c軸の格子定数を入力し、CONFIRMを押す<br />
+&nbsp;&nbsp;D. Angstrom単位の場合は、convert&nbsp;を押して、bohr単位にする<br />
+&nbsp;&nbsp;E. input OK---GO ON<br />
+&nbsp;&nbsp;F. set up via Space Group で原子のサイトを選択する<br />
+&nbsp;&nbsp;G. 各座標が書かれたラインを選択すると Specify occupation&nbsp;for site&nbsp;のパネルが出るので、specify occupant で原子を選択する<br />
+&nbsp;&nbsp;H. suppress symmetry, set same&nbsp;R_WS&nbsp;for all spheres,&nbsp;adjust R_WS by scaling, (calculate R_WS&nbsp;+ empty spheres)、show structure を押す<br />
+&nbsp;&nbsp;I. Visualizer で表示したいソフトの選択をして、run visualizerを押す<br />
+&nbsp; &nbsp; &nbsp; (case.xcrysdenなどが出来る。XCrySDenなどで開いてみるとよい)<br />
+&nbsp;&nbsp;J.&nbsp;DONE - RETURN<br />
+6) SELECT / MODIFY&nbsp;<br />
+&nbsp; &nbsp; A. select directory で 計算する系のフォルダを指定する<br />
+&nbsp; &nbsp; B. 右にあるfile list (.sys)を選択する<br />
+&nbsp; &nbsp; C. 更に右にcase.pop （case.pot ？）がある場合はそれも選択する<br />
+&nbsp; &nbsp; D. close<br />
+7)&nbsp;select and run program package<br />
+&nbsp;&nbsp;A. SPR-KKRを選択<br />
+&nbsp;&nbsp;B. select directroy で計算する系のフォルダを指定する<br />
+&nbsp;&nbsp;C.&nbsp;system で、create&nbsp;input を押す<br />
+&nbsp;&nbsp;D. Create input&nbsp;file で&nbsp;SCFやDOS, XAS(EXPERT&nbsp;MODEを押す,&nbsp;EKREL( band dispersion )を選択し、write inpfile quit を押す。<br />
+&nbsp; &nbsp; &nbsp; (Niでは、XASを選択するだけで、MCDの結果が出力された)<br />
+&nbsp;&nbsp;E. select | edit input-file で case.inpを選択する<br />
+&nbsp; &nbsp; &nbsp; SCF計算は case_SCF.inp, XAS計算はcase_XAS.inpになる<br />
+&nbsp;&nbsp;F. SCF計算の場合は kkrscf,&nbsp;DOSやXASの場合はkkrgenを選択<br />
+&nbsp; &nbsp; &nbsp; select program path&nbsp;でパスを指定し、create job&nbsp;file&nbsp;を選択する<br />
+&nbsp;&nbsp;G. job-file menu が出来る<br />
+&nbsp; H. job-file menu で run<br />
+&nbsp; &nbsp; &nbsp; (上手く動かない場合は、コンソールやターミナルで、計算する系のフォルダに入り、case_SCF.job&nbsp;や case_XAS.job のコマンドを入力すればよい)<br />
+8)&nbsp;SCF計算が無事に済むと、SCF&nbsp;- cycle converged !!!!!!! と表示される<br />
+9)&nbsp;SCF計算が済んだら、上記6)から再び続け、DOSやXASを計算させる<br />
+&nbsp;&nbsp;&nbsp;&nbsp; ファイルを見て case.pot_new と case.pot が同じかをチェック。違っていれば、mv case.pot_new case.pot とすればよい。（5.4版はどうかは確認していない）xband では files を押し、case.pot_new を選んで、move to の右を case.pot にして move を押す。<br />
+10)&nbsp; select and run program package で&nbsp;SPR-KKR を選んでいるときに、右側にある plot を押す。または、close した後に&nbsp;select and run program package で PLOTを選択<br />
+&nbsp;&nbsp;&nbsp;A.&nbsp;左の欄から計算した系のファイルを選択する<br />
+&nbsp;&nbsp;&nbsp;B. 右の欄で計算したいファイルを選択する<br />
+&nbsp;&nbsp;&nbsp;C.&nbsp;最も右の欄に結果をプロットできるファイルが出来る<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;xmgrace （または grace）がある場合は、図が表示される<br />
+11) SCF&nbsp;&rarr; DOS まで終了したら、SPR-KKRの画面そのままで system&nbsp;を選択して create input を押せば新たな入力ファイルが作れる（ XASなどで各原子を計算させるのに便利である）。また、右側にある plot を押せば結果の表示も楽になる。<br />
+12) その他の使い方<br />
+<br />
+もし、SPring-8 BL47XUの職員になれた方は、Dr. Gerhard H. Fecher に相談してみて下さい。Dr. Gerhard H. Fecher がSPRKKRに詳しいと H. Ebert 教授が言っておりました。調べてみると下記のHPの方のようです（WIEN2kでのオプションを解説されていた方で二重に驚きます）。<br />
+<a href="http://www.ghfecher.de/index.html">http://www.ghfecher.de/index.html</a><br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>garce install (CentOS 6.4)<br />
+http://davidwen.blogspot.jp/2013/05/how-to-install-heartbeat-on-centos-64.html<br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>garce set up<br />
+1) download garce : <a href="http://plasma-gate.weizmann.ac.il/Grace/">http://plasma-gate.weizmann.ac.il/Grace/</a><br />
+2) tar zxvf grace-5.1.9.tar.gz<br />
+3) cd grace-5.1.9<br />
+4) ./configure<br />
+5) make<br />
+6) sudo make install<br />
+7) make links<br />
+7) export PATH=$PATH:/usr/local/grace/bin<br />
+8) bash<br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■ </span>xmgr set up<br />
+1) download garce : http://plasma-gate.weizmann.ac.il/Xmgr/<br />
+2) tar zxvf xmgr-4.1.2.tar.gz<br />
+3) cd xmgr*<br />
+4) ./configure<br />
+5) make<br />
+6) sudo make install<br />
+7) export PATH=$PATH:/usr/local/xmgr/bin<br />
+8) bash<br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>WIEN2kでのXMCDの計算<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□</span>&nbsp;SOC の計算<br />
+1. Perform spin-polarized calc.?&nbsp; で YES&nbsp;を選択。<br />
+&nbsp; （私の場合は、 Expert の下にある select spin-polarized calculation にチェックを入れて、use X k-points in full BZ (default: 1000)の左の欄にk点を入力して、下にあるCHECK&nbsp;BATCH&nbsp;VALUES を押して、再度 CHECK BATCH VALUES を押して、View STDOUT を押して、 error や warning がなければ下記の2に進んでいる）<br />
+2. run SCF で spinorbit にチェックを入れて、start SCF cycle を押す。<br />
+3. case.inso で NX を 0 に置き換えて、NX1の行を削除（XMCDはNXの入力には対応していない）<br />
+4. case.in1 で 一番下の右から二番目の数値を 4.5 にする。<br />
+5. run SCF で再度 spinorbit にチェックを入れて、start SCF cycle で計算。<br />
+※ case.inso の入力をもう一度やり直したい場合は、Utiles にある initso_lapw を押す。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□&nbsp;</span>lcore の計算<br />
+1. Files での&nbsp;input files を押して、case.inc を選択すると、NUMBER OF ORBITALS&nbsp;と書かれた行がある。その行の最後の数値の後にスペースを一つ入れてその後に 1 を記述する。<br />
+2. single prog.&nbsp;を押して、SCF Programs にあるlcore にチェックを入れて、Execute を押す（case.corewfup が作成される）。<br />
+3. single prog. を押して、SCF Programs にあるlcore にチェックを入れて、Options にある spin down にチェックを入れて、Execute を押す（case.corewfdn が作成される）。<br />
+<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">□&nbsp;</span>OPTIC の計算<br />
+1. Tasks にある OPTIC&nbsp;を選択する。<br />
+2. case.inop で 2行目の後に、新しい行を作り、WIEN2kのuserguide にあるように XMCD 原子の番号(StrucGen や DOSと同じ)、そして、計算したいedge（K, L1, L23, M1, M23, or M45） を記入する。これらは空白も入れて6文字ずつに区切る。<br />
+3. number of choices のある行の数値に、下にあるChoicesから欲しい情報の数を入力する。<br />
+4. number of choices で入力した数だけ [ 1 Re xx ] とある行をコピー&amp;ペーストして、似た様式で欲しい情報の番号と名称を書き入れていく。<br />
+5. x optic -up を押す。<br />
+6. case.injoint で 3行目の後に、新しい行を4つ作る。<br />
+7. 新しく作った1行目の一番左に、XMCDを記述する。<br />
+8. Files の SCF files から case.scfcup を選び、遷移させる内殻のエネルギーの値を目盛っておく。<br />
+9. 新しく作った2行目に、遷移させる内殻のエネルギーの値よりも少しだけ広い値を入力する。<br />
+10. userguide にあるように、3行目と4行目はそれぞれ1.6 0.6 と 0.1 を入力しておけば良いだろう。<br />
+11. x joint -up を押す。<br />
+&nbsp; ( version 11&nbsp;だと NiO では、ここで error が出て終了）<br />
+12. 同様に Spin DOWN でも行う。<br />
+13. addjoint-updn_lapw を押す。<br />
+&nbsp; ( version 12 では、ここまで進み、結果が case.broad1, case.broad2, case.raw1, case.raw2 に出力される）<br />
+14. edit case.inkram を押す。<br />
+15. x kram を押す。<br />
+&nbsp; ( version 12 では、ここで error が出て終了）<br />
+16. opticplot を押す。<br />
+※ NBvalMAX は case.in2 の&nbsp;NE よりも2倍ほど多い値を入力してみたが無理であった。<br />
+------------------------------------------------------------------------------<br />
+<span style="font-family: verdana, tahoma, &quot;ＭＳ ゴシック&quot;, &quot;ＭＳ Ｐゴシック&quot;, &quot;ヒラギノ角ゴ Pro W3&quot;, Osaka?等幅, Osaka, 平成角ゴシック, sans-serif; background-color: rgb(255, 255, 255);">■&nbsp;</span>AkaiKKRでのK-edge XMCDの計算<br />
+1. calctyp を go で、reltyp をsralsにして、input_go などの名称でSAVE<br />
+2. specx &lt; in/input_go<br />
+3. calctyp の go を mcd に書き換えて、input_mcd などの名称で&nbsp;SAVE<br />
+4. source/cemesr.f での data ref/0.75d0/ を data ref/0.0d0/ に書き換えて SAVEし、 make と入力してコンパイルする。＊1<br />
+5. specx &lt; in/input_mcd &gt; out/output_mcd<br />
+6. 得られたoutput_mcd の中で xmd of Component という行が出てくる。各Componentは入力したinput_mcd での順に出力される。<br />
+&nbsp; 各列は、エネルギー、吸収、吸収（up）、吸収（down） の順番で出力される。<br />
+7. 必要なComponentのデータをコピー&amp;ペーストして、xmd_inputという名称でSAVE<br />
+8. xmdcnv を Akai Group から頂いている場合は xmdcnv と Terminal で入力して、最初に xmd_input 、次に xmd_output と入力する。＊2<br />
+9. gnuplot と入力して、gnuplot を起動させる。<br />
+10. plot &quot;xmd_output&quot; と入力すると結果が出力される。<br />
+11. 終了させる場合はウインドウを閉じて、Terminal 上で quit と入力する。<br />
+12. cemesr.f の data ref/0.0d0/ を data ref/0.75d0/ に戻してSAVEし、make と入力してコンパイルする。<br />
+＊1. ref は 内殻から非占有準位までの範囲を指定するewidth の 内殻からEFまでの比率を指定する。refがディフォルトの0.75だと、内殻からEFまでは ewidth * ref となる。ref を0 にすると EFから非占有準位までの範囲がewidthになる。<br />
+＊2.&nbsp;gfortran -o xmdcnv xmdcnv.f と Terminal 上で入力すると xmdcnv という名称の実行ファイルが作成される。xmdcnv はローレンチアンで得られた結果をブロードニングする。このプログラムは自作しても良い。<br />
+[1] <a href="http://www.ghfecher.de/Run_AKAI-KKR.pdf">http://www.ghfecher.de/Run_AKAI-KKR.pdf</a><br />
+------------------------------------------------------------------------------<br />
+<br />
+■ arg2gpt<br />
+set up<br />
+1. chmod +x arg2gpt<br />
+2. su<br />
+3. yum install python-argparse<br />
+<br />
+Usage<br />
+arg2gpt -f case_DOS.dos.agr<br />
+<br />
+arg2gpt<br />
+------------------------------------------------------------------------------<br />
+#!/usr/bin/env python<br />
+<br />
+#<br />
+# agr2gpt: (xm)grace to gnuplot or pylab translator<br />
+# Usage: ./agr2ppt -f grace_file.agr (-pl)<br />
+#<br />
+# By Julen Larrucea<br />
+# http://www.larrucea.eu<br />
+# &nbsp;<br />
+<br />
+<br />
+import os, sys, argparse<br />
+<br />
+version=&quot;0.1&quot;<br />
+<br />
+cwd=os.getcwd()+&quot;/&quot;<br />
+<br />
+parser = argparse.ArgumentParser(description=&quot;&quot;&quot;%s [options]\n\n Convert .agr (grace) files into gnuplot or pylab \n &quot;&quot;&quot;)<br />
+parser.add_argument('-f','--file_name', help=&quot;Name of grace file&quot;, required=True)<br />
+parser.add_argument('-pl','--pylab', help=&quot;Plot using pylab (Mathplotlib)&quot;, required=False)<br />
+args = vars(parser.parse_args())<br />
+inpfile= args['file_name']<br />
+<br />
+<br />
+if &quot;/&quot; not in inpfile:<br />
+&nbsp;inpfile=cwd+inpfile<br />
+print &quot;Input file: &quot;+inpfile<br />
+parse_xy=&quot;off&quot;<br />
+all_data=[]<br />
+line_titles=[]<br />
+# Parse data from xmgrace file<br />
+for line in open(inpfile,&quot;r&quot;):<br />
+&nbsp;# Plotting options<br />
+&nbsp;if 'yaxis&nbsp; label&nbsp; &quot;' in line:<br />
+&nbsp; ylab=line.rstrip('\n').split()[3:]<br />
+&nbsp; ylab=&quot; &quot;.join(ylab).strip('&quot;')<br />
+&nbsp;if 'xaxis&nbsp; label&nbsp; &quot;' in line:<br />
+&nbsp; xlab=line.rstrip('\n').split()[3:]<br />
+&nbsp; xlab=&quot; &quot;.join(xlab).strip('&quot;')<br />
+&nbsp;if len(line.split()) &gt; 2 and line.split()[2] == &quot;legend&quot;:<br />
+&nbsp; tmp_ti=line.rstrip('\n').split()[3:]<br />
+&nbsp; line_titles.append(&quot; &quot;.join(tmp_ti).strip('&quot;'))<br />
+# if len(line.split()) &gt; 4 and line.split()[1]==&quot;world&quot;:<br />
+#&nbsp; x1,x2,y1,y2=line.split()[2].strip(&quot;,&quot;),line.split()[4].strip(&quot;,&quot;),line.split()[3].strip(&quot;,&quot;),line.split()[5].strip(&quot;,&quot;)<br />
+&nbsp;if 'world xmin' in line:<br />
+&nbsp; x1=line.split()[3]<br />
+&nbsp;if 'world xmax' in line:<br />
+&nbsp; x2=line.split()[3]<br />
+&nbsp;if 'world ymin' in line:<br />
+&nbsp; y1=line.split()[3]<br />
+&nbsp;if 'world ymax' in line:<br />
+&nbsp; y2=line.split()[3]<br />
+&nbsp; print &quot;max x: &quot;+x1+&quot;, min x: &quot;+x2<br />
+&nbsp; print &quot;max y: &quot;+y1+&quot;, min y: &quot;+y2<br />
+<br />
+&nbsp;# Get the points for each line<br />
+&nbsp;if parse_xy==&quot;on&quot; and &quot;&amp;&quot; in line:<br />
+&nbsp; parse_xy=&quot;off&quot;<br />
+&nbsp; all_data.append(line_data)<br />
+&nbsp;if parse_xy==&quot;on&quot;:<br />
+&nbsp; line_data.append([float(line.split()[0]),float(line.split()[1])])<br />
+&nbsp;if &quot;@type xy&quot; in line:<br />
+&nbsp; parse_xy=&quot;on&quot;<br />
+&nbsp; line_data=[]<br />
+<br />
+#for i in all_data:<br />
+print &quot;ylab: &quot;,ylab<br />
+print &quot;xlab: &quot;,xlab<br />
+print &quot;line_titles: &quot;,line_titles<br />
+<br />
+<br />
+# drop raw data to enumerated files<br />
+outfiles=[]<br />
+for i in range(len(all_data)): #curve<br />
+&nbsp;outdrop=open(inpfile+&quot;.&quot;+str(i)+&quot;.dat&quot;,&quot;w&quot;)<br />
+&nbsp;outfiles.append(inpfile+&quot;.&quot;+str(i)+&quot;.dat&quot;)<br />
+&nbsp;for j in range(len(all_data[i])): #data pair<br />
+&nbsp; for k in range(len(all_data[i][j])): #data value<br />
+&nbsp;&nbsp; print&gt;&gt;outdrop, all_data[i][j][k],<br />
+&nbsp; print&gt;&gt;outdrop, &quot;&quot;<br />
+&nbsp;outdrop.close()<br />
+<br />
+# create the gnuplot input<br />
+outgnu=open(inpfile+&quot;.gnuplot&quot;,&quot;w&quot;)<br />
+print&gt;&gt;outgnu, &quot;set ylab '&quot;, ylab,&quot;'&quot;<br />
+print&gt;&gt;outgnu, &quot;set xlab'&quot;, xlab,&quot;'&quot;<br />
+plotstr=&quot;p [&quot;+x1+&quot;:&quot;+x2+&quot;] [&quot;+y1+&quot;:&quot;+y2+&quot;] &quot;<br />
+for i in range(len(outfiles)):<br />
+&nbsp;plotstr=plotstr+&quot; '&quot;+outfiles[i]+&quot;'&nbsp; u 1:2 title '&quot;+line_titles[i]+&quot;' w l,&quot;<br />
+print&gt;&gt;outgnu, plotstr.rstrip(&quot;,&quot;)<br />
+outgnu.close()<br />
+# now, you can just run: gnuplot -persist filename.gnuplot<br />
+<br />
+<br />
+if args['file_name']:<br />
+&nbsp; try:<br />
+&nbsp;&nbsp; from pylab import *<br />
+&nbsp;&nbsp; print &quot;pylab imported&quot;<br />
+&nbsp; except:<br />
+&nbsp;&nbsp; print &quot; ### ERROR: pylab not found. &quot;<br />
+&nbsp;&nbsp; sys.exit()<br />
+<br />
+if args['pylab']:<br />
+&nbsp; for i in range(len(all_data)):<br />
+&nbsp;&nbsp; plot(zip(*all_data[i])[0],zip(*all_data[i])[1],linewidth=1.0,label=line_titles[i])<br />
+&nbsp; plt.xlabel(xlab)<br />
+&nbsp; plt.ylabel(ylab)<br />
+&nbsp; legend = legend(loc='upper center', shadow=True)<br />
+&nbsp; plt.axis([float(x1),float(x2),float(y1),float(y2)])<br />
+&nbsp; plt.grid(True)<br />
+&nbsp; plt.rcParams.update({'font.size': 22})<br />
+&nbsp; show()&nbsp; &nbsp;<br />
+<br />
+<br />
+print &quot;&nbsp; Done&nbsp; &quot;<br />
+------------------------------------------------------------------------------<br />
+<br />
+■ arg2eps<br />
+set up<br />
+1. chmod +x arg2eps<br />
+2. su<br />
+3. yum install python-argparse<br />
+<br />
+Usage<br />
+arg2eps -f case_DOS.dos.agr<br />
+<br />
+arg2eps<br />
+------------------------------------------------------------------------------<br />
+#!/usr/bin/env python<br />
+<br />
+#<br />
+# agr2eps: (xm)grace to gnuplot (eps)<br />
+# Usage: ./agr2eps -f grace_file.agr<br />
+#<br />
+# By Julen Larrucea<br />
+# http://www.larrucea.eu<br />
+# &nbsp;<br />
+<br />
+<br />
+import os, sys, argparse<br />
+<br />
+version=&quot;0.1&quot;<br />
+<br />
+cwd=os.getcwd()+&quot;/&quot;<br />
+<br />
+parser = argparse.ArgumentParser(description=&quot;&quot;&quot;%s [options]\n\n Convert .agr (grace) files into gnuplot or pylab \n &quot;&quot;&quot;)<br />
+parser.add_argument('-f','--file_name', help=&quot;Name of grace file&quot;, required=True)<br />
+parser.add_argument('-pl','--pylab', help=&quot;Plot using pylab (Mathplotlib)&quot;, required=False)<br />
+args = vars(parser.parse_args())<br />
+inpfile= args['file_name']<br />
+<br />
+<br />
+if &quot;/&quot; not in inpfile:<br />
+&nbsp;inpfile=cwd+inpfile<br />
+print &quot;Input file: &quot;+inpfile<br />
+<br />
+parse_xy=&quot;off&quot;<br />
+all_data=[]<br />
+line_titles=[]<br />
+# Parse data from xmgrace file<br />
+for line in open(inpfile,&quot;r&quot;):<br />
+&nbsp;# Plotting options<br />
+&nbsp;if 'yaxis&nbsp; label&nbsp; &quot;' in line:<br />
+&nbsp; ylab=line.rstrip('\n').split()[3:]<br />
+&nbsp; ylab=&quot; &quot;.join(ylab).strip('&quot;')<br />
+&nbsp;if 'xaxis&nbsp; label&nbsp; &quot;' in line:<br />
+&nbsp; xlab=line.rstrip('\n').split()[3:]<br />
+&nbsp; xlab=&quot; &quot;.join(xlab).strip('&quot;')<br />
+&nbsp;if len(line.split()) &gt; 2 and line.split()[2] == &quot;legend&quot;:<br />
+&nbsp; tmp_ti=line.rstrip('\n').split()[3:]<br />
+&nbsp; line_titles.append(&quot; &quot;.join(tmp_ti).strip('&quot;'))<br />
+# if len(line.split()) &gt; 4 and line.split()[1]==&quot;world&quot;:<br />
+#&nbsp; x1,x2,y1,y2=line.split()[2].strip(&quot;,&quot;),line.split()[4].strip(&quot;,&quot;),line.split()[3].strip(&quot;,&quot;),line.split()[5].strip(&quot;,&quot;)<br />
+&nbsp;if 'world xmin' in line:<br />
+&nbsp; x1=line.split()[3]<br />
+&nbsp;if 'world xmax' in line:<br />
+&nbsp; x2=line.split()[3]<br />
+&nbsp;if 'world ymin' in line:<br />
+&nbsp; y1=line.split()[3]<br />
+&nbsp;if 'world ymax' in line:<br />
+&nbsp; y2=line.split()[3]<br />
+&nbsp; print &quot;max x: &quot;+x1+&quot;, min x: &quot;+x2<br />
+&nbsp; print &quot;max y: &quot;+y1+&quot;, min y: &quot;+y2<br />
+&nbsp;# Get the points for each line<br />
+&nbsp;if parse_xy==&quot;on&quot; and &quot;&amp;&quot; in line:<br />
+&nbsp; parse_xy=&quot;off&quot;<br />
+&nbsp; all_data.append(line_data)<br />
+&nbsp;if parse_xy==&quot;on&quot;:<br />
+&nbsp; line_data.append([float(line.split()[0]),float(line.split()[1])])<br />
+&nbsp;if &quot;@type xy&quot; in line:<br />
+&nbsp; parse_xy=&quot;on&quot;<br />
+&nbsp; line_data=[]<br />
+<br />
+#for i in all_data:<br />
+print &quot;ylab: &quot;,ylab<br />
+print &quot;xlab: &quot;,xlab<br />
+print &quot;line_titles: &quot;,line_titles<br />
+<br />
+# drop raw data to enumerated files<br />
+outfiles=[]<br />
+for i in range(len(all_data)): #curve<br />
+&nbsp;outdrop=open(inpfile+&quot;.&quot;+str(i)+&quot;.dat&quot;,&quot;w&quot;)<br />
+&nbsp;outfiles.append(inpfile+&quot;.&quot;+str(i)+&quot;.dat&quot;)<br />
+&nbsp;for j in range(len(all_data[i])): #data pair<br />
+&nbsp; for k in range(len(all_data[i][j])): #data value<br />
+&nbsp;&nbsp; print&gt;&gt;outdrop, all_data[i][j][k],<br />
+&nbsp; print&gt;&gt;outdrop, &quot;&quot;<br />
+&nbsp;outdrop.close()<br />
+<br />
+# create the gnuplot input<br />
+outgnu=open(inpfile+&quot;.gnuplot&quot;,&quot;w&quot;)<br />
+# gnuplot setting<br />
+print&gt;&gt;outgnu, &quot;#!/bin/csh -f&quot;<br />
+#print&gt;&gt;outgnu, &quot;#!/bin/bash -f&quot;<br />
+#print&gt;&gt;outgnu, &quot;#!/usr/bin/gnuplot -persist&quot;<br />
+print&gt;&gt;outgnu, &quot;set file=`pwd`&quot;<br />
+print&gt;&gt;outgnu, &quot;set filename = $file:t&quot;<br />
+#print&gt;&gt;outgnu, &quot;set psformat = '.ps'&quot;<br />
+print&gt;&gt;outgnu, &quot;set epsformat = '.eps'&quot;<br />
+print&gt;&gt;outgnu, &quot;gnuplot -persist &lt;&lt; EOF&quot;<br />
+print&gt;&gt;outgnu, &quot;set title '$filename'&quot;<br />
+#print&gt;&gt;outgnu, &quot;set size 0.7,1.0&quot;<br />
+print&gt;&gt;outgnu, &quot;set xr [*:*]&quot;<br />
+print&gt;&gt;outgnu, &quot;set xl 'Energy / eV'&quot;<br />
+print&gt;&gt;outgnu, &quot;set yr [:]&quot;<br />
+print&gt;&gt;outgnu, &quot;set yl 'Density of States / eV'&quot;<br />
+print&gt;&gt;outgnu, &quot;set yzeroaxis lt 1 lw 2 lc rgb 'black'&quot;<br />
+#print&gt;&gt;outgnu, &quot;set key box left top&quot;<br />
+print&gt;&gt;outgnu, &quot;set key left top &quot;<br />
+#<br />
+#print&gt;&gt;outgnu, &quot;set ylab'&quot;, ylab,&quot;'&quot;<br />
+#print&gt;&gt;outgnu, &quot;set xlab'&quot;, xlab,&quot;'&quot;<br />
+#plotstr=&quot;p [&quot;+x1+&quot;:&quot;+x2+&quot;] [&quot;+y1+&quot;:&quot;+y2+&quot;] &quot;<br />
+plotstr=&quot;plot&quot;<br />
+for i in range(len(outfiles)):<br />
+&nbsp;if i &lt; len(outfiles)/2 :<br />
+&nbsp;&nbsp; plotstr=plotstr+&quot; '&quot;+outfiles[i]+&quot;'&nbsp; u 1:2 title '&quot;+line_titles[i]+&quot;' w l,&quot;<br />
+&nbsp;else:<br />
+&nbsp;&nbsp; plotstr=plotstr+&quot; '&quot;+outfiles[i]+&quot;'&nbsp; u 1:(\$2*-1) title '&quot;+line_titles[i]+&quot;' w l,&quot;<br />
+print&gt;&gt;outgnu, plotstr.rstrip(&quot;,&quot;)<br />
+#<br />
+# gnuplot (eps)<br />
+print&gt;&gt;outgnu, &quot;set size 1.5,2.1&quot;<br />
+print&gt;&gt;outgnu, &quot;set xl '{/=30 Energy / eV}'&quot;<br />
+print&gt;&gt;outgnu, &quot;set yl '{/=30 Density of States / eV}'&quot;<br />
+print&gt;&gt;outgnu, &quot;set terminal postscript eps color enhanced 'Arial' 30&quot;<br />
+#print&gt;&gt;outgnu, &quot;set out '$filename$psformat'&quot;<br />
+print&gt;&gt;outgnu, &quot;set out '$filename$epsformat'&quot;<br />
+#print&gt;&gt;outgnu, &quot;set out 'plot.eps'&quot;<br />
+print&gt;&gt;outgnu, &quot;replot&quot;<br />
+print&gt;&gt;outgnu, &quot;set terminal x11&quot;<br />
+outgnu.close()<br />
+# now, you can just run: gnuplot -persist filename.gnuplot<br />
+<br />
+if args['file_name']:<br />
+&nbsp; try:<br />
+&nbsp;&nbsp; from pylab import *<br />
+&nbsp;&nbsp; print &quot;pylab imported&quot;<br />
+&nbsp; except:<br />
+&nbsp;&nbsp; print &quot; ### ERROR: pylab not found. &quot;<br />
+&nbsp;&nbsp; sys.exit()<br />
+<br />
+if args['pylab']:<br />
+&nbsp; for i in range(len(all_data)):<br />
+&nbsp;&nbsp; plot(zip(*all_data[i])[0],zip(*all_data[i])[1],linewidth=1.0,label=line_titles[i])<br />
+&nbsp; plt.xlabel(xlab)<br />
+&nbsp; plt.ylabel(ylab)<br />
+&nbsp; legend = legend(loc='upper center', shadow=True)<br />
+&nbsp; plt.axis([float(x1),float(x2),float(y1),float(y2)])<br />
+&nbsp; plt.grid(True)<br />
+&nbsp; plt.rcParams.update({'font.size': 22})<br />
+&nbsp; show()&nbsp; &nbsp;<br />
+<br />
+<br />
+print &quot;&nbsp; Done&nbsp; &quot;<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,89 @@
+ImageJ (https://imagej.nih.gov/ij/)<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト [1-3]<br />
+<br />
+[1] 便利なフリーウェア<br />
+&nbsp; https://aem-www.imr.tohoku.ac.jp/便利なフリーウェア/<br />
+[2] Advanced Data Processing and Simulations<br />
+&nbsp; https://www.superstem.org/learn/resources<br />
+[3] Electron Microscopy Software<br />
+&nbsp; http://jiam.utk.edu/facilities/microscopy/software.php<br />
+[4] STEM Simulation Codes<br />
+&nbsp; http://prism-em.com/resources-sim-codes/<br />
+------------------------------------------------------------------------------<br />
+□ ImageJ (windows 10 (64 bit))<br />
+(https://imagej.nih.gov/ij/download.html)<br />
+・ImageJ bundled with 64-bit Java 1.8.0_112<br />
+1. ij152-win-java8.zip を解凍<br />
+2. ImageJ.exe<br />
+[1] Image J / Fiji のダウンロード方法、インストール方法と使い方&nbsp;<br />
+&nbsp; http://scienceandtechnology.jp/archives/25990<br />
+<br />
+◇ Fiji<br />
+(https://imagej.net/Fiji/Downloads)<br />
+・ Download Fiji for your OS&nbsp;<br />
+&nbsp; 64-bit (Windows mark)<br />
+1. fiji-win64.zip を解凍<br />
+2. ImageJ-win64.exe<br />
+※ ImageJ-win64.exeをクリックして何かインストールしているが私は途中でそれをキャンセルで止めてしまった。止めなかった方がよかったかもしれない。<br />
+------------------------------------------------------------------------------<br />
+□ FFT (windows 10 (64 bit))<br />
+<br />
+(0. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe)<br />
+1. File &gt; Open... (e.g., *.png)<br />
+2. Process &gt; FFT &gt; FFT<br />
+<br />
+※ If it is surrounded by a yellow line, the range is converted.<br />
+&nbsp; (黄色の線で囲めば、その範囲を変換する)<br />
+------------------------------------------------------------------------------<br />
+□ Line Profile<br />
+<br />
+(0. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe)<br />
+1. File &gt; Open... (e.g., *.png)<br />
+2. Analyze &gt; Plot Profile<br />
+<br />
+※ 黄色い線をFFTの画面に引いても可能<br />
+------------------------------------------------------------------------------<br />
+□ Radial Profile Plot<br />
+(https://imagej.nih.gov/ij/plugins/radial-profile.html)<br />
+<br />
+1. download &quot;Radial_Profile.class&quot;<br />
+2. put &quot;Radial_Profile.class&quot; in C:\Users\inukai\Downloads\Fiji.app\plugins<br />
+3. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe<br />
+4. Process &gt; FFT &gt; FFT<br />
+5. Process &gt; FFT &gt; Make Circular Section ...<br />
+6. Plugins &gt; Radial Profile<br />
+------------------------------------------------------------------------------<br />
+□ Invert&nbsp;<br />
+<br />
+(0. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe)<br />
+1. File &gt; Open... (e.g., *.png)<br />
+2. Edit &gt; Invert<br />
+3. Image &gt; Adjust &gt; Brightness/Contrast...<br />
+------------------------------------------------------------------------------<br />
+□ References<br />
+<br />
+[1] 課題② 画像処理方法の演習 (in http://www.bio.chuo-u.ac.jp/nano/LM/)<br />
+&nbsp; http://www.bio.chuo-u.ac.jp/nano/LM/ImageJ_ex2.pdf<br />
+&nbsp; http://www.bio.chuo-u.ac.jp/nano/LM/ImageJ_ex3.pdf<br />
+&nbsp; http://www.bio.chuo-u.ac.jp/nano/LM/Image/ImageJ_ex3.html<br />
+[2] 実験系研究者のための画像処理技術<br />
+&nbsp; https://qiita.com/kon2/items/8290ac3e1b11e2308c14<br />
+[3] 電子顕微鏡画像のもつ特徴とその画像処理<br />
+&nbsp; http://www.yasunaga-lab.bio.kyutech.ac.jp/EosJ/images/e/e5/ElectronMicrographAnalysis1.pdf<br />
+[4] 研究室での画像処理:<br />
+&nbsp; http://www.iam.u-tokyo.ac.jp/chem/IMCB-8ken-HP/Lab_Manuals/entori/2017/6/26_ImageJ_files/20170513_ImageJの使い方.pdf<br />
+------------------------------------------------------------------------------<br />
+□ Oval Profile Plot (failed)<br />
+(https://imagej.nih.gov/ij/plugins/oval-profile.html)<br />
+<br />
+1. download &quot;Oval_Profile.java&quot;<br />
+2. put &quot;Oval_Profile.java&quot; in C:\Users\inukai\Downloads\Fiji.app\plugins<br />
+3. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe<br />
+4. Plugins &gt; Compile and Run...<br />
+5. File &gt; Quit<br />
+6. C:\Users\inukai\Downloads\Fiji.app\ImageJ-win64.exe<br />
+7. Process &gt; FFT &gt; FFT<br />
+8. Process &gt; FFT &gt; Make Circular Section ...<br />
+9. Plugins &gt; Radial Profile<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,725 @@
+DISCUS (http://tproffen.github.io/DiffuseCode/)<br />
+------------------------------------------------------------------------------<br />
+■ 解析の手順<br />
+<br />
+・ X-ray powder diffraction data -&gt; PDFgetX2 (old version PDFgetX or new version PDFgetX3) -&gt; DISCUS<br />
+・ Neutron -&gt; PDFgetN (new version PDFgetN3) -&gt; DISCUS<br />
+------------------------------------------------------------------------------<br />
+■ 各種の解析ソフト<br />
+<br />
+□ データの前処理ソフト<br />
+・ PDFgetX3 and PDFgetN3 (https://www.diffpy.org/products/pdfgetx.html)<br />
+・ PDFgetN (http://pdfgetn.sourceforge.net/)<br />
+・ Gudrun (https://www.isis.stfc.ac.uk/Pages/Gudrun.aspx)<br />
+<br />
+□ 代表的な解析ソフト<br />
+・DISCUS (http://tproffen.github.io/DiffuseCode/)<br />
+&nbsp; (https://www.xray.cz/ecm-cd/soft/xray/general/discus/discus/discus.html)<br />
+・PDFgui (https://www.diffpy.org/)<br />
+&nbsp; Small Models: Least Squares Refinement [1]<br />
+&nbsp; &lt; 1000 atoms [2]<br />
+・RMCProfile (http://www.rmcprofile.org/Main_Page)<br />
+&nbsp; Large Model: Reverse Monte Carlo [1]<br />
+&nbsp; 600 - 20000 atoms [3]<br />
+・EPSR (https://www.isis.stfc.ac.uk/Pages/Empirical-Potential-Structure-Refinement.aspx)<br />
+・PDFFIT (https://web.pa.msu.edu/cmp/billinge-group/programs/discus/pdffit.html)<br />
+・TOPAS Academic (http://www.topas-academic.net/)<br />
+※ 総合サイト (http://www.ccp14.ac.uk/solution/high_q_pdf/index.html)<br />
+------------------------------------------------------------------------------<br />
+■ データ取得<br />
+<br />
+□ X-ray<br />
+・ BL14B1 at SPring-8 in Japan [4]<br />
+<br />
+□ Neutron<br />
+・ NOVA (BL21) at J-PARC in Japan [4]<br />
+・ NPDF at LANSCE in USA [4]<br />
+------------------------------------------------------------------------------<br />
+■ Install (windows 10 (64 bit)<br />
+<br />
+□ DISCUS<br />
+(http://tproffen.github.io/DiffuseCode/)<br />
+1. Diffuse-5.32.0-win64-190312.exe<br />
+2. C:\Program Files (x86)\Discus\etc\X11\fontpath.d\xorg-x11-fonts-misc の種類が&quot;.symlink&quot;であることを確認する。<br />
+&nbsp; そうでなければREADME.TXTに書かれているようにする。<br />
+------------------------------------------------------------------------------<br />
+■ Install (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ DISCUS<br />
+(http://tproffen.github.io/DiffuseCode/)<br />
+1. DIFFUSE_INSTALL.tar.gz<br />
+2. DiffuseCode-v.5.32.0.tar.gz<br />
+3. AAA_INSTALL_DISCUS_LINUX.pdf<br />
+4. sudo apt-get install libx11-dev<br />
+&nbsp; sudo apt-get install libXmu-dev<br />
+&nbsp; sudo apt-get install libreadline-dev<br />
+&nbsp; sudo apt-get install libopenmp-dev<br />
+&nbsp; sudo apt-get install libopenmpi-dev<br />
+&nbsp; sudo apt-get install libopenmpi-bin<br />
+&nbsp; sudo apt-get install gfortran<br />
+&nbsp; sudo apt-get install c++<br />
+&nbsp; sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install cmake-curses-gui<br />
+&nbsp; sudo apt-get install libpng-dev<br />
+5. cp Downloads/DISCUS_INSTALLATION.tar.gz $HOME<br />
+6. cd $HOME<br />
+7. tar -zxf DISCUS_INSTALLATION.tar.gz<br />
+8. cd $HOME/DIFFUSE_INSTALL<br />
+9. cp Downloads/DiffuseCode-v.5.32.0.tar.gz .<br />
+10. sudo ./install_discus_suite.sh DiffuseCode-v.5.32.0.tar.gz<br />
+11. bash<br />
+<br />
+※ テストはdiscusと入力してみるとよい。<br />
+※ MIXSCATはG(r)のデータが必要<br />
+&nbsp; evince /usr/local/share/mixscat_man.pdf でマニュアルを読んでみて判明した。<br />
+------------------------------------------------------------------------------<br />
+■ Test (windows 10 (64 bit))<br />
+<br />
+(C:\Program Files (x86)\Discus\examples\mixscat)にExamplesのデータがある。<br />
+例えば、C:\Users\ユーザー名として、ユーザー名をinukaiとして、<br />
+その中にCeF3のファイルを作ってデータを入れておくと下記のようになる。<br />
+<br />
+□ Mixscat<br />
+cd C:\Users\inukai\CeF3<br />
+@mixscat.mac<br />
+exit<br />
+<br />
+□ ファイル名の書き換え<br />
+w_CeCe.mac -&gt; wn_CeCe.mac<br />
+w_CeF.mac &nbsp;-&gt; wn_CeF.mac<br />
+w_FF.mac &nbsp; -&gt; wn_FF.mac<br />
+<br />
+□ Discus<br />
+cd C:\Users\inukai\CeF3<br />
+@pdf.mac<br />
+<br />
+□ Discus<br />
+cd C:\Users\inukai\CeF3<br />
+@pdf-mark.mac<br />
+<br />
+□ Kuplot (including cygwin case)<br />
+cd CeF3<br />
+@plot.mac<br />
+<br />
+※ *.macの中にコマンドが記載されている。この内容をコピー&amp;ペーストしても動作する。<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+(C:\Program Files (x86)\Discus\docs)のpdfを参照するとよい。<br />
+<br />
+<br />
+□ DISCUS (結晶構造の読み取り)<br />
+（import command case）<br />
+・ cif<br />
+&nbsp; import cif, filename.cif<br />
+・ RMCProficle<br />
+&nbsp; import rmcprofile, filename.cssr<br />
+・ SHELX<br />
+&nbsp; import shelx, filename.ins<br />
+・ CrystalMaker<br />
+&nbsp; import cmaker, filename.xyz<br />
+※ filename.struが作成される<br />
+<br />
+□ DISCUS (結晶構造の読み取り)<br />
+（read command case）<br />
+・ cif<br />
+&nbsp; read<br />
+&nbsp; &nbsp; cell quartz.cif, 2, 2, 2<br />
+&nbsp; ※ 2 2 2はスーパーセルの指定<br />
+・ RMCProficle<br />
+・ SHELX<br />
+・ CrystalMaker<br />
+&nbsp; read<br />
+&nbsp; &nbsp; cell quartz.txt, 2, 2, 2<br />
+※ filename.struが作成される<br />
+※ 拡張子から自動的に読み取るファイル形式を判別している<br />
+※ タンパク質などではlcellの利用も検討するとよい？<br />
+※ もし対称性が読み取られていなかったらspacegroupを用いる？<br />
+<br />
+□ DISCUS (結晶構造の直接入力: 例 Ni)<br />
+ni.struの中に下記のように入力する。<br />
+-----<br />
+title Structure of fcc Ni<br />
+spcgr Fm-3m<br />
+cell 3.52, 3.52, 3.52, 90., 90., 90.<br />
+atoms x, y, z, Biso, Property, MoleNo, MoleAt, Occ<br />
+NI 0.00, 0.00, 0.00, 0.0025, 1, 0, 0, 1.0<br />
+-----<br />
+※ 元素置換は replace を用いる<br />
+※ 保存は save filename を用いる<br />
+<br />
+□ DISCUS (隣接原子の設定)<br />
+・ 個別の設定<br />
+&nbsp; 1 set vec, 1, 1, 1, 1, 0, 0<br />
+&nbsp; 2 set vec, 2, 3, 4, 1,-2, 4<br />
+&nbsp; ※ vec, [vector relationships] atom of site #, atom pf site #, shift [h, k, l]&nbsp;<br />
+・ 多くの原子がある場合<br />
+&nbsp; connectivity<br />
+&nbsp; &nbsp; reset<br />
+&nbsp; &nbsp; add Zn, O , 1.90, 2.10, zn_o_short<br />
+&nbsp; &nbsp; add Zn, Zn, 3.10, 3.30, zn_zn_second<br />
+&nbsp; &nbsp; add O , Zn, 1.90, 2.10, o_o_short<br />
+&nbsp; &nbsp; add O , O , 3.10, 3.30, o_o_second<br />
+&nbsp; &nbsp; create<br />
+&nbsp; &nbsp; show<br />
+&nbsp; exit<br />
+・ 多くの原子がある場合 (再設定の場合)<br />
+&nbsp; connectivity<br />
+&nbsp; &nbsp; recreate Zn, zn_zn_second<br />
+&nbsp; exit<br />
+※ この設定は面倒ではあるが、この苦労はモンテカルロ計算で報われる。<br />
+<br />
+□ DISCUS (Refining a PDF by RMC)<br />
+-----<br />
+import cif,ni.cif<br />
+#<br />
+read<br />
+&nbsp; cell ni.stru,4,4,4<br />
+#<br />
+pdf<br />
+&nbsp; data ni.data<br />
+#<br />
+&nbsp; set frange,1.7,20.0<br />
+&nbsp; set qmax,40.0<br />
+&nbsp; set qdamp,0.08<br />
+&nbsp; set rad,xray<br />
+&nbsp; sel ni<br />
+&nbsp; set mode,shift<br />
+&nbsp; set move,ni,0.01,0.01,0.01<br />
+&nbsp; set disp,1<br />
+&nbsp; set cyc,25<br />
+&nbsp; show all<br />
+&nbsp; run<br />
+&nbsp; save pdf,rmc.gr<br />
+&nbsp; save stru,rmc.stru<br />
+&nbsp; exit<br />
+#<br />
+export cif, rmc_cif.cif<br />
+<br />
+-----<br />
+※ frangeは計算範囲を指定<br />
+※ moveでは動かす原子とその移動の分布範囲（ガウス分布, 単位は格子単位）<br />
+※ dispはスクリーンの更新間隔<br />
+※ cycはRMC計算サイクルの指定<br />
+※ showは現在の設定の表示<br />
+※ saveで結果の保存<br />
+※ PDFgetX2のデータならそのまま受け付ける。つまり、r G(r) d_r d_Grのデータがあればよい。<br />
+※ 上記の入力だとrmc.grのGの値は0になっている。そこで、<br />
+出力された構造で同様の条件でPDFを描くプロセスを下に示す。<br />
+<br />
+□ DISCUS (Calculating the PDF)<br />
+-----<br />
+import cif,rmc_cif.cif<br />
+#<br />
+read<br />
+&nbsp; cell rmc_cif.stru,1,1,1<br />
+#<br />
+pdf<br />
+&nbsp; set therm,gauss<br />
+&nbsp; set range,20.0,0.01<br />
+&nbsp; set qmax,40.0<br />
+&nbsp; set qdamp,0.08<br />
+&nbsp; set rad,xray<br />
+#<br />
+&nbsp; calc<br />
+# &nbsp;<br />
+&nbsp; save pdf,rmc_cif.gr<br />
+#<br />
+exit<br />
+<br />
+-----<br />
+※ set range,rの最大値,rの刻み<br />
+※ set therm.offだとGの値が0で出力される。<br />
+<br />
+□ MIXSCAT (Examples)<br />
+PDFのデータからそれぞれの成分に対するPDFを得ることができる。<br />
+(C:\Program Files (x86)\Discus\examples\mixscat)にデータがある。<br />
+pdfgetxで実験データをPDFにしてから下記のようにして読み取る。<br />
+例えば、C:\Users\ユーザー名として、ユーザー名をinukaiとして、その中にCeF3のファイルを作って、CeF3_bulk_binned.gr と CeF3_Bulk_npdf_03902.gr を入れておくと下記のようになる。<br />
+-----<br />
+cd C:\Users\inukai\CeF3<br />
+reset<br />
+read dat,x,CeF3_bulk_binned.gr<br />
+read dat,n,CeF3_Bulk_npdf_03902.gr<br />
+#<br />
+match 0.5,2.0,24./320.864<br />
+elem Ce,1,F,3<br />
+remove Ce,Ce<br />
+show<br />
+calc<br />
+#<br />
+save pdf,CeCe_new_diff.gr<br />
+save wei,w_CeCe.mac<br />
+save res,CeCe.res<br />
+<br />
+-----<br />
+※ 上記を実行するとCeCe.resとCeCe_new_diff.gr, w_GeGe.macが作成されている。<br />
+　誤解しやすいがremoveで指定した元素のペアがデータとして残る。<br />
+&nbsp; remove Ce,Fとすれば、マニュアルにあるCe-Fの結果が得られる。<br />
+※ matchは rの最小値[Å], rの最大値[Å], 原子数/体積 を指定している。<br />
+※ elemは元素とその組成比<br />
+※ 構造モデルからのdifferential PDFは下の行をDISCUSのpdfモジュールに追加する<br />
+<br />
+□ DISCUS (Calculating the different PDF)<br />
+-----<br />
+read<br />
+&nbsp; cell CeF3.stru,1,1,1<br />
+#<br />
+pdf<br />
+&nbsp; set therm,gauss<br />
+&nbsp; set range,20.0,0.01<br />
+&nbsp; set delt,0.0<br />
+&nbsp; set qmax,0.0<br />
+&nbsp; set qdamp,0.0<br />
+&nbsp; set rad,xray<br />
+&nbsp; @wn_CeCe.mac<br />
+#<br />
+&nbsp; calc<br />
+# &nbsp;<br />
+&nbsp; save pdf,cece.gr<br />
+#<br />
+exit<br />
+<br />
+-----<br />
+※ set range,rの最大値,rの刻み<br />
+※ マニュアルに書かれている[Calculating the PDF]を再現するように書き換えてみた。<br />
+&nbsp; set rad,xrayはなくても同様の結果が得られる。<br />
+<br />
+□ DISCUS (出力)<br />
+・ cif<br />
+&nbsp; export cif, &lt;filename&gt;.cif<br />
+・ RMCProfile<br />
+&nbsp; export rmcprofile, &lt;filename&gt;{.rmc6f}, version:6<br />
+&nbsp; export rmcprofile, &lt;filename&gt;{.rmc6f}, version:7<br />
+・ SHELX<br />
+&nbsp; export shelx, &lt;filename&gt;.ins<br />
+・ VASP<br />
+&nbsp; export vasp, &lt;filename&gt;<br />
+&nbsp; export poscar, &lt;filename&gt;<br />
+<br />
+□ 画像の出力<br />
+・ useual<br />
+-----<br />
+load cr,atoms.xy ! loading the data file<br />
+plot ! plot it<br />
+-----<br />
+・ cif<br />
+-----<br />
+plot<br />
+&nbsp; program cif<br />
+&nbsp; sel all<br />
+&nbsp; outfile your_name.cif<br />
+&nbsp; run<br />
+exit<br />
+-----<br />
+<br />
+※ フーリエ変換を計算するための実際のコードの実現は、プログラムDIFFUSEに基づいている。<br />
+※ 散乱強度を計算する際には、考慮すべき点が2つあります。モデル結晶のサイズが有限であることと、モデル全体がコヒーレントに散乱し、計算されたパターンに不要な高周波振動が生じるという事実に起因する。<br />
+<br />
+※ DISCUSの1つの特徴は、モンテカルロ（MC）シミュレーションを使用して欠陥と歪みを導入することが可能性です。<br />
+※ cifを読み込める。<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX (Windows 10 (64 bit))<br />
+<br />
+□ Yorick: https://dhmunro.github.io/yorick-doc/downloads.html<br />
+&gt; https://sourceforge.net/projects/yorick/<br />
+&nbsp; yorick-2.1.05-win32.exe<br />
+&nbsp; [管理者として実行]でインストールする。ディフォルトのままでよい。<br />
+&nbsp; C:\Program Files (x86)\yorick-2.1.05\bin\yorick.exe で動作する。<br />
+<br />
+□ Install<br />
+(PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/)<br />
+&nbsp; pdfgetx1.1.tar.gz<br />
+&nbsp; 解凍して C:\Program Files (x86) にコピー&amp;ペースト<br />
+&nbsp; マニュアルに記載されている Actual_PATH を C:\Program Files (x86)\PDFgetX とする。<br />
+1. pdfgetx_custom.i<br />
+-----before<br />
+&nbsp; &nbsp;#include &quot;~/PDFgetX/pdfgetx.i&quot;<br />
+&nbsp; &nbsp;#include &quot;~/PDFgetX/pdfgetxdistribution.i&quot;<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp;#include &quot;C:/Program Files (x86)/PDFgetX/pdfgetx.i&quot;<br />
+&nbsp; &nbsp;#include &quot;C:/Program Files (x86)/PDFgetX/pdfgetxdistribution.i&quot;<br />
+-----<br />
+2. pdfgetx_custom.i をコピー&amp;ペーストして custom.i として C:\Program Files (x86)\yorick-2.1.05\bin に入れる。<br />
+3. pdfgetxdistribution.i<br />
+-----before<br />
+asf_file=&quot;~/PDFgetX/ASF.DAT&quot;<br />
+periodic_table=&quot;~/PDFgetX/PERIODIC_TABLE.DAT&quot;<br />
+mabscoeff_file =&quot;~/PDFgetX/MASS_ABS_COEFF.DAT&quot;<br />
+<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;lpr -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+-----after<br />
+asf_file=&quot;C:/Program Files (x86)/PDFgetX/ASF.DAT&quot;<br />
+periodic_table=&quot;C:/Program Files (x86)/PDFgetX/PERIODIC_TABLE.DAT&quot;<br />
+mabscoeff_file =&quot;C:/Program Files (x86)/PDFgetX/MASS_ABS_COEFF.DAT&quot;<br />
+<br />
+version=&quot;PDFgetX 1.1&quot;<br />
+printer_string=&quot;print -h -Prm31 __temp.ps&quot;<br />
+-----<br />
+4. C:\Program Files (x86)\yorick-2.1.05\bin\yorick.exe<br />
+5. pdfgetx<br />
+<br />
+◇ (これは必要ない)スタート画面で表示されるYorickを使いたい場合<br />
+&nbsp; MFC71.DLLが見つからないと表示される。<br />
+&nbsp; ImageMagickやMSの再配布パッケージを試してみたが失敗。<br />
+&nbsp; http://rabbitlove.way-nifty.com/diary/2014/02/mfc71dll-3096.html のHPの通りに行った。<br />
+&nbsp; 7.10.6041.0 &nbsp;1.01 MB &nbsp;0.47 MB &nbsp;U.S. English &nbsp;MFCDLL Shared Library - Retail Version をダウンロードし、mfc71.zip を解凍して、MFC71.DLLを小文字のmfc71.dllにしてC:\Windows\System32にコピー&amp;ペースト。<br />
+&nbsp; msvcr71.dll がないと表示されるのでVector（https://www.vector.co.jp/soft/win95/util/se435079.html）からダウンロード<br />
+&nbsp; 一応、mfc71.zip などのファイルはAVGで[選択した項目をスキャン]したがウィルスは検出されていない。<br />
+&nbsp; MFC71.DLLとmsvcr71.dllを C:\Program Files (x86)\yorick-2.1.05\binmfc コピー&amp;ペースト。<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetN (Windows 10 (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetN: https://sourceforge.net/projects/pdfgetn/files/)<br />
+&nbsp; PDFgetN-1.6.7-win32.exe<br />
+&nbsp; [管理者として実行]でインストールする。<br />
+&nbsp; C:\Program Files (x86)\PDFgetN とする。他はディフォルトのまま。<br />
+&nbsp; ディスクトップに作成されるPDFgetNをクリックすれば動作する。<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX2 (Windows 10 (64 bit))<br />
+<br />
+□ PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/<br />
+&nbsp; pdfgetx2-1.0-050123-win.exe<br />
+&nbsp; [管理者として実行]でインストールする。途中で止まるときはCtrl+Alt+Delでタスクマネージャーを動かすとよい。<br />
+&nbsp; custmizedにして、 C:\Program Files (x86)\PDFgetX2 とする。他はディフォルトのまま。<br />
+&nbsp;&nbsp;<br />
+□ IDL Virtual Machine (インストールが必要)<br />
+・ HARRIS<br />
+(HARRIS: https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine)<br />
+上記の本家で登録して最新版をインストールするか、過去に配布されていた古いフリーのものを用いる。<br />
+・ NASA<br />
+(Gridview: https://denali.gsfc.nasa.gov/gridview/)<br />
+&nbsp; idl_linux.x86.tar.gz<br />
+&nbsp; idl60vmosx.tar.gz<br />
+&nbsp; idl63winx86_32.exe<br />
+・ The University of Chicago<br />
+(GSE_shell wiki: https://sites.google.com/site/gseshellwiki/idl-download-and-installation<br />
+&gt; IDL64.zip: http://cars9.uchicago.edu/surfacewiki/IDLDownload?action=AttachFile&amp;do=view&amp;target=IDL64.zip)<br />
+&nbsp; IDL64.zip<br />
+1. https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine#howtodl<br />
+&nbsp; 一番下にresisterがある。<br />
+&nbsp; Subscribe to company and product related emails:* は No にした。<br />
+2. メールが来る。<br />
+&nbsp; 確認用のアドレスをクリック。ここで登録した情報を入力しても動かない。<br />
+&nbsp; You are not currently authorized to login to this site. と表示されている場合はまだ相手側に承認されていない。<br />
+&nbsp; 3. HPに戻り人の顔を部分をクリックすると[My account]が得られる。<br />
+&nbsp; ※ NASAとChicagoのものはダウンロードは問題がありそうなので行わない。本家のHARRISからの返信を待つ。<br />
+&nbsp; ※ 本家からメールは直ぐに届いたが、メールに記載のURLをクリックしてAccount Loginで<br />
+必要事項を記入したが[You are not currently authorized to login to this site.]と表示される。<br />
+3. 登録した次の日に Account Login で入れた。最初のメール以降のメールは特に来ていない。<br />
+&nbsp; &nbsp;人のマークをクリックして、 My Account をクリックして左にあるDownload Page &gt; をクリック。<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Microsoft Windows (7,8,10) 64-bi<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Native x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Unix x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Linux x86_64 64-bit<br />
+&nbsp; I Agreeをクリック。ソ連はよくてキューバがダメっていうのは残念ではある。両国の関係が改善する日を心待ちにしている。<br />
+4. IDL_ENVI53SP1win64.exe をクリック<br />
+&nbsp; IDLのVMしか私は興味がないのでENVIのチェックを外す。後はディフォルトのまま。<br />
+&nbsp; lisenseは[いいえ]にした。<br />
+5. ディストップにあるPDFgetX2をクリック<br />
+※ PDFgetX2を32 bitの意味であるx86においているが、上記の手順で 64 bit OS上でも動いている。<br />
+<br />
+□ Usage<br />
+1. PDFgetX2<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/)<br />
+&nbsp; pdfgetx1.1.tar.gz<br />
+1. sudo apt-get install yorick<br />
+2. unzip pdfgetx1.1.tar.gz<br />
+3. cd PDFgetX<br />
+4. cp pdfgetx_custom.i custom.i<br />
+5. cd $HOME<br />
+6. mkdir Yorick<br />
+7. cp PDFgetX/custom.i Yorick/custom.i<br />
+8. cd PDFgetX<br />
+※ もしPDFgetXの場所を変えたら、マニュアルの通りに Actual_PATH の部分を書き換える。<br />
+<br />
+□ Usage<br />
+1. yorick<br />
+2. pdfgetx<br />
+<br />
+□ manual<br />
+1. evince pdfxman.pdf<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetX2 (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ IDL Virtual Machine (インストールが必要)<br />
+・ HARRIS<br />
+(HARRIS: https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine)<br />
+上記の本家で登録して最新版をインストールするか、過去に配布されていた古いフリーのものを用いる。<br />
+・ NASA<br />
+(Gridview: https://denali.gsfc.nasa.gov/gridview/)<br />
+&nbsp; idl_linux.x86.tar.gz<br />
+&nbsp; idl60vmosx.tar.gz<br />
+&nbsp; idl63winx86_32.exe<br />
+・ The University of Chicago<br />
+(GSE_shell wiki: https://sites.google.com/site/gseshellwiki/idl-download-and-installation<br />
+&gt; IDL64.zip: http://cars9.uchicago.edu/surfacewiki/IDLDownload?action=AttachFile&amp;do=view&amp;target=IDL64.zip)<br />
+&nbsp; IDL64.zip<br />
+1. https://www.harrisgeospatial.com/Support/Self-Help-Tools/Help-Articles/Help-Articles-Detail/ArtMID/10220/ArticleID/17309/The-IDL-Virtual-Machine#howtodl<br />
+&nbsp; 一番下にresisterがある。<br />
+&nbsp; Subscribe to company and product related emails:* は No にした。<br />
+2. メールが来る。<br />
+&nbsp; 確認用のアドレスをクリック。ここで登録した情報を入力しても動かない。<br />
+&nbsp; You are not currently authorized to login to this site. と表示されている場合はまだ相手側に承認されていない。<br />
+3. HPに戻り人の顔を部分をクリックすると[My account]が得られる。<br />
+&nbsp; ※ NASAとChicagoのものはダウンロードは問題がありそうなので行わない。本家のHARRISからの返信を待つ。<br />
+&nbsp; ※ 本家からメールは直ぐに届いたが、メールに記載のURLをクリックしてAccount Loginで<br />
+必要事項を記入したが[You are not currently authorized to login to this site.]と表示される。<br />
+4. 登録した次の日に Account Login で入れた。最初のメール以降のメールは特に来ていない。<br />
+&nbsp; &nbsp;人のマークをクリックして、 My Account をクリックして左にあるDownload Page &gt; をクリック。<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Linux x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Microsoft Windows (7,8,10) 64-bi<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Native x86_64 64-bit<br />
+&nbsp; &nbsp; IDL 8.5.1 &nbsp;Mac OS X (10.9, 10.10) Unix x86_64 64-bit<br />
+&nbsp; I Agreeをクリック。ソ連はよくてキューバがダメっていうのは残念ではある。両国の関係が改善する日を心待ちにしている。<br />
+5. mkdir IDL<br />
+6. cd IDL<br />
+7. tar zxvf idl85envi53sp1linux.x86_64.tar.gz<br />
+8. sudo ./install.sh<br />
+&nbsp; [space] key<br />
+&nbsp; Do you accept all of the terms of the preceding license agreement? (y/n): &nbsp;y<br />
+&nbsp; /usr/local/exelis<br />
+&nbsp; IDL? (y/n): y<br />
+&nbsp; ENVI? (y/n): n<br />
+&nbsp; IDL Help files? (y/n): n<br />
+&nbsp; DICOM Network Services? (y/n): n<br />
+&nbsp; Install the above configuration? (y/n): y<br />
+&nbsp; Do you want to create the symbolic links in /usr/local/bin? (y/n): y<br />
+&nbsp; Do you want to run the License Wizard? (y/n): n<br />
+9. wget http://mirrors.edge.kernel.org/ubuntu/pool/main/libx/libxp/libxp6_1.0.2-1ubuntu1_amd64.deb<br />
+&nbsp; sudo dpkg --install libxp6_1.0.2-1ubuntu1_amd64.deb&nbsp;<br />
+&nbsp; (IBM Support: https://www-01.ibm.com/support/docview.wss?uid=swg21984532)<br />
+<br />
+□ Install<br />
+(PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/)<br />
+&nbsp; pdfgetx2-1.0-050315.tar.gz<br />
+1. tar zxvf pdfgetx2-1.0-050315.tar.gz<br />
+2. cd distribution<br />
+3. sudo ./install.sh<br />
+&nbsp; Do you ACCEPT the above statement? (Y/N) y<br />
+&nbsp; Use different directories? (Y/N) n<br />
+4. pdfgetx2<br />
+※ 流石はIBM supportである。上記の手順でIDL VMがubuntu 18.04 LTS (64 bit) (Windows Subsystem for Linux. Windows 10)で動作した（Subsystemの利用の場合はXLaunchの起動も忘れないように）。<br />
+◇ other methods<br />
+&nbsp; pdfgetx2-1.0-050315-linux.sh<br />
+1. sudo ./pdfgetx2-1.0-050315-linux.sh<br />
+&nbsp; Do you ACCEPT the above statement? (Y/N) y<br />
+&nbsp; Use different directories? (Y/N) n<br />
+<br />
+□ Usage<br />
+1. PDFgetX2<br />
+------------------------------------------------------------------------------<br />
+■ PDFgetN (ubuntu 18.04 LTS (64 bit))<br />
+<br />
+□ Install<br />
+(PDFgetN: https://sourceforge.net/projects/pdfgetn/files/)<br />
+&nbsp; PDFgetN-1.6.7.tar.gz<br />
+1. sudo apt-get install perl<br />
+&nbsp; sudo apt-get install perl-tk<br />
+2. tar zxvf PDFgetN-1.6.7.tar.gz<br />
+3. cd PDFgetN<br />
+4. sudo perl install.pm<br />
+<br />
+□ Usage<br />
+1. pdfgetn<br />
+<br />
+□ manual<br />
+1. evince ./manual/getn_man.pdf<br />
+------------------------------------------------------------------------------<br />
+■ Fundamental information<br />
+<br />
+・動径分布関数（Radial Distribution Function, RDF): R(r) [1]<br />
+&nbsp; R(r) dr : 半径rで厚さdrの球殻にある対を組む原子の数<br />
+<br />
+・RDF (radial distribution function) [6]<br />
+&nbsp; R(r) = 4*&pi;*r^2*&rho;0*g(r)&nbsp;<br />
+<br />
+・二体分布関数: g(r) [1]<br />
+&nbsp; g(r) = R(r)/(4*&pi;*r^2*&rho;0)<br />
+&nbsp; &rho;0: 原子数密度<br />
+&nbsp; 距離rの位置に原子がいる確率<br />
+<br />
+・原子対相関関数PDF: G(r) [1]<br />
+&nbsp; G(r) = 4*&pi;*r*&rho;0*[g(r)-1]<br />
+&nbsp; 結晶性物質を扱う人はG(r)を解析に用いることが多い<br />
+<br />
+・2体相関分布関数（Pair-Distribution Function, PDF) [4]<br />
+&nbsp; G(r) = 4*&pi;*r*&rho;0*[g(r)-1]<br />
+&nbsp; g(r)と同じ名前であるので間違えないよう注意が必要<br />
+<br />
+・二体分布関数(atomic Pair Distribution Function, PDF) [1,2]<br />
+&nbsp; G(r) = (2/&pi;)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ<br />
+<br />
+・Atomic PDF [3]<br />
+&nbsp; G(r) = 4*&pi;*r*[&rho;(r)-&rho;0]<br />
+&nbsp; &rho;0: average density<br />
+<br />
+・Atomic form factors [3]<br />
+&nbsp; Calculating a PDF from an atomistic model<br />
+&nbsp; G(r) = &Sigma;ij{[bi*bj/&lt;b&gt;^2]*&delta;(r-rij)}-4*&pi;*r*&rho;0<br />
+&nbsp; Z for x-rays, b for neutrons<br />
+&nbsp; &rho;0: average density<br />
+<br />
+・Modeling nanoscale morphology in real space [3]<br />
+&nbsp; G(r) = (2/&pi;)*&int;{Q*[S(Q)-1]*sin(Q*r)}dQ = 4*&pi;*r*[&rho;(r)-&rho;0*&gamma;0(r)]<br />
+&nbsp; &gamma;0(r): particle shape function<br />
+<br />
+・Reduced PDF = total correction function t(r) [6]<br />
+&nbsp; t(r) = 4*&pi;*r*&rho;0*g(r)<br />
+<br />
+・differential correlation function d(r) [6]<br />
+&nbsp; d(r) = 4*&pi;*r*&rho;0*[g(r) - 1]<br />
+<br />
+・reduced density: &rho;(r) [6]<br />
+&nbsp; &rho;(r) =&rho;0*g(r)<br />
+<br />
+◇ Mathematical basis of the PDF [1,4]<br />
+&nbsp; 解析に十分なデータを取るには大きなQが必要(例えば Q &gt; 20 ? 30 Å^-1)<br />
+&nbsp; 短波長（大きなエネルギー）の中性子やX線を用いる<br />
+&nbsp; 例： Q ? 30 Å^-1 -&gt; &lambda; ? 0.4 Å -&gt; E ? 31 keV<br />
+&nbsp; Qmax= 30-50 ?-1 (X-ray Synchrotron )<br />
+&nbsp; Qmax= 10-23 ?-1 (electrons)<br />
+<br />
+◇ Synchrotron X-rays [5]<br />
+・f: proportional to Z (atomic number)<br />
+&nbsp; poor sensitivity to light elements<br />
+&nbsp; f: decreases with Q = 4*&pi;*sin(&theta;)/&lambda;<br />
+・sample amount ? 100 mg<br />
+・acquisition time<br />
+&nbsp; ? 5 hours for point detector<br />
+&nbsp; ? 10 secounds for area detector<br />
+&nbsp; ? 0.1 secounds a-Si area detector<br />
+<br />
+◇ Neutrons [5]<br />
+・b: flucuates with Z<br />
+&nbsp; sensitive to light elements<br />
+&nbsp; b: constant with Q<br />
+・sample amount ? 5 - 10 g<br />
+・acquisition time<br />
+&nbsp; ? 2 - 5 hours, possibly longer<br />
+&nbsp; (much faster at the latest neutron souces, e.g. Oak Ridge Laboratory, Tennessee)<br />
+<br />
+[1] X線中性子PDF解析による結晶性物質の局所構造解析 [2]<br />
+&nbsp; http://pfwww.kek.jp/pf-seminar/AOT1/presenfiles/kodama.pdf<br />
+[2] 焼き入れ速度が V Ti Zr の 水素吸蔵特性に与える影響<br />
+&nbsp; https://www.jim.or.jp/journal/j/pdf3/79/03/131.pdf<br />
+[3] Atomic Pair Distribution Function (PDF) Analysis<br />
+&nbsp; https://neutrons.ornl.gov/sites/default/files/NXS_2018_PDF_KatePage.pdf<br />
+[4] 結晶PDF（Pair Distribution Function）解析で観る短配位中距離構造の世界<br />
+&nbsp; http://www.jssrr.jp/journal/pdf/28/p117.pdf<br />
+[5] Analysis of Local Structure by Atomic Pair Distribution Function<br />
+&nbsp; http://www.fhi-berlin.mpg.de/acnew/department/pages/teaching/pages/teaching__wintersemester__2016_2017/elena_willinger__analysis_of_local_structure_by_atomic_pair_distribution_function__170203.pdf<br />
+[6] Radial Distribution Function from Electron Diffraction Patterns<br />
+&nbsp; http://www.globalsino.com/EM/page1426.html<br />
+------------------------------------------------------------------------------<br />
+■ References&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ ubuntu 18.04 LTS on windows 10 (64 bit)<br />
+<br />
+□ Windows Subsystem for Linux<br />
+(https://qiita.com/Aruneko/items/c79810b0b015bebf30bb)<br />
+1. スタートボタンを右クリック &gt; アプリと機能<br />
+2. 右側にあるプログラムと機能<br />
+3. 左側にあるWindowsの機能の有効化または無効化<br />
+4. Windows Subsystem for Linux にチェックを入れる<br />
+5. 今すぐ再起動<br />
+6. Microsoft Storeでubuntuと検索<br />
+7. ubuntu 18.04 LTS<br />
+8. Eneter<br />
+9. ユーザー名とパスワード設定<br />
+10. リポジトリの変更（日本のJAISTにする）<br />
+11. sudo sed -i -e 's%http://.*.ubuntu.com%http://ftp.jaist.ac.jp/pub/Linux%g' /etc/apt/sources.list<br />
+&nbsp; sudo apt update<br />
+&nbsp; sudo apt upgrade<br />
+&nbsp; updateとupgradeをしないとまともにアプリが入らない<br />
+<br />
+□ パスワードの再設定 (Windows Subsystem for Linux)<br />
+&nbsp; lxrun /uninstall /full<br />
+&nbsp; lxrun /install<br />
+<br />
+□ VcXsrv (XLaunch)<br />
+(https://estuarine.jp/2017/11/wsl-x-window/)<br />
+vcxsrv-64.1.20.1.4.installer.exe<br />
+インストールするるだけ。特に設定はない。<br />
+Usage &gt; XLaunch &gt; 次へ(N) &gt; 次へ(N) &gt; 次へ(N) &gt; 完了 (Japanese)<br />
+Usage &gt; XLaunch &gt; Next &gt; Next &gt; Next &gt; Finish (English)<br />
+Memo: Multiple windows &gt; start no client &gt; Clipborad, native opengl<br />
+<br />
+□ LXDE (X-window) が必要な場合<br />
+(https://estuarine.jp/2017/11/wsl-x-window/)<br />
+export DISPLAY=localhost:0.0<br />
+lxpanel --profile LXDE<br />
+<br />
+□ ファイルの関係<br />
+C:\ = /mnt/c<br />
+C:\Users\inukai\AppData\Local\Packages\CanonicalGroupLimited.Ubuntu18.04onWindows_79rhkp1fndgsc\LocalState\rootfs\home\inukai<br />
+※ inukaiはユーザー名なのでご自身のユーザー名に変えてください。<br />
+<br />
+□ ubuntu 18.04 LST (usefull software)<br />
+sudo apt-get -y install libfftw3-dev<br />
+sudo apt-get -y install liblapack-dev<br />
+sudo apt-get -y install libopenmpi-dev<br />
+sudo apt-get -y install python-dev python-numpy python-matplotlib python-yaml python-h5py<br />
+sudo apt-get -y install python-setuptools<br />
+sudo apt-get -y install python-dev<br />
+sudo apt-get -y install imagemagick<br />
+sudo apt-get -y install graphicsmagick-imagemagick-compat<br />
+sudo apt-get -y install gnuplot<br />
+------------------------------------------------------------------------------<br />
+■ Install (failed)<br />
+<br />
+□ PDFgetX: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX/<br />
+&nbsp; Please download current version of PDFgetX&nbsp;<br />
+&nbsp; 失敗<br />
+<br />
+□ PDFgetX2: https://web.pa.msu.edu/cmp/billinge-group/programs/PDFgetX2/<br />
+&nbsp; pdfgetx2-1.0-050315-win.exe &nbsp;<br />
+&nbsp; PDFgetX2はインストールできなかった。<br />
+&nbsp; Linux版でテストしてみる。pdfgetx2-1.0-050315-linux.shをubuntu 18.04 LTS動作<br />
+&nbsp; sudo ./pdfgetx2-1.0-050315-linux.sh<br />
+&nbsp; Enter<br />
+&nbsp; Space<br />
+&nbsp; Y (Do you ACCEPt the above statement?)<br />
+&nbsp; N (Use different directories)<br />
+&nbsp;&nbsp;<br />
+&nbsp; http://docs.astro.columbia.edu/files/idl/6.4/<br />
+&nbsp; idl_linux.x86_64.tar.gz&nbsp;<br />
+&nbsp; 失敗<br />
+&nbsp;&nbsp;<br />
+&nbsp; I2py<br />
+&nbsp;&nbsp;<br />
+□ IDL関係<br />
+&nbsp; Fawlty Language (http://www.flxpert.hu/fl/)<br />
+&nbsp;&nbsp;<br />
+&nbsp; Scipy<br />
+&nbsp; import scipy.io as sio<br />
+&nbsp; filename = 'pdfgetx2.sav'<br />
+&nbsp; df = sio.readsav(filename)<br />
+&nbsp; 失敗<br />
+&nbsp;&nbsp;<br />
+&nbsp; IDLSave (http://astrofrog.github.io/idlsave/)<br />
+&nbsp; IDLSave-1.0.0.tar.gz<br />
+&nbsp; cd IDLSave-1.0.0/idlsave<br />
+&nbsp; gedit idlsave.py<br />
+&nbsp; -----Line 32<br />
+&nbsp; import gzip<br />
+&nbsp; -----Line 776<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # rec_string = zlib.decompress(f.read(nextrec-pos))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; rec_string = gzip.open(f.read(nextrec-pos))<br />
+&nbsp; -----<br />
+&nbsp; cd IDLSave-1.0.0<br />
+&nbsp; sudo python setup.py install<br />
+&nbsp; cd distribution<br />
+&nbsp; python<br />
+&nbsp; import idlsave<br />
+&nbsp; s = idlsave.read('pdfgetx2.sav')<br />
+&nbsp; 失敗<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

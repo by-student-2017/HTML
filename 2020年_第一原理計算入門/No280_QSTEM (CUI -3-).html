@@ -1,0 +1,712 @@
+QSTEM (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+■ QSTEM (Ubuntu 18.04 LTS (64 bit)) (lammps input structure data)<br />
+<br />
+□ Usage (case is any file name)<br />
+(lammps *.data to QSTEM *.cfg)<br />
+1. ./lmp_data2cfg_qsc case -kv 80 -atom &quot;C H&quot; -lab6<br />
+&nbsp; (80 mean 80 kV)<br />
+&nbsp; e.g.,&nbsp;<br />
+&nbsp; ・ 200 kV, LaB6: ./lmp_data2cfg_qsc case -kv 200 -atom &quot;C H&quot; -lab6<br />
+&nbsp; ・ &nbsp;80 kV, LaB6: ./lmp_data2cfg_qsc case -kv &nbsp;80 -atom &quot;C H&quot; -lab6<br />
+&nbsp; ・ 200 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -atom &quot;C H&quot; -fe -autoz<br />
+&nbsp; ・ &nbsp;80 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -atom &quot;C H&quot; -fe<br />
+&nbsp; ・ 200 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -atom &quot;C H&quot; -arm -autoz<br />
+&nbsp; ・ &nbsp;80 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -atom &quot;C H&quot; -arm<br />
+&nbsp; ・ &nbsp;30 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;30 -atom &quot;C H&quot; -arm<br />
+2. ~/QSTEM/bin/stem3 tem.qsc<br />
+&nbsp; (~/QSTEM/bin/stem3 tem.qsc &gt; qstem.log)<br />
+3. cd case<br />
+4. cp case_Proj.img &nbsp;case.img<br />
+5. python read.py<br />
+6. python plot_tem.py<br />
+<br />
+□ lmp_data2cfg_qsc (test version)<br />
+1. lmp_data2cfg_qsc<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.data tmp.data<br />
+#<br />
+awk '{if(($1 ~/^[0-9]+$/) &amp;&amp; ($2 ~/^[0-9]+$/) &amp;&amp; (($3 ~/^[0-9]+.[0-9]+$/) || ($3 ~/^[0-9]+$/)) &amp;&amp; (($4 ~/^[0-9]+.[0-9]+$/) || ($4 ~/^[0-9]+$/)) &amp;&amp; (($5 ~/^[0-9]+.[0-9]+$/) || ($5 ~/^[0-9]+$/))){printf &quot;%d %12.6f %12.6f %12.6f \n&quot;,$2, $3, $4, $5}}' tmp.data &gt;&gt; tmp.xyz<br />
+#<br />
+awk &nbsp;'{if($2==&quot;atoms&quot;){print &quot;Number of particles = &quot; $1}}' tmp.data &gt;&gt; tmp.cfg<br />
+echo &quot;A = 1.0 Angstrom&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+#<br />
+#set num_of_atoms = `awk '{if( ($2 == &quot;atom&quot;) &amp;&amp; ($3 == &quot;types&quot;)){print $1 }}' tmp.data`<br />
+set x = `awk '{if($3 == &quot;xlo&quot;){print $2 }}' tmp.data`<br />
+set y = `awk '{if($3 == &quot;ylo&quot;){print $2 }}' tmp.data`<br />
+set z = `awk '{if($3 == &quot;zlo&quot;){print $2 }}' tmp.data`<br />
+#<br />
+echo &quot;H0(1,1) = ${x}&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,2) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,3) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+#<br />
+echo &quot;H0(2,1) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,2) = ${y}&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,3) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+#<br />
+echo &quot;H0(3,1) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,2) = 0.0&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,3) = ${z}&quot; &gt;&gt; tmp.cfg<br />
+#<br />
+echo &quot;.NO_VELOCITY.&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;entry_count = 5&quot; &gt;&gt; tmp.cfg<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.01 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+set ion_charge_list = (1.0 0.0 1.0 2.0 0.0 0.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 0.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 3.0 3.0 2.0 3.0 2.0 2.0 2.0 2.0 3.0 4.0 -3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0 7.0 3.0 3.0 2.0 1.0 2.0 3.0 4.0 3.0 -2.0 -1.0 0.0 1.0 2.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 3.0 4.0 5.0 6.0 7.0 4.0 4.0 4.0 3.0 2.0 1.0 2.0 3.0 2.0 1.0 0.0 1.0 2.0 3.0 4.0 5.0 6.0 5.0 4.0 3.0 3.0 3.0 3.0 3.0 3.0 2.0 2.0 3.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0 0.0)<br />
+# https://www.sciencegeek.net/tables/PT_ions.pdf<br />
+#<br />
+if (&quot;$2&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $3 | awk '{print $0}'`)<br />
+else if (&quot;$3&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $4 | awk '{print $0}'`)<br />
+else if (&quot;$4&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $5 | awk '{print $0}'`)<br />
+else if (&quot;$5&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $6 | awk '{print $0}'`)<br />
+else if (&quot;$6&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $7 | awk '{print $0}'`)<br />
+else if (&quot;$7&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $8 | awk '{print $0}'`)<br />
+else if (&quot;$8&quot; == &quot;-atom&quot;) then<br />
+&nbsp; set atoms = (`echo $9 | awk '{print $0}'`)<br />
+endif<br />
+#<br />
+set i = 1<br />
+foreach natom ($atoms)<br />
+&nbsp; awk -v num=${i} -v element=${atoms[${i}]} '{if($1==num){print element &quot; &quot; $2 &quot; &quot; $3 &quot; &quot; $4}}' tmp.xyz &gt;&gt; tmp2.xyz<br />
+&nbsp; @ i += 1<br />
+end<br />
+#<br />
+set count = 1<br />
+foreach atom ($element_list)<br />
+&nbsp; set num = `grep -c -i ${atom} tmp2.xyz`<br />
+&nbsp; if (${num} &gt; 0) then<br />
+&nbsp; &nbsp; #echo ${num}<br />
+&nbsp; &nbsp; #echo ${count}<br />
+&nbsp; &nbsp; set mass = `echo $mass_list[$count] | awk '{printf(&quot;%d&quot;,$1+0.5)}'`<br />
+&nbsp; &nbsp; echo ${mass} &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; echo ${atom} &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; awk -v n=${atom} -v x=${x} -v y=${y} -v z=${z} -v mass=${mass} '{if($1==n){printf &quot;%12.6f %12.6f %12.6f %12.6f &nbsp; &nbsp;1.000000 \n&quot;, $2/x, $3/y, $4/z,((0.45*28)/mass)}}' tmp2.xyz &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; endif<br />
+&nbsp; endif<br />
+&nbsp; @ count += 1<br />
+end<br />
+#<br />
+rm -f -r tmp.xyz tmp2.xyz<br />
+mv tmp.cfg ${filename}.cfg<br />
+#<br />
+# calculate number of slices<br />
+set thickness = ${z}<br />
+#<br />
+set slices = `echo ${thickness} | awk '{printf(&quot;%d&quot;,$1/2.0+0.5)}'`<br />
+set slice_thickness = `echo &quot;${thickness} ${slices}&quot; | awk '{printf(&quot;%f&quot;,$1/$2)}'`<br />
+#echo ${thickness}<br />
+#echo ${slices}<br />
+#<br />
+if (&quot;$2&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $3 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$3&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $4 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$4&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $5 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$5&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $6 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$6&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $7 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$7&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $8 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$8&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $9 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else<br />
+&nbsp; set v0 = 200.000000<br />
+endif<br />
+set lambda = `echo ${v0} | awk '{printf(&quot;%12.10f&quot;,12.26/10.0/(($1*10^3*(1+0.9788*10^-3*$1))^(1/2)))}'`<br />
+set defocus = `echo ${lambda} | awk '{printf(&quot;%f&quot;,-1.2*(1.0*$1)^(1/2)*1000)}'`<br />
+#echo ${lambda}<br />
+#echo ${defocus}<br />
+set resolutionX = `echo ${x} | awk '{printf(&quot;%f&quot;,$1/512)}'`<br />
+set resolutionY = `echo ${y} | awk '{printf(&quot;%f&quot;,$1/512)}'`<br />
+#<br />
+if (&quot;$2&quot; == &quot;-autoz&quot; || &quot;$3&quot; == &quot;-autoz&quot; || &quot;$4&quot; == &quot;-autoz&quot; || &quot;$5&quot; == &quot;-autoz&quot; || &quot;$6&quot; == &quot;-autoz&quot; || &quot;$7&quot; == &quot;-autoz&quot; || &quot;$8&quot; == &quot;-autoz&quot; || &quot;$9&quot; == &quot;-autoz&quot; || &quot;${10}&quot; == &quot;-autoz&quot;) then<br />
+&nbsp; set zOffset = `echo ${slice_thickness} | awk '{printf(&quot;%f&quot;,$1/2)}'`<br />
+else<br />
+&nbsp; set zOffset = 0.000000<br />
+endif<br />
+<br />
+if (&quot;$2&quot; == &quot;-lab6&quot; || &quot;$3&quot; == &quot;-lab6&quot; || &quot;$4&quot; == &quot;-lab6&quot; || &quot;$5&quot; == &quot;-lab6&quot; || &quot;$6&quot; == &quot;-lab6&quot; || &quot;$7&quot; == &quot;-lab6&quot; || &quot;$8&quot; == &quot;-lab6&quot; || &quot;$9&quot; == &quot;-lab6&quot; || &quot;${10}&quot; == &quot;-lab6&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,1.5/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 15.0 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 10<br />
+&nbsp; set beam_current = 20<br />
+else if (&quot;$2&quot; == &quot;-fe&quot; || &quot;$3&quot; == &quot;-fe&quot; || &quot;$4&quot; == &quot;-fe&quot; || &quot;$5&quot; == &quot;-fe&quot; || &quot;$6&quot; == &quot;-fe&quot; || &quot;$7&quot; == &quot;-fe&quot; || &quot;$8&quot; == &quot;-fe&quot; || &quot;$9&quot; == &quot;-fe&quot; || &quot;${10}&quot; == &quot;-fe&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,0.65/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 2<br />
+&nbsp; set beam_current = 20<br />
+else if (&quot;$2&quot; == &quot;-arm&quot; || &quot;$3&quot; == &quot;-arm&quot; || &quot;$4&quot; == &quot;-arm&quot; || &quot;$5&quot; == &quot;-arm&quot; || &quot;$6&quot; == &quot;-arm&quot; || &quot;$7&quot; == &quot;-arm&quot; || &quot;$8&quot; == &quot;-arm&quot; || &quot;$9&quot; == &quot;-arm&quot; || &quot;${10}&quot; == &quot;-arm&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,0.325/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 1<br />
+&nbsp; set beam_current = 20<br />
+else<br />
+&nbsp; set dVV = 0.000003<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.000000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 0<br />
+&nbsp; set beam_current = 1<br />
+endif<br />
+<br />
+if (&quot;$2&quot; == &quot;-tds&quot; || &quot;$3&quot; == &quot;-tds&quot; || &quot;$4&quot; == &quot;-tds&quot; || &quot;$5&quot; == &quot;-tds&quot; || &quot;$6&quot; == &quot;-tds&quot; || &quot;$7&quot; == &quot;-tds&quot; || &quot;$8&quot; == &quot;-tds&quot; || &quot;$9&quot; == &quot;-tds&quot; || &quot;${10}&quot; == &quot;-tds&quot;) then<br />
+&nbsp; set tds = &quot;yes&quot;<br />
+else<br />
+&nbsp; set tds = &quot;no&quot;<br />
+endif<br />
+<br />
+cat &lt;&lt; EOF &gt; tem.qsc<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+% STEM configuration file generated by qstem<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+mode: TEM<br />
+print level: 4 &nbsp;% indicates how much information in output<br />
+save level: &nbsp;3 &nbsp;% indicates how much information shall be saved<br />
+filename: ${filename}.cfg<br />
+resolutionX: &nbsp;${resolutionX}<br />
+resolutionY: &nbsp;${resolutionY}<br />
+NCELLX: 1<br />
+NCELLY: 1<br />
+NCELLZ: 1<br />
+v0: ${v0} &nbsp;% beam energy<br />
+tds: ${tds} % do NOT include thermal diffuse scattering<br />
+temperature: 298.000000 % temperature in Kelvin<br />
+slice-thickness: ${slice_thickness} &nbsp;% slice thckness in A<br />
+slices: ${slices} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % number of different slices per slab in z-direction<br />
+center slices: no &nbsp; &nbsp; &nbsp; % do not center slices<br />
+slices between outputs: 10 &nbsp;% give intermediate results after every 8 slices<br />
+xOffset: &nbsp;0.000000 &nbsp; &nbsp; &nbsp;% slize x-position offset in cartesian coords<br />
+yOffset: &nbsp;0.000000 &nbsp; &nbsp; &nbsp;% slize y-position offset in cartesian coords<br />
+zOffset: &nbsp;${zOffset} &nbsp; &nbsp; &nbsp;% slize z-position offset in cartesian coords<br />
+periodicXY: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% not periodic in x- and y-direction<br />
+periodicZ: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % not periodic in z-direction<br />
+<br />
+% Geometrical properties<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+Crystal tilt X: 0.000000 &nbsp; &nbsp; &nbsp; &nbsp;% tilt in rad<br />
+Crystal tilt Y: 0.000000<br />
+Crystal tilt Z: 0.000000<br />
+Beam tilt X: 0.0 &nbsp; &nbsp; &nbsp; &nbsp;% beam tilt in mrad<br />
+Beam tilt Y: 0.0<br />
+Tilt back: no<br />
+<br />
+% TEM imaging parameters<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+nx: 512 &nbsp; &nbsp; &nbsp; &nbsp; % array size used for probe<br />
+ny: 512 &nbsp; &nbsp; &nbsp; &nbsp; % ny = nx, if not specified<br />
+Cs: ${Cs} &nbsp; &nbsp; &nbsp; % Speherical abberation in mm<br />
+C5: 0.000000 &nbsp; &nbsp;% C_5 abberation in mm<br />
+Cc: ${Cc} &nbsp; &nbsp; &nbsp; % Chromatic abberation in mm<br />
+dV/V: ${dVV} &nbsp; &nbsp;% energy spread in eV (FWHM)<br />
+alpha: ${alpha} &nbsp;% Illumination angle in mrad<br />
+defocus: ${defocus}<br />
+astigmatism: 0.000000<br />
+astigmatism angle: 0.000000<br />
+<br />
+<br />
+Source Size (diameter): ${Source_Size} &nbsp;% source size in A<br />
+beam current: ${beam_current} &nbsp; &nbsp; &nbsp; &nbsp;% beam current in pA (default: 1)<br />
+dwell time: 1000 &nbsp; &nbsp; &nbsp; &nbsp;% dwell time in msec (default: 1) (GUI 1.6021773e-4)<br />
+smooth: yes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % smoothen edge of probe in rec. space<br />
+gaussian: no<br />
+% Parameters for potential calculation<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+potential3D: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;yes &nbsp;% use 3D or 2D potential (3D realistically simulates z-motion of atoms)<br />
+atom radius: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;5.0 &nbsp; &nbsp; &nbsp; % radius used for calculation of proj potential V_proj(r)<br />
+plot V(r)*r: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;no &nbsp; &nbsp; &nbsp; &nbsp;% will create a plot for V_proj(r)*r vs. r &nbsp;for all slices and 1st atom<br />
+bandlimit f_trans: &nbsp; &nbsp;no &nbsp; &nbsp; &nbsp; &nbsp;% indicate whether to band limit transmission function or not<br />
+save potential: &nbsp; &nbsp; &nbsp; no &nbsp; &nbsp; &nbsp; &nbsp;% whether we want to save the projected potential in files<br />
+save projected potential: &nbsp; &nbsp; &nbsp; yes &nbsp; &nbsp; % whether we want to save the total projected potential<br />
+one time integration: yes &nbsp;% calculate V_proj once and then copy (much faster)<br />
+Display Gamma: 0 &nbsp; &nbsp; % Gamma value for image scaling (0 = logarithmic)<br />
+Folder: &quot;${filename}&quot;<br />
+Runs for averaging: 30 &nbsp;% averaging over 30 images for TDS simulation<br />
+Structure Factors: WK<br />
+show Probe: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% displays a graph of the crosssection of the inc. e-beam<br />
+propagation progress interval: 10 % show progress every N_prop_prog beam positions<br />
+potential progress interval: 1000 % show progress every N_pot_prog atoms<br />
+update Web: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% put results on web page<br />
+Pendelloesung plot: no &nbsp;% flag indicates whether to store Pendeloesung plot<br />
+sequence: 1 1<br />
+EOF<br />
+---------<br />
+2. sed -i 's/\r//g' lmp_data2cfg_qsc<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place lmp_data2cfg_qsc)<br />
+3. chmod +x lmp_data2cfg_qsc<br />
+4. ./lmp_data2cfg_qsc case -kv 80 -atom &quot;C H&quot; -lab6<br />
+※ e.g., case.data, 80 kV<br />
+<br />
+□ case.cfg (Windows)<br />
+1. VESTA<br />
+&nbsp; File &gt; Open... &gt; *.cif<br />
+&nbsp; File &gt; Export Data... &gt; case.xtl<br />
+2. shift + right click &gt; Powercell window<br />
+3. Convert2CFG<br />
+&nbsp; case.xtl &gt; open &gt; OK &gt; case.cfg<br />
+[1] How to convert crystal structure files to the CFG format&nbsp;<br />
+&nbsp; https://www.physics.hu-berlin.de/en/sem/software/software_convert_cfg<br />
+<br />
+□ read case_Proj.img<br />
+0. pip install numpy<br />
+&nbsp; pip install pillow<br />
+1. cp case_Proj.img &nbsp;case.img<br />
+2. gedit read.py<br />
+-----<br />
+from PIL import Image<br />
+import numpy as np<br />
+import struct<br />
+#import matplotlib.pyplot as plt<br />
+<br />
+fid = open(&quot;case.img&quot;,&quot;rb&quot;)<br />
+<br />
+# int data<br />
+header_size = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;header size: &quot;, header_size[0]<br />
+<br />
+paramSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;parameter size: &quot;, paramSize[0]<br />
+<br />
+commentSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;comment size: &quot;, commentSize[0]<br />
+<br />
+Nx = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Nx: number of pixels in x-direction, &quot;, Nx[0]<br />
+<br />
+Ny = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Ny: number of pixels in y-direction, &quot;, Ny[0]<br />
+<br />
+complexFlag = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Flag: complex(1) or real(0): &quot;, complexFlag[0]<br />
+<br />
+dataSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Data size (byte unit): &quot;, dataSize[0]<br />
+<br />
+version = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;version: &quot;,version[0]<br />
+<br />
+# double data<br />
+<br />
+t = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;sample thickness or defocus: &quot;, t[0]<br />
+<br />
+dx = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;dx: pixel size along x-direction, &quot;, dx[0], &quot; [Angstrom]&quot;<br />
+<br />
+dy = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;dy: pixel size along y-direction, &quot;, dy[0], &quot; [Angstrom]&quot;<br />
+<br />
+# other data<br />
+<br />
+for i in range(0,paramSize[0]):<br />
+&nbsp; auxilliary_data = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; print auxilliary_data[0]<br />
+<br />
+comment = []<br />
+for i in xrange(0,commentSize[0]):<br />
+&nbsp; comment.append(struct.unpack(&quot;c&quot;,fid.read(1))[0])<br />
+print &quot;comment&quot;<br />
+print comment<br />
+<br />
+# image data<br />
+<br />
+fod = open(&quot;case.raw&quot;,&quot;wb&quot;)<br />
+<br />
+actual_data = [[0 for i in range(Nx[0])] for j in range(Ny[0])]<br />
+for i in xrange(0,Nx[0]):<br />
+&nbsp; for j in xrange(0,Ny[0]):<br />
+&nbsp; &nbsp; actual_data[i][j] = struct.unpack(&quot;f&quot;,fid.read(dataSize[0]))[0]<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; #data = fid.read(dataSize[0])<br />
+&nbsp; &nbsp; #fod.write(data)<br />
+<br />
+data = np.array(actual_data,dtype=&quot;float32&quot;)<br />
+#print data.dtype<br />
+#print data.ndim<br />
+#print data.shape<br />
+<br />
+#-----matplotlib-----<br />
+#plt.imshow(data)<br />
+#plt.show()<br />
+<br />
+#-----PIL-----<br />
+new_data = (((data - np.min(data)) / (np.max(data) - np.min(data))) * 255).astype(np.uint8)<br />
+pil_img = Image.fromarray(new_data)<br />
+pil_img.show()<br />
+#new_pil_img = pil_img.convert(&quot;L&quot;)<br />
+#new_pil_img.show()<br />
+#new_pil_img.save(&quot;case.png&quot;)<br />
+<br />
+fid.close()<br />
+fod.close()<br />
+-----<br />
+3. sed -i 's/\r//g' read.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place read.py)<br />
+4. chmod +x read.py<br />
+5. python read.py<br />
+(※ od wave.img | more)<br />
+<br />
+□ plot case_Proj.img<br />
+0. pip install numpy<br />
+&nbsp; pip install pillow<br />
+1. cp case_Proj.img &nbsp;case.img<br />
+2. gedit plot_tem.py<br />
+-----<br />
+from PIL import Image<br />
+import numpy as np<br />
+import struct<br />
+#import matplotlib.pyplot as plt<br />
+<br />
+fid = open(&quot;case.img&quot;,&quot;rb&quot;)<br />
+<br />
+# int data<br />
+header_size = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;header size: &quot;, header_size[0]<br />
+<br />
+paramSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;parameter size: &quot;, paramSize[0]<br />
+<br />
+commentSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;comment size: &quot;, commentSize[0]<br />
+<br />
+Nx = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Nx: number of pixels in x-direction, &quot;, Nx[0]<br />
+<br />
+Ny = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Ny: number of pixels in y-direction, &quot;, Ny[0]<br />
+<br />
+complexFlag = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Flag: complex(1) or real(0): &quot;, complexFlag[0]<br />
+<br />
+dataSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;Data size (byte unit): &quot;, dataSize[0]<br />
+<br />
+version = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+print &quot;version: &quot;,version[0]<br />
+<br />
+# double data<br />
+<br />
+t = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;sample thickness or defocus: &quot;, t[0]<br />
+<br />
+dx = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;dx: pixel size along x-direction, &quot;, dx[0], &quot; [Angstrom]&quot;<br />
+<br />
+dy = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+print &quot;dy: pixel size along y-direction, &quot;, dy[0], &quot; [Angstrom]&quot;<br />
+<br />
+# other data<br />
+<br />
+for i in range(0,paramSize[0]):<br />
+&nbsp; auxilliary_data = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; print auxilliary_data[0]<br />
+<br />
+comment = []<br />
+for i in xrange(0,commentSize[0]):<br />
+&nbsp; comment.append(struct.unpack(&quot;c&quot;,fid.read(1))[0])<br />
+print &quot;comment&quot;<br />
+print comment<br />
+<br />
+# image data<br />
+<br />
+fod = open(&quot;case.raw&quot;,&quot;wb&quot;)<br />
+<br />
+actual_data = [[0 for i in range(Nx[0])] for j in range(Ny[0])]<br />
+for i in xrange(0,Nx[0]):<br />
+&nbsp; for j in xrange(0,Ny[0]):<br />
+&nbsp; &nbsp; actual_data[i][j] = struct.unpack(&quot;f&quot;,fid.read(dataSize[0]))[0]<br />
+&nbsp; &nbsp; #<br />
+&nbsp; &nbsp; #data = fid.read(dataSize[0])<br />
+&nbsp; &nbsp; #fod.write(data)<br />
+<br />
+data = np.array(actual_data,dtype=&quot;float32&quot;)<br />
+#print data.dtype<br />
+#print data.ndim<br />
+#print data.shape<br />
+<br />
+#-----matplotlib-----<br />
+#plt.imshow(data)<br />
+#plt.show()<br />
+<br />
+#-----PIL-----<br />
+new_data = (255 - ((data - np.min(data)) / (np.max(data) - np.min(data))) * 255).astype(np.uint8)<br />
+pil_img = Image.fromarray(new_data)<br />
+pil_img.show()<br />
+#new_pil_img = pil_img.convert(&quot;L&quot;)<br />
+#new_pil_img.show()<br />
+#new_pil_img.save(&quot;case.png&quot;)<br />
+<br />
+fid.close()<br />
+fod.close()<br />
+-----<br />
+3. sed -i 's/\r//g' read.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place read.py)<br />
+4. chmod +x read.py<br />
+5. python read.py<br />
+(※ od wave.img | more)<br />
+------------------------------------------------------------------------------<br />
+■ case.data (structure data for lammps)<br />
+<br />
+e.g., *.data<br />
+----------<br />
+title<br />
+<br />
+2000 atoms<br />
+2 atom types<br />
+<br />
+0.0 ???? xlo xhi<br />
+0.0 ???? ylo yhi<br />
+0.0 ???? zlo yhi<br />
+<br />
+Atoms<br />
+<br />
+1 1 x y z<br />
+2 1 x y z<br />
+...<br />
+2000 2 x y z<br />
+----------<br />
+<br />
+□ vasp -&gt; rmca *.cif &gt; lammps *.data<br />
+1. ./vasp2cfg case<br />
+2. ./cfg2lmp case<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] cif2pos.sh<br />
+&nbsp; http://home.ustc.edu.cn/~lipai/scripts/vasp_scripts/bash_cif2pos.html<br />
+[2] cif2vasp<br />
+&nbsp; https://github.com/danmichaelo/cif2vasp<br />
+[3] cif2pos.py<br />
+&nbsp; https://code.google.com/archive/p/abinitotools/downloads<br />
+[4] Chemistry tools tutorials/scripts<br />
+&nbsp; https://kbsezginel.github.io/chem-tools-tutorials/openbabel<br />
+------------------------------------------------------------------------------<br />
+■ QSTEM (Ubuntu 18.04 LTS (64 bit)) (cfg file)<br />
+<br />
+□ lammps input file&nbsp;<br />
+1. gedit lmp.in<br />
+-----<br />
+# ----- Output setting ----- (add like this keywords)<br />
+dump &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;fqstem all cfg 1 case.*.cfg mass type xs ys zs # qstem cfg format<br />
+dump_modify &nbsp; &nbsp; fqstem element C H # element name<br />
+run &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1<br />
+# ----- Output setting -----&nbsp;<br />
+-----<br />
+2. lammps &lt; lmp.in<br />
+3. cp case.1.cfg case.cfg<br />
+<br />
+□ Usage (case is any file name)<br />
+1. ./lmp2tem_qsc case -kv 80 -lab6<br />
+&nbsp; (80 mean 80 kV)<br />
+&nbsp; e.g.,&nbsp;<br />
+&nbsp; ・ 200 kV, LaB6: ./lmp_data2cfg_qsc case -kv 200 -lab6<br />
+&nbsp; ・ &nbsp;80 kV, LaB6: ./lmp_data2cfg_qsc case -kv &nbsp;80 -lab6<br />
+&nbsp; ・ 200 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -fe -autoz<br />
+&nbsp; ・ &nbsp;80 kV, FE &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -fe<br />
+&nbsp; ・ 200 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv 200 -arm -autoz<br />
+&nbsp; ・ &nbsp;80 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;80 -arm<br />
+&nbsp; ・ &nbsp;30 kV, Correct-Cc &nbsp;: ./lmp_data2cfg_qsc case -kv &nbsp;30 -arm<br />
+2. ~/QSTEM/bin/stem3 tem.qsc<br />
+&nbsp; (~/QSTEM/bin/stem3 tem.qsc &gt; qstem.log)<br />
+3. cd case<br />
+4. cp case_Proj.img &nbsp;case.img<br />
+5. python read.py<br />
+6. python plot_tem.py<br />
+<br />
+□ lmp2tem_qsc (test version)<br />
+1. lmp2tem_qsc<br />
+-----<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+#<br />
+set x = `awk '{if($1 == &quot;H0(1,1)&quot;){print $3 }}' tmp.cfg`<br />
+set y = `awk '{if($1 == &quot;H0(2,2)&quot;){print $3 }}' tmp.cfg`<br />
+set z = `awk '{if($1 == &quot;H0(3,3)&quot;){print $3 }}' tmp.cfg`<br />
+#<br />
+# calculate number of slices<br />
+set thickness = ${z}<br />
+#<br />
+set slices = `echo ${thickness} | awk '{printf(&quot;%d&quot;,$1/2.0+0.5)}'`<br />
+set slice_thickness = `echo &quot;${thickness} ${slices}&quot; | awk '{printf(&quot;%f&quot;,$1/$2)}'`<br />
+#echo ${thickness}<br />
+#echo ${slices}<br />
+#<br />
+if (&quot;$2&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $3 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$3&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $4 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$4&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $5 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$5&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $6 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$6&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $7 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$7&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $8 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else if (&quot;$8&quot; == &quot;-kv&quot;) then<br />
+&nbsp; set v0 = `echo $9 | awk '{printf(&quot;%11.6f&quot;,$1)}'`<br />
+else<br />
+&nbsp; set v0 = 200.000000<br />
+endif<br />
+set lambda = `echo ${v0} | awk '{printf(&quot;%12.10f&quot;,12.26/10.0/(($1*10^3*(1+0.9788*10^-3*$1))^(1/2)))}'`<br />
+set defocus = `echo ${lambda} | awk '{printf(&quot;%f&quot;,-1.2*(1.0*$1)^(1/2)*1000)}'`<br />
+#echo ${lambda}<br />
+#echo ${defocus}<br />
+set resolutionX = `echo ${x} | awk '{printf(&quot;%f&quot;,$1/512)}'`<br />
+set resolutionY = `echo ${y} | awk '{printf(&quot;%f&quot;,$1/512)}'`<br />
+#<br />
+if (&quot;$2&quot; == &quot;-autoz&quot; || &quot;$3&quot; == &quot;-autoz&quot; || &quot;$4&quot; == &quot;-autoz&quot; || &quot;$5&quot; == &quot;-autoz&quot; || &quot;$6&quot; == &quot;-autoz&quot; || &quot;$7&quot; == &quot;-autoz&quot; || &quot;$8&quot; == &quot;-autoz&quot; || &quot;$9&quot; == &quot;-autoz&quot; || &quot;${10}&quot; == &quot;-autoz&quot;) then<br />
+&nbsp; set zOffset = `echo ${slice_thickness} | awk '{printf(&quot;%f&quot;,$1/2)}'`<br />
+else<br />
+&nbsp; set zOffset = 0.000000<br />
+endif<br />
+<br />
+if (&quot;$2&quot; == &quot;-lab6&quot; || &quot;$3&quot; == &quot;-lab6&quot; || &quot;$4&quot; == &quot;-lab6&quot; || &quot;$5&quot; == &quot;-lab6&quot; || &quot;$6&quot; == &quot;-lab6&quot; || &quot;$7&quot; == &quot;-lab6&quot; || &quot;$8&quot; == &quot;-lab6&quot; || &quot;$9&quot; == &quot;-lab6&quot; || &quot;${10}&quot; == &quot;-lab6&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,1.5/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 15.0 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 10<br />
+&nbsp; set beam_current = 20<br />
+else if (&quot;$2&quot; == &quot;-fe&quot; || &quot;$3&quot; == &quot;-fe&quot; || &quot;$4&quot; == &quot;-fe&quot; || &quot;$5&quot; == &quot;-fe&quot; || &quot;$6&quot; == &quot;-fe&quot; || &quot;$7&quot; == &quot;-fe&quot; || &quot;$8&quot; == &quot;-fe&quot; || &quot;$9&quot; == &quot;-fe&quot; || &quot;${10}&quot; == &quot;-fe&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,0.65/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 2<br />
+&nbsp; set beam_current = 20<br />
+else if (&quot;$2&quot; == &quot;-arm&quot; || &quot;$3&quot; == &quot;-arm&quot; || &quot;$4&quot; == &quot;-arm&quot; || &quot;$5&quot; == &quot;-arm&quot; || &quot;$6&quot; == &quot;-arm&quot; || &quot;$7&quot; == &quot;-arm&quot; || &quot;$8&quot; == &quot;-arm&quot; || &quot;$9&quot; == &quot;-arm&quot; || &quot;${10}&quot; == &quot;-arm&quot;) then<br />
+&nbsp; set dVV = `echo ${v0} | awk '{printf(&quot;%f&quot;,0.325/($1*1000))}'`<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.400000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 1<br />
+&nbsp; set beam_current = 20<br />
+else<br />
+&nbsp; set dVV = 0.000003<br />
+&nbsp; set Cs &nbsp;= 1.00000<br />
+&nbsp; set Cc &nbsp;= 1.000000<br />
+&nbsp; set alpha = 1.5 # 1.5 - 20 [mrad]<br />
+&nbsp; set Source_Size = 0<br />
+&nbsp; set beam_current = 1<br />
+endif<br />
+<br />
+if (&quot;$2&quot; == &quot;-tds&quot; || &quot;$3&quot; == &quot;-tds&quot; || &quot;$4&quot; == &quot;-tds&quot; || &quot;$5&quot; == &quot;-tds&quot; || &quot;$6&quot; == &quot;-tds&quot; || &quot;$7&quot; == &quot;-tds&quot; || &quot;$8&quot; == &quot;-tds&quot; || &quot;$9&quot; == &quot;-tds&quot; || &quot;${10}&quot; == &quot;-tds&quot;) then<br />
+&nbsp; set tds = &quot;yes&quot;<br />
+else<br />
+&nbsp; set tds = &quot;no&quot;<br />
+endif<br />
+<br />
+cat &lt;&lt; EOF &gt; tem.qsc<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+% STEM configuration file generated by qstem<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+mode: TEM<br />
+print level: 4 &nbsp;% indicates how much information in output<br />
+save level: &nbsp;3 &nbsp;% indicates how much information shall be saved<br />
+filename: ${filename}.cfg<br />
+resolutionX: &nbsp;${resolutionX}<br />
+resolutionY: &nbsp;${resolutionY}<br />
+NCELLX: 1<br />
+NCELLY: 1<br />
+NCELLZ: 1<br />
+v0: ${v0} &nbsp;% beam energy<br />
+tds: ${tds} % do NOT include thermal diffuse scattering<br />
+temperature: 298.000000 % temperature in Kelvin<br />
+slice-thickness: ${slice_thickness} &nbsp;% slice thckness in A<br />
+slices: ${slices} &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % number of different slices per slab in z-direction<br />
+center slices: no &nbsp; &nbsp; &nbsp; % do not center slices<br />
+slices between outputs: 10 &nbsp;% give intermediate results after every 8 slices<br />
+xOffset: &nbsp;0.000000 &nbsp; &nbsp; &nbsp;% slize x-position offset in cartesian coords<br />
+yOffset: &nbsp;0.000000 &nbsp; &nbsp; &nbsp;% slize y-position offset in cartesian coords<br />
+zOffset: &nbsp;${zOffset} &nbsp; &nbsp; &nbsp;% slize z-position offset in cartesian coords<br />
+periodicXY: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% not periodic in x- and y-direction<br />
+periodicZ: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % not periodic in z-direction<br />
+<br />
+% Geometrical properties<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+Crystal tilt X: 0.000000 &nbsp; &nbsp; &nbsp; &nbsp;% tilt in rad<br />
+Crystal tilt Y: 0.000000<br />
+Crystal tilt Z: 0.000000<br />
+Beam tilt X: 0.0 &nbsp; &nbsp; &nbsp; &nbsp;% beam tilt in mrad<br />
+Beam tilt Y: 0.0<br />
+Tilt back: no<br />
+<br />
+% TEM imaging parameters<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+nx: 512 &nbsp; &nbsp; &nbsp; &nbsp; % array size used for probe<br />
+ny: 512 &nbsp; &nbsp; &nbsp; &nbsp; % ny = nx, if not specified<br />
+Cs: ${Cs} &nbsp; &nbsp; &nbsp; % Speherical abberation in mm<br />
+C5: 0.000000 &nbsp; &nbsp;% C_5 abberation in mm<br />
+Cc: ${Cc} &nbsp; &nbsp; &nbsp; % Chromatic abberation in mm<br />
+dV/V: ${dVV} &nbsp; &nbsp;% energy spread in eV (FWHM)<br />
+alpha: ${alpha} &nbsp;% Illumination angle in mrad<br />
+defocus: ${defocus}<br />
+astigmatism: 0.000000<br />
+astigmatism angle: 0.000000<br />
+<br />
+<br />
+Source Size (diameter): ${Source_Size} &nbsp;% source size in A<br />
+beam current: ${beam_current} &nbsp; &nbsp; &nbsp; &nbsp;% beam current in pA (default: 1)<br />
+dwell time: 1000 &nbsp; &nbsp; &nbsp; &nbsp;% dwell time in msec (default: 1) (GUI 1.6021773e-4)<br />
+smooth: yes &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; % smoothen edge of probe in rec. space<br />
+gaussian: no<br />
+% Parameters for potential calculation<br />
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%<br />
+<br />
+potential3D: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;yes &nbsp;% use 3D or 2D potential (3D realistically simulates z-motion of atoms)<br />
+atom radius: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;5.0 &nbsp; &nbsp; &nbsp; % radius used for calculation of proj potential V_proj(r)<br />
+plot V(r)*r: &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;no &nbsp; &nbsp; &nbsp; &nbsp;% will create a plot for V_proj(r)*r vs. r &nbsp;for all slices and 1st atom<br />
+bandlimit f_trans: &nbsp; &nbsp;no &nbsp; &nbsp; &nbsp; &nbsp;% indicate whether to band limit transmission function or not<br />
+save potential: &nbsp; &nbsp; &nbsp; no &nbsp; &nbsp; &nbsp; &nbsp;% whether we want to save the projected potential in files<br />
+save projected potential: &nbsp; &nbsp; &nbsp; yes &nbsp; &nbsp; % whether we want to save the total projected potential<br />
+one time integration: yes &nbsp;% calculate V_proj once and then copy (much faster)<br />
+Display Gamma: 0 &nbsp; &nbsp; % Gamma value for image scaling (0 = logarithmic)<br />
+Folder: &quot;${filename}&quot;<br />
+Runs for averaging: 30 &nbsp;% averaging over 30 images for TDS simulation<br />
+Structure Factors: WK<br />
+show Probe: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% displays a graph of the crosssection of the inc. e-beam<br />
+propagation progress interval: 10 % show progress every N_prop_prog beam positions<br />
+potential progress interval: 1000 % show progress every N_pot_prog atoms<br />
+update Web: no &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;% put results on web page<br />
+Pendelloesung plot: no &nbsp;% flag indicates whether to store Pendeloesung plot<br />
+sequence: 1 1<br />
+EOF<br />
+-----<br />
+2. sed -i 's/\r//g' lmp2tem_qsc<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place lmp2tem_qsc)<br />
+3. chmod +x lmp2tem_qsc<br />
+4. ./lmp2tem_qsc case -kv 80 -lab6<br />
+※ e.g., case.cfg, 80 kV<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

@@ -1,0 +1,397 @@
+PWscf (IR and Raman calculation)<br />
+--------------------------------------------------------------------------------<br />
+■ PWscf (compiling and tests)<br />
+<br />
+◇ PWscf (Install, gfortran)<br />
+0. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz<br />
+&nbsp; wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libopenblas-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install gnuplot<br />
+1. tar zxvf qe-6.4.1.tar.gz<br />
+2. cd q-e-qe-6.4.1<br />
+3. patch -p1 --merge &lt; backports-6.4.1.diff<br />
+4. ./configure<br />
+5. make pwall<br />
+<br />
+◇ Test<br />
+1. cd $HOME/q-e-qe-6.4.1/test-suite<br />
+2. make run-tests-pw-parallel<br />
+<br />
+◇ Test (Car-Parrinello)<br />
+1. cd $HOME/q-e-qe-6.4.1/test-suite<br />
+2. make run-tests-cp-parallel<br />
+--------------------------------------------------------------------------------<br />
+■ Phonon, IR and Raman calculation (Examples)<br />
+<br />
+・example05 (AlAs at Gamma point, phonon)<br />
+1. cd ~/q-e-qe-6.4.1/PHonon/examples<br />
+2. cd example05<br />
+3. ./run_example<br />
+<br />
+・example12 (SiH4 at Gamma point, IR)<br />
+1. cd ~/q-e-qe-6.4.1/PHonon/examples<br />
+2. cd example12<br />
+3. ./run_example<br />
+4. cd results<br />
+5. gedit sih4.dyn.out<br />
+<br />
+・example15 (CO2 and ZnO, IR and Raman)<br />
+1. cd ~/q-e-qe-6.4.1/PHonon/examples<br />
+2. cd example15<br />
+3. ./run_example<br />
+--------------------------------------------------------------------------------<br />
+■ Usage<br />
+<br />
+□ alpha-MgH2 (IR and Raman)<br />
+(cif2cell: cif2cell-informal type)<br />
+(alpha-MgH2: https://materialsproject.org/materials/mp-23710/)<br />
+1. cd ~/q-e-qe-6.4.1/pseudo<br />
+&nbsp; (copy (Ctrl+C) and paste (Ctrl+V) pseudoptentials, e.g., H and Mg)<br />
+&nbsp; ----------<br />
+&nbsp; Raman and IR need NORMCONS and LDA(=pz)<br />
+&nbsp; (https://www.quantum-espresso.org/pseudopotentials/hartwigesen-goedecker-hutter-pp)<br />
+&nbsp; wget http://www.quantum-espresso.org/upf_files/H.pz-hgh.UPF<br />
+&nbsp; wget http://www.quantum-espresso.org/upf_files/Mg.pz-hgh.UPF<br />
+&nbsp; ----------<br />
+2. cd ~/q-e-qe-6.4.1/PHonon/examples<br />
+3. cp -f -r example15 mgh2<br />
+4. cd mgh2<br />
+5. cif2cell -p pwscf --setup-all --print-symmetry-operations --pwscf-atomic-units --pwscf-pseudo-PSLibrary-libdr=$HOME/q-e-qe-6.4.1/pseudo -f MgH2_mp-23710_conventional_standard.cif<br />
+6. gedit run_example<br />
+-----(delete CO2 section)<br />
+# clean TMP_DIR<br />
+$ECHO &quot; &nbsp;cleaning $TMP_DIR...\c&quot;<br />
+rm -rf $TMP_DIR/CO2*<br />
+rm -rf $TMP_DIR/_ph0/CO2*<br />
+$ECHO &quot; done&quot;<br />
+<br />
+# self-consistent calculation for CO2<br />
+cat &gt; co2.scf.in &lt;&lt; EOF<br />
+&amp;CONTROL<br />
+&nbsp; calculation &nbsp;= &quot;scf&quot;,<br />
+&nbsp; prefix &nbsp; &nbsp; &nbsp; = &quot;CO2&quot;,<br />
+&nbsp; pseudo_dir &nbsp; = &quot;$PSEUDO_DIR&quot;,<br />
+&nbsp; outdir &nbsp; &nbsp; &nbsp; = &quot;$TMP_DIR&quot;,<br />
+/<br />
+&amp;SYSTEM<br />
+&nbsp; ibrav &nbsp; &nbsp; = 1,<br />
+&nbsp; celldm(1) =14.0,<br />
+&nbsp; nat &nbsp; &nbsp; &nbsp; = 3,<br />
+&nbsp; ntyp &nbsp; &nbsp; &nbsp;= 2,<br />
+&nbsp; ecutwfc &nbsp; = 80.D0, !better 120<br />
+/<br />
+&amp;ELECTRONS<br />
+&nbsp; conv_thr &nbsp; &nbsp;= 1.D-8,<br />
+&nbsp; mixing_beta = 0.7,<br />
+/<br />
+&amp;IONS<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; C 12.010 &nbsp;C.pbe-hgh.UPF<br />
+&nbsp; O 15.999 &nbsp;O.pbe-hgh.UPF<br />
+ATOMIC_POSITIONS (angstrom)<br />
+C &nbsp; &nbsp; &nbsp; &nbsp;3.000042068 &nbsp; 3.000042068 &nbsp; 3.544613556<br />
+O &nbsp; &nbsp; &nbsp; &nbsp;3.835408973 &nbsp; 3.835408973 &nbsp; 3.543705292<br />
+O &nbsp; &nbsp; &nbsp; &nbsp;2.164548959 &nbsp; 2.164548959 &nbsp; 3.543681153<br />
+K_POINTS (automatic)<br />
+1 1 1 0 0 0<br />
+EOF<br />
+<br />
+$ECHO &quot; &nbsp;running the SCF for CO2...\c&quot;<br />
+$PW_COMMAND &lt; co2.scf.in &gt; co2.scf.out<br />
+check_failure $?<br />
+$ECHO &quot; done&quot;<br />
+<br />
+# self-consistent phonon calculation with ph.x for CO2<br />
+cat &gt; co2.ph.in &lt;&lt; EOF<br />
+Normal modes for CO2<br />
+&nbsp;&amp;inputph<br />
+&nbsp; tr2_ph=1.0d-14,<br />
+&nbsp; prefix='CO2',<br />
+&nbsp; amass(1)=12.010,<br />
+&nbsp; amass(2)=15.999,<br />
+&nbsp; outdir='$TMP_DIR'<br />
+&nbsp; epsil=.true.,<br />
+&nbsp; trans=.true.,<br />
+&nbsp; asr=.true.<br />
+&nbsp; ! lraman=.true.<br />
+&nbsp; fildyn='dmat.co2'<br />
+&nbsp;/<br />
+&nbsp;0.0 0.0 0.0<br />
+EOF<br />
+$ECHO &quot; &nbsp;running phonon calculation of CO2...\c&quot;<br />
+$PH_COMMAND &lt; co2.ph.in &gt; co2.ph.out<br />
+check_failure $?<br />
+$ECHO &quot; done&quot;<br />
+<br />
+# extract phonon data with dynmat.x<br />
+cat &gt; co2.dm.in &lt;&lt; EOF<br />
+&nbsp;&amp;input fildyn='dmat.co2', asr='zero-dim' /<br />
+EOF<br />
+$ECHO &quot; Extracting phonon data with dynmat...\c&quot;<br />
+$DM_COMMAND &lt; co2.dm.in &gt; co2.dm.out<br />
+check_failure $?<br />
+$ECHO &quot; done&quot;<br />
+<br />
+$ECHO &quot;The data for spectrum is after '# mode &nbsp; [cm-1] &nbsp; &nbsp;[THz] &nbsp; &nbsp; &nbsp;IR' on &nbsp;co2.dm.out&quot;<br />
+awk 'NR==1,/mode/{next}/DYNMAT/,NR==0{next}{print}' co2.dm.out &gt; plotdata_co2.dat<br />
+<br />
+$ECHO &quot;Trying to plot it with gnuplot...&quot;<br />
+<br />
+cat &gt; plot_command_co2.cmd &lt;&lt; EOF<br />
+&nbsp;set lmargin 8<br />
+&nbsp;set rmargin 3<br />
+&nbsp;<br />
+&nbsp;set multiplot<br />
+&nbsp;set key left top<br />
+&nbsp;set origin 0.0,0.5<br />
+&nbsp;set size 1,0.5<br />
+&nbsp;set yrange [0:]&nbsp;<br />
+&nbsp;set format x &quot;&quot;<br />
+&nbsp;set tmargin 1<br />
+&nbsp;plot 'plotdata_co2.dat' u (\$2):(\$3) title ' CO2-RAMAN' w i lw 2<br />
+<br />
+&nbsp;set key left bottom<br />
+&nbsp;set origin 0.0,0.0<br />
+&nbsp;set size 1,0.587<br />
+&nbsp;set yrange [0:] reverse<br />
+&nbsp;set format x<br />
+&nbsp;set xlabel &quot;Wavenumber [cm-1]&quot;<br />
+&nbsp;set bmargin 3<br />
+&nbsp;set ylabel &quot;Intensity&quot; offset 0,5<br />
+&nbsp;plot 'plotdata_co2.dat' u (\$2):(\$4) title 'CO2-IR' w i lw 2 lc 2&nbsp;<br />
+&nbsp;set nomultiplot<br />
+EOF<br />
+<br />
+if [ &quot;$GP_COMMAND&quot; = &quot;&quot; ]; then<br />
+&nbsp; &nbsp; $ECHO &quot;No plot will be produced, because gnuplot was not found in the \$PATH &quot;<br />
+&nbsp; &nbsp; break<br />
+else<br />
+&nbsp; $GP_COMMAND -persist plot_command_co2.cmd &amp;<br />
+&nbsp; &nbsp;<br />
+fi<br />
+-----<br />
+7. gedit run_example<br />
+----------(modify ZnO section)<br />
+# self-consistent calculation for Wurtzite (ZnO)<br />
+cat &gt; zno.scf.in &lt;&lt; EOF<br />
+&amp;CONTROL<br />
+&nbsp; calculation &nbsp;= &quot;scf&quot;,<br />
+&nbsp; prefix &nbsp; &nbsp; &nbsp; = &quot;ZNO&quot;,<br />
+&nbsp; pseudo_dir &nbsp; = &quot;$PSEUDO_DIR&quot;,<br />
+&nbsp; outdir &nbsp; &nbsp; &nbsp; = &quot;$TMP_DIR&quot;,<br />
+/<br />
+&amp;SYSTEM<br />
+&nbsp; ibrav=0, celldm(1) =8.52624, nat=6, ntyp= 2,<br />
+&nbsp; ! occupations='smearing', smearing='mp', degauss=0.02,<br />
+&nbsp; ecutwfc =58.0, ! ecutrho = 385.0,&nbsp;<br />
+/<br />
+&amp;ELECTRONS<br />
+&nbsp; !mixing_mode='plain'<br />
+&nbsp; !mixing_beta = 0.5,<br />
+&nbsp; !startingwfc='random',<br />
+&nbsp; conv_thr = 4.4e-04 ,<br />
+&nbsp; mixing_beta = 0.7 ,<br />
+/<br />
+CELL_PARAMETERS {alat}<br />
+&nbsp; 1.000000000000000 &nbsp; 0.000000000000000 &nbsp; 0.000000000000000<br />
+&nbsp; 0.000000000000000 &nbsp; 1.000000000000000 &nbsp; 0.000000000000000<br />
+&nbsp; 0.000000000000000 &nbsp; 0.000000000000000 &nbsp; 0.668394124036577<br />
+ATOMIC_SPECIES<br />
+&nbsp; &nbsp;H &nbsp; &nbsp;1.00750 &nbsp;H.pbe-kjpaw_psl.1.0.0.UPF<br />
+&nbsp; Mg &nbsp; 24.30500 &nbsp;Mg.pbe-spnl-kjpaw_psl.1.0.0.UPF<br />
+ATOMIC_POSITIONS {crystal}<br />
+&nbsp; Mg &nbsp; 0.000000000000000 &nbsp; 0.000000000000000 &nbsp; 0.500000000000000<br />
+&nbsp; Mg &nbsp; 0.500000000000000 &nbsp; 0.500000000000000 &nbsp; 0.000000000000000<br />
+&nbsp; &nbsp;H &nbsp; 0.195920000000000 &nbsp; 0.195920000000000 &nbsp; 0.000000000000000<br />
+&nbsp; &nbsp;H &nbsp; 0.804080000000000 &nbsp; 0.804080000000000 &nbsp; 0.000000000000000<br />
+&nbsp; &nbsp;H &nbsp; 0.695920000000000 &nbsp; 0.304080000000000 &nbsp; 0.500000000000000<br />
+&nbsp; &nbsp;H &nbsp; 0.304080000000000 &nbsp; 0.695920000000000 &nbsp; 0.500000000000000<br />
+K_POINTS automatic<br />
+&nbsp; 7 7 10 &nbsp;0 0 0<br />
+<br />
+EOF<br />
+----------<br />
+8. gedit run_example<br />
+----------(modify ZnO section)<br />
+# self-consistent phonon calculation with ph.x for Wurtzite<br />
+cat &gt; zno.ph.in &lt;&lt; EOF<br />
+Normal modes for Wurtzite<br />
+&nbsp;&amp;inputph<br />
+&nbsp; tr2_ph=1.0d-12,<br />
+&nbsp; niter_ph = 99,<br />
+&nbsp; alpha_mix(1) = 0.7,<br />
+&nbsp; prefix='ZNO',<br />
+&nbsp; outdir='$TMP_DIR'<br />
+&nbsp; epsil=.true.,<br />
+&nbsp; ! Metal (no or small gap) case: occupations='smearing', smearing='mp', degauss=0.02,<br />
+&nbsp; lraman=.true.<br />
+&nbsp; trans=.true.,<br />
+&nbsp; asr=.true.<br />
+&nbsp; fildyn='dmat.zno'<br />
+&nbsp;/s<br />
+&nbsp;0.0 0.0 0.0<br />
+EOF<br />
+----------<br />
+9. gedit run_example<br />
+----------before<br />
+&nbsp;plot 'plotdata_zno.dat' u (\$2):(\$3) title ' ZnO-RAMAN' w i lw 2<br />
+<br />
+&nbsp;plot 'plotdata_zno.dat' u (\$2):(\$4) title 'ZnO-IR' w i lw 2 lc 2<br />
+----------<br />
+----------after<br />
+&nbsp;plot 'plotdata_zno.dat' u (\$2):(\$5) title ' MgH2-RAMAN' w i lw 2<br />
+<br />
+&nbsp;plot 'plotdata_zno.dat' u (\$2):(\$4) title 'MgH2-IR' w i lw 2 lc 2<br />
+----------<br />
+10. export OMP_NUM_THREADS=1<br />
+11. ./run_example<br />
+(12. cd results)<br />
+(13. gnuplot<br />
+&nbsp; plot &quot;plotdata_zno.dat&quot; u 2:5 t &quot;MgH2-Raman&quot; w i<br />
+&nbsp; plot &quot;plotdata_zno.dat&quot; u 2:4 t &quot;MgH2-IR&quot; w i<br />
+&nbsp; q)<br />
+(14. cat zno.dm.out<br />
+-----<br />
+&nbsp; &nbsp; &nbsp;IR activities are in (D/A)^2/amu units<br />
+&nbsp; &nbsp; &nbsp;Raman activities are in A^4/amu units<br />
+&nbsp; &nbsp; &nbsp;multiply Raman by 0.230470 for Clausius-Mossotti correction<br />
+<br />
+# mode &nbsp; [cm-1] &nbsp; &nbsp;[THz] &nbsp; &nbsp; &nbsp;IR &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Raman &nbsp; depol.fact<br />
+&nbsp; &nbsp; 1 &nbsp; &nbsp; -0.00 &nbsp; -0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp; 0.9778 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 2 &nbsp; &nbsp; -0.00 &nbsp; -0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp; 0.1296 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 3 &nbsp; &nbsp; -0.00 &nbsp; -0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp; 0.1701 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 4 &nbsp; &nbsp; &nbsp;0.00 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp; 0.6117 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 5 &nbsp; &nbsp; &nbsp;0.00 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp; 0.6239 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 6 &nbsp; &nbsp; &nbsp;0.00 &nbsp; &nbsp;0.0000 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp;13.9060 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 7 &nbsp; &nbsp;255.33 &nbsp; &nbsp;7.6546 &nbsp; &nbsp;0.1850 &nbsp; &nbsp; &nbsp; &nbsp; 0.7746 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 8 &nbsp; &nbsp;461.70 &nbsp; 13.8415 &nbsp; 15.2725 &nbsp; &nbsp; &nbsp; &nbsp; 5.6890 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp; 9 &nbsp; &nbsp;531.66 &nbsp; 15.9387 &nbsp; 36.5107 &nbsp; &nbsp; &nbsp; &nbsp; 0.2794 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;10 &nbsp; &nbsp;561.81 &nbsp; 16.8427 &nbsp; 45.0249 &nbsp; &nbsp; &nbsp; &nbsp; 6.4872 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;11 &nbsp; &nbsp;724.27 &nbsp; 21.7130 &nbsp; &nbsp;7.5499 &nbsp; &nbsp; &nbsp; &nbsp; 5.2992 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;12 &nbsp; &nbsp;777.90 &nbsp; 23.3208 &nbsp; 11.7545 &nbsp; &nbsp; &nbsp; &nbsp; 7.7135 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;13 &nbsp; &nbsp;892.50 &nbsp; 26.7563 &nbsp; 76.1261 &nbsp; &nbsp; &nbsp; &nbsp;17.4030 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;14 &nbsp; 1077.42 &nbsp; 32.3002 &nbsp; 34.6215 &nbsp; &nbsp; &nbsp; &nbsp;15.7278 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;15 &nbsp; 1104.60 &nbsp; 33.1151 &nbsp; 32.7491 &nbsp; &nbsp; &nbsp; &nbsp; 7.6968 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;16 &nbsp; 1135.33 &nbsp; 34.0363 &nbsp; 10.9705 &nbsp; &nbsp; &nbsp; &nbsp; 1.7805 &nbsp; &nbsp;0.7500<br />
+&nbsp; &nbsp;17 &nbsp; 1247.12 &nbsp; 37.3876 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp;29.7457 &nbsp; &nbsp;0.6480<br />
+&nbsp; &nbsp;18 &nbsp; 1409.62 &nbsp; 42.2593 &nbsp; &nbsp;0.0000 &nbsp; &nbsp; &nbsp; &nbsp;18.2452 &nbsp; &nbsp;0.7500<br />
+-----)<br />
+※ if you use &quot;zno&quot; and &quot;ZNO&quot;, please replace them to other words. e.g., &quot;mgh2&quot; and &quot;MgH2&quot;<br />
+※ Metal (no gap) or q/=0 case: epsil=.false.<br />
+※ Metal (no or small gap) case: occupations='smearing', smearing='mp', degauss=0.02,<br />
+<br />
+<br />
+□ settings<br />
+1. cd ~/q-e-qe-6.4.1<br />
+2. gedit environment_variables<br />
+-----before<br />
+PARA_PREFIX=&quot; &quot;<br />
+PARA_PREFIX=&quot;mpirun -np 4&quot;<br />
+<br />
+PARA_POSTFIX=&quot; -nk 1 -nd 1 -nb 1 -nt 1 &quot;<br />
+<br />
+PARA_IMAGE_POSTFIX=&quot;-ni 2 $PARA_POSTFIX&quot;<br />
+PARA_IMAGE_PREFIX=&quot;mpirun -np 4&quot;<br />
+-----<br />
+-----after (e.g.,6 core)<br />
+PARA_PREFIX=&quot; &quot;<br />
+PARA_PREFIX=&quot;mpirun -np 6&quot;<br />
+<br />
+PARA_POSTFIX=&quot; -nk 1 -nd 6 -nb 1 -nt 1 &quot;<br />
+<br />
+PARA_IMAGE_POSTFIX=&quot;-ni 6 $PARA_POSTFIX&quot;<br />
+PARA_IMAGE_PREFIX=&quot;mpirun -np 6&quot;<br />
+-----<br />
+<br />
+<br />
+□ MgH2 information<br />
+(MgH2: alpha(P42/mnm) &gt; gamma(Pbcn) &gt; beta(Pa3) &gt; delta (Pbc2) (unstable) &gt; epsilon(Pnma))<br />
+(MgH2: I41/amd, metastable)<br />
+(alpha-MgH2: https://materialsproject.org/materials/mp-23710/)<br />
+<br />
+[1] PWscf (IR and Raman calculation) (Youtube)<br />
+&nbsp; &nbsp;https://www.youtube.com/watch?v=gKn7vRRn5wY<br />
+--------------------------------------------------------------------------------<br />
+■ other code<br />
+<br />
+・RAMAN<br />
+&nbsp; http://flex.phys.tohoku.ac.jp/~tatsumi/abinitio-raman.html<br />
+--------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] &quot;Hands On: IR and Raman &quot;<br />
+&nbsp; http://www.iiserpune.ac.in/~smr2626/talks-presentations.html<br />
+&nbsp; http://www.iiserpune.ac.in/~smr2626/hands_on/&nbsp;<br />
+[2] Quantum-ESPRESSOで振動モードを計算する時のメモ<br />
+&nbsp; http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?QE%A4%C7%A4%CE%BF%B6%C6%B0%A5%E2%A1%BC%A5%C9%B7%D7%BB%BB%A5%E1%A5%E2<br />
+--------------------------------------------------------------------------------<br />
+■ Appendix (QHA compiling and tests for PWscf-6.4.1)<br />
+<br />
+◇ QHA (Install, gfortran)<br />
+1. cd $HOME/q-e-qe-6.4.1/QHA<br />
+2. cd Debye<br />
+&nbsp; gedit Makefile<br />
+&nbsp; -----after<br />
+&nbsp; FC = ifort<br />
+&nbsp;&nbsp;<br />
+&nbsp; FFLAGS = -O3<br />
+&nbsp; -----<br />
+&nbsp; -----before<br />
+&nbsp; FC = gfortran<br />
+&nbsp;&nbsp;<br />
+&nbsp; FFLAGS = -O2<br />
+&nbsp; -----<br />
+&nbsp; cd ..<br />
+3. cd Phonon_DOS<br />
+&nbsp; gedit Makefile<br />
+&nbsp; -----after<br />
+&nbsp; FC = ifort<br />
+&nbsp;&nbsp;<br />
+&nbsp; FFLAGS = -O3<br />
+&nbsp; -----<br />
+&nbsp; -----before<br />
+&nbsp; FC = gfortran<br />
+&nbsp;&nbsp;<br />
+&nbsp; FFLAGS = -O2<br />
+&nbsp; -----<br />
+&nbsp; cd ..<br />
+4. cd SRC<br />
+&nbsp; gedit Makefile<br />
+&nbsp; -----after<br />
+&nbsp; FC = ifort<br />
+&nbsp; -----<br />
+&nbsp; -----before<br />
+&nbsp; FC = gfortran<br />
+&nbsp; -----<br />
+&nbsp; cd ..<br />
+5. ./Compile<br />
+<br />
+◇ Examples (Si)<br />
+1. cd ~/q-e-qe-6.4.1/QHA/Examples<br />
+2. cd Si<br />
+3. ./Run_Me<br />
+4. gnuplot<br />
+&nbsp; plot &quot;projected.DOS&quot; w l<br />
+&nbsp; q<br />
+<br />
+◇ Examples (Al)<br />
+1. cd ~/q-e-qe-6.4.1/QHA/Examples<br />
+2. cd Al<br />
+3. ./Run_Me<br />
+4. gnuplot<br />
+&nbsp; plot &quot;projected.DOS&quot; w l<br />
+&nbsp; q<br />
+<br />
+◇ Examples (AlAs)<br />
+1. cd ~/q-e-qe-6.4.1/QHA/Examples<br />
+2. cd AlAs<br />
+3. ./Run_Me<br />
+4. gnuplot<br />
+&nbsp; plot &quot;projected.DOS&quot; w l<br />
+&nbsp; q<br />
+--------------------------------------------------------------------------------

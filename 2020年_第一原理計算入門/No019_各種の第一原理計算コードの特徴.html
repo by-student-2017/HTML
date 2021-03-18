@@ -1,0 +1,313 @@
+　ここでは各種の第一原理計算コード（主にバンド計算コード）の特徴についてまとめる<br />
+------------------------------------------------------------------------------<br />
+■ 精度について<br />
+&nbsp; 全電子計算法のために精度が最も高いと言われるWIEN2kと比較して、VASPでの精度が文献[1]で議論されています。このWIEN2kと擬ポテンシャル法による第一原理計算法での各種コードの結果を比較したものが文献[2]にあります。PAWの擬ポテンシャル法を用いたAbinit（free）やVASP（non-free）、GPAW（free）はWIEN2kと比較しても、精度がそれほど悪くないことが分かります。&nbsp;Elkと比較した文献[4]もあります。<br />
+[1] <a href="http://arxiv.org/abs/1204.2733">http://arxiv.org/abs/1204.2733</a>&nbsp;( <a href="http://arxiv.org/pdf/1204.2733v3.pdf">http://arxiv.org/pdf/1204.2733v3.pdf</a>&nbsp;)<br />
+[2] <a href="http://molmod.ugent.be/DeltaCodesDFT">http://molmod.ugent.be/DeltaCodesDFT</a>　<br />
+[3] <a href="https://www.nsc.liu.se/~pla/blog/2014/02/21/deltacodes/">https://www.nsc.liu.se/~pla/blog/2014/02/21/deltacodes/</a><br />
+[4] <a href="http://arxiv.org/abs/1404.3015">http://arxiv.org/abs/1404.3015</a><br />
+※ このHPでFe<sub>2</sub>VAlについてDOSを描画してみましたが、Full potential である Elk 程度の精度であれば良いと思います。<br />
+「以前は、全エネルギーの計算精度は、全電子L/APW法が最も優れていると言われていたが、L/APW法の利点をPP法のプログラムでも扱えるようにしたProjector Augmented Wave (PAW) 法により、VASPなどのPlane Wave-Pseudo Potential (PW-PP)法プログラムでも同程度の高精度計算が可能になり、現在広く使われるようになっている」　日本金属学会関東支部『ここまでできる。計算材料科学入門』<br />
+<br />
+Table 1. Delta-factor of open source code, except WIEN2k, VASP and CASTEP. (&nbsp;Ref.&nbsp;<a href="http://molmod.ugent.be/DeltaCodesDFT">http://molmod.ugent.be/DeltaCodesDFT</a> )&nbsp;
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 547.84px;">
+	<tbody>
+		<tr>
+			<td>code</td>
+			<td>Version</td>
+			<td>Basis</td>
+			<td style="width: 80.85px;">Potentials</td>
+			<td style="width: 79.14px;">delta-factor (meV/atom)</td>
+			<td style="width: 90.84px;">Authors</td>
+		</tr>
+		<tr>
+			<td>WIEN2k</td>
+			<td>13.1</td>
+			<td>LAPW+LO/APW+lo</td>
+			<td style="width: 80.85px;">full</td>
+			<td style="width: 79.14px;">0</td>
+			<td style="width: 90.84px;">S. Cottenier</td>
+		</tr>
+		<tr>
+			<td>PWscf</td>
+			<td>5.1</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">SSSP (mixed NC/US/PAW)</td>
+			<td style="width: 79.14px;">0.3</td>
+			<td style="width: 90.84px;">Quantum ESPRESSO [9]</td>
+		</tr>
+		<tr>
+			<td>CASTEP</td>
+			<td>8.0</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">OTFG CASTEP 8.0</td>
+			<td style="width: 79.14px;">0.5</td>
+			<td style="width: 90.84px;">CASTEP [7]</td>
+		</tr>
+		<tr>
+			<td>Abinit</td>
+			<td>7.7.3</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW <a href="http://www.abinit.org/downloads/PAW2">JTH v0.2</a></td>
+			<td style="width: 79.14px;">0.6</td>
+			<td style="width: 90.84px;">F. Jollet&nbsp;et al.&nbsp;[6]</td>
+		</tr>
+		<tr>
+			<td>VASP</td>
+			<td>5.2.12</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW 2012</td>
+			<td style="width: 79.14px;">0.7</td>
+			<td style="width: 90.84px;">K. Lejaeghere</td>
+		</tr>
+		<tr>
+			<td>VASP</td>
+			<td>5.2.12</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW 2012 GW-ready</td>
+			<td style="width: 79.14px;">0.8</td>
+			<td style="width: 90.84px;">K. Lejaeghere</td>
+		</tr>
+		<tr>
+			<td>Abinit</td>
+			<td>7.5.3</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW <a href="http://www.abinit.org/downloads/PAW2/OLD-VERSIONS/JTH-TABLE-0.1/index.html">JTH</a></td>
+			<td style="width: 79.14px;">1.2</td>
+			<td style="width: 90.84px;">F. Jollet et al. [3]</td>
+		</tr>
+		<tr>
+			<td>Abinit</td>
+			<td>7.1.2</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">GPAW PAW <a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html">0.9</a> (40Ha cut-off)</td>
+			<td style="width: 79.14px;">1.3</td>
+			<td style="width: 90.84px;">F. Jollet et al. [3]</td>
+		</tr>
+		<tr>
+			<td>GPAW</td>
+			<td>0.9.1</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW <a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html">0.9</a></td>
+			<td style="width: 79.14px;">1.5</td>
+			<td style="width: 90.84px;">ASE [2]</td>
+		</tr>
+		<tr>
+			<td>PWscf</td>
+			<td>5.0.2</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW <a href="http://theossrv1.epfl.ch/Main/Pseudopotentials">0.3.1</a></td>
+			<td style="width: 79.14px;">1.8</td>
+			<td style="width: 90.84px;">Quantum ESPRESSO [5]</td>
+		</tr>
+		<tr>
+			<td>OpenMX</td>
+			<td>3.7</td>
+			<td>pseudo-atomic orbitals</td>
+			<td style="width: 80.85px;">Morrison-Bylander-Kleinman norm-conserving (<a href="http://www.jaist.ac.jp/~t-ozaki/vps_pao2013/">2013</a>)</td>
+			<td style="width: 79.14px;">2.0</td>
+			<td style="width: 90.84px;">OpenMX [4]</td>
+		</tr>
+		<tr>
+			<td>VASP</td>
+			<td>5.2.2</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">PAW 2011</td>
+			<td style="width: 79.14px;">2.1</td>
+			<td style="width: 90.84px;">F. Jollet et al. [1]</td>
+		</tr>
+		<tr>
+			<td>Elk</td>
+			<td>2.3.22 ?</td>
+			<td>LAPW+lo</td>
+			<td style="width: 80.85px;">full</td>
+			<td style="width: 79.14px;">2.7</td>
+			<td style="width: 90.84px;">E. K&uml;u&cedil;c&uml;ukbenli et al. [8]</td>
+		</tr>
+		<tr>
+			<td>GPAW</td>
+			<td>0.8.0</td>
+			<td>gride-based</td>
+			<td style="width: 80.85px;">PAW <a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html">0.6</a></td>
+			<td style="width: 79.14px;">3.8</td>
+			<td style="width: 90.84px;">F. Jollet et al. [1]</td>
+		</tr>
+		<tr>
+			<td>CASTEP</td>
+			<td>8.0</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">OTFG CASTEP 7.0</td>
+			<td style="width: 79.14px;">2.4</td>
+			<td style="width: 90.84px;">CASTEP [7]</td>
+		</tr>
+		<tr>
+			<td>CASTEP</td>
+			<td>8.0</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">OTFG Materials Studio</td>
+			<td style="width: 79.14px;">3.4</td>
+			<td style="width: 90.84px;">CASTEP [7]</td>
+		</tr>
+		<tr>
+			<td>Dacapo</td>
+			<td>2.7.16</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">Vanderbilt Ultrasoft <a href="https://wiki.fysik.dtu.dk/dacapo/Pseudopotential_Library">version 2</a></td>
+			<td style="width: 79.14px;">6.2</td>
+			<td style="width: 90.84px;">ASE [2]</td>
+		</tr>
+		<tr>
+			<td>CASTEP</td>
+			<td>8.0</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">Vanderbilt ultrasoft</td>
+			<td style="width: 79.14px;">7.7</td>
+			<td style="width: 90.84px;">CASTEP [7]</td>
+		</tr>
+		<tr>
+			<td>Abinit</td>
+			<td>5.4.4p</td>
+			<td>plane waves</td>
+			<td style="width: 80.85px;">Troullier-Martins norm-conserving(<a href="http://www.abinit.org/downloads/psp-links/psp-links/gga_fhi">FHI</a>)</td>
+			<td style="width: 79.14px;">14.5</td>
+			<td style="width: 90.84px;">ASE [2]</td>
+		</tr>
+	</tbody>
+</table>
+References<br />
+<a href="http://www.tandfonline.com/doi/abs/10.1080/10408436.2013.772503#.VE8Efk0cSUk">[1]</a> K. Lejaeghere, V. Van Speybroeck, G. Van Oost and S. Cottenier, &quot;Error estimates for solid-state density-functional theory predictions: an overview by means of the ground-state elemental crystals&quot;, Critical Reviews in Solid State and Materials Sciences 39, 1-24 (2014).<br />
+<a href="https://wiki.fysik.dtu.dk/gpaw/setups/dcdft.html">[2]</a> Marcin Du?ak by means of ASE (2012).<br />
+<a href="http://arxiv.org/abs/1309.7274">[3]</a> F. Jollet, M. Torrent and N. Holzwarth, &quot;Generation of Projector Augmented-Wave atomic data: A 71 element validated table in the XML format&quot;, Computer Physics Communications 185, 1246-1254 (2014).<br />
+[4] Taisuke Ozaki by means of OpenMX (2013).<br />
+<a href="http://arxiv.org/abs/1404.3015">[5]</a> E. K&uuml;&ccedil;&uuml;kbenli et al., &quot;Projector augmented-wave and all-electron calculations a cross the periodic table: a comparison of structural and energetic properties&quot;, arXiv:1404.3015 (2014).<br />
+<a href="http://www.sciencedirect.com/science/article/pii/S0010465513004359">[6]</a> F. Jollet et&nbsp;al., Computer Physics Communications 185, 1246 (2014).<br />
+[7] Chris Pickard by means of CASTEP (2014).<br />
+<a href="http://arxiv.org/pdf/1404.3015v1.pdf">[8]</a> E. K&uml;u&cedil;c&uml;ukbenli et al., arXiv:1404.3015v1.<br />
+[9] I. E. Castelli, QuantumESPRESSO (2015).<br />
+------------------------------------------------------------------------------<br />
+■ unfolding<br />
+・ VASP： VASPの開発元ではないが、BandUP にてコードが公開されている<br />
+　現在は、VASPの他に、Quantum ESPRESSO(PWscf)やAbinitにも対応している。<br />
+・ RSDFT (<a href="https://github.com/j-iwata/RSDFT">https://github.com/j-iwata/RSDFT</a>)も実装していると聞きます。<br />
+・ OpenMX： 将来ユーザーが利用可能になるかもしれない<br />
+・ WIEN2k： fold2Blochで計算可能。ただし、図にするには手間がかかる。<br />
+・ 他のコードについては不明<br />
+------------------------------------------------------------------------------<br />
+■ 結合・反結合<br />
+・ DVXa法SCAT：非常に使いやすくspinを入れた系でも計算可能<br />
+・ Siesta：<br />
+・ 他のコードについては不明<br />
+------------------------------------------------------------------------------<br />
+■ 構造最適化について（2014年現在ではカットオフを小さくしても高い精度の計算が出来るのでAbinitでの計算は早くなっている可能性があります。時間の空いたときに再調査する予定です）<br />
+&nbsp; 格子定数の最適化と原子位置の最適化を同時に可能なのはPWscfです。一方、WIEN2kなどの全電子計算法は、計算時間も擬ポテンシャル法と比べて多く必要になり、単純な系でない場合は失敗することもあります。そのため、構造最適化には精度の高い擬ポテンシャルにPAW法を用いることが可能な第一原理計算コードをお勧めします。推奨されるパラメーターを用いてPAWで構造最適化をすると、VASPで2日掛かる構造最適化の計算がAbinitでは1?2週間程かかります。PWscf ではMKLを用いてDavidsonを選択すれば計算時間は短くて済みます（ディフォルトがDavidsonです）。Phaseの場合は固有値を得るのに、幾つかの方法を選択でき、DavidsonとRMMを併用するなどすると収束までの時間が短くなります（Free版では格子定数を最適できないのが残念です）。<br />
+※ AbinitとPWscfでのベンチマークはQE-Abinitでのrealizone.pdfに記載されています。<br />
+[1] <a href="http://www.nsc.liu.se/~pla/blog/2013/02/04/qevasp-part1/">http://www.nsc.liu.se/~pla/blog/2013/02/04/qevasp-part1/</a><br />
+※PAWポテンシャルを用いたPBEの結果では、VASPとAbinitが出力した格子定数がほぼ同じになりそうだ。検証している回数がまだ足りないが、いまのところ格子定数の変化の傾向も同じ結果が出ている。後はUSPPとPAWを併用したPWscfで同じ傾向と結果が出てくるか？だと考えている。恐らく格子定数まで含めた構造最適化の速さは VASP &gt;= PWscf &gt;= Abinit になりそうである。<br />
+※ メモリについて：VASPで約8GB必要な系であれば、AbinitやPWscfでは約22GBが必要になる。スーパーセルで何かを置換した系など複雑な系でもVASPは空間群を探してくれているからかもしれない（ここはもう少し調べたい）。<br />
+------------------------------------------------------------------------------<br />
+■ 擬ポテンシャルの作成について<br />
+&nbsp; 擬ポテンシャルの作成は、そのコードに最適な擬ポテンシャルを作成している研究者を除いて、理論計算を専門にしている研究者でも難しいと言われています。<br />
+■ 擬ポテンシャル<br />
+・Abinitは比較的多くの擬ポテンシャル（特にPAW法）が整備されています。<br />
+・PWscfはPAW法やウルトラソフト擬ポテンシャルなど他の手法のポテンシャルを混ぜて計算できます。<br />
+・GPAWはPAW法の利用を念頭においたものなので擬ポテンシャルが揃っています。<br />
+・Phaseは、2012年においてGUIで入力ファイル作成時にPAW法の擬ポテンシャルを自動で選択してくれませんが、PAW法の擬ポテンシャルがかなり揃っています。<br />
+------------------------------------------------------------------------------<br />
+■ 入力ファイルの作成について<br />
+&nbsp; 入力ファイルの作成が容易なコードは cif2cell が利用できるコードであると言えるでしょう（GUIが付属しているWIEN2kやGUIが用意されているGPAWを除く）。Abinit や PWscf, elk が比較的使いやすいです。PhaseはGUIがありますがPAW法の擬ポテンシャルを用いるときにはウルトラソフト擬ポテンシャルを用いるときよりは手間が必要です。GPAWで主に用いられるASE-GUIは構造最適化までならば計算が比較的容易です。<br />
+------------------------------------------------------------------------------<br />
+■ 実際の利用について<br />
+&nbsp; HPでTutrial が整備されているコードが便利です。「マニュアルでコマンドのみ書かれているコードは、正常に動作するかどうかや物理量を取り出す効率的な方法を探す必要があるため」にオススメできません。<br />
+<br />
+■ Tutrial が整備されているコード<br />
+&nbsp; Tutrialが整備されている計算コードは Abinit や PWscf, exciting, GPAW, BigDFTなどです（これらは論文でも良く採り上げられやすいコードなのが分かります）。Phaseは完全にガラパゴス化しているためGUIがかなり良いのに損をしています。elkは専用のページと動画を作りましたので、それを見ていただければ計算がより容易にできると思います。<br />
+<br />
+■ 論文での採用について<br />
+&nbsp; 研究しようとする分野で用いられているコードを用いるのが安全でしょう。私が良く見かけるのは、VASP, CASTEP, WIEN2k（これらは商用で価格が高い）です。フリーのソフトで良く見かけるのは、Abinit や PWscf, elk,&nbsp;OpenMX&nbsp;です。<br />
+------------------------------------------------------------------------------<br />
+■ 半導体における直接遷移と間接遷移の予測について<br />
+　大谷文章、「光触媒標準研究法」、東京図書では「（省略）Asahi らの論文でも、計算の出発点である格子定数（省略）をすこしいじると、M&rarr;&Gamma;の間接遷移になる、とのことなので、現段階では、計算によって直接遷移と間接遷移のいずれであるか、という判断は難しいといえる。OLCAO（Orthogonalized Linear Combination of Atomic Orbitals）法による計算[S. D. Mo, W. Y. Ching, Phys. Rev., B51, 13 &nbsp;023-13 032 (1995)]では、ルチル、アナタース、ブリッカイトは、それぞれ、直接遷移（&Gamma;）、間接遷移（M&rarr;&Gamma;）、および直接（&Gamma;）という結果が出ている」とあります。<br />
+&nbsp;&nbsp;他のコードを用いてSrTiO3のバンド構造を議論している論文を以下に挙げます。<br />
+・ABINIT: 格子定数を3.905 &Aring;とし、Troullier and Martins&rsquo; norm-conserving nonlocal pseudopotentialsを用いて60 Ryでk点を4x4x4点としてGWで計算[1]。間接遷移の結果。<br />
+・VASP: 格子定数を3.905 &Aring;とし、PAWを用いてLDA+U（Ti3dに対してU-J=10 eV）で計算[1]。間接遷移の結果。<br />
+・PWscf(Q-ESPRESSO):&nbsp;格子定数を3.904 &Aring;としVanderbilt ultrasoft pseudopotentialsを用いて30 Ryでk点を4x4x4(40原子のスーパーセルに対して）または3x3x3（80原子のスーパーセルに対して）としてLDAで計算[2]。間接遷移の結果。<br />
+・CASTEP: 格子定数を0.3095 nm（&larr;単純に論文の記述の誤り？）とし、GGAを用いた結果では、表示されているバンド図で伝導体の下端と伝導体の上端があるのがG点[3]。（しかし、表示するk点の範囲を増やせば間接遷移の結果となっているかもしれない）&larr;（文献再チェック中）<br />
+[1]&nbsp;M. S. Kim&nbsp;and C. H. Park, J. Korean Phys. Soc. 56,&nbsp;490 (2010).<br />
+[2] C. Zhang et al., Mater. Chem. Phys. 107, 215&nbsp;(2008).<br />
+[3] J. Lin et al., Cent. Eur. J. Phys. 7, 762 (2009).<br />
+[4] W. Luo et al., Phys. Rev. B 70, 214109 (2004).<br />
+[5] G. Fabricius et al., Phys. Rev B 55,&nbsp;164 (1997).<br />
+[6] E. Heifets et al., Surf. Sci. 513, 211&nbsp;(2002).<br />
+[7] S. Piskunov et al., Comp. Mater. Sci. 29, 165&nbsp;(2004).<br />
+[8] J. Robertson et al., Thin Solid Films 496, 1 (2006).<br />
+------------------------------------------------------------------------------<br />
+■ Phaseは何故VASPやCASTEPよりも論文で用いられる比率が少ないのか？<br />
+・英文のマニュアルやTutrialは他のコードに比べて格段に少ない<br />
+・絶対的なユーザーの少なさ<br />
+・実験屋のためのGUIの整備、精度への信頼、得られる物理量（XANESが計算出来ない）、相関交換項の少なさ、が挙げられる（計算速度は比較していないので分からない）<br />
+・Free版では格子定数の最適化が出来ない<br />
+・ホールを入れた擬ポテンシャルの不在（提供されるプログラムを用いて自作しなければならない。ホールを導入した場合に対して作成した擬ポテンシャルの検証方法も詳しく解説されていない）<br />
+※ Phaseは、他のコードでは見ることが少ないcifファイルからk点を自動で作成してくれている大変良い機能を持った無償のGUIがあるのに残念である。加えて、GUIはまだまだ便利になる余地がある<br />
+※ 無償での研究者の利用が促進され、論文で記載される量が多くなれば、商用品での企業の導入も説得力が増すが、国費を用いてもそこまで到達できなかったのが、残念といえば残念。その点で、CASTEPやVASPは尊敬に値します。<br />
+------------------------------------------------------------------------------<br />
+■ 計算できるスケール （大まかな認識としてこのような関係になる）<br />
+・ 第一原理分子動力学法 &lt; 第一原理計算&nbsp;（?nm, ?ps）<br />
+・ 古典分子動力学法&nbsp;、モンテカルロ法 (nm?&mu;m, ps?&mu;s)<br />
+・ セルラーオートマトン、フェーズフィールド法 (ns?&mu;m, &mu;s?ms)<br />
+・ CALPHAD法、粒子法、有限要素法 (mm?m, ms?s)<br />
+※ CALPHAD法ではクラスター展開により逐次的にしか考慮できない配置エントロピーをモンテカルロ法では自動的に全て考慮されている点は覚えてきたい。<br />
+------------------------------------------------------------------------------<br />
+■ 基底での分類<br />
+□&nbsp;局在基底:LCAO<br />
+&nbsp; Gaussian, GAMESS, Siesta, tranSiesta, ATK<br />
+□&nbsp;平面波基底:PW<br />
+&nbsp; VASP, Abinit, PWscf, WIEN2k<br />
+------------------------------------------------------------------------------<br />
+■ 界面や接合系での第一原理計算コード（計算では「金属/半導体/金属」とするのが無難）
+<div>□&nbsp;波動関数接続:PWCOND<br />
+□&nbsp;グリーン関数接続:ATK, tranSiesta, Smeagol（電界考慮可）, Want<br />
+------------------------------------------------------------------------------<br />
+■ KKR法を用いている「Akai-KKR」と「SPR-KKR」の違い（27/Sep/2016）<br />
+◇ オススメのコードは？<br />
+・最初に扱うのはAkai-KKRの方が良いです。なぜならば、コンパイルし易いのと、計算での収束性が良いこと、バンド分散の計算も安定していることが挙げられます。<br />
+・マニアックな計算をしたいという方はSPR-KKRです。フルポテンシャル法が使えるので、水素原子が入るような隙間が沢山ある結晶構造の計算に適しています。<br />
+（Akai-KKRもそうですが、マフィンティンポテンシャルを使う場合は、水素原子が入りそうな隙間には原子番号0の原子を指定して計算の精度を高めることができます。GaAsやZrNiSnなどが代表例）<br />
+　注意点として、SPR-KKRのはマニュアルを読んだだけでは分からないことが多くあります。セミナーの内容を調べたり、開発者に相談したりする苦労も必要になります。<br />
+<br />
+◇ Akai-KKRとSPR-KKRが出来ること<br />
+・CPA計算が可能（単位胞で元素置換した系の計算が可能）<br />
+・SCFとDOSの計算が可能<br />
+・全エネルギーやスピンモーメントを計算可能<br />
+　得られたデータから相の安定性や形成エネルギーを算出可能<br />
+<br />
+◇ Akai-KKRが得意<br />
+・収束が安定している<br />
+・バンド分散（ブロッホスペクトル）の計算が安定している<br />
+<br />
+◇ SPR-KKRが可能なこと<br />
+・非等価な原子位置（Akai-KKRでのnatmに対応）を十数以上入力可能<br />
+&nbsp;（Fe2VAlのnatmは4なのでAkai-KKRでも十分余裕がある）<br />
+・WIEN2kのように空間群から入力ファイルを作れる<br />
+・フルポテンシャル計算が可能<br />
+・LDA+U, GGA+Uが計算可能<br />
+・数多くの物性が計算可能（XAS, XPS(core-level and valence band), ARPES, XES, MXO, AES）<br />
+　Residual Resistivity of Alloys, Spin- and Orbital Momentsなど<br />
+　<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7">http://ebert.cup.uni-muenchen.de/index.php?option=com_content&amp;view=article&amp;id=8&amp;catid=4&amp;Itemid=7</a><br />
+　や<br />
+　<a href="http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en">http://ebert.cup.uni-muenchen.de/index.php?option=com_remository&amp;Itemid=20&amp;func=startdown&amp;id=51&amp;lang=en</a><br />
+　のマニュアルを見ると良い。<br />
+・クラスターや界面の計算が可能<br />
+------------------------------------------------------------------------------<br />
+■ VASPとWIEN2kの違い<br />
+◇ WIEN2kの利点<br />
+・ほぼ最高の計算精度を誇る<br />
+・信頼性が高いので、計算結果をほぼ信頼できる<br />
+・GUI(w2web)がしっかりしているので入力ファイルからバンド分散までの計算が容易<br />
+　Youtube動画：<a href="https://www.youtube.com/watch?v=_2O38qvabZo">https://www.youtube.com/watch?v=_2O38qvabZo</a>, <a href="https://www.youtube.com/watch?v=9Us6c8CUf-E&amp;list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN">https://www.youtube.com/watch?v=9Us6c8CUf-E&amp;list=PL9r3BfacS1mFU2Bc5su-fpzridiGqBOlN</a><br />
+<br />
+◇ VASPの得意なこと<br />
+・擬ポテンシャル法を使っているので、フルポテンシャル法のWIEN2kよりも構造最適化に適している<br />
+・フォノン計算に必要なDFPTが最新版には実装されている<br />
+・他の方が作ったツールが他に比べて充実している<br />
+------------------------------------------------------------------------------</div>

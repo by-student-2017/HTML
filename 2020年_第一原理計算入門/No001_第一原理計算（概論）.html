@@ -1,0 +1,541 @@
+<p>　このHPでは、学部4年生から大学院生M2及びD1までの方を対象に、第一原理計算コードのセットアップから、計算方法、結果の解釈及び理論計算と関連する実験方法までを解説していきます（社会人でもOK）。　<br />
+「知らないこと、まさかの気持ち、そして、慣れが装置故障（事故、人災、健康被害）を生じさせる」<br />
+------------------------------------------------------------------------------<br />
+■ 検索は[Ctrl + F]で行なえます<br />
+<br />
+※ 検索対象に色がつくなど、強調されて見つけ易くなります。基本的に好きな項目やキーワードから調べてみてください。<br />
+<br />
+※ 複数のページにいくつかの情報が入っています。一つのページにまとめると、重くなってほとんど編集できなくなるためです。<br />
+※ Youtube動画の画像が悪い場合は、歯車の部分（設定） &gt; 画質 &gt; 720p HD で高画質にすることが可能です（全画面にするとより詳細に見ることができます）。<br />
+--------------------------------------------------------------------------------<br />
+■ cifの記述様式（index）の変更について<br />
+<br />
+　cifの記述（index）の変更のため、cifの入出力が上手く動作しない事態が生じています。cifの新旧は下記に示すwebページ<br />
+&nbsp;<a href="https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Isymmetry_space_group_name_H-M.html">https://www.iucr.org/__data/iucr/cifdic_html/1/cif_core.dic/Isymmetry_space_group_name_H-M.html</a><br />
+に新旧で対応するindexが記載されています。<br />
+　indexをクリックして他の部分の変更も調べてください（特に、_symmetry_[]）。_symmetry_が最初に付くindexが主に変更されています。<br />
+<br />
+◇ cif2cellの非公式版&darr;<br />
+　<a href="https://github.com/by-student-2017/cif2cell-informal">https://github.com/by-student-2017/cif2cell-informal</a>　<br />
+※ 対応できないこともありますが、ご要望や改善点など情報を頂けましたら幸いです（「お問合せ」にご連絡頂ければ幸いです）。十分枯れたら公式に入れてもらおうと考えております。<br />
+------------------------------------------------------------------------------<br />
+※ 注意事項<br />
+<br />
+　このHPはアクセスカウンターを設置していますが、誰がどのように見ているかは私の能力が低いためか、まったく分からないです。なので気にせず見てください。皆さんと同じで、トータルのアクセス数しか分からないので、どの項目に需要があるのか全く分かりません。平均で１日200アクセスあるかなという程度しか私自身分かっていないです（どこのページがたくさん見られているか分かればその部分の内容をより充実できるのですが、それもわからないです）。本当に気にせず見てください。むしろYoutubeの方が国単位で全体の比率が分かって、ちょっと得した気分になれます。VASPを扱ったYoutube動画では米国が全体の閲覧者として約13%程度を占めています。インド、日本、アルジェリアが全体の閲覧者としてそれぞれ約10%程度を占めています。[カナダ、南アメリカ（ブラジルとコロンビアを除く）、オーストラリア、アフリカらは約0%]を除いた国が数％という感じ。Youtube動画の非商用のコード（PWscfなど）はVASPとは逆の国での閲覧が多いという印象（中国からの閲覧はほとんど無い）。<br />
+<br />
+　このHPは無償のボランティアで運営しています。さらにHTMLなどを用いてHPを自作していないので、うまくHPを管理できず、お金と時間の関係から、物理量がイタリックになっていなかったり、論文の記述方式が正式なものでなかったり、下付きでなかったり、数値と単位の間にスペースが無かったり、英数字が半角でなかったり、フォントがsymbolで書かれていなかったりしています（修正する余裕が無いのです）。ご注意ください。正しい記述は左欄の「英語論文執筆のポイント」を見てください。<br />
+　ネットでかなり良いものを見つけましたので、こちらも見てください。<br />
+・<s><a href="http://lecture.khlab.msl.titech.ac.jp/20080630JSAP-CrystalSchool-DFT-V3.pdf">http://lecture.khlab.msl.titech.ac.jp/20080630JSAP-CrystalSchool-DFT-V3.pdf</a></s>&nbsp;(リンク先消失)<br />
+・<a href="http://www.slideshare.net/dc1394/ss-26378208">http://www.slideshare.net/dc1394/ss-26378208</a><br />
+(P.30のTFは運動エネルギーも電子密度&rho;(r)で表現しようとしてやってみたが上手くいかなかった。これを補正する密度勾配の補正（Wizsacker補正も含めて）は1粒子のグリーン関数のWigner変換を半古典的に?展開することで得られる。その場合、高次の密度勾配補正が得られるが、原子や分子の場合には、これが正しいのは4次までである{原子の場合、6次の密度勾配補正は発散してしまう}。だから現在(Kohn-sham方程式)はp<sup>2</sup>/2mのままにしたと理解すればいい)<br />
+◆ 「産業利用に役立つ第一原理計算コードの選び方」<br />
+・<a href="http://support.spring8.or.jp/Doc_workshop/PDF_20150728/5.nakada.pdf">http://support.spring8.or.jp/Doc_workshop/PDF_20150728/5.nakada.pdf</a><br />
+&uarr;よくまとめられています。私のこのHPを見るより良いんじゃないでしょうか。<br />
+◆ 教育用に作った動画をYoutubeに投稿しました（下記の3つになります）<br />
+・<a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・<a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists?shelf_id=0&amp;view=1&amp;sort=dd">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a><br />
+・<a href="https://www.youtube.com/channel/UCc4zPzKBifooCix-gZhvDEQ">https://www.youtube.com/channel/UCc4zPzKBifooCix-gZhvDEQ</a><br />
+　Rietveld関係の動画は他の先生方に相談する前に知っておくと良い手順を載せておきました。これを参考にして分からないところをセミナーなどの機会で相談するようにしてみてください。<br />
+　私が（高齢ポスドク問題で）研究者を辞めた後も、みなさんは第一原理計算とリートベルト解析(&amp;MEM解析)、Igorマクロを有意義に活用してください。<br />
+◆ 研究＆教育用に作った資料など（GitHubに格納）：<br />
+・<a href="https://github.com/by-student-2017?tab=repositories">https://github.com/by-student-2017?tab=repositories</a><br />
+&nbsp; <span class="cursor-pointer" data-hovercard-type="acv_badge" data-hovercard-url="/users/by-student-2017/acv/hovercard">Thank you for GitHub's </span>&quot;<span class="cursor-pointer" data-hovercard-type="acv_badge" data-hovercard-url="/users/by-student-2017/acv/hovercard">Arctic Code Vault Contributor&quot; !!!<br />
+&nbsp; 日本国からでなく米国企業からYoutubeやGithubでの努力が評価されるのは、やはり日本にとどまらず、英語を猛勉強して米国に頭脳流出しろということか。少しでも世の中が良くなればと思って各種のコードやスクリプトを作っていたが、それでもやはり&rdquo;真に価値を理解してくれる素晴らしい方々&rdquo;に評価されて嬉しい。</span><br />
+◆「ゼロからわかる！！独習　量子化学計算：理論からはじめない新しい量子化学計算の本」<br />
+　&uarr;オススメ。私のHPの存在意義がなくなった。各種ソフトの様式が変更される前に購入してセットアップしておくことを薦めたい。<br />
+◆ 化学系の物質を扱う研究室の場合 （左欄の「GAMESS」もご覧ください）<br />
+・<a href="https://www.youtube.com/user/winmostar">https://www.youtube.com/user/winmostar</a>&nbsp;&gt; 再生リスト winmostar<br />
+　&uarr;を見れば化学系の物質の計算に役立ちます（※ これは私が作成したものではありません）<br />
+&nbsp;fireflyの具体的な使い方:<br />
+･ <a href="https://winmostar.com/jp/manual_jp.html">https://winmostar.com/jp/manual_jp.html</a><br />
+&nbsp; Winmostarを使用する場合にはこのHPが役立つ。これだけまとめてあるのは凄い。ただし、どの系でどのような設定が必要かも説明してあると第一原理計算に慣れていない学生様や初学者でも安心して計算結果を教官や上司に報告できる<br />
+･ <a href="http://pc-chem-basics.blog.jp/archives/106681.html">http://pc-chem-basics.blog.jp/archives/106681.html</a><br />
+なども非常に参考になります。web上にここまで情報を示して頂いて本当にありがたい。化学系は情報が書籍やweb上に豊富にある<br />
+◆ <a href="http://ryokbys.web.nitech.ac.jp/">http://ryokbys.web.nitech.ac.jp/</a><br />
+&nbsp;&nbsp; &uarr;のHPが素晴らしい。私の努力なんて、これがあれば一瞬で無意味になる。どうしてもっと早く私はこのHPを見つけなかったんだろう&hellip;&hellip;。<br />
+◆ Quantum ESPRESSOやabinitで遊ぶ 【翻訳】FAQ （<a href="http://quantumespresso.hatenablog.jp/entry/2015/10/25/010000">http://quantumespresso.hatenablog.jp/entry/2015/10/25/010000</a>）<br />
+　&uarr;本家QEのFAQ（<a href="http://www.quantum-espresso.org/resources/faq">http://www.quantum-espresso.org/resources/faq</a>）の翻訳。google 翻訳などにかける手間がはぶけるので助かる。英語に自信が無い私のような人間にはとても助かる。<br />
+◆ QuantumNerd (Projects: Quantum Espresso Tutorial 2019) (English)<br />
+&nbsp;&nbsp;<a href="https://www.youtube.com/channel/UCgQPek4ZSo_yL7wEjIhxvfA">https://www.youtube.com/channel/UCgQPek4ZSo_yL7wEjIhxvfA</a><br />
+&nbsp; 非常に良い動画。私のものを見るよりも良いんじゃないんでしょうか。この動画の再生数が少ないのが悲しい。私の動画の10倍は再生数があっても良いほどの情報量（オススメ）。<br />
+◆ <a href="http://www.misasa.okayama-u.ac.jp/~masami/pukiwiki/index.php?Quantum-ESPRESSO%A4%C8Vesta%A4%CE%CF%A2%B7%C8">神崎先生のpython</a> code (for PWscf)<br />
+◆ 大窪先生のpython code (for PWscf)<br />
+&nbsp;&nbsp;<a href="https://amorphous.tf.chiba-u.jp/memo.files/espresso/espresso.html">https://amorphous.tf.chiba-u.jp/memo.files/espresso/espresso.html</a><br />
+◆ 泉先生（twitter）「教員や上司による学生や部下に対する解析の丸投げにより全国各地で悲鳴が上がる時期となった。私は加害者でなく無償でソフトを配付しているだけなので、悪く思わないでほしい。」（8:21 2017/12/21）<br />
+※ 叩き台はこのHPで提供していますので参考にしてください。また、教員から誤りを指摘された方は、次の被害者の方の為に「お問合せ」にご連絡ください。可能な限り図書館で調べてより良いHPに修正させて頂きます。<br />
+◆ 京都大学様が化学実験用の素晴らしい動画を作ってくださっています<br />
+（英語版もあります）<br />
+・<a href="http://www.chem.zenkyo.h.kyoto-u.ac.jp/operation/index.html">http://www.chem.zenkyo.h.kyoto-u.ac.jp/operation/index.html</a><br />
+・<a href="https://ocw.kyoto-u.ac.jp/ja/opencourse/30/video05">https://ocw.kyoto-u.ac.jp/ja/opencourse/30/video05</a><br />
+・<a href="http://www2.yukawa.kyoto-u.ac.jp/~akira.ohnishi/Lib/gnuplot.html">http://www2.yukawa.kyoto-u.ac.jp/~akira.ohnishi/Lib/gnuplot.html</a> （gnuplot）<br />
+・python (<a href="https://repository.kulib.kyoto-u.ac.jp/dspace/handle/2433/245698">https://repository.kulib.kyoto-u.ac.jp/dspace/handle/2433/245698</a>)<br />
+◆ 神戸大学 計算科学教育センター様が計算化学に対する素晴らしい動画を作ってくださっています（QM/MMや機械学習に関するものもあります。Youtubeでも講義内容が動画で公開されている）<br />
+・<a href="http://www.eccse.kobe-u.ac.jp/distance_learning/">http://www.eccse.kobe-u.ac.jp/distance_learning/</a><br />
+◆ 慶応義塾大学 自然科学研究教育センター様が化学実験上の一般的注意と基本操作の動画を作ってくださっています。<br />
+・<a href="http://www.sci.keio.ac.jp/eduproject/gallery/">http://www.sci.keio.ac.jp/eduproject/gallery/</a><br />
+・<a href="http://www.sci.keio.ac.jp/eduproject/practice/chemistry/free.php?eid=00003">http://www.sci.keio.ac.jp/eduproject/practice/chemistry/free.php?eid=00003</a><br />
+・<a href="http://www.sci.keio.ac.jp/eduproject/practice/chemistry/additional.php?eid=00004">http://www.sci.keio.ac.jp/eduproject/practice/chemistry/additional.php?eid=00004</a><br />
+◆ 東京大学様が基礎化学実験用の動画を作ってくださっています。<br />
+・<a href="http://park.itc.u-tokyo.ac.jp/chemistry/exp/">http://park.itc.u-tokyo.ac.jp/chemistry/exp/</a><br />
+◆ 日本分析化学会企画「分析化学シリーズ 」日本分析化学会<br />
+　このビデオは博士課程を目指しているB4やM1に是非見て頂きたい。博士の学位をとってからこんなことも知らないのかと言われて教えられたことを学ぶことができる。古い映像ではあるが基本的なことを映像を見ながら勉強できることは、文章だけよりも大事なことである。将来、これを見ておけば装置管理や保守を頼まれたときにも心理的な障壁がわずかでも減少する。<br />
+◆ 東北大学様が学習のアドバイスについて書いてくださっています。<br />
+・<a href="http://jikken.he.tohoku.ac.jp/ri/modules/tinyd4/?content_id=6">http://jikken.he.tohoku.ac.jp/ri/modules/tinyd4/?content_id=6</a><br />
+◆ VASPが利用可能な大学のスパコン（2018年3月末時点）<br />
+・東北大学（計算材料学センター）<br />
+　化学系のコードだけでなく、WIEN2k, Abinit, PWscf, OpenMXなども可能で充実している。流石は研究第一主義。<br />
+　<a href="http://www.ccms.imr.tohoku.ac.jp/Jpn/user/calculate.php">http://www.ccms.imr.tohoku.ac.jp/Jpn/user/calculate.php</a><br />
+　<a href="http://www.ccms.imr.tohoku.ac.jp/Jpn/user/matrix.php">http://www.ccms.imr.tohoku.ac.jp/Jpn/user/matrix.php</a><br />
+・東京大学（Supercomputer Center）<br />
+　主に開発者の先生のコードが整備されている。<br />
+　<a href="http://www.issp.u-tokyo.ac.jp/supercom/visitor/applications">http://www.issp.u-tokyo.ac.jp/supercom/visitor/applications</a><br />
+・東京工業大学（TSUBAME）<br />
+　Phase, PWscf, OpenMXなども可能。<br />
+　<a href="http://www.gsic.titech.ac.jp/sites/default/files/leaflet2016.pdf">http://www.gsic.titech.ac.jp/sites/default/files/leaflet2016.pdf</a><br />
+・九州大学（情報基盤研究開発センター）<br />
+　化学系と機械学習用の環境が整備されている（流石！）<br />
+　<a href="https://www.cc.kyushu-u.ac.jp/scp/software/vasp.html">https://www.cc.kyushu-u.ac.jp/scp/software/vasp.html</a><br />
+・VASPは無いが他のオープンソースソフト（バンド計算含む）が利用可能な京都大学<br />
+　<a href="http://web.kudpc.kyoto-u.ac.jp/manual/ja/oss">http://web.kudpc.kyoto-u.ac.jp/manual/ja/oss</a><br />
+・VASPは無いが他のオープンソースソフト（主に機械学習）が利用可能な大阪大学<br />
+　機械学習：<a href="http://www.hpc.cmc.osaka-u.ac.jp/system/manual/octopus-use/machine-learning-software/">http://www.hpc.cmc.osaka-u.ac.jp/system/manual/octopus-use/machine-learning-software/</a><br />
+◇ 雑誌：Interface(インターフェース) 2017年 06 月号:計算科学ソフトが幅広く解説されている？<br />
+◇「任期切れた助教はどこにいくの 」（<a href="https://anond.hatelabo.jp/20180326180513">https://anond.hatelabo.jp/20180326180513</a>）の助教は凄いよ。外部資金もとって、年に1報も論文書いているなんて。色々とコメントを書かれているけど、私は同じ研究者として尊敬する。外部資金をとって年1報論文書く優秀な人でも次のポストがないんだな......。（※ 何で連絡先書いてなんいんだ！ 日本人ポスドク欲しがっている先生がいるから[ポスドク&rarr;企業の道]がまだある。その優秀な能力捨てないでくれ！！）<br />
+<br />
+※ 注意(PC購入について)<br />
+　業者からPCを購入する場合に、OS(CentOSやUbuntu)をサービス（無料）でインストールしてくれるところがありますが、OS無しで同様のスペックで1?2万円安いところがありますし、日本語を入れられると、SPR-KKRは日本語の部分を毎回の計算で削除しなければなりません。販売者と購入者ともに注意してください。1?2万円安ければ、もう一台PCが変えたりしますからね。困るのは学生です。注意してください。<br />
+------------------------------------------------------------------------------<br />
+■ このHPの使い方（素人が計算したときに実験とどのように比較するか？）<br />
+<br />
+　理論計算は複数の結果が出ます。幾つか得られた結果で、どれが正しいかを判断する一番簡単な方法は実験と合うものを採用することです。実験と合わない場合には結晶構造のモデルが誤っているか、用いている密度汎関数が良くないのでしょう｛どの近似が合うのかを色々試して議論してみましょう｝。理論計算は100%信頼してはいけませんが便利です。<br />
+　論文を見ると分かりますが、論文の中にはプロの計算屋さんでも色々な結晶構造モデルやどの近似手法だと実験結果と合いやすいかを議論しているものがあります。よく合うものを探す。そういうところからはじめてみるのもよいでしょう。微妙なところはプロでも難しいです。ですから余り気にしないでください。「いやいやそんなことは無い」と言われるプロの方は、論文だけでなく、初・中・上級者向けの情報をWebで公開してあげてください。お願い致します。（※ 2020年近辺では、計算機資源のある研究室であれば、<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">USPEX</span>などとフォノン計算コードを併用することで目的の候補となる物質の構造を提案することもかなりの精度でできつつある）<br />
+<br />
+･&nbsp; 形成エネルギー（左欄の「形成エネルギーの計算法」を参照してより実験値と合う結果を得るようにするとよい）<br />
+　形成エネルギーの計算は比較的精度が高いので100%信頼できなくても参考程度になるでしょう。どの結晶構造が安定なのかも｛ちょっとびっくりしますが｝リートベルト解析の結果と対応付けがし易いです｛エネルギー的に不利な結晶構造だと、その構造を用いてリートベルト解析すると最小2乗でのフィッティング[R因子]が悪くなる｝。大体&plusmn;0.1 eV程度で実験値と合う。実験と理論(GGA{PBE})があわなければ、想定した結晶モデルが間違っている可能性が高い。想定した結晶構造での形成エネルギー差が&plusmn;0.1 eV内にある場合には理論だけでは判断が難しい。リートベルト法など実験的な手法も積極的に活用しよう。<br />
+※ LDA+Uにすると上手くいかなくなるので、使用するのはGGAで良い。<br />
+※ 組織構造の予測はフェーズフィールド法を用いてください。第一原理計算を元に行う場合は次の手順になる。第一原理計算での物性値 -&gt; 予測した物性値を用いてCALPHAD法による自由エネルギー関数の決定 -&gt; 自由エネルギー関数を用いてフェーズフィールド法を行う。<br />
+<br />
+･ 電子構造<br />
+　電子構造も大まかに分かります。UPS(や放射光を用いたXPS)の結果と比較してみましょう。ピーク位置がぴったりと合わなくても、どのピークがどの原子のどの軌道から構成されているかが推定できます。強度の違いは遷移確率｛クロスセクション｝によるものです。それで十分です。容易に計算出来る近似の範囲内だと多少ピーク位置がズレていても気にしないことです（横軸{エネルギー}のズレは密度汎関数によるものです。気になる人は常田先生の書籍を参照してください）。逆にLDAやGGAの近似だとそれが精度的に正しいです。実験とあいすぎていれば逆に怪しんで下さい。あなたが再計算してみてもいいでしょう。そうすれば論文に書いていないことが何か分かります。そして、レフェリーの実力がどの程度であったかも分かります。横軸や強度が完全に合う合わないよりも、実験で得られたピークがどの原子のどの軌道に属しているかなどの物性の議論に繋がる情報を得ることが大切です。フェルミ端近傍の原子の軌道は電気抵抗やゼーベックに影響を与えるので、それを検討しながら原子や軌道を変えたり、フェルミ端から離れた原子の軌道を担っている原子ではより自由に元素を置換してもよいのではないかと考えたりする。<br />
+<br />
+･ バンド分散<br />
+　角度分解光電子分光法（ARPES）の結果と比較されたりします。上手く合えば解釈を進めて下さい。あわなければ計算屋が頑張らなければならない情報を提供したことになります｛それはとても重要です｝。ちなみに、スーパーセルを用いたときには、単位胞で表記でのgamma点とX点が重なったりします。初心に戻って調べてみてください。あなたが再計算してみてもいいでしょう。そうすれば論文に書いていないことが何か分かります。そして、レフェリーの実力がどの程度であったかも分かります。スーパーセルだと単位胞で表記でのgamma点とX点が重なるのに、その結果が出てないのは&rdquo;何か&rdquo;があります。レフェリーはこの点をどう指摘したのか気になります。ちなみに、そのような結果を出した論文｛超有名な雑誌｝の著者の方にメールを出しましたが返答がありませんでした。そういう大人にならないでください。素人でも疑問に思うことについて記述がないのは、私にその機会があるならrejectさせます｛ちなみに、2014年にスーパーセルだと単位胞での表記でgamma点とX点が重なるので、それを解決してバンド分散を描いたら(unfoldingと呼ばれる)どうなるかという論文が超有名な雑誌に記載されています。KKRでバンド分散を描いたような結果になります。人生って面白いですね！｝。<br />
+※ 有効質量や移動度も予測できます。電子がある原子から隣の原子に飛び移る確率は、波動関数の重なりが大きいほど大きくなることから、波動関数の大きく広がった重元素の酸化物は、電子の移動度が大きくなる可能性があります。<br />
+※ ARPESで見られるバンドのリノマライゼーション(例えばLDAやGGAで予測されるよりもバンドがフラットになるなど）を説明できない場合（実験では表面の影響を除くのも難しい）、LDAやGGAよりも精度の高い計算が必要になる。LDAやGGAでは交換項が厳密な値で取り入れられていないため、交換項の補正が必要となる。私はまだ検証していないが、一番簡単な方法は、交換項が厳密なHF（ハートリー・フォック）での値を混ぜるLDA+Uを用いることである（LDA+UはGW近似の静的極限）。他の交換相関項を用いてもよい（ただし、計算時間はLDAやGGAの10から100倍よりも多くの時間が必要になる。そして、それらはギャップ幅が明確に開いている系で実験結果と理論の比較が行なわれているので擬ギャップ系では上手く適応できるかは分からないことを頭の隅に入れておいて欲しい。量子的な揺らぎの効果が大きい系{Mott絶縁体関連}はDMFT）。SPR-KKRではLDA+Uと表面の影響を入れたARPESが計算できる（私はまだ完全に入力ファイルを解読できていないし、CPA{元素置換}した計算では途中で計算が止まる、などがあり、技術の取得に困難しておりますが、無償で使えるのでやる気のある方は開発者の方とコンタクトをとって研究をより良くしてみてください）。<br />
+<br />
+･ 電荷密度分布<br />
+　MEMの結果と比較したりします。MEMの結果をチェックする指標の一つにはなるでしょう。具体的には、MEMでのE値が正しいかの参考にしてみると良いでしょう。MEMと計算結果があわなければ計算屋が頑張らなければならない情報を提供したことになります｛それはとても重要です｝。<br />
+※ KKRで計算した結果と比較してみたい（同様のことは一度は実験屋なら考える）が、理論屋さんは、KKRなどのCPAを施したものは各原子の軌道がランダムに混ざったものなので計算しても無意味だと考えているようです。実験と理論の結果を比較できれば素晴らしいことなのですが&hellip;&hellip;。誰かが成功させてNatureに書いて欲しい（私ができなかったのは論文を書く才能と電荷密度分布を描けるようにKKRコードの改良ができなかったから。Akai-KKRの場合はフルポテンシャルにするためのコードも作る必要が&hellip;&hellip;。MT{マフィンティン}ポテンシャルから隙間のないように領域を分ける{蜂の巣みたいな}感じにポテンシャルを計算するようにするのですが&hellip;&hellip;）。<br />
+<br />
+･ ゼーベック係数の計算<br />
+　価電子帯がsp電子で構成されているものは10-20%程度の予測精度です（Boltztrapの開発者達が執筆した論文にそう書いてあります）。d電子系は傾向は得られるでしょうが絶対値の予測は難しいです(LDA+Uや精度の高い交換相関ポテンシャルを用いてください)。実験とあいすぎていれば逆に怪しんで下さい。あなたが再計算してみてもいいでしょう。そうすれば論文に書いていないことが何か分かります。そして、レフェリーの実力がどの程度であったかも分かります。私は「特殊なことをしているのにそれを明記しない」のはフェアーと思っていない｛アピール点なのに何故書かないのかも疑問｝だけですが、正直な人だと 論文に「非常に良く合っているのは偶然だろうけど」などと書いてくれています。※ メールを出してみたら返信もすぐに来て色々と教えてくれました。文面から分かる通り良い人でした。そういう人になってください。後から知りましたが、BoltzTraPの開発者の一人（恐らくボスの方）でした。しかも、私の上司（教授）がXXの材料を計算している方で「彼と連絡はとれんだろ」というような発言をされていましたが、案外上手くいきました。世の中、チャレンジしてみるものだと思いました（失敗の方が多いですが、教授の意に反して成功の確率が高かった｛ゼロじゃなかった｝ところが面白いですね）。更に後日談を書くと、BoltzTraPの開発者の一人で筆頭著者の方にもメールを出しましたが返信がきませんでした。完全に無視されたようです。<br />
+<br />
+･ XANES（K-edge）<br />
+　K-edgeの吸収スペクトルならそこそこ合います。どの軌道から構成されているかも推測できます。横軸（エネルギーの絶対値）は理論的にあわないことが分かっていますので余り気にしないで下さい｛常田先生の書かれた本を読んでみて下さい｝。候補となる結晶構造を計算して、どの吸収スペクトルに近いか比較検討してみるのも良いでしょう。実験結果と極端にあわなければ他の方と相談してみたりしてください。あわなければ計算屋が頑張らなければならない情報を提供したことになります｛それはとても重要です｝。<br />
+　吸収スペクトルの構造が実験と合うかは、計算する系のスクリーニング（遮蔽）の程度によって変わります。スクリーニングが強いCuではコアホールは0.5、MgOのMgではコアホールは1.0として計算すると実験結果と合うようになります。どの系がどのような遮蔽効果を持つかを色々と議論してみると良いかもしれませんね。<br />
+<br />
+･ ギャップ<br />
+　ギャップ値はGW近似やHSEなどを使わないと合いにくいですが、LDAやGGAだと多くの場合、実験値の2/3程度の値で出力されますから傾向だけ比較してみましょう。それで可能性を探れれば十分です。吸収スペクトルと比較する場合にはTDDFTなどでの結果と比較してみてください。ギャップがあまり大きくない系であれば予測精度が上がります。<br />
+「第一原理計算でバンドギャップを計算することは、現在（2014年)でも難しい問題である。一般にHF近似ではバンドギャップを過大評価し、DFTでは過小評価する。結晶Siのバンドギャップは室温で1.12 eVであるが、HF近似では5倍程度の値となり、GGAでは0.7 eV程度になる。この問題を改善する方法として、DFT+U法や混合汎関数法などが広く使われているが、Uパラメーターや汎関数の選択によりバンドギャップの計算値は大きく変わる。つまり、これらの方法をバンドギャップの予測に使うことは非常に難しく、実験値を再現するモデルを先に選択した後、他の物性（光学物性・スペクトル）などを計算するという使われ方をすることも多い。現時点では、固体ではGW近似、分子軌道法では完全配置間相互作用（Configuration interaction: CI)法が、モデルや計算方法の選択にもっとも依存せずに信頼できるバンドギャップの値を与えてくれると考えられているが、比較的小さな系にしか使えないという問題がある」 日本金属学会関東支部 『ここまでできる。計算材料科学入門』<br />
+※ GGAで光触媒を計算したこともありますが、実験的に性能の高い組成は計算しても性能が高そうな電子構造（HOMOが上がって、LUMOがほとんど下がらないなど）になる。ただし、同じ族では同じような電子構造になるので、族のなかでどれが一番良いかは実験した方が早いと思う。<br />
+※ 私は計算資源と時間がなくてできなかったが、水素発生準位に対してHOMOとLUMOを求めることもできます。<br />
+&nbsp; Dalton Trans. <b>41 </b>(2012)&nbsp;11482. &nbsp;<br />
+&nbsp; E<sub>VB</sub>=X-E<sup>e</sup> + 0.5 * E<sub>g</sub>, E<sub>CB</sub>=E<sub>VB</sub>-E<sub>g.</sub>&nbsp;<br />
+&nbsp; where <span class="italic">E</span><small><sub><font size="2">VB</font></sub></small> is the VB edge potentials, <span class="italic">E</span><small><sub><font size="2">CB</font></sub></small> is the CB edge potential, <span class="italic">E</span><small><sub><font size="2">g</font></sub></small> is the band gap energy of the semiconductor, <span class="italic">X</span> is the electronegativity of the semiconductor that is the geometric mean of the electronegativity of the constituent atoms (the electronegativity of an atom is the arithmetic mean of the atomic electron affinity and the first ionization energy), <span class="italic">E</span><small><sup><font size="2">e</font></sup></small> is the energy of free electrons on the hydrogen scale (&sim;4.5 eV).&nbsp;<br />
+&nbsp; E<sub>fp</sub>=E<sub>fp</sub><sup>0</sup>-0.05915pH<br />
+&nbsp; where <span class="italic">E</span><font size="2"><small><sub>fp</sub></small><small><sup>0</sup></small></font> is the flat band potential of catalyst when the pH is 0. When the pH was 7.0, the corresponding <span class="italic">E</span><small><sub><font size="2">VB</font></sub></small> and <span class="italic">E</span><small><sub><font size="2">CB</font></sub></small> of Bi<small><sub><font size="2">2</font></sub></small>S<small><sub><font size="2">3</font></sub></small> were 1.05 and &minus;0.33 eV while those of BiOI were 1.91 and 0.15 eV, respectively.<br />
+<br />
+･ 磁性<br />
+　磁性はスピンの初期状態で結果が変わることがありますので、upとdownの数を同じにしたときと、upを可能な限り優先的に配置したときを計算します。それでも同じ結果になれば、それをそこそこ参考にすればよいでしょう。そうでないときは、微妙なので、実験の結果と合う方でさらに解釈を進めてください（試しに、形成エネルギーでも比較してみると......）。<br />
+※ 重元素置換をした系で、Squidでスピンモーメントを調べて、SPR-KKRを用いてPBEで構造最適後、その構造を用いてPBE+UでUを系統的に調べて頂けると嬉しい。UPSやXPS, IPESを用いてもよいが、それらの装置を使える人（操作方法ではなく、Squidも含めて最底辺の研究者には利用権限が無い）は限られている。作製した試料はプロジェクト終了後に廃棄されるところもあるので欲しい人は相談してみるのも手。<br />
+<br />
+・酸化還元電位の算出<br />
+<a href="http://www.chem.konan-u.ac.jp/applphys/web_material/denkaQA.pdf">http://www.chem.konan-u.ac.jp/applphys/web_material/denkaQA.pdf</a>&nbsp;が参考になります。<br />
+<br />
+　計算してみると分かりますが、候補になりそうなものがあるかどうかを調べるのは実験した方が早いです。主に解釈に使って下さい。上手い言い方をすれば、理論計算はカレーにつける「らっきょ」です。あるとより美味しい。素人が計算する場合はそういうものだと考えることです。そして、暗闇の中で絨緞爆撃的に作業するよりもそこそこ合理的な優先順位をつけて材料を探索できると考えると良いでしょう。もしかしたら、「目的の材料｛超電導物質｝を探す確率を1%から3%へと引き上げるのに一役買うかも知れませんし、新しい機能性材料の発見を見逃さないチャンスを得られるかもしれません」（&larr;これは東工大細野先生のグループのサクセスストーリーの一部です。笑）。<br />
+　計算が100時間内に終わるようにすると、そこそこ精度の低い設定にすることになります。上記を読んで予測が難しいなと思った部分を素人が計算した結果は実験屋から評価されないことが多いです。加えて、「誰でも計算できる」から評価も低いです。ですから、コードを書き換えられるようにならない限り、計算にそんなに夢は無いです。しかし、「誰でも計算できる」のにGUIを使って知った気分になって苦労を経験せず、どの程度の議論が出来るかを建設的に討論できないのは間違っていると思います。そういう大人にならないでください。<br />
+<br />
+「GGAもLDAも高い精度の全エネルギーを与え、多くの場合に室温における格子定数の3%以内の誤差で安定な結晶構造を計算できる。弾性率、誘電率、格子振動などの物性についても、誤差は数%程度である。（省略）このように、密度汎関数理論（Density Functional Theory: DFT）法では、バンドギャップの値が重要な計算や、電子相関が強い系など、不得意な場合がある。しかしながら、これらの特性や、期待される計算精度を理解した上であれば、現在のDFT法は、物性解析手段として強力な実験補完ツールとして使えるだけでなく、材料設計や物性予測にも利用可能な状況である」&nbsp;日本金属学会関東支部 『ここまでできる。計算材料科学入門』<br />
+<br />
+※ <a href="http://www.sssj.org/jsssj/rensaikikaku/FPC/FPC_index.htm">http://www.sssj.org/jsssj/rensaikikaku/FPC/FPC_index.htm</a> なども読んでみるとよい。<br />
+※ 第一原理（統計）熱力学：<br />
+&nbsp; <a href="http://clupan.sourceforge.net/overview.html">http://clupan.sourceforge.net/overview.html</a>, <a href="https://www.jstage.jst.go.jp/article/materia/52/6/52_278/_article/-char/ja/">https://www.jstage.jst.go.jp/article/materia/52/6/52_278/_article/-char/ja/</a>&nbsp;<br />
+※ XAFSでの光触媒での例：<br />
+&nbsp; <a href="http://www.issp.u-tokyo.ac.jp/labs/sor/Presentation/yoshinobu.pdf">http://www.issp.u-tokyo.ac.jp/labs/sor/Presentation/yoshinobu.pdf</a><br />
+※ 尾崎先生がYoutubeでハンズオンの内容を公開してくれています：<br />
+&nbsp; <a href="https://www.youtube.com/watch?v=-V0FcsT8mDI">https://www.youtube.com/watch?v=-V0FcsT8mDI</a><br />
+※ 並列計算のためのクラスターPCを作る場合は下記の2つのHPが参考になります。<br />
+並列計算機の製作: <a href="http://chem.tf.chiba-u.jp/gacb10/linux/cluster.html">http://chem.tf.chiba-u.jp/gacb10/linux/cluster.html</a><br />
+実験化学者が作るPCクラスタ: <a href="http://pccluster.web.fc2.com/">http://pccluster.web.fc2.com/</a><br />
+<br />
+　これまでの経験ですと下記のようにするのが良いように思えます。<br />
+□ 電子構造<br />
+1. 対応するポテンシャルがある場合は分子動力学法コードで構造最適化<br />
+&nbsp; (lammpsだとminimizeのみでの計算)<br />
+2. xtbやDFTB+、MOPAC、QM/MM法などで構造最適化<br />
+3.&nbsp;GGA (or LDA {graphite or graphene})で構造最適化<br />
+&nbsp; (PWscf, VASPが速い）<br />
+&nbsp; (Gapのある系はCP法も検討する。PWscfやCPMD、それに近い概念のCP2kなど）<br />
+4. GGA (or LDA {graphite or graphene})で形成エネルギーの計算<br />
+&nbsp; (codeはどれでも良い。置換した系はKKR法も検討する）<br />
+&nbsp; (タンパク質の場合はFMOも検討する。QM/MMの計算後にFMOで計算されることもある）<br />
+5. Gapが大きい系はHSE06のパラメータの値を変えて実験のGapになるようにする<br />
+&nbsp; (研究資金のある研究室はVASPを用いている）<br />
+&nbsp; (Abinitが速い) &gt; 置換したものも同条件で計算<br />
+6. 実験結果とあまりにかけ離れた結果が出る系はDMFTを用いる<br />
+&nbsp; (ElkにRDMFTが実装されている。AbinitにもDMFTがある。これらは&rdquo;非常に&rdquo;計算コストが高い）<br />
+※ 計算機のスペックが低い場合は、HSE06の結果にあうようにDFT+U (GGA+U or LDA+U)でのUの値を探す(AMFがよい結果になり易い)。そして、得られたUでDFT+U (GGA+U or LDA+U)で物性を計算（WIEN2kやSPR-KKRが便利）<br />
+（スーパーセルを用いたときはunfoldingしたバンド図でも物性を検討）<br />
+* Phonon (DOSやバンド)の計算でDFPTを用いているPWscf, VASPが便利。Abinitは入力ファイルの作成が難しい。スーパーセル法での計算ならphonopyやphono3pyが良いが、3元系では安価なPCだと直ぐにメモリーオーバーし、計算もなかなか終わらない（私ではPhase0やelk, abinitなどでの計算が上手くできなかった）。DFPTを用いているPWscfならYoutubの動画にあげているように計算がなんとか可能な状態。有限温度でのフォノンが知りたければ、Alamodeなどのコードも検討する。<br />
+□ 状態図や形態、物性<br />
+・第一原理計算（0 Pa, 0Kでの生成エンタルピーなどを計算） &gt; CALPHAD（相図） &gt; フェイズフィールド法（形態や物性）<br />
+・第一原理計算（0 Pa, 0Kでの生成エンタルピーなどを計算） &gt; CALPHAD（相図）<br />
+・第一原理計算（0 Pa, 0Kでの生成エンタルピーなどを計算） &gt; フェイズフィールド法（形態や物性）<br />
+<br />
+■ 理論計算について<br />
+　理論を詳細に理解しなければと思わないでください。一般的な教科書の理解までで十分です。それで第一原理計算はできます（むしろ、第一原理計算コードで用いられている数値計算やアルゴリズムの詳細を事細かに理解していなくても英語ができる人が論文を書いている現状。それっておかしくないか？ でもそれが現実です。テキストも数式の展開の結果はあっても数値計算の詳細まで書いたものは数えるほどしかありません）。そのコードを理解していても業績にはなりません。そもそもコードの引数やアルゴリズムの&rdquo;詳細が丁寧に説明された形で公開されていない&rdquo;ので、そのコードを開発した研究室に席をおかない限り、そのコードを理解することは時間の無駄です。私のように無職になりますよ！ 左欄にある項目をある程度読んでそこそこ理解しておけば良いでしょう。<br />
+------------------------------------------------------------------------------<br />
+■ 第一原理計算と比較するための実験について<br />
+<br />
+◇ 放射光施設（特にSPring-8）や中性子施設（特にJ-PARC）<br />
+　上（部門長など）から積極的に新規ユーザーの獲得が推進されている（恐いくらいの気迫とピリピリとした痛々しい程の圧力を私は感じた）、ビームライン担当者が丁寧に測定方法を教えてくれます（解析方法も必要であればビームライン担当者に相談してください）。あまり身構えず、トライするのが良いです。<br />
+　そのため私のような研究者は周りの人に支えられているので大したことないじゃんと思われるのにビビッています。測定ボタン押すだけでいいじゃん。解析方法教えて貰えるじゃん。「君は何か凄いことしているの？」「研究者というよりオペレーターです。すみません」という感じです。<br />
+　私の尊敬する教授の先生は、ビームライン担当者に色々と聞いてますよ（この材料のこの物性はこのビームラインの実験で議論できるか？などなど）。そして、実験をしてバリバリ成果を挙げている。凄い人ってそういうものだと思います。<br />
+　上記の施設で測定方法と解析方法を一度でも習ったら、PFやUVSOR、AichiSR, JRR-3, HiSOR, 立命館大学のSRセンター, 佐賀SRなどにトライしてみましょう。<br />
+※ ポイント1<br />
+　初めて測定するときには、試料の配置や測定時間、入射光の波長（エネルギー）、入射光の角度、検出器の距離と角度などの実験条件を詳細にメモし、結果の議論がわかり易い試料を測定してビームライン担当者と測定期間内に一緒に相談しましょう。簡単な比較対象の試料があれば、測定中に解析するのも容易ですし、応用となる高度な分析や解釈を行なうときの大きな助けにもなります。結果を他の方と議論するときには、グラフの縦軸や横軸をSI単位系にするなど、他の人が見てわかり易いものにするのも大切です（もちろん既に有名な雑誌に投稿されている論文の図を参考にしてもよいです）。縦軸と横軸をどういう単位にするのが良いのか（計算方法や単位の換算方法）など、測定中にビームラインの人に相談しておきましょう。大変ですが、測定中にグラフを描いて他の人と相談する癖をつけておいてください（そういう風にするものだとビームライン管理者や旧帝大の教授や准教授の先生に指導されました）。それが研究者としては大切です。<br />
+※ ポイント2<br />
+　放射光の利用1回につき、論文1本の発表が普通です（そうできないことも多いですが、それよりも多く発表する人も当然います）。もし可能であれば、そう考えて研究を行なってみてください。1つの施設で半年に1回利用できるので、年2報の論文を発表して、助教&rarr;准教授&rarr;教授になるというルートが昔は言われていたりしました。放射光施設は多くあるので、出来る人は沢山論文が書けるのですが、測定対象の試料に問題があって、そう話が簡単にいかないことがあるのです。とはいえ、若い人には理論計算、試料作製、解析の3つの環境が整備されている研究室に配属されることを祈っています。<br />
+※ SPring-8であれば、研修会や講習会が開催されています。<br />
+　SPring-8のHP(<a href="http://support.spring8.or.jp/training.html">http://support.spring8.or.jp/training.html</a>) &gt; イベント情報<br />
+から情報が得られます。研修会や講習会は無償。宿舎（1泊2000円）が利用できるので遠くからでも大丈夫です。外部のセミナーで同様のことを行えば講義だけでも5万円程度はするので、このような無償の研修会や講習会は、これから研究を始めようとするかたにはありがたいと思います。私の尊敬する准教授や教授の先生は時間の無い中で色々なセミナーを受けていました。<br />
+<br />
+◇ 分析法の選択<br />
+1. 腐食など変質層が目視できるとき：SEM, EPMA, XRD<br />
+2. 表面の変色など変質層が目視で確認できないとき：AES, XPS, SIMS<br />
+3. 絶縁性などの機能の劣化の原因箇所が全く不明なとき<br />
+　形状の異常をSEMで確認<br />
+　A. 異常あり<br />
+　　EPMA, XRDで確認<br />
+　　a) 判明 &gt; 報告<br />
+　　b) 不明 &gt; AES, XPS, SIMSで確認<br />
+　　　b1) 判明 &gt; 報告<br />
+　　　b2) 不明 &gt; RBS, TEMで確認 &gt; 報告<br />
+　B. 異常なし<br />
+　　AES, XPS, SIMSで確認<br />
+　　a) 判明 &gt; 報告<br />
+　　b) 不明 &gt; RBS, TEMで確認 &gt; 報告<br />
+※ 溶液の場合：溶液用の専用ホルダーでSEM観察、小角散乱（SAXS）など<br />
+※ チャージアップ（帯電）し易いものは、表面コーティングしてからSEM（帯電現象とその影響 <a href="https://www.jeol.co.jp/words/semterms/a-z_09.pdf">https://www.jeol.co.jp/words/semterms/a-z_09.pdf</a>）観察<br />
+<br />
+参考文献：johokiko<br />
+------------------------------------------------------------------------------<br />
+※ この管理人のメモ書きみたいなものですので、個人でブログなどを書いておられます方はトピックスが重複することを気になさらずに執筆して頂けると助かります。私が実際に経験したことや勉強したことなどを書き込んでいますが、別の方にチェックをして頂いているわけでもありません。また、環境が違って動作しないこともあります。多くの方の経験や結果がweb上にある方がより効率的な試行錯誤ができると私は考えております。<br />
+　下記を読むと第一原理計算でどんなことが議論できるか分かります。<br />
+<s><a href="http://lecture.khlab.msl.titech.ac.jp/20080630JSAP-CrystalSchool-DFT-V3.pdf">http://lecture.khlab.msl.titech.ac.jp/20080630JSAP-CrystalSchool-DFT-V3.pdf</a></s>&nbsp;（リンク先消失）<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;かつて存在した&rdquo;google の20%ルール&rdquo;を可能にする時間を作るためには、研究成果や必要な情報が容易に手に入るように環境を構築することが重要である。120%の業務にならないように、このHPで役立てることがあれば嬉しい。<br />
+&nbsp; <a href="http://www.lifehacker.jp/2012/08/120824google8020rule.html">http://www.lifehacker.jp/2012/08/120824google8020rule.html</a><br />
+------------------------------------------------------------------------------<br />
+■ プログラミングを行う者は下記のHPを参照することをオススメする。<br />
+&nbsp; <a class="external free" href="http://programmer.97things.oreilly.com/" rel="nofollow" title="http://programmer.97things.oreilly.com">http://programmer.97things.oreilly.com</a><br />
+&nbsp; このHPの中での <a href="http://programmer.97things.oreilly.com/wiki/index.php/Contributions_Appearing_in_the_Book" title="Contributions Appearing in the Book">Contributions Appearing in the Book</a>,&nbsp;<a href="http://programmer.97things.oreilly.com/wiki/index.php/Other_Edited_Contributions" title="Other Edited Contributions">Other Edited Contributions</a>, <a href="http://programmer.97things.oreilly.com/wiki/index.php/Contributions_in_Progress" title="Contributions in Progress">Contributions in Progress</a>&nbsp;を読んでいく。バージョン管理システムなどについては左欄のチーム開発方法を参照すること。現在では、一人で一から第一原理計算などのプログラムを構築して第一人者になるということはかなり困難である。将来プログラマとして逃げ道を作っておくのであれば、チームでの開発方法（gitなど）を勉強しておくべきである。<br />
+※ 最近は複数のコアを含んだCPUでPCが発売されることが一般的になってきた。業務においてコードを並列化させることが必要になることもあるだろう。左欄では並列化と高速化を別の欄として記述し、OpenMPなどでのコードの書き方について簡単に記述した。並列化するためのコードを作成または理解するための助けに少しでもなれば幸である。<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;このHPは、「パレートの法則（80対20の法則）」を考慮して、目的の物性を得るのに必要な部分を記述するように可能な限り心がけている。重要であるが私が知った他者が書かない（または「木の葉を隠すなら森の中」的な記述となっている｛このHPもその部分があることを否定できないが｝）細かな部分は他の項目として情報が得られるようにしている。<br />
+　&quot;試験問題の80％が、その学科に関する20％の知識で十分に答えられる&quot;, （出典; 人生を変える80対20の法則: <a href="http://www5a.biglobe.ne.jp/~NKSUCKS/jinseiw.html"><font color="#0000ff">http://www5a.biglobe.ne.jp/~NKSUCKS/jinseiw.html</font></a>&nbsp;)<br />
+　&quot;ソフトウェア利用者のうち80%は、全機能のうち20%しか使わない&quot;, （出典; webにおける80:20ルール: <a href="http://www.cybergarden.net/blog/2004/04/web8020.html">http://www.cybergarden.net/blog/2004/04/web8020.html</a> ）<br />
+------------------------------------------------------------------------------<br />
+※ より詳細な第一原理計算の情報については下記を参照（これが理解できれば密度汎関数理論に関してこのHPはほぼ無用と化す）。<br />
+　<a href="http://rare-events.org/tsuneda/Kyoto-text.pdf">http://rare-events.org/tsuneda/Kyoto-text.pdf</a>&nbsp;（常田貴夫「<span id="btAsinTitle">密度汎関数法の基礎」KS物理専門書 も参照するとよい</span>）<br />
+　常田先生のHPも情報が豊富である： <a href="http://www.riken.jp/qcl/members/tsuneda/web/">http://www.riken.jp/qcl/members/tsuneda/web/</a>, <a href="http://rare-events.org/tsuneda/">http://rare-events.org/tsuneda/</a><br />
+※ 概略を理解したい場合は下記のJSTのWebラーニングプラザを参照すると良い。<br />
+　<s><a href="http://weblearningplaza.jst.go.jp/">http://weblearningplaza.jst.go.jp/</a></s>&nbsp;（リンク先消失。費やした税金は無駄になったの？）<br />
+※ 実験屋さんは下記（佐藤先生のHP）も読んでおくとよい。<br />
+　<s><a href="http://home.sato-gallery.com/">http://home.sato-gallery.com/</a>, <a href="http://homepage2.nifty.com/bussei_katsuaki/nandemoQ&amp;A.html">http://homepage2.nifty.com/bussei_katsuaki/nandemoQ&amp;A.html</a></s>&nbsp;(リンク先消失)<br />
+※ 下記のスライドも参照してみると良いだろう。<br />
+&nbsp; <a href="http://www.slideshare.net/cms_initiative/0718-ishimura">http://www.slideshare.net/cms_initiative/0718-ishimura</a><br />
+※ 下記もgfortran +ACMLインストールで参考になる。<br />
+&nbsp; <a href="http://www-fps.nifs.ac.jp/ito/memo/openmx04.html">http://www-fps.nifs.ac.jp/ito/memo/openmx04.html</a><br />
+------------------------------------------------------------------------------<br />
+■&nbsp;第一原理計算コードの種類<br />
+<br />
+　研究で取り扱う物質や測定手法によって下記の代表的なものを選択するのが良いでしょう。（無料・有料以外にも、特筆すべき点やお勧めの参考文献を記しておきます）<br />
+<br />
+※ アカデミックであれば、VASP（化学系の方で予算が豊富にあればCASTEP）とWIEN2k（化学系のかたはGaussian）の利用を強く勧めます。両者とも他のコードに比べて情報が豊富にあり、様々な計算も行いやすいようになっています。加えて、VASPに対しては他者によって開発された周辺ソフトが無料で公開されています。<br />
+　予算が無くて、無償でなければだめだという場合には、PWscf, OpenMX, GAMESS, SPR-KKR, Akai-KKR, Elk, Abinit, Osaka2k, siesta, exciting, ABCAP, GAMESS などがよいでしょう。<br />
+<br />
+※ 多くの場合、無償コードの欠点（もちろん例外のある無償コードも存在する）として、Web上で情報が少ない、周辺ソフトが他者によって無償で開発されていない、独学で入力ファイルを作るのに不安が残る、構造最適化での計算速度が遅い、スーパーセルでは空間群が自動認識されない、小さい系しか走らない、計算できる物性値が少ない、などのどれかが該当します。ただし、開発者に相談したり、しっかりとコードを読み込めば、商用のソフトに勝てる結果を得ることができます。そんなことが簡単にできれば、みなが無償のコードを使うに決まっている。<br />
+　あえて書いておきますが、このHP（ここまでくるのに）に、独学（試行錯誤、追試、他者の後追い）と &quot;一部分は無償であるが、有償｛書籍代と交通費、講習・受講料｝のセミナー参加などで累積で数百万円ほど費やして&quot;専門家や有識者に相談・講義を受ける）で10年を超える歳月がかかっている。<br />
+　数少ない実験の合間（真空引きの待ち時間 1-2分）や皆が帰るころや土日祝日｛大抵実験している｝で疲れた体と精神であるのに居残って計算方法の確立や結果の検証、学習、関連論文やマニュアルの読み込み、に毎日時間を費やすことを想像して欲しい。<br />
+※ 何故、私がここまでの費用を掛けてこれを書いているのか？ それは下記のHPを見て欲しい。<br />
+<a href="http://www.asahi-net.or.jp/~wk2t-oosw/hakase.html">http://www.asahi-net.or.jp/~wk2t-oosw/hakase.html</a>, <a href="http://mitsuhiro.exblog.jp/13321769/">http://mitsuhiro.exblog.jp/13321769/</a>, <a href="http://ja.uncyclopedia.info/wiki/%E3%83%94%E3%83%9A%E3%83%83%E3%83%88%E5%9C%9F%E6%96%B9">http://ja.uncyclopedia.info/wiki/%E3%83%94%E3%83%9A%E3%83%83%E3%83%88%E5%9C%9F%E6%96%B9</a> (M1で教官から論文を書いてみてと言われて、M2までに論文が出ず、D2までに学振が取れないような者はこのような結果になる可能性が非常に高い。学振が取れないのは、あなたが行っている研究課題が駄目だったり、指導教官の力がなかったりする要因が大きな割合を占めます。決してあなただけの所為ではありません。学生を指導した経験を話すと「私がもっと有能だったらもっとよい仕事を学生にさせてあげられるのに」といつも思い、私の能力不足と勉強不足をいつも後悔・反省しています)<br />
+　良い仕事をして、それでもまだ引き返せるところで引き返して欲しい。ちなみに、あなたがいま読んでいる私のHPを読むよりも elkやabinit, PWscfのdiscussion や forums、RIETAN-FPのマニュアル、ResearchGate、論文での記述（数式を追うのではなく、まず、どのような手法がどの場合に良いのかなど物事に対する要点が数行で書かれている部分がある｛それを探して読んだ方が良い｝）を読む方がはるかに価値があることも記しておく｛ただし、論文には技術的な詳細が書かれていないことが多いから、論文を読んだからと言って、論文と同じ結果が出せるとは思わない方がいい。論文を読んで、その通りにすれば同じ結果が&rdquo;簡単&rdquo;に出るなんて幻想だから。実際にやってみると書かれていないパラメーターも多い。そして、研究環境が違いすぎる。数ヶ月前(2015年12月辺り)、2014年のPRBに論文が掲載されたコードを公開している人に質問をしたら2-3時間で返信が来た。私のPCで計算すると2日掛かる計算が&rdquo;たったの2-3時間&rdquo;で終わる。試行錯誤する効率が24倍、もう勝てないと思った｝。海外から見たら私のHPの記述なんて何十年も遅れたものなのだ。英語が出来て、要点が書かれた部分を論文から探す方が膨大な厚みのマニュアルを読むよりも有益であることは言うまでもない。英語ができるということは私のように英語が出来なくて辞書を引きながら分厚いマニュアルを読み込んで追試をしながら同じ結果が出るまでの苦行の期間を著しく短縮させる。そして、良く分かっている人に質問も出来る。時間を効率的に使って良い仕事をして欲しい。そして、引き返せるところで良い仕事を成して（あなたには博士号を取る能力があると）満足して、あなたに適した良い道を探して欲しい。偏差値35程度の私立大学卒業でこんなグズな私でも旧帝で博士号取っちゃったんだから・・・・・・。あなたに取れないはずがない！ だから常勤のポストを取れないと判断したら引き返せるところで引き返して欲しい（遅くとも修士の就職活動開始前にはピペド階級となる確率が93%(あれから数年を経ているのでもっと競争は激化し大学の予算も削られているのでその確率は相当に高くなっている。京大のポスドクの更新も十数人いる中で一人だけ許可されたという話を風の噂で聞いて恐怖した記憶も新しい。あの東大と並ぶ京大でこれなのだ。恐ろしい・・・・・・。偏差値35の教育重視大学の私立大学に東大の教員｛准教授など｝が公募に応募している現状を認識せよ)を超えていることを認識して、この後どうするか覚悟を決めて欲しい。ポスドクで生涯を終えられるのはまだ幸せな方である｛通常の定年を終える前にフリーターとなる確率の方が遥かに高い｝。まだ少しマシな上の世代でも、2013年に京大の助教から偏差値35の私立大学に准教授で就任した人が、私はまだ幸せな方だといっていたことも知っておくと良い。当然、この下の世代はさらに雇用状況が悪化する）。東大首席がポスドク８年目とか聞くともう駄目だ・・・・・・。悪いことは言わないから（あなたの代わりに土日祝日無く日に15時間以上実験して社会に貢献してくれる人材は豊富にいるから気にしなくていい。あなたはあなたの幸せを掴みなさい。国が倒れたらそれを指導した老人たちの責任だ。あなたの責任ではない。私が経験したことであれば、技術的なこと（これは論文にならない）はこのHPで可能な限り書くから安心していい。このHPを見れば、私が獲得した技術を直ぐにでも取得し、再現するすることが出来る。えっ、記述が第一原理計算とXRDだけだって？ ご愁傷様。ピペドと同様の問題を抱えて社会的に死につつある私が出来るのはここまでだ（新しいことを取得して職（食）を繋いでいくだけで精一杯なのだ）。それ以外の技術は、土下座やセミナー料を払ってでも指導教官や他大学の先生に教えて貰ってください（指導教官は&rdquo;とても&rdquo;嫌な顔をするだろうけどね。それでも&rdquo;巨人の肩の上に乗る&rdquo;ことが出来ればそれはかなりの幸運である。大抵の場合、まず巨人の肩の上にさえ乗れない）。この国の技術というのは、公開されているものがそこまでのものなのだ。もし、学生を指導したいなら、M1はB4を、M2はM1とB4を指導しなさい。銅鉄主義や&rdquo;私の背中を見て育って欲しい（ある意味、それは真実である。技術的なことが公開されていない現状を見れば分かるとおり、競争社会で生きていくことができるのはそれで世界的に有名になるほどの成果を掴めたものだけである。そして、[学生の自主性を尊重する]という名の放任主義も散見される）&rdquo;という旧帝の教員よりも、あなたは教育者として十分に良い仕事をしている。年齢を重ねても勉強時間なんか無くて、切羽詰って就業｛研究｝時間が増えるだけだから）。みんな（政府）の好きな自己責任論で生きて行けなくなる前に・・・・・・。<br />
+※ Q. 質問者（私）「成功までの年月の繋ぎ方はどうすればよいでしょうか？」<br />
+A. 東工大 細野先生「少しずつ成果が出てくるのが大切（少しずつ手法や装置も開発してきた）」「大きいプロジェクトとのときは面白いことをする（ものも入れる）」「採用するなら頑固？で業績の出ている者（その人に業績が出るのは何かがあるから）」『材料開発の三要素「探索（勘）：不安定、プロセス（腕力）：対象が膨大、理論・モデル（頭）：そう単純ではない』<br />
+※ 「&ldquo;失敗例&rdquo;を含む約1000の超電導物質探索の結果を初公開」、<a href="http://www.nims.go.jp/news/archive/2015/05/201505180.html">http://www.nims.go.jp/news/archive/2015/05/201505180.html</a><br />
+※ ニュートンの細野先生の記事では、&rdquo;嫌いなことはしない&rdquo;って書いてありました。嫌いなことをしなかったら、底辺私立大出の私みたいになりますけどね。私はあと何年ポスドクを続けられて無職にならないで済むか......。<br />
+<br />
+※ 第一原理計算で何ができるかは（白井先生： <a href="http://www.cmp.sanken.osaka-u.ac.jp/~koun/Lecs/Material_Design13.pdf">http://www.cmp.sanken.osaka-u.ac.jp/~koun/Lecs/Material_Design13.pdf</a>）を参照すると良い。<br />
+<br />
+■ 計算できるスケール （大まかな認識としてこのような関係になる）<br />
+・ 第一原理分子動力学法 &lt; 第一原理計算&nbsp;（?nm, ?ps）<br />
+・ 古典分子動力学法&nbsp;、モンテカルロ法 (nm?&mu;m, ps?&mu;s)<br />
+・ セルラーオートマトン、フェーズフィールド法 (ns?&mu;m, &mu;s?ms)<br />
+・ CALPHAD法、粒子法、有限要素法 (mm?m, ms?s)<br />
+<br />
+■ 計算時間（大まかな認識としてこのような関係になる）<br />
+・1 min: unitcell (=1x1x1), 構造最適化をすると 0.5 hour - 1 day<br />
+・1 hour: supercell (=2x2x2), 構造最適化をすると 0.5 day - 1 week<br />
+・1 day: Phonon frequency<br />
+・1 week: Lattice thermal conductivity<br />
+・1 year: Diffusivity<br />
+<br />
+a) 分子軌道法（化学屋さん向き）<br />
+◆ GAMESS : 無料、IRやRaman分光の計算ができる。<br />
+『すぐできる 量子化学計算ビギナーズマニュアル 』<br />
+『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から<br />
+実験値との比較まで 』（NMRの計算に関する記述がある）<br />
+◆ Gaussian : 有料、IRやRaman分光の計算ができる。<br />
+『すぐできる 量子化学計算ビギナーズマニュアル 』<br />
+『Gaussianプログラムによる量子化学計算マニュアル 計算入力法から<br />
+実験値との比較まで&nbsp;』<br />
+『名古屋大学情報連携基盤センターニュース 』<br />
+『Gaussianプログラムで学ぶ情報化学・計算化学実験』<br />
+『第5版　実験化学講座＜12＞　計算化学』<br />
+『電子構造論による化学の探究』<br />
+◆ CP2k : 無料<br />
+◆ ABINIT-MP : 無料<br />
+『プログラムで実践する 生体分子量子化学計算』<br />
+◆ ProteinDF : 無料<br />
+『タンパク質量子化学計算?ProteinDFの夢と実現?』<br />
+◆ DV-X alpha法 SCAT : 数千円で購入可能（金属材料の計算もOK）<br />
+『はじめての電子状態計算 』（DVXa研究協会｛学生は無料｝に入れば、会誌や相対論や遷移確率の計算が可能なプログラムを頂ける）<br />
+◆ PSI3 : 無料<br />
+<br />
+b) 分子動力学法(MD) （※ 古典MDの場合は大規模な構造最適化の計算に向いている）<br />
+◆ LAMMPS&nbsp;: 無料、第一原理ではなく古典MD<br />
+◆ Gromacs : 無料、第一原理ではなく古典MD<br />
+◆ GROMOS&nbsp;: 無料、第一原理ではなく古典MD<br />
+◆ SIGRESS ME 特別版:、第一原理ではなく古典MD<br />
+『機械・材料設計に生かす実践分子動力学シミュレーション』<br />
+◆ TINKER : 無料、第一原理ではなく古典MD<br />
+◆ PWscf : 無料<br />
+◆ GULP&nbsp;: 無料、第一原理ではなく古典MD<br />
+◆ AMBER : 有料、第一原理ではなく古典MD<br />
+『すぐできる分子シミュレーションビギナーズマニュアル 』<br />
+◆ Phase : 有償<br />
+『第一原理シミュレータ入門』<br />
+<br />
+c) バンド計算法（物理屋さん、金属材料の計算向き）<br />
+◆ PWscf : 無料、vdW、XAS、STM、IR、Raman<br />
+&nbsp;&nbsp;Landauer-Buttiker formulaによる伝導度が計算可能<br />
+◆ ABINIT : 無料、Kubo-Greenwood公式による光学伝導度の計算が可能<br />
+『実験ノート　第一原理バンド計算プログラム「ABINIT」』<br />
+◆ OpenMX : 無料、非平行グリーン関数を用いた電気伝導度の計算が可能<br />
+◆ WIEN2k : 有料 (XMCDの計算が可能）<br />
+『固体の中の電子』<br />
+&nbsp;&nbsp;ボルツマン輸送方程式による電気伝導度及びゼーベック係数の計算が可能<br />
+&nbsp;&nbsp;電荷密度分布やPhonon、弾性率、遷移確率の計算ができる<br />
+◆ ELK : 無料、XASの計算が可能(Full-PotentialでTDDFTも備えている。BES計算）<br />
+◆ SPRKKR : 無料<br />
+◆ AkaiKKR : 無料<br />
+『計算機マテリアルデザイン入門』<br />
+◆ exciting : 無料、XANESの計算が可能(Full-PotentialでTDDFTも備えている）<br />
+◆ FLEUR : 無料<br />
+◆ ABCAP : 無料<br />
+『計算機マテリアルデザイン入門』<br />
+&nbsp;&nbsp;ボルツマン輸送方程式による電気伝導度及びゼーベック係数の計算が可能<br />
+◆ VASP : 有料<br />
+◆ CASTEP : 無料(UK)、有料（高価なのでこのHPでは取り扱わない）、Phonon, ELNES, GGA+U, sx-LDAの計算が可能<br />
+◆ GPAW : 無料、XAS, XES, STMの計算が可能<br />
+&nbsp;&nbsp;非平行グリーン関数を用いた電気伝導度の計算が可能<br />
+◆ TOMBO : 無料<br />
+◆ CPMD : 無料<br />
+◆ OSAKA-2000 : 無料<br />
+『計算機マテリアルデザイン入門』<br />
+◆ Yambo : 無料、GW近似の計算ができる<br />
+&nbsp; （Abinit or PWscfの結果が必要、Optical absorption）<br />
+◆ EXC : 無料、遷移確率の計算ができる<br />
+&nbsp;&nbsp;&nbsp;&nbsp; （ABINITの結果が必要）<br />
+◆ DP : 無料、EELSの計算ができる<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;（ABINITの結果が必要）<br />
+◆ BigDFT : 無料、XANESの計算が可能<br />
+◆ APE : 無料、遷移確率の計算ができる<br />
+◆ Phase (UVSOR) : 有償、STM、GGA+U、TDDFT、vdW、XASの計算ができる<br />
+『第一原理シミュレータ入門』<br />
+『第一原理バンド計算ソフトウェア Advance/PHASE』、アドバンスシミュレーション、2011.10.Vol 9<br />
+『第一原理バンド計算ソフトウェア Advance/PHASE』 、アドバンスシミュレーション、2013.1.Vol 14<br />
+第41回薄膜・表面物理基礎講座（2012年）「簡単に使えるようになります！ 実験補完ツールとしての材料シミュレーション入門」 のテキスト<br />
+<br />
+上記の他にも、Wikipediaは全てを網羅していませんが、多くのコードを分類しています。<br />
+分子動力学&nbsp;: <a href="http://en.wikipedia.org/wiki/Molecular_design_software">http://en.wikipedia.org/wiki/Molecular_design_software</a><br />
+分子軌道法及びバンド計算法&nbsp;: <a href="http://en.wikipedia.org/wiki/Quantum_chemistry_computer_programs">http://en.wikipedia.org/wiki/Quantum_chemistry_computer_programs</a><br />
+ノートパソコンで出来る原子レベルのシミュレーション入門講習会(日本材料学会)&nbsp;<br />
+<br />
+その他の有用なサイト<br />
+ABINITなどの実行ファイル(binary)が配布されている。大変便利<br />
+&nbsp; <a href="http://www.etsf.eu/resources/software/etsf_software_repository">http://www.etsf.eu/resources/software/etsf_software_repository</a><br />
+上記にはない計算コードのリンク先があり便利<br />
+&nbsp; <a href="http://www.psi-k.org/codes.shtml">http://www.psi-k.org/codes.shtml</a><br />
+&nbsp; <a href="http://chikyu-to-umi.com/earth/yo_code5.htm">http://chikyu-to-umi.com/earth/yo_code5.htm</a><br />
+下記も参考にしておくとよいだろう。<br />
+&nbsp; <a href="http://ann.phys.sci.osaka-u.ac.jp/CMD/CMD18/index_CMD18.html">http://ann.phys.sci.osaka-u.ac.jp/CMD/CMD18/index_CMD18.html</a><br />
+&nbsp; <a href="http://www.sssj.org/jsssj/rensaikikaku/FPC/FPC_index.htm">http://www.sssj.org/jsssj/rensaikikaku/FPC/FPC_index.htm</a><br />
+&nbsp; <a href="http://www.psi-k.org/codes.shtml">http://www.psi-k.org/codes.shtml</a><br />
+幾つかの国産のコードの簡単な概説であれば、「計算物質科学イニシアティブ広報誌 Torrent」、6 (2012) 06 に記述がある。<br />
+・ useful links: <a href="http://www.dragon.lv/exafs/qc.htm">http://www.dragon.lv/exafs/qc.htm</a><br />
+・ クラスター展開法については<br />
+　CLUPAN (<a href="http://cms.mtl.kyoto-u.ac.jp/seko.html">http://cms.mtl.kyoto-u.ac.jp/seko.html</a>, <a href="http://clupan.sourceforge.net/">http://clupan.sourceforge.net/</a>) を参照すると良い。<br />
+・ abinitで遊ぶ（<a href="http://abinit.blog.jp/">http://abinit.blog.jp/</a>）も色々とまとめてくださっていてとても助かる。<br />
+<br />
+　上記のコードの中から、初めて理論計算を行われる方は、無料で、得たい結果（XANESやELNES、STM、IR, Raman、GW近似、電気伝導度、ゼーベック係数、化学ポテンシャル、構造最適化、電界や磁界を掛けた場合の計算結果など）の計算が可能なものを選ばれるのではないかと思います。しかし、研究費（4万円から5万円程度）があって、金属材料のバンド計算を行う必要があれば、GUIが付属しているWIEN2kの選択をお勧めします。<br />
+<br />
+注1：上記のほとんどのコードは、状態密度分布（DOS）やバンド図（分子軌道法や一部の分子動力学法は除く）、電荷密度分布の結果を得ることが可能です。これらの結果だけを得たい方（UPS, XRDを利用する方など）は、特に気にすることなく、使いやすいコードを選んで頂ければ良いです。<br />
+<br />
+注2：それでも計算ソフトを選ぶのに迷ったら、分子軌道法はGAMESS及びDV-X alpha法 SCAT、バンド計算法は擬ポテンシャルを用いたものでAbinit及びPWscf（バンド分散をプロットするには左欄「分散表示変換プログラム」を参照）、&nbsp;FLAPW法ではWIEN2k及びABCAPやelk, excitingを選択されるのが良いでしょう。MCDを計算したい場合は、WIEN2kやSPRKKR+xbandが簡便です。下記のHPには使用感が記載されています。<s><a href="http://www.tuat.ac.jp/~nagailab/tomi/siyou.html">http://www.tuat.ac.jp/~nagailab/tomi/siyou.html</a></s>　(リンク先消失)<br />
+<br />
+　余談であるが、CISSのソフトを解説した書籍には、『次世代流体解析ソフトウエアAdvance/FrontFlow/redを用いた数値計算』もある。<br />
+<br />
+※ <a href="http://wiki.livedoor.jp/kobayak/">バンド計算関連情報; </a><a href="http://wiki.livedoor.jp/kobayak/">http://wiki.livedoor.jp/kobayak/</a><br />
+※ コンピュテーショナル・マテリアルズ・デザイン（CMD&reg;）ワークショップ に参加するのも良い。<br />
+※ ELSES 研究会にも参加してみるとよいであろう。<br />
+※ 裳華房様のHPで 「若手 春・夏・秋・冬の学校」の情報があります。<br />
+※ OpenMX はJAISTのサマースクールで基礎と応用が学べる（2009年8月と2013年7月末-8月に開催された）。この他、OpenMXのworkshop に関する情報を常にチェックしておくとよい。<br />
+※ 中部圏であれば、JFCC でのナノ構造研究所での材料計算セミナーに参加してみるのも良い。<br />
+※ MTERE2 53 (9) 393?448 (2014) ：　まてりあ Vol.53 (2014) も参照してみると良い。<br />
+※ 日本金属学会関東支部『ここまでできる。計算材料科学入門』 も参照してみると良い。<br />
+<br />
+■ 日本の教育が崩壊したときには下記を見て勉学すればよいだろう。<br />
+<a class="yt-uix-sessionlink     spf-link  g-hovercard" data-name="" data-sessionlink="ei=zaB3VZHBH8HT4QKUzJewDg" data-ytid="UCO3xnVTHzB7l-nc8mABUJIQ" href="https://www.youtube.com/channel/UCO3xnVTHzB7l-nc8mABUJIQ">International Centre for Theoretical Sciences</a> (Youtube)<br />
+<a href="https://www.youtube.com/watch?v=EXWsin1VNKY">https://www.youtube.com/watch?v=EXWsin1VNKY</a>&nbsp;:WIEN2k<br />
+<a href="https://www.youtube.com/watch?v=DDAILHuxpyI">https://www.youtube.com/watch?v=DDAILHuxpyI</a> :WIEN2k<br />
+<a href="https://www.youtube.com/watch?v=TErBA54sk_Y">https://www.youtube.com/watch?v=TErBA54sk_Y</a> :WIEN2k<br />
+<a href="https://www.youtube.com/watch?v=BkZlitgcaPw">https://www.youtube.com/watch?v=BkZlitgcaPw</a> : Hubbard U 1<br />
+<a href="https://www.youtube.com/watch?v=l6CZ3b6Ksx0">https://www.youtube.com/watch?v=l6CZ3b6Ksx0</a> : Hubbard U 2<br />
+<a href="https://www.youtube.com/watch?v=WTjmod0w9vk">https://www.youtube.com/watch?v=WTjmod0w9vk</a>&nbsp;: GW<br />
+（説明にある式では容易に見えるが、実際に数値計算に実装するには大きな困難が数多く存在する）<br />
+<a href="https://www.youtube.com/watch?v=jVrglcZaJBk">https://www.youtube.com/watch?v=jVrglcZaJBk</a>&nbsp;: GW + DMFT<br />
+<a href="https://www.youtube.com/watch?v=dEIKecMDHiM">https://www.youtube.com/watch?v=dEIKecMDHiM</a> : Photonic crystals<br />
+<a href="https://www.youtube.com/watch?v=AufmV0P6mA0">https://www.youtube.com/watch?v=AufmV0P6mA0</a> : 量子力学、英語字幕有り<br />
+<a href="https://www.youtube.com/watch?v=ZFIPrU1KpGw">https://www.youtube.com/watch?v=ZFIPrU1KpGw</a>&nbsp;: 英語字幕有り<br />
+<a href="https://www.youtube.com/watch?v=0V9J_-iGF5Q">https://www.youtube.com/watch?v=0V9J_-iGF5Q</a><br />
+<a href="https://www.youtube.com/watch?v=RxJzyo485so">https://www.youtube.com/watch?v=RxJzyo485so</a>&nbsp;ARPES<br />
+<a href="https://www.youtube.com/watch?v=5orzn-XA29M">https://www.youtube.com/watch?v=5orzn-XA29M</a><br />
+<a href="https://www.youtube.com/watch?v=JLIhOPcAL1k">https://www.youtube.com/watch?v=JLIhOPcAL1k</a>&nbsp;: 英語字幕有り<br />
+<a href="https://www.youtube.com/watch?v=ots5zxbrlUk">https://www.youtube.com/watch?v=ots5zxbrlUk</a>&nbsp;: 英語字幕有り<br />
+<a href="https://www.youtube.com/watch?v=0Eeuqh9QfNI">https://www.youtube.com/watch?v=0Eeuqh9QfNI</a>&nbsp;: 英語字幕有り<br />
+<a href="https://www.youtube.com/watch?v=Eh6hl-1VDxo">https://www.youtube.com/watch?v=Eh6hl-1VDxo</a>&nbsp;: 英語字幕有り<br />
+------------------------------------------------------------------------------<br />
+Ubuntu 12.04.3 で簡単にインストールできる計算コード<br />
+openmx 3.5-1<br />
+quantum-espresso 4.3.2-1<br />
+abinit 5.3.4.dfsg-3build2<br />
+gromacs 4.5.5-1<br />
+psi3 3.4.0-2build1<br />
+liggghts 1.5-1<br />
+------------------------------------------------------------------------------<br />
+PCの選定方法<br />
+&nbsp; 理論計算を初めて行われる方は、どのようなPCを選べばよいか迷われると思います。まず、以下の方法でPCを選択して下さい。（ノートPCではなく、同じ金額で約2倍程度性能が良いものを選択できるデスクトップやタワー、ワークステーションと呼ばれる種類を選びます）<br />
+<br />
+a)　研究費が無い場合<br />
+&nbsp; Windows OSがインストールされているPCがあれば、DV-X alpha法 SCAT、GAMESS、CP2k、Phase、ABINIT、TOMBO等での計算が可能です。また、計算速度は遅くなりますが、VMware PlayerやVertualBoxなどを利用してLinux OSによる計算が可能になります。計算速度が速くなるものとして、CygwinやandLinuxがあります。これらを用いた場は、PWscfやABCAP, WIEN2k等の利用が可能になります。<br />
+<br />
+b)&nbsp;研究費が1万?数万円ある場合<br />
+&nbsp; 中古PCのアールキューブ　や　NTT X-Store　で1万円から2万円程度の特価のPCを購入すれば良いでしょう。OSは無くても問題ありません。グラフィックボードもオンボードで大丈夫です。（特価品が無ければ、待つのも一つの選択肢です）<br />
+<br />
+c) 研究費が数万?十数万円ある場合<br />
+&nbsp; Dospara でBTOのPCを購入すれば良いでしょう。OSは無くても問題ありません。グラフィックボードもオンボードで大丈夫です。<br />
+<br />
+d) 研究費が数十万円以上ある場合<br />
+&nbsp; この場合は、コンカレントシステムズ にお頼みして、WIEN2kや他のソフトを導入したPCを購入することがお勧めです。WIEN2kはweb上で計算を走らせることが可能なので、研究費が数十万円ある場合やPCをセットアップする時間の無い大学教員の方には、この選択が適しています。<br />
+<br />
+e) 大学に大型計算機がある場合&nbsp;<br />
+&nbsp; 大学によっては、他機関の人でも2週間内で10万円分の利用が無料で行えるお試し計算が可能であったり、GaussianやWIEN2kが備えてある場合は、数万円の分担金を支払って、自分の研究対象となる材料の第一原理計算をしてみても良いでしょう。共同研究の申請をしてみるのも手です。<br />
+<br />
+&nbsp; 大体の予算と購入先が決まれば、PCのスペックを検討します。現在のPCは性能が高いので、Core 2 Duo以降のCPUで、メモリが4GB以上あれば、例えば、国際会議での査読付き発表論文（プロシーディングス）に書けるような結果を得ることができます（プロシーディングスの内容にもよりますが&hellip;&hellip;）。<br />
+<br />
+&nbsp; もっとも悩むのが、研究費が1万から数万円の場合ですね。金属材料におけるバルクの電子構造を取り扱う実験屋さんが、実験結果を計算結果と比較する場合には、もう少しPCの性能を落とすことが可能で、CPUはPentium 4以降で、メモリも1GBあれば大丈夫です。<br />
+<br />
+大事な事：PCを安く購入できてもCPUの消費電力などに注意しましょう。Xeon 3.4 GHz x 2などを個人宅で使うと、月約2千円程度の電気代が掛かります。<br />
+<br />
+------------------------------------------------------------------------------<br />
+PCの選定方法（アドヴァンス）<br />
+&nbsp; 上記の選定方法で問題ありませんが、さらに厳しい予算状況の場合には、詳細にPCのスペックを検討する必要があります。<br />
+<br />
+&nbsp; まず、DV-X alpha法 SCATのみを用いる場合を考えます。このコードは、Fortran 形式で、COMMON文を用いて書かれていますので、64 bitタイプのWindows OSとIntel Fortran のコンパイルを用いても 32 bit 計算の場合よりも僅かに大きな規模の計算しか出来ません。そのため、コードを書き換えない場合は、PCのメモリを4 GB以下にしても良いでしょう。<br />
+<br />
+&nbsp; 次に、PhaseやAbinit、GAMESS（32 bit版）をWindows上で用いる場合を考えます。この場合、64 bitの規模の計算をするためには、64bit のWindows OSとコンパイラを用いて独自にコンパイルしなけれければなりません。これは、Linux OSを用いるよりもかなり大変な作業になるので、PhaseをWindows上で用いる場合は、PCのメモリを4 GB以下にしても良いでしょう。<br />
+<br />
+&nbsp; 今度は、PhaseやABINIT, GAMESS等をLinux（64 bit版）上で用いる場合を考えます。この場合、対象となる系の大きさによって必要となるメモリ数が異なります。もし、小さな系で計算するチャンスがあれば、そのメモリ数を参考にすることができます。大雑把ですが、計算規模や計算時間は用いている原子数の約3乗に比例します。必要なメモリ数は原子数の約2?3乗に比例します。<br />
+<br />
+&nbsp; 最後に、WIEN2kを用いた場合を考えます。WIEN2kは、HDDの容量が空いていれば、大きな規模の系でもだいたい計算が可能です。しかし、実装しているメモリ数を超えると、私の経験での話ですが、計算速度が数分の1程度(=1/6程度)に低下します。大きな規模の計算をする場合には、小さな系で必要な規模を見積もっておくと良いでしょう。<br />
+------------------------------------------------------------------------------<br />
+OSの選定方法<br />
+<br />
+・2017年の現在、私はUbuntu（Ubuntu 14.04 LTS以降）をお勧めします。恐らくこの先もずっとUbuntuを使い続けると思います。<br />
+・CentOSは必要なライブラリーを手に入れるのが難しくて、とても面倒なので、技官を目指す方以外はお勧めしません。<br />
+・下記はまだ私が旧帝の博士後期課程の学生だった頃（2009年）の情報です。旧帝の情報系の学位を持った研究者に聞いて下記ですから、当時の混沌とした状況がうかがえます。<br />
+<br />
+◆ 研究対象と計算コード、PCが決まれば、後はOSの選定が問題になります。<br />
+まず、インターネット（LAN）が使用可能かどうかを調べて下さい。インターネットが使えないと第一原理計算コードのセットアップに必要なソフトのインストールが、かなり大変な作業となるからです。<br />
+<br />
+◆ OSはWindows用の第一原理計算コードを用いるのでなければ、無償で手に入るLinuxを選択します。しかし、Linuxにも多くの種類があります。以下にPCに対するLinuxの選定方法をまとめましたので、購入予定のPCと比較しながら、どれをインストールするかを考えてみて下さい。<br />
+<br />
+a) Pentium 4やPentium D, Core 2 Duo&nbsp;の時代に設計されたPC<br />
+&nbsp; openSUSE 10.3 をお勧めします。なぜならば、インターネットに接続していなくても、インストール用のCDやDVDからYaST2で必要なソフトが手に入りやすいからです。<br />
+<br />
+b) HPのXeon などの場合<br />
+&nbsp; CentOS 4.8 （CDタイプ）でしかインストール出来ない場合があります。<br />
+注 : 余談ですが、WorkSation xw8200を購入した場合には、部屋の温度差によって、メモリを一度抜き差ししないといけなくなる場合もありますので、注意して下さい。<br />
+<br />
+c) Core i5やi7などを用いた最新のPCの場合<br />
+&nbsp; 最新のLinux OSやその更新を待たないとPCにインストールできない事があります。研究者の方は、FedoraやCentOSを使われている方もおりますので、特に思い入れがなければ、CentOSにしてみるのも手でしょう。しかし、WIEN2kでPhononの計算をしたい場合は、Ubuntuも選択肢の中に入るかもしれません。3年くらい前(2009年)に計算を専門とされる方に相談したところ、どのLinux OSを選んでも良いとのことでした。<br />
+------------------------------------------------------------------------------<br />
+Linux OS<br />
+<br />
+A)&nbsp;Ubuntu<br />
+&nbsp; VNCでのリモートや第一原理計算コードのセットアップが比較的容易。フォノン計算用のコードであるPhonopyのセットアップも容易なことから、オススメのOSである。<br />
+<br />
+B) ContOS<br />
+&nbsp; FTPやwebサーバーとしてNikkei Linux で解説記事のあるOSである。企業などから購入する場合はこのOSとなる。そのため、資金のある研究室に進学する場合は、このOSを選択しておくとよいだろう。大型計算機やサーバーの管理者や技官になることも視野に入れておきたい場合もこちらを選択しておくのがよいだろう。<br />
+<br />
+C)&nbsp;Fedora<br />
+&nbsp; 並列計算用のScaLapackがrpmで整備されている。並列化を容易に成し遂げたい場合は、このOSを選択することも視野に入れておくとよい。ただし、データ転送はrshにしないと計算速度が低下してしまう。<br />
+<br />
+D)&nbsp;openSUSE<br />
+&nbsp; 本HPでは解説していないが、欧州で利用者が比較的多いOSである。留学先の研究室がこのOSを使っている場合は、こちらのOSを利用することも視野に入るかもしれない。<br />
+<br />
+E) Debian<br />
+&nbsp; 本HPでは解説していないが、OSに使用するメモリ容量が少ないということから、少ないメモリしか積んでいない場合は有利になるかもしれない。（勉強不足で済まない）<br />
+------------------------------------------------------------------------------</p>
+
+<p>OS を選定したら、左欄から必要な情報を得て下さい。</p>
+
+<p>◆ 初学者の方は、「Ubuntu 12.04 LST (62bit)」や「CentOS 6 x84_64 (64bit)」 &rarr; 入力ファイルのQ&amp;A &rarr; 結果の解釈方法(まとめ) と進めていくと良いでしょう。</p>
+
+<p>◆ 中級者の方は、左欄の結果を参考にして頂いて、色々とライブラリを設定して、最速のコンディションを探して頂ける助けになりましたら幸いです。</p>
+
+<p>◆ 上級者の方は、「プログラミングの方法」等を参考にして頂いて、新しい手法の開発や改良を行って頂ければと思っております（まだ「プログラミングの方法」の編纂が完全に済んでおりません。済みません）。</p>
+
+<p>------------------------------------------------------------------------------<br />
+理論計算を行う上で読んでおくと良い参考文献を下に記す（他にもある）。<br />
+　OYOBUTURI, Vol 74, No.8, 2005.<br />
+　OYOBUTURI, Vol 80, No.7, 2011.<br />
+　OYOBUTURI, Vol 81, No.9, 2012.<br />
+　日本物理学会誌 Vol 64 (2009) 241-296: <a href="http://ci.nii.ac.jp/vol_issue/nels/AN00196952/ISS0000436441_ja.html">http://ci.nii.ac.jp/vol_issue/nels/AN00196952/ISS0000436441_ja.html</a><br />
+------------------------------------------------------------------------------<br />
+電子状態計算の教科書<br />
+　Electronic Structure - Basic Theory and Practical Methods -<br />
+　Richard M. Martin Cambridge University Press<br />
+　ISBN: 0-521-78285-6<br />
+------------------------------------------------------------------------------<br />
+固体物理関係の教科書<br />
+　Condensed Matter Physics<br />
+　Michael P. Marder Wiley-Interscience<br />
+　ISBN: 0-471-17779-2<br />
+------------------------------------------------------------------------------<br />
+&nbsp; このHPで筆者に権利があるものは全てGPLとします。しかし、教科書や参考書を作られる場合にはBSDでよいです。リンクはフリーです。教科書や参考書は監修などのチェックが入り、また、現状の著作権法の解釈では、公衆への利益も増進され、研究の発展に資するからです。<br />
+※ 広告が入っておりますが著者はアフィリエイトによる収入を得るようにしておりません。現在、アカデミック価格で広告無しのHPとなるよう申請中です。<br />
+※ 2020/3/5: googleの広告が行間に異様に入るのを確認（著者はアフィリエイトによる収入を得るようにしておりません）。googleさん、もし見ているなら、現在の非常勤の職が終わる2024/4からgoogle所属で、汎用人工知能の研究・開発で米軍と共同研究させて欲しいよ。ここで呟いても意味はないと思うけど。優秀な人材が得られない状況かぁ。優秀な人は羨ましいね。まあ、私は優秀じゃないからこの状況なんだろうけど。その数日後、過去の状態に戻ったように見えた。4/2に再び広告が行間に異様に入るのを確認。<br />
+------------------------------------------------------------------------------</p>

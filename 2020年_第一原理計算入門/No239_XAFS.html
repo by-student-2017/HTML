@@ -1,0 +1,660 @@
+<p>・理論計算との比較は左欄「XAS&amp;EELS」に記載</p>
+
+<p>・解析に際して知っておくと良い情報は左欄の「XAFS tips」に記載</p>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ XAFS講習会</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ SPring-8主催：解析講習会（年2回開催）</span></div>
+
+<div><span style="font-size:14px">・<a href="http://www.spring8.or.jp/ja/science/meetings">http://www.spring8.or.jp/ja/science/meetings</a></span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 日本XAFS研究会主催の講習会</span></div>
+
+<div><span style="font-size:14px">・<a href="https://sites.google.com/site/jxafssoc2001/workshops">https://sites.google.com/site/jxafssoc2001/workshops</a></span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ HX-XAFS group of Nagoya Univ. SR-Center and Aichi SR</span></div>
+
+<div><span style="font-size:14px">・<a href="http://titan.nusr.nagoya-u.ac.jp/Tabuchi/BL5S1/doku.php?id=tsukada:text-tsukada">http://titan.nusr.nagoya-u.ac.jp/Tabuchi/BL5S1/doku.php?id=tsukada:text-tsukada</a></span></div>
+
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ 参考資料</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 山本孝先生（徳島大）</span></div>
+
+<div><span style="font-size:14px">&nbsp; SPring-8 XAFSデータ解析講習会テキスト（2009）</span></div>
+
+<div><span style="font-size:14px">&nbsp; <a href="http://support.spring8.or.jp/Doc_lecture/Text_090127.html">http://support.spring8.or.jp/Doc_lecture/Text_090127.html</a></span></div>
+
+<div>&nbsp;</div>
+</div>
+
+<div><span style="font-size:14px">◇ 日本XAFS研究会、「XAFSの基礎と応用」、講談社</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ Adsorption News. Vol. 31，No. 3（October2017） 通巻No. 122</span></div>
+
+<div><span style="font-size:14px">&nbsp; &nbsp;<a href="https://www.j-ad.org/adsorption_news/31_3.pdf">https://www.j-ad.org/adsorption_news/31_3.pdf</a></span></div>
+
+<p>------------------------------------------------------------------------------</p>
+
+<div><span style="font-size:14px">■ EXAFS</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ 測定 (研究室によって流儀がある)</span></div>
+
+<p>a)&nbsp;最低でも目的とするピークから200 eVの範囲は取るようにする<br />
+&nbsp;&nbsp; Tiなどの大きな原子数になると、ピークの前が250 eV, ピークからは700?1000 eV を測定する。<br />
+　（炭素なら7Å、他の元素なら10?15Åは取れるようにしておくと良い）<br />
+　（炭素は酸化していると酸素の吸収が邪魔になり広い範囲で取れない。窒化していればさらに測定範囲が狭くなってしまう）<br />
+b)&nbsp;読み取りのエネルギーステップ<br />
+&nbsp; 1. ピーク前: 10 eV/s 以下&nbsp;のステップ（もっと小さなステップにするとよい）<br />
+&nbsp; 2. ピーク前後: 0.1?0.2 eV/s&nbsp;ステップ(最悪の場合、0.8&nbsp;eV/s)<br />
+&nbsp;&nbsp;&nbsp; （より詳細に取りたい場合に 0.1 eV/s ステップ。分光結晶の分解能で制限される。分光結晶の分解能が0.5 eVの場合 0.2 eV/s ステップ。0.７eVの場合 0.5 eV/s ステップにするなど）<br />
+&nbsp;&nbsp;3. ピークから 50 eV程度後、2 eV/s　ステップ<br />
+&nbsp; 4. ピークから 100 eV程度後、4 eV/s　ステップ<br />
+&nbsp; ※ ピーク前 5 eV ? 10 eV は取り扱う試料によっては立ち上がりが異なる場合があるので注意。Ni foil と NiO などが良い例。<br />
+&nbsp; ※ &quot;蛍光測定の場合&quot;や&quot;ノイズが大きい場合&quot;、1 step を 1 s 以上、時に 5?10 s&nbsp;とすることもある。&nbsp;<br />
+c)&nbsp;測定時間<br />
+&nbsp; 放射光 1分?1時間30分(下記に詳細)、研究室光源 3時間程度<br />
+d)&nbsp;AthenaとArtemis で解析<br />
+e)&nbsp;フーリエスペクトルを出すだけでもよい<br />
+<br />
+□ 試料準備 （下記のどれかが多い）<br />
+・ カーボンテープ上に試料をまぶす<br />
+・ 両面テープ上に試料をまぶす<br />
+・ 試料を錠剤にする<br />
+・ 「ポリスチレン+トルエン」に均一分散させてシール化<br />
+・ BN（ほとんど使われない）<br />
+<br />
+□ 放射光施設及び装置<br />
+・軽元素： UVSOR, EELS(TEM)<br />
+・軽-重元素(TiやCr)：立命館SR, 佐賀LSなど<br />
+・重元素： PF, SPring-8<br />
+<br />
+□ 利用料金<br />
+・立命館SR： 約20万円 / 8h<br />
+・佐賀LS： 約40万円 / 8h<br />
+・PF(BL-7C)：?<br />
+・SPring-8：?<br />
+<br />
+□ XAS: X-ray Absorption Spectroscopy<br />
+&nbsp; XAFS: X-ray Absorption fine Strucuture<br />
+&nbsp;&nbsp;&nbsp; EXAFS: Extended X-ray Absrption Fine Structure<br />
+&nbsp;&nbsp;&nbsp; XANES (NEXAFS): X-ray Absroption Near Edge Structure<br />
+<br />
+□ 測定での小技<br />
+&nbsp; Countが思ったよりも少なかった場合<br />
+・ ビームモニターの高さや位置が最適かを確認する<br />
+・ 感度の良いガスかsampleを薄くする<br />
+・ ビームの大きさを決める（下流側からSlitを開く）<br />
+<br />
+□ 論文を書くために<br />
+・ 生スペクトル、&Chi;（カイ）、動径分布 の3つの図を見せることが重要<br />
+・ 生スペクトルから&mu;を引いて、エッジジャンプで規格化した後に、終わりの方が水平になっているかを確認。そうなっていなければ&mu;を引きなおすか、水平になっていない端の部分を除く<br />
+・ &mu;の引き方は、ピークの前のデータから引くか、ピークの前後のデータを考慮して引く方法がある。大抵の場合、多項式関数が用いられる<br />
+・ 横軸のキャリブレーションは Cuなどの標準試料を用いる。Cuのスペクトルでの最初のピークをE0にするか、または、Cuのスペクトルを微分して、微分する前での最初のピークの直ぐ後にある、微分したときのピーク位置をE0とする<br />
+・ FEFFは計算するモデルが間違っていなければ、横軸の精度が高い。そのため、FEFFの結果を利用して実験値の横軸を補正することも行われる<br />
+・ &Chi;に掛けるkの重みは1?3で良い。重たい元素ほど重みも大きくする。（4にすることもある）<br />
+・ &Chi;はその上下の振動の中心が横軸に水平になっているようにする。傾いていたりすると&times;<br />
+・ &Chi;からフーリエ変換して動径分布関数を得るときに、余分なÅまで入れると誤った結果になる。約2?10Åまたは約2?15Å程度まで考慮するようにすると良い（場合によっては、1Å近辺からも計算に考慮できる場合がある）<br />
+・ &Chi;からフーリエ変換するÅの幅が広いほど、動径分布関数での半値幅は狭くなる<br />
+・ 動径分布関数での横軸の精度は高いが、配位数は横軸よりも精度が悪いと一般的にいわれている<br />
+・ 動径分布関数が予想と合わない場合には、位相シフト（熱振動により原子間距離が短く出る）が計算に考慮されているかをチェックする<br />
+・ 動径分布関数は単一の元素からなっていないことに注意する<br />
+<br />
+□ 動径分布関数の強度を比較したときでの解釈（あくまでも参考）<br />
+・ 第三近接あたりで強度が弱くなる： 微結晶や準結晶<br />
+・ 第二近接を超えた辺りで分布が変化（または強度が弱くなる）： 第1?2隣接原子までOrderしている。<br />
+・ 第一近接あたりまで分布が変化：アモルファス、メカニカルアロイングされた試料<br />
+[1] <a href="http://athenaandartemis.seesaa.net/category/6719310-1.html">http://athenaandartemis.seesaa.net/category/6719310-1.html</a><br />
+[2] <a href="http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_4.pdf">http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_4.pdf</a><br />
+[3] <a href="http://pfwww.kek.jp/innovationPF/04_EVENT/XAFS_Seminor_0910/theory.pdf">http://pfwww.kek.jp/innovationPF/04_EVENT/XAFS_Seminor_0910/theory.pdf</a><br />
+[4] <a href="http://pfwww.kek.jp/jxs/">http://pfwww.kek.jp/jxs/</a><br />
+<br />
+□ 理論や適応範囲<br />
+&nbsp; 左欄の「XAS&amp;EELS」を参照</p>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ XAFSのポイント</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ 分析・構造解析が求められる試料</span></div>
+
+<div><span style="font-size:14px">（X線回折法が適用できない試料も多く存在する）</span></div>
+
+<div><span style="font-size:14px">・非晶質（固体・液体・気体）の測定</span></div>
+
+<div><span style="font-size:14px">・複数元素が混在する試料</span></div>
+
+<div><span style="font-size:14px">・希薄・薄膜試料の測定</span></div>
+
+<div><span style="font-size:14px">・反応のその場観察</span></div>
+
+<div><span style="font-size:14px">・非破壊で測定</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ XAFSで測定できるもの</span></div>
+
+<div><span style="font-size:14px">・結晶、非晶質の両方に適用可能</span></div>
+
+<div><span style="font-size:14px">・短距離秩序のみ持つ物質</span></div>
+
+<div><span style="font-size:14px">・長距離秩序を持つ物質（これは自動的に短距離秩序も持つ）</span></div>
+
+<div><span style="font-size:14px">&nbsp; (長距離秩序を持つ物質は、X線回折、XAFSの両方で測定が可能。両者を相補的に利用することも行われる)</span></div>
+
+<div><span style="font-size:14px">・元素を選択して測定が可能</span></div>
+
+<div><span style="font-size:14px">&nbsp; 複数の元素が混在する試料から目的とする元素の周りの構造の情報を抽出する</span></div>
+
+<div><span style="font-size:14px">&nbsp; (目的の元素の濃度や量が少ない試料に向く： 薄膜（デバイス）、希薄物質（微量ドープ材料）)</span></div>
+
+<div><span style="font-size:14px">&nbsp; (数ナノの薄膜も測定可能。透過法でない方法なら微量ドープは0.1%まで可能)</span></div>
+
+<div><span style="font-size:14px">・硬X線の高い透過性を利用することで非破壊でその場観察が可能</span></div>
+
+<div><span style="font-size:14px">&nbsp; (内部にある物質や化学・物理反応中の試料のその場観察など)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ 用語</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">◇ XAFS(X-ray Absorption Fine Structure)</span></div>
+
+<div><span style="font-size:14px">・X線吸収微細構造</span></div>
+
+<div><span style="font-size:14px">・元素に特有な吸収端近傍の細かな変動</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANES（ゼーンズ）</span></div>
+
+<div><span style="font-size:14px">・吸収端近傍（-50から50 eV）</span></div>
+
+<div><span style="font-size:14px">&nbsp;「基底準位」（内殻準位）から「非占有準位」や「準連続帯」への励起</span></div>
+
+<div><span style="font-size:14px">・XANES(X-ray Absorption Near Edge Structure)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ EXAFS（イグザフス）</span></div>
+
+<div><span style="font-size:14px">・吸収端から離れた領域（50から1500 eV）</span></div>
+
+<div><span style="font-size:14px">&nbsp;「基底準位」（内殻準位）から「連続帯」への励起</span></div>
+
+<div><span style="font-size:14px">・EXAFS(Extended X-ray Absorption Fine Structure)</span></div>
+
+<div><span style="font-size:14px">※ 学会などでは、「ゼーンズ領域では...」などとして用語が使われる</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ XAFS解析の流れ</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">1. XAFS以外の手法による情報収集</span></div>
+
+<div><span style="font-size:14px">&nbsp; 最初のモデル検討に使う情報</span></div>
+
+<div><span style="font-size:14px">2. XANESでの解析</span></div>
+
+<div><span style="font-size:14px">&nbsp; 対称性の検討 -&gt; 配位数</span></div>
+
+<div><span style="font-size:14px">&nbsp; 化学種の同定 -&gt; 配位原子</span></div>
+
+<div><span style="font-size:14px">&nbsp; 混合物の有無 -&gt; 化学種の数、存在比率</span></div>
+
+<div><span style="font-size:14px">3. EXAFSでの解析モデルの構築</span></div>
+
+<div><span style="font-size:14px">4. EXAFSでの解析</span></div>
+
+<div><span style="font-size:14px">&nbsp; 結合距離、配位原子種</span></div>
+
+<div><span style="font-size:14px">&nbsp; 3次元構造モデル</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANESのスペクトル形状</span></div>
+
+<div><span style="font-size:14px">・励起前後の準位の微細構造を反映した位置にピークや肩構造が見られる（これらは配位の対称性（混成軌道など）に敏感）</span></div>
+
+<div><span style="font-size:14px">・カチオンは原子価数が大きいほど高いエネルギー側に吸収端が現れる</span></div>
+
+<div><span style="font-size:14px">・プリエッジピーク強度は対称性およびd電子数に強く依存する</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANESから得られる情報</span></div>
+
+<div><span style="font-size:14px">・原子の化学状態（電子状態）</span></div>
+
+<div><span style="font-size:14px">・配位の対称性</span></div>
+
+<div><span style="font-size:14px">・混合物の場合は混合比</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANESの解析</span></div>
+
+<div><span style="font-size:14px">・XANESはEXAFSのような定式化された解析手法は確立されていない</span></div>
+
+<div><span style="font-size:14px">・非常に多くの構造情報を持っている。正しいXAFS解析を行う上で非常に重要となる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 選択則（電気双極子遷移）</span></div>
+
+<div><span style="font-size:14px">・&Delta;l = &plusmn;1, &Delta;j = 0,&plusmn;1, &Delta;n:制限無し</span></div>
+
+<div><span style="font-size:14px">（l = 方位量子数、s = 0, p = 1, d = 2）</span></div>
+
+<div><span style="font-size:14px">・s -&gt; p：&Delta;l = &plusmn;1 (許容)</span></div>
+
+<div><span style="font-size:14px">・s -&gt; d：&Delta;l = &plusmn;2（禁制）電気四重極遷移は許容。ただし遷移確率は3桁小さい</span></div>
+
+<div><span style="font-size:14px">・p -&gt; d：&Delta;l = +1 （許容）</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 吸収端</span></div>
+
+<div><span style="font-size:14px">・K吸収端： 1s 吸収（対称性に特に敏感）</span></div>
+
+<div><span style="font-size:14px">・L1吸収端：2s 吸収（対称性に特に敏感）</span></div>
+
+<div><span style="font-size:14px">・L2,3吸収端：2p 吸収</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 吸収端エネルギーE0の見積もり</span></div>
+
+<div><span style="font-size:14px">・真のE0を実験的に求めることは困難</span></div>
+
+<div><span style="font-size:14px">・仮のE0決定法のガイドラインはない</span></div>
+
+<div><span style="font-size:14px">・評価法によりE0および化合物間の序列が時に異なる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANESでの酸化数による吸収端のシフト</span></div>
+
+<div><span style="font-size:14px">・見かけ上のシフト量は元素群内では類似</span></div>
+
+<div><span style="font-size:14px">・希土類元素のシフト量は他の元素群より大きい</span></div>
+
+<div><span style="font-size:14px">&nbsp; (Ref: 山本孝ら、分析化学、62 (2013) 555.)</span></div>
+
+<div><span style="font-size:14px">・スペクトルを実際に見比べて評価することが大切</span></div>
+
+<div><span style="font-size:14px">・対称性などの予備情報が揃わないと推定価数の確度は低い</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XANESでの混合試料の価数評価</span></div>
+
+<div><span style="font-size:14px">・未知試料の平均酸化数を評価するときには特に注意</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 得意な解析（左側ほど得意な解析。右側はど不得意な解析）</span></div>
+
+<div><span style="font-size:14px">・XANES: 電子状態、対称性、価数、化合物同定、配位数、配位原子種類、結合距離</span></div>
+
+<div><span style="font-size:14px">・EXAFS: 結合距離、配位原子種類、配位数、化合物同定、価数、対称性</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ EXAFS振動の起源</span></div>
+
+<div><span style="font-size:14px">・励起先：連続体（光電子波として放出）</span></div>
+
+<div><span style="font-size:14px">・光電子波が近くの原子により散乱</span></div>
+
+<div><span style="font-size:14px">&nbsp; 一部がX線吸収電子に戻る</span></div>
+
+<div><span style="font-size:14px">&nbsp; 放出光電子波と散乱光電子波が干渉する</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ EXAFS振動の大きさ</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">◇ 散乱原子の位置のゆらぎ</span></div>
+
+<div><span style="font-size:14px">・散乱光電子波の位相のずれ -&gt; 干渉が小さくなる -&gt; EXAFS振動が小さくなる</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 同種の散乱原子が同じ距離に位置する場合</span></div>
+
+<div><span style="font-size:14px">・散乱電子数（N）に比例 -&gt; 配位数</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 散乱原子の元素種</span></div>
+
+<div><span style="font-size:14px">・散乱光電子波の強度依存 -&gt; 元素種の区別</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 散乱原子までの距離</span></div>
+
+<div><span style="font-size:14px">・散乱原子までの距離が離れるほど光電子波が広がり散乱が弱まる</span></div>
+
+<div><span style="font-size:14px">・1/r^2に比例 -&gt; 近くの原子が見える</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 解析ソフトにより理論計算されるパラメーター</span></div>
+
+<div><span style="font-size:14px">・多体効果による効果（EXAFSの振動を小さくする）</span></div>
+
+<div><span style="font-size:14px">・散乱原子の後方散乱強度（光電子波の散乱の大きさ）</span></div>
+
+<div><span style="font-size:14px">・散乱原子による光電子波の位相の変化</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 解析により求めるパラメーター</span></div>
+
+<div><span style="font-size:14px">・散乱原子の個数</span></div>
+
+<div><span style="font-size:14px">・散乱原子の吸収原子からの距離</span></div>
+
+<div><span style="font-size:14px">・散乱原子の位置の揺らぎの大きさ（Debye-Waller因子）</span></div>
+
+<div><span style="font-size:14px">・元素種</span></div>
+
+<div><span style="font-size:14px">・E0（kの原点）</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ EXAFSから得られる情報</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">◇ 目的原子周りの局所構造</span></div>
+
+<div><span style="font-size:14px">・原子間距離：約0.01Å（相対的）</span></div>
+
+<div><span style="font-size:14px">・配位数：約&plusmn;10%（わかっているものを同定するという条件での値）</span></div>
+
+<div><span style="font-size:14px">・元素種：周期表で一段以上離れているものは区別</span></div>
+
+<div><span style="font-size:14px">・モデル構造の判定：一意的ではない</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 位置の揺らぎ</span></div>
+
+<div><span style="font-size:14px">・熱振動</span></div>
+
+<div><span style="font-size:14px">・非対称性</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 留意点</span></div>
+
+<div><span style="font-size:14px">・上記の全ての情報が得られるわけではない</span></div>
+
+<div><span style="font-size:14px">・多くの場合、第一近接の原子についての情報のみが得られる</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ フーリエ変換XAFS（FT-XAFS）</span></div>
+
+<div><span style="font-size:14px">・EXAFSの振動成分（&chi;(k)）をフーリエ変換（FT）</span></div>
+
+<div><span style="font-size:14px">・実空間の動径分布関数に相当</span></div>
+
+<div><span style="font-size:14px">・散乱原子の位置にピーク</span></div>
+
+<div><span style="font-size:14px">・位相のずれの影響により0.02から0.03 nmほど小さい位置</span></div>
+
+<div><span style="font-size:14px">※ FT-XAFSのみで結論することは危険であるためモデルフィッティングが必要</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ FT-XAFS用の測定に必要なこと</span></div>
+
+<div><span style="font-size:14px">・フーリエ変換範囲が狭いとピーク分解が悪くなりピーク位置が真の値からズレる</span></div>
+
+<div><span style="font-size:14px">・上記を防ぐためには、大きなk（吸収端から離れたエネルギー）まで「信号/雑音」比の高いデータを得ておく必要がある</span></div>
+
+<div><span style="font-size:14px">・k = 14 Å^-1までのデータを得ることが望ましい</span></div>
+
+<div><span style="font-size:14px">※ 可能なのであれば、光電子波のエネルギー(Ee)は1200 eVまで測定できると良い</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ XAFS解析の限界</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">◇ 測定原理上の限界</span></div>
+
+<div><span style="font-size:14px">・3次元構造が1次元データに圧縮される（情報量の欠如）</span></div>
+
+<div><span style="font-size:14px">・原子番号の近い元素種は後方散乱強度が類似するため同定が困難になる</span></div>
+
+<div><span style="font-size:14px">・同程度の距離にある複数原子（分別が困難となる）</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 解析のあいまいさ</span></div>
+
+<div><span style="font-size:14px">・モデル計算のパラメーター間に相関がある（配位数とDebye-Waller因子）</span></div>
+
+<div><span style="font-size:14px">・フィッティングの差異に誤った解（極小値）に収束してしまうことがある</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ XAFS解析にはXAFS以外での試料に対する情報が必要</span></div>
+
+<div><span style="font-size:14px">・他の実験の情報：元素組成、XRD、STM、UV-Vis、IR、NMRなど</span></div>
+
+<div><span style="font-size:14px">・既知の類似物質の構造</span></div>
+
+<div><span style="font-size:14px">・理論的な検討：安定な構造かあり得ない構造か？</span></div>
+
+<div><span style="font-size:14px">・類似物質の解析調査の情報</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ 希薄（ppmオーダー）や薄膜試料のXAFS測定</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div><span style="font-size:14px">◇ 蛍光法</span></div>
+
+<div><span style="font-size:14px">・透過法でできない希薄や薄膜試料は蛍光法</span></div>
+
+<div><span style="font-size:14px">・チャージアップしやすい試料（酸化物など）</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 電子収量法</span></div>
+
+<div><span style="font-size:14px">・数十nmの表面</span></div>
+
+<div><span style="font-size:14px">----------</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ SPring-8 BL01B1</span></div>
+
+<div><span style="font-size:14px">・広いエネルギー領域（3.8 - 113 keV）を測定できる</span></div>
+
+<div><span style="font-size:14px">・Caより重い元素を測定可能</span></div>
+
+<div><span style="font-size:14px">・希土類元素のK端を測定することで広いk範囲を測定可能</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 複合計測手法（in-situ XAFS-XRD測定）</span></div>
+
+<div><span style="font-size:14px">・XAFS: 測定対象元素の化学状態および局所構造情報が得られる</span></div>
+
+<div><span style="font-size:14px">・XRD: 試料の結晶子部位の結晶構造に関する情報（結晶系、結晶子サイズ、結晶格子長、結晶の生成・消滅など）</span></div>
+
+<div><span style="font-size:14px">・個別の計測で問題となる観察領域や測定条件の微妙な違いに由来する計測データの偏差を考慮する必要がない</span></div>
+
+<div><span style="font-size:14px">・情報量が少ないことに起因する解析の誤りを低減するなど解析結果の信頼性が向上する</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ in-situ XAFS-XRDでの測定条件</span></div>
+
+<div><span style="font-size:14px">・測定温度範囲：常温、200から600度まで100度毎、600から650度まで50度毎</span></div>
+
+<div><span style="font-size:14px">・フローガス：Heガス 50ml/min</span></div>
+
+<div><span style="font-size:14px">・XAFS計測時間：10 min</span></div>
+
+<div><span style="font-size:14px">・XRD：目的となる元素の吸収端前</span></div>
+
+<div><span style="font-size:14px">・XRD測定時間：5 min</span></div>
+
+<div><span style="font-size:14px">・XRD検出器画素サイズ：172 &mu;m/pixel (487x195 pixel)</span></div>
+
+<div><span style="font-size:14px">・試料と検出器の距離：550 mm</span></div>
+
+<div><span style="font-size:14px">・検出器高さ：90 mm（-523 pixel相当）</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ in-situ XAFS-XRDでの手順</span></div>
+
+<div><span style="font-size:14px">1. ビームステップを外し、Quick-XAFS測定を行いXAFSデータを得る</span></div>
+
+<div><span style="font-size:14px">2. ビームストップを入れ、Step Scan測定を行い、XRDデータを得る</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ 測定試料</span></div>
+
+<div><span style="font-size:14px">・均一な粉末試料の作製にはBNと混合してペレットを作製する方法が一般的に行われる</span></div>
+
+<div><span style="font-size:14px">・必要な試料量の計算にはSPring-8産業利用推進室提供のXAFS試料調製ガイドプログラムがある</span></div>
+
+<div><span style="font-size:14px">&nbsp; https://support.spring8.or.jp/xafs.html &gt; XAFS試料調製ガイドプログラム</span></div>
+
+<div><span style="font-size:14px">・https://www1.gifu-u.ac.jp/~techrep/2020/pdf/02_10.pdf</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ EXAFSの分析方法</span></div>
+
+<div><span style="font-size:14px">・SPring-8での講習会 : http://support.spring8.or.jp/event/XAFS_110113.html</span></div>
+
+<div><span style="font-size:14px">・SPring-8産業利用推進室：http://support.spring8.or.jp/xafs.html</span></div>
+
+<div><span style="font-size:14px">・XAFS講習会資料 : http://pfwww.kek.jp/innovationPF/04_EVENT/XAFS_Seminor_1010/analysis.pdf</span></div>
+
+<div><span style="font-size:14px">・AthenaとArtemisを用いたEXAFS解析 : イトー様のHP</span></div>
+
+<div><span style="font-size:14px">&nbsp; http://athenaandartemis.seesaa.net/category/6429149-1.html</span></div>
+
+<div><span style="font-size:14px">・Athena : http://cars9.uchicago.edu/~ravel/software/</span></div>
+
+<div><span style="font-size:14px">・産業利用：http://support.spring8.or.jp/Doc_lecture/Text_090127.html</span></div>
+
+<div><span style="font-size:14px">・Cu箔：http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_4.pdf</span></div>
+
+<div><span style="font-size:14px">・ZnO結晶：http://support.spring8.or.jp/Doc_lecture/PDF_090127/xafs_5.pdf</span></div>
+
+<div><span style="font-size:14px">・PF-XAFS：http://pfwww.kek.jp/nomura/pfxafs/</span></div>
+
+<div><span style="font-size:14px">&nbsp; http://athenaandartemis.seesaa.net/article/234545494.html</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ References</span></div>
+
+<div><span style="font-size:14px">[1] SPring-8 秋の学校</span></div>
+
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<p>■ SPring-8 BL27SU測定（軟X線吸収分光法）<br />
+<br />
+□ XAFS測定でのセットアップ<br />
+1) カレントアンプ428 ： I0 (M4ミラー）, ゲイン9<br />
+&nbsp;&nbsp;&nbsp; FILTER 3 msec をON<br />
+2) カレントアンプ428 ： I (sample), ゲイン10<br />
+&nbsp;&nbsp;&nbsp; FILTER RISETIME を押して、つまみを回し、 3 msec にする。<br />
+&nbsp;&nbsp;&nbsp; FILTER が ON になっているのを確認<br />
+3) 固体①のoutがCh0に接続されていることを確認<br />
+4) 固体②のoutがCh2に接続されていることを確認<br />
+5) 固体①と固体②のケーブルがV/Fコンバーターに接続されていることを確認<br />
+&nbsp;&nbsp;&nbsp;（ 固体①はCH1, 固体②はCH2に接続、NEGにセット）<br />
+6) XASの測定中にSample Current (CH2)が飽和した場合は、アンプのゲインを小さな値にする。（例えば、カレントアンプ428 ： I (sample), ゲイン10 &rarr; ゲイン9 へ）<br />
+＊&nbsp;試料に流入する電流 1 nA &rarr;（カレントアンプ ： ゲイン 9&nbsp;：&nbsp;電流値が10の9乗倍の大きさの電圧値に変換される&nbsp;）&rarr; 1 V &rarr; (V/Fコンバーター）&rarr;10万パルス　（カレントアンプの出力は0?10 V であるので、カウント数が飽和していた場合は、ゲインの値を減らす）<br />
+7) 測定時はカレントアンプ のZeroチェックをOFFにする<br />
+&nbsp;&nbsp;&nbsp; BL27_VLSPGM_scan_main.vi を立ち上げて測定に入る<br />
+&nbsp;&nbsp;&nbsp; データ保存はLドライブのXESPESstationへ<br />
+8) 試料移動時はカレントアンプのZeroチェックをONにする<br />
+<br />
+□ XAS測定（C K-edge での例）<br />
+1)&nbsp;下記のような条件にしておけばよいだろう。<br />
+&nbsp;&nbsp;&nbsp; Activity O, Start energy (eV) 302.000, Stop energy 279.000, Step energy 0.100, Grating G3, pluse speed 1000, E-vector Horizontal, resolution 3000, Counter Preset 1.0<br />
+&nbsp;&nbsp;&nbsp; Activity O, Start energy (eV) 302.000, Stop energy 279.000, Step energy 0.100, Grating G3, pluse speed 1000, E-vector Vertical, resolution 3000, Counter Preset 1.0<br />
+2) 上記の二つ（HorizontalとVertical）の合計の測定時間は、約34分30秒である。<br />
+<br />
+□ XAFS測定（C K-edge での例）<br />
+80 - 300 eV, 0.35 step energy でも1時間30分程度の測定時間が掛かる。<br />
+2) C&nbsp;: 275 - 530 eV, 0.35 step energy<br />
+3) O : 520 - 770 eV, 0.35 step energy<br />
+<br />
+□ ビームアボートから復旧後の対処方法<br />
+1) telnet接続のコメントの中で下記が流れる<br />
+　ID&nbsp;Gap can be changed by users &gt; ID-BL<br />
+　（「フィリング変更の為、本日10時にユーザー運転を一時中断します」にも注意）<br />
+2) MBSを開ける<br />
+　&nbsp;(パネル上のMBSを押す&rarr;open&nbsp;&rarr;&nbsp;Enter)<br />
+3) Local + Remote にする<br />
+　（パネル中の左下にあるlocal ?を押して、local Remote を選択する）<br />
+4)&nbsp;Gapの値を確認(web上で確認できる）<br />
+　（XAS測定の出力データで、E(Y), Gap にGapの値が書かれているのでチェックする）<br />
+&nbsp;&nbsp;機器グループから検索するオンライン/アーカイブデータベース上の最新データ<br />
+&nbsp;&nbsp;bl_id &rarr; bl_id27&nbsp;を押して待つ &rarr; bl_id27_gap / position (10秒/1回　更新される）<br />
+5) Gapが開ききったままの時は、自分で設定する<br />
+------------------------------------------------------------------------------<br />
+□ 水の研究<br />
+[1] 水の中の溶質分子の電子状態観測（SPring-8 BL17SU）</p>
+
+<p>&nbsp; 徳島高、堀川裕加、応用物理、80 (2011) 898.<br />
+[2] 水分子の高速ダイナミックス（IRによる観測）</p>
+
+<p>&nbsp; 芦原聡、応用物理、80 (2011) 894.<br />
+------------------------------------------------------------------------------</p>

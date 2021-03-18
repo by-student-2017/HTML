@@ -1,0 +1,123 @@
+------------------------------------------------------------------------------<br />
+Å° hotbit<br />
+(debian 10.0 or ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://github.com/pekkosk/hotbit)<br />
+(Edit: 26/Aug/2020)<br />
+<br />
+Å† libxc-4.3.4<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake gcc g++ build-essential<br />
+&nbsp; sudo apt install -y python-dev python-distutils python-setuptools<br />
+&nbsp; cd ~<br />
+2. wget https://www.tddft.org/programs/libxc/down/4.3.4/libxc-4.3.4.tar.gz<br />
+3. tar zxvf libxc-4.3.4.tar.gz<br />
+4. cd ~/libxc-4.3.4<br />
+5. sudo python setup.py install<br />
+<br />
+Å† Install (hotbit)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y ase python-ase<br />
+&nbsp; sudo apt install -y libblas-dev liblapack-dev libopenblas-dev<br />
+&nbsp; sudo apt install -y python-numpy python-scipy python-matplotlib<br />
+&nbsp; (sudo apt install -y libxc-dev)<br />
+&nbsp; cd ~<br />
+2. git clone https://github.com/pekkosk/hotbit.git<br />
+3. cd hotbit<br />
+4. python setup.py install --home=~/hotbit<br />
+<br />
+Å† environment settings<br />
+1. echo ' ' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo '# hotbit' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export HOTBIT_DIR=$HOME/hotbit/lib/python' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PATH=$HOME/hotbit:$PATH' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export HOTBIT_PARAMETERS=$HOME/hotbit/param' &gt;&gt; ~/.bashrc<br />
+&nbsp; echo 'export PYTHONPATH=$PYTHONPATH:$HOTBIT_DIR' &gt;&gt; ~/.bashrc<br />
+2. bash<br />
+or<br />
+1. cd ~/hotbit<br />
+2. bash env_exports<br />
+<br />
+Å† test<br />
+1. cd $HOTBIT_DIR/hotbit/test<br />
+2. python test.py<br />
+<br />
+Å† examples<br />
+1. cd ~/hotbit/examples<br />
+2. cd AuAu_parametrization<br />
+3. python AuAu.py<br />
+(you can get <span class="pl-s">AuAu_repulsion.pdf)</span><br />
+------------------------------------------------------------------------------<br />
+Å† Parameters and parametrization<br />
+(https://github.com/pekkosk/hotbit/wiki/Parameters-and-parametrization)<br />
+<br />
+hotbit/parametrization/atom.py -&gt; KSAllElectron<br />
+hotbit/parametrization/util.py -&gt; IP_EA<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] hotbit<br />
+&nbsp; https://github.com/pekkosk/hotbit<br />
+[2] Parameters and parametrization<br />
+&nbsp; https://github.com/pekkosk/hotbit/wiki/Parameters-and-parametrization<br />
+[3] https://trac.cc.jyu.fi/projects/hotbit/wiki/Parametrization<br />
+------------------------------------------------------------------------------<br />
+Å† libxc (github)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake<br />
+2. git clone https://gitlab.com/libxc/libxc.git<br />
+3. cd libxc<br />
+4. sudo python setup.py install<br />
+<br />
+Å† libxc-5.0.0<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake<br />
+2. wget https://www.tddft.org/programs/libxc/down/5.0.0/libxc-5.0.0.tar.gz<br />
+3. tar zxvf libxc-5.0.0.tar.gz<br />
+4. cd libxc-5.0.0<br />
+5. sudo python setup.py install<br />
+<br />
+Å† libxc-4.3.4<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake gcc g++ build-essential<br />
+2. wget https://www.tddft.org/programs/libxc/down/4.3.4/libxc-4.3.4.tar.gz<br />
+3. tar zxvf libxc-4.3.4.tar.gz<br />
+4. cd libxc-4.3.4<br />
+5. sudo python setup.py install<br />
+<br />
+Å† libxc-4.3.3<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake gcc g++ build-essential<br />
+2. wget https://www.tddft.org/programs/libxc/down/4.3.3/libxc-4.3.3.tar.gz<br />
+3. tar zxvf libxc-4.3.3.tar.gz<br />
+4. cd libxc-4.3.3<br />
+5. sudo python setup.py install<br />
+Å¶ Start iteration...<br />
+iter&nbsp;&nbsp; 0, dn=4.0e+00&gt;1.0e-07, max 8 sp-iter<br />
+iter&nbsp; 10, dn=7.8e-02&gt;1.0e-07, max 4 sp-iter<br />
+iter&nbsp; 20, dn=1.5e-03&gt;1.0e-07, max 3 sp-iter<br />
+iter&nbsp; 30, dn=1.3e-04&gt;1.0e-07, max 3 sp-iter<br />
+iter&nbsp; 40, dn=1.4e-05&gt;1.0e-07, max 2 sp-iter<br />
+iter&nbsp; 50, dn=1.6e-06&gt;1.0e-07, max 2 sp-iter<br />
+iter&nbsp; 60, dn=1.8e-07&gt;1.0e-07, max 2 sp-iter<br />
+Traceback (most recent call last):<br />
+&nbsp; File &quot;/home/inukai/hotbit/lib/python/hotbit/test/parametrization.py&quot;, line 7, in &lt;module&gt;<br />
+&nbsp;&nbsp;&nbsp; atom.run()<br />
+&nbsp; File &quot;/home/inukai/hotbit/lib/python/hotbit/parametrization/atom.py&quot;, line 347, in run<br />
+&nbsp;&nbsp;&nbsp; self.calculate_energies(echo=True)<br />
+&nbsp; File &quot;/home/inukai/hotbit/lib/python/hotbit/parametrization/atom.py&quot;, line 177, in calculate_energies<br />
+&nbsp;&nbsp;&nbsp; self.exc=self.xcf.exc(self.dens)<br />
+&nbsp; File &quot;/home/inukai/hotbit/lib/python/hotbit/parametrization/pylibxc_interface.py&quot;, line 68, in exc<br />
+&nbsp;&nbsp;&nbsp; e_xc = e_x + e_c<br />
+NameError: global name 'e_x' is not defined<br />
+('parametrization.py', 'returned', 256, 'and FAILED!')<br />
+<br />
+Å† libxc-4.2.3<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y cmake gcc g++ build-essential<br />
+2. wget https://www.tddft.org/programs/libxc/down/4.2.3/libxc-4.2.3.tar.gz<br />
+3. tar zxvf libxc-4.2.3.tar.gz<br />
+4. cd libxc-4.2.3<br />
+5. sudo python setup.py install<br />
+Å¶ Segmentation fault (core dumped)<br />
+('parametrization.py', 'returned', 35584, 'and FAILED!')<br />
+------------------------------------------------------------------------------

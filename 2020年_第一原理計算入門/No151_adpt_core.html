@@ -1,0 +1,122 @@
+------------------------------------------------------------------------------<br />
+■ adpt_core (Automatized DFTB Parameter Toolkit)<br />
+(Debian 10.0 and ubuntu 18.04 LTS (64 bit) on windows10 (64 bit))<br />
+(Edit: 26/Aug/2020)<br />
+<br />
+□ Qt5 (failed)<br />
+(https://wiki.qt.io/Building_Qt_5_from_Git#Getting_the_source_code)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y perl g++<br />
+2. git clone git://code.qt.io/qt/qt5.git<br />
+3. cd qt5<br />
+4. perl init-repository<br />
+5. ./configure -prefix $PWD/qtbase -opensource -nomake tests<br />
+6. Do you accept the terms of either license? y<br />
+7. make -j 4<br />
+-----<br />
+make[3]: Leaving directory '/home/inukai/qt5/qtbase/src/network'<br />
+make[3]: Leaving directory '/home/inukai/qt5/qtbase/src/gui'<br />
+make[2]: *** [Makefile:586: sub-gui-make_first] Error 2<br />
+make[2]: Leaving directory '/home/inukai/qt5/qtbase/src'<br />
+make[1]: *** [Makefile:51: sub-src-make_first] Error 2<br />
+make[1]: Leaving directory '/home/inukai/qt5/qtbase'<br />
+make: *** [Makefile:62: module-qtbase-make_first] Error 2<br />
+-----<br />
+(Please, see README)<br />
+<br />
+□ Install (adpt_core) (failed)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y gcc build-essential<br />
+&nbsp; sudo apt install -y cmake<br />
+&nbsp; sudo apt install -y qt5-default<br />
+&nbsp; sudo apt install -y libcurl4-openssl-dev<br />
+&nbsp; sudo apt install -y libxml2-dev<br />
+&nbsp; sudo apt install -y libblas-dev liblapack-dev liblapacke-dev gfortran<br />
+2. git clone https://bitbucket.org/solccp/adpt_core.git<br />
+3. cd adpt_core<br />
+4. git submodule init<br />
+5. git submodule update<br />
+6. cd external_libs<br />
+7. ./make-external-libs.sh<br />
+8. mkdir adpt_core_build<br />
+9. cd adpt_core_build<br />
+10. qmake PREFIX=~/adpt_core ~/adpt_core<br />
+11. make<br />
+12. sudo make install<br />
+&nbsp; (~/adpt_core/adpt/bin)<br />
+※ Splcoeff.cpp:(.text+0xc525): undefined reference to `LAPACKE_dgglse'<br />
+<br />
+□ Install (adpt_auxiliary) (failed)<br />
+1. sudo apt update<br />
+&nbsp; sudo apt install -y gcc build-essential<br />
+&nbsp; sudo apt install -y cmake<br />
+&nbsp; sudo apt install -y qt5-default<br />
+&nbsp; sudo apt install -y libmysqlclient-dev<br />
+&nbsp; sudo apt install -y mesa-common-dev<br />
+&nbsp; sudo apt install -y libgl1-mesa-dev<br />
+&nbsp; sudo apt install -y libxml2-dev<br />
+&nbsp; sudo apt install -y libz<br />
+&nbsp; sudo apt install -y libqt5sql5-mysql<br />
+2. git clone https://bitbucket.org/solccp/adpt_auxiliary.git<br />
+3. cd adpt_auxiliary<br />
+4. git submodule init<br />
+5. git submodule update<br />
+6. cd external_libs<br />
+7. ./make-external-libs.sh<br />
+8. cd ~/qt5<br />
+9. cd qtbase/src/plugins/sqldrivers/mysql<br />
+10. qmake<br />
+11. make install<br />
+12. mkdir adpt_auxiliary_build<br />
+13. cd adpt_auxiliary_build<br />
+14. qmake PREFIX=~/adpt_auxiliary ~/adpt_auxiliary<br />
+15. make<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] adpt_core<br />
+&nbsp; https://bitbucket.org/solccp/adpt_core/src/master/<br />
+[2] Michael Gaus, Chien-Pin Chou, Henryk Witek, Marcus Elstner, Automatized Parametrization of SCC-DFTB Repulsive Potentials : Application to Hydrocarbons, <em>J. Phys. Chem. A</em> <strong>113</strong>: 43. 11866-11881. (2009)<br />
+[3] Chien-Pin Chou, Yoshifumi Nishimura, Chin-Chai Fan, Grzegorz Mazur, Stephan Irle and Henryk A. Witek, Automatized Parameterization of DFTB using Particle Swarm Optimization, <em>J. Chem. Theory Comput.</em>, DOI: <a data-is-external-link="true" href="http://doi.org/10.1021/acs.jctc.5b00673" rel="nofollow">10.1021/acs.jctc.5b00673</a>.<br />
+<br />
+qt5<br />
+[q1] Ubuntu 18.04.1 LTS にQt5 をインストールする<br />
+&nbsp; https://qiita.com/chlochan/items/53f1276522d03f460a81<br />
+1. wget http://download.qt.io/official_releases/qt/5.11/5.11.2/qt-opensource-linux-x64-5.11.2.run<br />
+2. chmod +x qt-opensource-linux-x64-5.11.2.run<br />
+3. ./qt-opensource-linux-x64-5.11.2.run<br />
+4. sudo apt install -y build-essential<br />
+5. sudo apt install -y libfontconfig1<br />
+6. sudo apt install -y mesa-common-dev<br />
+7. sudo apt install -y libglu1-mesa-dev<br />
+8. cd ~/.local/share/applications<br />
+8. gedit Qt-Creator.desktop<br />
+-----<br />
+[Desktop Entry]<br />
+Version=1.0<br />
+Encoding=UTF-8<br />
+Type=Application<br />
+Name=QtCreator<br />
+Comment=QtCreator<br />
+NoDsiplay=true<br />
+Exec=/home/username/Qt5.11.2/Tools/QtCreator/bin/qtcreator %f<br />
+Icon=/home/username/Qt5.11.2/5.11.2/Src/qtdoc/doc/images/landing/icon_QtCreator_78x78px.png<br />
+Name[en_US]=Qt-Creator<br />
+-----<br />
+9. gedit defaults.list<br />
+-----<br />
+text/qtcreator=Qt-Creator.desktop;<br />
+-----<br />
+10. sudo gedit /usr/share/applications/mimeapps.list<br />
+-----[added Associations]<br />
+application/vnd.nokia.qt.qmakeprofile=qtcreator.desktop<br />
+-----<br />
+or do not exist /usr/share/applications/mimeapps.list case<br />
+-----<br />
+[added Associations]<br />
+application/vnd.nokia.qt.qmakeprofile=qtcreator.desktop<br />
+-----<br />
+11. sudo update-mime-database /usr/share/mime<br />
+------------------------------------------------------------------------------<br />
+<br />
+&nbsp;

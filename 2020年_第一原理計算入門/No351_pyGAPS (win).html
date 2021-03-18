@@ -1,0 +1,339 @@
+<p>pyGAPS (https://github.com/pauliacomi/pyGAPS)<br />
+------------------------------------------------------------------------------<br />
+■ pyGAPS (windows10, 64 bit) (8/April/2020)<br />
+<br />
+□ Install&nbsp;<br />
+0.Microsoft Visual C++ 14.0<br />
+&nbsp; (https://visualstudio.microsoft.com/ja/downloads/)<br />
+&nbsp; [Visual Studio 2019のツール] &gt; [Build Tools for Visual Studio 2019] &gt; [ダウンロード]<br />
+&nbsp; [vs_buildtools__347702307.1586311273.exe] &gt; [C++ Build Tools][check]<br />
+&nbsp; [check] [MSVC v142], [Windows 10 SDK], [Windows用C++ CMakeツール] &gt; [インストール]<br />
+1.Anaconda/Conda (https://www.anaconda.com/distribution/)<br />
+2.Python 3.7 version<br />
+&nbsp; 64-Bit Graphical Installer (466 MB)<br />
+&nbsp; (Anaconda3-2020.02-Windows-x86_64.exe<br />
+&nbsp; [Next &gt;] &gt; [I Agree] &gt; [check] Just Me, [Next &gt;] &gt; [Next &gt;] &gt; [Install] &gt; [Next &gt;] &gt; [Next &gt;] &gt; [Finish])<br />
+3.Anaconda Prompt(anaconda3) [start menu]<br />
+4.conda create -n myenv python=3.7 numpy scipy pandas matplotlib<br />
+&nbsp; Proceed ([y]/n)? y<br />
+5.conda activate myenv<br />
+6.pip install pygaps<br />
+<br />
+□ Usage<br />
+0.Anaconda Prompt(anaconda3) [start menu]<br />
+&nbsp; conda activate myenv<br />
+1.mkdir pyGAPS<br />
+2.cd pyGAPS<br />
+3.notepad quickstart1.py<br />
+-----<br />
+import pygaps<br />
+<br />
+isotherm = pygaps.PointIsotherm(<br />
+&nbsp; &nbsp; pressure=[0.1, 0.2, 0.3, 0.4, 0.5, 0.4, 0.35, 0.25, 0.15, 0.05],<br />
+&nbsp; &nbsp; loading=[0.1, 0.2, 0.3, 0.4, 0.5, 0.45, 0.4, 0.3, 0.15, 0.05],<br />
+&nbsp; &nbsp; material= 'Carbon X1',<br />
+&nbsp; &nbsp; adsorbate = 'N2',<br />
+&nbsp; &nbsp; temperature = 77,<br />
+)<br />
+isotherm.plot()<br />
+-----<br />
+4.python quickstart1.py<br />
+<br />
+□ python (version)<br />
+1. python --version<br />
+&nbsp; Python 3.7.7<br />
+------------------------------------------------------------------------------<br />
+■ DFT fit<br />
+<br />
+□ DFT pore size distribution (read csv data file)<br />
+0.Anaconda Prompt(anaconda3) [start menu]<br />
+&nbsp; conda activate myenv<br />
+&nbsp; cd pyGAPS<br />
+1. notepad dft_fit_csv.py<br />
+-----<br />
+import pygaps<br />
+import matplotlib.pyplot as plt<br />
+<br />
+# create the path<br />
+path = r'case.csv'<br />
+<br />
+# import the isotherm<br />
+isotherm = pygaps.isotherm_from_csv(path)<br />
+isotherm.print_info()<br />
+<br />
+# fitting on DFT kernel<br />
+result_dict_dft = pygaps.psd_dft(<br />
+&nbsp; &nbsp; isotherm,<br />
+&nbsp; &nbsp; kernel='DFT-N2-77K-carbon-slit',<br />
+&nbsp; &nbsp; #branch='des',<br />
+&nbsp; &nbsp; #bspline_order=5,<br />
+&nbsp; &nbsp; verbose=True)<br />
+<br />
+# plot<br />
+plt.show()<br />
+<br />
+# import pprint<br />
+# pprint.pprint(result_dict_dft)<br />
+<br />
+import pandas as pd<br />
+df = pd.DataFrame(result_dict_dft)<br />
+df.to_csv(&quot;result_dft.csv&quot;, index=False)<br />
+-----<br />
+2. python dft_fit_csv.py<br />
+※ 下のデータを使ってグラフが出力されれば、&quot;case.csv&quot;での&quot;pressure,loading&quot;の次の行からのデータを書き換えて、&quot;python dft_fit_csv.py&quot;と入力するだけで他の炭素材料でも同様に計算できます。<br />
+※&nbsp;result_dft.csvにDFTでの結果が出力されます。<br />
+<br />
+□ case.csv (e.g., test data for dft_fit_csv.py)<br />
+1. notepad case.csv<br />
+-----<br />
+material,Takeda 5A<br />
+material_batch,Test<br />
+temperature,77.355<br />
+adsorbate,N2<br />
+date,21/05/2010 00:00<br />
+t_act,200.0<br />
+user,PI<br />
+lab,MADIREL<br />
+machine,Triflex<br />
+type,calorimetry<br />
+project,ACRONYM<br />
+iso_type,Isotherme<br />
+is_real,true<br />
+pressure_mode,absolute<br />
+pressure_unit,bar<br />
+loading_basis,molar<br />
+loading_unit,mmol<br />
+adsorbent_basis,mass<br />
+adsorbent_unit,g<br />
+data<br />
+pressure,loading<br />
+&nbsp;1.8847540944e-07, &nbsp; &nbsp; &nbsp; 0.510281<br />
+&nbsp;4.4981502356e-07, &nbsp; &nbsp; &nbsp; 1.02256<br />
+&nbsp;1.05895977469e-06, &nbsp; &nbsp; &nbsp;1.54166<br />
+&nbsp;2.36080023165e-06, &nbsp; &nbsp; &nbsp;2.05975<br />
+&nbsp;4.93533546369e-06, &nbsp; &nbsp; &nbsp;2.58003<br />
+&nbsp;9.34604865367e-06, &nbsp; &nbsp; &nbsp;3.09167<br />
+&nbsp;1.65158863942e-05, &nbsp; &nbsp; &nbsp;3.60649<br />
+&nbsp;2.81741591431e-05, &nbsp; &nbsp; &nbsp;4.12025<br />
+&nbsp;4.6050177358e-05, &nbsp; &nbsp; &nbsp; 4.63325<br />
+&nbsp;7.33499660449e-05, &nbsp; &nbsp; &nbsp;5.14278<br />
+&nbsp;0.000116582727489, &nbsp; &nbsp; &nbsp;5.65215<br />
+&nbsp;0.000189446932169, &nbsp; &nbsp; &nbsp;6.15738<br />
+&nbsp;0.000316512389904, &nbsp; &nbsp; &nbsp;6.66319<br />
+&nbsp;0.000546133729966, &nbsp; &nbsp; &nbsp;7.15274<br />
+&nbsp;0.000963054936966, &nbsp; &nbsp; &nbsp;7.62057<br />
+&nbsp;0.00167105795491, &nbsp; &nbsp; &nbsp; 8.05205<br />
+&nbsp;0.00277661195969, &nbsp; &nbsp; &nbsp; 8.44275<br />
+&nbsp;0.00430658538389, &nbsp; &nbsp; &nbsp; 8.78956<br />
+&nbsp;0.00619833444193, &nbsp; &nbsp; &nbsp; 9.08882<br />
+&nbsp;0.00814150619803, &nbsp; &nbsp; &nbsp; 9.32422<br />
+&nbsp;0.010614565881, &nbsp; &nbsp; &nbsp; &nbsp; 9.5693<br />
+&nbsp;0.0132150407699, &nbsp; &nbsp; &nbsp; &nbsp;9.79498<br />
+&nbsp;0.0161300947185, &nbsp; &nbsp; &nbsp; &nbsp;9.9955<br />
+&nbsp;0.0192383845379, &nbsp; &nbsp; &nbsp; &nbsp;10.1831<br />
+&nbsp;0.0224495586143, &nbsp; &nbsp; &nbsp; &nbsp;10.3557<br />
+&nbsp;0.0258139418251, &nbsp; &nbsp; &nbsp; &nbsp;10.5129<br />
+&nbsp;0.0292655677769, &nbsp; &nbsp; &nbsp; &nbsp;10.6629<br />
+&nbsp;0.0328162890471, &nbsp; &nbsp; &nbsp; &nbsp;10.8033<br />
+&nbsp;0.0364202497629, &nbsp; &nbsp; &nbsp; &nbsp;10.9343<br />
+&nbsp;0.0401363242016, &nbsp; &nbsp; &nbsp; &nbsp;11.06<br />
+&nbsp;0.0438943684222, &nbsp; &nbsp; &nbsp; &nbsp;11.1801<br />
+&nbsp;0.047788814434, &nbsp; &nbsp; &nbsp; &nbsp; 11.2928<br />
+&nbsp;0.0517277561867, &nbsp; &nbsp; &nbsp; &nbsp;11.4013<br />
+&nbsp;0.0557435453873, &nbsp; &nbsp; &nbsp; &nbsp;11.5028<br />
+&nbsp;0.0597569057811, &nbsp; &nbsp; &nbsp; &nbsp;11.5983<br />
+&nbsp;0.064911222468, &nbsp; &nbsp; &nbsp; &nbsp; 11.7107<br />
+&nbsp;0.069073128687, &nbsp; &nbsp; &nbsp; &nbsp; 11.7963<br />
+&nbsp;0.0732345491447, &nbsp; &nbsp; &nbsp; &nbsp;11.8788<br />
+&nbsp;0.0774738857253, &nbsp; &nbsp; &nbsp; &nbsp;11.9577<br />
+&nbsp;0.0817466426878, &nbsp; &nbsp; &nbsp; &nbsp;12.0313<br />
+&nbsp;0.086115094639, &nbsp; &nbsp; &nbsp; &nbsp; 12.1002<br />
+&nbsp;0.0902110344648, &nbsp; &nbsp; &nbsp; &nbsp;12.1613<br />
+&nbsp;0.0946098950775, &nbsp; &nbsp; &nbsp; &nbsp;12.2246<br />
+&nbsp;0.0991701256155, &nbsp; &nbsp; &nbsp; &nbsp;12.2852<br />
+&nbsp;0.103614842101, &nbsp; &nbsp; &nbsp; &nbsp; 12.3437<br />
+&nbsp;0.108132422791, &nbsp; &nbsp; &nbsp; &nbsp; 12.4002<br />
+&nbsp;0.112658747186, &nbsp; &nbsp; &nbsp; &nbsp; 12.4529<br />
+&nbsp;0.117141353058, &nbsp; &nbsp; &nbsp; &nbsp; 12.5027<br />
+&nbsp;0.121590927157, &nbsp; &nbsp; &nbsp; &nbsp; 12.5475<br />
+&nbsp;0.126230919711, &nbsp; &nbsp; &nbsp; &nbsp; 12.5949<br />
+&nbsp;0.130771816947, &nbsp; &nbsp; &nbsp; &nbsp; 12.6388<br />
+&nbsp;0.135308828092, &nbsp; &nbsp; &nbsp; &nbsp; 12.681<br />
+&nbsp;0.139990596123, &nbsp; &nbsp; &nbsp; &nbsp; 12.7223<br />
+&nbsp;0.144522749654, &nbsp; &nbsp; &nbsp; &nbsp; 12.7607<br />
+&nbsp;0.149212289867, &nbsp; &nbsp; &nbsp; &nbsp; 12.7992<br />
+&nbsp;0.153960121444, &nbsp; &nbsp; &nbsp; &nbsp; 12.836<br />
+&nbsp;0.158594284862, &nbsp; &nbsp; &nbsp; &nbsp; 12.8696<br />
+&nbsp;0.16333531578, &nbsp;12.9049<br />
+&nbsp;0.168058859289, &nbsp; &nbsp; &nbsp; &nbsp; 12.9384<br />
+&nbsp;0.172777545184, &nbsp; &nbsp; &nbsp; &nbsp; 12.9696<br />
+&nbsp;0.177565209193, &nbsp; &nbsp; &nbsp; &nbsp; 13.0023<br />
+&nbsp;0.182422822838, &nbsp; &nbsp; &nbsp; &nbsp; 13.0334<br />
+&nbsp;0.187118192187, &nbsp; &nbsp; &nbsp; &nbsp; 13.0629<br />
+&nbsp;0.191915571424, &nbsp; &nbsp; &nbsp; &nbsp; 13.0919<br />
+&nbsp;0.213155001327, &nbsp; &nbsp; &nbsp; &nbsp; 13.2158<br />
+&nbsp;0.241476831925, &nbsp; &nbsp; &nbsp; &nbsp; 13.3651<br />
+&nbsp;0.265150897787, &nbsp; &nbsp; &nbsp; &nbsp; 13.4841<br />
+&nbsp;0.290940940153, &nbsp; &nbsp; &nbsp; &nbsp; 13.6067<br />
+&nbsp;0.314674268901, &nbsp; &nbsp; &nbsp; &nbsp; 13.7151<br />
+&nbsp;0.338111283217, &nbsp; &nbsp; &nbsp; &nbsp; 13.8216<br />
+&nbsp;0.362102065489, &nbsp; &nbsp; &nbsp; &nbsp; 13.9263<br />
+&nbsp;0.387371371672, &nbsp; &nbsp; &nbsp; &nbsp; 14.0421<br />
+&nbsp;0.410529558965, &nbsp; &nbsp; &nbsp; &nbsp; 14.143<br />
+&nbsp;0.433964630236, &nbsp; &nbsp; &nbsp; &nbsp; 14.2464<br />
+&nbsp;0.460477485512, &nbsp; &nbsp; &nbsp; &nbsp; 14.3602<br />
+&nbsp;0.482466930962, &nbsp; &nbsp; &nbsp; &nbsp; 14.4518<br />
+&nbsp;0.509072080897, &nbsp; &nbsp; &nbsp; &nbsp; 14.5627<br />
+&nbsp;0.533579713261, &nbsp; &nbsp; &nbsp; &nbsp; 14.6608<br />
+&nbsp;0.557532606146, &nbsp; &nbsp; &nbsp; &nbsp; 14.7558<br />
+&nbsp;0.58091521519, &nbsp;14.8492<br />
+&nbsp;0.606217553146, &nbsp; &nbsp; &nbsp; &nbsp; 14.9507<br />
+&nbsp;0.628509142164, &nbsp; &nbsp; &nbsp; &nbsp; 15.041<br />
+&nbsp;0.654752885645, &nbsp; &nbsp; &nbsp; &nbsp; 15.15<br />
+&nbsp;0.679083700871, &nbsp; &nbsp; &nbsp; &nbsp; 15.2549<br />
+&nbsp;0.703599105417, &nbsp; &nbsp; &nbsp; &nbsp; 15.3607<br />
+&nbsp;0.727623890984, &nbsp; &nbsp; &nbsp; &nbsp; 15.4721<br />
+&nbsp;0.751900300938, &nbsp; &nbsp; &nbsp; &nbsp; 15.5858<br />
+&nbsp;0.776215571801, &nbsp; &nbsp; &nbsp; &nbsp; 15.7056<br />
+&nbsp;0.800709602847, &nbsp; &nbsp; &nbsp; &nbsp; 15.8379<br />
+&nbsp;0.824908290982, &nbsp; &nbsp; &nbsp; &nbsp; 15.9799<br />
+&nbsp;0.849040915573, &nbsp; &nbsp; &nbsp; &nbsp; 16.1418<br />
+&nbsp;0.873265834822, &nbsp; &nbsp; &nbsp; &nbsp; 16.3459<br />
+&nbsp;0.897475209708, &nbsp; &nbsp; &nbsp; &nbsp; 16.644<br />
+&nbsp;0.920860733319, &nbsp; &nbsp; &nbsp; &nbsp; 17.1561<br />
+&nbsp;0.941237451039, &nbsp; &nbsp; &nbsp; &nbsp; 18.2209<br />
+&nbsp;0.958790923708, &nbsp; &nbsp; &nbsp; &nbsp; 21.5865<br />
+&nbsp;0.942249777722, &nbsp; &nbsp; &nbsp; &nbsp; 19.4276<br />
+&nbsp;0.917552698427, &nbsp; &nbsp; &nbsp; &nbsp; 17.4274<br />
+&nbsp;0.880262741517, &nbsp; &nbsp; &nbsp; &nbsp; 16.5296<br />
+&nbsp;0.850050327688, &nbsp; &nbsp; &nbsp; &nbsp; 16.2158<br />
+&nbsp;0.82500350021, &nbsp;16.0344<br />
+&nbsp;0.798097178228, &nbsp; &nbsp; &nbsp; &nbsp; 15.8695<br />
+&nbsp;0.753942441715, &nbsp; &nbsp; &nbsp; &nbsp; 15.637<br />
+&nbsp;0.728259266849, &nbsp; &nbsp; &nbsp; &nbsp; 15.5158<br />
+&nbsp;0.702605237665, &nbsp; &nbsp; &nbsp; &nbsp; 15.397<br />
+&nbsp;0.678571708393, &nbsp; &nbsp; &nbsp; &nbsp; 15.2912<br />
+&nbsp;0.65424575078, &nbsp;15.1899<br />
+&nbsp;0.630456073713, &nbsp; &nbsp; &nbsp; &nbsp; 15.0924<br />
+&nbsp;0.606683884056, &nbsp; &nbsp; &nbsp; &nbsp; 14.998<br />
+&nbsp;0.583124457876, &nbsp; &nbsp; &nbsp; &nbsp; 14.9039<br />
+&nbsp;0.556783562122, &nbsp; &nbsp; &nbsp; &nbsp; 14.7978<br />
+&nbsp;0.533547653011, &nbsp; &nbsp; &nbsp; &nbsp; 14.7014<br />
+&nbsp;0.508475565942, &nbsp; &nbsp; &nbsp; &nbsp; 14.5952<br />
+&nbsp;0.484541131988, &nbsp; &nbsp; &nbsp; &nbsp; 14.494<br />
+&nbsp;0.460827233694, &nbsp; &nbsp; &nbsp; &nbsp; 14.3845<br />
+&nbsp;0.436125296785, &nbsp; &nbsp; &nbsp; &nbsp; 14.2756<br />
+&nbsp;0.412060678786, &nbsp; &nbsp; &nbsp; &nbsp; 14.1674<br />
+&nbsp;0.388038807787, &nbsp; &nbsp; &nbsp; &nbsp; 14.0628<br />
+&nbsp;0.364459951152, &nbsp; &nbsp; &nbsp; &nbsp; 13.9567<br />
+&nbsp;0.339726925516, &nbsp; &nbsp; &nbsp; &nbsp; 13.8483<br />
+&nbsp;0.316000397426, &nbsp; &nbsp; &nbsp; &nbsp; 13.7393<br />
+&nbsp;0.291396584312, &nbsp; &nbsp; &nbsp; &nbsp; 13.6245<br />
+&nbsp;0.267212469018, &nbsp; &nbsp; &nbsp; &nbsp; 13.5068<br />
+&nbsp;0.243625840201, &nbsp; &nbsp; &nbsp; &nbsp; 13.3864<br />
+&nbsp;0.219543734793, &nbsp; &nbsp; &nbsp; &nbsp; 13.2595<br />
+&nbsp;0.195448999589, &nbsp; &nbsp; &nbsp; &nbsp; 13.1205<br />
+&nbsp;0.171732186727, &nbsp; &nbsp; &nbsp; &nbsp; 12.9696<br />
+&nbsp;0.147816211706, &nbsp; &nbsp; &nbsp; &nbsp; 12.7927<br />
+&nbsp;0.124366567594, &nbsp; &nbsp; &nbsp; &nbsp; 12.582<br />
+&nbsp;0.1028453961, &nbsp; 12.3371<br />
+&nbsp;0.0884312048252, &nbsp; &nbsp; &nbsp; &nbsp;12.1382<br />
+-----</p>
+
+<div><span style="font-size:14px">※ 入力データについて</span></div>
+
+<div><span style="font-size:14px">&nbsp; ADSとDESを測定の順番通りに記述して読み込ませることができる。</span>DESでデータが欠けていると（特に小さいp/p0）正しい値にならないので、欠けた部分をADSのデータで補う必要がある。<br />
+<br />
+□ 解析用のpythonのテンプレート<br />
+&nbsp;&nbsp;<a href="https://github.com/by-student-2017/pyGAPS-python3.7-template">by-student-2017/pyGAPS-python3.7-template (github.com)</a><br />
+上記のURLに解析用のpythonコードを置いておきました。[<a href="https://pygaps.readthedocs.io/en/master/examples/characterisation.html">Material characterisation &mdash; pygaps 2.0.2 documentation</a>]をgoogle翻訳で翻訳しながら学習を進めて頂ければと思います。<br />
+&nbsp; 使い方はpython + ファイル名です。例えば、PSD-plot.pyでは下記のようになります。<br />
+&nbsp;&nbsp;python PSD-plot.py<br />
+上記を実行するとカーボン用の3種類の方法で細孔径分布が計算されプロットされます。</div>
+
+<p>------------------------------------------------------------------------------<br />
+□ units<br />
+&nbsp; 入力データの単位が異なる場合は、case.csvで下記の部分を書き換えると対応するようになります。気になる場合は、ご自身で単位を換算してみて、どれも同じ結果になっているかを確かめてみてください。adsorbentはDFTのデータのためなのかわかりませんが、私の場合は下記の単位の設定以外では動作しませんでした。<br />
+<br />
+・p/p<sub>0</sub>, cm<sup>3</sup>(STD)/g の場合</p>
+
+<div><span style="font-size:14px">&nbsp; pressure_mode,</span>relative</div>
+
+<div><span style="font-size:14px">&nbsp; loading_basis,molar</span></div>
+
+<div><span style="font-size:14px">&nbsp; loading_unit,</span>cm3(STP)</div>
+
+<div><span style="font-size:14px">&nbsp; adsorbent_basis,mass</span></div>
+
+<div><span style="font-size:14px">&nbsp; adsorbent_unit,g</span></div>
+
+<p><br />
+・pe/kPa, cm<sup>3</sup>(STD)/g の場合<br />
+&nbsp;pressure_mode,absolute</p>
+
+<div><span style="font-size:14px">&nbsp; pressure_unit,</span>kPa</div>
+
+<div>&nbsp; loading_basis,molar<br />
+&nbsp; loading_unit,cm3(STP)</div>
+
+<div><span style="font-size:14px">&nbsp; adsorbent_basis,mass</span></div>
+
+<div><span style="font-size:14px">&nbsp; adsorbent_unit,g</span></div>
+
+<p><br />
+・case.csv (format)<br />
+&nbsp; pressure_mode,['absolute', 'relative']<br />
+&nbsp; ----------<br />
+&nbsp;&nbsp;pressure_mode,absolute<br />
+&nbsp; pressure_unit,['bar', 'Pa', 'kPa', 'atm', 'mmHg']<br />
+&nbsp; ----------<br />
+<br />
+&nbsp;&nbsp;loading_basis,['mass', 'volume', 'molar']<br />
+&nbsp; ----------</p>
+
+<div>&nbsp; loading_basis,mass</div>
+
+<div>&nbsp; loading_basis,['mg', 'g', 'kg']</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp; loading_basis,volume</div>
+
+<div>&nbsp; loading_basis,['cm3', 'ml', 'dm3', 'l', 'm3']</div>
+
+<div>&nbsp;</div>
+
+<div>&nbsp; loading_basis,molar</div>
+
+<div>&nbsp; loading_basis,['mol', 'mmol', 'kmol', 'cm3(STP)', 'ml']</div>
+
+<p>&nbsp; ----------<br />
+<br />
+&nbsp; adsorbent_basis,['mass', 'volume', 'molar']<br />
+&nbsp; ----------<br />
+&nbsp;&nbsp;adsorbent_basis,molar<br />
+&nbsp; adsorbent_unit,['mol', 'mmol', 'kmol', 'cm3(STP)', 'ml']<br />
+&nbsp; ----------<br />
+&nbsp; adsorbent_basis,mass<br />
+&nbsp;&nbsp;adsorbent_unit,['mg', 'g', 'kg']<br />
+------------------------------------------------------------------------------</p>
+
+<div><span style="font-size:14px">□ Error</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">◇ raise ValueError(&quot;A value in x_new is above the interpolation &quot;</span></div>
+
+<div><span style="font-size:14px">&nbsp; ValueError: A value in x_new is above the interpolation range.</span></div>
+
+<div><span style="font-size:14px">-----(remove near 1.0 data)</span></div>
+
+<div><span style="font-size:14px">0.999,&nbsp; 1159.6</span></div>
+
+<div><span style="font-size:14px">1.0012,&nbsp; 1214.5</span></div>
+
+<div><span style="font-size:14px">0.9981,&nbsp; 1180.8</span></div>
+
+<div><span style="font-size:14px">-----</span></div>
+
+<p>------------------------------------------------------------------------------</p>

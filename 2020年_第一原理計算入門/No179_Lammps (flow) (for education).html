@@ -1,0 +1,64 @@
+<p>Lammps flow&nbsp;for education (windows 10 (64 bit))<br />
+------------------------------------------------------------------------------<br />
+■ lammps<br />
+<br />
+□ インストール方法&nbsp;(Edit: Jun/27/2021)<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="https://rpm.lammps.org/windows/admin/64bit/LAMMPS-64bit-18Jun2019.exe">LAMMPS-64bit-18Jun2019.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[<span class="pl-s"><span class="pl-pds">&quot;</span>C:\Program Files\LAMMPS 64-bit 18Jun2019\bin\lmp_serial.exe<span class="pl-pds">&quot;</span></span> -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[<span class="pl-s">C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります</span><br />
+<br />
+□ 描画ソフト<br />
+&nbsp;・gnuplot（<a href="http://www.gnuplot.info/">http://www.gnuplot.info/</a>）<br />
+&nbsp;&nbsp;<a href="http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php">http://www.yamamo10.jp/yamamoto/comp/gnuplot/inst_win/index.php</a><br />
+・Ovito（<a href="https://www.ovito.org/windows-downloads/">https://www.ovito.org/windows-downloads/</a>）<br />
+※ web上に情報がありますので、お手数をおかけしますが、そちらをご参照ください<br />
+※ gnuplotのインストールと環境設定 (Edit: Dec/11/2020)<br />
+1.&nbsp;<a href="https://sourceforge.net/projects/gnuplot/files/gnuplot/">gnuplot - Browse /gnuplot at SourceForge.net</a>&nbsp;から gp528-win64-mingw.exe を得る<br />
+&nbsp; gp528-win64-mingw.exe をダブルクリック。設定はディフォルトのままでよい<br />
+2.&nbsp;コントロール パネル &gt; システムとセキュリティ &gt; システム<br />
+3. システムの環境設定 &gt; 環境変数（N）... &gt; システム環境変数（S）のPath &gt; 編集（I）... &gt; 新規（N）&gt;&nbsp;C:\Program Files\gnuplot\bin を追加する &gt; OK &gt; OK<br />
+------------------------------------------------------------------------------<br />
+■ 分子動力学シミュレーション<br />
+<br />
+□ 入力ファイルのダウンロード<br />
+&nbsp; by-student-2017 の lammps_education_flow_win (<a href="https://github.com/by-student-2017/lammps_education_flow_win.git"><span style="font-size:14px">https://github.com/by-student-2017/lammps_education_flow_win.git</span></a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
+&nbsp;&nbsp;<br />
+□ シミュレーションの実行<br />
+1. 各種のフォルダの中にある run.bat をダブルクリックすれば計算が走る<br />
+2. cfg を Ovito で開けば構造が得られる<br />
+3. plot と記載のあるファイルをダブルクリックすれば図が得られる<br />
+&nbsp; ※ 温度が目的の値になっているか、エネルギーが一定の値になっているかを確認してみてください<br />
+※ 以上の手順は、data.inにある原子の情報、そして、in.lmpのポテンシャルと出力の原子の情報を書きかえれば他の材料でも同様に計算が可能です（Avogadroなどのフリーソフトを用いて構造のファイル（data.in）を作られる方もいます）<br />
+<br />
+□&nbsp;<span style="font-size:14px">tutorial_1_Fe_cyclohexane_Cr</span><br />
+&nbsp;&nbsp;Fe/cyclohexane/Crの計算。<br />
+<br />
+□&nbsp;<span style="font-size:14px">tutorial_2_Cu_toluene_Ni</span><br />
+&nbsp;&nbsp;Cu/toluene/Niの計算。<br />
+<br />
+□&nbsp;<span style="font-size:14px">tutorial_3_Co_toluene_Zr</span><br />
+&nbsp;&nbsp;Cotoluene/Zr<br />
+<br />
+□&nbsp;<span style="font-size:14px">tutorial_4_Ti_toluene_Mg</span><br />
+&nbsp;&nbsp;Ti/toluene/Mgの計算。</p>
+
+<p><br />
+□&nbsp;<span style="font-size:14px">tutorial_5_Al_DD_Ca</span><br />
+&nbsp; Al/DD/Caの計算。</p>
+
+<p>&nbsp;</p>
+
+<p>※ reaxffポテンシャルを使って、金属と有機物の界面を有する計算例を作ってみました。Mg, Al, Ca, Zrなどは活性が高すぎるため、酸化物や表面にOHなどを付けて表面を安定にした方が有機物が分解しなくてすみます。</p>
+
+<p>※ Avogadro, VESTA, LibreOfficeを用いて構造を作っています。フリーソフトで初期構造（分子間の隙間を大きめに）を作って、構造緩和させたものをdata.inに入れています。</p>
+
+<p>※ reaxffのファイルにreaxffポテンシャルをまとめておきました。Feが計算できるものはKISTにあるファイルではエラーが表示されたので私が修正しました（修正が誤っていたら申し訳ありません）。</p>
+
+<p>※ これらの入力例は、とりあえず作ってみたという感じですので、より精度が高く、目的の構造を計算できるように入力ファイルを作って頂けましたら幸いに存じます。</p>
+
+<p>------------------------------------------------------------------------------</p>
+
+<div>&nbsp;</div>

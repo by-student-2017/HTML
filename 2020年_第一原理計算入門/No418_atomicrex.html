@@ -1,0 +1,708 @@
+atomicrex (https://www.atomicrex.org/)<br />
+------------------------------------------------------------------------------<br />
+■ atomicrex (ubuntu 18.04 LTS (64 bit) (on Windows 10 (64 bit)))<br />
+(https://www.atomicrex.org/)<br />
+<br />
+□ Install (Ubuntu 18.04 LTS (64 bit))<br />
+1. git clone https://gitlab.com/atomicrex/atomicrex.git<br />
+2. cd atomicrex<br />
+3. sudo apt-get install python-dev python-sphinx python-numpy libboost-dev libxml2-dev libnlopt-dev &nbsp;libmuparser-dev build-essential gfortran vim-common cmake<br />
+&nbsp; (python3 case: sudo apt-get install python3-dev python3-sphinx python3-numpy)<br />
+4. mkdir build<br />
+5. cd build<br />
+6. cmake ..<br />
+7. make<br />
+<br />
+◇ Usage<br />
+1. $HOME/atomicrex/build/atomicrex *.xml<br />
+<br />
+◇ *.xml (input file)<br />
+(e.g., $HOME/atomicrex/tests/potentials)<br />
+<br />
+◇ github<br />
+1. git clone&nbsp;https://github.com/by-student-2017/csh.git<br />
+2. cd csh/atomicrex<br />
+3. ls<br />
+&nbsp; (you can see Cu, run_atomicrex_eam and vasp2atomicrex)<br />
+<br />
+◇ Examples (Al, EAM) (from VASP output)&nbsp;<br />
+1. cd $HOME/atomicrex/examples/fitting_EAM_potential<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+3. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 4.15691<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al.eam.fs Al<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+4. lammps &lt; lammps_test.in<br />
+<br />
+※ NLopt minimizer (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/fitting_NLopt_minimizer<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='26.981' atomic-number='13'&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+<br />
+※ Spa minimizer (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/fitting_Spa_minimizer&nbsp;<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='26.981' atomic-number='13'&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+<br />
+※ monte carlo sampling (Al, EAM)<br />
+1. cd $HOME/atomicrex/examples/monte_carlo_sampling<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='26.981' atomic-number='13'&gt;Al&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;eam id='Al' species-a='*' species-b='*'&gt;<br />
+<br />
+&nbsp; &lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;eam id='Al' species-a='*' species-b='*'&gt;<br />
+&nbsp; &lt;export-eam-file&gt;Al.eam.fs&lt;/export-eam-file&gt;<br />
+&nbsp; &lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+(3. same method)<br />
+<br />
+◇ Examples (Cu, EAM)<br />
+1. cd $HOME/atomicrex/examples/potential_EAM<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Cu&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='63.546' atomic-number='29'&gt;Cu&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-eam-file&gt;Cu.tersoff&lt;/export-eam-file&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Cu.eam)<br />
+<br />
+◇ Examples (Si, MEAM)<br />
+1. cd $HOME/atomicrex/examples/potential_MEAM<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='28.085' atomic-number='14'&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-functions&gt;Si.meam&lt;/export-functions&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Si.meam.*.table, *=U,V,f,g,rho) (V=phi)<br />
+<br />
+◇ Examples (Si, SW)<br />
+1. cd $HOME/atomicrex/examples/potential_SW<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+1.1. gedit main.xml<br />
+--------before<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+--------after<br />
+&lt;atom-types&gt;<br />
+&nbsp; &lt;species mass='28.085' atomic-number='14'&gt;Si&lt;/species&gt;<br />
+&lt;/atom-types&gt;<br />
+--------<br />
+1.2. gedit potential.xml<br />
+--------before<br />
+&lt;/mapping&gt;<br />
+<br />
+&lt;functions&gt;<br />
+--------<br />
+--------after<br />
+&lt;/mapping&gt;<br />
+&lt;export-functions&gt;Si.sw&lt;/export-functions&gt;<br />
+&lt;functions&gt;<br />
+--------<br />
+2. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Si.sw.*.table, *=F,V,f,g)<br />
+<br />
+◇ Cu (HCP, Lennard-Jones)<br />
+1. gedit cu_hcp_lj.xml<br />
+------<br />
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;iso-8859-1&quot;?&gt;<br />
+&lt;job&gt;<br />
+<br />
+&nbsp; &lt;!-- general settings --&gt;<br />
+&nbsp; &lt;name&gt;Testing top-level input parameters&lt;/name&gt;<br />
+&nbsp; &lt;verbosity&gt;maximum&lt;/verbosity&gt;<br />
+&nbsp; &lt;real-precision&gt;6&lt;/real-precision&gt;<br />
+&nbsp; &lt;tolerance-preset&gt;balanced&lt;/tolerance-preset&gt;<br />
+&nbsp; &lt;validate-potentials/&gt;<br />
+<br />
+&nbsp; &lt;!-- specify the different atom types (to be referred to in the blocks that follow) --&gt;<br />
+&nbsp; &lt;atom-types&gt;<br />
+&nbsp; &nbsp; &lt;species&gt;Cu&lt;/species&gt;<br />
+&nbsp; &nbsp; &lt;!--species mass='63.546' atomic-number='29'&gt;Cu&lt;/species--&gt;<br />
+&nbsp; &lt;/atom-types&gt;<br />
+&nbsp;&nbsp;<br />
+&nbsp; &lt;!-- specify optimization procedure --&gt;<br />
+&nbsp; &lt;!--fitting --&gt;<br />
+&nbsp; &lt;!--/fitting --&gt;<br />
+<br />
+&nbsp; &lt;!-- specify potential form and parameters --&gt;<br />
+&nbsp; &lt;potentials&gt;<br />
+&nbsp; &nbsp; &lt;lennard-jones id=&quot;Lennard-Jones&quot; species-a=&quot;*&quot; species-b=&quot;*&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;sigma&gt;2.5&lt;/sigma&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;epsilon&gt;0.5&lt;/epsilon&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;cutoff&gt;5.1&lt;/cutoff&gt;<br />
+&nbsp; &nbsp; &lt;/lennard-jones&gt;<br />
+&nbsp; &lt;/potentials&gt;<br />
+<br />
+&nbsp; &lt;!-- specify structures and associated properties --&gt;<br />
+&nbsp; &lt;structures&gt;<br />
+&nbsp; &nbsp; &lt;hcp-lattice id=&quot;HCP&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter&gt;2.5&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;ca-ratio&gt;2.5&lt;/ca-ratio&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&lt;total-energy/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &nbsp; &lt;/hcp-lattice&gt;<br />
+&nbsp; &lt;/structures&gt;<br />
+<br />
+&lt;/job&gt;<br />
+------<br />
+2. $HOME/atomicrex/build/atomicrex cu_hcp_lj.xml<br />
+<br />
+◇ Usage (EAM potential)<br />
+1. cd ~/atomicrex<br />
+2. mkdir calc<br />
+&nbsp; cd calc<br />
+-----(VASP)<br />
+(2.5. rm -f -r WAVECAR)<br />
+3. cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;$HOME/vasp.5.4.1/potpaw_PBE&quot; --vasp-cartesian-lattice-vectors --setup-all --no-reduce --supercell=[3,3,3] -f Al.cif&nbsp;<br />
+4. (replace 1.0 (2nd line) with 0.9 on POSCAR)<br />
+5. gedit INCAR<br />
+-----<br />
+ISMEAR = 0<br />
+IBRION = 0<br />
+MDALGO = 2<br />
+ISIF = 2<br />
+SMASS = 1.0<br />
+SIGMA = 0.1<br />
+LREAL = Auto<br />
+ALGO = VeryFast<br />
+PREC = Low<br />
+ISYM = 0<br />
+TEBEG = 298<br />
+NSW = 50<br />
+POTIM = 3.0<br />
+NCORE = 2<br />
+-----<br />
+6. gedit KPOINT<br />
+-----<br />
+K-Points<br />
+&nbsp;0<br />
+Gamma<br />
+&nbsp;1 &nbsp;1 &nbsp;1<br />
+&nbsp;0 &nbsp;0 &nbsp;0<br />
+-----<br />
+7. export OMP_NUM_THREADS=1<br />
+&nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+8. cp POSCAR POSCAR_res_POSCAR_0.9<br />
+&nbsp; (replace atomic position in &quot;POSCAR_res_POSCAR_0.9&quot; with POSITION in OUTCAR)<br />
+&nbsp; remove Al in &quot;POSCAR_res_POSCAR_0.9&quot;<br />
+&nbsp; replace Direct to Cartesian in &quot;POSCAR_res_POSCAR_0.9&quot;<br />
+(repeat 4. - 8. for 1.0 (2nd line) on POSCAR from 0.9 to 1.1)<br />
+-----(atomicrex)<br />
+9. cp ~/atomicrex/examples/fitting_EAM_potential/main.xml ./<br />
+&nbsp; cp ~/atomicrex/examples/fitting_EAM_potential/potential.xml ./<br />
+&nbsp; cp ~/atomicrex/examples/fitting_EAM_potential/structures.xml ./<br />
+&nbsp; &nbsp; (replace &quot;POSCAR_res_POSCAR_0.9.traj_forces&quot; with &quot;POSCAR_res_POSCAR_0.9&quot;)<br />
+&nbsp; &nbsp; (replace &quot;POSCAR_res_POSCAR_1.0.traj_forces&quot; with &quot;POSCAR_res_POSCAR_1.0&quot;)<br />
+&nbsp; &nbsp; (replace &quot;POSCAR_res_POSCAR_1.1.traj_forces&quot; with &quot;POSCAR_res_POSCAR_1.1&quot;)<br />
+10. $HOME/atomicrex/build/atomicrex main.xml<br />
+&nbsp; (you can get Al.eam.fs)<br />
+11. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 4.15691<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Al.eam.fs Al<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+12. lammps &lt; lammps_test.in<br />
+<br />
+◇ vasp2atomicrex<br />
+1. gedit vasp2atomicrex<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+set out_file_name = $1<br />
+sed -n '1,5p' POSCAR &gt; ${out_file_name}<br />
+sed -n '7,7p' POSCAR &gt;&gt; ${out_file_name}<br />
+echo &quot;Cartesian&quot; &gt;&gt; ${out_file_name}<br />
+set start_line = `grep -n &quot;POSITION&quot; OUTCAR | tail -1 | sed -e 's/:.*//g'`<br />
+set end_line = `grep -n &quot;total drift:&quot; OUTCAR | tail -1 | sed -e 's/:.*//g'`<br />
+awk -v sl=${start_line} -v el=${end_line} 'sl+2&lt;=NR &amp;&amp; NR&lt;=el-2{print $0}' OUTCAR &gt;&gt; ${out_file_name}<br />
+-----<br />
+2. sed -i 's/\r//g' vasp2atomicrex<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place vasp2atomicrex)<br />
+3. chmod +x vasp2atomicrex<br />
+4. ./vasp2atomicrex POSCAR_res_POSCAR_X.X.traj_forces<br />
+<br />
+◇ run_atomicrex_eam (e.g. Al)<br />
+0. cp ~/atomicrex/examples/fitting_EAM_potential/main.xml ./<br />
+&nbsp; cp ~/atomicrex/examples/fitting_EAM_potential/potential.xml ./<br />
+&nbsp; cp ~/atomicrex/examples/fitting_EAM_potential/structures.xml ./<br />
+1. gedit run_atomicrex_eam<br />
+-----<br />
+#! /bin/csh -f<br />
+<br />
+cif2cell -p vasp --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=$HOME/vasp.5.4.1/potpaw_PBE --vasp-cartesian-lattice-vectors --setup-all --no-reduce --supercell=&quot;[3,3,3]&quot; -f *.cif<br />
+<br />
+cat &lt;&lt; EOF &gt; INCAR<br />
+ISMEAR = 0<br />
+IBRION = 0<br />
+MDALGO = 2<br />
+ISIF = 2<br />
+SMASS = 1.0<br />
+SIGMA = 0.1<br />
+LREAL = Auto<br />
+ALGO = VeryFast<br />
+PREC = Low<br />
+ISYM = 0<br />
+TEBEG = 298<br />
+NSW = 50<br />
+POTIM = 3.0<br />
+NCORE = 2<br />
+EOF<br />
+<br />
+cat &lt;&lt; EOF &gt; KPOINTS<br />
+K-Points<br />
+&nbsp;0<br />
+Gamma<br />
+&nbsp;1 1 1<br />
+&nbsp;0 0 0<br />
+EOF<br />
+<br />
+cp POSCAR POSCAR_tmp<br />
+foreach i (0.9 1.0 1.1)<br />
+&nbsp; sed -e &quot;2 s/1.0/$i/g&quot; POSCAR_tmp &gt; POSCAR<br />
+&nbsp; #<br />
+&nbsp; mpirun -np 4 $HOME/vasp*/bin/vasp_std<br />
+&nbsp; #<br />
+&nbsp; ./vasp2atomicrex POSCAR_res_POSCAR_$i.traj_forces<br />
+end<br />
+cp POSCAR_tmp POSCAR<br />
+rm -f -r POSCAR_tmp<br />
+<br />
+$HOME/atomicrex/build/atomicrex main.xml<br />
+-----<br />
+2. sed -i 's/\r//g' run_atomicrex_eam<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_atomicrex_eam)<br />
+3. chmod +x run_atomicrex_eam<br />
+4. export OMP_NUM_THREADS=1<br />
+5. ./run_atomicrex_eam<br />
+Al: https://www.atomicrex.org/examples/fitting_EAM_potential.html<br />
+Cu: https://www.atomicrex.org/examples/potential_EAM.html<br />
+<br />
+◇ run_atomicrex_eam (Example, EAM potential, e.g. Cu)<br />
+(https://www.atomicrex.org/examples/potential_EAM.html)<br />
+1. (make input files {main.xml, potential.xml and structures.xml})<br />
+2. export OMP_NUM_THREADS=1<br />
+3. ./run_atomicrex_eam<br />
+4. gedit lammps_test.in<br />
+-----<br />
+units&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;metal<br />
+boundary&nbsp;&nbsp; &nbsp;p p p<br />
+atom_style&nbsp;&nbsp; &nbsp;atomic<br />
+<br />
+lattice&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;fcc 3.6149<br />
+region&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;box block 0 1 0 1 0 1<br />
+create_box&nbsp;&nbsp; &nbsp;1 box<br />
+create_atoms 1 box<br />
+<br />
+pair_style&nbsp;&nbsp; &nbsp;eam/fs<br />
+pair_coeff&nbsp;&nbsp; &nbsp;* * Cu.eam.fs Cu<br />
+<br />
+variable&nbsp;&nbsp; &nbsp;atom_pe equal pe/atoms<br />
+variable&nbsp;&nbsp; &nbsp;atom_vol equal vol/atoms<br />
+<br />
+thermo_style custom atoms pe v_atom_pe vol v_atom_vol press pxx pyy pzz pxy pxz pyz<br />
+<br />
+run &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;0<br />
+-----<br />
+5. lammps &lt; lammps_test.in<br />
+<br />
+◇ main.xml (Cu)<br />
+-----<br />
+&lt;?xml version='1.0' encoding='iso-8859-1'?&gt;<br />
+&lt;job&gt;<br />
+<br />
+&nbsp; &lt;name&gt;Fitting an EAM potential for copper&lt;/name&gt;<br />
+<br />
+&nbsp; &lt;verbosity&gt;medium&lt;/verbosity&gt;<br />
+<br />
+&nbsp; &lt;fitting&gt;<br />
+&nbsp; &nbsp; &lt;BFGS conv-threshold='1e-5' max-iter='20' /&gt;<br />
+&nbsp; &lt;/fitting&gt;<br />
+<br />
+&nbsp; &lt;atom-types&gt;<br />
+&nbsp; &nbsp; &lt;species mass='63.546' atomic-number='29'&gt;Cu&lt;/species&gt;<br />
+&nbsp; &lt;/atom-types&gt;<br />
+<br />
+&nbsp; &lt;potentials&gt;<br />
+&nbsp; &nbsp; &lt;xi:include href='potential.xml'<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; xmlns:xi='http://www.w3.org/2003/XInclude' /&gt;<br />
+&nbsp; &lt;/potentials&gt;<br />
+<br />
+&nbsp; &lt;structures&gt;<br />
+&nbsp; &nbsp; &lt;xi:include href='structures.xml'<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; xmlns:xi='http://www.w3.org/2003/XInclude' /&gt;<br />
+&nbsp; &lt;/structures&gt;<br />
+<br />
+&lt;/job&gt;<br />
+-----<br />
+※ &lt;BFGS conv-threshold='1e-5' max-iter='20' /&gt; の部分は、Alと同様に精度をあげるために、&lt;BFGS conv-threshold='1e-10' max-iter='200' /&gt; などとするのがよいかもしれない。<br />
+<br />
+◇ potential.xml (Cu)<br />
+-----<br />
+&lt;eam id=&quot;elemental EAM potential&quot; species-a=&quot;*&quot; species-b=&quot;*&quot;&gt;<br />
+<br />
+&nbsp; &lt;mapping&gt;<br />
+&nbsp; &nbsp; &lt;pair-interaction species-a=&quot;*&quot; species-b=&quot;*&quot; function=&quot;V&quot; /&gt;<br />
+&nbsp; &nbsp; &lt;electron-density species-a=&quot;*&quot; species-b=&quot;*&quot; function=&quot;rho&quot; /&gt;<br />
+&nbsp; &nbsp; &lt;embedding-energy species=&quot;*&quot; function=&quot;F&quot; /&gt;<br />
+&nbsp; &lt;/mapping&gt;<br />
+&nbsp; &lt;export-eam-file&gt;Cu.eam.fs&lt;/export-eam-file&gt;<br />
+&nbsp; &lt;functions&gt;<br />
+<br />
+&nbsp; &nbsp; &lt;sum id=&quot;V&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;user-function id=&quot;V_term1&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;input-var&gt;r&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ( E1 * (exp(-2 * alpha1 * (r - r01))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 2 * exp(-alpha1 * (r - r01)))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + E2 * (exp(-2 * alpha2 * (r - r02))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 2 * exp(-alpha2 * (r - r02))) + delta)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; E1 * (2 * alpha1 * exp(-alpha1 * (r - r01))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 2 * alpha1 * exp(-2 * alpha1 * (r - r01)))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; + E2 * (2 * alpha2 * exp(-alpha2 * (r - r02))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - 2 * alpha2 * exp(-2 * alpha2 * (r - r02)))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;E1&quot;&gt;2.01458e2&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;alpha1&quot;&gt;2.97758&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;r01&quot;&gt;0.83591&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;E2&quot;&gt;6.59288e-3&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;alpha2&quot;&gt;1.54927&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;r02&quot;&gt;4.46867&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;delta&quot;&gt;0.86225e-2&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;screening&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;user-function id=&quot;rho_screening&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;cutoff&gt;5.50679&lt;/cutoff&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;input-var&gt;r&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 - 1/(1 + ((r - cutoff) / h)^4)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4 * h^4 * (r-cutoff)^3 / ((h^4 + (r-cutoff)^4)^2)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;h&quot;&gt;0.50037&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/user-function&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/screening&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;/user-function&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;user-function id=&quot;V_term2&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;cutoff&gt;5.50679&lt;/cutoff&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;input-var&gt;r&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs1 ? S1*(rs1-r)^4 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs2 ? S2*(rs2-r)^4 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs3 ? S3*(rs3-r)^4 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs1 ? -4*S1*(rs1-r)^3 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs2 ? -4*S2*(rs2-r)^3 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; - (r &lt; rs3 ? -4*S3*(rs3-r)^3 : 0)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;rs1&quot;&gt;2.24&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;rs2&quot;&gt;1.80&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;rs3&quot;&gt;1.20&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;S1&quot;&gt;4.0&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;S2&quot;&gt;40.0&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;S3&quot;&gt;1.15e3&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;/user-function&gt;<br />
+&nbsp; &nbsp; &lt;/sum&gt;<br />
+<br />
+&nbsp; &nbsp; &lt;user-function id=&quot;rho&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;input-var&gt;r&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; a * exp(-beta1*(r - r03)^2)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + exp(-beta2*(r - r04))<br />
+&nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; beta2 * (-exp(-beta1 * (r - r04)))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; - 2 * a * beta1 * (r - r03) * exp(-beta1 * (r - r03)^2)<br />
+&nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;a&quot;&gt;3.80362&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;r03&quot;&gt;-2.19885&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;r04&quot;&gt;-2.61984e2&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;beta1&quot;&gt;0.17394&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;beta2&quot;&gt;5.35661e2&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;screening&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;user-function id=&quot;rho_screening&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;cutoff&gt;5.50679&lt;/cutoff&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;input-var&gt;r&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1 - 1/(1 + ((r - cutoff) / h)^4)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 4 * h^4 * (r - cutoff)^3 / ((h^4 + (r - cutoff)^4)^2)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &lt;param name=&quot;h&quot;&gt;0.5&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &lt;/user-function&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;/screening&gt;<br />
+&nbsp; &nbsp; &lt;/user-function&gt;<br />
+<br />
+&nbsp; &nbsp; &lt;user-function id=&quot;F&quot;&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;input-var&gt;rho&lt;/input-var&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (rho &lt; 1) ?<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (F0 + 0.5 * F2 * (rho - 1)^2 + q1 * (rho - 1)^3<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + q2 * (rho - 1)^4 + q3 * (rho - 1)^5 + q4 * (rho - 1)^6)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (F0 + 0.5 * F2 * (rho - 1)^2 + q1 * (rho - 1)^3<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + Q1 * (rho - 1)^4) / (1 + Q2 * (rho - 1)^3)<br />
+&nbsp; &nbsp; &nbsp; &lt;/expression&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (rho &lt; 1) ?<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (rho - 1) * ( F2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + 3 * q1 * (rho - 1)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + 4 * q2 * (rho - 1)^2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + 5 * q3 * (rho - 1)^3<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + 6 * q4 * (rho - 1)^4 )<br />
+&nbsp; &nbsp; &nbsp; &nbsp; :<br />
+&nbsp; &nbsp; &nbsp; &nbsp; (F2 * (rho - 1) + 3 * q1 * (rho - 1)^2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + 4 * Q1 * (rho - 1)^3)/(Q2 * (rho - 1)^3 + 1)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; - (3 * Q2 * (rho - 1)^2 * (F0 + 0.5 * F2 * (rho - 1)^2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; + q1 * (rho - 1)^3 + Q1 * (rho - 1)^4))<br />
+&nbsp; &nbsp; &nbsp; &nbsp; / ((Q2 * (rho - 1)^3 + 1)^2)<br />
+&nbsp; &nbsp; &nbsp; &lt;/derivative&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;F0&quot;&gt;-2.3&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;F2&quot;&gt;1.4&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;q1&quot;&gt;-1.3&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;q2&quot;&gt;-0.9&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;q3&quot;&gt;1.8&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;q4&quot;&gt;3.0&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;Q1&quot;&gt;0.4&lt;/param&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;param name=&quot;Q2&quot;&gt;0.3&lt;/param&gt;<br />
+&nbsp; &nbsp; &lt;/user-function&gt;<br />
+<br />
+&nbsp; &lt;/functions&gt;<br />
+<br />
+&lt;/eam&gt;<br />
+-----<br />
+※ こちらはAlよりもかなり複雑な式を記述している。恐らくだが、Alは重要となる最外殻が主に&rdquo;s軌道とp軌道&rdquo;なの単純でよいが、Cuは最外殻にd軌道が含まれるため式が複雑になっているものと思われる。もしかしたら、この式を用いれば、Cu以外にもTiからNiまでは同じ式で計算してもよいかもしれない。経験と勉強不足ですまない。<br />
+<br />
+◇ structures.xml (Cu)<br />
+-----<br />
+&lt;group&gt;<br />
+<br />
+&nbsp; &lt;fcc-lattice id='FCC'&gt;<br />
+&nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &lt;lattice-parameter&gt;3.615&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-energy target='-3.540'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter target='3.615'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;bulk-modulus/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;C11 target='170.0'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;C12 target='122.5'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;C44 target= '75.8'/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/fcc-lattice&gt;<br />
+<br />
+&nbsp; &lt;bcc-lattice id='BCC'&gt;<br />
+&nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &lt;lattice-parameter&gt;2.8&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-energy target='-3.496'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/bcc-lattice&gt;<br />
+<br />
+&nbsp; &lt;diamond-lattice id='DIA'&gt;<br />
+&nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &lt;lattice-parameter&gt;4.0&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-energy target='-2.293'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter min='3.0'/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/diamond-lattice&gt;<br />
+<br />
+&nbsp; &lt;sc-lattice id='SC'&gt;<br />
+&nbsp; &nbsp; &lt;atom-type&gt;Cu&lt;/atom-type&gt;<br />
+&nbsp; &nbsp; &lt;lattice-parameter&gt;2.3&lt;/lattice-parameter&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-energy target='-2.996'/&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;lattice-parameter/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/sc-lattice&gt;<br />
+<br />
+&nbsp; &lt;user-structure id='structure_1'&gt;<br />
+&nbsp; &nbsp; &lt;poscar-file&gt;POSCAR_res_POSCAR_0.9.traj_forces&lt;/poscar-file&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-forces fit='true' output-all='true'/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/user-structure&gt;<br />
+<br />
+&nbsp; &lt;user-structure id='structure_2'&gt;<br />
+&nbsp; &nbsp; &lt;poscar-file&gt;POSCAR_res_POSCAR_1.0.traj_forces&lt;/poscar-file&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-forces fit='true' output-all='true'/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/user-structure&gt;<br />
+<br />
+&nbsp; &lt;user-structure id='structure_3'&gt;<br />
+&nbsp; &nbsp; &lt;poscar-file&gt;POSCAR_res_POSCAR_1.1.traj_forces&lt;/poscar-file&gt;<br />
+&nbsp; &nbsp; &lt;properties&gt;<br />
+&nbsp; &nbsp; &nbsp; &lt;atomic-forces fit='true' output-all='true'/&gt;<br />
+&nbsp; &nbsp; &lt;/properties&gt;<br />
+&nbsp; &lt;/user-structure&gt;<br />
+<br />
+&lt;/group&gt;<br />
+-----<br />
+※ 最後に、計算した値でのフィットもするように追加。上記のように合わせたい構造データの情報を書き込む。<br />
+<br />
+※ VASP &gt; atomicrex &gt; making EAM or Tersoff potentials<br />
+※ EAM potentials need mass data.<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] 原子間ポテンシャルについて<br />
+&nbsp; http://www.cmsm.iis.u-tokyo.ac.jp/documents/ポテンシャル関数について_2018_01.pdf<br />
+[2] 解析的に求めたEAMポテンシャルの力の実装<br />
+[3] 固体系における原子間ポテンシャルパラメータ最適化ソフトウェアの開発<br />
+&nbsp; https://www.jstage.jst.go.jp/article/kikaia/77/783/77_783_2026/_pdf/-char/ja<br />
+[4] 分子動力学法における原子間ポテンシャルパラメー タの最適化<br />
+[5] アモルファス金属に対する経験的原子間ポテンシャルの適用性評価&nbsp;<br />
+&nbsp; http://www.fml.t.u-tokyo.ac.jp/img/graduation-thesis/2006m_nikkuni.pdf<br />
+[6] CFDEMproject/LAMMPS<br />
+&nbsp; https://github.com/CFDEMproject/LAMMPS/tree/master/tools/eam_database<br />
+[7] NIST (Interatomic Potentials Repository)<br />
+&nbsp; https://www.ctcms.nist.gov/potentials/system/Pt/<br />
+[8] lammps / potentials / W_zhou.eam.alloy<br />
+&nbsp; https://github.com/lammps/lammps/blob/master/potentials/W_zhou.eam.alloy<br />
+[9] Zhou X. W., R. A. Johnson, and H. N. G. Wadley, Phys. Rev. B. 69, 144113 (2004)<br />
+[10] &nbsp;X. W. Zhou, H. N. G. Wadley, R. A. Johnson, D. J. Larson, N. Tabat, A. Cerezo, A. K. Petford-Long, G. D. W. Smith, P. H. Clifton, R. L. Martens, and T. F. Kelly, Acta Mater. 49, 4005 (2001).<br />
+[11] &nbsp;H. N. G. Wadley, X. Zhou, R. A. Johnson, and M. Neurock, Prog. Mater. Sci. 46, 329 (2001).<br />
+[12] [9.8. eam database tool] and [9.9. eam generate tool]<br />
+&nbsp; http://www.afs.enea.it/software/lammps/doc17/html/Section_tools.html<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

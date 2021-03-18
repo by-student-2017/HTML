@@ -1,0 +1,1098 @@
+　ここではフロンティア軌道論についての情報をまとめる<br />
+------------------------------------------------------------------------------<br />
+■ 軌道図の描き方 [2]<br />
+（例： ブタジエンとエチレンのディールス・アルダー反応の遷移状態）<br />
+1. 「GaussView」などで遷移状態（TS）の大まかな構造（原子の座標など）と電荷を指定する<br />
+2. 「Gaussian16」などでTSの量子化学計算（原子座標の最適化と波動関数の算出）を実行し、正確なTS構造と分子軌道を取得する<br />
+3. 以下のa)とb)の場合について描画でききる<br />
+a) フロンティア軌道の場合<br />
+　手順2で得られたTSの原子座標データをブタジエンとエチレンのそれぞれに分け、個々に量子化学計算を実行し、分子軌道を取得する。ブタジエンのHOMOとエチレンのLUMOを重ねて描画する<br />
+b) 結合軌道の場合<br />
+　手順2で得られたTSの分子軌道を「結合モデル解析プログラム」（<a href="http://orbitalphase.web.fc2.com/">http://orbitalphase.web.fc2.com/</a>）で結合軌道に変換し、結合軌道を描画する<br />
+------------------------------------------------------------------------------<br />
+■ フロンティア軌道と化学反応 [1]<br />
+<br />
+「一方の分子のHOMOと他方の分子のLUMOの間の相互作用が化学反応の主要な推進力となる」<br />
+<br />
+◇ 化学反応が起こる条件<br />
+(i) 同位相の原理<br />
+　HOMOとLUMOの相互作用点の軌道位相は等しくなければならない。相互作用点の重なり積分が負の場合には共鳴積分が正になって安定化が生じないので反応は起こらない。これは下記の条件(iii)と関連する<br />
+(ii) 最小エネルギー差の原理<br />
+　HOMOが高い分子とLUMOが低い分子の反応は速い<br />
+(iii) 最大重なりの原理<br />
+　HOMOとLUMOの相互作用における軌道の重なりが正で大きいほど反応は速くなる。これは上記(i)の条件に関連している。<br />
+(iv) 最小共鳴積分の原理<br />
+　HOMOとLUMOの相互作用の共鳴積分が負で、その絶対値が大きくなれば反応は速く進む<br />
+(v) 総電子数条件<br />
+　HOMOとLUMOの相互作用に関与する電子数は3個以下である（4個では交換反発が生じて反応が起こらない）<br />
+以上のことから反応性に関する次の重要事項が導かれる。<br />
+(1) HOMOが高い分子は求核性が高い。このような分子は相手に電子を与え、相手を還元する性質が強い<br />
+(2) LUMOが低い分子は求電子性が高い。このような分子は相手から電子を奪い、相手を酸化する性質が強い<br />
+(3) HOMOが高い分子とLUMOが低い分子の反応速度は大きい。HOMO-LUMO間のエネルギー差&Delta;Eが小さければ最小エネルギー差の原理により相互作用が大きくなり電子移動もスムーズに起こり、反応も速く進行する<br />
+(4) 強い結合より弱い結合のほうが反応性が高い。<br />
+　弱い結合のHOMOは高く、LUMOは低い傾向がある。したがって、弱い結合は反応性が高くなっていると予想される<br />
+(5) &sigma;結合より&pi;結合のほうが反応性が高い。&pi;結合は重なり結合が&sigma;結合のそれより小さいので結合が弱く、エネルギー準位が高くなって分子表面に張り出しているため&sigma;結合に比べて反応性が高い<br />
+<br />
+◇ 希ガスの反応性<br />
+　希ガスが不活性な原因は閉殻電子配置をとり、オクテット則を満たすためであると説明されているが、本質はもっと奥深いところにある。希ガスは化学反応生起条件にことごとく違反している。これが希ガスの反応性低下の原因である。<br />
+----------<br />
+(i) 「HOMOのエネルギー準位が高いこと」に違反<br />
+　He, Ne, Ar, Krまではかなりイオン化エネルギー（I）の値が大きく最高被占原子軌道（HOAO）が低いが、Xe, RnになるとかなりHOAOが高くなっているので反応性が出てくる可能性がある。特に準位が低い半占軌道をもつ試薬（たとえば、フッ素原子、酸素原子など）とは反応をする可能性が大きい。実際、XeF<sub>2</sub>, XeCl<sub>2</sub>, XeO<sub>2</sub>などの安定な化合物が単離されている。<br />
+(ii) 「LUMOのエネルギー準位が低いこと」に違反<br />
+　電子親和力（A）の値はすべて負であり、最低空原子軌道（LUAO）が相当に高い（存在しない？）ことを示している。したがって、反応相手の電子を受け入れることができないので非常に反応性は低い<br />
+(iii) 「最小エネルギー差の原理」に違反<br />
+　イオン化エネルギーと電子親和力の値を見ると、希ガスはほかの元素に比較して、HOAOが低くLUAOが高いため相手の分子のフロンティア軌道とのエネルギー差がかなり大きいので、相互作用が小さくなる傾向がある。それでも、Xe, RnになるとかなりHOAOが高くなっているので反応性が出てくる可能性がある<br />
+(iv) 「最大重なりの原理」に違反<br />
+　希ガスの軌道の空間的広がりはHe, Ne, Arではかなり小さく（1Å程度）相手の軌道との重なりが小さい。Kr, Xe, Rnになると通常の元素の広がりの大きさになる（2Å程度）ので反応が起こるようになる<br />
+(v) 「最小共鳴積分の原理」に違反<br />
+　希ガスの軌道の広がりは小さく、重なり積分が小さいので共鳴積分の絶対値も小さい。したがって、反応相手との相互作用も小さく反応性が低くなっている<br />
+(vi) 「総電子数条件（1?3個）を満たすこと」に違反<br />
+　希ガスには奇数個の電子をもつ原子軌道は存在しない。したがって、反応するときの相手の軌道は空軌道か半占軌道のいずれかでなければ反応が起こる可能性はない。そのときですら、相手の空軌道または半占軌道のエネルギー準位が希ガスのフロンティア軌道によほど近くないと反応は起こりにくい<br />
+----------<br />
+　以上のように、希ガスの低い反応性の原因は特異なフロンティア（原子）軌道の準位と広がりにあることがわかる<br />
+<br />
+◇ 有機分子のフロンティア軌道<br />
+(1) フロンティア軌道は官能基に局在化する傾向がある<br />
+　官能基は光吸収の発色団にもなり、化学反応の中心ともなる。これはフロンティア軌道が官能基に現れているからである。官能基は相対的に弱い化学結合で構成される原子団であり、結合が弱いためフロンティア軌道となりやすい<br />
+(2) アルカンはHOMOが低く、LUMOが高いため反応しにくい<br />
+　一般にHOMOが約-13 eV以下であるとかなり低く、LUMOが約5 eV以上（HF/6-31G(d)レベルの値： 計算レベルによってLUMOのエネルギー準位は変化する）であればかなり高いと判断し、その分子の反応性（電子受容性）は小さいと考えてよい<br />
+(3) 多くの場合、&pi;結合や非共有電子対（n<sub>x</sub>）に由来するMOがHOMOになる（&pi;結合でもC=O結合ではn<sub>O</sub>がHOMOになる）<br />
+　&pi;結合は弱い結合である。非共有電子対は結合していないので分子表面に浮き上がりやすくフロンティア軌道になる傾向がある<br />
+(4) C=O, C=C, 芳香環, C&equiv;C, C&equiv;N、ニトロ基などでは&pi;結合に由来する分子軌道がフロンティア軌道になる傾向がある。反結合性&pi;軌道がLUMOになる。このうち、C=Oとニトロ基のLUMOは非常に低いのでカルボニル化合物やニトロ化合物は求電子性が高い<br />
+(5) 有機ヨウ化物、有機臭素化物、ニトロ化合物、カルボニル化合物などの低準位LUMO（1?4 eV）をもつ分子は高い求電子性を示す<br />
+　有機ハロゲン化合物の中で、フッ化物と塩化物の2つはLUMOがかなり高いので求電子反応性が低い<br />
+(6) アルケン、アルキン、芳香族化郷物、エノール、エノラート、エナミンなどのC=C &pi;結合を含む分子は、高準位HOMO（-7?-10 eV）をもつので求核性を示す<br />
+(7) 非共有電子対を有するアルコール、エーテル、アミン、カルボニル酸素などは高準位のhOMO（-11?-12 eV; イオン化エネルギー（I）の値は9?10 eVでHOMOが高いことを示す）をもつので高い求核性を示し、Lewis塩基として求核性を示し、Lewis酸（H<sup>+</sup>を含む）と配位結合を形成する。アルコール、エーテルよりアミンの求核性のほうがHOMOが高いために強い<br />
+　R<sub>2</sub>O： + BF<sub>3</sub>&nbsp;&rarr; R<sub>2</sub>O&nbsp;： BF<sub>3</sub><br />
+　R<sub>3</sub>N： + BF<sub>3</sub>&nbsp;&rarr; R<sub>3</sub>N&nbsp;： BF<sub>3</sub><br />
+(8) 芳香族化合物はHOMOが高いので求電子置換反応を行う<br />
+(9) SS結合やSeSe結合を含む化合物はHOMOが高く（-9.56, -8.97 eV）、LUMOが低い（3.63, 2.28 eV）。これらの結合はグルタチオンやタンパク質などの生体分子に含まれ、さまざまな酸化還元過程に関与している。特にセレンを含む酵素は活性酸素の還元過程に関与しており、非常にHOMOが高い（-8.97 eV）ので活性酸素の還元反応がきわめてスムーズに生体内で起こると考えられる<br />
+------------------------------------------------------------------------------<br />
+■ フロンティア軌道は光吸収の場となる [1]<br />
+<br />
+　分子は光を吸収する。通常これはHOMOに入っている電子が光エネルギーによって励起され、LUMOに遷移するために起こる。遷移エネルギー、すなわち、HOMOとLUMOのエネルギー差が吸収された光のエネルギー（≒1240/&lambda;、photon energy; 単位: eV）に近似的に等しくなる。近似的というのは、励起状態で構造変化などによるエネルギー状態の変化があり、それが吸収波長の値に大きく影響するからである。（省略）フロンティア軌道の準位差&Delta;Eが極大吸収波長&lambda;<sub>max</sub>に大きく影響していることがわかる。<br />
+（省略）<br />
+　以上のように、無機分子、有機分子を問わず、HOMO-LUMO間のエネルギー差と極大吸収波長の光エネルギーの間には良好な相関があることがわかる。この相関は、フロンティア軌道が光吸収の場になっており、フロンティア軌道が存在すると仮定することによってはじめて光の吸収波長の傾向が説明できることを強く示唆している。<br />
+　すなわち、分子軌道計算で出てきたフロンティア軌道のエネルギー準位によって、光の吸収波長を予測することが可能である。<br />
+------------------------------------------------------------------------------<br />
+■ 分子軌道とフロンティア軌道 [1]<br />
+<br />
+◇ 分子軌道の一般的特徴<br />
+　軌道相互作用は、分子の対称性によって重なり積分がゼロになる場合があり、同じ対称性の軌道間だけでしか起こらないので、できあがったMOは分子の対称性が反映されている。対称性に関するこのMOの特徴は、MOが分子構造の情報を含んでいるという意味で非常に重要である。さらに、MOは次のような際立った特徴をもつ。<br />
+(1) どのMOも分子全体に広がる傾向がある<br />
+　電子はなるべく分子全体に非局在化してエネルギー的に安定化しようとする。電子のこのような非局在化傾向によって、対称性が許せば、軌道相互作用によってMOは分子全体にできるだけ広がろうとする<br />
+(2) MOは内殻MOと外殻MOに分離している<br />
+　これは、外殻AOと内殻AOのエネルギー準位には大きな差があるため、内殻AOが軌道相互作用にほとんど関与しないからである<br />
+(3) MOはエネルギー準位別に分離している<br />
+　MOのこの性質はきわめて重要である。外殻MOのうちで、表面MOと内面MOが分離して算出されるからである。MO法は外殻分子軌道の表面MOだけを抽出して議論できる唯一の方法論である。化学現象は表面MOの相互作用で起こる。MO法の際立った有用性がここにある。<br />
+　アルカン（C<sub>n</sub>H<sub>2n+2</sub>, n=1?6）のMOの計算データを比較すると（HF/6-31G(d)による計算）。電子数の増加（10&rarr;50個）とともに（分子が大きくなると）、以下の傾向があることがわかる。<br />
+(1) 外殻被占軌道の準位幅（w）が広がり（10.73 &rarr; 17.84 eV）、平均間隔（w/3n）が減少する（3.58&rarr;0.99 eV）<br />
+　平均間隔とは準位幅を間隔数（3n=外殻被占軌道の総数-1）で割った値である<br />
+(2) HOMOの準位が上昇する（-14.66 &rarr; -11.77 eV）<br />
+(3) LUMOの準位が下降する（6.83 &rarr; 6.21 eV）<br />
+　このように、分子が大きくなるとMOの数が増大して外殻MO全体の準位分布幅が広がり、準位が高い外殻MOはますます高く。準位が低い外殻MOはますます低くなるが、全体の準位間の拡大に限度があり、準位の平均間隔は減少するという傾向が出てくる。この傾向は分子の性質を考えるうえで重要である。分子が非常に大きくなり高分子になると、MOの数は膨大になり、HOMO-LUMO間のエネルギー差が小さくなる。<br />
+※ 原子軌道 （atomic orbital: AO）<br />
+※ 分子軌道 （molecular oribital: MO）<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;基本的な情報-1- [1]<br />
+・ 中性原子のエネルギー準位は原子核から無限遠をゼロとして常に負である<br />
+・ 無機化合物、有機化合物、分子の大小を問わず、分子軌道計算で出てくるHOMOのエネルギー準位の絶対値はイオン化エネルギー（I）の値にほぼ等しい<br />
+・ LUMOのエネルギー準位は電子親和力（A）と相関している<br />
+・ LUMOのほうがHOMOより空間的広がりが大きい<br />
+<br />
+◇ 典型元素<br />
+　水素原子の1s軌道準位が-13.61 eV（0.5 au）であることは、基本事項として覚えておこう。この値は水素様原子のシュレーディンガー方程式を解くことで得られ、エネルギーの原子単位（au）の定義のもとになっている。すなわち、この値の2倍がエネルギーの1 au（27.2114 eV = 2625.50 kJmol<sup>-1</sup>）に相当する。実験でもこの値は水素原子の第一イオン化エネルギー（I=13.59844 eV）として確認されている。<br />
+　第2周期に着目すると、化学で最も重要な元素である炭素の軌道準位は水素原子の1s軌道準位の上下に存在している。炭素の2s軌道準位は約-20 eV（-19.20 eV）、2p軌道準位は約-12 eV（-11.79 eV）であり、（炭素の軌道準位の概略値は覚えておこう）。水素原子の1s軌道準位は、炭素の2つの軌道準位に挟まれている。これが炭素と水素という2つの元素を基本に成立する有機化学という豊穣な学問分野が成立する根源的理由になっている。もう一つの理由は、窒素と酸素の外殻軌道準位が炭素や水素の軌道準位に比較的近いことである（-15.45?-33.86 eV）。ハロゲン原子も同様である（-10.97 ? -42.79 eV）。リン、硫黄、セレンの軌道準位も -10.97 ? -23.92 eVの間にあり炭素の軌道準位にかなり近い。<br />
+　適度に安定な分子を形成するための条件として、<br />
+1) 軌道準位がアルカリ金属元素のように高くなく適度に低いこと<br />
+2) 原子軌道どうしの軌道準位が近く相互作用が有利であること<br />
+という二つの条件が必要である。上記の原子はこの条件を満たしている。これが多様な共有結合をもつ安定分子が形成され、有機化学という豊かな学問分野が成立したもう一つの理由である。<br />
+　生命体がこれらの元素を採用して生命活動を営んでいることも同様の理由による。リンは核酸やATP（アデノシン三リン酸）などのエネルギー代謝を行う分子に含まれ、生命に必須の元素である。硫黄はシステイン、メチオニンなどのアミノ酸に含まれる。特にシステインはグルタチオン（glutathione: GSH; 3個のアミノ酸からなるペプチド）に含まれ、細胞内の酸化還元代謝に必須の重要な役割をしているだけでなく、グルタチオンレダクターゼ（glutathione reductase）などの酵素の活性中心（生体反応が行われる場所）にあり、代謝に重要な役割をしている。<br />
+　セレンはグルタチオンペルオキシダーゼ（glutathione peroxidase: GP<sub>X</sub>）という酸化還元酵素の活性中心に含まれ、酸素の代謝で生じる有毒物質（過酸化水素）を水へと還元無毒化している。GP<sub>X</sub>は動物の体全体の細胞に普遍的に含まれるきわめて重要な酵素であり、セレンの高い軌道準位（-10.97, -22.79 eV）を利用して生命体の存亡にかかわる重要な生体反応に関与している。ヨウ素は甲状腺ホルモン（チロキシン）に含まれる元素で、生物の生長や調節にかかわる重要な役割をしている。ヨウ素の軌道準位（-10.97, -22.34 eV）がセレンのそれとほぼ同じであることは興味深い。<br />
+<br />
+◇ 遠視軌道の広がりと軌道半径<br />
+・ 典型元素<br />
+　A. 同じ周期での比較<br />
+　　1) 水素の1s軌道の軌道半径は0.794Å<br />
+　　2) 原子番号の増加とともにs軌道、p軌道いずれも軌道半径がほぼ同じ程度に単調減少する。これは原子核の正電荷が増えることで原子軌道の広がりが減少するためである<br />
+　B. 同族での比較<br />
+　　1) 高周期になるとs軌道もp軌道も軌道半径が広がる<br />
+　　　　（13族の第3・第4周期を除く）<br />
+　　2) 第2周期と第3周期の軌道半径の差が大きい。元素としての性質にも大きな違いがある<br />
+　　3) 第3周期以降の軌道の半径の差は小さい<br />
+・ 遷移元素<br />
+　1) 同一周期の比較では右へ行くと、s軌道、p軌道ともに軌道半径は単調減少する<br />
+　2) 同じ元素で調べるとs軌道のほうがd軌道よりかなり原子軌道の広がりが大きい（3倍前後）<br />
+　3) d軌道の軌道半径はs軌道のものよりp軌道のものに非常に近い<br />
+<br />
+◇ 原子半径<br />
+　原子のサイズは原子軌道の広がりで決まる。元素の単体や分子の結晶構造や化学結合距離をもとに、原子の半径に関する四つの概念、ファンデルワールス力、共有結合半径、イオン半径、金属結合半径、が提案されている。これらのうち、共有結合半径と金属結合半径をまとめて原子半径（atomic radius）とよぶ。<br />
+A. 共有結合半径<br />
+　共有結合半径（covalent radius）は、同じ元素（A）の単結合（A-A）の結合距離の1/2として定義される原子半径である。たとえば、水素の共有結合半径は水素分子の結合距離（0.7414Å）の半分0.37Åである。炭素の共有結合半径はC-C単結合距離（1.54Å）の半分（0.77Å）である。（省略）共有結合半径はファンデルワールス半径よりもかなり小さいが、周期表での値の変化の傾向は、ファンデルワールス半径とよく似ている（同一周期jの原子では右へ行くほど減少、同族原子では下へ行くと増加）。<br />
+　共有結合半径を用いて異なる2元素の単結合距離をかなりの精度で予測することができる。<br />
+B. ファンデルワールス半径<br />
+　単体結晶における近接原子の平均中心距離の1/2として算出される原子半径をファンデルワールス半径（van der Waals radius）とよぶ。例えば、結晶状態のアルゴンではアルゴン原子が立方最密充填格子をつくるい、3.76Åの間隔で規則正しく並んでいるのでアルゴンのファンデルワールス半径はその半分の1.88Åと定義する。最小のファンデルワールス半径をもつ元素は水素（1.2Å）であり、炭素、窒素、酸素、フッ素は、それぞれ1.70, 1.55, 1.52, 1.47Åである。大きな元素としてはカリウム（2.75Å）のようなアルカリ金属が挙げられる。<br />
+　2元素のファンデルワールス半径の和は、その2元素が形成する化学結合距離よりかなり大きい。たとえば、C-H結合距離は1.09Åであるが、これら2元素のファンデルワールス半径の和は2.9Åであり、結合距離の2倍よりはるかに大きい。ファンデルワールス半径は結合していない原子が反発力を生じることなく接近可能な限界距離と考えられている。すなわち、原子どうしが接触し急激に反発力が作用し始める限界半径がファンデルワールス半径であると考えられる。分子内において、（化学結合や水素結合を形成している場合にも）2原子どうしの接触距離がその2原子のファンデルワールス半径の和より小さい場合には、一定の反発力（ファンデルワールス斥力： van der Waals replusion, 立体反発: steric replusion; 交換反発で生じる斥力で、そのポテンシャルはk/r<sup>1/2</sup>で近似される）が生じていると考えられる。化学結合や水素結合では、その反発斥力を凌駕する結合力が生じて結合が形成されている。<br />
+　ファンデルワールス半径は分子の構造と性質を考察するうえで非常に重要な基本概念である。この半径に基づいた分子構造を表現する模型が空間充填模型であり、分子や物質の空孔の大きさ、酵素の活性中心の立体的環境を評価する際に重宝される。<br />
+　ファンデルワールス半径の周期表上でお変化の傾向は、一般に、希ガス元素を除いて、同一周期の原子では右に行くほど小さくなり、同族原子では高周期になるほど大きくなり、外殻原子軌道の広がりの傾向と一致し、共有結合半径との相関も高い。<br />
+<br />
+◇ 原子の半径はフロンティア原子軌道の半径で決まる<br />
+（省略）<br />
+　原子の最高被占軌道とは、それぞれの原子について電子に占有されたエネルギー準位が最も高い原子軌道である（フロンティア原子軌道の一つ：FAO）。最高被占軌道半径は、FAOの広がりを表す式で定義される原子核から電子までの平均距離である。最高被占軌道半径は、ファンデルワールス半径の値とはかなりかけ離れているが、共有結合半径とはかなり近い値を示し、これら2つの半径とかなり良い相関を示すことがわかる。この事実は、当然であるが、原子軌道のうちでエネルギー準位が高く、広がりが大きい原子軌道がその原子の軌道半径の大きさを支配していることを示唆している。<br />
+------------------------------------------------------------------------------<br />
+■ 基本的な情報-2- [2]<br />
+<br />
+◇ 電子の軌道<br />
+1) 軌道はx, y, z座標の関数である<br />
+　軌道関数の値は正と負のところがある。正負の境界では値がゼロになる面をもち、これを節面という。この節面を境に軌道関数の値は正負の符号を変える<br />
+2) 軌道は特定のエネルギーをもつ<br />
+3) 軌道関数の二乗は、電子を見いだす確率である<br />
+　軌道関数を二乗すると、正負の区別はなくなり正のみになって、化学反応にとって重要な「軌道の位相」という概念の意味が消える。節面では、電子を見いだす確率はゼロである<br />
+<br />
+◇ 原子軌道<br />
+1) 電子殻のエネルギーは次の順に高くなる<br />
+　K殻 &lt; L殻 &lt; M殻 &lt; ・・・<br />
+　K殻には原子軌道1s軌道、L殻に2sと2p軌道、M殻には3s, 3p, 3d軌道が属する<br />
+2) 同じ核種の同じ電子殻の原子軌道エネルギーは次の順に高くなる<br />
+　s軌道 &lt; p軌道 &lt; d軌道<br />
+　HやHe<sup>+</sup>のように電子が1個しかない場合には同じであるが、複数の電子がある場合には、同じ電子殻でもs, p, d軌道のエネルギーは上のようになる<br />
+3) s軌道は&rdquo;球状&rdquo;で、p軌道は&rdquo;ダンベル形&rdquo;である<br />
+　s軌道では、半径の等しい球面上ではどこでも電子を見いだす確率は同じである。p軌道は&rdquo;ダンベル形&rdquo;で、軌道関数の値がゼロになる節面がある（たとえば、p<sub>x</sub>軌道の節面はyz平面）。d軌道になると節面はもう一つ増える。軌道の節面が増えるとエネルギーが高くなる。<br />
+4) 原子の軌道エネルギーは電気陰性度が大きくなるにつれて低くなる<br />
+① 同周期の原子では、原子番号が大きくなるほど軌道エネルギーは低い<br />
+　軌道エネルギー： 高い&larr; Li Be B C N O F &rarr;低い<br />
+　電気陰性度： 小さい&larr; Li Be B C N O F &rarr;大きい<br />
+② 同族の原子では、原子番号が大きいほど軌道エネルギーは高い<br />
+　軌道エネルギー： 低い&larr; F Cl Br I &rarr; 高い<br />
+　電気陰性度： 大きい&larr; F Cl Br I &rarr; 小さい<br />
+<br />
+◇ 波の干渉と位相<br />
+・ 位相は波の重なりに重要な役割を果たす<br />
+　ある波を表す関数に-1をかければ、正負の符号が反対になった波になる。こらら二つの波は位相が180&deg;異なる。位相は、二つの波が出合って干渉し合うとき重要な効果を発揮する。すなわち、位相が合って波が同じ位相（同位相という）で重なれば、互いに強め合って振幅の大きな波になる。一方、位相が合わずに逆の位相（逆位相という）で重なれば、弱め合って振幅の小さい波になる。<br />
+　反応で結合しようとしている過程でも、波の干渉と同じように、軌道の位相が決定的な役割を果たす。<br />
+<br />
+◇ 軌道の相互作用<br />
+・ 軌道の相互作用の一般則<br />
+① エネルギーの低い軌道は、高い軌道を同位相で取り込み、重なり領域の電子密度を大きくし、エネルギーを下げて安定化して結合性となる。逆に、エネルギーの高い起動は、低い軌道を逆位相で取り込み、重なり領域の電子密度を小さくし、エネルギーを上げて不安定化して反結合性となる。安定化する軌道ではエネルギーの低いほうの軌道が主成分である。また、不安定化する軌道ではエネルギーの高いほうの軌道が主成分となる。<br />
+② 軌道の相互作用は重なりが大きいほど、強くなる<br />
+③ 同位相の安定化（結合性）および逆位相の不安定化（反結合性）は、軌道エネルギー差が小さいほど大きくなる。極端に大きな軌道エネルギー差がある場合は、重なりが大きくても安定化も不安定かもしない<br />
+④ 同位相による安定化（結合性）より、逆位相による不安定化（反結合性）のほうが大きくなる<br />
+<br />
+◇ HOMO-LUMO相互作用（フロンティア軌道論）<br />
+1) HOMOとLUMO<br />
+　分子には多くの分子軌道がある。電子はエネルギーの低い軌道から順に2個ずつ占める。最もエネルギーの高い被占軌道を最高被占軌道（Highest Occupied Molecular Orbital, HOMOと略称）という。一方、最もエネルギーが低い空軌道を最低空軌道（Lowest Unoccupied Molecular Orbital, LUMOと略称）とよぶ。<br />
+2) HOMO-LUMO相互作用<br />
+　反応が起こるには、一方の分子のHOMOと他方の分子のLUMOのエネルギーが近いほどよい（軌道の相互作用の一般則の③）。電子供与体のHOMOと電子受容体のLUMOが最も大きく重なるように起こる（軌道相互作用の一般則の②）<br />
+3) 反応の起こるしくみ<br />
+　HOMOと相手側のLUMOが重なり合い、HOMOはエネルギーの高いLUMOを同位相で取り込み、重なり領域に電子を非局在化させて安定化する。この結果、遷移状態の安定化と新しい共有結合が形成される。<br />
+① HOMOとLUMOは混じり合って二つの新しい軌道に変わり、安定なほうの軌道に二つの電子が入ることによって遷移状態が最も安定化される<br />
+② HOMO-LUMO相互作用によって、新しい共有結合が形成されるのに必要な電子を原子間に非局在化させる<br />
+③ HOMO-LUMO相互作用によって、被占軌道間の反発で不安定化する遷移状態を最もよく安定化し、反応のエネルギー障壁（活性化エネルギー）を下げる
+<div style="text-align: center;"><img src="data:image/png;base64,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" /></div>
+4) 立体障害の起こるしくみ<br />
+　嵩高い基が反発し合う立体反発や反応を妨げる立体障害は、被占軌道間の反発の結果である（軌道相互作用の一般則の④）<br />
+5) HOMO, LUMOの主成分となる軌道： HOBO, LUBO<br />
+　HOMOはn軌道を含む結合性軌道（&sigma;, &pi;）からなり、それらのうち最も高いエネルギーの軌道（Highest Occupied Bond Orbital, HOBO）がおもに働く。一方、LUMOの主成分は、空のp, &sigma;<sup>*</sup>, &pi;<sup>*</sup>のうち最も低いエネルギーの軌道（Lowest Unoccupied Bond Orbital, LUBO）である場合が多い。反応を考える場合は、HOBO, LUBOをHOMO, LUMOの代わりに用いて考えることのできる場合が多い<br />
+※ 福井謙一博士の発見したフロンティア軌道論は、一般的にHOMO-LUMO相互作用論とよばれ、広く使われている。ちなみに、HOMOとLUMOをあわせてフロンティア軌道という〔半軌道であるSOMO(Singly Occupied Molecular Orbitalの略)もフロンティア軌道の一つ〕<br />
+※ 反応を考える時、分子軌道を用いる場合はHOMOとLUMO、結合軌道を用いて考える場合はHOBOとLUBOである。<br />
+<br />
+◇ 結合に関して<br />
+1) 共有結合の形成には原子軌道の重なりが重要<br />
+　いま、炭素原子に無限遠の4方向から水素原子が近づいてきて、メタンのC-H結合が形成される過程を考える。このときの&sigma;CH結合性軌道および炭素の混成軌道と水素の1s軌道との重なりを示す（※ 図 3.7 a, bは省略）<br />
+2) 共有結合の生成と切断のしくみ<br />
+① 共有結合は結合性軌道を占める電子対によって形成される<br />
+② 反結合性軌道を締める電子は結合を弱めるか、あるいは切断する<br />
+3) 結合のエネルギー差によって結合の様式が変わる<br />
+① 混成軌道にエネルギー差がないと典型的な共有結合となる<br />
+② 徐々にエネルギー差が出てくると極性結合になり、差が極端になるとイオン結合になる<br />
+<br />
+◇ 軌道エネルギーに関して<br />
+1) 軌道エネルギーの序列<br />
+　同じ原子の結合性軌道（&pi;, &sigma;）、非結合性軌道（n）、反結合性軌道（&pi;<sup>*</sup>, &sigma;<sup>*</sup>）のエネルギーの序列は&sigma;＜ &pi; ＜ n ＜ &pi;<sup>*</sup> ＜ &sigma;<sup>*</sup>である<br />
+① エネルギーの高い結合性軌道や孤立電子対軌道（HOBO）をもつ分子（HOMOのエネルギーが高い）は強い電子供与体として働く<br />
+② エネルギーの低い反結合性軌道や空のp軌道（LUBO）をもつ分子（LUMOのエネルギーが低い）は強い電子受容体として働く<br />
+　結合の極性： 小さい &larr;&nbsp;CH<sub>3</sub>-CH<sub>3</sub>&nbsp; CH<sub>3</sub>-Cl&nbsp; CH<sub>3</sub>-OH<sub>2</sub><sup>+</sup>&nbsp; Na<sup>+-</sup>O-CH<sub>3</sub> &rarr; 大きい<br />
+　混成軌道のエネルギー差： 小さい &larr; CH<sub>3</sub>-CH<sub>3</sub>&nbsp; CH<sub>3</sub>-Cl&nbsp; CH<sub>3</sub>-OH<sub>2</sub><sup>+</sup>&nbsp; Na<sup>+-</sup>O-CH<sub>3</sub> &rarr; 大きい<br />
+2) 同一周期内の原子の違いによる軌道エネルギーの変化<br />
+　エネルギーの低い軌道をもつ同一周期の原子に置き換えると、原子番号が増えるととともに結合性軌道（&sigma;<sub>CX</sub>）も反結合性軌道（&sigma;<sub>CX</sub><sup>*</sup>）もエネルギーが低くなる<br />
+　例えば、CH<sub>3</sub>-XにおけるXを代えたときの軌道エネルギーの変化は下記のようになる<br />
+　&sigma;<sub>CX</sub>や&sigma;<sub>CX</sub><sup>*</sup>のエネルギー： 高い &larr;&nbsp;BH<sub>2</sub>&nbsp; CH<sub>3</sub>&nbsp; NH<sub>2</sub>&nbsp; OH&nbsp; F&nbsp;&rarr; 低い&nbsp;<br />
+　Xの混成軌道のエネルギー： 高い &larr; BH<sub>2</sub>&nbsp; CH<sub>3</sub>&nbsp; NH<sub>2</sub>&nbsp; OH&nbsp; F &rarr; 低い<br />
+　Xの電気陰性度：&nbsp;小さい &larr; BH<sub>2</sub>&nbsp; CH<sub>3</sub>&nbsp; NH<sub>2</sub>&nbsp; OH&nbsp; F &rarr; 大きい<br />
+3) 高周期の原子による軌道エネルギーの変化<br />
+　高周期の原子Xに置き換えると結合性軌道のエネルギー&epsilon;（&sigma;<sub>CX</sub>）は高く、反結合性軌道&epsilon;（&sigma;<sub>CX</sub><sup>*</sup>）のエネルギーは低くなる。Xがハロゲンの場合、次のようになる。<br />
+　&epsilon;（&sigma;<sub>CF</sub>） ＜ &epsilon;（&sigma;<sub>CCl</sub>） ＜ &epsilon;（&sigma;<sub>CBr</sub>） ＜ &epsilon;（&sigma;<sub>CI</sub>）&nbsp;<br />
+　&epsilon;（&sigma;<sub>CF</sub><sup>*</sup>）&nbsp;＞ &epsilon;（&sigma;<sub>CCl</sub><sup>*</sup>）&nbsp;＞ &epsilon;（&sigma;<sub>CBr</sub><sup>*</sup>） ＞ &epsilon;（&sigma;<sub>CI</sub><sup>*</sup>）&nbsp;<br />
+　エネルギーの低い&epsilon;（&sigma;<sub>CX</sub>）の主成分はエネルギーの低いX軌道で、Xの軌道エネルギーが&epsilon;（&sigma;<sub>CX</sub>）のエネルギーの傾向を決める。Xの軌道エネルギーは高周期ほど高い。<br />
+　エネルギーの高い&epsilon;（&sigma;<sub>CX</sub><sup>*</sup>）に関しては、どの&sigma;<sub>CX</sub>*に関しても主成分がエネルギーの高いCの混成軌道である。エネルギーは、Xの軌道との相互作用による不安定化で決まる。高周期になるとC-X結合距離が著しく長くなり、混成軌道間の重なりが減少して反結合性軌道の不安定化は小さくなり&epsilon;（&sigma;<sub>CX</sub><sup>*</sup>）はより低い準位にとどまる。<br />
+4) 軌道エネルギーは電荷の影響を受ける<br />
+① 軌道エネルギーは正電荷により低くなる<br />
+　たとえば、CH<sub>3</sub>NH<sub>2</sub>がプロトン化されてカチオンCH<sub>3</sub>NH<sub>3</sub><sup>+</sup>になると、LUMO（主成分：&sigma;<sub>CX</sub><sup>*</sup>）のエネルギーは著しく低くなる（求核剤のHOMOとの相互作用が強くなり、S<sub>N</sub>2反応が起こるようになる）。<br />
+② 軌道エネルギーは負電荷により高くなる<br />
+　HO<sup>-</sup>とH<sub>2</sub>OのHOMOはともにO原子の純粋なp軌道であるが、HO<sup>-</sup>のp軌道のほうが軌道エネルギーは高くなる<br />
+<br />
+◇ 分子軌道に関して<br />
+1) 分子中の電子のふるまいを表す軌道<br />
+　分子内の電子が、分子骨格をなす原子核との相互作用、および他の電子との相互作用のもとで働くとき、その運動の仕方を決定するのが分子軌道である。ただ、分子軌道は分子全体に広がっていて、分子軌道を眺めるだけでは分子の化学的性質を知るのは容易ではない。そこで、有機化学が長い年月をかけて築き上げてきた&rdquo;結合&rdquo;を表す結合軌道（結合性軌道や反結合性軌道）を考えると有機化学になじむ。さらに原子軌道を混ぜ合わせてつくる、sp, sp<sup>2</sup>, sp<sup>3</sup>混成軌道から結合の軌道を考えると、分子を理解しやすいことも多い。<br />
+2) 分子軌道は原子軌道の線形結合として計算で得られる<br />
+　原子と原子が結合することで分子が形成されるように、分子軌道も原子軌道と原子軌道との相互作用の結果と考えられる。分子軌道は連立方程式を解けば結合軌道の線形結合に書き直すことができる。つまり、分子軌道は結合軌道の相互作用の結果生じる軌道であると考えられる。<br />
+<br />
+◇ 幾何構造（結合角）<br />
+・ 幾何構造は被占軌道間の反発によって決まる<br />
+　原子のまわりの幾何構造は、&sigma;結合電子対および孤立電子対の被占軌道間の反発によって決まる。これら被占軌道にある電子対の総数が4のときは四面体構造（&ang;AZB=109.5&deg;）になり、結合を表すのにsp<sup>3</sup>混成軌道が使われる。電子対の数が3のときは平面三角形（&ang;AZB=120&deg;）でsp<sup>2</sup>混成軌道、2のときは直線（&ang;AZB=180&deg;）でsp混成軌道である。<br />
+※ 電子対の数には、&pi;結合電子対を加味しないことに注意<br />
+<br />
+◇ 反応性に関して<br />
+1) 電子供与体の反応性<br />
+　電子供与体（求核剤）は、HOMOのエネルギーが高いほど反応性が高い<br />
+　求核剤としての反応性： CH<sub>3</sub><sup>-</sup> ＞ NH<sub>2</sub><sup>-</sup> ＞ HO<sup>-</sup> ＞ F<sup>-</sup><br />
+　HOMO（n軌道）のエネルギー： CH<sub>3</sub><sup>-</sup> ＞ NH<sub>2</sub><sup>-</sup> ＞ OH<sup>-</sup> ＞ F<sup>-</sup><br />
+2) 電子受容体の反応性<br />
+　電子受容体（求電子剤）は、LUMOのエネルギーが低いほど反応性が高い<br />
+　SN2の反応性： CH<sub>3</sub>-F ＜ CH<sub>3</sub>-Cl ＜ CH<sub>3</sub>-Br ＜ CH<sub>3</sub>-I<br />
+　LUMO（&sigma;*軌道）のエネルギー： CH<sub>3</sub>-F&nbsp;＞ CH<sub>3</sub>-Cl&nbsp;＞ CH<sub>3</sub>-Br&nbsp;＞ CH<sub>3</sub>-I<br />
+3) アニオン、カチオンの反応性<br />
+　アニオンとカチオンは、それぞれ強力な電子供与体、受容体であり、反応性が高い。これらの反応でも共有結合をつくるにはHOMO-LUMO相互作用は必須であり、静電引力だけでは共有結合はできない。カチオンのフロンティア軌道はLUMOで、そのエネルギーは正電荷の影響できわめて低い。一方、アニオンのフロンティア軌道はHOMOで、そのエネルギーは負電荷の影響できわめて高い。<br />
+※ HOMO-LUMO相互作用は、HOMOとLUMOの軌道エネルギーの差が小さいほど強くなる<br />
+※ 電子供与体のHOMOエネルギーが高いほど反応しやすい<br />
+※ アニオンはHOMOのエネルギーを高くし、カチオンはLUMOのエネルギーを低くする<br />
+※ 電子受容体のLUMOのエネルギーが低いほど反応しやすい<br />
+<br />
+◇ 反応の選択性<br />
+　反応の選択性は、HOMOとLUMO（HOBOとLUBO）の重なりの大きさで決まる<br />
+1) 位置選択性<br />
+　電子供与体のHOMOおよび電子受容体のLUMOの広がり（振幅）の大きい位置で反応が起こる。S<sub>N</sub>2反応では、電子受容体のハロゲン化アルキル（RX）の&sigma;<sub>CX</sub><sup>*</sup>（LUMOの主成分、LUBO）はXよりC原子上で大きく広がっている。したがって、求核剤はXではなくC原子を攻撃する。<br />
+2) 立体選択性<br />
+　電子供与体のHOMOと電子受容体のLUMOの重なりが大きくなる方向に反応は起こる。S<sub>N</sub>2反応において、電子供与体（ヒドロキシドイオン）が電子受容体を背面攻撃する場合には、電子供与体のHOMOが受容体のLUMOとよく重なるからである。<br />
+　しかし、前面攻撃の場合には、（例えば、H-O）n<sub>0</sub>が（CH<sub>3</sub>-Xでの）&sigma;<sub>CX</sub><sup>*</sup>のC部分と同位相で重なると、（例えばX=Clで）Cl部分との重なりは逆位相にならざるをえず、背面攻撃と比べてHOMO-LUMOの重なりは減少する。<br />
+※ 位置選択性は軌道の広がりの大きさが重要<br />
+※ 立体選択性は、軌道の重なりが大きくなるように近づく傾向が重要<br />
+<br />
+◇ 軌道位相の連続条件と環式軌道相互作用<br />
+　複数の分子や結合間で電子が非局在化するには、電子供与体と電子受容体の役割を果たすものが少なくともそれぞれ一つは必要である。軌道が環式に有効に相互作用するには、これらの軌道位相がある条件を満たさねばならない。<br />
+　環式相互作用は同一の点から発生した波が別の点で出会って干渉する場合に似ている。位相が合えば強め合うが、位相が合わなければ弱めあう。強め合うには、次の軌道位相の連続条件が必須である。<br />
+・ 隣接する電子供与性軌道と電子供与性軌道は逆位相<br />
+・ 隣接する電子受容性軌道と電子受容性軌道は同位相<br />
+・ 隣接する電子供与性軌道と電子受容性軌道は同位相<br />
+　この軌道位相の連続条件が満たされたとき、環式軌道相互作用は効果的に起こり、電子は非局在化して安定化する。<br />
+　安定な直鎖共役ヘキサトリエンおよびディールス・アルダー反応において、この軌道位相の連続条件が成り立つことを示した。<br />
+　環状遷移状態を経る反応の立体選択性に関するウッドワード-ホフマン則や環状共役ポリエンの安定性（芳香族性）に関するヒュッケル則はともに軌道位相の連続性に由来している。分子の構造や反応の遷移状態が環状でなくても、電子の非局在化には環式軌道相互作用が関与することが明らかになり、アルケンへの求電子付加反応の位置選択性（マルコウニコフ則）、ディールス・アルダー反応の領域選択性、求電子芳香族置換のオルト-パラ配向性およびメタ配向性、交差共役と直鎖共役ポリエン、ジカチオン、ジアニオン、一重項および三重項ビラジカルの異性体の相対的安定性、さらにはアルカンの分岐異性体の熱力学的安定性なども軌道位相の連続条件で統一的に理解できることもわかっている。<br />
+※ 電子供与性軌道： HOMO, HOBO（結合性軌道、孤立電子対の非結合性軌道など）<br />
+※ 電子受容性軌道： LUMO, LUBO（反結合性軌道、空のp軌道など）<br />
+※ 「軌道位相の連続条件」は、経験的に導き出されたものではなく、パウリの排他原理にかかわる理論的な手続きにより導出されたものである<br />
+<br />
+◇ 軌道の変形と軌道混合則<br />
+1) 重なりによる軌道混合則<br />
+・ 軌道&Phi;<sub>1</sub>に、同じ原子、分子のエネルギーの高い軌道&Phi;<sub>2</sub>が混合するときは、介在する異なる原子、分子の軌道&Phi;<sub>3</sub>と同位相で重なる<br />
+・ 軌道&Phi;<sub>1</sub>に、同じ原子、分子のエネルギーの低い軌道&Phi;<sub>2</sub>が混合するときは、介在する異なる原子、分子の軌道&Phi;<sub>3</sub>と逆位相で重なる
+
+<div style="text-align: center;"><img src="data:image/png;base64,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" /></div>
+2) 電荷による軌道混合則<br />
+　この場合の重要な因子は、電荷の位置と混合する二つの軌道の位置関係である。次のようなルールがある。<br />
+・ 位相関係は電荷に最も近い原子上の軌道で決まる<br />
+・ ＜正電荷の場合＞<br />
+　エネルギーの高い軌道がエネルギーの低い軌道に混ざる場合には、同位相で混ざる<br />
+　エネルギーの低い軌道がエネルギーの高い軌道に混ざる場合には、逆位相で混ざる<br />
+・＜負電荷の場合＞<br />
+　正電荷の場合と逆の位相関係で軌道が混ざる
+<div style="text-align: center;"><img src="data:image/png;base64,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" /></div>
+※ 軌道混合則とは、軌道の変形の際に軌道の位相関係を決めるルール<br />
+※ 同位相では広がりは大きくなり、逆位相では広がりは小さくなる<br />
+------------------------------------------------------------------------------<br />
+■ 分子の形（構造）を決める要因 [2]<br />
+<br />
+　結合の長さは原子によって次のような傾向がある。同じ周期の元素では、原子番号とともに増える核の正電荷との静電引力によって、価電子の軌道エネルギーは低くなり、最外殻の半径は縮んで、結合は短くなる。<br />
+　C-H (109 pm) &gt; N-H (101 pm) &gt; O-H (96 pm)<br />
+　原子の最外殻電子1個に着目して考える。この電子の見だされる確率は軌道関数の二乗なので、たとえ最外殻の電子でも核の近くに見いだされる確率はゼロではない。核の近くでは他の電子によって核電荷は遮蔽されることなく、最外殻電子は核電荷+Zを直接に感じることになる。したがって、原子番号Zが大きければ核に引きつけられて安定化し、電子の軌道エネルギーも下がり&rdquo;半径&rdquo;も収縮する。<br />
+　同じ族では、第2周期から第5周期へと価電子の軌道エネルギーは高くなり、最外殻の半径は長くなって、結合も長くなる。<br />
+　C-F (133 pm) &gt; C-Cl (177 pm) &gt; C-Br (194 pm) &gt; C-I (213 pm)<br />
+　（省略）ある原子の二つの結合がなす角度を結合角という。結合角は、おもに&sigma;結合電子対と孤立電子対の総数によって決められる。<br />
+<br />
+・第2周期元素の最も安定な幾何構造
+<table border="1" cellpadding="1" cellspacing="1" style="width: 283.32px;">
+	<tbody>
+		<tr>
+			<td style="width: 103.48px; text-align: center;">電子対の総数</td>
+			<td style="width: 86.48px; text-align: center;">幾何構造</td>
+			<td style="width: 74.32px; text-align: center;">結合角</td>
+		</tr>
+		<tr>
+			<td style="width: 103.48px; text-align: center;">2</td>
+			<td style="width: 86.48px; text-align: center;">直線</td>
+			<td style="width: 74.32px; text-align: center;">180&deg;</td>
+		</tr>
+		<tr>
+			<td style="width: 103.48px; text-align: center;">3</td>
+			<td style="width: 86.48px; text-align: center;">平面三角形</td>
+			<td style="width: 74.32px; text-align: center;">120&deg;</td>
+		</tr>
+		<tr>
+			<td style="width: 103.48px; text-align: center;">4</td>
+			<td style="width: 86.48px; text-align: center;">正四面体</td>
+			<td style="width: 74.32px; text-align: center;">109.5&deg;</td>
+		</tr>
+	</tbody>
+</table>
+
+<p>※ 電子対の総数 = &sigma;結合電子対 + 孤立電子対<br />
+<br />
+　この理論は、電子対で占められた軌道が相互作用すると反発を引き起こす、という理由に基づく。分子は、価電子対の間の反発が最も小さくなるように、できるだけ互いに遠ざかるような結合角をもつと最も安定な幾何構造になる。これを原子価殻電子対反発（Valence shell electron-pair repulsion: VSEPR）理論という。<br />
+（省略）<br />
+　原子価殻電子対反発理論において原子まわりの電子対を数えあげる際、&pi;結合電子対を除いた理由は、&pi;結合性軌道は同じ原子の関与する&sigma;結合性軌道とは反発し合わないからである。&sigma;軌道は&pi;軌道の節面の上半分と下半分と反対の位相で重なるので、相殺して全体として重ならない。つまり相互作用しない。したがって、電子対の数は、&pi;結合電子対を除いて、&sigma;結合電子対と孤立電子対のみを数えればよい。（※ 直交したp軌道同士は重ならない）<br />
+※ 共有結合には&sigma;結合と&pi;結合の二種類がある。&pi;軌道は位相の関係から原子と共有する&sigma;軌道やn軌道とは重ならず、反発しないので、&pi;結合電子対は加味しない。&sigma;結合電子対の数は、結合する原子、または基（置換基）の数に等しい。<br />
+<br />
+　原子間に結合電子対が増えるほど、結合は強く、かつ短くなる。<br />
+強さ： 単結合（エタン） &lt; 二重結合（エチレン） &lt; 三重結合（アセチレン）<br />
+長さ： 単結合（エタン）&nbsp;&gt; 二重結合（エチレン）&nbsp;&gt; 三重結合（アセチレン）<br />
+※ C-C (154 pm). C=C (134 pm), C&equiv;C (120 pm)<br />
+<br />
+　球対称のs軌道のほうが節面をもつp軌道より相手の原子軌道と重なりやすい。したがって、混成のs性が増えるほど〔sp<sup>3</sup> (25%) &lt; sp<sup>2</sup> (33%) &lt; sp (50%)〕、結合は強く、かつ短くなる。<br />
+強さ： C(sp<sup>3</sup>)-H &lt; C(sp<sup>2</sup>)-H &lt; C(sp)-H<br />
+長さ： C(sp<sup>3</sup>)-H &gt; C(sp<sup>2</sup>)-H &gt; C(sp)-H<br />
+------------------------------------------------------------------------------<br />
+■ 極性を支配する因子 [2]<br />
+<br />
+　極性結合の結合性軌道エネルギーの低いほうの混成軌道が大きな広がりをもつ、すなわち主成分になる。したがって、結合電子対は、エネルギーの低い軌道の原子に偏ることになる。原子はエネルギーの低い軌道をもつほど、結合電子対を引き寄せる力が強くなり、負電荷を帯びる。結合に与（あずか）る両軌道のエネルギー差が大きいほど結合の極性は大きくなる。<br />
+・ 結合に与る原子の（混成）軌道エネルギーは、同じ周期では原子番号が大きくなるほど低くなる<br />
+　外殻の電子でも原子核近傍に存在する確率があり、核の正電荷は内殻の電子で完全に遮蔽されないので、核電荷が増えればそれだけ正電荷に強く引きつけられ、原子軌道のエネルギーは低くなる。すなわち、CよりOやFの軌道エネルギーは低い。OやFの原子上で結合性軌道の広がりは大きく、結合電子対の電子密度は高くなるので負電荷を帯びる。<br />
+・ 結合に与る原子の（混成）軌道エネルギーは、同じ族では原子番号が大きくなるほど高くなる<br />
+　これは、K殻、L殻、・・・となるにつれて、電子は核から遠ざかり核の引力が弱まるからである。たとえば、ハロゲン（X）の族では軌道エネルギーはF &lt; Cl &lt; Br &lt; I の順に高くなり、C<sup>&delta;+</sup> - X<sup>&delta;-</sup>結合の極性は減少する。<br />
+　結合の性質は、共有結合とイオン結合の間で連続的に変化し、極性結合はそれらの中間にあたる。このように、結合の一連の性質は結合に与る混成軌道のエネルギー差の違いによって区分される。エネルギー差の小さいところでは共有結合で、差が大きくなると極性結合になり、さらに極性が大きくなるとイオン結合になる。<br />
+※ 核電荷： 原子核は中性子と陽子からなり、中性子は電荷をもたないが、陽子は+1の正電荷をもつ。原子は原子番号に等しい数の陽子をもっているので、原子番号が増えるにつれて核の正電荷は一つずつ増える。<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;混成軌道のエネルギーと電気陰性度の関係 [2]<br />
+<br />
+　分子での電子分布が原子状態での単なる和からずれるのは、おもに原子によって電気陰性度が異なるからである。この電気陰性度とは、分子内の原子が電子を引き寄せる相対的な尺度である。電気陰性度は一般的に次のような傾向をもっている。<br />
+・ 同じ周期の原子では、原子番号が大きくなるほど電気陰性度は高い<br />
+・ 同じ族の原子では、原子番号が大きいほど電気陰性度は小さい<br />
+　興味深いことに、結合に与る混成軌道のエネルギーは、上の電気陰性度の傾向とよく相関している。混成軌道のエネルギーが低くなると電気陰性度は大きくなる。結合性軌道はエネルギーの低い混成軌道が主成分になり、結合電子対は当該原子に引き寄せられる。エネルギーの低い混成軌道をもつ原子の電気陰性度は大きいことになる。<br />
+（省略）CH<sub>2</sub>=Xの&pi;結合のp軌道、CH<sub>3</sub>-Xの&sigma;結合のsp<sup>3</sup>混成軌道、CH<sub>2</sub>=Xの&sigma;結合のsp<sup>2</sup>混成軌道、こららのどの結合の混成軌道においても電気陰性度が大きくなると軌道エネルギーが下がる。（LiからFまでこれらの関係を示した図は文献[2]を参照。電気陰性度はポーリングの電気陰性度を用いている。混成軌道のエネルギーは、同じ元素なら上に示した結合の順番で、毎に約-0.2 Hartreeずつ負の側になる。混成軌道のエネルギー/電気陰性度 = 約-0.175から-0.25 Hartreeで上に示した結合の順番で傾きがより負の値になる）<br />
+※ 電気陰性度は&rdquo;目安&rdquo;であって、「物理定数」ではないことを心に留める必要がある。<br />
+※ 同じ原子でも混成軌道のエネルギーはs軌道の割合が増えれば下がる（p軌道の割合が増えれば上がる）ことを表している<br />
+※ ポーリングの電気陰性度： H 2.1, B 2.0, P 2.1<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;代表的な反応剤のHOMO, LUMO&nbsp;[2]<br />
+<br />
+◇ 酸化剤<br />
+　酸化・還元反応は電子の授受を伴う反応である。一方が酸化されれば他方は還元されるので、酸化と還元は常に同時に起こる。酸化剤は、相手から電子を奪い（電子受容体）、自身は還元される。有機化合物が酸化されると、多くの場合C-H結合が減るか、C-Z結合が増える。ZはC原子より電気陰性度の大きい原子（通常はO, N, またはハロゲン）である。<br />
+<br />
+◇ 還元剤<br />
+　還元剤は、相手に電子を与え（電子供与体）、自身は酸化される。有機化合物が還元されると、多くの場合C-H結合が増えるか、C-Z結合が減る。ZはC原子より軌道エネルギーの低い（電気陰性度の大きい）原子（通常はO, N, ハロゲンである）。<br />
+　還元剤とは他を還元する反応剤である。還元剤には三つの種類がある。<br />
+1) 最も単純な還元剤は水素分子H<sub>2</sub>である。この還元剤を用いたアルケンの水素化反応は金属触媒表面で起こる。この反応ではcis-アルケンが合成される<br />
+2) 2e<sup>-</sup>と2H<sup>+</sup>を与えれば還元したこと（H<sub>2</sub>を与えたこと）と同等である。電子源はアルカリ金属、プロトン源は液体アンモニアを用いて、アルキンをアルケンに還元する。この反応ではtrans-アルケンが合成される。<br />
+3) ヒドリドH<sup>-</sup>とH<sup>+</sup>を加えるのも還元である。H<sup>-</sup>源となるものは金属水素化合物である。<br />
+<br />
+◇ 求核剤<br />
+　求核剤とは、分子のなかの正電荷を帯びた原子（核）を求めて攻撃する反応剤である。軌道論からいえば、LUMOの広がりの大きい原子を攻撃しやすい反応剤である。したがって、エネルギーの高いHOMOをもち、そのHOMOができるだけ1原子に局在化した分子である。その条件を一番備えているのが、孤立したアニオン中心をもつ化学種である。そのn軌道は負電荷のために高いエネルギーをもち、アニオン中心に局在している。<br />
+　アニオンでない求核剤もあるが、一般に求核性は劣る。しかし、正電荷のためLUMOエネルギーの低いカチオンを攻撃するには十分である。<br />
+※ 求核剤はHOMOが重要で、そのエネルギーが高いほど反応性に富む。<br />
+<br />
+◇ 求電子剤<br />
+　求電子剤は、電子豊富な原子を求めて攻撃する反応剤である。軌道論からいえば、HOMOの広がりの大きい原子を攻撃しやすい反応剤である。すなわち、エネルギーの低いLUMOをもち、そのLUMOができるだけ局在化した分子である。<br />
+※ 求める電子剤はLUMOが重要で、そのエネルギーが低いほど反応性の富む<br />
+<br />
+◇ 有機金属反応剤<br />
+　よく用いられる有機金属反応剤は、C-M （M = LI, Mg, Cu）結合をもつ。HOMOはエネルギーが高く、ほとんどC-M結合に局在化している。また、C原子は原子軌道エネルギーが金属に比べて低い（電気陰性度が大きい）ので、&sigma;<sub>CM</sub>はC原子に偏って広がっている（結合性は極性C<sup>&delta;-</sup>-M<sup>&delta;+</sup>をもつ）。とくにM = Li, Mgの場合に、HOMOがC-M結合のC原子にほとんど局在化している（C-M結合のM原子側の背面に広がりが認められないことから、M軌道の寄与が少ないことがわかる）。そｊのためカルボカチオンのように反応する。M = Cuでは、明らかに金属のd軌道の寄与が認められ、カルボアニオン性は少ない。<br />
+　この反応剤は強い求核剤でもあり、カルボニル基などの求電子的なC原子とC-C結合を形成するので、有機分子の炭素骨格を構築するのに非常に有用である。また、強い塩基でもあり、カルボン酸、アルコール、アミンからプロトンを引き抜く。<br />
+　有機カルシウムおよび有機バリウム反応剤のHOMOは、上の有機マグネシウム反応剤のHOMOと似ている。有機亜鉛反応のHOMOは、有機銅反応剤と比べて金属の軌道の寄与がきわめて小さい。<br />
+※ 有機金属反応剤は強い求核剤であり、HOMOが重要<br />
+※ 塩基はプロトン受容体である<br />
+<br />
+◇ ホウ素反応剤<br />
+　アルケンのヒドロホウ素化に無機ホウ素反応剤のボランBH<sub>3</sub>が用いられる。また、クロスカップリング（鈴木-宮浦反応）には有機ホウ素反応剤RBY<sub>2</sub>が用いられる。いずれも電子受容体として働く。<br />
+<br />
+◇ シモンズ-スミス反応剤<br />
+　C-C結合生成法として、カルベン（R<sub>2</sub>C：）中間体を用いたアルケンのシクロプロパン環への変換反応がある。<br />
+　ジハロカルベン（CX<sub>2</sub>）によるジハロシクロプロパン環は収率よく得られるが、最も単純なカルベンでもあるメチレン（：CH<sub>2</sub>）による反応ではそうはうまくいかない。この反応にはシモンズ-スミス反応剤（ICH<sub>2</sub>ZnI）が有効である。<br />
+※ カルベン： 価電子が6個（2個不測）で、電荷をもたない二配位の炭素化合物の総称<br />
+※ シモンズ-スミス反応剤は電子受容体として働くため、LUMOが重要<br />
+<br />
+◇ 有機リン反応剤<br />
+　ここで述べる有機リン反応剤は、ウィッティッヒ反応剤ともよばれ、C-P結合をもつ有機リン化合物である。代表的なものはトリフェニルホスホニウムイリド（Ph<sub>3</sub>P<sup>+</sup>-C<sup>-</sup>R<sub>2</sub>）で、トリフェニルホスフィン（Ph<sub>3</sub>P）のP原子とカルベン（：CR<sub>2</sub>）のC原子が結合した形をしている。実際はホスホニウム塩Ph<sub>3</sub>P<sup>+</sup>-CHR<sub>2</sub>から塩基で脱プロトン化して合成される。<br />
+※ 軌道エネルギーの序列は、&sigma; &lt; &pi; &lt; n。有機リン反応剤は、C原子上の負電荷のためHOMOエネルギーが高い。したがって、炭素求核剤（電子供与体）として働く<br />
+<br />
+◇ 芳香族求電子置換反応剤<br />
+　ベンゼンに代表される芳香族化合物の特徴的な反応は求電子置換反応である。<br />
+　この反応は芳香環へ求電子剤が付加することで始まり、付加物からの脱プロトン化で終わる。この付加反応では芳香族性を壊さなければならないので、アルケンへの付加反応の求電子剤より強い求電子剤が必要となる。このため求電子剤に酸を加えて求電子剤/酸の複合求電子剤が用いられる。<br />
+※ 求電子剤は電子受容体であり、LUMOが重要。LUMOのエネルギーを下げれば求電子剤は強くなる<br />
+※ 酸は電子受容体であり、求電子剤のLUMOを下げる<br />
+------------------------------------------------------------------------------<br />
+■ 官能基と酸・塩基の強度<br />
+<br />
+　酸・塩基強度の定量評価は種々の官能基の性質を考えるための基本情報である。1970年以前は主に水溶液中での実測値が用いられたが、1980年代以降は気相における酸・塩基強度が正確に測定できるようになり、官能基の電子効果が水の溶媒効果がない条件（溶媒和によるエントロピー効果のない条件）で議論できるようになった。<br />
+<br />
+◇ 官能基の電子効果と電子の非局在化機構<br />
+　分子の中では電子が動き回っている。この電子の動きを非局在化（delocalization）と呼ぶ。電子の非局在化の方向が官能基の電子効果（電子求引性または電子供与性）に大きな影響を及ぼす。分子内のすべての電子が自由に動き回っているわけではない。分子表面に存在する電子だけが、ある束縛条件のもとに動き回れるのである。<br />
+<br />
+◇ 酸と塩基の定義<br />
+　酸・塩基には歴史的に二つの定義がなされている。Br&oslash;nstedとLowryは酸・塩基をプロトンの授受に着目して定義した。この定義によれば、酸（acid）はプロトンを放出するもの（プロトン供与体： proton donor）であり、塩基（base）はプロトンを放出するもの（プロトン受容体： proton acceptor）となる。Br&oslash;nsted-Lowry酸のことを単にプロトン酸（proton acid）とも言う。<br />
+　たとえば、水の分子（H<sub>2</sub>O）は、次の式で示すように、プロトンを放出するので酸とみなせる。<br />
+　H<sub>2</sub>O &rarr; OH<sup>-</sup> + H<sup>+</sup><br />
+一方、水分子の酸素原子は、酸AHと反応して、次の式のように、プロトンを受け取るので塩基とみなせる。<br />
+　AH（酸） + H<sub>2</sub>O（塩基） &rarr; H<sub>3</sub>O<sup>+</sup>（酸） + A<sup>-</sup>(塩基)<br />
+　プロトン化された水分子（H<sub>3</sub>O<sup>+</sup>）はヒドロニウムイオン（hydronium ion）と呼ばれる酸であり、酸AHが脱プロトンして生じたアニオン（A-）は塩基である。この反応で生じたH<sub>3</sub>O<sup>+</sup>は塩基H<sub>2</sub>Oの共役酸（conjugate acid）と呼ばれ、A-は酸AHの共役塩基（conjugate base）と呼ばれる。酸AHが強ければ、A-H結合が解離しやすく、共役塩基A-が生成しやすい。<br />
+　一方、Lewisは、Br&oslash;nsted-Lowryの酸・塩基の概念をより広くとらえ、電子対の授受に着目して酸塩基の概念を提唱した。それによると、酸は電子対を受け取るもの（電子対供与体： electron-pair acceptor）、塩基は電子対を与えるもの（電子対供与体： electron-pair donor）という定義になる。Lewis塩基Bはしばしば、電子対&rdquo;：&rdquo;を付けて、B：または：Bと表現される。Lewis酸・塩基の基本的な反応は、次の式に示すように、配位結合の生成である。この種の反応は、既に見てきたように、電荷移動相互作用（charge-transfer (CT) interaction）にほかならない。<br />
+　Lewis酸（A） + Lewis塩基（：B） &rarr; A：B<br />
+（例）<br />
+　H<sup>+</sup> + ：NH<sub>3</sub> &rarr; NH<sub>4</sub><sup>+</sup><br />
+　BF<sub>3</sub> + ：NH<sub>3</sub> &rarr; F<sub>3</sub>B<sup>-</sup>：N<sup>+</sup>H<sub>3</sub><br />
+<br />
+◇ 酸解離指数pKa<br />
+　一般に化合物の酸性度は、1気圧298 K、水溶液中での酸解離定数Kaの常用対数の符号を変えた量である酸解離定数pKaで表される。水溶液中では、溶媒和を無視すると、酸AHは、次の式に示すようなプロトン解離平衡にあると考えられる。<br />
+　AH + H<sub>2</sub>O &larr;&rarr; A<sup>-</sup> + H<sub>3</sub>O<sup>+</sup><br />
+この解離平衡の解離定数Kaは、溶媒H<sub>2</sub>Oの量は多量にあるので一定とみなすと、次の式のように表される。<br />
+　Ka = [A<sup>-</sup>][H<sub>3</sub>O<sup>+</sup>] / ([AH][H<sub>2</sub>O]) = [A<sup>-</sup>][H<sub>3</sub>O<sup>+</sup>] / [AH]<br />
+Kaの常用対数にマイナスを付けた値が酸解離指数pKaである。<br />
+　pKa = -log (Ka)<br />
+したがって、解離定数Kaが大きいとpKaは小さい。<br />
+　Kaの定義式をもとにAHの酸性度が水中で強くなる条件を考えてみよう。AHが酸として強いためには解離しやすくKaの値は大きくなければならないので、<br />
+1) 酸AHが不安定であること（A-H結合が弱いこと）<br />
+2) A-H結合がイオン的であり、水溶媒の大きな極性の影響を受けやすいこと<br />
+3) 共役アニオンA-が水溶液中で安定であること<br />
+の三つの条件が必要である。A-H結合が弱くイオン的で、共役アニオンA-が安定であればAHは水中で酸として強くなる。<br />
+（省略）pKaが小さいほど酸性度が高くなるということに注意しながら、これらのpKaのデータを考察してみよう。<br />
+1) この表（文献[1]を参照）では、メタンが最も酸性が弱く、硫酸が最も酸性が高い<br />
+2) CH<sub>4</sub> &lt; NH<sub>3</sub> &lt; H<sub>2</sub>O &lt; HFの順に酸性度が増大。この順に結合エネルギーは大きくなるので（C-H（439）&rarr;N-H（453）&rarr;O-H（498）&rarr;H-F（569）; 単位： kJ/mol）<br />
+　この酸性度の順序は不思議である。しかし、同一周期では原子番号の増大とともに電気陰性度（&sigma;電子求引性）が大きくなって結合のイオン性が増大するので、水溶液中でイオン解離しやすくなると同時に、共役塩基が安定化するためこの順序になると考えられる。<br />
+3) 同族元素の酸を比較すると、高周期になるほど酸性が強くなる<br />
+　16族元素： H<sub>2</sub>O &lt; H<sub>2</sub>S &lt; H<sub>2</sub>Se<br />
+　17族元素： HF &lt; HCl &lt; HBr &lt; HI<br />
+　これは弱い結合ほｄｐ解離しやすく、共役塩基が高周期になると安定になり（分極率が大きくなるほど電荷の安定化効果が大きい）。解離の方向に平衡が移動するため<br />
+4) C<sub>6</sub>H<sub>5</sub>OH &gt; CH<sub>3</sub>OH &gt; H<sub>2</sub>O<br />
+　共役塩基の安定性を考えると、分極率の大きい塩基（アニオン）のほうが電荷が広がって安定になる。すなわち、この3つの酸のうち、サイズが最も大きなアニオンC<sub>6</sub>H<sub>5</sub>O<sup>-</sup>の酸強度が最大である<br />
+5) HCN &lt; HNO<sub>2</sub> &lt; H<sub>3</sub>PO<sub>4</sub> &lt; HNO<sub>3</sub> &lt; H<sub>2</sub>SO<sub>4</sub>の順に酸性度が上がる<br />
+6) 共役塩基の塩基性の順序は酸強度の順序と逆になる。弱酸の共役塩基ほど塩基性が強い。塩基性の順序は次のようになる。<br />
+　第2周期： CH<sub>3</sub><sup>-</sup> &gt; NH<sub>2</sub><sup>-</sup> &gt; HO<sup>-</sup> &gt; F<sup>-</sup> （酸性度の順序： CH<sub>4</sub> &lt; NH<sub>3</sub> &lt; H<sub>2</sub>O &lt; HF）<br />
+　16族元素： HSe<sup>-</sup> &lt; HS<sup>-</sup> &lt; HO<sup>-</sup>（酸性度の順序： H<sub>2</sub>Se &gt; H<sub>2</sub>S &gt; H<sub>2</sub>O）<br />
+　17族元素： I<sup>-</sup> &lt; Br<sup>-</sup> &lt; Cl<sup>-</sup> &lt; F<sup>-</sup> （酸性度の順序： HI &gt; HBr &gt; HCl &gt; HF）<br />
+　CH<sub>3</sub>O<sup>-</sup> &gt; C<sub>6</sub>H<sub>5</sub>O<sup>-</sup> （酸性度の順序： CH<sub>3</sub>OH &lt; C<sub>6</sub>H<sub>5</sub>OH）<br />
+<br />
+◇ 溶媒効果とエントロピーの影響<br />
+　厳密にはpKaの解釈においては溶媒効果が無視できない。酸の強さを測定する溶媒として通常使われてる水溶液中では、次の式で示すように、酸AHは何個か（m個）の水分子で溶媒和されている。これが解離してプロトンを放出しても、生じる共役塩基A-はイオンであり電荷をもつので、AHよりも水分子によって大きく溶媒和される。ヒドロニウムイオンも溶媒和されているので解離平衡系の右の溶媒和がかなり大きくなり、平衡系のエントロピー変化（分子集団としての自由度の減少）はきわめて大きいだろうと予想される。エントロピーSの減少は自由エネルギーGの増大を招くので不利である。<br />
+　AH・・・・・・（H<sub>2</sub>O）<sub>m</sub> &larr;&rarr; [A<sup>-</sup>]（H<sub>2</sub>O）<sub>n</sub> + [H<sub>3</sub>O<sup>+</sup>]（H<sub>2</sub>O）<sub>x</sub><br />
+　AH・・・・・・（H<sub>2</sub>O）<sub>m</sub> （※ 溶媒和した酸。溶媒和が弱い）<br />
+　[A<sup>-</sup>]（H<sub>2</sub>O）<sub>n</sub> + [H<sub>3</sub>O<sup>+</sup>]（H<sub>2</sub>O）<sub>x</sub> （※ 溶媒和したアニオンとプロトン。電荷があるので溶媒和が強い）<br />
+　問題は、pKaが298 Kでの酸解離平衡の自由エネルギー変化&Delta;Gに比例することである。次の式に示すように、&Delta;Gがエントロピー変化&Delta;Sの項を含んでいるので、pKaは&Delta;Sに依存する。<br />
+　&Delta;G = - RT ln (Ka) = 2.303 RT(pKa) = &Delta;H - T&Delta;S<br />
+　pKa&nbsp;= (1/2.303R)*(&Delta;H/T - &Delta;S)<br />
+　一般に官能基の電子効果はpKaを用いて議論されている。しかし、酸性度に基づく官能基の電子効果は、本来、エンタルピー変化&Delta;Hをもとに考察しなければならない。溶媒和というエントロピーに由来する余計な因子のない条件で議論しなければ意味がないのである。<br />
+　水溶液中では、&Delta;Gの式のエンタルピー変化&Delta;Hは小さく（ほとんどゼロ）、pKaの値は、解離におけるエントロピー変化&Delta;Sに大きく依存する。一般に、pKaは共役塩基（A<sup>-</sup>）の水和（溶媒和）によるエントロピー変化&Delta;Sの影響を強く受けることが知られており、pKaの解釈には注意が必要である。A<sup>-</sup>が不安定なほど、A<sup>-</sup>の電荷が局在するほど溶媒和の水の束縛が強くなってエントロピーが減少し右への反応が不利になって弱酸となる。（省略。文献[1]の表を参照）&Delta;Gのうち90%以上は&Delta;Sの変化に由来する（T&Delta;Sの値は22?32 kJ/mol）。イオン化熱&Delta;Hは非常に小さい（-0.2?-2.9 kJ/mol）。すなわち、pKaの値が変化するのはエントロピーの効果であるという意外な結論が出てくる。エントロピー効果は溶媒和の効果であるから酸の強さとは必ずしも関係しない。それでも酸ほど溶媒和効果が大きくエントロピー的に解離平衡が不利になるからであるが、議論に危険が伴う。（文献[1]の表のpKaの値から言えば）ギ酸 &lt; 酢酸 &lt; 2,2-ジメチルプロピオン酸の順に増大して酸性度が減少するので、「アルキル基は電子供与性であり、サイズが大きくなると電子供与性が増大して酸の酸性度を弱める」という有機化学の&rdquo;常識&rdquo;が読み取れるが、気相における酸性度のデータを用いると、そのようなことは言えない。<br />
+　したがって、官能基の電子効果を厳密に議論するには、孤立分子の酸性度、すなわち、気相の酸性度を分子の絶対酸度（absolute acidity）の尺度として用いなければならない。<br />
+<br />
+◇ 気相における酸性度<br />
+（省略）酸強度の支配因子としては、具体的には、次の三つの因子が重要であると考えられている。<br />
+1) A-H結合の解離エネルギーの大きさは、周囲（プトロンの近傍）に&sigma;電子求引基（electron-widthdrawing group）があるとA-H結合の電子がAに引っ張られて弱まり、A-H結合はイオン開裂しやすくなり酸性度が強くなる。逆にAが&sigma;電子供与性であればA-H結合は強くなる。この効果は結合を通じて伝わる効果であり、誘起効果（induction effect）とも呼ばれる<br />
+2) A-のイオン化エネルギーはラジカルA・の電子親和力であり、これはA・のLUMOの準位と広がりに関係するので、分極率（A-のサイズ）にも依存する。したがって、気相酸性度はAHの分極率（電子雲の広がり； 分子AHのサイズ）にも関係している。分極率効果は空間を通じて伝わる効果であり、負電荷に直接影響が及ぶので電場効果（フィールド効果： electron field effect）とも呼ばれる<br />
+3) A-が安定になるほどAHは酸として強くなるので、A-における超共役効果（anionic hyperconjugation）も酸強度に影響する重要な要因である。電子求引基のLUMOは低いのでAのLUMOが低いほど超共役効果が強くなり、酸としては強くなると予想される。<br />
+<br />
+◇ アルキル基の電子効果<br />
+（省略）気相では（水相とは逆に）アルキル基のサイズが大きくなり枝分かれが増すと酸性度が増す。<br />
+1) &sigma;電子効果； 極性効果（polar effect）による電子供与効果（酸性度の低下）<br />
+　この極性効果は、誘起効果とも呼ばれ、&sigma;結合を通じて電子供与性を示す。<br />
+2) 分極率（polarizability）による酸性度の強化<br />
+　アルキル基の電子雲は負電荷の近傍に接近すると空間を通じて直接負電荷を中和して安定化する性質を示す。これが分極率効果（電場効果）と呼ばれる効果で、共役塩基A<sup>-</sup>を安定化するので酸の強化に寄与する。アルキル基が大きくなると負電荷のごく近くに分子内の一部の原子が接近できるようになるのでA<sup>-</sup>が効果的に安定化し、AHの酸性度が強くなる。一般にAの原子団のサイズが大きくなるとこの効果が増大する。したがって、アルキル基が大きくなるとこの効果によって、アルキル基は電子求引性を示すことになる。<br />
+3) アルキル基によるA-の安定化（酸性度の強化）<br />
+　この効果も、見かけ上、アルキル基の電子求引性（酸強度の亢進）を引き起こす。共役塩基A-が分子内超共役によって安定化されて酸解離が容易になる効果である。アルキル基のサイズが大きくなると、アルカンの場合と同様に、共役塩基A-のLUMOが低下するため、A-の被占軌道との電荷移動相後作用（CT相互作用）が大きくなり安定化が増す。したがって、大きなアルキル基はA-に対して電子求引性を示し、A-を安定化するので酸強度の増大に寄与する。<br />
+<br />
+◇ 種々の有機分子の気相酸性度<br />
+（省略）<br />
+1) 気相酸性度が小さいほうが酸性度が大きい（解離しやすい）<br />
+2) 同一周期では原子番号の増加とともに酸性度が増す（電気陰性度の増大による&sigma;電子求引性の増大）<br />
+3) 混成のs性の増大とともに酸性度が増大する。sp<sup>3</sup>&rarr;sp<sup>2</sup>&rarr;spになると混成軌道の準位が低下し、電気陰性度が増大するので電子求引性となり酸性度が増す。<br />
+4) LUMOが低く広がりが大きい&pi;結合があると電子求引性が増大し、酸性が強くなる<br />
+5) カルボニル基やシアノ基（-C&equiv;N）は電子求引性<br />
+6) ニトロ基はカルボニル基よりLUMOが低く電子求引性（ニトロ基は弱い結合で成り立つため）<br />
+7) アルキル基の電子効果<br />
+　・ アルキル基のサイズが大きくなると分極率が大きくなりイオン電荷が安定化される<br />
+　・ LUMOが低くなり電子求引性が上昇（t-Bu &gt; CH<sub>3</sub>CH<sub>2</sub> &gt; CH<sub>3</sub>）<br />
+8) カルボン酸（ハロゲンの効果がpKaの傾向と逆： LUMO準位が影響している）<br />
+　・（&sigma;<sup>*</sup><sub>C-F</sub> &gt; &sigma;<sup>*</sup><sub>C-Cl</sub> &gt; &sigma;<sup>*</sup><sub>C-Br</sub>）（LUMOが低いと電子求引性）<br />
+　・ 分極率も影響している（F &lt; Cl &lt; Brの順に分極率が大きくなる）<br />
+9) シクロペンタジエン（352.4）は炭化水素酸としては異常に酸性度が高い<br />
+　これは共役アニオン（C<sub>5</sub>H<sub>5</sub><sup>-</sup>）が熱力学的に安定な6&pi;電子系（芳香族性をもつ）を形成するためである。プロペンの気相酸性度（389.8）に比べてもはるかにシクロペンタジエン（352.4）のほうが酸性度が強いのは、明らかに芳香族性のためである<br />
+10) スルホンはスルホキシドより酸性が強い<br />
+<br />
+◇ （塩基の）気相での定義<br />
+（省略）気相塩基性が大きいほど塩基性が強い。<br />
+（省略）気相塩基性（GB）とプロトン親和力（PA）の間には非常にきれいな直線関係が成立する。すなわち、塩基のプロトン化反応のエントロピー変化は基質Bによらずほぼ一定である（6?9 kcal/mol）。このことは塩基性度の議論をするとき、GB, PAの値のいずれをベースにしてもほとんどの場合、問題ないことを示唆している。<br />
+<br />
+◇ 塩基の強さ<br />
+（省略）<br />
+以上をまとめると、次のようになる。<br />
+1) 一般に、N, O, Sの非共有電子対の塩基性を比較すると、Nの非共有電子対が最も塩基性が強い<br />
+2) イオン化エネルギーが小さい（HOMOが高い）ほど塩基性が強くなる。すなわち、塩基性の強さにはフロンティア軌道が重要な役割を演じている<br />
+3) A-H結合が弱くなると塩基性が弱くなる（GB; NH3 &gt; PH3 &gt; AsH3）<br />
+4) アルキル置換はHOMOを上昇させるため塩基性を強める<br />
+5) 酸素塩基の強さ； H2O &lt; ROH ≒ RCOOH &lt; RCOOR' ≒ R2C = O &lt; R2O<br />
+------------------------------------------------------------------------------<br />
+■ 酸・塩基の強さとその支配因子 [2]<br />
+<br />
+1) 酸の強さを決定する因子<br />
+　酸-塩基反応において、酸H-Aはプトロンを失い、共役塩基A：<sup>-</sup>には孤立電子対が残される。アニオンの孤立電子対のn軌道は、分子中で最も高いエネルギーの軌道なので非局在化して安定化しやすい。したがって、酸H-Aの共役塩基A：<sup>-</sup>の孤立電子対の安定性がHAの賛成の主因になりうる。<br />
+・ 共役塩基A：-のHOMOのエネルギーが低いほど、HAは強い酸である<br />
+　A：<sup>-</sup>のHOMO（主成分はn）のエネルギーが下がれば、電子供与体A：<sup>-</sup>の反応性は落ち、プロトンを受容する逆反応が遅くなって、A：<sup>-</sup>（したがって、H<sub>3</sub>O<sup>+</sup>）の濃度が高くなる。すなわち、共役塩基A：<sup>-</sup>は速度論的に安定化される。<br />
+　また、他の軌道はすべてHOMOよりエネルギーが低いはずだから、全電子のエネルギーが低くなる可能性は高く、熱力学的にも安定化されるであろう。<br />
+① 元素の効果<br />
+　同じ周期の元素では、HAの酸性はAの原子番号が大きいほど強くなる（p<em>K</em>aは小さくなる）。<br />
+　酸の強さ： R<sub>3</sub>CH &lt; R<sub>2</sub>NH &lt; ROH &lt; HF<br />
+　p<em>K</em>a： ?50 (R<sub>3</sub>CH) &gt; ?38 (R<sub>2</sub>NH) &gt; ?16 (ROH) &gt; 3.2 (HF)<br />
+　周期表の同一周期の元素Aでは、原子番号が大きくなるにつれて原子軌道のエネルギーが下がり（電気陰性度が大きくなり）、これを主成分とする共役塩基A：<sup>-</sup>のHOMO（n）のエネルギーは下がって共役塩基は安定化し、HAの酸性は強くなる。<br />
+　共役塩基のHOMO（n)のエネルギー： R<sub>3</sub>C<sup>-</sup> &gt; R<sub>2</sub>N<sup>-</sup> &gt; RO<sup>-</sup> &gt;&nbsp;F<sup>-</sup><br />
+　共役塩基の安定性； R<sub>3</sub>C- &lt; R<sub>2</sub>N<sup>-</sup> &lt; RO<sup>-</sup> &lt; F<sup>-</sup><br />
+　※ 原子のなかの電子は、たとえ最外殻の価電子でも、核近くに存在する確率が高く、内殻の電子によって完全に遮蔽されない。そのため、原子番号が大きいと核の正電荷が増えるので、価電子の軌道エネルギーが下がる<br />
+② 誘起効果<br />
+　2,2,2-トリフルオロエタノール（CF<sub>3</sub>CH<sub>2</sub>OH）（p<em>K</em>a = 12.4）はエタノール（CH<sub>3</sub>CH<sub>2</sub>OH）(p<em>K</em>a = 16)より強い酸である。<br />
+　価電子の軌道エネルギーはFのほうがCよりも低いため、C-F結合の結合性軌道の主成分はF原子の軌道となり、結合電子対はF原子にひきつけられる（F<sup>&delta;- </sup>- C<sup>&delta;+</sup>）。このC原子上の部分的正電荷はC原子の混成軌道のエネルギーを下げるため、F<sub>3</sub>C-CH<sub>2</sub>結合の結合電子対をF<sub>3</sub>C側に引き寄せる（F<sub>3</sub>C<sup>&delta;- </sup>- CH<sub>2</sub><sup>&delta;+</sup>）。このように順次隣の原子の部分的な正電荷を増やすことによって、CF<sub>3</sub>CH<sub>2</sub>O<sup>-</sup>の酸素上のアニオン中心のn<sub>0</sub>軌道、したがって、CF<sub>3</sub>CH<sub>2</sub><sup>-</sup>のHOMOのエネルギーは下がる。<br />
+　エタノールのCH<sub>3</sub>基では、H原子の軌道のほうが高いエネルギーをもつので結合電子対はC側に偏る（H<sup>&delta;+ </sup>- C<sup>&delta;-</sup>）。この部分電荷はC-C結合に逆の極性（H<sub>3</sub>C<sup>&delta;+</sup> - CCH<sub>2</sub><sup>&delta;-</sup>）を誘起し、共役塩基CH<sub>3</sub>CH<sub>2</sub>O<sup>-</sup>のHOMO（主成分n<sub>O</sub>）のエネルギーを下げる。<br />
+　すなわち誘起効果とは、結合の極性の変化が原子の軌道エネルギーを静電的に上下させ、隣接結合に極性を順次誘起する効果である。原子の軌道エネルギーが高くなると結合電子が相手原子側に偏り、低くなれば結合電子を相手原子から引き付ける。おもに&sigma;電子であらわになる。<br />
+　&pi;結合では隣接結合の&pi;と&pi;<sup>*</sup>軌道のエネルギー差が小さく、&pi;-&pi;<sup>*</sup>相互作用が強くなって電子の非局在化の効果を覆い隠す。<br />
+③ 共役効果（電子の非局在化）<br />
+　酢酸（CH<sub>3</sub>CO<sub>2</sub>H）(p<em>K</em>a = 4.8)は、エタノール（CH<sub>3</sub>CH<sub>2</sub>OH）(p<em>K</em>a = 16)より強い酸である。それは、共役塩基（CH<sub>3</sub>CO<sub>2</sub><sup>-</sup>）において、アニオン中心のn<sub>O</sub>（p<sub>O</sub>）とカルボニル基の&pi;<sup>*</sup><sub>C=O</sub>が相互作用して、孤立電子対がカルボニル基に非局在化して安定化するからである。すなわち、共役塩基のHOMOのエネルギーが下がって酢酸の酸性度が上がる。<br />
+④ 混成効果<br />
+　H-Aの酸性度は、A：<sup>-</sup>のアニオンの孤立電子対の混成n軌道のs性が大きいほど高くなる。2s軌道は2p軌道よりエネルギーが低いから、共役塩基のHOMOのエネルギーが下がり、酸性度が上がる。まとめると、次のようになる。<br />
+　酸の強さ： CH<sub>3</sub>CH<sub>3</sub> &lt; CH<sub>2</sub>=CH<sub>2</sub> &lt; HC&equiv;CH<br />
+　共役塩基の安定性： CH<sub>3</sub>CH<sub>2</sub><sup>-</sup> &lt; CH<sub>2</sub>=CH<sup>-</sup> &lt; HC&equiv;C<sup>-</sup><br />
+　HOMO（n）エネルギー： CH<sub>3</sub>CH<sub>2</sub><sup>-</sup> &gt; CH<sub>2</sub>=CH<sup>-</sup> &gt; HC&equiv;C<sup>-</sup><br />
+　n軌道のs性（混成）： 25% （sp<sup>3</sup>） &lt; 33% （sp<sup>2</sup>） &lt; 50% (sp)<br />
+　※ s性： 混成軌道におけるs軌道の割合をいう。たとえば、sp<sup>3</sup>混成軌道はs軌道とp軌道が1：3の比で混ざったものなので、s性は25%である。s性が高いほど、混成軌道のエネルギーは低い。したがって、酸性度が上がる。<br />
+2) 塩基の強さを決定する因子<br />
+　HOMOのエネルギーの高さが一つの重要な因子である<br />
+　HOMO(n)のエネルギー： HF &lt; H<sub>2</sub>O &lt; H<sub>3</sub>N<br />
+　塩基性： HF &lt; H<sub>2</sub>O &lt; H<sub>3</sub>N<br />
+　有機化学の実際からみれば、有機分子は酸か塩基に分類でき、結果として酸は比較的少なく、大部分は塩基といえる。有機分子で酸としての反応性があるは、カルボン酸、スルホン酸、リン酸くらいである。それにくらべれば塩基は多く、なかでも塩基性の低いものが多い。塩基性の強いものは、有機分子というより有機金属化合物である。<br />
+　※ HOMOのエネルギーは反応性という分子の動的性質（求核性など）を決める指標であるが、同時に酸-塩基反応の正反対がおもに平衡を決めている場合には、塩基の強さを示す有効な目安になりうる&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ S<sub>N</sub>1反応 -分子内反応- [2]<br />
+<br />
+　求核置換反応（S<sub>N</sub>1反応）は二段階で進む反応で、反応速度を決める重要な段階は分子内反応である。もともと分子間反応に対して提案されたフロンティア軌道論を分子内反応に応用するには、結合間の反応と見なして、その間の結合性軌道（分子のHOMOに相当）と反結合性軌道（分子のLUMOに相当）の相互作用を考えればよい。<br />
+1) S<sub>N</sub>1反応<br />
+　この反応では、求核剤が脱離基をもつ化合物を攻撃して置換反応を起こす。<br />
+　CH<sub>3</sub>CO<sub>2</sub><sup>-</sup> + (CH<sub>3</sub>)<sub>3</sub>C-Br &rarr; CH<sub>3</sub>CO<sub>2</sub>-C(CH<sub>3</sub>)<sub>3</sub> + Br<sup>-</sup><br />
+　この点ではS<sub>N</sub>2反応と同じであるが、一段階で協奏的に起こるのではなく、二段階の反応で反応中間体のカルボカチオンを経由して進む。<br />
+　(CH<sub>3</sub>)<sub>3</sub>C-Br &rarr; (CH<sub>3</sub>)<sub>3</sub>C<sup>+</sup> + Br：<sup>-</sup><br />
+　CH<sub>3</sub>CO<sub>2</sub><sup>-</sup> + (CH<sub>3</sub>)<sub>3</sub>C<sup>+</sup> &rarr; CH<sub>3</sub>CO<sub>2</sub>-C(CH<sub>3</sub>)<sub>3</sub><br />
+　反応速度を決める段階（律速段階という）は、エネルギー障壁の高い前半の過程である。この反応では、求核剤はHOMOのエネルギーの低い、弱い電子供与体が望ましい。HOMOのエネルギーが高い、強い電子供与体ではS<sub>N</sub>2反応が起こる。<br />
+　溶媒はプロトン性溶媒（H<sub>2</sub>O, ROHなど）が有効で、中間に生成するカルボカチオンと脱離基のアニオンをともに安定化させる（SN2反応では、プロトン性溶媒は不適当）。<br />
+2) 反応の立体化学<br />
+　S<sub>N</sub>1反応における生成物の立体構造は、反応中間体のカルボカチオンを求核剤が攻撃する段階で決まる。したがって、カルボカチオンの形状から考える必要がある。カルボカチオンはカチオン中心のC原子のまわりに三つの結合電子対があるので、VSEPR理論から平面三角形でsp<sup>2</sup>混成をしており、空のp軌道がその平面の上下に広がっている。<br />
+　この構造では、求核剤の攻撃は上下どちらの方向からも同じ確率で起こる。脱離基以外の3置換基が異なる場合、立体配置はSN2反応では反転するが、S<sub>N</sub>1反応では反転も保持も同じ確率で起こり、二つのエナンチオマーの等量混合物（ラセミ混合物）が得られる。<br />
+　強い塩基のヒドロキシアニオン（-OH）との反応では、S<sub>N</sub>2反応を起こし、立体特異的にトランス異性体のみを与える。<br />
+3) 分子内反応の軌道論<br />
+　フロンティア軌道論は電子供与体のHOMOと電子受容体のLUMOの相互作用で反応が推進されるというもので、厳密にいえば分子間の反応理論である。分子内反応に適用するときには、次のように考える。<br />
+<br />
+【分子内反応の軌道論ルール】<br />
+・ 最もエネルギーの高い結合性軌道（&pi;, &sigma;）あるいは非結合性軌道（n）と、最もエネルギーの低い反結合性軌道（&pi;<sup>*</sup>, &sigma;<sup>*</sup>）あるいは空のp軌道とが重なるように分子内反応は起こる<br />
+<br />
+　最初に示した例でいえば、(CH<sub>3</sub>)<sub>3</sub>C-BrからBr：<sup>-</sup>が脱離する段階が分子内反応である。ここでC-Br結合が切れる。この結合には、分子内で一番エネルギーの低い原子軌道をもつBr原子があるので、この&sigma;<sup>*</sup><sub>CBr</sub>が最もエネルギーの低い反結合性軌道である。したがって、&sigma;<sub>CBr</sub>結合が電子受容体として働く。この軌道とよく重なる電子供与性軌道は、メチル基の&sigma;<sub>CH</sub>結合性軌道である。<br />
+4) S<sub>N</sub>1反応の反応性<br />
+① 置換基効果<br />
+　ハロゲン化アルキルの反応性は、脱離基をもつC原子上のR基の数が増えると高くなる。この傾向はS<sub>N</sub>2反応とはまったく逆である。<br />
+　反応速度： CH<sub>3</sub>-X &lt; RCH<sub>2</sub>-X (第一級) &lt;&lt; R<sub>2</sub>CH-X (第二級) &lt; R<sub>3</sub>C-X （第三級）<br />
+　・ 第三級ハロゲン化アルキルは速やかに反応する<br />
+　・ 第二級ハロゲン化アルキルの反応は遅い<br />
+　・ ハロゲン化メチルと第一級ハロゲン化メチルでは、反応はきわめて遅いか観測できない<br />
+　ハロゲン化アルキルの反応性は、駆動力の&sigma;<sub>CH</sub>-&sigma;<sup>*</sup><sub>CX</sub>相互作用を数え上げれば容易に理解できる。つまり、&sigma;<sup>*</sup><sub>CBr</sub>と同時によく重なることのできる&sigma;<sub>CH</sub>は、第一級では一つ、第二級では二つ、第三級では三つである。<br />
+　立体効果も上記の反応性効果を強める。反応中心炭素は出発物質でのsp<sup>3</sup>混成（結合角 109.5&deg;）から中間体カチオンでのsp<sup>2</sup>混成（結合角120&deg;）に変化する過程で結合角が広がり、置換基Rの数が増えるほど置換基間の被占&sigma;-&sigma;軌道相互作用による反発が緩和する。S<sub>N</sub>2反応では、求核剤と置換基の間の被占軌道間の反発相互作用としておもに現れ、立体効果は逆に障害となる。<br />
+　ハロゲン化アルキルで電子供与性軌道として働く&sigma;<sub>CH</sub>軌道を、それより高いエネルギーのnや&pi;軌道に置換すれば反応性が高まるはずである。実際、事実と一致する。<br />
+　反応速度： H-CH<sub>2</sub>CH<sub>2</sub>-X &lt;&lt; CH<sub>2</sub>=CH<sub>2</sub>-CH<sub>2</sub>-X &lt; C<sub>6</sub>H<sub>5</sub>-CH<sub>2</sub>-X &lt;&lt; CH<sub>3</sub>O-CH<sub>2</sub>-X<br />
+　しかし、メトキシ基のn<sub>O</sub>軌道はC=Cの&pi;結合やベンゼンのHOMOよりエネルギーが低いが、メトキシ基のほうが反応を促進する。これはn<sub>O</sub>軌道のほうが&sigma;<sup>*</sup><sub>CX</sub>との重なりが大きいためと考えられる。<br />
+　ビニル基よりフェニル基のHOMOのエネルギーは高いから電子供与性が強い。ビニル基の&pi;にはp軌道由来の面以外に節面はないが、フェニル基のHOMOには一つ余分に分子面に垂直な節面がある。節面が増えるごとに軌道エネルギーは高くなるので、フェニル基のHOMOのエネルギーはより高く、電子供与性が強くなる。<br />
+② 脱離基効果<br />
+　S<sub>N</sub>1反応での電子受容体は、S<sub>N</sub>2反応と同様、C-X結合であるので、S<sub>N</sub>2反応と同じ傾向の脱離基効果を示す。ハロゲンでは以下のようになる。<br />
+　反応性： RF &lt;&lt; RCl &lt; RBr &lt; RI<br />
+※ 協奏反応： いくつかの結合の切断と生成が同時に起こり、出発物質が直接生成物に変換される反応をいう<br />
+※ 分子間反応では、電子供与体と電子受容体はHOMOとLUMOが最も重なるように相対的な位置関係をとる自由がある。しかし、分子内では互いに結合で結ばれていて、最適な相対的位置関係を必ずしもとれない。そのため軌道の重なりが支配的になる場合がある<br />
+※ &sigma;<sup>*</sup><sub>CX</sub>との重なりの最も大きいのは、メトキシ基（CH<sub>3</sub>O-）のO原子上のn軌道である。XC-OCH<sub>3</sub>の結合距離が短く、n軌道は一元氏上に広がりが局在して他の軌道と重なりやすい。ビニル基（CH<sub>2</sub>=CH-）、フェニル基（C<sub>6</sub>H<sub>5</sub>-）ではXC-CRの結合距離が長く、また&pi;軌道は多原子にわたって広がっているので、1点で重なるには不利である。このため、電子供与性はメトキシ基のほうが強い。<br />
+------------------------------------------------------------------------------<br />
+■ 軌道相互作用における電子の役割 [1]<br />
+<br />
+◇ 電子数と系の安定化エネルギー<br />
+1) 安定化が起こるためには電子が存在しなければならない<br />
+　電子がまったく軌道に入っていなければその系のエネルギーは変化しない<br />
+2) 半占軌道が存在する系では相互作用して必ず安定化する<br />
+　半占軌道をもつ化学種の代表例がラジカルである。ラジカルの反応性が高い理由の一つがここにある。ラジカルは相手が半占軌道でも被占軌道でも空軌道でもかまわず相互作用して安定になろうとするので反応性が非常に高くなっている。多くの原子は半占軌道をもつので反応性が高く分子を作る。（省略）ラジカルは被占軌道と相互作用して安定化するのでラジカルの安定性は、ラジカル中心の原子が第三級＞第二級＞第一級の順に低くなると予想される。半占軌道は、相互作用する被占軌道の数が多いほど安定化量が増すからである。<br />
+3) 安定化が最大になるのは電子が2個関与する（c)の場合である<br />
+　（(c)は分子AとBの軌道にそれぞれ1の電子があり、それらの軌道が結合と反結合軌道を作り、結合軌道に電子が2個入る場合に該当する）<br />
+4) 次に安定化が大きいのは電子が2個関与する(b)の場合である<br />
+　（(b)は分子Aの軌道には0個の電子、分子Bの軌道には2個の電子があり、それらの軌道が結合と反結合軌道を作り、結合軌道に電子が2個入る場合に該当する）<br />
+　この型の相互作用をドナー・アクセプター相互作用（donor-acceptor interaction; DA相互作用と略す）または電荷移動相互作用（charge transfer interaction; CT相互作用と略す）と言う。医かに示すような種々の化学現象において重要であり共有結合の次に強い。<br />
+　① 酸と塩基の相互作用<br />
+　② 超共役相互作用（hyperconjugative interaction; 分子内で起こるDA相互作用）<br />
+　③ カルボカチオンの安定化機構<br />
+　④ &pi;錯体などの分子化合物の形成と安定化機構<br />
+　⑤ 水素結合<br />
+5) 不安定化が起こるのは関与する電子数が4個である場合だけである<br />
+　この場合にのみ、系に斥力が作用して相互作用系に反発力が生じて系が崩壊する。これを交換反発（exchange replusion）またはパウリ斥力（Pauli repulsion）という。またファンデルワールス斥力も同じ斥力を意味する。有機化学ではこの斥力を立体反発とよんでいる。この斥力は以下のような特徴をもつ。<br />
+　① 2軌道4電子系の斥力の大きさは&Delta;*≒&Delta;なので小さい。しかし、その集積はかなり大きな斥力になる。小さな分子ではほとんど作用しないと考えられるが、大きな分子になると集積反発力はかなり大きさになり、化学反応などで立体反発や立体障害などの原因として反応の進行を妨害する重要な役割を演じるようになる<br />
+　② 化学結合や水素結合が形成されると被占軌道どうしの交換反発が必ず生じるが、この反発に抗して化学結合や水素結合が形成されている<br />
+以上はほとんどすべての基本的な化学現象の起源に関係する非常に重要な結論である。軌道間の相互作用は表面分子軌道、特にフロンティア軌道において最大となる。表面分子軌道とは分子をファンデルワールス半径の大きさをもつ原子の集合体として表したときの表面（ファンデルワールス面）付近に張り出したMOである。分子構造の支配因子を考慮するときにも軌道相互作用モデルは有効である。化学結合の成り立ちと強さ、分子の熱力学的安定性、分子構造、酸と塩基の強さ、化学反応性など分子の基本的性質は表面分子軌道の相互作用に支配されている。<br />
+※ &Delta;*は反結合軌道と元の軌道との差、&Delta;は結合軌道と元の軌道との差、どちらもエネルギー的に近い法の差とする<br />
+------------------------------------------------------------------------------<br />
+■ イオン結合を分子軌道で考える [1]<br />
+<br />
+◇ イオン結合の特徴<br />
+　一般にイオン結合にはMO法は適用できないとされている。しかし、イオン結合の本質を考えるため、ここではあえてMO法を適用してみよう。イオン結合あるいはイオン結合からなる化合物の特徴は次のようである。<br />
+1) 共有結合とは逆に方向性がなく多方向性である<br />
+2) 固体では電気伝導性はないが溶融すると電気を通す<br />
+3) 固いが脆い（結晶が少しずれるとイオン間の反発力により自発的に壊れる）<br />
+4) 誘電率の高い溶媒によく溶けてイオンに分かれる<br />
+　これらの特徴は共有結合にはない。しかし、イオン結合と共有結合には明確な境界はなく、結合に関与する2つの元素の性質によって多様性がある。分子軌道論では、この2種類の化学結合を統一的に軌道相互作用の原理で説明する。イオン結合は共有結合が形成不可能な（または困難な）元素どうしで形成される共有結合の極端な場合とみなすことができる。その特徴は化学結合形成時の軌道相互作用において次の2つに要約できる。<br />
+1) 関与する原子軌道のエネルギー差&Delta;Eが大きい<br />
+2) 関与する2元素のうち、1つの元素の広がりが小さい（エネルギー準位が低いために広がりが小さくなる）ため、重なり積分の値が小さい<br />
+　そのため軌道間相互作用が小さくなり分子軌道が形成されにくい。（省略）<br />
+　イオン結合はこのような二つの理由により、軌道相互作用がほとんど不可能な原子間のみに形成される。原子軌道間の相互作用がほとんどなく（&Delta;≒0, &Delta;*≒0）、集合系の分子軌道が形成されにくいので、低い軌道の元素のほうへ電子移動が起こり、結果として、クーロン引力が作用するようになる。重要なことは、このクーロン引力の大きさは、軌道間エネルギー差&Delta;Eの大きさに近いことである。<br />
+<br />
+◇ 格子エネルギーの実験データ<br />
+　格子エネルギーの主要な部分は、イオン間のクーロン引力（90%程度）とファンデルワールス反発（交換反発； 10%程度）である。<br />
+<br />
+◇ 格子エネルギーは軌道間エネルギー差に由来する<br />
+　興味深いのは、イオン結晶の格子エネルギーUは軌道間エネルギー差&Delta;Eiに近似的に等しいことである。（省略）これらの軌道間エネルギー差の値&Delta;Eiは格子エネルギーUにかなり近い。気体状態から結晶状態へのエネルギー変化があるとしても、エネルギー保存則を考慮すると、&Delta;EiがUに変換したと考えることができる。これに、ファンデルワールス反発（Uを減少）とファンデルワールス引力（Uを増大）および零点エネルギー（Uを増大）が副次的に作用したと考えられる。<br />
+<br />
+※ 一般に、HOMO-LUMO間のエネルギー差&Delta;Eが大きくなると、分子は熱力学的に安定になる。この傾向は最大ハードネスの原理（principle of maximum hardness; しばしばPMHと略す）とよばれており、分子の熱力学的安定性を示す重要な基本原理である。<br />
+------------------------------------------------------------------------------<br />
+■ 共有結合ではなくイオン結合になる理由 [2]<br />
+<br />
+　共有結合（電子を共有してできる結合）とは対照的に原子間で互いに電子を共有せずに形成される結合もある。一方の原子から他方の原子へ電子が移ると、どちらの原子も電荷をもったイオンになる。正に帯電したイオンをカチオンとよび、負に帯電したイオンをアニオンというが、これらのカチオンとアニオンの間に静電引力が働いて、結合ができる。このような静電引力による結合をイオン結合という。（省略）共有結合ではなくイオン結合になるのは、価電子の軌道エネルギーに大きな差があって軌道どうしが相互作用できないからである。一般にイオン結合をつくるカチオンは金属元素で、価電子の軌道エネルギーが高い。一方、相手のアニオンは非金属元素で軌道エネルギーが低い。軌道相互作用を通して重なり領域に電子をためて共有するより、エネルギーの高い軌道から低い軌道に電子対を移して安定化し、さらにカチオンとアニオンの静電引力によって安定化するほうがエネルギー的に有利になる。<br />
+　共有結合の結合性軌道に相当するイオン結合の軌道は、軌道エネルギーの低い原子に局在化している。つまり、結合性軌道に相当するエネルギーは（NaClの場合は）Cl<sup>-</sup>の孤立電子対のn(3p)軌道である。<br />
+------------------------------------------------------------------------------<br />
+■ 電荷移動相互作用とフロンティア軌道 [1]<br />
+<br />
+◇ 電荷移動相互作用の定義<br />
+　被占軌道（&Chi;<sub>1</sub>）と空軌道（&Chi;<sub>2</sub>）との2軌道2電子相互作用を電荷移動相互作用（charge-transfer interaction: CT相互作用）またはドナー・アクセプター相互作用（DA相互作用： donor-acceptor interaction）とよぶ。このとき被占軌道（&Chi;<sub>1</sub>）は供与軌道（ドナー軌道： donor orbital）、空軌道（&Chi;<sub>2</sub>）は受容軌道（アクセプター軌道： acceptor orbital）とよばれる。電荷移動相互作用とよばれる理由は、相互作用の結果、被占軌道&Chi;<sub>1</sub>は空軌道&Chi;<sub>2</sub>を同位相で少し取り込むので&Chi;<sub>1</sub>は&Chi;<sub>2</sub>に電子を一部供与したことになり、逆に&Chi;<sub>2</sub>は&Chi;<sub>1</sub>の電子の一部を受け入れたことになり、電子が&Chi;<sub>1</sub>から&Chi;<sub>2</sub>へ一部移動するからである。通常、この種の安定化相互作用を単にCT相互作用（CT interaction）、その機構をCT機構（CT mechanism）とよぶ。<br />
+　CT相互作用は、配位結合、超共役、アンチペリプラナー効果（超共役の一種）、&pi;錯体の形成、水素結合、化学反応の初期状態など、分子の世界で普遍的にはたらく安定化相互作用であり、電子の非局在化機構の一種として非常に重要な役割を果たしている。<br />
+◇ 電荷移動相互作用の特徴<br />
+　（省略）<br />
+◇ 配位結合と電荷移動錯体<br />
+　安定化エネルギーは通常の共有結合と比べるとかなり弱い。強いものでも通常の共有結合の半分程度、&pi;型錯体ではたかだか数kJ/mol程度の弱いものである。<br />
+　CT機構で形成される化学結合は配位結合（coordinate bond）とよばれる。形成されてしまえば共有結合と同じだが、形成機構が異なる。代表的な配位結合といｓて、Lewis酸（A）とLewis塩基（B）の配位結合がある。この場合、AがBの電子対に配位するので配位結合とよばれる。このような生成物はCT相互作用の結果生じる分子なので電荷移動錯体（CT錯体： charge-transfer complex）ともよばれている。<br />
+　A + B: &rarr; A-B<br />
+　配位結合のように明らかな原子間結合が形成されるわけではないが、分子間のCT相互作用による安定化で生じる電荷移動錯体もある。&pi;電子系が関与する例が多く、もとの分子は無色でも錯体は着色している場合が多い。ベンゼンにヨウ素を少量入れると青色を呈する。ベンゼンが&pi;供与体となりヨウ素が&pi;受容体となってCT相互作用が起こった結果、弱い電荷移動錯体が形成されて長波長側に光吸収が起こる。<br />
+　この着色は、フロンティア軌道間の相互作用が大きいために生じると考えられている。一般に、&pi;電子系のCT相互作用により、弱い電荷移動吸収（CT absorption）が紫外可視光領域の長波長側に現れる。これは、ドナー（D）のHOMOからアクセプター（A）のLUMOへの電子遷移（CT遷移）による吸収であり、CT相互作用の結果現れる新たな吸収帯である。その結果、CT錯体が形成されると長波長側に新しい吸収帯が現れ着色する。<br />
+------------------------------------------------------------------------------<br />
+■ フロンティア軌道と分子の安定性 [1]<br />
+<br />
+　分子AとBの2ついの分子が相互作用して分子Cが生まれる場合、安定化を生み出す軌道相互作用は互いの被占軌道（主にHOMO）と空軌道（主にLUMO）の相互作用である。（省略）<br />
+　下方軌道どうしの交換反発相互作用による不安定化に、AとBのフロンティア軌道どうしの相互作用による安定化が勝って、安定な分子Cに生まれ変わるのである。<br />
+　このように分子Cへの安定化の源泉はAとBの間のフロンティア軌道の相互作用の大きさにあることになる。だとすると、生成した分子Cのフロンティア軌道のエネルギー差（HOMO-LUMO間のエネルギー差： &Delta;E）が大きいほどCは安定になるはずである。すなわち、<br />
+　「分子のフロンティア軌道間エネルギー差&Delta;Eが大きいほど分子は安定になる」<br />
+と予想される。たとえば種々の配座異性体のうち、フロンティア軌道間エネルギー差が大きい配座異性体ほど安定になっているはずだる。<br />
+<br />
+◇ 最大ハードネスの原理<br />
+　上記の予想を裏付ける興味深い原理がアメリカのPearsonにより報告されている。「HOMO-LUMO間のエネルギー差が大きいほど分子は安定になる」という分子の熱力学的安定性に関する経験則である。理論的に完全に証明されているわけではなく例外もあるが、通常の分子の配座異性体間では、ほとんど例外なく成立することが経験的に知られている（構造が大きく異なる異性体の間では成立しない場合がある）。（省略）分子内の電子の非局在化は主にLUMOを介して起こるので、フロンティア軌道間エネルギー差&Delta;Eが大きい分子では電子の非局在化が起こりにくい。すなわち、励起状態になりにくく、反応性も減少し速度論的にも安定ということになる。最大ハードネスの原理は分子の熱力学的安定性だけでなく化学反応性にも関係している。<br />
+------------------------------------------------------------------------------<br />
+■ フロンティア軌道と分子構造 [1]<br />
+<br />
+◇ 結合距離と動径関数<br />
+　結合距離が動径関数に依存することは相関を見れば明らかである。結合距離をフロンティア原子軌道の軌道半径に対してプロットすると良好な直線関係が見られる。原子半径は原子の被占原子軌道の軌道半径で決まるので当然といえば当然であるが、ここで重要なことは、結合距離が、それぞれの原子の被占原子軌道のうちエネルギー準位が最高である原子軌道の軌道半径と良好な関係を示すことである。<br />
+　この事実から、p軌道が被占軌道となっている原子の場合、p軌道の軌道半径単独で結合距離と相関していることになる。これは、結合距離も結合強度と同様にフロンティア原子軌道の性質に強く影響されることを示唆している。<br />
+<br />
+◇ 結合距離の周期性<br />
+　軌道半径に周期性があるように結合距離の周期性もある。（ラジカルも含めてすべてのA-H結合距離をプロットした図を見ると）非常にきれいな周期性が見られる。同じ周期では右に行くほど短くなる。同族比較では高周期になると長くなる。<br />
+<br />
+◇ フロンティア軌道準位との相関<br />
+　A-H結合の強度が小さくなるとフロンティア軌道のエネルギー差が小さくなり、HOMOが高く、LUMOが低くなる傾向が見られた。結合距離が長い結合は一般に弱いから、フロンティア分子軌道と結合距離について同様の相関が見られるはずである。<br />
+　（省略）AH分子について、結合距離に対してフロンティア軌道のエネルギー準位（HF/3-21G*で算出）をプロットすると、かなり良好な直線関係が見られる。この関係から次のことがわかる。<br />
+1) 長い結合距離をもつ化合物のhOMOの準位は高い傾向がある<br />
+2) 長い結合距離をもつ化合物のLUMOの準位は低い傾向がある<br />
+3) 長い結合のHOMO-LUMO間のエネルギー差&Delta;Eは小さい傾向がある<br />
+　これらの事実から、結合距離はフロンティア軌道が大きな影響を与えていることがわかる。また、短い結合は強く、HOMO-LUMO間のエネルギー差が大きいので、明らかに最大ハードネスの原理がはたらいている。<br />
+　これらの三つの傾向は、結合距離の長さで反応性の傾向が判断できるという分子構造と化学反応性との関係を示している点で非常に興味深い。実際、高周期元素の化学結合は距離が長いので結合が弱く、低周期元素の結合と比較して、相対的に化学反応性に富む傾向がある。このように、分子構造と化学反応性には深い関係がある。視点を変えて言えば、その分子の化学反応性の情報は分子構造ｎ書き込まれているということである。<br />
+------------------------------------------------------------------------------<br />
+■ ゴーシュ効果 [1]<br />
+<br />
+◇ ゴーシュ効果の定義<br />
+　ブタン（融点 -138.3℃、沸点-0.5℃）のC2-C3結合周りの回転異性現象は興味深い。室温、気相においては、隣接する2個のメチル基の距離が近い回転異性体（ゴーシュ体： gauche conformation）が28%、メチル基が180&deg;離れた異性体（アンチ体： anti conformation； トランス体とも呼ばれる）が72%という平衡状態にある。興味深いのは、ゴーシュ体が28%も存在することである。メチル基は立体的にかなり大きく、ゴーシュ体のメチル基間の距離（3.03 Å）ではファンデルワールス反発（立体反発）がかなり大きいと推察される。にもかかわらず立体反発を克服してゴーシュ体が28%も存在することはゴーシュ体を安定化させる何らかの効果が作用していることを示唆している。この効果のことをゴーシュ効果（gauche effect）と呼ぶ。ゴーシュ効果の本質は明らかにされていないが、タンパク質や核酸など生体分子や種々の人工ポリマーのらせん構造（ヘリックス構造： helix structure）を支配する非常に重要な効果である。<br />
+<br />
+◇ ゴーシュ効果の例<br />
+（省略）一般に、（X, Y）として非共有電子対を含む原子または置換基が導入されるとゴーシュ効果により、ゴーシュ体が安定になる傾向が強くなる。ゴーシュ効果の本質は単純ではなく、アンチペリプラナー効果、非共有電子対の非局在化、ファンデルワールス引力などの諸因子が複雑に絡み合った結果であると考えられている。「原子、原子団、分子はなるべく集合して安定になろうとする」という物質の世界の基本原理からも、ゴーシュ効果を理解できるだろう。<br />
+　ゴーシュ効果はポリマーのらせん構造の起源である。生体分子にはN, Oなどの多数のヘテロ原子が含まれており、ゴーシュ効果が強く作用して、らせん構造をとる場合が多い。ゴーシュ体とアンチ体のエネルギー差はさほど大きくなく、回転障壁もブタンやエタン程度と考えられるので、タンパク質分子の構造がらせん構造からシート構造（アンチ配座だけで成り立つ）へ簡単に変化することもうなずける。<br />
+------------------------------------------------------------------------------<br />
+■ 種々の分子軌道法&nbsp;[1]<br />
+<br />
+・ 半経験的分子軌道法（semi-empirical MO法）<br />
+　外殻・内殻のすべての電子を考慮するが、積分を部分的に無視する。あるいはあらかじめパラメータとして与えて、基底（軌道）関数の精度を補い、計算速度を高めている。安定構造、エネルギー計算にはそれほどの精度はないので研究論文で議論するほどのデータは得られないが、分子量が大きな分子構造の迅速な予測には便利である。通常は、この方法でおおよその構造を計算した後に、次に述べる非経験的分子軌道法で構造の最適化を行って高精度計算に入るという順序をとることが多い。<br />
+・ 非経験的分子軌道法（ab initio MO法）<br />
+　各元素に固有の原子軌道関数（基底関数）を用いて分子積分をすべて精密に計算する。3-21G*, 6-31G(d), 6-311+G**基底など、それぞれの原子に特別に開発された高精度のガウス型基底（GTO）を用いる。安定構造、エネルギー準位など定量性に非常に優れており、精度高く実験データを再現できる。最先端の研究はこれらの基底関数を用いて行われる。電子相間（電子間の相互認識）を考慮するもの（MP2法など）と考慮しないもの（Hartree-Fock法: HF法）の2つの方法に分けられる。<br />
+・ 密度汎関数法（density functional theoretical method: DFT法）<br />
+　分子の電子状態や反応の遷移状態を計算する場合には、HF法では実験データを正確に再現できないことがある。電子相間を考慮しないと実験データとの対応が悪い。密度汎関数法は結晶格子エネルギーなどのファンデルワールス力を含む原子、分子間相互作用を定量的に計算できる最先端の方法である。（※ LDAではファンデルワールス力が入っていると言われているが、PBEではファンデルワールス力は入っていないので注意）<br />
+------------------------------------------------------------------------------<br />
+■ 化学結合の形成機構<br />
+<br />
+　軌道相互作用は化学結合の形成過程とみなすことができる。その逆の過程は結合が解離する過程である。（省略）2個の軌道それぞれが1個ずつ電子をもって水平軸上を接近してくる過程を下の図に示す。</p>
+
+<p style="text-align: center;"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAfYAAAFHCAYAAABTfW5sAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAC49SURBVHhe7d0/jBTXvuDxmn1Xa9+nJxlHFyJjrVaGl9hopcsQAcEVg/QkxhFDBETMRAwREAHRwEuwo8HRQLAaiIDgCoiACLzJ4OSBI0wEjvDVk9b26kmz9T3UwTVF9f9/1VXfj1Tqruqe7upq6F/9zvmdUzObqUSSJNXCf8tuJUlSDRjYJUmqEQO7JEk1YmCXJKlGDOySJNWIgV2SpBoxsEtSwz19+jS7pzowsEtSzRG4L168mPz000/Zlnd+++23cHvmzJlwG9c13ZygRpJqjGC9b9++5NmzZ8nDhw+TAwcOvN9+8ODB5NSpU8njx4+T7du3h+fcu3cvPK7pZcYuSRVCVj0zM5M8evQo2zKYa9euvc/U8xn7xx9/nDx58iR58OBBcv369eSjjz4yqNeEgV2SaurNmzfJ+fPnk7W1tbD+yy+/hFvETP7LL79MFhYWklevXiUnT57MHtU0M7BLGqsXL16EbPSbb74Jt6xXHZnuzZs3wz7TXE1QJMutOvrO5+fnk6+++iqs//zzz+EWZOy3b99Ozp07Fz4fwX9lZSV7VNPMPnZJY0NgvHTpUgg2e/fuTe7evZvcv38/BBi29YtMlIDbLYLa7OxsttZe3OcTJ06E7Pbbb78NgXDbtm3Jy5cvs2cND6/9+eefb+kP7wcnTYcPHw77yL7++c9/Dp8hZu95FNd1ezw0BQjskjRqb9++3UwD6ubCwkK25d22NHhtpsEn29KfNAiSoHS97Ny5M/vL9uLrpice2ZbNzfX19bAtDZLZluHiWPD6vHe/fv311800S99MM/BsS0jgNufm5rI11ZlN8dIYkVl+/W//ltz/l39JkpmZkS8/lWwb6pJmlt0iSwbV1xGZJJlpGmizLf0hs01/z7peusm06Z8+duxYaEnItyawz9i/f3+4HQTZOZl1foljymmBKD7WbbcFBXP8W1teXs62JOEY5/vYVWPpP3JJY0ImRca6sbGRbRkdssw0IGVr1UC2mwb2zcXFxc0LFy5syYSr5urVq6WZc9w+aCsDOAa8VrdLN60Er1+/Di0jxWNLBt9tS4Wmm33sUk3t2bMnZH3pScT74qlJIluk4Oy7774LWfuuXbuSo0ePvu9HZl/pv+aWrJhb+oTTQBoeb2cUfez0T9P///bt2/dZOjiuZPNpAM22vOvP5nOxD3w2MuvTp0+HwrReDdrHTisD+8ff5zFmndaA9OQy26LaCuFd0sgM0lfaL7I1/nuzVCFrJ7tNg2PYF/rVy5C9psE+tGogfoZ79+6F9XY4xvHzdrN0k7nyHFoX8mhp4e+Lx5RMmlqBKGb1T548ybZ0b5A+9ngcylqEaCnisVbHX/VhH7s0QpcvXw6Z0p07d7It40EVd8R795LNjgKZOlk1WWw++81jytPnz5+/74uPrQzd9AuPoo+9iCFu8bhSHZ9HpXk+Q55ECwn7x/A2+tXL3j8ed/vZ68/ALo0AP7JM9sHkIKurqwMN5epVWSDPB/pJiMVx+YuNEGAI5q1OethOMOqnOXoYeF+atGka53ZpaSlMv4rY3N5qQheG8fGZxxngKZjje+ffHse1uMTCOz6Pai49e5U0RHEIF03P3TQjD1saTEKTa3EZR8FeK7FokP2giZt95PjQ/F7WNEwTNo9Pohsj4r0pQmOf6SLgu+RzsF9s4zOUFdDRhcBz+j3e/TTFcwzjvnZaJnlMNR4GdmnIxln5XpTvWy8uVehr59gQWKjcboXjRt/2JE6KitjP58+fZ2vv8BmK2yI+G/s+yHfPe3JiOMkTMU03q+KlGqGPNTbDxybkfPX3+vr6lnHkVcM+M385fdZzc3PZ1unAcaeSngupjLMJXioysEtDwHCnSfUFt0K/6o0bN0Yy7eko0DfMUDLmK481CRxXgj3D3qqMEyj2PX9CQo0AhYDTdoKi6WfxnDSgSVW+1w1zslPg9fXXXydctpSF4zoNxV4UJxLcydjjvvM52CaNmxm71CcyTCqlueoXk6gsLi5mj1TDtGXsNGWXDcWiujxW1VcV1f78eyhiEp4qd32ongzsUh8IQGRkBKPbt29Xrhke0xbYJQ2HTfFSH7Zt2xaysSdPnlQyqEtqLgO71CcmniG4S1KVGNilLnFBkLJ+VEmqEgO71AUq36l4ZviVJFWZgV1qgwyd+cAZzjSNk6ZIah4Du9QCle9k6YxPZzaxqk+SIkkwsEstxMr3hw8fWvkuaWoY2KU2qHx33m9J08TALuVY+S5p2hnYpcz58+dDnzpTxErStDKwq/HI0I8dOxYuQkLlu0VykqaZgV2NRuU7VxCjCd7Kd0l1YGBXo1H5TsW7c75LqgsDuxpvZWXFOd8l1YaBXY1DcZyV75LqysCuRjlz5kwolGM2OUmqIwO7GoEM/euvv06uXbuWrK+vJwsLC9kjklQvBnbVHpXv+/btC1dmY3pYg7qkOjOwq/aofOeqbBsbG8ns7Gy2VZLqycCuRqDyfefOndmaJNWXgV21RHEcTfCS1DQGdtUOc75TKMdscpLUNAZ21UZ+zncr3yU1lYFdtUBQj5XvTA9rUJfUVAZ21cLHH3+cHD9+PAT1r776KtsqSc1jYFdtLC8vW/kuqfEM7Jpa169fT968eZOtSZJgYNdUYs73kydPJk+fPs22SJJgYNdUyc/5fvv27WR+fj57RJIEA7umRrHy3aAuSR8ysGtqxMp35ny38l2SyhnYNVWsfJek9gzsqjQr3yWpNwZ2VdbS0lKofHfOd0nqnoFdlcNV2Q4fPhyydSrfT5w4kT0iSerEwK5KiZXvz549s/JdkvpgYFelUPl+9uxZK98lqU8GdlUOTe/bt2/P1iRJvTCwa+K4fvpPP/2UrUmSBmFg18TQn07VO/O+O+d79XCyxSx/Zfi++O4kVY+BXRMRK9/v3LmT3Lt3L1lYWMgeUVUwJ//BgwfDdxW9ePEibKcWYtu2bWHkwuXLl7NHJVWBgV1jFyvfyQgfPnyYzM3NZY+oKugeYWQC8hME7dq1Kzl9+nRoZbl582YI+swGKKk6DOwau1j5znA2K9+rh0B+6dKlZGVl5f16xP0bN26E4ka+u7t37zqBkFQxBnZNhJXv1XX+/PnQijI7OxvW84Gd5vejR48mFy5cCN8fEwixTVJ1GNg1FjTt0j+raqMojib2q1evZlu2BnZaWwj63B45ciQE9QMHDmSPSqoCA7tGjjnfyQIN7NXHdxWz8XgVvXzxXMRjzgooVZOBXSNDQKCqmgyQIjkDQbXRqlJWDPfq1avsnqRpYGDXSFD5TlCnGZfpYWN/raqJ74mCOZrgaWZHzNjzTfGSqs/ArpEgONCkS+V7DBCqLrpKOPkqtqrwPZY1xUuqLgO7RoYgYcV09cWCuTi8LY++djN2aboY2DU0zEBmgdz0oWBucXGxdE4BArvz+EvTxcCugcU53+mjNbBPlzgMcf/+/WFe+OLCdwub46XpMbOZyu5LPeMHn7nDmX6UyUoc01wdFy9eDLPEvXz5MtuyFU3su3fv7ipo8xrWSkjTwcCuvsU53wkMXMiFecRVHZ0CO99bnA++EwrrYrW8pGozsGsgXJ2NH32nh62eToFdUj3Zx66BUPluUJek6jCwqydkgd0230qSxs/Arq7Qn37s2LHkypUrVr5LUoUZ2NURRVZMD8t1t5nzfWFhIXtEklQ1Bna1la98d853Sao+A7vaYojT6uqqc75L0pQwsKsjJp1xzndJmg4Gdn2AK31xYRBJ0vQxsOs9+tOZHpb5w73whyRNJwO7AuYNp0iOTN3Kd0maXgZ2hUyd4WygSM7Kd0maXgZ2hcr3tbW1kKlb+S5J083AroAs3cp3SZp+BvaGOnPmTLgymySpXgzsDRMr369fv+71tSWphgzsDRIr37k6G/3pc3Nz2SOSpLowsDfI4cOHwy2V71999VW4L0mqFwN7g1D5TlDfvn17tkWSVDcG9gYhS7dfXZLqzcBeY1a+S1LzGNhriGun059u5bskNU8jA/v9+/eze/XDxVuYHvbFixdWvktSAzUusDPUi3HcDP2qIz4brHyXpGZqXGC/dOlSmKTlypUr2ZZ6WV9ft/JdkhqsUYGdbD0Wk127dq2WWfuuXbvsV5ekBmtUYCdbj+qQtfMZTp48GYrkJElCYwJ7PluPpjlrj5XvfCab3SVJUWMCez5bj6Y1a6fynTnfubXyXZKU14jAXpatR9OYtVP5Tj+6le+SpKKZzVR2v7YYt/706dNw/9WrV6FPenl5Ofnkk0/CNjLe2dnZcH8aMEZ9586dFsmprYsXLyY3btxIXr58mW2R1ASNCOx5jx49ChO48GNHcJTqysAuNVOjquKnkZXvkqReGNgrjMp3WhesfJckdcvAXlH0o+/ZsycU9lEkZ+W7JKkbBvYKovn92LFjIUvf2NgIs8lJktQNA3sFUe1+7969MEZ927Zt2VZJkjozsFcU2brD2SRJvTKwV0CsfP/mm2+yLZIk9cdx7BNG5TszyTE7Hs3v0zRRjqonP5Pi48ePw7+r06dPh3UsLCxYsyHVnIF9gpjrnQu5gKDuhDkaFK0+Z86cyda2onuHf/d28Uj1ZlP8BMXKd4azGdQ1DIuLiy3nPDh79qxBXWoAA/sE3b59O2TqVr5rWAjcBPAigj1BX1L9GdgnyMp3jUJZ1r6ysuK/Nakh+grsVHHTV01hDijWoQhMrcVJZ7gwhzRKxaydS/ueOHEiW5NUdz0F9jgs6/PPP0/u3r0binR2794dllbXO9cfc75z+dgDBw5kW6XRyWftFy5cCLeSmqGnwL60tBSCE9OcXr16NcyMRrAncBmwyhXnfPc4aRxi1k62Pj8/n22V1ARdD3fjsqFk6+vr62EsbBSD1uvXr7MtA0pPFNIzCMaCZRuG6xHZ87NnycvZ2WTnqPsc09f/H//xH8l//+d/DkE9FsnR0hG7MaLjx49vaS7leHMt7Tx+pDmhiniNsqFNnHBFfDd0ARTxPeb7YXlOHP8cERjyF58Z1n5zcnjlypVs7R32hX2K6r7ftOAU8V68ZzTofnPS/fTp03A7zv2WNFldB/YdO3aEwPT8+fNsyzuffvppyEKp8B6a9McoBPgReJT+UB5MfzBfpj9YO3M/WKPyv9MTlP/5r/+a/PWvf822vPsxZgx7Hscwn81Tw8CSx5C4/I86r8FrFeX78WlNKZvRbnl5eUs1Ps8p1kmQ6eV/sIe13wSrYtcN+8I+RXXf77JaC94rP+xxWvdb0mR1Fdg5myew8588n8HwY8GsaWyLPxJkB2ynDz5mUvzI0s+X/4GYFH4EqzTznCRJw9RVHzvNefjiiy/CbRSbAPMZRGzS+/LLL0OT8NraWpjmstgUKGm0qInhRFtSs3QV2GNzYL6vjcyXPkeKdPLNnjyHgH7u3LmwTlbM/Ofx5EDS6NH8zgk1i6Rm6Sqwx4w8FvJQ6X3+/PlQRBebs+kPJHgT6PMZPBkDzz906FC2RdKoXbp0KdzSUmbWLjVLV4GdjJwAzo8FVfD0q1Mt+9lnn4Vsnj5rriSVz9wjKum5mlS+UEfS6OSL5egaM2uXmqXrqnh+IMjKycbjpUXJBNjGequgzo8MTfNVKJyDxXOqO06881XwdI95VTepOUZ22VaGxXz//fchs69KUIeBXXXGiTStakX5kSuS6q2nmee6RbZw69atLUG9bCIVScMV+9aL7GuXmmPogZ0me5rgQZMg2TEZRL5pUNLw5fvWi+xrl5pj6E3xrX5cyNyr0BRoU7zqikLWODQ1zieRn+6V/4NltTCS6mVkfexVZWBXExDguQojhav54aeS6m8kfeySJGkyDOySJNWIgV2SpBoxsEuSVCMGdkmSasTALklSjRjYJZViLDxDQ1tNbMNlm3m83fLNN99kz5Y0LgZ2SaWWlpbCvA9c86HM3NxcuMAMz9m/f39y4cKF9wvrbJc0fgZ2SR8gG3/69Gm45DKZeycLCwthIpy4cBEoODmONH4GdklbcLEYLtpE5k1G3i6wv3jxIkxVywlAEbPeOYWtNH4Gdklb0C/OtdsXFxfD+i+//BJuizgB4NoQs7Oz2ZatqpCtX79+PTl8+HDo7+fiVFzHgvWq4iSK1o5Yo8B9ahzOnz+fPUN5XrGwnIFd0nsEFi79urq6GtbJ2OOFZYpoqsfevXvDLW7evFl6PfhWYoFeL0u3uLokl6ul5eHevXuhZYFt3XQtTALHeffu3cmPP/4YLnm9traWPHjwINQ6fPTRR9mzFHFS6QlPOQO7pPcIIvPz8++zcDJ3lAXDGNhv3boVAu6+ffvCFeV6ydR5fQrtelm6QasD2TkBks/C+xw5ciQ8VsV+fzJPjh0XpiKgc0LF/biv1ip8iBNQWjOqeqI2UVzdTVK9vHz5kqs2bj58+DDb0tnt27c30wC4+fr162zL5uby8nJ4nefPn2db/pCeAITH0mw4vA+3aVa8mQbT7BmTwb7yOdj3PPaP/eVzDorXSoNt18vCwkL2l+VWVlZK943PwGf59ddfsy3CxsZGOF4sxe9Zm5tm7JI+KJiLPvnkk3BblhUxnI2iOYa9pcEr3LK06nMfFyr6+TxHjx7NtrwTWxiKBX3UEPBZ4jKJflua3DnutJbk0erAMabFoYj95PEmIluPzNpLZAFeUo30mrGnAX1z586dH2SGa2tr4XW4zYuvf+LEiWxLf2gdKGa3nZZO2Cf27e3bt9mWzfC50sAZPmNe/HxkfbQ0pEF/Mw2kY8+QaelIT4qytXf47uK+FbGvfJ5ujkfd5LP1uJi1b2XGLjUcRVsUmV29evWDzDCuFyvj4+Qz+cK5iEr0VrPVjQNFVWS/FMtFZLZkdWWtCbRS8NkZi88tQ/jI+seF/eL4FlsSvv3223CbryvgudQz8J3lP1+T5LP1yKy9IAvwkmqkl4ydvvJithjFrPHcuXPZlndiVkz2lEeWTCY5jH7sfsW+/5h1cyz4fPRV0zIRt5WJn7fblo5hYD/Zt3w//OrqatjneIx5Tqx9iLfdtmDUSVm2Hhez9j+YsUsNRibLQgaYH1IWF/rdkc+G6NsloyWbL/ZPx+FkacDJnj1+McNl36mOp9qc4Xvs96tXr5LLly+//1xFtFxQJzDO/ec40pLAMaW1g5EJP/zwQ3L8+PHwOLUBHNfYSkJrRFOVZeuRWfsfZoju2X1JNUGg/vzzz8Psb+2CFAGOputODh06lKRZe7hP4KG5upU4ZGtS+HFnH/lcNK+fPn06BEPGPBM8KaqLnyUvPv7kyZPSYrVR4n15f9731KlTyYkTJ8Ln4KQEdBcUv0dOvMB33ERM3vP48ePGfv52DOxSDXUb2PUOQYLK9DiRzTQwsBvYW7EpXlKj0YR79+7d90Gd7gVOjKRpZWCX1Fg019Mdcfbs2XCffmzWmRq36qgZmMSYe1WfgV1SY9G3TeHad999FwqzWMjWq3xVOgoCOfmgP56F+2yTIvvYpRqyj111Zx97a2bskiTViIFdkqQaMbBLNUHze5woJl7wJBaEsXQzXl3S9DOwSzXBMK04Y1yc2ITCqriN4C6p/gzsUk1QyV287GfEzGuLi4vZmqQ6M7BLNcLUo2UYpz3uaVIlTYaBXaqRsqzdbF1qFgO7VDPFrN1sXWoWA7tUM/ms3Wxdqg5GpnAVP4pZuRQvl0yOVxUcJgO7VEMxazdbl6qB6w/s27cv+eSTT5Lbt2+H6+0T3C9fvjz0a+w7paw0AdevXw9Zdf4Socz3zZC1PJ6Tn7ecvyteeYwpY/PTxsZx63//+9/DddT/9Kc/hWukc43viNfgtYqYpjNiX8rmIF9eXh7pfufVZb/J1MjO8tgX9imq1X7/138ly+m/u1FeAPdiuu+PX71KHqYBcqTSY5IelGylP3wXe/bsCa1nKysr2dYk2bFjR7iQz9u3b7Mtw2FglyYgXlEsf6bO2PM3b95ka+/wnLm5uWzt3d8VJ5rhzD//Y8yP+o0bN7K1d/jRv3r1arb2x1XNivLzbrMvcTx83vr6uvvd437T1HrlypVs7R32hX2K6rTf/+8//zP5X//0T8m//+1vycdpgB+FsQV2Wrw4kRmg5Yum9xcvXiQvX77c0oL26aefhosQccngYTKwS5KGguydEwEyeE4ACFi7du3KHh2uabkIDMeEAE4rR/6kiUC/e/fu0G2Wb3GK4slb/qSuW/axS5IGRjDnioK0BBDAyE67CerFloW6idM7f/HFF+E24lLByHePgKZ5Aj1Bv9+iOgO7JGlg9M+TfRLQux2JQRA7fPhwrYN7DOz5kxyyeIrpQFN8RD0Dx+P333//oI6iFwZ2SVLPitkkBXw0N/cyCuPatWuhyfnSpUvZlvrKB+qlpaXQxE6w53jFZvfY354vsOuHgV2S1DUyTZrcySyLRXy9IFuPhXlkqnXN2uNoBT5rzMiPHDnyvu+cEyS2UTnPtmEMTzWwS5I6IigxZIsKePqFaXLvp7Aritl6VNesnZYMuij4rLdu3UpOnz6dLCwshFEKbKOvnXHtdGUMi1XxkqSOmEwFBKmYhfaLbJ2sv5jxb2xsdP3a01IV36+ZmZlkbW1tyxDFbpmxS5I+UCzeIqtkGTSoo5itR03oax8HA7sk6T36usnOGW5FZj1s+b71ojr3tfcinlT1e/wN7JKkULx18uTJ0I/O/dXV1aEUchUxjS3V4PTTx6FetALEKW/7HbtdB5zUMEsd3wHiBWOYG6AX9rFLksK85QRyJpeh4GscOIGgr51+8uJELZ3UvY99EGbskqQQIKl0H1dQ1+gY2CWpQei3ZfpXJknJG9Wc7ho/A7skNUScz53q87/85S/ZVtWNgV2Sai6OG6cY69SpU6HJveyKYqoHA7sk1RxFcfECLQT0bdu2ZY+ojgzsklQzDCljTHgeM5gNMgWspoeBXZJqgoDOuGeWBw8eZFvVNAZ2SZpyTM/KbHEEdDB0jQlm1EwGdkmacvSZUyDHtbz7mexF9WJgl6Qpw4xt+YuoUBxHUJ+bm8u2qMkM7JI0JQjmZ86cCUPXuEKaVMbALkkVx9W+GINOQL9582aYz91x6GrFwC5JFUfTOxl6HIu+vLycPSJ9yMAuSRXHZU1fv36dnDt3biSXUp1GFAgeP348W1OegV2SKoSJZWhyL04wY0DfisDOpDv6kIFdkirg/v37yZ49e8J4dKrbZ2dns0ek3hjYJWnCuOra4cOHw6VT6UNnchmnf1W/DOySNGGLi4vJxsZGsr6+nuzcuTPbOn327duXzMzMhMlyNDkGdkkao2fPniXHjh37YIIZCuSm2fXr15OnT5+G+/nPpvEzsEvSGDBk7eTJk6Ef/cWLF7UKfnGcfSxm47NqcgzskjRily9fDpXuXH2N5naa3ac9Q88jqFPsd+jQobBOoNfkGNglacQI4mtra6EwbmFhIdtaD3Qt0AyfL/gzsE+WgV2ShojCMQJdHsPX6jrmmu4FZsQjqHOVOdgUP1kGdkkaEgI6Te5cqIV+9Lpjmluy8zjFbQzs//jHP8KtJsPALkkDigF9aWkpOXXqVGhyZ0x6nVH8d+nSpXBBmjgrXmyKtyp+sgzskjSgH3/8MZmfnw8Bnauuxcy1zgjq1A7wuaMY4A3skzWzmcruS5K6QOBq8sxwjFc/ePBg8uTJkw+q+3fs2BFObJ4/f55taY2+eFo6Hj58GOZ+13CYsUtSlxiuRkDbvXt3oyu/6XJgtryyIXtk7VbFT5aBXZI6YEgXF2chqBO4yDCb0NxehnntabGgEr4MU+LaFD9ZNsVLUhsMX2MOdFAo1uQmYwJ2t60VXD++U3eFTfGjYWCXpA6a3qceMYTv5s2b2Vp7586de19M14qBfTQM7JKUIYBfuXIl3DL1q0bLwD4a9rFLajyalhmmRpAhI927d2/2iDR9DOySGo2gTr/xt99+m5w9ezaMRY8zqUnTyMAuTbH79+9n9/pDU2i8hnZTUd0eL9BC1t6pX1iqOgO7NKXiEKxBhhYxFeqxY8eytWa4c+fOBwVgXKSlqcPXVD8GdmlKMaUnQ7Eo9lJnTC6zZ8+ecDL0ww8/ZFul+jGwS1OIbJ3ME1xha5Csve7obmBiGRZmSqPJfWVlJXtUqh8DuzSFyNYjs/b2GH/ObGgbGxuhL537Up0Z2KUpk8/WI7P2P5Ch56+FTjEcAb1sXnOpjgzs0pTJZ+uRWfu7gH7y5MkwFp2ha1JTGdilKVKWrUdNzdr5zGfOnAkBnQI5svPV1dXsUal5DOzSFGHcOlNvssSm5bg+Ozs78Lj2aURgZ/gaF2ihMO7EiRPZI1IzOVe8NKXitcEH+S/MhCw3btwIAXFa0O0AJ5KZfs4VPxpm7JKmAgGda4ETCOh2kFTOwC6p8gjkBPTz58+Hpnab26XWDOySKo2gvrS0lCwsLLyfXMbpX6XWDOySKo3snIBOcRyTzUhqz8AuqTK40tzhw4dDUVVEkZyzxUndM7BLmrh4pbp9+/aF9Vj5Lql3BnZJE0UfOldd++WXX8Kwp3v37iW7du3KHpXUKwO7pIli/PLt27cdy9wQTKIUr7Z37NixsI2ZA+O2y5cvh23qn4Fd0tgwS1zxh5vsfH5+PltT3XHyxkV6mGCJmgrQFcM6y9zcXNim/hnYpQHQF0yxFxmHWqOZnVnudu/eHS7Qki+OU7NQDHn27NlsbStO8LwK3+AM7NIAmDCFpsWYeehD169ff3/FtdOnTyfPnz+3yr3hFhcXS4cuXrhwIbunQRjYpT7RfEjQ4uIrXgu9NVo14lh0snYnl1FZ1m62PjwGdqlPNL+TedBHbNPyH4qtFxwjJpcxoCuvmLWbrQ+Pgb1myCJpHo4VpmRIXNKyqsjmGO5EPzX7e/LkyXC9ccY0VxnHlAKg/I8R/chNRpcEw9b4Hh2Hrk7yWbvZ+nAZ2GuEilIm+CDArK+vJ2tra8ndu3eT7777LntGfzhZiCcK3S7d4Mef57J/ZHSMX+Y/O0G9ykGS/SZbZ5/Z35h1NDWwk6HzPXJyRt85fegcF6mTmLWbrQ+Xgb1GuK42zZ1xTm1+ZFdXV0PB0iB4zf379/e0dIOWBU4aGMNMczbB4MiRI+Gxbl9jEthvji0XJcFHH30UbntqjmfIFydAgyyxEr/ssW6X9N9MQn1A2WNdLn9LvytOKkFrC4VytBTlsT4zM7NlKZ4AUq9QfA6vlccxLj6HpXjsy54T9zHi/YvPKe43LUjF50zrfrMtrwr7zdBHTuhjtj6s/ea9i89hKSp7TnG/i+vTYGYzld3XlOM/yaVLl0KRUlnFaZWQ5dG6sLy8HE5EIv7T8h95GJOVMPlFL0Vt7Een5kBORGhu3tjYeP9crhFOBs8JStfjsdmvFy+ylf48oiUlfd/N9Fj162J6vG88eJC8XF/PtvTu//z6a/J///znbO0dTnzyle8EgmIw4IQxf7z5rujeyONkj+LEiNaSshEIPCffSlD2Y8x75fv5+S6LrSzF/WZ/iv+GpnW/+U3Iz+hX5/3mfXi/ouJvSjf7zWvl16eBgb1mYpCJ/zhj83Ye/1D5zzrJiSDIMDgJodk2/5+WoE5wf/v2bel/Jvq2Y6bcySgCOycjPIeWkCiejLCNpsVx4UeJLGiQ/8J8D7T0cDIoqR4M7DVBAItN26dOnXofLPNnqJx9U6hGQCUAcV3rbvCavU7AQsbdDv2xBKZf02wv4oRjx44dYd/JiPM4EWEfuJ3UP1kCOPvAyUi+RSQGWPoJi02io2Rgl1TGPvaaIOBQlUxAJWgT0PNBnaYrgkAU+4UnhQBdzI456eDko9hcRuZN8Il1A5PASQcnTgTvYjdHbBH5+eefw60kTRQZu6ZfGlw25+bmsrU/pBnx+9t4Pw2Om2mACvcnJQ3qm2mAzNY2N588ebI5Pz9P6rm5uroatqVZZLh9/fp1uGWf2fdJWF5eDvscj2Ee+8l+LywsZFvGIz2JC+87iEkeU0mjYcZeExSOkLHTx04TLQtZPIVeIKss9rVPElk53Qc0BVP0RzYcuwZevXoV1q9cuRLWixnyuNEVwXEla4/j7fNLvEJVL/35kjQqBvaaoCKbCnOarJeWlkI/+pdffhn6g6uIIXgU77G/iEPe6EZgyNRnn322pUBtkjhh4kSkVTcAJ0w83qnwTpLGweK5BmLM5/Hjx8da6DUMFnptZfGcpDJm7JIk1YiBvYGoPJ/GCu7ff/89THLC/kuSyhnYG4RmVyZSoS+b4W+sMza76uhzZ18ZIkdfNjUErFPMJknayj52aUrZxy6pjBm7JEk1YmCXJKlGDOySJNWIgV2SpBoxsEuSVCMGdqlhuH7AzMxMWJh6mLkB4joLc+NLml4GdqlhuPRsK/Pz8855L005A7vUMO2Cd7ugL2k6GNilBioL4GbrUj0Y2KUGKgviZutSPRjYpYbKB3Kzdak+DOxSQ+WDudm6VB8GdqnBCOhm61K9eHU3qeEYx75z585sTdK0M7BLklQjNsVLklQjBnZJkmrEwC5JUo0Y2CVJqhEDuyRJNWJglySpRgzskiTViIFdkqQaMbBLklQjBnZJkmrEwC5JUo0Y2CVJqhEDuyRJNWJglySpRgzskiTViIFdkqQaMbBLklQjBvYJmZmZye611s1z2un37wd931Y6vW7+8VHtQ51N+piN+v39NyF1x8A+AfxAbW5uZmujEd9j2D+GvF67pQ6q/DnK9i1uG8X33S3ed9T/pif5+aRpYmCfsFH8UOV/ZHv9MYzP5TYuebxeXMrW8/KvEV+nbFsTjPKzcuzj65d9D6PGe4/rffOfVVK5mfQ/yvh/CRqq+OOb/0Hs5ceq3VfW6ke21fai4vPa/V0vz+0k/7eDvM4wDPr+ZX8/rM806WNT1G5/fvnll+TMmTPJTz/9lG15Z+fOncn+/fuThYWF5OOPP8629qZKx+HgwYPJo0ePWu7P0tJS8uLFi2yt3L179/o+Fr3i+7h+/Xry+PHj5OnTp2HbgQMHklOnTiXz8/NhvZOTJ0+G13j+/Hmya9eubKsqI/3HqDHKH/JOh7/Xr2fQ1ys+3u75ZY+129bqNmK91VJU9pxOSy96fX5R2d8P+prRsF5nWDrtTxqwwnPm5ubC+pMnTzZXV1c3t23btrl9+/bNly9fhu29qspxWF9fD/vC8vr162zrVmnwC4/Pzs5mW955+/bt5ldffRWWXm1sbGxeuHAhW+sex5t9SU8iNm/fvh22sX9pcA7b+b464TuMn/nhw4fZVlWJTfFjlh7zkG0MO+Po5vXie7eS37f4vOI6uJ9/r/h4u/ePr132nPjaPBYfj/fLnp9/LL90eqxM3Pf80m57FZTtW1zGifdrd2zx22+/hdu9e/eG2zS4JYuLi0kaEJI3b94kx44de/+cXvC+4/68Rew3LRLpSUtYp4WiDJ8TfPa89OQmZMrF7d149uxZcunSpWytdysrK++zczJu1nHr1q1w2w4tEPEzx8+majGwT0D+x3DQH6f4g97pBzaKP4jt3pfnxNfL34/K1ovbiuI+Ft+3l30fhbjv7Zb4vHGK31FxQXH/8kvVxGb4YvBKs9QQHGgK7tRMXVXnz58Pn+Po0aNhvVWQi5+P7oei06dPJ2fPns3WRo9uEP6dLC8vZ1ve4SQDxW6Tom+++Sbcst8wsFeTgX0C+IEu+xEu+xEv2xaxnv9BLz63bEH8m7jeq/zfdfMa8TnFW5QdhyphXyexj/E7Ki7Thn5clGWlBEWMMrDfvHkz9IF//fXX4X6Z+/fvt8y2WyFjpo+ZTJdgiVZB8fvvvw+38fOC5xIU+dv495PU6gQsj/2llYDPHPvVez1uGg8D+xgRJPLBLQaNuK34I1625JWtd1ryiutR2X72q/jexfW8svcd5L0HxXuX7ee0meQxJCMnoMWMMO+jjz4Kt/00xXfj4sWLodl4+/bt4eSBZv89e/aEQreIoE4hWK8Biib4EydObAnWrV6DY8A+xABOgNy3b1+lst1vv/027GPMxMvQQkHXAS0tsdDv1atX4VbVYmAfo2JQq2rQKO5j2X7mg268P2gAKXvfsvceBz7LpN572Pgc+e+ol2UQMSvNB7+8GBRGkbESTOkvfvnyZbK+vh6qt7kl+JLB7969OyyHDx9OVldXe9oHMn9OFC5cuBDW40nLzz//HG7zeD+ey8kL70tA37FjR9helWryy5cvh33k+BDcy3A8+dxXr14N6/F5vZ4QaUzS//SagKoe+vx+ld0v7ne7z8FjnZao1f1e9Pt3ecX96kfZ37d7zV7fL+5jq2VcOr1XrBhfW1vLtmyVZn/h8VbV5J20e/9ff/21ZcU9+0NFOQsV3r3gddOgFir7o1hpnmbw2ZY/UHnOYysrK9mWzfC+fPZuLS8vh+fnl1jFXtzO0k1lexRHLbT6jqL05Gzz3Llz2do7jGzg/VQ9ZuxjVsyCytZbLe2UPb/VMoj030x2rzs8P/5NvJ/fViUcm+J+DeOY9Sq+Z6sFxWOZX6qirG85IpMnC6RPt1WWOAiainld+sHJysmWY+EXTeg007Pw/nfu3Om6WZzmaF6Xyv4o38ReRF888n3XVKP3UjD35ZdfhsK7/BKz/eJ2lm6PZ+yeIAvnmLTCceOzxRaKiJaKTsV2mpD0h0BjFA958TZq9ZV0+qo6PR518zqtlk6PxyUqu9/u8VZLt3p5bl7xfcpep/icdlr9fZluXzOvn78ZhU77QZZHVleGLJS/z2e+ver0/rwHmS2ZJvvC89MgvCU7pVWBDLybVgPGjjP+uyzLZzvvUURGy/uS6Q8Tn6HT52+HMfQcC45ROxwXvkOOU1F6stLy+9VkVeMXokHif8b8f8pW9/M6/Sfu9HjU7+v0s1/xseJzyra3ut+LXv6O58alqN3rdHqPVo/3+j7t9Pt3o9BqXwhkBLuyptoYIFs14zLpCc3VBP1WAbfTMeA1CLT5gMq2GGh5fwI6t91OssLfLiwsZGtbESRZigh8ZQGfzxUn7enHIIGdY8JnKXt/vps8uhcI4GXisRz2SYsGZ1P8GNGMmh7zbK0ZYtNxvimZYxC3Twr7EJdeDOv7i8ehrqg2p2CMpuE8ttMsTvM1xVp5PJ+mYYre0qCR3L17N1S194O/ZxKcNHBnW/7YlmbcoSmcheI6tndC4RhdB7F4rIjm72KzNM3wFJeVvT7DxkY1GqCTa9euhWb49OQg2/IOowUYFhjxeenKoLiwTGzy77YbQ2OU/rhoTPKHu9Wh73V71O1X2e/r9LNfvbxXq/t5bB906Ua3zytq93fxsV72o5VB/37YyvaHzJbtZN4UaHFLhkiGPD8/H5qCi/ibNAhma5ubi4uLpVnluD8/GSnZPe/bacm3MLD/bKO5m1aBuMTtHJN+9Zuxd/os+VaH2H3Raem1AFGj50VgJqRVxtbr9qjbDLDd8/p5rN/XQ/7xVvcnoZ/37+azYhifa9LHp0x+n8jKyfaKyJ658AvZehEZJMPPyIh5nGydojYy7DTAZM+azGdn31pNblN07ty58DnJfvPj5ctwLPod8kYmzfj7Xo8FrQgc11YoiEtPREIWTmbfDQoJY/auajCwT0irH6gYAMq0+6ra/V1Rq9cp26f867ba315eD2Wvmd9W1Or1R6XdZ6qCqu7fIPtF5TXN03GCFJqvi03YVf9exonAywlHN90Iah4Du6SJYxgZWejr16+zLe8muCnL7iW1Z/GcpImjyC42/1JwRgbPtK3ObCb1zoxdUiUwtemDBw9CH/WhQ4c+uAKZpO4Y2CVJqhGb4iVJqhEDuyRJNWJglySpRgzskiTViIFdkqQaMbBLklQjBnZJkmrEwC5JUo0Y2CVJqhEDuyRJNWJglySpNpLk/wNvMMKNZD+csAAAAABJRU5ErkJggg==" />　</p>
+
+<p>　それぞれの軌道が電子を1個ずつ運んでくるので集合系には合計2個の電子がある。相互作用系はある一定の距離（平衡核間距離）で最も安定化し、全体の安定化は&Delta;E+2&Delta;となる。これは、軌道相互作用の逆の過程、すなわち結合解離に要するエネルギー（結合解離エネルギー； D<sub>e</sub>）に近似的に等しいとみなせる。<br />
+　上の図で示したプロセスのエネルギー変化を下の図に示す。</p>
+
+<p style="text-align: center;"><img src="data:image/png;base64,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" /></p>
+
+<p>2個の軌道が遠くに離れている場合の相互作用系の全エネルギーE<sub>0</sub> = a<sub>1</sub> + a<sub>1</sub>である。軌道が接近してくると安定化する軌道は徐々に安定化し、系全体も安定化するが、核間反発があるので、ある距離（r<sub>e</sub>）で安定化は極小値（E<sub>e</sub>）に落ち着く。それ以上接近すると急激に核間クーロン反発が大きくなり接近できなくなる。量子力学的には接近しようとする力と核間反発による斥力との間で振動現象が起こり、零点エネルギー（h&nu;/2）と呼ばれる振動状態が生まれ、系のエネルギーはこれ以下には下がらない。この零点エネルギーがあるので実験的に観測される結合解離エネルギー（De）はこの分だけ差し引かねばならない。より正確な結合解離エネルギーは<br />
+　De = E<sub>0</sub> - E<sub>e</sub> - h&nu;/2 = &Delta;E + 2&Delta; - h&nu;/2<br />
+となる。<br />
+　実験的には、分子（ラジカルなどの反応性中間体を含む）の任意の単結合R-Xが均等開裂するときのエンタルピー変化が結合解離エネルギーD<sub>e</sub>（R-X）である。<br />
+　R-X &rarr; R・ + ・X<br />
+　零点エネルギーh&nu;/2は微小だから、化学結合の強さは近似的に結合解離エネルギーD<sub>e</sub> = &Delta;E + 2&Delta; - h&nu;/2 ≒ &Delta;E + 2&Delta;に等しいと考えてよい。すなわち、化学結合の強度は近似的に2つの変数&Delta;Eと&Delta;で決まる。ただし、軌道間エネルギー差&Delta;Eが大きいと軌道相互作用による安定化量&Delta;Eは減少するので、この2つの変数は相互に影響を与えあう。<br />
+<br />
+◇ 共有結合と解離結合<br />
+　化学結合を共有結合とイオン結合にあえて分けるなら軌道間エネルギー差&Delta;Eの大小によって次のように分類できる。<br />
+1) &Delta;E = 0 &rarr; 完全な共有結合（結合強度 = 2&Delta;）<br />
+2) &Delta;E = &infin; &rarr; 完全なイオン結合（結合強度 = &Delta;E）<br />
+上記1)は純粋な共有結合で&Delta;Eがゼロの場合、上記2)はその逆であり（&Delta;Eが大きい）完全なイオン結合である。上記2)の場合、イオン結合エネルギー（安定化量）は&Delta;Eだけになる。しかし、実際には上記1)と2)の中間で表される場合が多い。たとえばC-C, C-N, C-O, C-Fの4ｒつの結合を例にとると、C-Cは純粋な共有結合だが、それ以外は電気陰性度の差があるために、この順にイオン性が増大すると考えられる。しかし、結合エネルギーもさほど変化しないうえ、C-F結合でイオン性が高くなっているとも思えない。フッ素を含む有機化合物であるフレオンは水に溶けずフッ素樹脂は堅牢で耐熱性が高く、撥水性の高い（表面張力が小さい）物質である。なぜだろうか？<br />
+<br />
+◇　共有結合強度の支配因子<br />
+（省略）周期表上では、共有結合性がきわめて強いCH4とPH3を例外として、次の傾向が読み取れる。<br />
+1) 右上に行くほど強くなる<br />
+2) 左下に行くほど補枠なる<br />
+　これらの傾向は外殻原子軌道のエネルギー準位の傾向に一致している。したがって、A-H結合の強さは、Aのフロンティア原子軌道のエネルギー準位が低いほど強い。<br />
+<br />
+◇ 共有結合の強度に影響するほかの因子<br />
+（省略）<br />
+1) 同周期比較では、エネルギー準位が下がるほど（すなわち、右に行くほど）、結合強度が減少する傾向を示す<br />
+2) 同族比較では、エネルギー準位が上がるほど（すなわち、高周期になるほど）、結合強度が増大する傾向を示す<br />
+（省略）<br />
+以上の議論をまとめると次の2点に要約される<br />
+1) 化学結合の強さの支配因子は主に原子軌道のエネルギー準位である。低い準位の軌道が関与すれば強い。重なり積分は結合強度にそれほど大きな影響を与えない<br />
+2) 非共有電子対が結合の大きさに大きな影響を与える。交換反発で結合は弱くなるが、非共有電子対の超共役が作用すると結合は強化される。<br />
+------------------------------------------------------------------------------<br />
+■ Woodward-Hoffmann則 [1]<br />
+<br />
+　軌道対称性保存則（rules of conservation of orbital symmetry）とは、化学反応においては「相互作用系の分子軌道の対称性が、反応の全過程を通じて不変であり保存される」という法則である。1964年にR. Hoffmannにより分子軌道論をもとに提唱されたまったく新しい概念であり、一連の周辺環状反応において、軌道対称性保存則を仮定すると、それまで不可解であった反応の立体選択性を見事に説明できた。当時、それまで説明不可能であった種々の有機化学反応の立体選択性が、反応点のMOの対称性（位相）で決めるという。目からうろこのシンプルな概念として世界中の化学者に驚嘆の眼をもって受け入れられ、以後、反応選択性に関する議論と研究の大ブームが巻き起こった。まさに分子軌道論の勝利の瞬間であった。<br />
+　軌道対称性保存則は、歴史的には、1928年以来のWindaus, Havingaらによるエルゴステロール（ergosterol）のビタミンD2への光変換における立体特異性の問題に由来している。（図は省略）エルゴステロール（ergosterol）に光を当てると開環反応が起こり、ビタミンD2（calcierol）に変換されることが1928年にWindausらにより発見されていた。1961年、Havingaらはこの問題を取り上げ、この変換反応の中間に開環反応生成物プレエルゴカルシフェロール（pre-ergocalciferol）とその閉環反応生成物ルミステロール（lumisterol）が関与していることを発見した。前者を加熱すると、水素移動（hydrogen shift）でカルシフェロール（calciferol）、閉環反応でピロカシフェロール（pyrocalciferol）、イソピロカシフェロール（iso-pyrocalciferol）の3つの異性体が生成した。さらに後者2つに光を照射すると、1,3-ヘキサジエン環が閉環し、4員環を含むピロカシフェロール異性体に変換される。<br />
+　これらの変換反応は立体特異的に起こり、熱反応と光反応で生成物の立体化学が異なることがわかり、不思議な現象として有機化学者の頭を悩ませていた。<br />
+<br />
+◇ 周辺環状反応の許容反応と禁制反応<br />
+（省略）<br />
+<br />
+◇ 周辺環状反応における同面過程と逆面過程<br />
+（省略）Woodward-Hoffmann則は、これらの過程に関与する電子数の総和nによって次のようにきわめて単純なルールに纏められている。<br />
+1) 熱許容反応（光禁制反応）では、4q+2個（q = 0, 1, 2, 3, ...）の電子が関与する同面過程の数と4q個の電子が関与する逆面過程の数を足し合わせた数pが奇数となる<br />
+2) 光許容反応（熱禁制反応）では、その数pが偶数となる<br />
+　たとえば、&pi;<sup>2</sup><sub>s</sub>+&pi;<sup>2</sup><sub>s</sub>の軌道相互作用機構で進行する反応は熱禁制で光許容（q = 2）、&pi;<sup>2</sup><sub>s</sub>+&pi;<sup>2</sup><sub>a</sub>の軌道相互作用機構で進行する反応は熱許容で光禁制となる（p = 1）。また、&pi;<sup>2</sup><sub>s</sub>+&pi;<sup>2</sup><sub>s</sub>+&pi;<sup>2</sup><sub>s</sub>では熱許容・光禁制である（p = 3）。<br />
+<br />
+◇ 電子環状反応<br />
+（省略）<br />
+・ 電子環状反応における回転選択性</p>
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 370.72px;">
+	<tbody>
+		<tr>
+			<td style="width: 109.92px; text-align: center;">&pi;結合の数（n）</td>
+			<td style="width: 98.12px; text-align: center;">&pi;電子数</td>
+			<td style="width: 70.92px; text-align: center;">熱反応</td>
+			<td style="width: 67.07px; text-align: center;">光反応</td>
+		</tr>
+		<tr>
+			<td style="width: 109.92px; text-align: center;">奇数</td>
+			<td style="width: 98.12px; text-align: center;">2n = 4q + 2</td>
+			<td style="width: 70.92px; text-align: center;">逆旋</td>
+			<td style="width: 67.07px; text-align: center;">同旋</td>
+		</tr>
+		<tr>
+			<td style="width: 109.92px; text-align: center;">偶数</td>
+			<td style="width: 98.12px; text-align: center;">2n = 4q</td>
+			<td style="width: 70.92px; text-align: center;">同旋</td>
+			<td style="width: 67.07px; text-align: center;">逆旋</td>
+		</tr>
+	</tbody>
+</table>
+<br />
+◇ 付加環化反応<br />
+（省略）<br />
+・ [m + n]付加環化反応のWoodward-Hoffmann則
+<table border="1" cellpadding="1" cellspacing="1" style="width: 261.32px;">
+	<tbody>
+		<tr>
+			<td style="width: 58.72px; text-align: center;">m + n</td>
+			<td style="width: 87.72px; text-align: center;">熱許容</td>
+			<td style="width: 95.32px; text-align: center;">光許容</td>
+		</tr>
+		<tr>
+			<td style="width: 58.72px; text-align: center;">4q + 2</td>
+			<td style="width: 87.72px; text-align: center;">m<sub>s</sub> + n<sub>s</sub><br />
+			m<sub>a</sub> + n<sub>a</sub></td>
+			<td style="width: 95.32px; text-align: center;">m<sub>s</sub> + n<sub>a</sub><br />
+			m<sub>a</sub> + n<sub>s</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 58.72px; text-align: center;">4q</td>
+			<td style="width: 87.72px; text-align: center;">m<sub>s</sub> + n<sub>a</sub><br />
+			m<sub>a</sub> + n<sub>s</sub></td>
+			<td style="width: 95.32px; text-align: center;">m<sub>s</sub> + n<sub>s</sub><br />
+			m<sub>a</sub> + n<sub>a</sub></td>
+		</tr>
+	</tbody>
+</table>
+　通常、逆面過程を伴う付加環化反応は起こりにくいことが知られている。同面過程（m<sub>s</sub> + n<sub>s</sub>）が一般に観測される。<br />
+（省略）<br />
+　実際、Diels-Alder反応は室温から200℃程度の加熱条件で起こる。非常に多くの反応例が報告されており、有機合成反応としてきわめて重要な反応である。<br />
+------------------------------------------------------------------------------<br />
+■ ベンゼンの安定性と芳香族化合物 [2]<br />
+<br />
+1) ベンゼンの構造と反応性<br />
+2) 位相から考えるベンゼンの安定性<br />
+<br />
+------------------------------------------------------------------------------<br />
+■ 芳香族求電子置換反応 [2]<br />
+<br />
+　芳香環はきわめて安定でほとんど反応しないが、ある種の求電子剤とは反応して、芳香環を保ったまま置換生成物を与える。<br />
+1) ベンゼンの反応<br />
+　ベンゼンの特徴的な反応では、環のH原子が求電子剤Eに置き換わる。この反応は、<br />
+① 求電子剤の付加とプロトン脱離の二段階で起こる<br />
+② 反応活性種E<sup>+</sup>は酸触媒の存在下で発生する
+
+<table border="1" cellpadding="1" cellspacing="1" style="width: 362.92px;">
+	<tbody>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">反応</td>
+			<td style="width: 147.13px; text-align: center;">求電子剤E / 酸触媒</td>
+			<td style="width: 94.92px; text-align: center;">E<sup>+</sup></td>
+		</tr>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">ハロゲン化</td>
+			<td style="width: 147.13px; text-align: center;">X<sub>2</sub> / FeX<sub>3</sub></td>
+			<td style="width: 94.92px; text-align: center;">X<sup>+</sup></td>
+		</tr>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">ニトロ化</td>
+			<td style="width: 147.13px; text-align: center;">HNO<sub>3</sub> / H<sub>2</sub>SO<sub>4</sub></td>
+			<td style="width: 94.92px; text-align: center;"><sup>+</sup>NO<sub>2</sub></td>
+		</tr>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">スルホン化</td>
+			<td style="width: 147.13px; text-align: center;">SO<sub>3</sub> / H<sub>2</sub>SO<sub>4</sub></td>
+			<td style="width: 94.92px; text-align: center;"><sup>+</sup>SO<sub>3</sub>H</td>
+		</tr>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">アルキル化</td>
+			<td style="width: 147.13px; text-align: center;">RCl / AlCl<sub>3</sub></td>
+			<td style="width: 94.92px; text-align: center;">R<sup>+</sup></td>
+		</tr>
+		<tr>
+			<td style="width: 102.72px; text-align: center;">アシル化</td>
+			<td style="width: 147.13px; text-align: center;">RCOCl / AlCl<sub>3</sub></td>
+			<td style="width: 94.92px; text-align: center;">R<sup>+</sup>C=O</td>
+		</tr>
+	</tbody>
+</table>
+2) ニトロ化反応の軌道論<br />
+（省略）<br />
+3) 軌道論による置換ベンゼンの反応の配向性<br />
+（省略）<br />
+------------------------------------------------------------------------------<br />
+■ ベンゼンの安定性と芳香族化合物 [2]<br />
+<br />
+1) ベンゼンの構造と反応性<br />
+　構造については次のような特徴をもつ。<br />
+・ すべての原子は同一平面上にある<br />
+・ 正六角形の炭素骨格をもつ<br />
+　すべて等しい炭素間結合長（139 pm）は、C-C単結合長（153 pm）とC=C二重結合長（134 pm）の中間である。すべての結合角は120&deg;で、C原子はsp2混成である。分子面に垂直なp軌道に6個の電子が非局在化している。<br />
+　これらを満たすために二つの等価なルイス構造の共鳴として表すか、それらの混成体として表す。反応については、<br />
+・ 不飽和化合物であるのに付加反応は起こさない<br />
+　しかし、ルイス酸（FeBr3）の存在下で反応して、付加反応ではなく置換反応を起こす。<br />
+2) 位相から考えるベンゼンの安定性<br />
+（省略）<br />
+　一般的に、<br />
+「4n+2（nは0を含む整数）個の&pi;電子をもつ環状共役化合物は安定」<br />
+これを4n+2&pi;電子則という。これを満たす化合物を芳香族化合物といい、特別な安定性をもつ。ベンゼンはn=1の場合である。<br />
+------------------------------------------------------------------------------<br />
+■ ディールス-アルダー反応と環化付加反応 [2]<br />
+<br />
+（省略）<br />
+1) ディールス-アルダー反応の軌道論<br />
+（省略）環化電子非局在化によって遷移状態は特別に安定化して、二つの新しい&sigma;結合は同時に形成するので、反応は協奏的に起こり立体化学は保持される。<br />
+（省略）<br />
+　ディールス-アルダー反応は、ジエンの4&pi;電子（あるいは4原子）とジエノフィルの2&pi;電子（あるいは2原子）が関与するので、[4+2]環化付加反応と呼ばれる。[2+2]環化付加反応であるアルケンの二量化反応が協奏的、かつ立体特異的に起こりにくいことは軌道の位相を考えれば容易にわかる。<br />
+2) 光環化付加反応の軌道論<br />
+　光反応では、[2+2]と[4+2]環化付加反応の起こりやすさは上で説明した熱反応とは逆になる。光[2+2]環化付加反応は立体特異的に起こりうる。分子が光を吸収して電子がHOMOからLUMOに励起すると、HOMO, LUMOはそれぞれSOMO, SOMO'（一電子で占められる分子軌道）になって、電子供与性軌道としても電子受容性軌道としても働くことができるようになる。そのため光反応では、励起分子のSOMOおよびSOMO'はエネルギー的に近い基底状態分子のHOMOおよびLUMOと相互作用して、電子の非局在化が起こりやすくなる。SOMOとSOMO'は励起する前のHOMOとLUMOなので、光二量化反応ではHOMO-SOMOやLUMO-SOMO'相互作用は位相に恵まれ、[2+2]環化付加が協奏的に起こる。<br />
+　[2+2]環化付加は光反応で、[4+2]環化付加は熱反応で起こりやすい。環状遷移状態を経由して起こる反応は、関与する電子数に決定的な影響を受ける。環状共役化合物の安定性が電子数に支配されるのと同じである。芳香族性と反応の立体選択性に関する規則は、かたや分子（ポテンシャルエネルギー曲面の極小点）の安定性を、かたや反応遷移状態（ポテンシャルエネルギー曲面の鞍点）の安定性を対象にしている点が異なるだけで、起源はまったく同じで、軌道の位相である。<br />
+------------------------------------------------------------------------------<br />
+■ 芳香族化合物の反応 [1]<br />
+<br />
+　福井理論の最初の報告例は芳香族分子の求電子置換反応である。（省略）<br />
+　福井が最初にフロンティア軌道論を使って発表した論文から、ほかの芳香族分子の求電子置換反応における反応位置の実験結果とフロンティア軌道（HOMO）による予測を抜粋して表8.1（※ 表は省略）に示す。、ほとんどの場合、予測と実験結果が完全に一致している。唯一の例外はアントラセンのスルホン化反応であるが、一次生成物の9-置換体が不安定であることが原因である。<br />
+　福井がこれらの計算を行った当時は日本ではコンピューターが使えず手回し計算機時代であったから、福井は群論を駆使して永年行列式を簡単にして手計算を行っている。この福井の論文は発表されるや否や世界的に高い評価を得た。量子力学の化学分野への有用性を日本人が世界で初めて示した研究論文である。フロンティア軌道論がその後「案外奥深いもの」として化学反応の解釈に大きな威力を発揮する礎石となった論文であり、量子有機化学という新しい分野がこのとき始まったのである。<br />
+------------------------------------------------------------------------------<br />
+■ シクロヘキサンの立体配座とアノマー効果 [2]<br />
+<br />
+1) いす形配座と舟形配座<br />
+　六員環飽和炭化水素であるシクロヘキサン（C6H12）は、いわゆるいす形配座が安定である。平面構造をとると結合角C-C-Cが120&deg;になってsp3混成の結合角109.5&deg;からずれて角度ひずみが生じる。さらに&sigma;結合まわりの配座が重なり形になって、なじれひずみも生じて不安定になる。これらのひずみを避けるため、シクロヘキサンは対角線上のメチレン基が互いに反対方向を向くように平面から上下にずれて、いす形配座になって安定した構造になる。<br />
+　対角線上のメチレン基が同じ方向を向くように上下にずれた舟形配座は、そのメチレン基の被占軌道間の反発が生じるため不安定となる。舟形配座は、いす形配座を反転させ、第二のいす形配座になる中間の構造である。<br />
+2) エクアトリアル配座とアキシアル配座<br />
+　一置換シクロヘキサンには二つのいす形配座がある。置換基が環平面に垂直なアキシアル配座と平行にあるエクアトリアル配座である。安定なのは、嵩高い置換基が立体反発（被占軌道間の反発）のより少ない空間を占めるエクアトリアル配座である。<br />
+3) アノマー効果の軌道論<br />
+　同じ六員環飽和化合物でありながら、環内にO原子をもつ場合、立体反発からの予想に反してアキシアル配座がより安定になる分子がある。原子軌道エネルギーの低い（電気陰性度の高い）Xがピラノース糖のアノマー位（1位）にある分子に見られることにちなんで、この現象をアノマー効果とよぶ。<br />
+（省略）<br />
+------------------------------------------------------------------------------<br />
+■ カルボン酸、エステル、アミド、ペプチドの立体配座 [2]<br />
+<br />
+　エステル（R<sup>1</sup>COX（X=OR<sup>2</sup>））およびアミド（X=NHR<sup>2</sup>）のOC-X結合は、&pi;結合性を帯びている。R<sup>1</sup>、R<sup>2</sup>がトランスにある配座（ここでは単にトランス配座とよぶことにする）とシスにある配座がある。ともにアルキル基などの嵩高い場合は、それらの被占軌道間の反発（立体反発）のため、トランス配座が安定である。また、カルボン酸（X=OH）やギ酸エステルあるいはアミド（R<sup>1</sup>=H, X=OR<sup>2</sup>, NHR<sup>2</sup>）など、R<sup>1</sup>とR<sup>2</sup>の被占軌道間の反発が弱くても、トランス配座が相対的に安定である。<br />
+<br />
+※ 電子供与性-受容性結合がアンチペリプラナー位にあると電子が非局在化しやすくなる<br />
+◇ 立体配座の定義 [2]<br />
+&nbsp;&sigma;結合まわりの回転は&pi;結合にくらべてはるかに容易であるが、完全に自由ではない。エタンのような小さな分子では、回転によって相互に変換できる構造をもち、その構造を立体配座という。その配座の異なる分子を配座異性体とよぶ。A-B-C-Dにおける単結合B-Cのまわりの立体配座は、結合A-Bと結合C-Dの二面角で区別され、以下のように命名されている。
+<table border="1" cellpadding="1" cellspacing="1" style="width: 281.52px;">
+	<tbody>
+		<tr>
+			<td style="width: 97.32px; text-align: center;">二面角（&deg;）</td>
+			<td style="width: 170.52px; text-align: center;">配座名</td>
+		</tr>
+		<tr>
+			<td style="width: 97.32px; text-align: center;">0?30<br />
+			30?90<br />
+			90?150<br />
+			150?180</td>
+			<td style="width: 170.52px; text-align: center;">シンペリプラナー<br />
+			シンクリナル<br />
+			アンチクリナル<br />
+			アンチペリプラナー</td>
+		</tr>
+		<tr>
+			<td style="width: 97.32px; text-align: center;">0, 120<br />
+			60, 180</td>
+			<td style="width: 170.52px; text-align: center;">エクリプス（重なり形）<br />
+			スタッガード（ねじれ形）</td>
+		</tr>
+		<tr>
+			<td style="width: 97.32px; text-align: center;">0<br />
+			60<br />
+			180</td>
+			<td style="width: 170.52px; text-align: center;">シス　または　シン<br />
+			ゴーシュ<br />
+			アンチ　または　トランス</td>
+		</tr>
+	</tbody>
+</table>
+&nbsp; エタンには、ねじれ形配座（H-C-C-Hの二面角60&deg;）と重なり形配座（同二面角0&deg;）という立体配座が存在する。前者は平衡構造で安定であるが、後者は単結合まわりの回転の遷移状態に相当し、エネルギーは高い。<br />
+------------------------------------------------------------------------------<br />
+■ 脱離反応 - E2反応のトランス脱離 [2]<br />
+<br />
+・ E2機構<br />
+　H<sup>+</sup>の引き抜きとX-の脱離が同時に起こる<br />
+　協奏的、二分子反応（反応速度がRXとBの濃度に依存）<br />
+・ E1機構<br />
+　H<sup>+</sup>の引き抜きの前にX-の脱離が起こる<br />
+　段階的、一分子反応（反応速度がRXの濃度にのみ依存）<br />
+------------------------------------------------------------------------------<br />
+■ 覚えておきたい軌道論の最重要語 [2]<br />
+<br />
+・ 位相（phase）<br />
+　ある波（たとえば正弦波）を表す関数に-1をかければ、正負の符号が反対になった波になる。このとき、これらの二つの波は位相が180&deg;異なるという<br />
+<br />
+・ エネルギー準位（energy level）<br />
+　一連のとりうるエネルギーのとびとびの値をエネルギー準位という<br />
+<br />
+・ 重なり反発（overlap replusion）<br />
+　分子が近づくにつれて2個の電子が詰まった被占軌道どうしは重なるようになり、互いに反発し合う。その結果、相互作用系は不安定になる。この重なり反発によって、分子間で新しい結合が生成されにくくなる。嵩高い置換基間の立体反発、立体障害などもこれに由来する<br />
+<br />
+・ 環式軌道相互作用（cyclic orbital interaction）<br />
+　有機化学を学ぶうえで重要な軌道相互作用の形式は三つある。<br />
+　1) 一対の軌道間の相互作用<br />
+　2) 3番目の軌道が混合する相互作用<br />
+　3) 環式に起こる相互作用<br />
+　この環式軌道相互作用が効果的に働くには、軌道位相の連続条件が満たされなければならない<br />
+<br />
+・ 軌道（orbital）<br />
+　惑星の軌道（orbit）とは異なり、電子の位置は確率でしか表せないため、英語では語尾alを添えて区別する。一電子の挙動を近似的に表す波動関数を軌道とよぶ。1個の電子の位置座標（x, y, z）のみの関数で、この関数の二乗が電子の存在する確率を示す<br />
+<br />
+・ 軌道位相（orbital phase）<br />
+　軌道が相互作用するとき波の干渉と似たことが起こり、軌道が同位相か逆位相で重なるかによって強め合ったり、弱め合ったりする。この軌道位相は、化学結合の生成消滅の鍵を握る重要な因子である<br />
+<br />
+・ 軌道位相の連続条件（conditions for orbital phase continuity）<br />
+　複数の分子や結合間で電子が非局在化する際に、軌道相互作用が環式になる場合がある。環式軌道相互作用が効果的に起こり、電子が非局在化して安定化するには、電子供与体と電子受容体の軌道が次の位相連続条件を満たさなければならない。<br />
+　「隣接する電子供与性軌道間では逆位相、それ以外（電子受容性軌道間および電子供与性軌道と電子受容性軌道の間）では、同時に同位相で重なること」<br />
+<br />
+・ 軌道エネルギー（orbital energy）<br />
+　軌道はおのおのの固有のエネルギーをもつ。連続的に変わることはなく、とびとびの値をもつ<br />
+<br />
+・ 軌道エネルギー差（orbital energy difference）<br />
+　とくに重要なのはHOMOとLUMOの軌道エネルギー差で、小さくなるほど反応性が上がる。一般的にはエネルギー差が小さいほど、同位相の軌道の安定化と逆位相の軌道の不安定化は大きくなる<br />
+<br />
+・ 軌道混合則（orbital mixing rule）<br />
+　軌道は、重なりを通じて相互作用したり、周囲の電場が変化することで、その形を変形する。この際、どのように変形するかを決めるのが軌道混合則である。簡単にいうと、混合する軌道の位相関係を決める法則である<br />
+<br />
+・ 軌道相互作用（orbital interaction）<br />
+　原子、結合、分子の相互作用を文献[2]では原子軌道、結合軌道、分子軌道の相互作用として扱う。軌道相互作用の基本は、二つの軌道が相互作用すると以下のようになる。<br />
+　1) エネルギーの低い軌道は高い軌道を同位相で取り込んで安定化する<br />
+　2) エネルギーの高い軌道は低い軌道を逆位相で取り込んで不安定化する<br />
+<br />
+・ 軌道の広がり（orbital amplitude）<br />
+　軌道関数の値（正と負の値があるので、絶対値）は核から離れるほど小さくなる。核から離れても大きな絶対値をもつ軌道ほど、大きく広がっているという。軌道の広がりが大きいところでは、他の軌道と大きな重なりをもつことができる。したがって、HOMOとLUMOの広がりの大きいところでは反応が起こりやすい<br />
+<br />
+・ 軌道の重なり（orbital overlap）<br />
+　軌道相互作用を強くする重要な因子。軌道どうしの重なりが大きいほど相互作用は強い<br />
+<br />
+・ 軌道変形（orbital distortion）<br />
+　同じ広がりをもつ軌道が、置換基の種類や触媒の働きによって非等価な広がりに変形することがある。この軌道変形によって反応性に差が生じ、選択性の原因となる。そのしくみを支配するのが軌道混合則である<br />
+<br />
+・ 同位相（in-phase）<br />
+　二つの波が干渉し合うとき、位相が合って同じ位相で重なること。このとき互いに強め合って振幅の大きい波になる<br />
+<br />
+・ 逆位相（out-of-phase）<br />
+　二つの波が干渉し合うとき、位相がずれて逆の位相で重なること。このとき互いに弱め合って振幅の小さい波になる。軌道であれば、重なりが小さくなる<br />
+<br />
+・ 空軌道（unoccupied molecular orbital）<br />
+　電子のまったく入っていない軌道をいう。そのなかで最も軌道エネルギーの低い分子軌道がLUMO（ルモ、最低空軌道｛lowest unoccupied molecular orbital｝）である<br />
+<br />
+・ 被占軌道（occupied molecular orbital）<br />
+　電子2個が詰まった軌道をいう。その中で最も軌道エネルギーの高い軌道がHOMO（ホモ、最高被占軌道｛highest occupied molecular orbital｝）である<br />
+<br />
+・ SOMO（singly occupied molecular orbital）<br />
+　電子が1個しか入っていない軌道。略してSOMO（ソモ）という。この軌道もラジカルや励起分子の反応において重要や役割をする。その場合、SOMO-HOMO相互作用、およびSOMO-LUMO相互作用が支配的になる。SOMOを持つ反応剤は、電子受容体にも電子供与体にもなりうる<br />
+<br />
+・ LUBO（lowest unoccupied bond orbital）<br />
+　空のp軌道を含む反結合性軌道（&sigma;<sup>*</sup>, &pi;<sup>*</sup>）のうち最も低いエネルギーの軌道。LUMOの主成分で、LUMOに代わる役目を果たすことが多い<br />
+<br />
+・ HOBO（highest occupied bond orbital）<br />
+　n軌道を含む結合性軌道（&sigma;, &pi;）のうち最も高いエネルギーの軌道。HOMOの主成分で、HOMOに代わる役割を果たすことが多い<br />
+<br />
+・ 結合軌道（bond orbital）<br />
+　結合には結合性軌道と反結合性軌道があると考え、結合の相互作用を表すのに両軌道を用いる。これらを総称して結合軌道とよび、&sigma;、&sigma;<sup>*</sup>軌道および&pi;、&pi;<sup>*</sup>軌道がある<br />
+<br />
+・ 結合性軌道（bonding orbital）<br />
+　二つの原子（混成）原子軌道が同位相で重なってできる安定な軌道を結合性軌道という。この軌道の電子は原子どうしを結合させるように働く。結合軌道と混同しないように注意<br />
+<br />
+・ 反結合性軌道（antibonding orbital）<br />
+　二つの（混成）原子軌道が逆位相で重なってできる不安定な軌道。この軌道に入る電子は、結合を弱めたり開裂させるように働く<br />
+<br />
+・ 非結合性軌道（nonbonding orbital）<br />
+　一つの原子上に局在化した孤立電子対（不対電子）の軌道。この軌道は結合に関与せず、軌道論ではnと表記する<br />
+<br />
+・ 原子軌道（atomic orbital）<br />
+　原子核のまわりに存在する1個の電子のふるまいを記述する関数。エネルギーの低いものからs軌道、p軌道、d軌道などがある<br />
+<br />
+・ 分子軌道（molecular orbital）<br />
+　原子軌道の考え方を分子系に拡張したもので、分子のなかの電子のふるまいを表す軌道<br />
+<br />
+・ 混成軌道（hybridized orbital）<br />
+　分子中の結合を理解するために考案された原子軌道で、s軌道とp軌道をある割合で混成させてつくる。sp混成軌道、sp<sup>2</sup>混成軌道、sp<sup>3</sup>混成軌道がある。たとえば、sp<sup>3</sup>混成軌道は、s軌道とp軌道を1：3の割合で混成させたもの<br />
+<br />
+・ &sigma;軌道（&sigma; orbital）<br />
+　結合軸に対して回転対称な軌道をいう。単結合を担う<br />
+<br />
+・ &pi;軌道（&pi; orbital）<br />
+　結合軸を含む平面を一つ節面にもつ軌道をいう。二重結合の一つを担う<br />
+<br />
+・ 節面（nodal plane）<br />
+　節面を境に正負の符号が変わる。たとえばp軌道では、軌道関数の値がゼロになる<br />
+<br />
+・ 電子供与体（electron donar）<br />
+　相互作用において電子を与えるほうの分子をいう。化学反応において、電子供与体（たとえば求核剤）はHOMOのエネルギーが高いほど反応性が高い<br />
+<br />
+・ 電子受容体（electron acceptor）<br />
+　相互作用において電子を受け取るほうの分子をいう。化学反応において、電子受容体（たとえば求電子剤）はLUMOのエネルギーが低いほど反応性が高い<br />
+<br />
+・ 電子の非局在化（electron delocalization）<br />
+　一方の分子（電子供与体）のHOMOと相手分子（電子受容体）のLUMOが重なることによってもたらされる効果。分子どうしが反応する前は電子供与体に局在していた電子は、相互作用が進むと、分子間の重なり領域や電子受容体に移る。これが新たな分子間の結合を生む<br />
+<br />
+・ フロンティア軌道（frontier orbital）<br />
+　最高被占軌道（HOMO）、最低空軌道（LUMO）、半占軌道（SOMO）を称してフロンティア軌道という<br />
+<br />
+・ フロンティア軌道論（frontier orbital theory）<br />
+　電子給与体のHOMOと電子受容体のLUMOが最も軌道が重なるように反応は起こる。HOMOとLUMOが選ばれるのは（場合によってはSOMOも）、被占軌道と空軌道の組合せのなかで軌道のエネルギー差が最も小さく、相互作用して遷移状態を最も安定化して反応を促進する。HOMO-LUMO相互作用理論ともいわれる。<br />
+------------------------------------------------------------------------------<br />
+■&nbsp;参考文献<br />
+[1] 友田修司『フロンティア軌道論で化学を考える』講談社サイエンティフィック<br />
+[2] 稻垣都士ら『フロンティア軌道論で理解する有機化学』化学同人<br />
+------------------------------------------------------------------------------

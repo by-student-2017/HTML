@@ -1,0 +1,213 @@
+RMC++ (https://www.szfki.hu/~nphys/rmc++/opening.html)<br />
+------------------------------------------------------------------------------<br />
+Å° RMC++ (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† install (ver.1.4)<br />
+(https://www.szfki.hu/~nphys/rmc++/downloads.html)<br />
+ÅERMC_POT++ Linux/Unix source<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/Source_RMC_POT_lin_1.4.tar.gz<br />
+1. tar zxvf Source_RMC_POT_lin_1.4.tar.gz<br />
+2. mv Source rmc++<br />
+3. cd rmc++<br />
+4. make MULTI=0 POT=0 SUMP=0 ARCH=64<br />
+(you can get rmcp_multi_pot_sp64.exe)<br />
+<br />
+Å† Test<br />
+0. cd ~/rmc++<br />
+&nbsp; wget https://www.szfki.hu/~nphys/rmc++/test_run_RMC_POT_1.4.tar.gz<br />
+1. tar zxvf test_run_RMC_POT_1.4.tar.gz<br />
+2. cd test_run<br />
+3. cd CCl4_at<br />
+4. ~/rmc++/rmcp_multi_pot_sp64.exe<br />
+5. ccl4_at<br />
+<br />
+Åû Usage (no check)<br />
+1. gedit msc30.dat<br />
+-----<br />
+MSC30, C and H only at 300 K (example)<br />
+0.0164 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! number density<br />
+1.1 0.86 0.63 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! cut offs<br />
+0.1 0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! maximum moves<br />
+0.1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! r spacing<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! movout option<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of configurations to collect, frequency<br />
+5000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! step for printing<br />
+100000 100000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! step limit, step for saving<br />
+0 0 1 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! sets of experiments (g(r), neutron, X-ray, EXAFS)<br />
+msc30chfq.dat<br />
+1 500 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! Range of points<br />
+0. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Constant to subtract<br />
+0.0025 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! Standard deviation<br />
+.ture. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! wheter to vary amplitudes<br />
+.ture. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! wheter to vary constant<br />
+.false. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! wheter to vary linear<br />
+.false. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! wheter to vary quadratic<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of cosdistr. of bond angles condtraint, dcos_theta<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of coordination constraints<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! no. of average coordination constraints<br />
+1 0 2 0.5 0.5 1 &nbsp; &nbsp; &nbsp; &nbsp; ! whether to use a potential, weight mode, combination rule...<br />
+12.8 12.8 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! vdW and coulomb cutof in A<br />
+2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of different gromacs types<br />
+3.500 2.420 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! LJ sigma in A<br />
+0.276 0.126 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! LJ epsilon in kJ/mol<br />
+-0.05 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! vdW weight<br />
+-0.05 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! Coulomb weight<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! FNC switch<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! initial bin shift<br />
+1.1414 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! xmax used in the run<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of atoms omoved in a single move<br />
+200 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! size of the histroy buffer<br />
+5 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! number of savings between each histroy buffering<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! indicator of custom move<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! whether to load the histogram from file, if possible (0: no, 1; yes)<br />
+5 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! maximum number of atoms in a grid cell<br />
+0. 0 0 0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;! fraction of swaps, ntypes*(ntypes-1)/2 0(not allowd) or 1 (allowed)<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! total number of threads to use<br />
+0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; ! local inv: number of intervals, sigmas, mode (0:bin, 1:dstance-based) ...<br />
+-----<br />
+2. gedit msc30.top<br />
+-----<br />
+-----<br />
+<br />
+Åû LJ<br />
+-----<br />
+element : sigma in A | epsilon in kJ/mol<br />
+C: 3.50 &nbsp;| 0.276<br />
+H: 2.42 &nbsp;| 0.126<br />
+-----<br />
+<br />
+[1] 1 Force ?elds<br />
+&nbsp; http://www2.mpip-mainz.mpg.de/~andrienk/journal_club/opls.pdf<br />
+[2] 7. Van der Waals Potential Energy<br />
+&nbsp; http://www.csb.yale.edu/userguides/datamanip/autodock/html/Using_AutoDock_305.a.html<br />
+------------------------------------------------------------------------------<br />
+Å° RMC++ (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+<br />
+Å† install (ver.1.6)<br />
+(https://www.szfki.hu/~nphys/rmc++/RMC_new-multi/download_new_multi.html)<br />
+ÅERMC++_new Linux/Unix source<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/RMC_new-multi/Source_RMC_new_lin_1_6_1.tar.gz<br />
+1. tar zxvf Source_RMC_new_lin_1_6_1.tar.gz<br />
+2. mv Source_RMC_new rmc++16<br />
+3. cd rmc++16<br />
+4. make SUMP=0 ARCH=64<br />
+(you can get rmc_new_sp64.exe)<br />
+<br />
+Å† Test<br />
+0. cd ~/rmc++16<br />
+&nbsp; wget https://www.szfki.hu/~nphys/rmc++/RMC_new-multi/test_run_1_6_1.tar.gz<br />
+1. tar zxvf test_run_1_6_1.tar.gz<br />
+2. cd test_run<br />
+3. cd CCl4_at<br />
+4. ~/rmc++16/rmc_new_sp64.exe<br />
+5. ccl4_at<br />
+------------------------------------------------------------------------------<br />
+Å° Auxiliary programs<br />
+<br />
+Å† xcoeff<br />
+(Create X-ray data file with coefficients for X-ray fitting with the simple)<br />
+0. wget http://www.szfki.hu/~nphys/rmc++/auxiliary/xcoeff.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir xcoeff<br />
+3. tar zxvf xcoeff.tar.gz -C ./xcoeff<br />
+4. cd xcoeff<br />
+5. gedit Makefile<br />
+-----before<br />
+&nbsp; &nbsp; &nbsp; &nbsp; g77 -Wall -o xcoeff $(OBJS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; g77 -Wall -O3 -c -o $@ $&lt;<br />
+-----<br />
+-----after<br />
+&nbsp; &nbsp; &nbsp; &nbsp; gfortran -Wall -o xcoeff $(OBJS)<br />
+&nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
+&nbsp; &nbsp; &nbsp; &nbsp; gfortran -Wall -O3 -c -o $@ $&lt;<br />
+-----<br />
+Åû Usage<br />
+1. gedit xcoeff.dat<br />
+-----<br />
+2<br />
+0.876<br />
+C<br />
+0.124<br />
+H<br />
+inp.dat<br />
+3<br />
+out.fqd<br />
+-----<br />
+2. gedit inp.dat<br />
+-----<br />
+(number of data)<br />
+comment<br />
+Q F(Q)<br />
+...<br />
+-----<br />
+3. ./xcoeff<br />
+<br />
+Åû Usage (xcoeff)<br />
+1. gedit xcoeff.dat<br />
+-----<br />
+2<br />
+0.876<br />
+C<br />
+0.124<br />
+H<br />
+inp.dat<br />
+3<br />
+out.fqd<br />
+-----<br />
+2. gedit inp.dat<br />
+-----<br />
+(number of data)<br />
+comment<br />
+Q F(Q)<br />
+...<br />
+-----<br />
+3. ./xcoeff<br />
+(You can get out.fqd)<br />
+Å¶ F(Q) = Q*[S(Q)-1]<br />
+&nbsp; e.g., get S(Q) from PDFgetX<br />
+<br />
+Å† crystal<br />
+(Create starting configuration)<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/auxiliary/crystal.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir crystal<br />
+3. tar zxvf crystal.tar.gz -C ./crystal<br />
+4. cd crystal<br />
+5. gfortran crystal.f90 -o crystal.exe<br />
+<br />
+Å† convert_CMconfigs<br />
+(convert the RMC configurations to text type *.cmtx file of CrystalMaker)<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/auxiliary/convert_CMconfigs.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir convert_CMconfigs<br />
+3. tar zxvf convert_CMconfigs.tar.gz -C ./convert_CMconfigs<br />
+4. cd convert_CMconfigs<br />
+5. make<br />
+<br />
+Å† convert_gromacs<br />
+(The convert_gromacs program)<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/auxiliary/convert_gromacs.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir convert_gromacs<br />
+3. tar zxvf convert_gromacs.tar.gz -C ./convert_gromacs<br />
+4. cd convert_gromacs<br />
+5. make<br />
+<br />
+Å† FNC_config<br />
+(create a multi-component starting configuration and fnc)<br />
+0. wget https://www.szfki.hu/~nphys/rmc++/auxiliary/FNC_config.tar.gz<br />
+1. cd ~/rmc++16<br />
+&nbsp; (cd ~/rmc++)<br />
+2. mkdir FNC_config<br />
+3. tar zxvf FNC_config.tar.gz -C ./FNC_config<br />
+4. cd FNC_config<br />
+5. make<br />
+<br />
+Å† exafs_coeff.dat<br />
+(https://github.com/by-student-2017/exafs_coeff_dat)<br />
+------------------------------------------------------------------------------

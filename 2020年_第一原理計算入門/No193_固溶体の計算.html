@@ -1,0 +1,184 @@
+　Special-Quasirandom-Structure（SQS）が計算可能なSupercellとATAT<br />
+-----------------------------------------------------------------------------<br />
+■ Supercell [1]<br />
+<br />
+□ Linux<br />
+1. <a href="https://orex.github.io/supercell/">https://orex.github.io/supercell/</a> &gt; download &gt; Linux 64bit<br />
+2. mkdir supercell<br />
+3. cd supercell<br />
+4. tar zxvf supercell-linux.tar.gz<br />
+<br />
+□ Linux (compiling)<br />
+0. sudo apt-get install cmake<br />
+&nbsp; sudo apt-get install libboost-all-dev<br />
+&nbsp; sudo apt-get install libeigen3-dev<br />
+&nbsp; (if you see &quot;sudo apt autoremove&quot;,<br />
+&nbsp; sudo apt autoremove<br />
+&nbsp; sudo apt-get install libeigen3-dev )<br />
+1. <a href="https://github.com/openbabel/openbabel">https://github.com/openbabel/openbabel</a><br />
+&nbsp; 1) Clone or Download &gt; Download ZIP<br />
+&nbsp; 2) unzip openbabel-master.zip<br />
+&nbsp; 3) mkdir build<br />
+&nbsp; 4) cd build<br />
+&nbsp; 5) cmake ..<br />
+&nbsp; 6) make -j2<br />
+&nbsp; 7) make test<br />
+&nbsp; 8) sudo make install<br />
+2. cd ~<br />
+&nbsp; 1) git clone --recursive https://github.com/orex/supercell.git &amp;&amp; cd supercell &amp;&amp; \<br />
+&nbsp; mkdir build &amp;&amp; cd build &amp;&amp; cmake ../ &amp;&amp; make &amp;&amp; sudo make install<br />
+<br />
+□ Usage<br />
+1. cd ~/supercell/data/examples/Ca2Al2SiO7<br />
+2. supercell -i Ca2Al2SiO7.cif -s 1x1x2 -m -o Ca2Al2SiO7_cell_1x1x2<br />
+<br />
+□ options<br />
+-i: input file<br />
+-o: output file<br />
+-s: supercell size<br />
+-m: present in the command line<br />
+<br />
+※ 泉富士夫先生のtwitterを読むとわかりますが、泉先生が開発している新機能でこのsupercellが利用可能になる。2019年の秋ごろに名古屋工業大学で無料で講演される予定（お声がかからなかったのでできませんでした。すみません）なので、固溶体の計算に興味のある方は参加されるとよい。固溶体で短距離秩序（結合角のランダムな歪みなど）が重要になる場合は、VASPやPWscfなどでSQSの計算するための入力ファイルをこのSupercellで作るとよい。VESTAで描画した構造から、VASPだけでなく、無償のPWscfで計算する機能も付けてくれるはず。特に、PWscfは研究予算が準備できない研究室や企業でも論文で報告されている結果を得られる可能性があるため参加を検討されると良いだろう。<br />
+-----------------------------------------------------------------------------<br />
+■ ATAT [2]<br />
+<br />
+□ Youtube
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9OYm-KWgZSfLHnQxfZQzEAbsdxLgYOCk" width="560"></iframe></div>
+<br />
+□ Linux (compiling)<br />
+1. <a href="https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/">https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/</a><br />
+&nbsp; Download:<br />
+&nbsp;&nbsp;&nbsp; <a href="https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/atat3_36.tar.gz"><b>Whole toolkit (Stable version)</b></a><br />
+2. tar zxvf atat3_36.tar.gz<br />
+3. cd atat<br />
+4. make<br />
+&nbsp; (Execute files are in /atat/src)<br />
+5. make install<br />
+&nbsp; (Execute files are in $HOME/bin)<br />
+6. rebash<br />
+※ $HOMEにbinのファイルが出来るその中に実行ファイルが入っている。（このbinファイルの名称を変えたり別の場所に動かすと上手く動かないので注意）<br />
+※ 隠しファイルの .atat.rc にatatのディレクトリがセットされている。<br />
+<br />
+□ Usage<br />
+----------<br />
+◇ Interfacing MAPS with other first-principles codes (PWscf)<br />
+1. cd&nbsp;$HOME/atat/glue/qe/example/INPUT<br />
+&nbsp; (makelat Mo,W fcc,bcc, hcp<br />
+&nbsp;&nbsp; makelat Ca,Mg:O rocksalt)<br />
+2. cp ../../runstruct_qe ./<br />
+3. gedit runstruct_qe<br />
+&nbsp; ----------<br />
+&nbsp; KPPRA=50<br />
+&nbsp; PWCOMMAND=&quot;mpirun -np 2 $HOME/qe-6.3/bin/pw.x&quot;<br />
+&nbsp; PseudoDIR=../<br />
+&nbsp; CUT_WFC=20<br />
+&nbsp; CUT_CHG=160<br />
+&nbsp; DEGAUSS=0.2<br />
+&nbsp; celldm(1) = 1.8897,<br />
+&nbsp; ----------<br />
+2. maps -d &amp;<br />
+3. touch ready<br />
+&nbsp; wait until atat code show &quot;done!.&quot;<br />
+4. cd 0<br />
+5. ../runstruct_qe &amp;<br />
+6. cat energy<br />
+7. cd ..<br />
+-----<br />
+&nbsp; 1) gedit runstruct_qe &amp;<br />
+&nbsp;&nbsp; &nbsp;(if&nbsp;you&nbsp;desire&nbsp;better result,&nbsp;you change parameters)&nbsp;<br />
+&nbsp;&nbsp; &nbsp;(gedit vasp.wrap &amp; for VASP)<br />
+&nbsp; 2) cd 0<br />
+&nbsp; 3) ../runstruct_qe &amp;<br />
+&nbsp; 4) cat energy<br />
+&nbsp;&nbsp;5) cd ..<br />
+-----<br />
+8. pollmach ~/atat/glue/qe/example/INPUT/runstruct_qe<br />
+&nbsp; or&nbsp;<br />
+&nbsp; pollmach $HOME/atat/glue/qe/example/INPUT/runstruct_qe<br />
+9. touch stop<br />
+10. touch stoppoll<br />
+11. mapsrep<br />
+----------<br />
+Need input file<br />
+・ lat.in<br />
+&nbsp; -----<br />
+&nbsp; a b c alpha beta gamma (coordinate system)<br />
+&nbsp; unit cell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;x1 y1 z1<br />
+&nbsp;&nbsp;&nbsp; x2 y2 z2<br />
+&nbsp;&nbsp;&nbsp; x3 y3 z3<br />
+&nbsp;&nbsp;x, y, z atom,atom,...<br />
+&nbsp; -----<br />
+・ qe.param<br />
+&nbsp; -----<br />
+&nbsp; ppW&nbsp; W&nbsp; 183.80&nbsp; W.GTH_LDA.UPF<br />
+&nbsp; ppMo&nbsp; Mo&nbsp; 12.011&nbsp; Mo.GTH_LDA.UPF<br />
+&nbsp; -----<br />
+・ pseudo potential file<br />
+----------<br />
+※ 私の環境（gfrotran -llapack -lblas -lfftw3）だといくつかの計算で不正なメモリー参照を意味するSIGSEGVのエラーが出る。<br />
+　Intel fortranでの対策方法は下のHPに記載されている。下記のことを行ってエラーの表示をメモして開発者に尋ねるしかない。<br />
+　<a href="https://www.isus.jp/products/fortran-compilers/sigsegv-or-sigbus-errors/">https://www.isus.jp/products/fortran-compilers/sigsegv-or-sigbus-errors/</a>　(<a href="https://software.intel.com/en-us/articles/determining-root-cause-of-sigsegv-or-sigbus-errors/">https://software.intel.com/en-us/articles/determining-root-cause-of-sigsegv-or-sigbus-errors/</a>)<br />
+----------<br />
+◇ Test MAPS with a simple example<br />
+1. mkdir cuau<br />
+2. cd cuau<br />
+3. cp $HOME/atat/examples/cuau.in lat.in<br />
+4. maps -d &amp;<br />
+5. touch ready<br />
+6. ls */wait<br />
+7. echo 1.1 &gt; 0/energy<br />
+8. rm 0/wait<br />
+9. maps -h | more<br />
+----------<br />
+◇ Install the interface between MAPS and VASP<br />
+&nbsp; (underconstructing)<br />
+1. ezvap<br />
+2. gedit ~/.ezvasp.rc<br />
+3. ezvap<br />
+4. maps -d &amp;<br />
+3. cp atat/glue/vasp/vasp.warap .<br />
+4. ezvasp -h | more<br />
+5. cd 0<br />
+6. runstruct.vasp<br />
+7. cd ..<br />
+8. pollmach runstruct.vasp &amp;<br />
+9. touch stoppoll<br />
+----------<br />
+◇ With queueing systems<br />
+&nbsp; (underconstructing)<br />
+----------<br />
+<br />
+□&nbsp; Interface<br />
+&nbsp; There are every interface (e.g. qe, vasp, siesta, etc) in /atat/glue<br />
+<br />
+□ stop command<br />
+&nbsp; touch stop<br />
+&nbsp; rm maps_is_running<br />
+&nbsp; touch stoppoll<br />
+&nbsp; rm pollmach_si_running<br />
+[S1] <a href="https://arxiv.org/pdf/cond-mat/0212159.pdf">https://arxiv.org/pdf/cond-mat/0212159.pdf</a><br />
+<br />
+※ 文献[8]にVASPでの計算例を示したスライドがある。マニュアル[9]を見ると、VASP以外にもPWscfでも可能なようだ。<br />
+※ 構造は、xcrysdenが使えれば、xcrysden --pwi pwscf.in または、 xcrysden --pwo pwscf.out で確認できる。<br />
+-----------------------------------------------------------------------------<br />
+■ References<br />
+[1] Supercell grogram: <a href="https://orex.github.io/supercell/">https://orex.github.io/supercell/</a><br />
+[2] ATAT: <a href="https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/">https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/</a><br />
+[3] Special-Quasirandom-Structure（SQS）モデル: <a href="https://elements-strategy.jp/pdf/01_P-36.pdf">https://elements-strategy.jp/pdf/01_P-36.pdf</a><br />
+[4] K. Tarafder et al., J. Phys.: Condens. Mater, 20 (2008) 445201.: <a href="https://iopscience.iop.org/article/10.1088/0953-8984/20/44/445201/pdf">https://iopscience.iop.org/article/10.1088/0953-8984/20/44/445201/pdf</a><br />
+　Fig.2 にKKR-CPAとPAW-SQS, LMTO-ASRのDOSが比較されている（どれも似た結果になっている）。<br />
+以下に論文のSummaryで重要な点を記述する。<br />
+・ The single-site CPA cannot effectively address the problem of short-range ordering.<br />
+　KKR-CPA（一般的なシングルサイト近似）では短距離秩序の問題を解決できない<br />
+・ It is here that the SQS really wins over other techniques. It can include random distortions of bond angles as well within the quasi-random supercell.<br />
+　SQSは結合角のランダムな歪みを含めることができる点で他の手法に勝っている（意訳）。<br />
+[5] Li-Tun Tian et al., Comp. Mater. Sci., 128 (2017) 302.: <a href="https://www.sciencedirect.com/science/article/pii/S0927025616306061">https://www.sciencedirect.com/science/article/pii/S0927025616306061</a><br />
+&nbsp; この論文では図を拡大して詳細に見ることができる。Cu-Alにおいて、構造緩和していない場合、SQSとCPAはほぼ同じ結果を与える。構造緩和した場合には、CPAでもQNAを利用した計算がもっとも実験結果に近くなる。その次にSQSが近い結果を与えている。QNAがどういった計算なのかは論文の中身が読めないのでわからない。<br />
+[6] D. D. Johnson and M. Asta, Comp. Mater. Sci., 1 (1997) 54.: <a href="https://www.sciencedirect.com/science/article/pii/S0927025697000165">https://www.sciencedirect.com/science/article/pii/S0927025697000165</a><br />
+　The main finding: The mixing energies obtained from the CPA, SIM, and SQS methods agree well as long as one is careful to use similar approximations amongst the different approaches!<br />
+　CPA, SIM, SQS法から得られた混合エネルギーは、異なるアプローチ間で同様の近似を用いるように注意を払っている限り、よく一致する。<br />
+[7] A. V. D. Walle et al., Calphad, 58 (2017) 70.: <a href="https://www.sciencedirect.com/science/article/pii/S0364591617300305?via%3Dihub">https://www.sciencedirect.com/science/article/pii/S0364591617300305?via%3Dihub</a><br />
+[8] ATAT - A software toolkit for modeling coupled configurational and vibrational disorder in alloy systems: <a href="https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/tutorial/isingvib2na.pdf">https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/tutorial/isingvib2na.pdf</a><br />
+[9] The Alloy-Theoretic Automated Toolkit (ATAT): A User Guide: <a href="https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/manual.pdf">https://www.brown.edu/Departments/Engineering/Labs/avdw/atat/manual.pdf</a><br />
+-----------------------------------------------------------------------------

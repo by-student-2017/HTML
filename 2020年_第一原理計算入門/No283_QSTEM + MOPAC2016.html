@@ -1,0 +1,805 @@
+QSTEM (https://lammps.sandia.gov/)<br />
+------------------------------------------------------------------------------<br />
+Å° QSTEM (Ubuntu 18.04 LTS (64 bit)) (cfg file)<br />
+<br />
+Å† cfg(QSTEM) -&gt; mop (MOPAC 2016)<br />
+1. gedit cfg_qsc2mop_div<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.0107 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+set element_flag = (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)<br />
+#<br />
+set lattice_unit = `awk 'NR==2{print $3}' tmp.cfg`<br />
+set La = `awk -v n=${lattice_unit} 'NR==3{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+set Lb = `awk -v n=${lattice_unit} 'NR==7{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+set Lc = `awk -v n=${lattice_unit} 'NR==11{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+echo $La &gt; &nbsp;${filename}.para<br />
+echo $Lb &gt;&gt; ${filename}.para<br />
+echo $Lc &gt;&gt; ${filename}.para<br />
+#<br />
+set i = 1<br />
+set j = 1<br />
+foreach atom ($element_list)<br />
+&nbsp; set element_flag[$i] = `tail -n +13 tmp.cfg | grep -e ${atom} -n | sed -e 's/:.*//g'`<br />
+&nbsp; if ($element_flag[$i] &gt; 0) then<br />
+&nbsp; &nbsp; @ j += 1<br />
+&nbsp; endif<br />
+&nbsp; @ i += 1<br />
+end<br />
+@ j += -1<br />
+set max_atom_types = $j<br />
+#<br />
+set MaxNo_div_i = $2<br />
+set MaxNo_div_j = $2<br />
+set MaxNo_div_k = $2<br />
+set div_i = 1<br />
+while ($div_i &lt;= $MaxNo_div_i)<br />
+&nbsp; set div_j = 1<br />
+&nbsp; while ($div_j &lt;= $MaxNo_div_j)<br />
+&nbsp; &nbsp; set div_k = 1<br />
+&nbsp; &nbsp; while ($div_k &lt;= $MaxNo_div_k)<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot;<br />
+&nbsp; &nbsp; &nbsp; echo ${div_i}${div_j}${div_k}<br />
+&nbsp; &nbsp; &nbsp; echo &quot;AUX LARGE CHARGE=0 PM7&quot; &gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; echo &quot;Title&quot; &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot; &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; set ori_x_start = `echo &quot;1.0/$MaxNo_div_i*($div_i-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_y_start = `echo &quot;1.0/$MaxNo_div_j*($div_j-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_z_start = `echo &quot;1.0/$MaxNo_div_k*($div_k-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_x_end = `echo &quot;1.0/$MaxNo_div_i*($div_i)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_y_end = `echo &quot;1.0/$MaxNo_div_j*($div_j)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_z_end = `echo &quot;1.0/$MaxNo_div_k*($div_k)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; set i = 1<br />
+&nbsp; &nbsp; &nbsp; set j = 0<br />
+&nbsp; &nbsp; &nbsp; set element = &quot;H&quot;<br />
+&nbsp; &nbsp; &nbsp; foreach atom ($element_list)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if ($element_flag[$i] &gt; 0) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set end_line = `echo $element_flag[$i]&quot;+10&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if ($j &gt;= 1) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; echo $j&quot; &quot;$element<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v atom=$element -v sln=$start_line -v eln=$end_line -v a=$La -v b=$Lb -v c=$Lc -v oxs=$ori_x_start -v oxe=$ori_x_end -v oys=$ori_y_start -v oye=$ori_y_end -v ozs=$ori_z_start -v oze=$ori_z_end &nbsp;'{if(NR&gt;=sln &amp;&amp; NR&lt;=eln &amp;&amp; oxs&lt;=$1 &amp;&amp; $1&lt;=oxe &amp;&amp; oys&lt;=$2 &amp;&amp; $2&lt;=oye &amp;&amp; ozs&lt;=$3 &amp;&amp; $3&lt;=oze){printf &quot; %s %8.6f 1 %8.6f 1 %8.6f 1 \n&quot;,atom,$1*a,$2*b,$3*c}}' tmp.cfg &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ j += 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set start_line = `echo $end_line&quot;+3&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set element = $atom<br />
+&nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @ i += 1<br />
+&nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; set end_line = `awk 'END{print NR}' tmp.cfg`<br />
+&nbsp; &nbsp; &nbsp; echo $j&quot; &quot;$element<br />
+&nbsp; &nbsp; &nbsp; awk -v atom=$element -v sln=$start_line -v eln=$end_line -v a=$La -v b=$Lb -v c=$Lc -v oxs=$ori_x_start -v oxe=$ori_x_end -v oys=$ori_y_start -v oye=$ori_y_end -v ozs=$ori_z_start -v oze=$ori_z_end &nbsp;'{if(NR&gt;=sln &amp;&amp; NR&lt;=eln &amp;&amp; oxs&lt;=$1 &amp;&amp; $1&lt;=oxe &amp;&amp; oys&lt;=$2 &amp;&amp; $2&lt;=oye &amp;&amp; ozs&lt;=$3 &amp;&amp; $3&lt;=oze){printf &quot; %s %8.6f 1 %8.6f 1 %8.6f 1 \n&quot;,atom,$1*a,$2*b,$3*c}}' tmp.cfg &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; mv tmp.xyz ${filename}_${div_i}${div_j}${div_k}.mop<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; @ div_k = $div_k + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ div_j = $div_j + 1<br />
+&nbsp; end<br />
+&nbsp; @ div_i = $div_i + 1<br />
+end<br />
+#<br />
+rm -f -r tmp.cfg<br />
+#<br />
+---------<br />
+2. sed -i 's/\r//g' cfg_qsc2mop_div<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg_qsc2mop_div)<br />
+3. chmod +x cfg_qsc2mop_div<br />
+4. ./cfg_qsc2mop_div case 3<br />
+Å¶ e.g., case.cfg<br />
+<br />
+Å† mop (MOPAC 2016) -&gt; cfg(QSTEM)<br />
+1. gedit mop_div2lmp_cfg<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.0107 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+cp ${filename}.para tmp.para<br />
+set a = `awk 'NR==1{print $1}' tmp.para`<br />
+echo &quot;a lattice constant:&quot; ${a}<br />
+set b = `awk 'NR==2{print $1}' tmp.para`<br />
+echo &quot;b lattice constant:&quot; ${b}<br />
+set c = `awk 'NR==3{print $1}' tmp.para`<br />
+echo &quot;c lattice constant:&quot; ${c}<br />
+#<br />
+set numofpar = 23040<br />
+echo &quot;Number of particles = &quot;${numofpar} &gt; tmp.cfg<br />
+echo &quot;A = 1.0 Angstrom (basic length-scale)&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,1) = &quot;${a}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,2) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,3) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,1) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,2) = &quot;${b}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,3) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,1) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,2) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,3) = &quot;${c}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;.NO_VELOCITY.&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;entry_count = 3&quot; &gt;&gt; tmp.cfg<br />
+#<br />
+set MaxNo = $2<br />
+set i = 1<br />
+while ($i &lt;= $MaxNo)<br />
+&nbsp; set j = 1<br />
+&nbsp; while ($j &lt;= $MaxNo)<br />
+&nbsp; &nbsp; set k = 1<br />
+&nbsp; &nbsp; while ($k &lt;= $MaxNo)<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot;<br />
+&nbsp; &nbsp; &nbsp; echo $i$j$k<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; set end_line = `awk 'END{print NR}' ${filename}_$i$j$k.mop`<br />
+&nbsp; &nbsp; &nbsp; if ($end_line &gt;= 4) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cp ${filename}_$i$j$k.out tmp_check.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set check = `grep -c &quot; &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp_check.out`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if (&quot;$check&quot; == &quot;0&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cat ${filename}_$i$j$k.out | tac | sed '/SCF FIELD WAS ACHIEVED/q' | tac &gt; tmp.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set read_start = `grep -n &quot;CARTESIAN COORDINATES&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set read_end &nbsp; = `grep -n &quot;Empirical Formula:&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #set total_atoms = `awk '{if($1==&quot;Empirical&quot; &amp;&amp; $2==&quot;Formula:&quot;){print $6}}' tmp.out`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set m = 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; foreach atom (${element_list})<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v rs=${read_start} -v re=${read_end} -v mass=$mass_list[$m] -v atomic_symbol=${atom} -v n=2 -v a=${a} -v b=${b} -v c=${c} '(NR&gt;=rs &amp;&amp; NR&lt;=re &amp;&amp; $2==atomic_symbol){printf &quot;%-12.6f \n%s \n%-12.6f %-12.6f %-12.6f \n&quot;,mass,$2,$3/a,$4/b,$5/c}' tmp.out &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ m = $m + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; cat ${filename}_$i$j$k.out | tac | sed '/ &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE/q' | tac &gt; tmp.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set read_start = `grep -n &quot; &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set read_end &nbsp; = `grep -n &quot;* UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #set total_atoms = `awk '{if($1==&quot;Empirical&quot; &amp;&amp; $2==&quot;Formula:&quot;){print $6}}' tmp.out`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set m = 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; foreach atom (${element_list})<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v rs=${read_start} -v re=${read_end} -v mass=$mass_list[$m] -v atomic_symbol=${atom} -v n=2 -v a=${a} -v b=${b} -v c=${c} '(NR&gt;=rs &amp;&amp; NR&lt;=re &amp;&amp; $1==atomic_symbol){printf &quot;%-12.6f \n%s \n%-12.6f %-12.6f %-12.6f \n&quot;,mass,$1,$2/a,$4/b,$6/c}' tmp.out &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ m = $m + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; @ k = $k + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ j = $j + 1<br />
+&nbsp; end<br />
+&nbsp; @ i = $i + 1<br />
+end<br />
+#<br />
+set total_number_of_atom = `awk 'END{print (NR-13)/3}' tmp.cfg`<br />
+sed -i -e &quot;1c\Number of particles = ${total_number_of_atom}&quot; tmp.cfg<br />
+mv tmp.cfg ${filename}.lmp_cfg<br />
+rm -f -r tmp.out<br />
+---------<br />
+2. sed -i 's/\r//g' mop_div2lmp_cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place mop_div2lmp_cfg)<br />
+3. chmod +x mop_div2lmp_cfg<br />
+4. ./mop_div2lmp_cfg case 3<br />
+Å¶ e.g., case.lmp_cfg<br />
+(ovito &gt; case.lmp_cfg)<br />
+<br />
+Å† fit tem image<br />
+1. gedit fit_tem.py<br />
+---------<br />
+from PIL import Image<br />
+import numpy as np<br />
+import struct<br />
+import random<br />
+import commands<br />
+<br />
+# ----- input parameters ----- start -----<br />
+mixing_para = 0.05<br />
+max_move_atom_init = 2.0 # Angstrom unit<br />
+max_move_atom_low_limit = 0.05 # Angstrom unit<br />
+max_move_atom_high_limit = 3.0 # Angstrom unit<br />
+<br />
+exchange_ratio = 0.001 # exhange element A for element B<br />
+<br />
+dif_value_limit = 0.7 # exp(0.7) = 2.01<br />
+e_atom_limit = 1.1 # evaluate move atom<br />
+<br />
+cycle_limit = 1.0e-8<br />
+reset_value = cycle_limit*1000<br />
+<br />
+e_ran_low_limit = 0.995 # =&gt; not adopt new position<br />
+dif_value_factor = ((256/2)/2)**2<br />
+<br />
+file_name = &quot;tmp.cfg&quot;<br />
+reference_image_file = &quot;reference.png&quot;<br />
+im = np.array(Image.open(reference_image_file).convert('L'),'f')<br />
+# ----- input parameters ----- end -----<br />
+commands.getoutput(&quot;cp &quot;+file_name+&quot; tmp.cfg&quot;)<br />
+<br />
+# ----- auto reading ----- start -----<br />
+La = commands.getoutput(&quot;awk 'NR==3{printf \&quot;%12.6f \&quot;, $3}' &quot;+file_name)<br />
+print &quot;lattice constant a: &quot;, La, &quot; Angstrom&quot;<br />
+move_percent = max_move_atom_init / float(La) # [%/100] unit<br />
+move_percent_low_limit = max_move_atom_low_limit / float(La) # [%/100] unit<br />
+move_percent_high_limit = max_move_atom_high_limit / float(La) # [%/100] unit<br />
+# -----<br />
+total_char_line = commands.getoutput(&quot;grep -c [A-Za-z] &quot;+file_name)<br />
+total_num_char_line = int(total_char_line) - 13<br />
+print &quot;total number of elements: &quot;, total_num_char_line<br />
+# -----<br />
+total_cfg_line = commands.getoutput(&quot;awk 'END{print NR}' &quot;+file_name)<br />
+total_num_cfg_line = int(total_cfg_line) - 13 - total_num_char_line*2<br />
+print &quot;total number of atoms: &quot;, total_num_cfg_line<br />
+total_number_of_atoms = total_num_cfg_line<br />
+# -----<br />
+num_char_line = []<br />
+number_of_atoms_temp = []<br />
+for i in range(total_num_char_line):<br />
+&nbsp; char_line = commands.getoutput(&quot;grep -n [A-Za-z] &quot;+file_name+&quot; | sed -e 's/:.*//g' | sed -ne '&quot;+str(14+i)+&quot;p' &nbsp;| sed -r -e ':loop;N;b loop;s/\\n/ /g' -e 's/ +/ /g'&quot;)<br />
+&nbsp; num_char_line.append(int(char_line))<br />
+&nbsp; number_of_atoms_temp.append(int(char_line)-13-(i+1)*2)<br />
+number_of_atoms_temp.append(total_number_of_atoms)<br />
+print &quot;boundary: &quot;, number_of_atoms_temp<br />
+# ----- auto reading ----- end -----<br />
+<br />
+def dif2sum(new_data,reference_data):<br />
+&nbsp; return np.sum((new_data - reference_data)**2)<br />
+<br />
+old_value = float((256-1)^2*2 + (256-1)^2*(256*256-2))<br />
+new_value = float((256-128)^2*256*256)<br />
+dif_value = (new_value-old_value)/old_value * dif_value_factor<br />
+n_ran = 16<br />
+e_atom = np.ones(total_number_of_atoms)<br />
+start_flag = 1<br />
+while (abs(dif_value) &gt; cycle_limit):<br />
+&nbsp; commands.getoutput(&quot;cp tmp.cfg case.cfg&quot;)<br />
+&nbsp; #<br />
+&nbsp; n_ran = n_ran - 15<br />
+&nbsp; j = 0<br />
+&nbsp; for i in range(1,total_num_char_line):<br />
+&nbsp; &nbsp; if (n_ran &gt; (number_of_atoms_temp[i]+2*i)):<br />
+&nbsp; &nbsp; &nbsp; j = i<br />
+&nbsp; n_ran = n_ran - 2*j<br />
+&nbsp; #<br />
+&nbsp; e_atom[n_ran] = e_atom[n_ran]*(1.0-mixing_para) + e_atom[n_ran]*np.exp(-dif_value)*mixing_para<br />
+&nbsp; if (e_atom[n_ran] &gt;= e_atom_limit):<br />
+&nbsp; &nbsp; e_atom[n_ran] = e_atom_limit<br />
+&nbsp; &nbsp; print &quot;----- reset e_atom&quot;, e_atom[n_ran]<br />
+&nbsp; print &quot;----- move atom number and e_atom parameter value: &quot;, n_ran, e_atom[n_ran]<br />
+&nbsp; e_ran = random.uniform(e_ran_low_limit,1.0)<br />
+&nbsp; n_ran = random.randrange(1,total_number_of_atoms)<br />
+&nbsp; e_atom_ran = random.uniform(0.0,1.0)<br />
+&nbsp; while (e_atom[n_ran] &lt; e_atom_ran):<br />
+&nbsp; &nbsp; n_ran = random.randrange(1,total_number_of_atoms)<br />
+&nbsp; print &quot; &quot;<br />
+&nbsp; print &quot;----- new move atom number:&quot;, n_ran<br />
+&nbsp; move_percent = move_percent*(1.0-mixing_para) + move_percent*e_atom[n_ran]*mixing_para<br />
+&nbsp; if (move_percent &lt;= move_percent_low_limit):<br />
+&nbsp; &nbsp; move_percent == move_percent_low_limit<br />
+&nbsp; &nbsp; print &quot;reset move_percent (low limit)&quot;, move_percent_low_limit<br />
+&nbsp; if (move_percent &gt;= move_percent_high_limit):<br />
+&nbsp; &nbsp; move_percent == move_percent_high_limit<br />
+&nbsp; &nbsp; print &quot;reset move_percent (high limit)&quot;, move_percent_high_limit<br />
+&nbsp; print &quot;----- moving limit (x,y,z), (1/La) unit: &quot;, move_percent<br />
+&nbsp; x_ran = random.uniform(-move_percent,move_percent)<br />
+&nbsp; y_ran = random.uniform(-move_percent,move_percent)<br />
+&nbsp; z_ran = random.uniform(-move_percent,move_percent)<br />
+&nbsp; #<br />
+&nbsp; n_ran = n_ran + 15<br />
+&nbsp; j = 0<br />
+&nbsp; for i in range(1,total_num_char_line):<br />
+&nbsp; &nbsp; if (n_ran &gt; (15+number_of_atoms_temp[i])):<br />
+&nbsp; &nbsp; &nbsp; j = i<br />
+&nbsp; n_ran = n_ran + 2*j<br />
+&nbsp; #<br />
+&nbsp; ex_ran = random.uniform(0.0,1.0)<br />
+&nbsp; if (exchange_ratio &gt;= ex_ran):<br />
+&nbsp; &nbsp; ex_area_ran1 = 0<br />
+&nbsp; &nbsp; ex_area_ran2 = 0<br />
+&nbsp; &nbsp; while (ex_area_ran1 == ex_area_ran2):<br />
+&nbsp; &nbsp; &nbsp; ex_area_ran1 = random.randrange(0,total_num_char_line)<br />
+&nbsp; &nbsp; &nbsp; ex_area_ran2 = random.randrange(0,total_num_char_line)<br />
+&nbsp; &nbsp; print &quot;exchange area 1: &quot;, ex_area_ran1<br />
+&nbsp; &nbsp; print &quot;exchange area 2: &quot;, ex_area_ran2<br />
+&nbsp; &nbsp; ex_at1_ran = random.randrange(number_of_atoms_temp[ex_area_ran1]+1,number_of_atoms_temp[ex_area_ran1+1]) + 15 + 2*ex_area_ran1<br />
+&nbsp; &nbsp; ex_at2_ran = random.randrange(number_of_atoms_temp[ex_area_ran2]+1,number_of_atoms_temp[ex_area_ran2+1]) + 15 + 2*ex_area_ran2<br />
+&nbsp; &nbsp; print &quot;----- exchange (x y z) in &quot;,ex_at1_ran,&quot; line for &quot;,ex_at2_ran<br />
+&nbsp; &nbsp; print &quot;before&quot;<br />
+&nbsp; &nbsp; char_ex_at1 = &nbsp;commands.getoutput(&quot;sed -n &quot;+str(ex_at1_ran)+&quot;p case.cfg&quot;)<br />
+&nbsp; &nbsp; print char_ex_at1<br />
+&nbsp; &nbsp; char_ex_at2 = &nbsp;commands.getoutput(&quot;sed -n &quot;+str(ex_at2_ran)+&quot;p case.cfg&quot;)<br />
+&nbsp; &nbsp; print char_ex_at2<br />
+&nbsp; &nbsp; print &quot;after&quot;<br />
+&nbsp; &nbsp; new_char_ex_at1 = char_ex_at2[0:38] + &quot; &quot; + char_ex_at1[39:len(char_ex_at1)]<br />
+&nbsp; &nbsp; new_char_ex_at2 = char_ex_at1[0:38] + &quot; &quot; + char_ex_at2[39:]<br />
+&nbsp; &nbsp; print new_char_ex_at1<br />
+&nbsp; &nbsp; print new_char_ex_at2<br />
+&nbsp; &nbsp; replace1 = commands.getoutput(&quot;sed -i -e 's/&quot;+str(char_ex_at1)+&quot;/&quot;+str(new_char_ex_at1)+&quot;/g' case.cfg&quot;)<br />
+&nbsp; &nbsp; replace2 = commands.getoutput(&quot;sed -i -e 's/&quot;+str(char_ex_at2)+&quot;/&quot;+str(new_char_ex_at2)+&quot;/g' case.cfg&quot;)<br />
+&nbsp; #<br />
+&nbsp; print &quot;----- replace parameter in cfg file -----&quot;<br />
+&nbsp; print str(n_ran), &quot;line&quot;<br />
+&nbsp; char_old = &nbsp;commands.getoutput(&quot;sed -n &quot;+str(n_ran)+&quot;p case.cfg&quot;)<br />
+&nbsp; print char_old<br />
+&nbsp; #<br />
+&nbsp; new_x_char = commands.getoutput(&quot;awk 'NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($1+&quot;+str(x_ran)+&quot;-int($1+&quot;+str(x_ran)+&quot;))}' case.cfg&quot;)<br />
+&nbsp; if (float(new_x_char) &lt; 0):<br />
+&nbsp; &nbsp; new_x = float(new_x_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_x = float(new_x_char)<br />
+&nbsp; new_y_char = commands.getoutput(&quot;awk 'NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($2+&quot;+str(y_ran)+&quot;-int($2+&quot;+str(y_ran)+&quot;))}' case.cfg&quot;)<br />
+&nbsp; if (float(new_y_char) &lt; 0):<br />
+&nbsp; &nbsp; new_y = float(new_y_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_y = float(new_y_char)<br />
+&nbsp; new_z_char = commands.getoutput(&quot;awk 'NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f \&quot;, ($3+&quot;+str(z_ran)+&quot;-int($3+&quot;+str(z_ran)+&quot;))}' case.cfg&quot;)<br />
+&nbsp; if (float(new_z_char) &lt; 0):<br />
+&nbsp; &nbsp; new_z = float(new_z_char) + 1.0<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; new_z = float(new_z_char)<br />
+&nbsp; #<br />
+&nbsp; char_new = commands.getoutput(&quot;awk 'NR==&quot;+str(n_ran)+&quot;{printf \&quot;%12.6f %12.6f %12.6f %12.6f %12.6f \\n\&quot;, &quot;+str(new_x)+&quot;, &quot;+str(new_y)+&quot;, &quot;+str(new_z)+&quot;, $4, $5}' case.cfg&quot;)<br />
+&nbsp; print char_new<br />
+&nbsp; #<br />
+&nbsp; replace = commands.getoutput(&quot;sed -i -e 's/&quot;+str(char_old)+&quot;/&quot;+str(char_new)+&quot;/g' case.cfg&quot;)<br />
+&nbsp; #print replace<br />
+&nbsp; print &quot;----- qstem calculation -----&quot;<br />
+&nbsp; run = commands.getoutput(&quot;$HOME/QSTEM/bin/stem3 tem.qsc&quot;)<br />
+&nbsp; #print run<br />
+&nbsp; copy = commands.getoutput(&quot;cp -f ./case/case_Proj.img case.img&quot;)<br />
+&nbsp; #print copy<br />
+&nbsp; # ----------------------------------------------------<br />
+&nbsp; print &quot;----- comparing calc image and exp -----&quot;<br />
+&nbsp; fid = open(&quot;case.img&quot;,&quot;rb&quot;)<br />
+&nbsp; # int data<br />
+&nbsp; header_size = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;header size: &quot;, header_size[0]<br />
+&nbsp; #<br />
+&nbsp; paramSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;parameter size: &quot;, paramSize[0]<br />
+&nbsp; #<br />
+&nbsp; commentSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;comment size: &quot;, commentSize[0]<br />
+&nbsp; #<br />
+&nbsp; Nx = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;Nx: number of pixels in x-direction, &quot;, Nx[0]<br />
+&nbsp; #<br />
+&nbsp; Ny = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;Ny: number of pixels in y-direction, &quot;, Ny[0]<br />
+&nbsp; #<br />
+&nbsp; complexFlag = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;Flag: complex(1) or real(0): &quot;, complexFlag[0]<br />
+&nbsp; #<br />
+&nbsp; dataSize = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;Data size (byte unit): &quot;, dataSize[0]<br />
+&nbsp; #<br />
+&nbsp; version = struct.unpack(&quot;i&quot;,fid.read(4))<br />
+&nbsp; #print &quot;version: &quot;,version[0]<br />
+&nbsp; #<br />
+&nbsp; # double data<br />
+&nbsp; t = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; #print &quot;sample thickness or defocus: &quot;, t[0]<br />
+&nbsp; #<br />
+&nbsp; dx = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; #print &quot;dx: pixel size along x-direction, &quot;, dx[0], &quot; [Angstrom]&quot;<br />
+&nbsp; #<br />
+&nbsp; dy = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; #print &quot;dy: pixel size along y-direction, &quot;, dy[0], &quot; [Angstrom]&quot;<br />
+&nbsp; #<br />
+&nbsp; # other data<br />
+&nbsp; for i in range(0,paramSize[0]):<br />
+&nbsp; &nbsp; auxilliary_data = struct.unpack(&quot;d&quot;,fid.read(8))<br />
+&nbsp; &nbsp; print auxilliary_data[0]<br />
+&nbsp; #<br />
+&nbsp; comment = []<br />
+&nbsp; for i in xrange(0,commentSize[0]):<br />
+&nbsp; &nbsp; comment.append(struct.unpack(&quot;c&quot;,fid.read(1))[0])<br />
+&nbsp; #print &quot;comment&quot;<br />
+&nbsp; #print comment<br />
+&nbsp; #<br />
+&nbsp; # image data<br />
+&nbsp; #fod = open(&quot;case.raw&quot;,&quot;wb&quot;)<br />
+&nbsp; actual_data = [[0 for i in range(Nx[0])] for j in range(Ny[0])]<br />
+&nbsp; for i in xrange(0,Nx[0]):<br />
+&nbsp; &nbsp; for j in xrange(0,Ny[0]):<br />
+&nbsp; &nbsp; &nbsp; actual_data[i][j] = struct.unpack(&quot;f&quot;,fid.read(dataSize[0]))[0]<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; #data = fid.read(dataSize[0])<br />
+&nbsp; &nbsp; &nbsp; #fod.write(data)<br />
+&nbsp; #<br />
+&nbsp; data = np.array(actual_data,dtype=&quot;float32&quot;)<br />
+&nbsp; #print data.dtype<br />
+&nbsp; #print data.ndim<br />
+&nbsp; #print data.shape<br />
+&nbsp; #<br />
+&nbsp; #-----matplotlib-----<br />
+&nbsp; #plt.imshow(data)<br />
+&nbsp; #plt.show()<br />
+&nbsp; #<br />
+&nbsp; #-----PIL-----<br />
+&nbsp; new_data = (255 - ((data - np.min(data)) / (np.max(data) - np.min(data))) * 255).astype(np.uint8)<br />
+&nbsp; pil_img = Image.fromarray(new_data)<br />
+&nbsp; #pil_img.show()<br />
+&nbsp; #new_pil_img = pil_img.convert(&quot;L&quot;)<br />
+&nbsp; #new_pil_img.show()<br />
+&nbsp; #new_pil_img.save(&quot;case.png&quot;)<br />
+&nbsp; #<br />
+&nbsp; fid.close()<br />
+&nbsp; #fod.close()<br />
+&nbsp; # ----------------------------------------------------<br />
+&nbsp; #<br />
+&nbsp; new_value = dif2sum(new_data,im)<br />
+&nbsp; print &quot;----- new value: &quot;, new_value<br />
+&nbsp; print &quot;----- old value: &quot;, old_value<br />
+&nbsp; dif_value = (new_value-old_value)/old_value * dif_value_factor<br />
+&nbsp; print &quot;----- dif value: &quot;, dif_value<br />
+&nbsp; if (dif_value == 0.0 or dif_value &gt;= dif_value_limit):<br />
+&nbsp; &nbsp; dif_value = reset_value<br />
+&nbsp; &nbsp; print &quot;----- if value = 0, reset value and exp(-reset): &quot;, dif_value, np.exp(-dif_value)<br />
+&nbsp; &nbsp; reset_flag = 1<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; print &quot;----- value and exp(-value): &quot;, dif_value, np.exp(-dif_value)<br />
+&nbsp; &nbsp; reset_flag = 0<br />
+&nbsp; print &quot;----- e_ran value:&quot;, e_ran<br />
+&nbsp; if (np.exp(-dif_value) &gt;= e_ran and reset_flag == 0):<br />
+&nbsp; &nbsp; print &quot;----- adopt new position -----&quot;<br />
+&nbsp; &nbsp; commands.getoutput(&quot;cp case.cfg tmp.cfg&quot;)<br />
+&nbsp; &nbsp; old_value = new_value<br />
+&nbsp; else:<br />
+&nbsp; &nbsp; print &quot;----- not adopt new position -----&quot;<br />
+&nbsp; if (start_flag == 1):<br />
+&nbsp; &nbsp; old_value = new_value<br />
+&nbsp; &nbsp; start_flag = 0<br />
+---------<br />
+2. sed -i 's/\r//g' fit_tem.py<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place fit_tem.py)<br />
+3. chmod +x fit_tem.py<br />
+4. python fit_tem.py<br />
+5. python plot_tem.py<br />
+Å¶ e.g.,&nbsp;<br />
+&nbsp; tmp.cfg, 80 kV<br />
+&nbsp; exp file: reference.png<br />
+<br />
+Å† QSTEM + MOPAC<br />
+1. gedit run_qstem_mopac<br />
+---------<br />
+#! /bin/csh -f<br />
+<br />
+set filename = $1<br />
+set No = 1<br />
+set div = $2<br />
+set MaxNo = $3<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; ./lmp_cfg2cfg_qsc ${filename} -kv 80 -lab6<br />
+&nbsp; cp case.cfg tmp.cfg<br />
+&nbsp; python fit_tem.py<br />
+&nbsp; ./cfg_qsc2mop_div ${filename} $div<br />
+&nbsp; #<br />
+&nbsp; set i = 1<br />
+&nbsp; while ($i &lt;= $div)<br />
+&nbsp; &nbsp; set j = 1<br />
+&nbsp; &nbsp; while ($j &lt;= $div)<br />
+&nbsp; &nbsp; &nbsp; set k = 1<br />
+&nbsp; &nbsp; &nbsp; while ($k &lt;= $div)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; /opt/mopac/MOPAC2016.exe ${filename}_$i$j$k.mop<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @ k = $k + 1<br />
+&nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; @ j = $j + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+&nbsp; #<br />
+&nbsp; ./mop_div2lmp_cfg ${filename} $div<br />
+&nbsp; cp ${filename}.lmp_cfg ${filename}.cfg<br />
+&nbsp; #<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+---------<br />
+2. sed -i 's/\r//g' run_qstem_mopac<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_qstem_mopac)<br />
+3. chmod +x run_qstem_mopac<br />
+4. ./run_qstem_mopac case 6 1000<br />
+<br />
+Å† MOPAC (calculate div data)<br />
+1. gedit run_mopac<br />
+---------<br />
+#! /bin/csh -f<br />
+<br />
+set filename = $1<br />
+<br />
+echo -n &gt; ${filename}.skip<br />
+<br />
+set No = 1<br />
+set div = $2<br />
+set MaxNo = $3<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; ./lmp_cfg2cfg_qsc ${filename} -kv 80 -lab6<br />
+&nbsp; cp case.cfg tmp.cfg<br />
+&nbsp; python fit_tem.py<br />
+&nbsp; ./cfg_qsc2mop_div ${filename} $div<br />
+&nbsp; #<br />
+&nbsp; set i = 1<br />
+&nbsp; while ($i &lt;= $div)<br />
+&nbsp; &nbsp; set j = 1<br />
+&nbsp; &nbsp; while ($j &lt;= $div)<br />
+&nbsp; &nbsp; &nbsp; set k = 1<br />
+&nbsp; &nbsp; &nbsp; while ($k &lt;= $div)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set end_line = `awk 'END{print NR}' ${filename}_$i$j$k.mop`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if ($end_line &lt;= 3) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; echo $i$j$k &gt;&gt; ${filename}.skip<br />
+&nbsp; &nbsp; &nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; /opt/mopac/MOPAC2016.exe ${filename}_$i$j$k.mop<br />
+&nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @ k = $k + 1<br />
+&nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; @ j = $j + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ i = $i + 1<br />
+&nbsp; end<br />
+&nbsp; #<br />
+&nbsp; ./mop_div2lmp_cfg ${filename} $div<br />
+&nbsp; cp ${filename}.lmp_cfg ${filename}.cfg<br />
+&nbsp; #<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+---------<br />
+2. sed -i 's/\r//g' run_mopac<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_mopac)<br />
+3. chmod +x run_mopac<br />
+4. ./run_mopac case 6<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] cif2pos.sh<br />
+&nbsp; http://home.ustc.edu.cn/~lipai/scripts/vasp_scripts/bash_cif2pos.html<br />
+[2] cif2vasp<br />
+&nbsp; https://github.com/danmichaelo/cif2vasp<br />
+[3] cif2pos.py<br />
+&nbsp; https://code.google.com/archive/p/abinitotools/downloads<br />
+[4] Chemistry tools tutorials/scripts<br />
+&nbsp; https://kbsezginel.github.io/chem-tools-tutorials/openbabel<br />
+------------------------------------------------------------------------------<br />
+Å° MOPAC (Tv)<br />
+<br />
+Å† cfg(QSTEM) -&gt; mop (MOPAC 2016)<br />
+1. gedit cfg_qsc2mop<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+cp ${filename}.cfg tmp.cfg<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.0107 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+set element_flag = (0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0)<br />
+#<br />
+set lattice_unit = `awk 'NR==2{print $3}' tmp.cfg`<br />
+set La = `awk -v n=${lattice_unit} 'NR==3{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+set Lb = `awk -v n=${lattice_unit} 'NR==7{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+set Lc = `awk -v n=${lattice_unit} 'NR==11{printf &quot;%10.6f&quot;,($3)*n}' tmp.cfg`<br />
+echo $La &gt; &nbsp;${filename}.para<br />
+echo $Lb &gt;&gt; ${filename}.para<br />
+echo $Lc &gt;&gt; ${filename}.para<br />
+#<br />
+set i = 1<br />
+set j = 1<br />
+foreach atom ($element_list)<br />
+&nbsp; set element_flag[$i] = `tail -n +13 tmp.cfg | grep -e ${atom} -n | sed -e 's/:.*//g'`<br />
+&nbsp; if ($element_flag[$i] &gt; 0) then<br />
+&nbsp; &nbsp; @ j += 1<br />
+&nbsp; endif<br />
+&nbsp; @ i += 1<br />
+end<br />
+@ j += -1<br />
+set max_atom_types = $j<br />
+#<br />
+#set MaxNo_div_i = $2<br />
+#set MaxNo_div_j = $2<br />
+#set MaxNo_div_k = $2<br />
+set MaxNo_div_i = 1<br />
+set MaxNo_div_j = 1<br />
+set MaxNo_div_k = 1<br />
+set div_i = 1<br />
+while ($div_i &lt;= $MaxNo_div_i)<br />
+&nbsp; set div_j = 1<br />
+&nbsp; while ($div_j &lt;= $MaxNo_div_j)<br />
+&nbsp; &nbsp; set div_k = 1<br />
+&nbsp; &nbsp; while ($div_k &lt;= $MaxNo_div_k)<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot;<br />
+&nbsp; &nbsp; &nbsp; echo ${div_i}${div_j}${div_k}<br />
+&nbsp; &nbsp; &nbsp; echo &quot;AUX LARGE CHARGE=0 PM7&quot; &gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; echo &quot;Title&quot; &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot; &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; set ori_x_start = `echo &quot;1.0/$MaxNo_div_i*($div_i-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_y_start = `echo &quot;1.0/$MaxNo_div_j*($div_j-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_z_start = `echo &quot;1.0/$MaxNo_div_k*($div_k-1)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_x_end = `echo &quot;1.0/$MaxNo_div_i*($div_i)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_y_end = `echo &quot;1.0/$MaxNo_div_j*($div_j)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; set ori_z_end = `echo &quot;1.0/$MaxNo_div_k*($div_k)&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; set i = 1<br />
+&nbsp; &nbsp; &nbsp; set j = 0<br />
+&nbsp; &nbsp; &nbsp; set element = &quot;H&quot;<br />
+&nbsp; &nbsp; &nbsp; foreach atom ($element_list)<br />
+&nbsp; &nbsp; &nbsp; &nbsp; if ($element_flag[$i] &gt; 0) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set end_line = `echo $element_flag[$i]&quot;+10&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; if ($j &gt;= 1) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; echo $j&quot; &quot;$element<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v atom=$element -v sln=$start_line -v eln=$end_line -v a=$La -v b=$Lb -v c=$Lc -v oxs=$ori_x_start -v oxe=$ori_x_end -v oys=$ori_y_start -v oye=$ori_y_end -v ozs=$ori_z_start -v oze=$ori_z_end &nbsp;'{if(NR&gt;=sln &amp;&amp; NR&lt;=eln &amp;&amp; oxs&lt;=$1 &amp;&amp; $1&lt;=oxe &amp;&amp; oys&lt;=$2 &amp;&amp; $2&lt;=oye &amp;&amp; ozs&lt;=$3 &amp;&amp; $3&lt;=oze){printf &quot; %s %8.6f 1 %8.6f 1 %8.6f 1 \n&quot;,atom,$1*a,$2*b,$3*c}}' tmp.cfg &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ j += 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set start_line = `echo $end_line&quot;+3&quot; | bc -l`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; set element = $atom<br />
+&nbsp; &nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; &nbsp; @ i += 1<br />
+&nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; set end_line = `awk 'END{print NR}' tmp.cfg`<br />
+&nbsp; &nbsp; &nbsp; echo $j&quot; &quot;$element<br />
+&nbsp; &nbsp; &nbsp; awk -v atom=$element -v sln=$start_line -v eln=$end_line -v a=$La -v b=$Lb -v c=$Lc -v oxs=$ori_x_start -v oxe=$ori_x_end -v oys=$ori_y_start -v oye=$ori_y_end -v ozs=$ori_z_start -v oze=$ori_z_end &nbsp;'{if(NR&gt;=sln &amp;&amp; NR&lt;=eln &amp;&amp; oxs&lt;=$1 &amp;&amp; $1&lt;=oxe &amp;&amp; oys&lt;=$2 &amp;&amp; $2&lt;=oye &amp;&amp; ozs&lt;=$3 &amp;&amp; $3&lt;=oze){printf &quot; %s %8.6f 1 %8.6f 1 %8.6f 1 \n&quot;,atom,$1*a,$2*b,$3*c}}' tmp.cfg &gt;&gt; tmp.xyz<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; mv tmp.xyz ${filename}_${div_i}${div_j}${div_k}.mop<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; @ div_k = $div_k + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ div_j = $div_j + 1<br />
+&nbsp; end<br />
+&nbsp; @ div_i = $div_i + 1<br />
+end<br />
+#<br />
+@ div_k = $div_k - 1<br />
+@ div_j = $div_j - 1<br />
+@ div_i = $div_i - 1<br />
+mv ${filename}_${div_i}${div_j}${div_k}.mop ${filename}.mop<br />
+awk -v n=${lattice_unit} 'NR==3{printf &quot; Tv %7.4f 1 &nbsp;0.0000 0 &nbsp;0.0000 0 \n&quot;,($3)*n}' tmp.cfg &gt;&gt; ${filename}.mop<br />
+awk -v n=${lattice_unit} 'NR==7{printf &quot; Tv &nbsp;0.0000 0 &nbsp;%7.4f 1 &nbsp;0.0000 0 \n&quot;,($3)*n}' tmp.cfg &gt;&gt; ${filename}.mop<br />
+awk -v n=${lattice_unit} 'NR==11{printf &quot; Tv &nbsp;0.0000 0 &nbsp;0.0000 0 &nbsp;%7.4f 1 \n&quot;,($3)*n}' tmp.cfg &gt;&gt; ${filename}.mop<br />
+#<br />
+rm -f -r tmp.cfg<br />
+#<br />
+---------<br />
+2. sed -i 's/\r//g' cfg_qsc2mop<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place cfg_qsc2mop)<br />
+3. chmod +x cfg_qsc2mop<br />
+4. ./cfg_qsc2mop case<br />
+Å¶ e.g., case.cfg<br />
+5. /opt/mopac/MOPAC2016.exe case.mop<br />
+<br />
+Å† mop (MOPAC 2016)(Tv) -&gt; cfg(QSTEM)<br />
+1. mop2lmp_cfg<br />
+---------<br />
+#! /bin/csh -f<br />
+set filename = $1<br />
+#<br />
+set element_list = (H He Li Be B C N O F Ne Na Mg Al Si P S Cl Ar K Ca Sc Ti V Cr Mn Fe Co Ni Cu Zn Ga Ge As Se Br Kr Rb Sr Y Zr Nb Mo Tc Ru Rh Pd Ag Cd In Sn Sb Te I Xe Cs Ba La Ce Pr Nd Pm Sm Eu Gd Tb Dy Ho Er Tm Yb Lu Hf Ta W Re Os Ir Pt Au Hg Tl Pb Bi Po At Rn Fr Ra Ac Th Pa U Np Pu Am Cm Bk Cf Es Fm Md No Lr Rf Df Sg Bh Hs Mt Ds Rg Cn Nh Fl Mc Lv Ts Og)<br />
+#<br />
+set mass_list = (1.00794 4.00260 6.941 9.01218 10.81 12.0107 14.007 16.00 18.9984 20.180 22.99 24.305 26.98 28.1 30.97 32.1 35.45 39.95 39.10 40.08 44.955912 47.867 50.9415 51.9961 54.938045 55.845 58.933195 58.6934 63.546 65.38 69.723 72.63 74.92160 78.96 79.904 83.798 85.4678 87.62 88.90585 91.224 92.90638 95.96 98 101.07 102.90550 106.42 107.8682 112.411 114.818 118.710 121.760 127.60 126.90447 131.293 132.9054519 137.33 138.90547 140.116 140.90765 144.242 145 150.36 151.964 157.25 158.92535 162.500 164.93032 167.259 168.93421 173.054 174.9668 178.49 180.94788 183.84 186.207 190.23 192.217 195.084 196.966569 200.59 204.3833 207.2 208.98040 209 210 222 223 226 227 232.0381 231.03588 238.02891 237 244 243 247 247 251 252 257 258 259 262 261.11 268 271 270 269 278 281 281 285 286 289 289 293 294 294)<br />
+#<br />
+#cp ${filename}.para tmp.para<br />
+cat ${filename}.out | tac | sed '/UNIT CELL TRANSLATION VECTORS/q' | tac &gt; tmp_tv.out<br />
+#set a = `awk 'NR==1{print $1}' tmp.para`<br />
+set a = `awk -v n=1.0 'NR==4{printf &quot;%10.6f&quot;,($3)*n}' tmp_tv.out`<br />
+echo &quot;a lattice constant:&quot; ${a}<br />
+#set b = `awk 'NR==2{print $1}' tmp.para`<br />
+set b = `awk -v n=1.0 'NR==5{printf &quot;%10.6f&quot;,($4)*n}' tmp_tv.out`<br />
+echo &quot;b lattice constant:&quot; ${b}<br />
+#set c = `awk 'NR==3{print $1}' tmp.para`<br />
+set c = `awk -v n=1.0 'NR==6{printf &quot;%10.6f&quot;,($5)*n}' tmp_tv.out`<br />
+echo &quot;c lattice constant:&quot; ${c}<br />
+#<br />
+set numofpar = 23040<br />
+echo &quot;Number of particles = &quot;${numofpar} &gt; tmp.cfg<br />
+echo &quot;A = 1.0 Angstrom (basic length-scale)&quot; &nbsp;&gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,1) = &quot;${a}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,2) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(1,3) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,1) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,2) = &quot;${b}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(2,3) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,1) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,2) = 0.0 A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;H0(3,3) = &quot;${c}&quot; A&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;.NO_VELOCITY.&quot; &gt;&gt; tmp.cfg<br />
+echo &quot;entry_count = 3&quot; &gt;&gt; tmp.cfg<br />
+#<br />
+#set MaxNo = $2<br />
+set MaxNo = 1<br />
+set i = 1<br />
+while ($i &lt;= $MaxNo)<br />
+&nbsp; set j = 1<br />
+&nbsp; while ($j &lt;= $MaxNo)<br />
+&nbsp; &nbsp; set k = 1<br />
+&nbsp; &nbsp; while ($k &lt;= $MaxNo)<br />
+&nbsp; &nbsp; &nbsp; echo &quot; &quot;<br />
+&nbsp; &nbsp; &nbsp; echo $i$j$k<br />
+&nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; #cp ${filename}_$i$j$k.out tmp_check.out<br />
+&nbsp; &nbsp; &nbsp; cp ${filename}.out tmp_check.out<br />
+&nbsp; &nbsp; &nbsp; set check = `grep -c &quot; &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp_check.out`<br />
+&nbsp; &nbsp; &nbsp; if (&quot;$check&quot; == &quot;0&quot;) then<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cat ${filename}_$i$j.out | tac | sed '/SCF FIELD WAS ACHIEVED/q' | tac &gt; tmp.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set read_start = `grep -n &quot;CARTESIAN COORDINATES&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set read_end &nbsp; = `grep -n &quot;Empirical Formula:&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #set total_atoms = `awk '{if($1==&quot;Empirical&quot; &amp;&amp; $2==&quot;Formula:&quot;){print $6}}' tmp.out`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set m = 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; foreach atom (${element_list})<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v rs=${read_start} -v re=${read_end} -v mass=$mass_list[$m] -v atomic_symbol=${atom} -v n=2 -v a=${a} -v b=${b} -v c=${c} '(NR&gt;=rs &amp;&amp; NR&lt;=re &amp;&amp; $2==atomic_symbol){printf &quot;%-12.6f \n%s \n%-12.6f %-12.6f %-12.6f \n&quot;,mass,$2,$3/a,$4/b,$5/c}' tmp.out &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ m = $m + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; else<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #cat ${filename}_$i$j$k.out | tac | sed '/ &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE/q' | tac &gt; tmp.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; cat ${filename}.out | tac | sed '/ &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE/q' | tac &gt; tmp.out<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set read_start = `grep -n &quot; &nbsp;UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set read_end &nbsp; = `grep -n &quot;* UNABLE TO ACHIEVE SELF-CONSISTENCE&quot; tmp.out | sed -e 's/:.*//g'`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #set total_atoms = `awk '{if($1==&quot;Empirical&quot; &amp;&amp; $2==&quot;Formula:&quot;){print $6}}' tmp.out`<br />
+&nbsp; &nbsp; &nbsp; &nbsp; #<br />
+&nbsp; &nbsp; &nbsp; &nbsp; set m = 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; foreach atom (${element_list})<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; awk -v rs=${read_start} -v re=${read_end} -v mass=$mass_list[$m] -v atomic_symbol=${atom} -v n=2 -v a=${a} -v b=${b} -v c=${c} '(NR&gt;=rs &amp;&amp; NR&lt;=re &amp;&amp; $1==atomic_symbol){printf &quot;%-12.6f \n%s \n%-12.6f %-12.6f %-12.6f \n&quot;,mass,$1,$2/a,$4/b,$6/c}' tmp.out &gt;&gt; tmp.cfg<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; @ m = $m + 1<br />
+&nbsp; &nbsp; &nbsp; &nbsp; end<br />
+&nbsp; &nbsp; &nbsp; endif<br />
+&nbsp; &nbsp; &nbsp; @ k = $k + 1<br />
+&nbsp; &nbsp; end<br />
+&nbsp; &nbsp; @ j = $j + 1<br />
+&nbsp; end<br />
+&nbsp; @ i = $i + 1<br />
+end<br />
+#<br />
+set total_number_of_atom = `awk 'END{print (NR-13)/3}' tmp.cfg`<br />
+sed -i -e &quot;1c\Number of particles = ${total_number_of_atom}&quot; tmp.cfg<br />
+mv tmp.cfg ${filename}.lmp_cfg<br />
+rm -f -r tmp.out<br />
+---------<br />
+2. sed -i 's/\r//g' mop2lmp_cfg<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place mop2lmp_cfg)<br />
+3. chmod +x mop2lmp_cfg<br />
+4. ./mop2lmp_cfg case<br />
+Å¶ e.g., case.cfg<br />
+<br />
+Å† QSTEM + MOPAC (Tv)<br />
+1. gedit run_qstem_mopac_tv<br />
+---------<br />
+#! /bin/csh -f<br />
+<br />
+set filename = $1<br />
+set No = 1<br />
+set MaxNo = $2<br />
+while ($No &lt;= $MaxNo)<br />
+<br />
+&nbsp; ./lmp_cfg2cfg_qsc ${filename} -kv 80 -lab6<br />
+&nbsp; cp case.cfg tmp.cfg<br />
+&nbsp; python fit_tem.py<br />
+&nbsp; ./cfg_qsc2mop ${filename}<br />
+&nbsp; /opt/mopac/MOPAC2016.exe ${filename}_$i$j$k.mop<br />
+&nbsp; ./mop2lmp_cfg ${filename}<br />
+&nbsp; cp ${filename}.lmp_cfg ${filename}.cfg<br />
+&nbsp; #<br />
+&nbsp; @ No = $No + 1<br />
+end<br />
+---------<br />
+2. sed -i 's/\r//g' run_qstem_mopac_tv<br />
+&nbsp; (sudo apt install nkf)<br />
+&nbsp; (nkf -Lu --in-place run_qstem_mopac_tv)<br />
+3. chmod +x run_qstem_mopac_tv<br />
+4. ./run_qstem_mopac_tv case 1000<br />
+------------------------------------------------------------------------------<br />
+&nbsp;

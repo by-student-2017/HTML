@@ -1,0 +1,656 @@
+------------------------------------------------------------------------------<br />
+■ quantum-espresso v.6.4.1<br />
+(ubuntu 20.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(Edit: 11/Jun/2020)<br />
+<br />
+Note:&nbsp;has_gipaw=&quot;false&quot; is needed !!! (for USPP)<br />
+&nbsp; And same nl&nbsp; on&nbsp;Valence configuration (Generation configuration ???)<br />
+<br />
+□ Install<br />
+1. sudo apt update<br />
+2. sudo apt install -y quantum-espresso<br />
+<br />
+□ check<br />
+1. which pw.x<br />
+<br />
+□ version<br />
+1. pw.x --version<br />
+<br />
+□ help<br />
+1. pw.x --help<br />
+<br />
+□ example settings<br />
+1. cd $HOME<br />
+2. mkdir quantum-espresso<br />
+3. cd quantum-espresso<br />
+4. cp -r /usr/share/doc/quantum-espresso/examples ./<br />
+<br />
+□ XCrySDen<br />
+1. sudo apt install -y xcrysten<br />
+<br />
+□ quantum-espresso ubuntu package<br />
+&nbsp; https://packages.ubuntu.com/search?keywords=quantum-espresso&amp;searchon=names<br />
+------------------------------------------------------------------------------<br />
+■ Pseudo-potential for Virtual crystal approximation (VCA)<br />
+<br />
+□ (x Ni + 1-x Co) norm-conserving psuedo-potential (ONCV case)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. git clone https://github.com/pipidog/ONCVPSP.git<br />
+4. cd ONCVPSP/sg15<br />
+5. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ni_ONCV_PBE_sr.upf<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Co_ONCV_PBE_sr.upf<br />
+6.(for example,)<br />
+&nbsp; New Pseudo = x Ni_ONCV_PBE_sr.upf + (1-x) Co_ONCV_PBE_sr.upf<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.9<br />
+7. mv NewPseudo.UPF Ni09Co01_ONCV_PBE_sr.upf<br />
+<br />
+□ (x Ni + 1-x Co) norm-conserving psuedo-potential (Pseudo DoJo case)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. wget http://www.pseudo-dojo.org/pseudos/nc-sr-04_pbe_standard_upf.tgz<br />
+&nbsp; [(NCPP: Pseudo DoJo: http://www.pseudo-dojo.org/) -&gt; Format: upf -&gt; download]<br />
+4. tar zxvf nc-sr-04_pbe_standard_upf.tgz<br />
+5. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ni.upf<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Co.upf<br />
+6.(for example,)<br />
+&nbsp; New Pseudo = x Ni.upf + (1-x) Co.upf<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.9<br />
+7. mv NewPseudo.UPF Ni09Co01_NC.UPF<br />
+<br />
+□ (x Ni + 1-x Co) ultra-soft psuedo-potential (TEOS case)<br />
+(http://theossrv1.epfl.ch/Main/Pseudopotentials)<br />
+(Maybe, this mixing is not good, because of has_gipaw=&quot;true&quot;)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. tar zxvf pbe.0.3.1.tgz<br />
+4. cd PSEUDOPOTENTIALS_ALT<br />
+5. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ni.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Co.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+6.(for example,)<br />
+&nbsp; New Pseudo = x Ni.pbe-spn-rrkjus_psl.0.3.1.UPF + (1-x) Co.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.9<br />
+7. mv NewPseudo.UPF Ni09Co01.pbe-n-rrkjus_psl.0.UPF<br />
+<br />
+□ (x Ni + 1-x Co) ultra-soft psuedo-potential (PSlibrary case)<br />
+(http://www.quantum-espresso.org/pseudopotentials)<br />
+(Maybe, this mixing is not good, because of&nbsp;has_gipaw=&quot;true&quot;)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. wget http://www.quantum-espresso.org/upf_files/Ni.pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+4. wget http://www.quantum-espresso.org/upf_files/Co.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+5. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ni.pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Co.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+6.(for example,)<br />
+&nbsp; New Pseudo = x Ni.pbe-spn-rrkjus_psl.1.0.0.UPF + (1-x) Co.pbe-spn-rrkjus_psl.0.3.1.UPF<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.9<br />
+7. mv NewPseudo.UPF Ni09Co01.pbe-n-rrkjus_psl.UPF<br />
+<br />
+※ Note: Use of PAW is not implemented on virtual_v2.x<br />
+※&nbsp;Note:&nbsp;has_gipaw=&quot;false&quot; is needed !!! (for USPP)<br />
+&nbsp; Maybe, mixing is good potentials,<br />
+&nbsp; &nbsp;&nbsp;Ni.rel-pbe-spn-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; &nbsp; Co.rel-pbe-spn-rrkjus_psl.0.3.1.UPF&nbsp; &nbsp; &nbsp;<br />
+※ xx_ONCV_PBE_sr.upf =&gt; scalar relativistic (for non-spin-orbit calculations)<br />
+※ xx_ONCV_PBE_fr.upf =&gt; fully relativistic (for spin-orbit calculatons)<br />
+※ Please, try&nbsp;QE v5.2.0 for USPP.<br />
+<br />
+※ In actual use, use the supercell and use the potential created above for only part of it.<br />
+※ The potential created by NCPP, USPP, PAW and virtual_v2.x method may be mixed in the input file for SCF calculation, etc. NCPP is good accuracy for s and/or p orbit. If d and/or f orbit are the outermost shells, it is necessary to compare the result with supercell method or KKR method.&nbsp;<br />
+※ Failed: USPP (GBRV binary type) &gt; uspp2upf.x &gt; virtual_v2.x<br />
+<br />
+※ 実際の利用においては、スーパーセルを用いて、その一部のみに上記（virtual_v2.x）で作成したポテンシャルを用いる<br />
+※ NCPP, USPP, PAW, 上記で作成したポテンシャルを、SCF計算の入力ファイルなどに混在させて記載してもよい<br />
+&nbsp; 最外殻がspならばNCPPでも比較的良い精度で計算できるだろう。dやfが最外殻である場合は他の手法での計算結果と比較して結果が大きく違わないことを確認する必要がある（例えば、CPAの計算が可能なKKR法や、VCAを使わずにスーパーセルで計算した結果と比較する）。問題がなければ、phonopyなどでフォノンを計算してみるのもよいだろう<br />
+※ GBRVのUSPPは、uspp2upf.xで擬ポテンシャルファイルを変換してvirtual_v2.xを走らせてみたが上手くいかなかった<br />
+※ virtual_v2.f90のコードを解読している途中であるが、relには対応しているようである。USPPの中にはGIPAWのデータを有しているものもあり、USPPで上手くいかないという話を聞くのは、GIPAWのデータを上手く処理できないためである可能性が浮上した。GIPAWを含んだUSPPでもうまく動作するようにコードを改良する必要がある<br />
+※ virtual_v2.f90のコードに記載のメールアドレスを用いて開発者にメールを出したが返信は来なかった（メールのエラーはなかったため受信箱などには受け取られていると思われる）（もちろん私の所属している研究所の正式なメールで送信している）<br />
+------------------------------------------------------------------------------<br />
+■ examples&nbsp;<br />
+<br />
+□ Ga<sub>x</sub>In<sub>1-x</sub>As<br />
+--------------------<br />
+◇ step 1<br />
+(x Ga + 1-x In)&nbsp;ultra-soft psuedo-potential (PSlibrary case)<br />
+1. wget http://www.quantum-espresso.org/upf_files/Ga.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+2. wget http://www.quantum-espresso.org/upf_files/In.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+3. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt;&nbsp;Ga.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt;&nbsp;In.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+4.(for example,)<br />
+&nbsp; mixing parameter x [0&lt;x&lt;1] = 0.875<br />
+5. mv NewPseudo.UPF&nbsp;Ga0875In0125.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; (mass = 0.875 * 69.723 + 0.125 * 114.818 = 75.3598)<br />
+<br />
+◇ step 2<br />
+0.&nbsp;wget http://www.quantum-espresso.org/upf_files/As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+1.&nbsp;cat &gt; GaxIn1-xAs.vc-relax.in &lt;&lt; EOF<br />
+&amp;control<br />
+&nbsp; calculation='vc-relax'<br />
+&nbsp; restart_mode='from_scratch',<br />
+&nbsp; prefix='GaxIn1-xAs',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav= &nbsp;2,&nbsp;<br />
+&nbsp; celldm(1) =10.50,&nbsp;<br />
+&nbsp; nat= &nbsp;2,&nbsp;<br />
+&nbsp; ntyp= 2,<br />
+&nbsp; ecutwfc =60.0,<br />
+&nbsp;&nbsp;occupations = 'smearing' ,<br />
+&nbsp; smearing = 'mp' ,<br />
+&nbsp; degauss = 0.01&nbsp;<br />
+/<br />
+&amp;electrons<br />
+&nbsp; conv_thr = &nbsp;1.0d-4<br />
+&nbsp; mixing_beta = 0.7<br />
+/<br />
+&amp;ions<br />
+/<br />
+&amp;cell<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; Xx1 &nbsp; 75.36&nbsp; Ga0875In0125.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+&nbsp; As &nbsp;74.92 &nbsp;As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+ATOMIC_POSITIONS (alat)<br />
+&nbsp; Xx1 0.00 0.00 0.00<br />
+&nbsp; As 0.25 0.25 0.25<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">K_POINTS automatic</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka?等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 2 2 2 &nbsp; 1 1 1</span><br />
+EOF<br />
+2. mpirun -np 4 pw.x &lt; GaxIn1-xAs.vc-relax.in | tee GaxIn1-xAs.vc-relax.out&nbsp;<br />
+3.&nbsp;grep -n -A 3 &quot;CELL_PARAMETERS&quot; GaxIn1-xAs.vc-relax.out<br />
+&nbsp;&nbsp;grep -n &quot;! &nbsp; &nbsp;total energy&quot; GaxIn1-xAs.vc-relax.out<br />
+4. xcrysden --pwo&nbsp;GaxIn1-xAs.vc-relax.out<br />
+&nbsp; (xcrysden --pwi&nbsp;GaxIn1-xAs.vc-relax.in)<br />
+--------------------<br />
+GaAs&nbsp;(PSLibrary)<br />
+1387:CELL_PARAMETERS (alat= 10.50000000)<br />
+1388- &nbsp;-0.517855589 &nbsp;-0.000000000 &nbsp; 0.517855589<br />
+1389- &nbsp; 0.000000000 &nbsp; 0.517855589 &nbsp; 0.517855589<br />
+1390- &nbsp;-0.517855589 &nbsp; 0.517855589 &nbsp;-0.000000000<br />
+! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-191.52763689 Ry<br />
+<br />
+Ga0875In0125As&nbsp;(PSLibrary)<br />
+1834:CELL_PARAMETERS (alat= 10.50000000)<br />
+1835- &nbsp;-0.529941236 &nbsp;-0.000000000 &nbsp; 0.529941236<br />
+1836- &nbsp; 0.000000000 &nbsp; 0.529941236 &nbsp; 0.529941236<br />
+1837- &nbsp;-0.529941236 &nbsp; 0.529941236 &nbsp;-0.000000000<br />
+2029:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-188.66183300 Ry &nbsp; &nbsp;<br />
+<br />
+Ga05In05As&nbsp;(PSLibrary)<br />
+1090:CELL_PARAMETERS (alat= 10.50000000)<br />
+1091- &nbsp;-0.552955205 &nbsp;-0.000000000 &nbsp; 0.552955205<br />
+1092- &nbsp;-0.000000000 &nbsp; 0.552955205 &nbsp; 0.552955205<br />
+1093- &nbsp;-0.552955205 &nbsp; 0.552955205 &nbsp; 0.000000000<br />
+1283:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-179.81150660 Ry<br />
+<br />
+InAs&nbsp;(PSLibrary)<br />
+6972:CELL_PARAMETERS (alat= 10.50000000)<br />
+6973- &nbsp;-0.555328921 &nbsp;-0.000000000 &nbsp; 0.555328921<br />
+6974- &nbsp; 0.000000000 &nbsp; 0.555328921 &nbsp; 0.555328921<br />
+6975- &nbsp;-0.555328921 &nbsp; 0.555328921 &nbsp;-0.000000000<br />
+6928:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-160.72226605 Ry<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ sequential run<br />
+<br />
+◇ step 1<br />
+1. mkdir mix<br />
+&nbsp; cp mix.UPF ./mix<br />
+2. gedit tmp.vc-relax.in<br />
+-----(e.g., GaxIn1-xAs)<br />
+&amp;control<br />
+&nbsp; calculation='vc-relax'<br />
+&nbsp; restart_mode='from_scratch',<br />
+&nbsp; prefix='GaxIn1-xAs',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav= &nbsp;2,<br />
+&nbsp; celldm(1) =10.50,<br />
+&nbsp; nat= &nbsp;2,<br />
+&nbsp; ntyp= 2,<br />
+&nbsp; ecutwfc =60.0,<br />
+&nbsp; occupations = 'smearing' ,<br />
+&nbsp; smearing = 'mp' ,<br />
+&nbsp; degauss = 0.01<br />
+/<br />
+&amp;electrons<br />
+&nbsp; conv_thr = &nbsp;1.0d-4<br />
+&nbsp; mixing_beta = 0.7<br />
+/<br />
+&amp;ions<br />
+/<br />
+&amp;cell<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; Xx1 &nbsp; 32.32 &nbsp;mix.UPF<br />
+&nbsp; As &nbsp;74.92 &nbsp;As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+ATOMIC_POSITIONS (alat)<br />
+&nbsp; Xx1 0.00 0.00 0.00<br />
+&nbsp; As 0.25 0.25 0.25<br />
+K_POINTS automatic<br />
+&nbsp; 2 2 2 &nbsp; 1 1 1<br />
+-----<br />
+※ The mass of Xx1 is dummy. No problem for SCF calculation.<br />
+<br />
+◇ step 2<br />
+0. sudo apt install -y csh<br />
+1. gedit run.csh<br />
+----------<br />
+#!/bin/csh -f<br />
+<br />
+#set QEPATH = $HOME/q-e-qe-6.4.1/bin<br />
+set QEPATH = /usr/local/bin<br />
+<br />
+setenv OMP_NUM_THREADS 1<br />
+set num_core = `grep 'core id' /proc/cpuinfo | sort -u | wc -l`<br />
+<br />
+touch cell_param.txt etot.txt upf_list.txt<br />
+cd mix<br />
+set upf_list=`ls *.UPF`<br />
+cd ..<br />
+foreach upf_name ( ${upf_list} )<br />
+&nbsp; cp ./mix/${upf_name} ./<br />
+&nbsp; sed 's/mix.UPF/'${upf_name}'/g' tmp.vc-relax.in &gt; run.vc-relax.in<br />
+&nbsp; mpirun -np ${num_core} ${QEPATH}/pw.x &lt; run.vc-relax.in | tee run.vc-relax.out<br />
+&nbsp; grep -A 3 &quot;CELL_PARAMETERS&quot; run.vc-relax.out | tail -4 &gt;&gt; cell_param.txt<br />
+&nbsp; grep &quot;! &nbsp; &nbsp;total energy&quot; run.vc-relax.out | tail -1 &gt;&gt; etot.txt<br />
+&nbsp; echo ${upf_name} &gt;&gt; upf_list.txt<br />
+&nbsp; rm ${upf_name}<br />
+end<br />
+cat cell_param.txt<br />
+cat etot.txt<br />
+cat upf_list.txt<br />
+----------<br />
+2. chmod +x run.csh<br />
+3. ./run.csh<br />
+------------------------------------------------------------------------------<br />
+■ github<br />
+<br />
+□&nbsp;Ga<sub>x</sub>In<sub>1-x</sub>As<br />
+--------------------<br />
+◇ settings<br />
+1. git clone&nbsp;https://github.com/by-student-2017/q-e-qe-6.4.1-vca.git<br />
+2. cd ~/q-e-qe-6.4.1/upftools<br />
+3. cp -r ~/q-e-qe-6.4.1-vca/upftools/* ./<br />
+4. make<br />
+<br />
+◇&nbsp;python setting<br />
+1. sudo apt install -y python<br />
+2. chmod +x pwout2in.py<br />
+<br />
+◇&nbsp;Run<br />
+1. cd&nbsp;sequential-run-auto-band-dos-ph-lat<br />
+2. cp Ga.pbe-dnl-rrkjus_psl.1.0.0.UPF 1.UPF<br />
+3. cp In.pbe-dn-rrkjus_psl.1.0.0.UPF 2.UPF<br />
+4. gedit x.dat<br />
+5. chmod +x run.csh<br />
+6. ./run.csh<br />
+<br />
+◇&nbsp;Note -1-<br />
+1.UPF = Xx1.00000.UPF, X=1.0<br />
+2.UPF = Xx0.00000.UPF, X=0.0<br />
+<br />
+◇&nbsp;Note -2- (x.dat)<br />
+X.XXXXX<br />
+Y.YYYYY<br />
+Z.ZZZZZ<br />
+...<br />
+<br />
+◇&nbsp;Note -3- (mass.dat)<br />
+First Line: mass of 1.UPF<br />
+Second Line: mass of 2.UPF<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] added virtual_v2.f90 (gitlab)<br />
+&nbsp; https://gitlab.com/QEF/q-e/-/merge_requests/111<br />
+----------<br />
+&nbsp;&nbsp;The virtual_v2.f90 code can generate VCA pseudo from two norm-conserving or USPP pseudos in UPF v2 format. It is known to work with QE v5.2.0 or less, but there are some issues with QE v5.3.0 or above (there is some conflict with FoX library which I don't know how to resolve).<br />
+----------<br />
+[2]&nbsp;<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">Virtual Crystal Approximation for InGaAs random alloy simulations</span><br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(https://docs.quantumatk.com/tutorials/vca_for_ingaas/vca_for_ingaas.html)<br />
+&nbsp;&nbsp;In<sub>x</sub>Ga<sub>1-x</sub>As system</span><br />
+[3]&nbsp;S. Baroni et al., Phys. Rev. Lett. 65 (1990) 84.; &quot;Phonon Dispersions in Ga<sub>x</sub>Al<sub>1-x</sub>As Alloys&quot;<br />
+&nbsp; S. Baroni et al., Phys. Rev. B 41 (1990) 3870.<br />
+------------------------------------------------------------------------------<br />
+■ read pp code<br />
+&nbsp;&nbsp;$HOME/q-e-qe-6.4.1/Modules/pseudo_types.f90<br />
+&nbsp;&nbsp;$HOME/q-e-qe-6.4.1/Modules/upf.f90<br />
+&nbsp; $HOME/q-e-qe-6.4.1/Modules/read_upf_v2.f90<br />
+&nbsp; $HOME/q-e-qe-6.4.1/atomic/paw_type.f90<br />
+&nbsp;&nbsp;<a href="https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format">https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format</a><br />
+&nbsp;
+<div><span style="font-size: 14px;">NAMING CONVENTION FOR THE PSEUDOPOTENTIAL</span></div>
+&nbsp;&nbsp;<a href="https://www.quantum-espresso.org/pseudopotentials/naming-convention">https://www.quantum-espresso.org/pseudopotentials/naming-convention</a><br />
+----------<br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">rel: full-relativistic</span><br />
+----------<br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">starNl: one core-hole in Nl state</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif; text-align: justify;">starhNl: half core-hole in Nl state<br />
+&nbsp;&nbsp;(Nl: 1s 2s 2p 3s 3p 3d 4s 4p 4d 4f 5s 5p 5d 6s 6p)&nbsp;</span><br />
+----------<br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">vwn: Vosko-Wilk-Nusair (LDA) exch-corr</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">pz: Perdew-Zunger (LDA) exch-corr</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">pw91: Perdew-Wang 91 gradient-corrected functional</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">pbe: Perdew-Burke-Ernzerhof (PBE) exch-corr</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">blyp: Becke-Lee-Yang-Parr (BLYP) exch-corr</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">tpss: Tao-Perdew-Staroverov-Scuseria (TPSS) meta-GGA<br />
+・coulomb: Coulomb bare -Z/r potential</span><br />
+----------(<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif; text-align: justify;">Any meaningful combination (i.e. sp) of:</span>)<br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">s: semicore state s in valence</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">p: semicore state p in valence</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">d: semicore state d in valence</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">f: valence f state in core</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">n: nonlinear core-correction</span><br />
+・nl<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">:&nbsp;</span><span style="color: rgb(77, 81, 86); font-family: arial, sans-serif;">nonlocal&nbsp;</span>?<br />
+・sl<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">:&nbsp;</span><span style="color: rgb(77, 81, 86); font-family: arial, sans-serif;">semilocal?</span><br />
+----------<br />
+<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">・bhs: Bachelet-Hamann-Schlueter and derived</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">rrkj: Rappe Rabe Kaxiras Joannopoulos (norm-conserving)</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">vbc: Von Barth-Car (direct fit)</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">mt: Martins-Troullier</span><br />
+・<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">van: Vanderbilt ultrasoft</span><br />
+<span style="color: rgb(77, 77, 77); font-family: Arial, Helvetica, sans-serif;">・rrkjus: Rappe Rabe Kaxiras Joannopoulos (ultrasoft)<br />
+・kjpaw: Projector Augmented Wave (Kresse-Joubert paper)<br />
+-----<br />
+・bpaw: Projector Augmented Wave (original Bloechl recipe)<br />
+・ae: All-Electron (no pseudization)<br />
+-----</span><br />
+------------------------------------------------------------------------------<br />
+■ Appendix<br />
+<br />
+□ Executables<br />
+/usr/bin/alpha2f.x<br />
+/usr/bin/average.x<br />
+/usr/bin/bands.x<br />
+/usr/bin/bse_main.x<br />
+/usr/bin/casino2upf.x<br />
+/usr/bin/cell2ibrav.x<br />
+/usr/bin/cp.x<br />
+/usr/bin/cpmd2upf.x<br />
+/usr/bin/dos.x<br />
+/usr/bin/dynmat.x<br />
+/usr/bin/epa.x<br />
+/usr/bin/epsilon.x<br />
+/usr/bin/ev.x<br />
+/usr/bin/fd.x<br />
+/usr/bin/fd_ef.x<br />
+/usr/bin/fd_ifc.x<br />
+/usr/bin/fermi_proj.x<br />
+/usr/bin/fermi_velocity.x<br />
+/usr/bin/fhi2upf.x<br />
+/usr/bin/fix_upf.x<br />
+/usr/bin/fpmd2upf.x<br />
+/usr/bin/fqha.x<br />
+/usr/bin/fs.x<br />
+/usr/bin/generate_rVV10_kernel_table.x<br />
+/usr/bin/generate_vdW_kernel_table.x<br />
+/usr/bin/gww.x<br />
+/usr/bin/gww_fit.x<br />
+/usr/bin/head.x<br />
+/usr/bin/hp.x<br />
+/usr/bin/ibrav2cell.x<br />
+/usr/bin/initial_state.x<br />
+/usr/bin/interpolate.x<br />
+/usr/bin/iotk.x<br />
+/usr/bin/iotk_print_kinds.x<br />
+/usr/bin/kpoints.x<br />
+/usr/bin/lambda.x<br />
+/usr/bin/ld1.x<br />
+/usr/bin/manycp.x<br />
+/usr/bin/matdyn.x<br />
+/usr/bin/molecularnexafs.x<br />
+/usr/bin/molecularpdos.x<br />
+/usr/bin/ncpp2upf.x<br />
+/usr/bin/neb.x<br />
+/usr/bin/oldcp2upf.x<br />
+/usr/bin/open_grid.x<br />
+/usr/bin/path_interpolation.x<br />
+/usr/bin/pawplot.x<br />
+/usr/bin/ph.x<br />
+/usr/bin/phcg.x<br />
+/usr/bin/plan_avg.x<br />
+/usr/bin/plotband.x<br />
+/usr/bin/plotproj.x<br />
+/usr/bin/plotrho.x<br />
+/usr/bin/pmw.x<br />
+/usr/bin/pp.x<br />
+/usr/bin/ppacf.x<br />
+/usr/bin/projwfc.x<br />
+/usr/bin/pw.x<br />
+/usr/bin/pw2bgw.x<br />
+/usr/bin/pw2critic.x<br />
+/usr/bin/pw2gw.x<br />
+/usr/bin/pw2wannier90.x<br />
+/usr/bin/pw4gww.x<br />
+/usr/bin/pwcond.x<br />
+/usr/bin/pwi2xsf.x<br />
+/usr/bin/q2qstar.x<br />
+/usr/bin/q2r.x<br />
+/usr/bin/q2trans.x<br />
+/usr/bin/q2trans_fd.x<br />
+/usr/bin/read_upf_tofile.x<br />
+/usr/bin/rrkj2upf.x<br />
+/usr/bin/simple.x<br />
+/usr/bin/simple_bse.x<br />
+/usr/bin/simple_ip.x<br />
+/usr/bin/spectra_correction.x<br />
+/usr/bin/sumpdos.x<br />
+/usr/bin/turbo_davidson.x<br />
+/usr/bin/turbo_eels.x<br />
+/usr/bin/turbo_lanczos.x<br />
+/usr/bin/turbo_spectrum.x<br />
+/usr/bin/upf2casino.x<br />
+/usr/bin/uspp2upf.x<br />
+/usr/bin/vdb2upf.x<br />
+/usr/bin/virtual_v2.x<br />
+/usr/bin/wannier_ham.x<br />
+/usr/bin/wannier_plot.x<br />
+/usr/bin/wfck2r.x<br />
+/usr/bin/wfdd.x<br />
+/usr/bin/xspectra.x<br />
+------------------------------------------------------------------------------<br />
+■ Information<br />
+<br />
+□&nbsp;Ga<sub>x</sub>Al<sub>1-x</sub>As or&nbsp;Ga<sub>x</sub>In<sub>1-x</sub>As<br />
+--------------------<br />
+◇ step 1<br />
+(x Ga + 1-x Al) norm-conserving psuedo-potential (ONCV case)<br />
+1. mkdir mixed-pseudo<br />
+2. cd mixed-pseudo<br />
+3. git clone https://github.com/pipidog/ONCVPSP.git<br />
+4. cd ONCVPSP/sg15<br />
+5. virtual_v2.x<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Ga_ONCV_PBE_sr.upf<br />
+&nbsp; Input PP file # &nbsp;1 in UPF format &gt; Al_ONCV_PBE_sr.upf<br />
+6.(for example,)<br />
+&nbsp;New Pseudo = x Ga_ONCV_PBE_sr.upf + (1-x) Al_ONCV_PBE_sr.upf<br />
+&nbsp;mixing parameter x [0&lt;x&lt;1] = 0.125<br />
+7. mv NewPseudo.UPF Ga0125Al0875_ONCV_PBE_sr.upf<br />
+&nbsp; mass = 0.125*69.723 + 0.875*26.98 = 32.323<br />
+<br />
+◇ step 2<br />
+0. cp&nbsp; ~/ONCVPSP/sg15/Ga0125Al0875_ONCV_PBE_sr.upf ./<br />
+&nbsp; cp ~/ONCVPSP/sg15/As_ONCV_PBE_sr.upf ./<br />
+1.&nbsp;cat &gt; GaxAl1-xAs.vc-relax.in &lt;&lt; EOF<br />
+&amp;control<br />
+&nbsp; calculation='vc-relax'<br />
+&nbsp; restart_mode='from_scratch',<br />
+&nbsp; prefix='GaxAl1-xAs',<br />
+&nbsp; pseudo_dir = './',<br />
+&nbsp; outdir='./'<br />
+/<br />
+&amp;system<br />
+&nbsp; ibrav= &nbsp;2,&nbsp;<br />
+&nbsp; celldm(1) =10.50,&nbsp;<br />
+&nbsp; nat= &nbsp;2,&nbsp;<br />
+&nbsp; ntyp= 2,<br />
+&nbsp; ecutwfc =60.0,<br />
+&nbsp;&nbsp;occupations = 'smearing' ,<br />
+&nbsp; smearing = 'mp' ,<br />
+&nbsp; degauss = 0.01&nbsp;<br />
+/<br />
+&amp;electrons<br />
+&nbsp; conv_thr = &nbsp;1.0d-4<br />
+&nbsp; mixing_beta = 0.7<br />
+/<br />
+&amp;ions<br />
+/<br />
+&amp;cell<br />
+/<br />
+ATOMIC_SPECIES<br />
+&nbsp; Xx1 &nbsp; 32.32&nbsp; Ga0125Al0875_ONCV_PBE_sr.upf<br />
+&nbsp; As &nbsp;74.92 &nbsp;As_ONCV_PBE_sr.upf<br />
+ATOMIC_POSITIONS (alat)<br />
+&nbsp; Xx1 0.00 0.00 0.00<br />
+&nbsp; As 0.25 0.25 0.25<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">K_POINTS automatic</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ｍｓ ゴシック&quot;,&quot;ｍｓ ｐゴシック&quot;,&quot;ヒラギノ角ゴ pro w3&quot;,osaka?等幅,osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ＭＳ ゴシック&quot;,&quot;ＭＳ Ｐゴシック&quot;,&quot;ヒラギノ角ゴ Pro W3&quot;,Osaka?等幅,Osaka,平成角ゴシック,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">&nbsp; 2 2 2 &nbsp; 1 1 1</span><br />
+EOF<br />
+2. mpirun -np 4 pw.x &lt; GaxAl1-xAs.vc-relax.in | tee GaxAl1-xAs.vc-relax.out&nbsp;<br />
+3.&nbsp;grep -n -A 3 &quot;CELL_PARAMETERS&quot; GaxAl1-xAs.vc-relax.out<br />
+&nbsp;&nbsp;grep -n &quot;! &nbsp; &nbsp;total energy&quot; GaxAl1-xAs.vc-relax.out<br />
+4. xcrysden --pwo&nbsp;GaxAl1-xAs.vc-relax.out<br />
+&nbsp; (xcrysden --pwi&nbsp;GaxAl1-xAs.vc-relax.in)<br />
+--------------------<br />
+AlAs&nbsp;(ONCV)<br />
+1356:CELL_PARAMETERS (alat= 10.50000000)<br />
+1357- &nbsp;-0.514112675 &nbsp;-0.000000000 &nbsp; 0.514112675<br />
+1358- &nbsp; 0.000000000 &nbsp; 0.514112675 &nbsp; 0.514112675<br />
+1359- &nbsp;-0.514112675 &nbsp; 0.514112675 &nbsp;-0.000000000<br />
+1529:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-151.15193777 Ry<br />
+<br />
+Ga0125Al0875As&nbsp;(ONCV)<br />
+1000:CELL_PARAMETERS (alat= 10.50000000)<br />
+1001- &nbsp;-0.536837019 &nbsp;-0.000000000 &nbsp; 0.536837019<br />
+1002- &nbsp;-0.000000000 &nbsp; 0.536837019 &nbsp; 0.536837019<br />
+1003- &nbsp;-0.536837019 &nbsp; 0.536837019 &nbsp; 0.000000000<br />
+1180:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-141.30809977 Ry<br />
+<br />
+GaAs&nbsp;(ONCV)<br />
+5495:CELL_PARAMETERS (alat= 10.50000000)<br />
+5496- &nbsp;-0.509000272 &nbsp;-0.000000000 &nbsp; 0.509000272<br />
+5497- &nbsp; 0.000000000 &nbsp; 0.509000272 &nbsp; 0.509000272<br />
+5498- &nbsp;-0.509000272 &nbsp; 0.509000272 &nbsp;-0.000000000<br />
+5451:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-143.98415220 Ry<br />
+<br />
+Al_ONCV_PBE_sr.upf<br />
+Ga_ONCV_PBE_sr.upf<br />
+As_ONCV_PBE_sr.upf<br />
+Ga0125Al0875_ONCV_PBE_sr.upf<br />
+--------------------<br />
+AlAs (DoJo)<br />
+993:CELL_PARAMETERS (alat= 10.50000000)<br />
+994- &nbsp;-0.479279543 &nbsp; 0.000000000 &nbsp; 0.479279543<br />
+995- &nbsp;-0.000000000 &nbsp; 0.479279543 &nbsp; 0.479279543<br />
+996- &nbsp;-0.479279543 &nbsp; 0.479279543 &nbsp; 0.000000000<br />
+1168:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-216.65767495 Ry<br />
+<br />
+Ga0125Al0875As (DoJo)<br />
+1539:CELL_PARAMETERS (alat= 10.50000000)<br />
+1540- &nbsp;-0.475519659 &nbsp;-0.000000000 &nbsp; 0.475519659<br />
+1541- &nbsp; 0.000000000 &nbsp; 0.475519659 &nbsp; 0.475519659<br />
+1542- &nbsp;-0.475519659 &nbsp; 0.475519659 &nbsp;-0.000000000<br />
+1730:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-222.36164454 Ry<br />
+<br />
+GaAs (DoJo)<br />
+1836:CELL_PARAMETERS (alat= 10.50000000)<br />
+1837- &nbsp;-0.476864461 &nbsp;-0.000000000 &nbsp; 0.476864461<br />
+1838- &nbsp; 0.000000000 &nbsp; 0.476864461 &nbsp; 0.476864461<br />
+1839- &nbsp;-0.476864461 &nbsp; 0.476864461 &nbsp;-0.000000000<br />
+2013:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-364.89530161 Ry<br />
+<br />
+Al.upf<br />
+Ga.upf<br />
+As.upf<br />
+Ga0125Al0875.upf<br />
+--------------------<br />
+AlAs&nbsp;(PSLibrary)<br />
+700:CELL_PARAMETERS (alat= 10.50000000)<br />
+701- &nbsp;-0.516544744 &nbsp;-0.000000000 &nbsp; 0.516544744<br />
+702- &nbsp; 0.000000000 &nbsp; 0.516544744 &nbsp; 0.516544744<br />
+703- &nbsp;-0.516544744 &nbsp; 0.516544744 &nbsp;-0.000000000<br />
+! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp; -25.55499923 Ry<br />
+<br />
+Ga0125Al0875As&nbsp;(PSLibrary)<br />
+826:CELL_PARAMETERS (alat= 10.50000000)<br />
+827- &nbsp;-0.472651260 &nbsp;-0.000000000 &nbsp; 0.472651260<br />
+828- &nbsp; 0.000000000 &nbsp; 0.472651260 &nbsp; 0.472651260<br />
+829- &nbsp;-0.472651260 &nbsp; 0.472651260 &nbsp; 0.000000000<br />
+! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp; -31.58063804 Ry<br />
+<br />
+GaAs&nbsp;(PSLibrary)<br />
+1387:CELL_PARAMETERS (alat= 10.50000000)<br />
+1388- &nbsp;-0.517855589 &nbsp;-0.000000000 &nbsp; 0.517855589<br />
+1389- &nbsp; 0.000000000 &nbsp; 0.517855589 &nbsp; 0.517855589<br />
+1390- &nbsp;-0.517855589 &nbsp; 0.517855589 &nbsp;-0.000000000<br />
+! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-191.52763689 Ry<br />
+<br />
+Al.pbe-nl-rrkjus_psl.1.0.0.UPF<br />
+Ga.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+Ga0125Al0875.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+--------------------<br />
+Ga0875In0125As&nbsp;(PSLibrary)<br />
+1834:CELL_PARAMETERS (alat= 10.50000000)<br />
+1835- &nbsp;-0.529941236 &nbsp;-0.000000000 &nbsp; 0.529941236<br />
+1836- &nbsp; 0.000000000 &nbsp; 0.529941236 &nbsp; 0.529941236<br />
+1837- &nbsp;-0.529941236 &nbsp; 0.529941236 &nbsp;-0.000000000<br />
+2029:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-188.66183300 Ry<br />
+<br />
+Ga.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+In.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+Ga0875In0125.pbe-dnl-rrkjus_psl.1.0.0.UPF<br />
+--------------------<br />
+GaAs&nbsp;(PSLibrary)<br />
+1387:CELL_PARAMETERS (alat= 10.50000000)<br />
+1388- &nbsp;-0.518643330 &nbsp; 0.000000000 &nbsp; 0.518643330<br />
+1389- &nbsp; 0.000000000 &nbsp; 0.518643330 &nbsp; 0.518643330<br />
+1390- &nbsp;-0.518643330 &nbsp; 0.518643330 &nbsp;-0.000000000<br />
+1714:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-186.88506042 Ry<br />
+<br />
+Ga0875In0125As&nbsp;(PSLibrary)<br />
+1052:CELL_PARAMETERS (alat= 10.50000000)<br />
+1053- &nbsp;-0.539929890 &nbsp; 0.000000000 &nbsp; 0.539929890<br />
+1054- &nbsp; 0.000000000 &nbsp; 0.539929890 &nbsp; 0.539929890<br />
+1055- &nbsp;-0.539929890 &nbsp; 0.539929890 &nbsp;-0.000000000<br />
+1235:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-185.21366539 Ry<br />
+<br />
+InAs&nbsp;(PSLibrary)<br />
+6972:CELL_PARAMETERS (alat= 10.50000000)<br />
+6973- &nbsp;-0.555328921 &nbsp;-0.000000000 &nbsp; 0.555328921<br />
+6974- &nbsp; 0.000000000 &nbsp; 0.555328921 &nbsp; 0.555328921<br />
+6975- &nbsp;-0.555328921 &nbsp; 0.555328921 &nbsp;-0.000000000<br />
+6928:! &nbsp; &nbsp;total energy &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= &nbsp; &nbsp;-160.72226605 Ry<br />
+<br />
+Ga.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+In.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+As.pbe-n-rrkjus_psl.1.0.0.UPF<br />
+Ga0875In0125.pbe-dn-rrkjus_psl.1.0.0.UPF<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ Memo<br />
+<br />
+□ important modules<br />
+・$HOME/q-e-qe-6.4.1/Modules/pseudo_types.f90<br />
+・$HOME/q-e-qe-6.4.1/Modules/read_upf_v2.f90<br />
+<span style="font-size: 14px;">・</span>$HOME/q-e-qe-6.4.1/Modules/<span style="font-size: 14px;">write_upf_v2.f90<br />
+Note: These do not clearly mention augfun, kdiff and sqr, but bellow URL mention them.</span><br />
+&nbsp;&nbsp;<a href="https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format">https://www.quantum-espresso.org/pseudopotentials/unified-pseudopotential-format</a><br />
+<br />
+□ virtual_v3.x<br />
+・In case of &quot;is_ultrasoft = .true. and is_paw = .true.&quot;, pslibrary do not show error , but paw from virtual_v3.x show <span style="color: rgb(77, 81, 86); font-family: arial, sans-serif;">&quot;Error in&nbsp;</span><span style="font-weight: bold; color: rgb(95, 99, 104); font-family: arial, sans-serif;">arraytorealdp</span><span style="color: rgb(77, 81, 86); font-family: arial, sans-serif;">. Too&nbsp;</span><span style="font-weight: bold; color: rgb(95, 99, 104); font-family: arial, sans-serif;">few elements</span><span style="color: rgb(77, 81, 86); font-family: arial, sans-serif;">&nbsp;found.&quot;<br />
+&nbsp;&nbsp;</span><a href="https://infosys.ars.usda.gov/svn/code/spare_parts/fox/fsys/fox_m_fsys_parse_input.F90">https://infosys.ars.usda.gov/svn/code/spare_parts/fox/fsys/fox_m_fsys_parse_input.F90</a><br />
+・read_upf_v2 module do not read rcloc data, why ?&nbsp;<br />
+?------------------------------------------------------------------------------

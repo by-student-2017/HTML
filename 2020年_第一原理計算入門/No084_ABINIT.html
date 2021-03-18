@@ -1,0 +1,1130 @@
+　ここではABINITを用いた基本的な計算からGW近似によるバンドギャップの計算までを解説する<br />
+------------------------------------------------------------------------------<br />
+■ Youtube動画（全てクリエイティブコモンにしています）
+<div><iframe allow="autoplay; encrypted-media" allowfullscreen="" frameborder="0" height="315" src="https://www.youtube.com/embed/videoseries?list=PL9r3BfacS1mFnw6DXaP6xAVoBohmLLzKM" width="560"></iframe></div>
+・Abinit: <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFnw6DXaP6xAVoBohmLLzKM">https://www.youtube.com/playlist?list=PL9r3BfacS1mFnw6DXaP6xAVoBohmLLzKM</a><br />
+・インストール方法： <a href="https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW">https://www.youtube.com/playlist?list=PL9r3BfacS1mFif0-qGV_mTVVqcNIlB9TW</a><br />
+・再生リスト: <a href="https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists">https://www.youtube.com/channel/UCcyHw8UcdB8ppBHYLUAdklw/playlists</a><br />
+・関連動画: <a href="https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists">https://www.youtube.com/channel/UCh922UHWEPD1FqGSp-Cvn7Q/playlists</a>&nbsp;<br />
+--------------------------------------------------------------------------------<br />
+■<span style="font-weight: bold;"> </span>ABINIT Discussion Forums（困ったときは下記を参考にしてみると良いだろう）
+
+<ul>
+	<li><a href="http://forum.abinit.org/index.php">http://forum.abinit.org/index.php</a></li>
+</ul>
+<br />
+■ Windows binaries（Windowsユーザーは下記を参考にするとよい。Youtubeにも関連情報がある）
+<ul>
+	<li><a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1619&amp;p=5074&amp;hilit=binaries#p5074">Abinit 7.4.3 <span class="posthilit">binaries</span> for Windows 64bits posted</a></li>
+	<li><a href="http://forum.abinit.org/viewtopic.php?f=2&amp;t=1619&amp;p=5074&amp;hilit=binaries#p5074">http://forum.abinit.org/viewtopic.php?f=2&amp;t=1619&amp;p=5074&amp;hilit=binaries#p5074</a></li>
+</ul>
+<br />
+■<span style="font-weight: bold;"> </span>Abinit GUI (無理に使用する必要はない)
+
+<ul>
+	<li><a href="http://forum.abinit.org/viewtopic.php?f=24&amp;t=2240">http://forum.abinit.org/viewtopic.php?f=24&amp;t=2240</a></li>
+</ul>
+<br />
+■<span style="font-weight: bold;"> </span>Version (ヴァージョンの読み方が記されている)
+
+<ul>
+	<li><a href="http://pitp.phas.ubc.ca/confs/sherbrooke2012/archives/ABINIT_Rignanese.pdf">http://pitp.phas.ubc.ca/confs/sherbrooke2012/archives/ABINIT_Rignanese.pdf</a></li>
+</ul>
+<br />
+■ ABINITでの入力ファイルのQ&amp;A
+<ul>
+	<li><a href="http://herschel.dsf.unica.it/cgi-bin/dwww//usr/share/doc/abinit-doc/users/FAQ.html">http://herschel.dsf.unica.it/cgi-bin/dwww//usr/share/doc/abinit-doc/users/FAQ.html</a></li>
+	<li>Tutrial: <a href="http://www.abinit.org/documentation/helpfiles/for-v6.10/tutorial/welcome.html">http://www.abinit.org/documentation/helpfiles/for-v6.10/tutorial/welcome.html</a></li>
+	<li>Input Variables: 下記のHPから使用しているvarsion を選択して調べる。 <a href="http://www.abinit.org/documentation/input-variables">http://www.abinit.org/documentation/input-variables</a>&nbsp;&nbsp;</li>
+	<li>Community:&nbsp;下記のHPでのAbinit Forum や Mailing Lists も調べてみるとよい。 <a href="http://www.abinit.org/community">http://www.abinit.org/community</a></li>
+</ul>
+<br />
+■ 擬ポテンシャル（大抵はPAWかUSPP｛ウルトラソフト擬ポテンシャル｝を選択する）
+<ul>
+	<li><a href="http://www.abinit.org/downloads/atomic-data-files">http://www.abinit.org/downloads/atomic-data-files</a></li>
+	<li><a href="http://www.abinit.org/downloads/PAW2/USpp2Abinit-Manual-html/">http://www.abinit.org/downloads/PAW2/USpp2Abinit-Manual-html/</a>&nbsp;</li>
+	<li><a href="http://www.physics.rutgers.edu/~dhv/uspp/#DOWNLOAD">http://www.physics.rutgers.edu/~dhv/uspp/#DOWNLOAD</a></li>
+</ul>
+※ 擬ポテンシャルファイルは、<a href="http://www.abinit.org/downloads/PAW2">http://www.abinit.org/downloads/PAW2</a>&nbsp;からPAWでGGAまたはGGA-PBEのもので、どのタイプでも良いので用いる。ecut 15?25 とし、pawecutdg 15?40 として計算すればよい。十分に慣れてきて、計算時間を短縮したいなどの要望が出てきて、よりパラメーターを吟味するようになってきたら、各ポテンシャルにある README&nbsp;を開いて、ecut などの値とVASPとの結果の比較などに目を通してみればよい。<br />
+<br />
+■ Binary（インストールが容易なヴァージョン）
+<ul>
+	<li>Abinitを用いた計算の記録: <a href="http://abinit.seesaa.net/">http://abinit.seesaa.net/</a></li>
+</ul>
+<br />
+■<span style="font-weight: bold;"> </span>ABINITでの入力ファイルのvariablesの選択<br />
+物質・材料研究機構の新井先生が書かれた「ABINITによる第一原理電子構造計算
+<ul>
+	<li><a href="http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example1.pdf">http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example1.pdf</a></li>
+	<li><a href="http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf">http://www.nims.go.jp/cmsc/staff/arai/memo/kyushu/example2.pdf</a></li>
+	<li>GWは <a href="http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_flash_ppt_presentation">http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_flash_ppt_presentation</a>&nbsp;を参照</li>
+</ul>
+<br />
+■<span style="font-weight: bold;"> </span>BFGS: 今日、経験的にも理論的にも最も優れているとされている準ニュートン法
+
+<ul>
+	<li><a href="http://www.gfd-dennou.org/arch/oboro/doc/optimize/pub/main.pdf">http://www.gfd-dennou.org/arch/oboro/doc/optimize/pub/main.pdf</a>&nbsp;</li>
+	<li><a href="http://dse.ssi.ist.hokudai.ac.jp/~onosato/EDUCATION/sec09-06.pdf">http://dse.ssi.ist.hokudai.ac.jp/~onosato/EDUCATION/sec09-06.pdf</a>&nbsp;</li>
+</ul>
+<br />
+◆ /usr/local/bin/abinit を見ると実行可能なコマンドが分かります。cif2cellもありますので、利用して頂けましたら幸いです（使い方は左欄の「入力ファイルの変換」を参照）。<br />
+<br />
+◆ case.in ファイルに入力する重要入力変数<br />
+()の中に記述されていない変数：系、計算に応じて変更が必要<br />
+()の中に記述されている変数：計算速度向上等に関係するテクニカルな変数。case.inファイルに記述するが、推奨値がソフト側で与えられている。<br />
+A. 結晶構造、原子情報変数：acell, rprim, ntypat, znucl, natom, typat, xred, (nsim)<br />
+B. 平面波カットオフ変数：ecut<br />
+C. 交換相関項変数：ixc<br />
+D. k点設定変数：ngkpt, (kgtopt), (nshiftk), (shiftk)<br />
+E. 収束条件変数：toldfe, (nstep)<br />
+F. 構造最適化変数：optcell, ionmov, (ntime), (dilatmx), (ecutsm)<br />
+G. その他：<br />
+金属の場合：tsmear, (occopt)<br />
+半導体の場合：(diemac)<br />
+<br />
+◆ 計算での幾つかのポイント<br />
+A. 半導体の場合は occopt, tsmear が不要。<br />
+B. 金属の場合は、例えば occopt 4, &nbsp;tsmear 0.04 が推奨値。<br />
+C . nsym 1 ：対称性の指定がP1構造になる。chkprim 0 は対称性を自動認識させない指定。<br />
+D. 構造最適化<br />
+&nbsp; optcell：1の場合、ユニットセルを等方的に伸縮させ、応力(sigma)がゼロになるように計算される。2を推奨。<br />
+&nbsp; inomv：3の場合、エネルギーが低くなるように原子を動かす。<br />
+&nbsp; ntime 10, dilatmx 1.05, ecutsm 0.5 が推奨値。<br />
+&nbsp; case.outの最後に書かれたacellに最適化したセルの長さが書かれる。<br />
+&nbsp; ※ prtcif 1を記入しておくと cif ファイルが出力される。VESTAなどで表示してみよう。<br />
+E. ixc: 7の場合 LDA。1?9はLDAで、1, 2, 3, 7はほぼ同じ結果となる。<br />
+F. 半導体の場合 diemac 12.0,&nbsp; <span class="st">絶縁体</span>の場合 diemac 2.0-4.0にすると収束を早めることができる。<br />
+G. k点の設定<br />
+&nbsp; ngkpt： ngkpt&nbsp;= 2,2,2 は逆格子空間上で、x, y, zをそれぞれ半分ずつ区切ったk点を作る。つまり、逆格子空間上で2*2*2=8点が形成される。<br />
+&nbsp; nshift： nshift = 1（1はshiftkを用いてngkptで作った全てのk点をシフトさせる指定の数）としてshiftk = ( 1/2, 1/2, 1/2 )とすると、ngkpt で作ったk点間の距離を1単位として、shiftkで指定する量だけk点をシフトさせる(https://www.jstage.jst.go.jp/article/jsssj/28/3/28_3_135/_pdf)。<br />
+&nbsp; kptopt ：入力ファイルから読み取る場合は0 を指定、1はIrreducible Brillouin Zone内で対称性を考慮してk点を生成、負の値はバンド図の計算で用いる。ディフォルトは1に設定されている。<br />
+H. spinat は、例えばz軸にd電子6個を全てupスピンで揃えた場合にFeだと 0.0 0.0 6.0 となる。upとdownが同量だと3(up) -3(down) = 0 となって、 0.0 0.0 0.0 となる。spinatで指定する値がupに揃える（強磁性）かupとdownがほぼ同量（磁性が弱い）かで結果が異なる場合がある。<br />
+I. BoltzTraP（ゼーベック係数、電気伝導度計算）を使用したい場合は、prtbltztrp を用いる。<br />
+J. PHONOPY（フォノン計算）を使用したい場合は、prtposcarを用いる。<br />
+※ 3軸それぞれを一度に構造最適化したい場合はPWscfの使用を考慮に入れる。<br />
+※ PAW と USPP は計算コストがあまり違わないので、精度が高い計算をしたい場合は PAW を選択し、信頼性を重視したい場合は 比較的枯れたUSPPを選択したりすることを考慮に入れたりするとよい。<br />
+※ PAWの擬ポテンシャルを用いる場合には、ecut 15 とし、pawecutdg 40 としておけば良いだろう（<a href="http://www.abinit.org/documentation/helpfiles/for-v6.12/input_variables/varpaw.html#pawecutdg">http://www.abinit.org/documentation/helpfiles/for-v6.12/input_variables/varpaw.html#pawecutdg</a>&nbsp;参照）<br />
+<br />
+◆ case.outでの見方<br />
+A. ファイルの下から見ていく。<br />
+B. Calculation completed と表示されていれば、正常終了。<br />
+C. -kt*entropy は誤差範囲を示す。<br />
+D. Etotal が全エネルギーを示す。<br />
+E. sigma に応力テンソルが示される。<br />
+F. -outvars: echo values of variables after computation ----- の下で、最終的な結果が示される。構造最適化されている場合、acellが格子定数を示す。&nbsp;<br />
+G. Warning を調べる。<br />
+H. Integrated total density in atomic spheres: にて、「Note: Diff(up-dn) can be considered as a rough approximation of a local magnetic moment.（注：Diff(up-dn)は局所的な磁気モーメントの粗い近似と考えることができる）」の記述がある。<br />
+<br />
+◆ 出力ファイル<br />
+A. DDB&nbsp;：&nbsp;Derivative DataBase（全ての2DTEや3DTEを含んでいる）。<br />
+B. WFK ： 波動関数ファイル。<br />
+C. 1WF&nbsp;&nbsp;： &nbsp;the first-order derivatives of the wavefunctions（波動関数の一次微分）。<br />
+D. 2DTE ： the seconf derivatives of the&nbsp;total energy（全エネルギーの二次微分）。1WFから計算される。<br />
+E. DDK&nbsp;：dH/dk, Electric Fildに関係したファイル。<br />
+<br />
+◆ ABINITでのディフォルトの単位系<br />
+A. エネルギー：1 hartree = 27.2113845 eV = 2625.5 kJ/mol = 4.35974417 * 10^-18 J<br />
+B. 長さ： 1 bohr = 0.52917720859 &Aring; = 5.2917720859 * 10^-11 m<br />
+C. 応力：1 hartree/(bohr^3) = 29421.01 GPa<br />
+<br />
+◆ k点の設定 (http://www.abinit.org/documentation/helpfiles/for-v7.8/input_variables/varbas.html#shiftk)
+<ul>
+	<li>FCC (primitive cell) case</li>
+</ul>
+
+<div style="margin-left: 20px;">rprim<br />
+0.0 0.5 0.5<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+&nbsp;</div>
+
+<div style="margin-left: 20px;">nshiftk 4<br />
+<br />
+shiftk<br />
+0.5 0.5 0.5<br />
+0.5 0.0 0.0<br />
+0.0 0.5 0.0<br />
+0.0 0.0 0.5</div>
+
+<ul>
+	<li>BCC (primitive cell) case</li>
+</ul>
+
+<div style="margin-left: 20px;">rprim<br />
+-0.5 0.5 0.5<br />
+0.5 -0.5 0.5<br />
+0.5 0.5 -0.5<br />
+<br />
+nshiftk 2<br />
+<br />
+shiftk<br />
+0.25 0.25 0.25<br />
+-0.25 -0.25 -0.25</div>
+
+<ul>
+	<li>hcp (primitive cell) case</li>
+</ul>
+
+<div style="margin-left: 20px;">rprim<br />
+1.0 0.0 0.0<br />
+-0.5 sqrt(3)/2 0.0<br />
+0.0 0.0 1.0<br />
+<br />
+nshiftk 1<br />
+<br />
+shiftk 0.0 0.0 0.5</div>
+
+<ul>
+	<li>other primitive cell case</li>
+</ul>
+
+<div style="margin-left: 20px;">nshiftk 1<br />
+shiftk 0.5 0.5 0.5</div>
+-----<br />
+◆ ノルム保存型擬ポテンシャル（主にフォノンの計算で2014年現在でも用いられている）<br />
+（2014年の現在でもフォノンを扱った計算では論文にその記述を見つけることができる）
+<ul>
+	<li>OPIUM: <a href="http://www.sas.upenn.edu/rappegroup/research/pseudo-potential-gga.html">http://www.sas.upenn.edu/rappegroup/research/pseudo-potential-gga.html</a></li>
+</ul>
+
+<div style="margin-left: 20px;">　計算させる原子の擬ポテンシャルファイルの2行目の2番の値（zion）をメモっておき、単位胞にあるその原子の数（typatで記述したその原子の数）だけ加算する。その合計を2で割った値がEFでのintegrated DOSに対応する（nsppolを2にしてスピンを考慮した場合）。nbandの数はこれに1-2割追加した値にすれば良いだろう。<br />
+　Fe2VAlの擬ギャップをよく再現させるためには、40 Haで構造最適化した構造を用いてみたが40 Haでは上手くいかず、50 Haで可能になった。下記には50 Ha で構造最適化したときの格子定数を示す。<br />
+50 Ha: 3*1.1054644472E+01, Phonon(DFPT): (ifort + MKL + fftw3xf_intel case ) 201195.0 s = 2.32 days&nbsp; (There are negative frequencies) ?<br />
+100 Ha: 3*1.0761825710E+01 (7499.4 s)</div>
+
+<ul>
+	<li>FHI: <a href="http://www.abinit.org/downloads/psp-links/psp-links/gga_fhi">http://www.abinit.org/downloads/psp-links/psp-links/gga_fhi</a></li>
+</ul>
+
+<div style="margin-left: 20px;">　EFでのintegrated DOSの値やnbandの計算の仕方は上記のOPIUMと同じ。<br />
+　Fe2VAlを構造最適化したとき、ecut が 50 Ha と 100 Ha では格子定数が10^-5オーダー(0.001%)で異なるだけである。<br />
+50 Ha：3*1.0971932576E+01、価電子帯のDOSをある程度再現できているが、ギャップは開いている。<br />
+100 Ha：3*1.0972260791E+01、価電子帯のDOSはある程度再現できているが、ギャップは1 eV程度開いている。<br />
+200 Ha : 格子定数を3*1.0972260791E+01として計算。価電子帯のDOSはある程度再現できているが、ギャップは1 eV程度開いている。</div>
+
+<ul>
+	<li>HGH: <a href="http://sourceforge.net/p/cp2k/code/HEAD/tree/trunk/potentials/Goedecker/abinit/pbe/">http://sourceforge.net/p/cp2k/code/HEAD/tree/trunk/potentials/Goedecker/abinit/pbe/</a></li>
+</ul>
+
+<div style="margin-left: 20px;">　EFでのintegrated DOSの値やnbandの計算の仕方は上記のOPIUMと同じ。<br />
+　Fe2VAlを構造最適化したとき、ecut が 50 Ha と 100 Ha では格子定数が10^-3オーダー(0.1%)で異なるだけである。<br />
+50 Ha：3*1.0755777949E+01、擬ギャップとなっている。<br />
+100 Ha： 3*1.0781232342E+01、擬ギャップではなく僅かにギャップが開く。<br />
+&nbsp;</div>
+&nbsp; 価電子帯のDOSについてはどのノルム保存型擬ポテンシャルも比較的良い結果を与えている。一方、伝導帯側ではどの擬ポテンシャルが有効なのかを検討しておくことが重要であるということを強く感じる結果となった。<br />
+※ 格子定数の実験値は、5.76517 Angstrom = 10.894591 Bohrである。<br />
+Fe2VAlを計算したときのk点 (OPIUMでは DOSでの ngkpt を 8 8 8 にすると擬ギャップになる。他は未確認)<br />
+SCF: ngkpt 4 4 4, DOS ngkpt 6 6 6<br />
+ngkpt 6 6 6<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+-----<br />
+◆ ウルトラソフト擬ポテンシャル<br />
+　必要なカットオフがノルム保存型擬ポテンシャルよりも小さく済むと言われている。ecutはノルム保存型擬ポテンシャルの1/8から1/4程度で良いと聞く。
+<ul>
+	<li>Legacy Library: <a href="http://www.physics.rutgers.edu/~dhv/uspp/">http://www.physics.rutgers.edu/~dhv/uspp/</a></li>
+</ul>
+
+<div style="margin-left: 20px;">gunzip uspp-736-0.tgz<br />
+tar xf uspp-736-0.tar<br />
+rm uspp-736-0.tar<br />
+USpp2Abinitを用いて非常に有名なヴァンデルビート（Vanderbilt）のUSPPをAbinitのPAWフォーマットに変換する。しかし、下記で示すように既にPAWが整備されているので、下記のPAWを用いることをオススメする。</div>
+-----<br />
+◆ PAW擬ポテンシャル<br />
+　必要なカットオフ（ecut）がノルム保存型擬ポテンシャルよりも小さく済むと言われている。形式的にはウルトラソフト擬ポテンシャルに近い。GPAWは pawecutdg 60 でテストした。他は、pawecutdg 15 としている。
+<ul>
+	<li>GBRV: <a href="http://www.physics.rutgers.edu/gbrv/">http://www.physics.rutgers.edu/gbrv/</a></li>
+</ul>
+
+<div style="margin-left: 20px;">・PBE<br />
+mkdir all_pbe_paw<br />
+cd all_pbe_paw<br />
+tar zxvf all_pbe_paw.tar.gz<br />
+　下記にはFe2VAlに対してecut 15 Ha で構造最適化したときの格子定数を示す。<br />
+15 Ha: 3*1.0790408689E+01<br />
+---<br />
+・LDA<br />
+mkdir all_lda_paw<br />
+cd all_lda_paw<br />
+tar zxvf all_lda_paw.tar.gz<br />
+※ default ixc 2 (non-spin)である。ixc 1 と 2(non-spin) と 3(non-spin) と 7 はほぼ同じ結果を与える。<br />
+15 Ha: 3*1.0566642902E+01、ixc 1 と nsppol 2 で計算したが擬ギャップになっている。</div>
+
+<ul>
+	<li>GPAW: <a href="https://wiki.fysik.dtu.dk/gpaw/setups/setups.html">https://wiki.fysik.dtu.dk/gpaw/setups/setups.html</a></li>
+</ul>
+
+<div style="margin-left: 20px;">　40 Ha程度のカットオフ(ecut)を指定しないとFe2VAlのDOSを上手く再現してくれない。ノルム保存型擬ポテンシャルよりは少ないカットオフ値で再現できる。</div>
+
+<ul>
+	<li>JTH: <a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a></li>
+</ul>
+
+<div style="margin-left: 20px;">　ecut 15 HaでFe2VAlのDOSを上手く再現してくれる。VASPでの擬ポテンシャルに匹敵する。フリーでこの結果は素晴らしい。重要な欠点を挙げるとすれば、素人にはこのJTHを用いてフォノンの計算ができないところであろう。フォノンの計算では、Abinitが改良されるのを待つか、OPIUMなどのノルム保存型擬ポテンシャルを用いることが必要である。</div>
+Fe2VAlを計算したときのk点（DOS ngkpt 6 6 6 や 7 7 7 ではギャップが開く）<br />
+SCF: ngkpt 4 4 4, DOS ngkpt 8 8 8<br />
+ngkpt 8 8 8<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+-----<br />
+※ 上手くいかないときは、SCF計算とDOS計算の入力ファイルで格子定数が同じかどうかを確認する（ecutが異なるときはエラーを出してくれる）。当然ながらSCFとDOSで格子定数が異なると正しい値は出力されない。<br />
+※ 上記の計算は、面倒ではあるが、構造最適化 -&gt; 最適化した構造を用いて SCF 計算 -&gt; DOS計算としている。構造最適化 -&gt; DOS計算にできれば良いが、私の実力不足でその方法がまだ判明していない。<br />
+<br />
+case.filesには、以下を記述する。（）と（）内は記述しない。<br />
+./A/case.in　とファイルAの中にある指定も可能。<br />
+--------------------------------------------------<br />
+case.in　（パラメーターの入力ファイル名）<br />
+case.out　（出力ファイル名）<br />
+casexi　（その他の入力ファイルのヘッダー）<br />
+casexo　（その他の出力ファイルのヘッダー）<br />
+temp　（一時ファイル用）<br />
+06-C.LDA.fhi　（擬ポテンシャルファイル名）<br />
+--------------------------------------------------<br />
+<br />
+case.in<br />
+--------------------------------------------------<br />
+acell&nbsp;7.38&nbsp;7.38&nbsp;7.38 #セルの長さの設定。 3*7.38 でもよい。（a.u.単位）<br />
+angdeg　90&nbsp;90 90 #基本ベクトル間の角度(a2とa3の間の角) (a1とa3の間の角) (a1とa2の間の角)<br />
+ntypat 3 #原子種の数<br />
+znucl 38 22 8 #各原子種の原子番号<br />
+natom 5 #原子数<br />
+typat 1 2 3 3 3 #各原子の種類を指定　（例だと、Sr Ti O O O となる）<br />
+xred #各原子の相対座標　または　xcart #各原子の座標<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+0.5 0.5 0.0<br />
+0.5 0.0 0.5<br />
+0.0 0.5 0.5　<br />
+ixc 11 #交換相関項の設定。GGAは11。擬ポテンシャルもGGA用が必要<br />
+nsppol 2 #スピン分極を考慮する場合は2<br />
+spinat #各原子の初期のスピン（ディフォルト値は0.0d0、h-bar/2単位）<br />
+0.0 0.0 0.0<br />
+0.0 0.0 0.0<br />
+0.0 0.0 0.0<br />
+0.0 0.0 0.0<br />
+0.0 0.0 0.0<br />
+nband #考慮する状態（バンド）数<br />
+68&nbsp;68<br />
+ecut 30.0 #平面波展開のカットオフエネルギー（Hartree単位）<br />
+occopt 7 #7はGaussian smearing<br />
+tsmear 0.01 #フェルミ端のブロードニング（Hartree単位）<br />
+kptopt 1 #対称性を考慮してirreducible Bz内でのk点を作成<br />
+ngkpt 6 6 6 #Monkhorst-Pack法によるk点（x, y, z方向のk点数）<br />
+nstep 40 #最大イタレーション<br />
+toldfe 1.0d-6 #収束判定条件（total energy) または toldff #収束判定条件（atomic forces)<br />
+--------------------------------------------------<br />
+<br />
+case.in (複数の計算を行う場合 : multi dataset mode）<br />
+この方法は、原子位置を徐々に変えて計算したり、SCF計算の後にDOSやバンド図を計算させたりすることを設定することができる。下記はカットオフを徐々に変えた例。<br />
+--------------------------------------------------<br />
+ndtset 3 #データセットの数<br />
+ecut1 30.0<br />
+ecut2 35.0<br />
+ecut3 40.0<br />
+または下記のようにする<br />
+ndtset 3&nbsp;<br />
+ecut : 30.0<br />
+ecut+ 5.0<br />
+--------------------------------------------------<br />
+<br />
+複数のデータセットを複数計算する場合<br />
+?が付いた変数がdatasetで変化する。udtsetの二番目の数字は&quot;?の後に数字を付ける数&quot;（幾つか計算させたい系の数などを書き込めばよい）。udtsetの一番目の数字だけ変数が変化する。<br />
+--------------------------------------------------<br />
+ndtset 12 udtset 6 2 # ndtsetはdatasetの合計（＝udtset の一番目の数字 * udtsetの二番目の数字）<br />
+ecut:? 10&nbsp;ecut+? 5 #&nbsp;:? は初期値、+?は増加分、udtset の一番目の数字だけ繰り返される<br />
+natom?1 # 1つめの系の計算　（udtsetの二番目の数字で設定）<br />
+（省略）<br />
+natom?2 # 2つめの系の計算　（udtsetの二番目の数字で設定）<br />
+（省略）<br />
+--------------------------------------------------<br />
+※&nbsp;例えば、ndtset, nsym 1, xred1, xred2 ... を組み合わせると、特定の原子を動かしていった場合での全エネルギーの変化を知ることができる。<br />
+<br />
+計算の実行は、abiniｔ &lt; case.files &gt; case.log<br />
+<br />
+Q. ABINITでDOSやBand図を計算をする方法を教えて下さい。<br />
+A1. SCF計算で出力されたcase0_DENファイルを複製して、casei_DENという名前に変えて下さい。<br />
+<br />
+case.in（DOSを得るための計算）<br />
+--------------------------------------------------<br />
+iscf -2 #SCF計算をしない<br />
+prtdos&nbsp;3 #Local Density of States inside a sphere centered on an atomを出力<br />
+nband 28 #考慮する状態（バンド）数<br />
+tolwfr 1.0e-10 #wf許容誤差<br />
+--------------------------------------------------<br />
+※ acell, ntypat, znucl, natom, typat, xred, ecut, ngkpt はSCF計算のときと同じものを記述しておく。<br />
+※ 全状態密度分布を得たい場合は prtdos2 、部分状態密度分布を得たい場合は prtdos 3 とする。<br />
+※ フェルミエネルギーは case.out に記載があるものを用いる。<br />
+※ non-spinでSrTiO3をHGHの擬ポテンシャルを用いて計算した限りでは、SCFとDOSを連動させてk点を徐々に増加させてもk点が十分であれば結果に大きな変化は無い。<br />
+<br />
+case.in　（バンド図のための計算）<br />
+--------------------------------------------------<br />
+iscf -2 #SCF計算をしない<br />
+nband 28 #計算するバンドの数<br />
+enunit 1 #eV単位の固有エネルギーとなるように設定<br />
+tolwfr 1.0e-10 #&lt;nk|(H-E)<sup>2</sup>|nk&gt;&nbsp; &lt;= 1.0e-10<br />
+kptopt -5&nbsp;#負の場合はkptboundsとndivkが対応する。<br />
+kptbounds #代表的なk点の分割を5(kptopt -5 で 5を指定)にしたから、5+1点を記入。<br />
+0.0 0.0 0.0 #Gamma点<br />
+0.5 0.0 0.0 #X点<br />
+0.5 0.5 0.0 #M点<br />
+0.0 0.0 0.0 #Gamma点<br />
+0.5 0.5 0.5 #R点<br />
+0.5 0.5 0.0 #M点<br />
+ndivk 15 15 20 25 15 #上で入力した点間の分割数。<br />
+--------------------------------------------------　<br />
+※ acell, ntypat, znucl, natom, typat, xred, ecut はSCF計算のときと同じものを記述しておく。<br />
+<br />
+Q. ABINITでDOSやBand図の計算でもっと簡便な方法は無いですか？<br />
+A2. &nbsp;SCF での case.in ファイルに prtden 1 を記入して、DOSやバンド図の計算のcase.inでgetden -1 （prtden 1 で出力した電子密度ファイルを読み込む）を記入しておくと、case0_DENファイルを複製して、casei_DENにしなくてもよくなります。ndtset も使えるので便利（SCF後&rarr;Band図の計算など）。<br />
+--------------------------------------------------　<br />
+<br />
+Q. Gamma点のフォノン、M点での不安定モードに対応する原子変位を計算をする方法を教えて下さい。<br />
+A. 下記のようにします。<br />
+<br />
+case.in　（Gamma点に対するフォノンの計算）<br />
+--------------------------------------------------<br />
+ndtset 2 #データセットの数<br />
+#キーワードの直後に1が書かれていると最初に計算される。<br />
+kptopt1 1 #　対称性を考慮してirreducible BZ内でのk点を作成<br />
+tolvrs1 1.0d-10 #　SCF停止の基準<br />
+#キーワードの直後に2が書かれていると二番目に計算される。<br />
+rfphon2 1 #　フォノンタイプの摂動に対する応答関数<br />
+rfatpol2 1 5 #　1から5の原子が変位する<br />
+rfdir2 1 0 0 #　x軸方向のみ原子が変位する指定<br />
+nqpt2&nbsp;1 #　変位に関して一つの波数ベクトル<br />
+qpt2　0 0 0 #　Gamma点での計算<br />
+getwfk2 -1 #　WFK ファイルから波動関数を得る<br />
+kptopt2 2　#　時間反転対称<br />
+tolvrs2 1.0d-8 #　SCF停止の基準<br />
+#以下は共通。キーワードの直後に数字が書かれない。<br />
+acell 7.267 7.267 7.267 #　セルの長さの設定<br />
+ntypat 3 　# 原子種の数<br />
+znucl 38 22 8　#　各原子種の原子番号<br />
+natom 5 # 原子数<br />
+typat 1 2 3 3 3 # Sr Ti O O O<br />
+xred #各原子の相対座標<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+0.5 0.5 0.0<br />
+0.5 0.0 0.5<br />
+0.0 0.5 0.5　<br />
+ecut 40.0 # 平面波展開のカットオフエネルギー<br />
+ngkpt 6 6 6 # Monkhorst-Pack法によるk点（x, y, z方向のk点数）<br />
+--------------------------------------------------<br />
+<br />
+case.files (M点での不安定モードに対応する原子位置変位の計算）<br />
+--------------------------------------------------<br />
+case.in<br />
+case.out<br />
+casexo_DS3_DDB<br />
+foo<br />
+--------------------------------------------------<br />
+<br />
+case.in (M点での不安定モードに対応する原子位置変位の計算）<br />
+--------------------------------------------------<br />
+eivec 1 # flag to turn on the analysis of phonon eigenvectors<br />
+nph1l 1 # number of q-points for phonon interpolation<br />
+qph1l 1 1 0 2 # list of q-points for phonon interpolation<br />
+--------------------------------------------------<br />
+※ &quot;case.in　（Gamma点に対するフォノンの計算）&quot;での&rdquo;#以下は共通&rdquo;と書いた共通の部分も記述しておく。<br />
+<br />
+計算の実行は、anaddb &lt; case.files &gt; case.log<br />
+<br />
+Q. ABINITで特定の原子を固定した場合の構造最適化の方法を教えて下さい。<br />
+A. 下記のようにnatfixとiatfixを用いて下さい。<br />
+<br />
+case.in　（特定原子を固定した構造最適化）<br />
+--------------------------------------------------<br />
+ionmov 3 # 修正Broydenアルゴリズムを使用（全エネルギー考慮）<br />
+ntime 10 # Broydenタイムステップの最大値<br />
+tolmxf 5.0d-4 # 構造最適化での収束判定条件（Hartree / Bohr）<br />
+nsym 1 # 空間群 No.1<br />
+acell 4.73565 4.73565 47.25<br />
+angdeg 90 90 120<br />
+natfix 2 # 固定する原子種の数<br />
+iatfix 6 7 # 固定する原子の番号<br />
+ntypat 2 # 原子種の数<br />
+znucl 6 27 # 各原子種の種類を指定<br />
+natom&nbsp;7 # 原子数<br />
+typat 1 1 2 2 2 2 2 # C C Co Co Co Co Co<br />
+xred # 各原子の相対座標　または　xcart #各原子の座標<br />
+0.0 0.0 0.4<br />
+0.3333 0.6666 0.4<br />
+0.3333 0.6666 0.488<br />
+0.0 0.0 0.56938<br />
+0.3333 0.6666 0.65076<br />
+0.0 0.0 0.73214<br />
+0.3333 0.6666 0.81352<br />
+nband&nbsp;36 # 考慮する状態（バンド）数<br />
+ixc 7 # 交換相関項の設定。Perdew-Wang 92 function<br />
+ecut 30.0 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+kptopt 1 # 1にすると手動でk点を設定することになる<br />
+ngkpt 6 6&nbsp;2 # セル内を6 x 6 x 2で分割する<br />
+nstep 40 # 最大イタレーション<br />
+toldfe 1.0d-6 # 収束判定条件（total energy) または toldff #収束判定条件（atomic forces)<br />
+--------------------------------------------------<br />
+<br />
+Q. ABINITでチュートリアルの入力ファイルを書き直して実際の計算をする場合、どのくらいの精度に設定し直せばよいですか？<br />
+A. XtalEditのsample/ABINITの中には、入力ファイルの例が書かれています。この程度の精度になるように、チュートリアルの値を書き換えると良いと思います。（原子種や原子座標の設定は除く）<br />
+Ga2O3 : ionmov 2, ntime 200, acell 10.0531007914 10.0531007914 10.0531007914, tsmear 0.04, ixc 7, kptop 1, ngkpt 4 4 4, ecut 40.0, nstep 100, toldff 5.0d-5, tolmxf 5.0d-4, diemac 12.0<br />
+La2O3 : ionmov 2, ntime 200, optcel 0, tsmear 0.04, ixc 7, kptopt 1, ngkpt 4 4 2, ecut 40.0, nstep 100, toldff 5.0d-5, tolmx 5.0d-4, diemac 12.0<br />
+LaAlO3(Lattice optimize) : ionmov 1, dtion 100.0, vis 50.0, acell 11.322570056 16.039447611 11.401013107, ecut 50.0, kptopt 0 #(use nkpt.), nkpt 1, nstep 100, toldfe 1.0d-6, diemac 12.0<br />
+LaGaO3 (1000 k)&nbsp;: ionmov 2, ntime 200, acell 10.3651470474 14.6831709313 10.4369566349, tsmear 0.04, ixc 7, kptopt 1, ngkpt&nbsp;3 3 3, ecut 45.0, nstep 100, toldff 5.0d-5, tomlxf 5.0d-4, diemac 12.0<br />
+LaGaO3(super cell) : ionmov 2, ntime 200, optcel 0, acell 14.7093964442 14.6831710000, 14.7093964442, tsmear 0.04, ixc 7, kptopt 1, ngkpt 2 2 2, ecut 45.0, nstep 100, toldff 5.0d-5, tolmx 5.0d-4<br />
+SrO : ionmov 2, ntime 200, optcel 2, acell 6.8949883953 6.8949883953 6.8949883953, ixc 7, tsmear 0.04, kptopt 1, ngkpt 4 4 4, ecut 40, nstep 100, toldff 5.0d-5, tolmx 5.0d-4, diemac 12.0<br />
+<br />
+Q. TDDFTの入力ファイルを教えてください。<br />
+A. チュートリアルには下記のようにあります。（見たところ、全てのnbandとboxcenter, nbdbufを消して、diemacとcommon dataの部分を計算したい系の情報に書き換えればよいようだ｛調査中｝）<br />
+&nbsp; case.in<br />
+&nbsp; --------------------------------------------------<br />
+&nbsp; ndtset 2 (SCFとTDDFTの二つのプロセスがあるという意味）<br />
+&nbsp; #data set 1 SCF<br />
+&nbsp; iscf1 5 # SCFの計算の設定<br />
+&nbsp; tolwfr1 1.0d-15 #&lt;nk|(H-E)<sup>2</sup>|nk&gt;&nbsp; &lt;= 1.0e-15<br />
+&nbsp; nband1 5 # 考慮する状態（バンド）数<br />
+&nbsp; prtden1&nbsp;1&nbsp;# TDDFTの計算で用いるための電荷密度分布のデータを出力する<br />
+&nbsp; getwfk1&nbsp;0&nbsp;# no use of previously computed output wavefunction file appended with _DSx_WFK is done.<br />
+&nbsp; #data&nbsp;set&nbsp;2&nbsp;TDDFT<br />
+&nbsp; iscf1 -1&nbsp;# TDDFTの計算の設定<br />
+&nbsp; tolwfr2&nbsp;1.0d-9 #&lt;nk|(H-E)<sup>2</sup>|nk&gt;&nbsp; &lt;= 1.0e-9<br />
+&nbsp; nband2 12 # 考慮する状態（バンド）数、非占有準位の数も入れる<br />
+&nbsp; getden2 1 # data set &quot;1&quot; からの電荷密度分布のデータを取得する<br />
+&nbsp; getwfk2 1 #&nbsp; data set &quot;1&quot; からの output wavefunction file を得る<br />
+&nbsp; #common data<br />
+&nbsp; acell 6 2*5 Angstrom # 6 x 5 x 5 の大きさの単位胞を設定<br />
+&nbsp; boxcenter 3*0.0d0 # 中心位置を設定（TDDFTでの計算のみに用いられる）。ディフォルトは 0.5 0.5 0.5<br />
+&nbsp; diemac 1.0d0 # For silicon, use 12.0 . A similar value is likely to work well for other&nbsp;semiconductors.&nbsp; For wider gap insulators, use 2.0 ... 4.0.&nbsp;ディフォルトは 10<sup sizcache="7" sizset="0"><span style="font-size: small;">6</span></sup> (metallic damping).<br />
+&nbsp; diemix 0.5d0 # model dielectric mixing factor.&nbsp; 0.0 から1.0の間の値。ディフォルトは 1.0<br />
+&nbsp; ecut 25 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+&nbsp; ixc 7 # 交換相関項の設定。Perdew-Wang 92 function<br />
+&nbsp; kptopt 0 # k点設定のオプション(この場合、1点計算になる）<br />
+&nbsp; natom 2 # 単位胞内に2つの原子を用いる<br />
+&nbsp; nbdbuf 0 # bufferとしてのバンドの数<br />
+&nbsp; nstep 25 # 最大イタレーション<br />
+&nbsp; ntypat 1 # 1つの原子種のみ用いる<br />
+&nbsp; znucl 7 # 窒素原子Nを1番に設定<br />
+&nbsp; typat 1 1 # N と N の座標を単位胞内で設定する<br />
+&nbsp; xcart -0.54885 0 0 0.54885 0 0 Angstrom # 座標の設定<br />
+&nbsp; --------------------------------------------------
+<p>&nbsp;</p>
+
+<p>Q. GW近似での入力ファイルを教えてください。</p>
+
+<p>A. チュートリアルには下記のようにあります。擬ポテンシャルはLDA用のものが必要です。最後にpspncやfhiと付いたファイルや、Troullier-Martines pspやHamann-type, LDA CA Perdewangとファイルに書き込まれたものを用いて下さい。<br />
+<br />
+GWA Calculation Steps<br />
+1. Calculation of the KS electronic structure<br />
+&darr;<br />
+2. Calculation of the RPA screening W<br />
+&darr;<br />
+3. Calculation of the GW corrections ( self-energy matrix element) &lt;&Sigma;V&gt;<br />
+<br />
+case.files<br />
+--------------------------------------------------<br />
+&nbsp; case.in<br />
+&nbsp;&nbsp;case.out<br />
+&nbsp; casei<br />
+&nbsp; caseo<br />
+&nbsp;&nbsp;caset<br />
+&nbsp; ../../Psps_for_tests/14si.pspnc<br />
+--------------------------------------------------　<br />
+<br />
+case.in<br />
+--------------------------------------------------<br />
+ndtset 3 #<br />
+#Definition of parameters for the calculation of the KSS file<br />
+nbandkss1 -1 # KSS fileにおけるバンド数に関する設定。-1は完全対角化、平面波の数とバンドの数を case.outで見てみるとよい。<br />
+nband1 9 # 占有と非占有のバンド数<br />
+&nbsp;<br />
+#Calculation of the screening<br />
+optdriver2 3 # Screening 計算<br />
+getkss2 -1 # 前のデータセットからのKSS fileを取得<br />
+nband2 17 # screening 計算で用いるバンド数<br />
+ecutwfn2 2.1 # 波動関数のためのカットオフエネルギーを設定, Usually, <b>ecutwfn</b> is smaller than <a href="http://www.abinit.org/documentation/helpfiles/for-v7.4/input_variables/varbas.html#ecut">ecut</a>, ecutwfn is smaller than ecut. It would be more convenient to keep the default ecut value.<br />
+ecuteps2 3.6 # 誘電関数のためのカットオフエネルギーを設定<br />
+ppmfrq2 16.7 # Imaginary frequency where to calculate the screening. Note that, if the plasmon-pole approximation is good, then, the choice of ppmfrq should have no influence on the final result.&nbsp; One should check whether this is the case.&nbsp; In general, the plasmon frequencies of bulk solids are of the order of 0.5 Hartree.<br />
+awtr2 0 # 時間反転対称性無しにAdler-Wiser expressionを用いる<br />
+&nbsp;<br />
+#Calculation of the Self-Energy matrix elements<br />
+optdriver3 4 # Self-Energy 計算<br />
+getkss3 -2 # KSS file をデータセット1から得る<br />
+getscr3 -1 # SCR fileを前のデータセットから得る<br />
+nband3 30 # Self-Energy 計算で用いるバンド数<br />
+ecutwfn3 5.0 # Planewaves to represents wavefunctions. It would be more convenient to keep the default ecut value.<br />
+ecutsigx3 6.0 # Dimension of the G sum in Sigma_x. Dimension of Sigma_c = size of screening matrix (SCR files)or size of Sigma_x, whichever is smaller. It would be more convenient to keep the default ecut value.<br />
+nkptgw3 1 # GW補正のためのk点の数<br />
+kptgw3 # k点の指定<br />
+-0.125 0.0 0.0<br />
+bdgw3 4 5 # 4から5のバンドに対してGW補正を計算<br />
+&nbsp;<br />
+#Data common to the three different datasets<br />
+acell 3*10.217 # 10.217 x 10.217 x 10.217のユニットセル<br />
+rprim # primitive vectors<br />
+0.0 0.5 0.05<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+ntypat 1 # 原子種の数<br />
+znucl 14 # 各原子種の原子番号<br />
+#Definition of the atoms<br />
+natom 2 # 原子数<br />
+typat 1 1 #各原子の種類を指定<br />
+xred 0.0 0.0 0.0 # 各原子の相対座標<br />
+0.25 0.25 0.25<br />
+#Definition of the k-point grid<br />
+ngkpt 4 4 4 # Monkhorst-Pack法によるk点（x, y, z方向のk点数）<br />
+nshiftk 4 # k点のグリッドをシフトさせる数<br />
+shiftk 0.5 0.5 0.5 #&nbsp;k点のシフト。<br />
+0.5 0.0 0.0<br />
+0.0 0.5 0.0<br />
+0.0 0.0 0.5<br />
+istwfk *1 # This is mandatory in all the GW steps.<br />
+#Use only symmorphic operations<br />
+symmorphi 0 #<br />
+#Definition of the planewave basis set<br />
+ecut 8.0 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+#Definition of the SCF procedure<br />
+nstep 10 # 最大イタレーション<br />
+&nbsp;&nbsp; toldfe 1.0d-6 # 収束判定条件（total energy)<br />
+diemac 12.0 #　For silicon, use 12.0 . A similar value is likely to work well for other semiconductors. For wider gap insulators, use 2.0 ... 4.0. ディフォルトは 10<sup>6</sup> (metallic damping).<br />
+iscf 5 # SCFの計算の設定<br />
+--------------------------------------------------</p>
+
+<p>上記は下記のようにして、ディフォルトの値を用いるようにしても、0.001 eVの違いでGapの値が求められる。</p>
+
+<p># ppmfrq2 16.7 eV # Note that, if the plasmon-pole approximation is good, then, the choice of ppmfrq should have no influence on the final result.&nbsp; One should check whether this is the case.&nbsp; In general, the plasmon frequencies of bulk solids are of the order of 0.5 Hartree.</p>
+
+<p>#wtr2 0 # 時間反転対称性無しにAdler-Wiser expressionを用いる</p>
+
+<p>　<br />
+&nbsp; 下記はAlの例ですが、これ以外にも多くのステップが必要です。<br />
+case.files　<br />
+--------------------------------------------------<br />
+&nbsp; case.in<br />
+&nbsp;&nbsp;case.out<br />
+&nbsp; casei<br />
+&nbsp; caseo<br />
+&nbsp;&nbsp;caset<br />
+&nbsp; ../../Psps_for_tests/13al.981214.fhi<br />
+--------------------------------------------------　</p>
+
+<p>&nbsp;</p>
+
+<p>case.in<br />
+--------------------------------------------------<br />
+# Create the KSS file<br />
+kssform 1 # ディフォルトは1<br />
+nbandkss 30 # the KSS file でのバンドの数。GW計算で用いられる。<br />
+nband 6 # バンド数の設定<br />
+prtwf 0 # 波動関数のアウトプットは無し<br />
+# definition of occupation numbers<br />
+occopt 3 # フェルミディラック関数を用いる<br />
+tsmear 0.05 # フェルミ端のブロードニング（Hartree単位）<br />
+&nbsp; # Definition of the unit cell<br />
+acell 3*7.652 # 7.652 x 7.652 x 7.652のユニットセル<br />
+rprim # FCC primitive vectors<br />
+0.0 0.5 0.5<br />
+0.5 0.0 0.5<br />
+0.5 0.5 0.0<br />
+# Definition of the atom types<br />
+ntypat 1 # 1つの原子種のみ用いる<br />
+znucl 13 # 原子番号13、つまりAlを&quot;1&quot;に設定<br />
+# Definition of the atoms<br />
+natom 1 # 単位胞内で設定する原子の数<br />
+typat 1 # &quot;1&quot;（ つまりAl ）を単位胞内で用いる<br />
+xred 0.0 0.0 0.0 # &quot;1&quot;（ つまりAl ）の座標を設定<br />
+# Definition of the planewave basis set<br />
+ecut 8 # 平面波展開のカットオフエネルギー（Hartree単位）<br />
+# Definition of the k-point grid<br />
+ngkpt 4 4 4 # セル内を4 x 4 x 4で分割する<br />
+# 64 k point<br />
+nshiftk 1 # k点のグリッドをシフトさせる数<br />
+shiftk 0.0 0.0 0.0 # k点のシフト。<br />
+istwfk 8*1 #<br />
+#Definition of the SCF procedure<br />
+nstep 50 # 最大イタレーション<br />
+toldfe 1.0d-8 # 収束判定条件（total energy)<br />
+prtvol 5 # 結果を出力するボリュームを制御する<br />
+enunit 1 # eV単位の固有エネルギーとなるように設定<br />
+--------------------------------------------------</p>
+
+<p>&nbsp;</p>
+
+<p>Q. DFT+Uでの入力ファイルを教えてください。</p>
+
+<p>A. チュートリアルには下記のようにあります。<br />
+&nbsp; 擬ポテンシャルは paw が必要です。(ldaの記述があるものも必要か調査中）<br />
+&nbsp;&nbsp;case.files<br />
+&nbsp; --------------------------------------------------<br />
+&nbsp; case.in<br />
+&nbsp; case.out<br />
+&nbsp; casei<br />
+&nbsp; caseo<br />
+&nbsp; casex<br />
+&nbsp; ../../Psps_for_tests/Ni.atompaw.lda.paw<br />
+&nbsp; ../../Psps_for_tests/08o-lda.atompaw　<br />
+&nbsp; --------------------------------------------------<br />
+<br />
+&nbsp;&nbsp;case.in<br />
+&nbsp; --------------------------------------------------<br />
+&nbsp; #Spin<br />
+&nbsp; nsppol 1 #　an antiferromagnetic system&nbsp;の場合<br />
+&nbsp; nspden 2 #　an antiferromagnetic system の場合<br />
+&nbsp; nspinor 1 #　an antiferromagnetic system&nbsp;の場合<br />
+&nbsp; spinat 0 0 1&nbsp;# 各原子の初期のスピン<br />
+&nbsp; 0 0 -1<br />
+&nbsp; 0 0 0<br />
+&nbsp; 0 0 0<br />
+&nbsp; #Parameters<br />
+&nbsp; nstep 50&nbsp;# 最大イタレーション<br />
+&nbsp; ecut 15&nbsp;# 平面波展開のカットオフエネルギー<br />
+&nbsp; pawecutdg 30 # ecut&nbsp;の2倍以上の値を設定する<br />
+&nbsp; iscf 17<br />
+&nbsp; toldfe 1.0d-5&nbsp;# 収束判定条件（total energy)&nbsp;<br />
+&nbsp; nband 40&nbsp; #考慮する状態（バンド）数<br />
+&nbsp; occopt 1<br />
+&nbsp; #Structural parameters<br />
+&nbsp; natom 4&nbsp;# 原子数<br />
+&nbsp; ntypat 2&nbsp;# 原子種の数<br />
+&nbsp; typat 1 1 2 2 # Ni Ni O O<br />
+&nbsp; znucl 28 8&nbsp;# 各原子種の原子番号<br />
+&nbsp; xred 0 0 0&nbsp;# 各原子の相対座標<br />
+&nbsp; 0.0 0.0 0.5<br />
+&nbsp; 0.5 0.5 0.25<br />
+&nbsp; 0.5 0.5 0.75<br />
+&nbsp; acell 3*7.92&nbsp;# セルの長さの設定<br />
+&nbsp; rprim 0.0 1/2 1/2<br />
+&nbsp; 1/2 0.0 1/2<br />
+&nbsp; 1.0 1.0 0.0<br />
+&nbsp; # Kpoint Grid<br />
+&nbsp; ngkpt 2 2 2&nbsp;# セル内を2 x&nbsp;2 x 2で分割する<br />
+&nbsp; chksymbreak 0 # The k point grid is not symmetric, but the calculations being for the ground-state, this is not a problem.<br />
+&nbsp; # LDA+U<br />
+&nbsp; usepawu 1&nbsp;# FLL法だと1, AMF法だと2<br />
+&nbsp; lpawu 2 -1 # znucl での順に対応させて入力。-1:&nbsp;U無し、2:d軌道にU, 3: f軌道にUを考慮<br />
+&nbsp; upawu 8.0 0.0 eV<br />
+&nbsp; jpawu 0.8 0.0 eV&nbsp; # upawu の10%の値を入力<br />
+--------------------------------------------------<br />
+<br />
+Q. DFT+Uで最初の数回まで電子の状態を固定しておく方法を教えてください。<br />
+A. チュートリアルを参考にすると、上記のDFT+Uに対応するものでは、下記を追加します（確認中）。ここでは、NiOの構造での例を示します。Niは 3d8 4s2 を取り、upは全ての軌道が電子で埋まり、downは3つまで軌道が電子で埋まります。埋まり方は、m=-2 の軌道が0.9 というように、少数点で指定することが可能です。d軌道の場合、文献[1-6]を参考にして、m=-2(xy), m=-1(yz), m=0(3z^2-r^2), m=1(xz), m=2(x^2-y^2) のどの軌道に電子を入れたいかを考慮して下さい。<br />
+--------------------------------------------------<br />
+#Density matrix<br />
+usedmatpu 5 # dmatpawu で設定した値を保持しておく cycle 数。<br />
+# 上の設定では、SCF計算 5回後に最適な値に変えるようにする。<br />
+<br />
+dmatpawu # d軌道では、縦横ともm=-2, m=-1, m=0, m=1, m=2の順に並ぶ行列。<br />
+# f軌道では、縦横ともm=-3, m=-2, m=-1, m=0, m=1, m=2, m=3 の順に並ぶ行列。<br />
+#Occupation matrix for spin 1 and atom 1<br />
+1.00000 0.00000 0.00000 0.00000 0.00000<br />
+0.00000 1.00000 0.00000 0.00000 0.00000<br />
+0.00000 0.00000 1.00000 0.00000 0.00000<br />
+0.00000 0.00000 0.00000 1.00000 0.00000<br />
+0.00000 0.00000 0.00000 0.00000 1.00000<br />
+#Occupation matrix for spin 1 and atom 2<br />
+0.90000 0.00000 0.00000 0.00000 0.00000<br />
+0.00000 0.90000 0.00000 0.00000 0.00000<br />
+0.00000 0.00000 0.15000 0.00000 0.00000<br />
+0.00000 0.00000 0.00000 0.90000 0.00000<br />
+0.00000 0.00000 0.00000 0.00000 0.15000<br />
+# add to conserve old &lt; 6.7.2 behavior for calculating forces at each SCF step<br />
+optforces 1<br />
+--------------------------------------------------<br />
+[1] <a href="http://ja.wikipedia.org/wiki/D%E8%BB%8C%E9%81%93">http://ja.wikipedia.org/wiki/D%E8%BB%8C%E9%81%93</a><br />
+[2] <a href="http://www.ml.seikei.ac.jp/tsubomura/education/muki2/muki2_7.pdf">http://www.ml.seikei.ac.jp/tsubomura/education/muki2/muki2_7.pdf</a><br />
+[3] <a href="http://www.sss.fukushima-u.ac.jp/~daio/table_4.pdf">http://www.sss.fukushima-u.ac.jp/~daio/table_4.pdf</a><br />
+[4] <a href="http://www.px.tsukuba.ac.jp/Archive/060510YMoritomo2Dslide.pdf">http://www.px.tsukuba.ac.jp/Archive/060510YMoritomo2Dslide.pdf</a><br />
+[5] <a href="http://www.chem-station.com/yukitopics/complex.htm">http://www.chem-station.com/yukitopics/complex.htm</a><br />
+[6] <a href="http://www.materials.sci.osaka-cu.ac.jp/materials2002/Lec_others/cft.html">http://www.materials.sci.osaka-cu.ac.jp/materials2002/Lec_others/cft.html</a><br />
+<br />
+Q. DFT+UでのUの決定方法を教えてください。（調査中）<br />
+A. チュートリアルには下記のようにあります。case1.fies で計算して得た case1o を用いて case2.files で U を計算させます。チュートリアルにはないですが、ixc は指定しておいて下さい。<br />
+<br />
+case1.files<br />
+--------------------------------------------------<br />
+case1.in<br />
+case1.out<br />
+case1i<br />
+case1o<br />
+case1x<br />
+../../Psps_for_tests/26fe.p<br />
+--------------------------------------------------<br />
+<br />
+case1.in<br />
+--------------------------------------------------<br />
+#########################################################<br />
+# Automatic test for ABINIT: #<br />
+# Prelimirary step for test v5#39 (macro_uj) #<br />
+# and v5#40 (testirdden) #<br />
+# #<br />
+# Fe bcc 2 atomic supercell - ferromag.- PAW DJA 2010 &amp; MT 2009 #<br />
+#########################################################<br />
+#Unit cell<br />
+acell 3*5.42<br />
+chkprim 0 # 0: do not check if uc primitive<br />
+rprim 1.00 0.00 0.00<br />
+0.00 1.00 0.00<br />
+0.00 0.00 1.00<br />
+<br />
+#Spin polarization<br />
+nsppol 2 #1 unpolarized / 2 polarized<br />
+spinat 0 0 2.843062<br />
+0 0 2.843062<br />
+<br />
+#Definition of the atom types<br />
+ntypat 1<br />
+znucl 26<br />
+<br />
+#Definition of the atoms<br />
+natom 2<br />
+typat 2*1 # atomic types<br />
+xred<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+ecut 8 # Energy cutoff<br />
+pawecutdg 20 # pawecutdg &gt; 2*ecut<br />
+nband 25 # Fe_2 minband=17<br />
+<br />
+#Definition of the SCF procedure<br />
+nstep 15 # max number SCF cycles<br />
+tolvrs 10d-12<br />
+<br />
+#Definition of the k-point grid<br />
+kptopt 1 # 1: automatic generation of k points<br />
+ngkpt 3 3 3 # n x n x n<br />
+nshiftk 1<br />
+shiftk 0.5 0.5 0.5<br />
+<br />
+#Smearing<br />
+occopt 4<br />
+tsmear 0.05 eV<br />
+<br />
+#DFT+U<br />
+usepawu 1 # 1 at lim dble cnt / 2 rnd m fld dle cnt<br />
+lpawu 2 # ang moments corrrected<br />
+# znucl での順に対応させて入力。-1: U無し、2:d軌道にU, 3: f軌道にUを考慮<br />
+<br />
+#Save disk space &amp; Miscelaneous<br />
+prteig 0<br />
+prtden 1 # This is the default value<br />
+optforces 2<br />
+--------------------------------------------------<br />
+<br />
+case2.files<br />
+--------------------------------------------------<br />
+case2.in<br />
+case2.out<br />
+case1o<br />
+case2o<br />
+case2x<br />
+../../Psps_for_tests/26fe.paw<br />
+--------------------------------------------------<br />
+<br />
+case2.in<br />
+--------------------------------------------------<br />
+#########################################################<br />
+## Automatic test for ABINIT: ##<br />
+## determine U from change of occupation on atoms upon potential ##<br />
+## shift on atom 1 ##<br />
+## Fe bcc structure - ferromagnetic PAW DJA 2010 ##<br />
+#########################################################<br />
+# 2 atomic supercell<br />
+acell 3*5.42<br />
+chkprim 0 # 0: do not check if uc primitive<br />
+rprim 1.00 0.00 0.00<br />
+0.00 1.00 0.00<br />
+0.00 0.00 1.00<br />
+nsppol 2<br />
+<br />
+#Definition of the atom types<br />
+ntypat 1<br />
+znucl 26<br />
+<br />
+#Definition of the atoms<br />
+natom 2<br />
+typat 2*1 # atomic types<br />
+xred<br />
+0.0 0.0 0.0<br />
+0.5 0.5 0.5<br />
+ecut 8 # Energy cutoff<br />
+pawecutdg 40 # pawecutdg &gt; 2*ecut<br />
+nband 25 # Fe_2 minband=17<br />
+<br />
+#Definition of the k-point grid<br />
+kptopt 1 # 1: automatic generation of k points<br />
+ngkpt 3 3 3 # n x n x n<br />
+nshiftk 1<br />
+shiftk 0.5 0.5 0.5<br />
+<br />
+#Smearing<br />
+occopt 4<br />
+tsmear 0.05 eV<br />
+<br />
+#DFT+U<br />
+usepawu 1 # 1 at lim dble cnt / 2 rnd m fld dle cnt<br />
+lpawu 2 # ang moments corrrected<br />
+nsym&nbsp;1 # P1 structure<br />
+pawujat 1 # default, the atom on which U is determined<br />
+pawujv 0.1 eV # default, size of the potential shift<br />
+macro_uj 1 # activate determination of U<br />
+pawujrad 2.66866 # optional, radius ASA-sphere to which U should be extrapolated<br />
+<br />
+#Only to accelerate test<br />
+irdwfk 1 # default for macro_uj = 1<br />
+# nline 2<br />
+# nnsclo 2<br />
+tolvrs 10d-9 # default for macro_uj = 1<br />
+<br />
+#Save disk space<br />
+prteig 0<br />
+prtwf 0<br />
+prtden 0<br />
+--------------------------------------------------<br />
+<br />
+Q. phononでのbandやdosの計算のさせ方を教えて下さい。（調査中）<br />
+A. tutorial の rf1 と rf2 を参照して下さい。<br />
+1. abinit &lt; trf2_1.files &gt; trf2_1.log<br />
+2. mrgddb &lt; trf2_3.in<br />
+3. anaddb &lt; trf2_4.files &gt; trf2_4.log ※ IFCの結果が欲しいときのみ？<br />
+4. anaddb &lt; trf2_5.files &gt; trf2_5.log ※ phonon band の結果が欲しいときのみ。<br />
+5. trf2_5.out_B2EPS.freq をプロットソフトなどでフォノンのバンドを図示する。本当ならば、そのままtutorialの手順に従うか、trf2_5.out のデータを処理するプログラムを作って図示するなどした方が良い。<br />
+6. trf2_7.in に prtdos 1 を追加する。可能ならば、ng2qpt 40 40 40 の方が良いだろう。<br />
+7. anaddb &lt; trf2_7.files &gt; trf2_7.log ※ phonon dos の結果が欲しいときのみ。<br />
+8. PHDOS が出力されるので図示すれば良い。<br />
+<br />
+◇ trf2_1.in の書き換え<br />
+#Common input variables 以下の部分を、これまでSCF計算させてきたように、計算したい系のものに書き換える。<br />
+<br />
+◇ trf2_3.in の書き換え<br />
+1行目：出力の名前 (name output)<br />
+2行目：ファイルに記述しておきたいメモ (description)<br />
+3行目：DDBファイルの数 (number of DDB files)<br />
+4行目以降：DDBファイルの名称 (file name list)<br />
+※ 1行目の出力の名前は特に書き換える必要はないだろう。<br />
+※ 3行目を8として、4行目をtrf2_1o_DS3_DDBからにしているのは、trf2_1.inにてqpt3からqpt10までの結果を出力させているため。<br />
+<br />
+◇ trf2_4.files の書き換え<br />
+3行目：trf2_3.inの1行目で書いた名称を記述する。<br />
+<br />
+◇ trf2_4.in&nbsp;の書き換え<br />
+・ brav は計算する系のものを指定する。S.C.はsimple cubic, F.C.はface center, B.C. は body center, Hexはhexagonal crystal stractureに対応する。<br />
+※ brav はtrf2_5.inやtrf2_7.inにも存在するので、計算する系の指定に変える。<br />
+<br />
+◇ rfatop: For the calculation of a full dynamical matrix, use <b>rfatpol</b>(1)=1 and <b>rfatpol</b>(2)=<a href="http://www.abinit.org/documentation/helpfiles/for-v7.8/input_variables/varbas.html#natom">natom</a>, together with <a href="http://www.abinit.org/documentation/helpfiles/for-v7.8/input_variables/varrf.html#rfdir">rfdir</a> 1 1 1 .<br />
+<a href="http://forum.abinit.org/viewtopic.php?f=8&amp;t=1673">http://forum.abinit.org/viewtopic.php?f=8&amp;t=1673</a><br />
+<a href="http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_powerpoint_ppt_presentation">http://www.powershow.com/view/f0f8f-NjNkY/Abinit_Workshop_powerpoint_ppt_presentation</a><br />
+<br />
+◇ パラメーター<br />
+dieflag :<br />
+elaflag :<br />
+elphflag : 1 =&gt; anaddb performs an analysis of the electron-phonon coupling<br />
+ifcflag : 1 =&gt; calculate and use the interatomic force constants<br />
+instrflag : 1 =&gt; Print out both force-response and displacement-response internal-strain tensor.<br />
+nlflag :　1 =&gt; the electrooptic tensor, Raman susceptibilities and non-linear optical susceptibilities are calculated;　2 =&gt; only the non-linear optical susceptibilities and first-order changes of the dielectric tensor induced by an atomic displacement are calculated;<br />
+piezoflag :<br />
+polflag : 1 =&gt; ANADDB computes the polarization in cartesian coordinates.<br />
+thmflag : 1 =&gt; the code will compute, using the histogram method.<br />
+<br />
+◇ Q-point grid<br />
+brav :　ブラべー格子（1-S.C., 2-F.C., 3-B.C., 4-Hex.)<br />
+nqgpt : q点でのグリッド点の数。The Monkhorst-Pack grid linear dimensions, for the DDB (coarse grid)<br />
+nqshift : number of q-points in repeated basic q-cell<br />
+q1shift :<br />
+&nbsp; General case :<br />
+&nbsp;&nbsp;&nbsp; nqshift 1<br />
+&nbsp;&nbsp;&nbsp; q1shift&nbsp; 0.5 0.5 0.5<br />
+&nbsp; General case (Gamma point): &nbsp;<br />
+&nbsp;&nbsp;&nbsp; nqshift 1<br />
+&nbsp;&nbsp;&nbsp; q1shift&nbsp; 0 0 0<br />
+&nbsp; hexagonal lattice :<br />
+&nbsp; &nbsp; nqshift 2<br />
+&nbsp;&nbsp;&nbsp; q1shift&nbsp; 0 0 0<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0 0.5<br />
+&nbsp; BCC :<br />
+&nbsp; &nbsp; nqshift 2<br />
+&nbsp;&nbsp;&nbsp; q1shift&nbsp; 0 0 0<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.5 0.5<br />
+&nbsp; FCC :<br />
+&nbsp;&nbsp;&nbsp; nqshift 4<br />
+&nbsp;&nbsp;&nbsp; q1shift&nbsp; 0 0 0<br />
+&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.5 0<br />
+<br />
+◇ Energy conservation and charge nutrality<br />
+asr : Acoustic Sum Rule. 1 =&gt; imposed asymetrically　2=&gt; symmetric way<br />
+　Acoustic Sum Rule を設定することで計算誤差による虚数のフォノンモードの発生を回避する。<br />
+chneut :&nbsp; 有効電荷計算での電気的中立性の要求<br />
+<br />
+◇ Others<br />
+dipdip : Dipole-dipole interaction treatment<br />
+ifcana : 1 =&gt; analysis of interatomic force constants, Default: 0 =&gt; no analysis of interatomic force constants<br />
+ifcout : IFC出力<br />
+natifc : IFC分析での原子の数<br />
+atifc : IFC分析での原子<br />
+<br />
+◇ band (trf2_5.inで使用)<br />
+eivec :<br />
+&nbsp; 0: ディフォルトで、フォノンの固有ベクトルを書き出さない<br />
+&nbsp; 1 または 2: フォノンの固有ベクトルを書き出す<br />
+&nbsp; 4 : band2epsとして出力ファイルを生成する<br />
+nph1l : number of phonons in list 1<br />
+qph1l : Reduced coordinates and normalization factor for phonon dispersion<br />
+nph2l : number of directions in list 2<br />
+qph2l :<br />
+<br />
+◇ prameters(trf2_7.inで使用)<br />
+thmflag : Thermodynamical properties flag<br />
+nq2qpt : sample the BZ up to ngqpt2<br />
+ngrids : number of grids of increasing size<br />
+q2shit :<br />
+nchan : # of channels for the DOS with channel width 1 cm-1<br />
+nwchan : # of different channel widths from this integer down to 1 cm-1<br />
+thmtol : Tolerance on thermodynamical function fluctuations<br />
+ntemper : Number of temperatures<br />
+temperinc : Increment of temperature in K for temperature dependency<br />
+tempermin : Minimal temperature in Kelvin<br />
+------------------------------------------------------------------------------<br />
+■ Phonon Calculation data (ABINIT code)<br />
+<br />
+F. M. Gashimazade et al., Physics of the Solid state, <span id="volume-range">56 (2014) </span><span id="page-range">761-764</span>.<br />
+GeSe: LDA,&nbsp;Hartwigsen-goedecker-Hutter norm-conserving pseudopotentials, 80 Ry, 4x4x4 k point and shift, 10&ndash;8 Ry/Bohr<br />
+<br />
+P. Norouzzadeh et al., Journal of Alloys and Compounds 587 (2014) 474&ndash;480.<br />
+Ba8Si46 and Ba8Al16Si30 : GGA-PBE, Troullier&ndash;Martins pseudopotentials, &nbsp;1 meV/atom, 6x6x6, 60 Ry, 5 x10-5 Hartree/Bohr and 5x10-7 Hartree/Bohr3<br />
+<br />
+B. Zhou et al., J. Phys. D: Appl. Phys. 47 (2014) 115502 (9pp)<br />
+HfO2: GGA-PBE, Hartwigsen&ndash;Goedecker&ndash;Hutter (HGH) method (pseudopotentials),&nbsp; 4x4x4 Monk, 60 Ha, Broyden&ndash;Fletcher&ndash;Goldfarb&ndash;Shanno minimization (BFGS) modified ( 0.0001 Ha/atom)<br />
+<br />
+N. V. Petrova and I. N. Yakovkin, Phys. Status Solidi B 250 (2013)&nbsp;2141&ndash;2144.<br />
+GaAS blende:<br />
+SCF: LDA, HGH pseudopotentials, 6x6x6 k (0.02 Angstrom accuracy), 20 Ha, 0.001 Ha convergence of total energy,<br />
+phonon band: 8x8x8 k, phonon frequencies at gamma: 12x12x12<br />
+We believe therefore that the achieved convergence of the frequencies at G was 0.05 cm1 for TO and 0.5 cm1 for LO modes.<br />
+<br />
+P. Norouzzadeh et al., J. Phys.: Condens. Matter 25 (2013) 475502 (9pp)<br />
+Si46-VIII:<br />
+SCF: GGA-PBE, Troullier&ndash;Martins method (norm-conserving potentials), 6x6x6 k,&nbsp;60 Ry, &nbsp;meV/atom, Methfessel&ndash;Paxton smearing 0.01 Ry<br />
+Broyden&ndash;Fletcher&ndash;Goldfarb&ndash;Shanno-based method, force: 5x10-5 Hartree/bohr, stress: 5 x10-7 Hartree/bohr3<br />
+Phonon density: 8x8x8 k, interatomic force constants (Fourier interpolation with specific treatment of the long-range dipole&ndash;dipole interaction)<br />
+<br />
+E. Borissenko et al., J. Phys.: Condens. Matter 25 (2013) 102201 (7pp)<br />
+LDA, optimized pseudopotentials (<a href="http://www.sas.upenn.edu/rappegroup/research/psp.html">http://www.sas.upenn.edu/rappegroup/research/psp.html</a>),&nbsp;6x6x6k, 50Ha<br />
+Norm-conserving pseudopotentials (Troullier-Martines(TM), FHI96PP, Hartwigsen&ndash;Goedecker&ndash;Hutter (HGH))<br />
+<br />
+ATOMPAW: <a href="http://www.abinit.org">http://www.abinit.org</a>.<br />
+OPIUM: <a href="http://opium.sourceforge.net">http://opium.sourceforge.net</a>.<br />
+------------------------------------------------------------------------------<br />
+<a href="http://ftp.abinit.org/ws07/Liege_Mazevet.pdf">http://ftp.abinit.org/ws07/Liege_Mazevet.pdf</a><br />
+<a href="http://ftp.abinit.org/ws11/mazevet.pdf">http://ftp.abinit.org/ws11/mazevet.pdf</a><br />
+<a href="http://nano-bio.ehu.es/files/verstraete_queretaro.pdf">http://nano-bio.ehu.es/files/verstraete_queretaro.pdf</a><br />
+<br />
+------------------------------------------------------------------------------<br />
+並列化（業者様向け） ＜gfortranでのコンパイル＞<br />
+&nbsp;&nbsp;（OSが64 bitのものを用意できなかったので、Get ABINIT for&nbsp;All platformsにした。インストールと性能を考えれば、現状では、4coreで、OSはLinuxで64bitのPCを用意するのが良いだろう。そうすれば、Get ABINIT for Linuxをダウンロードすればよい）<br />
+&nbsp; 下記を実行前に、左の欄にandLinuxにあるsudo apt-get install を全て入れておく。<br />
+&nbsp; tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp; cd abinit-6.8.1<br />
+&nbsp; ./configure&nbsp;FC=mpif90 --enable-mpi<br />
+&nbsp; make multi<br />
+&nbsp;&nbsp;&nbsp; ( make multi multi_procs=2, 4coreの場合 mke mj4 でもよい)<br />
+&nbsp; cd tests<br />
+&nbsp; make help<br />
+&nbsp; make tests_min<br />
+&nbsp; cd ..<br />
+&nbsp; sudo make install<br />
+参考文献：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-38.html">http://nitrogen14.blog51.fc2.com/blog-entry-38.html</a>　<br />
+<a href="http://nitrogen14.blog51.fc2.com/blog-entry-39.html">http://nitrogen14.blog51.fc2.com/blog-entry-39.html</a><br />
+<a href="http://www.abinit.org/documentation/build-system/mpi-support">http://www.abinit.org/documentation/build-system/mpi-support</a><br />
+<br />
+並列化1（学生様向け）（調査中）＜Intel Compiler + MPICH でのコンパイル＞<br />
+&nbsp; tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp; cd abinit-6.8.1<br />
+&nbsp; ./configure FC=/usr/local/mpich/bin/mpif90 --enable-mpi --with-linalg-libs=&quot;-lmkl_blas95 -lmkl_lapack95 -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&quot;&nbsp;--with-dft-flavor=&quot;none&quot; --with-trio-flavor=&quot;none&quot;<br />
+&nbsp; make multi multi_procs=2<br />
+&nbsp; (&nbsp;4coreの場合 mke mj4 でもよい)<br />
+&nbsp; cd tests<br />
+&nbsp; make help<br />
+&nbsp; make tests_min<br />
+&nbsp; cd ..<br />
+&nbsp; sudo make install<br />
+参考文献：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-38.html">http://nitrogen14.blog51.fc2.com/blog-entry-38.html</a><br />
+<a href="http://nitrogen14.blog51.fc2.com/blog-entry-39.html">http://nitrogen14.blog51.fc2.com/blog-entry-39.html</a><br />
+<a href="http://www.abinit.org/documentation/build-system/mpi-support">http://www.abinit.org/documentation/build-system/mpi-support</a><br />
+※ --with-dft-flavor=&quot;none&quot; --with-trio-flavor=&quot;none&quot; を入れる必要がない方法も模索中。<br />
+※ mpirun -np&nbsp;2 abinit &lt;input.files&gt; output.log&nbsp;<br />
+<br />
+並列化2（学生様向け）（調査中）＜Intel Compiler + MPICH でのコンパイル＞<br />
+&nbsp; tar zxvf abinit-6.8.1.tar.gz<br />
+&nbsp; cd abinit-6.8.1<br />
+&nbsp; ./configure FC=/usr/local/mpich/bin/mpif90 --enable-mpi --with-linalg-libs=&quot;-lmkl_blas95 -lmkl_blacs -lmkl_lapack95 -lmkl_scalapack_core -lmkl_intel -lmkl_intel_thread -lmkl_core -lifcore -lguide -lpthread -lsvml&quot;&nbsp; --with-dft-flavor=&quot;none&quot;&nbsp; --with-trio-flavor=&quot;none&quot;&nbsp;<br />
+&nbsp; make multi multi_procs=2<br />
+&nbsp; ( 4coreの場合 mke mj4 でもよい)<br />
+&nbsp; cd tests<br />
+&nbsp; make help<br />
+&nbsp; make tests_min<br />
+&nbsp; cd ..<br />
+&nbsp; sudo make install<br />
+参考文献：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-38.html">http://nitrogen14.blog51.fc2.com/blog-entry-38.html</a><br />
+<a href="http://nitrogen14.blog51.fc2.com/blog-entry-39.html">http://nitrogen14.blog51.fc2.com/blog-entry-39.html</a><br />
+<a href="http://www.abinit.org/documentation/build-system/mpi-support">http://www.abinit.org/documentation/build-system/mpi-support</a><br />
+<a href="http://www.abinit.org/documentation/build-system/mpi-support">http://www.abinit.org/documentation/build-system/mpi-support</a><br />
+※ --with-dft-flavor=&quot;none&quot; --with-trio-flavor=&quot;none&quot; を入れる必要がない方法も模索中。<br />
+------------------------------------------------------------------------------<br />
+ABINIT&nbsp;GUI&nbsp;<br />
+&nbsp;&nbsp;1)&nbsp;cd&nbsp;abinit-6.8.1<br />
+&nbsp;&nbsp;2) cd&nbsp;gui/precompiled<br />
+&nbsp;&nbsp;3)&nbsp;java -jar AbinitGUI.jar<br />
+------------------------------------------------------------------------------<br />
+cif 形式のファイルから abinit 用の入力ファイルを作る方法<br />
+&nbsp; 左欄の「入力ファイルの変換」を参照して下さい。<br />
+------------------------------------------------------------------------------<br />
+Abinit Band Structure maker （バンド図の描写）<br />
+1) cd /home/*/abinit-6.8.1/util/users<br />
+2) python AbinitBandStructureMaker.py case.out<br />
+3) python AbinitBandStructureMaker.py case.out.dbs<br />
+4) xmgrace case.out.dbs.agr<br />
+※ manual : /home/*/abinit-6.8.1/doc/users<br />
+igor 用などにするには、プログラムを自作するしかない。<br />
+------------------------------------------------------------------------------<br />
+電子密度分布の描写<br />
+1) case.in に prtden 1 を記入し、SCF計算する<br />
+2) cut3d を実行する<br />
+3) DENの記述がある最後に出力されたファイルを指定<br />
+4) 1 を選択<br />
+5) XCrysDenを用いる場合、9を選択する<br />
+6) 入力ファイルの名前を記述（case.xsf など）<br />
+7) n を選択する<br />
+8) 0 を選択する<br />
+9) XCrysDenからFile &rarr; Open Structure &rarr; Open XSF<br />
+10) tools &rarr; Data Grid を選択し、OKを押す<br />
+11) isovalue に数値を入力して、Submit を押し、Hideを押せば電子密度分布が表示される。<br />
+<br />
+MEMと比較する場合はVESTAの利用が便利であろう。以下に使用方法を示す。<br />
+1)&nbsp;VESTAを起動させて case.xsf を開く。<br />
+2) Utilities の2D Data Display を開く。<br />
+3) slice... で欲しい断面のデータを指定して、OKを押す。<br />
+4)&nbsp;General でのBird's-eye viewとAbsolute valuesにチェックを入れて、&nbsp;Saturation levels で、Minで0%, Maxで100%を入力。<br />
+5) Contours での Draw contour lines にチェックを入れる。そして、interval の値を細かい刻みにする。<br />
+※ 慣れてきたら、MEMと同じパラメータを最初から入れて、結果を比較してみよう。<br />
+------------------------------------------------------------------------------<br />
+弾性定数の求め方<br />
+1) 弾性定数はスーパーセルに微小にひずみを与えて得られる応力から計算することが多い。<br />
+2) &sigma; = C * &epsilon; の行列計算から&epsilon;を変えて&sigma;（＝sigma）を得て、Cを求める。<br />
+計算のポイント<br />
+A. 構造最適化で計算する<br />
+B. k点数と平面波のカットオフに非常に敏感であるため、それらを十分余裕のある大きな値にする。<br />
+C. DFTでの計算結果は実験結果と10%程度の誤差がある。<br />
+D. 内部構造が複雑な系は細心の注意が必要。<br />
+E. 有限圧力下での求め方はさらに難しいらしい。<br />
+------------------------------------------------------------------------------<br />
+[1] <a href="http://hss.iic.hokudai.ac.jp/WS07/pdf/Kohyama.pdf">http://hss.iic.hokudai.ac.jp/WS07/pdf/Kohyama.pdf</a><br />
+[2] <a href="http://www.nims.go.jp/cmsc/staff/kobayak/SAMP/NewMagb/tsld007.htm">http://www.nims.go.jp/cmsc/staff/kobayak/SAMP/NewMagb/tsld007.htm</a><br />
+------------------------------------------------------------------------------<br />
+For the GS calculations, in the &quot;cg&quot; array containing the wavefunction coefficients, there is for each k-point and each band, a segment cg(1:2,1:npw).<br />
+------------------------------------------------------------------------------</p>

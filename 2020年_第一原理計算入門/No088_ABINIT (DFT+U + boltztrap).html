@@ -1,0 +1,326 @@
+　ここではABINITを用いた入力ファイルとその結果を掲載していく。テスト中(under finding Eg = 0 condition)<br />
+--------------------------------------------------------------------------------<br />
+Ubuntu 12.04 (precise) 64-bit<br />
+プロセッサ: Intel&reg; Core&trade; i7-2700K CPU @ 3.50GHz &times; 8<br />
+メモリ: 15.7 GiB<br />
+Abinit 7.6.4<br />
+コンパイラ: gfortran<br />
+VESTA v.2.1.6<br />
+-----<br />
+PAW: <a href="http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html">http://www.abinit.org/downloads/PAW2/JTH-TABLE/index.html</a>　<br />
+-----<br />
+Ueff values used for the different elements in the LDA+U caluculations of Heusler compounds.<br />
+Element: Effective parameter Ueff (U-J), J=0, LDA+U (SIC), WIEN2k [1]<br />
+Ti: 1.36 eV<br />
+V: 1.34 eV<br />
+Cr: 1.59 eV<br />
+Mn: 1.69 eV<br />
+Fe: 1.80 eV<br />
+Co: 1.92 eV<br />
+Ueff = U * 0.075 (approximately 7%-8%)<br />
+-----<br />
+U = F0 - J : Cowan&rsquo;s program<br />
+Ueff = U * 0.075 (approximately 7%-8%)<br />
+<br />
+d state : F0 = 15.31 + 1.50 * (Z-21)<br />
+f state : F0 = 2.38 + 0.93 * (Z-57)<br />
+<br />
+3d: J = 0.81 + 0.08 * (Z-21)<br />
+4d: J = 0.59 + 0.056 * (Z-39)<br />
+5d: J= 0.60 + 0.053 * (Z-71)<br />
+<br />
+4f: J = 0.90 + 0.036 * (Z-57)<br />
+5f: J = 0.66 + 0.035 * (Z-89)<br />
+<br />
+google : Atomic Coulomb exchange parameter 5d transition<br />
+<br />
+Element Ueff(eV) F0 [12]<br />
+Sc 1.05 1.27<br />
+Ti 1.93 2.21<br />
+V 1.34 2.36<br />
+Cr 4.62 0.94<br />
+Mn 1.31 2.75<br />
+Fe 1.83 2.35<br />
+Co 2.22 2.68<br />
+Ni 1.61 3.21<br />
+Y 0.8 1.0<br />
+Zr 1.5 1.8<br />
+Nb 1.5 2.3<br />
+Mo 4.6 2.2<br />
+Ru 2.0 2.4<br />
+Rh 2.0 2.4<br />
+Pd 15 2.6<br />
+Ta -1.0 -0.2<br />
+Ir 1.6 2.0<br />
+Pt 0.9 2.0<br />
+[12] http://optics.unige.ch/Publications/ele88.pdf<br />
+[13] http://arxiv.org/pdf/1103.5593.pdf<br />
+--<br />
+U: Coulomb replusion parameter<br />
+J: exchange integral parameter<br />
+Fe Heusler: Ueff = 4.0 eV ( Eg = 0 case, Ueff = 2.0 eV) [2]<br />
+V Heusler: Ueff = 1.5 eV ( Eg =0 case, Ueff = 1.0 eV) [2]<br />
+Fe metal: Ueff = 6.2-6.8 eV [26]<br />
+Fe oxide: 4.8-7.4 eV [36]<br />
+GGA-EV (Eg = -0.06 eV)<br />
+mBJ = LDA+U (Fe Heusler: Ueff = 3.0 eV, V Heusler: Ueff = 1.0 eV)<br />
+change: V (unoccupied states at X), Fe(occupied and unoccupied states especially at Gamma)<br />
+--<br />
+LSDA<br />
+Fe: U = 4.0 eV, J = 0.8 eV [3]<br />
+--<br />
+Fe2VAl (hole dope system) [4]<br />
+0.75 m&Omega;cm at 300 K<br />
+n<sub>h</sub> = 4.8 x 10<sup>20</sup> cm<sup>-3</sup><br />
+relaxation time<br />
+PBE: 0.9 x 10<sup>-14</sup> s<br />
+B1-WC: 1.4 x 10<sup>-14</sup> s<br />
+specific heat<br />
+experimental 1.5 &plusmn; 0.3 mJ/mol K<sup>2</sup><br />
+PBE: 0.76 mJ/mol K<sup>2</sup><br />
+B1-WC: 1.00 mJ/mol K<sup>2</sup><br />
+-<br />
+Fe2VAl (electron dope system) [4]<br />
+0.65 m&Omega;cm at 300 K corresponding to a doping x = 0.03 (Fe2VAl1-xMx, M=Si, Ge)<br />
+n<sub>e</sub> = 6.0 x 10<sup>20</sup> cm<sup>-3</sup><br />
+relaxation time<br />
+PBE: 1.5 x 10<sup>-14</sup> s<br />
+B1-WC: 3.4 x 10<sup>-14</sup> s<br />
+specific heat<br />
+experimental 1.5 &plusmn; 0.3 mJ/mol K<sup>2</sup><br />
+PBE: 0.76 mJ/mol K<sup>2</sup><br />
+B1-WC: 1.00 mJ/mol K<sup>2</sup><br />
+-<br />
+the doping x = 0.03 (Fe2VAl1-xMx, M=Si, Ge) [4]<br />
+B1-WC: 3.4 x 10<sup>-14</sup> s (Eg= 0.6, 0.34, and 0.2 eV)<br />
+B1-WC: 3.2 x 10<sup>-14</sup> s (Eg= 0 eV)<br />
+-----<br />
+Refrences<br />
+[1] H. C. Kandpal et al., J. Phys. D: Appl. Phys. 40 (2007) 15074-1523.: <a href="http://iopscience.iop.org/0022-3727/40/6/S01">http://iopscience.iop.org/0022-3727/40/6/S01</a><br />
+&nbsp; , H. C. Kandpal et al., Phys. Rev. B 73 (2006) 094422.: http://journals.aps.org/prb/pdf/10.1103/PhysRevB.73.094422<br />
+[2] Dat Do et al., Phys. Rev. B 84 (2011) 125104.: <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.125104">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.125104</a><br />
+[3] V. N. Antonov et al., Phys. Rev. B 77 (2008) 134444.: <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.77.134444">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.77.134444</a><br />
+[4] D. I. Bilc et al., Phys. Rev. B 83 (2011) 205204.: <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.83.205204">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.83.205204</a><br />
+[26] V. I. Anisimov and O. Gunnarson, Phys. Rev. B 43 (1991) 7570.: <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.44.943">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.44.943</a><br />
+[36] G. K. H. Madsen and P. Novak, Europhys. Lett. 69 (2005) 777.: <a href="http://iopscience.iop.org/0295-5075/69/5/777">http://iopscience.iop.org/0295-5075/69/5/777</a><br />
+-----<br />
+■ Fe<sub>2</sub>VAl (Seebeck Coefficient calculation)<br />
+<br />
+□ Fe2VAl.files<br />
+-----<br />
+Fe2VAl.in<br />
+Fe2VAl.out<br />
+Fe2VAli<br />
+Fe2VAlo<br />
+Fe2VAltmp<br />
+Fe.GGA_PBE-JTH-paw.xml<br />
+V.GGA_PBE-JTH-paw.xml<br />
+Al.GGA_PBE-JTH-paw.xml<br />
+-----<br />
+<br />
+□ Fe2VAl.in<br />
+-----<br />
+#Crystal strucuture data<br />
+#Ci2cell<br />
+acell&nbsp;&nbsp;&nbsp; 3*10.8945922199 &nbsp;<br />
+<br />
+rprim&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+natom&nbsp;&nbsp;&nbsp; 4 &nbsp;<br />
+ntypat&nbsp;&nbsp; 3 &nbsp;<br />
+typat&nbsp;&nbsp;&nbsp; 1 1 2 3 &nbsp;<br />
+znucl&nbsp;&nbsp;&nbsp; 26 23 13 &nbsp;<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+<br />
+#SCF calculation data<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+<br />
+ecut 15.<br />
+pawecutdg 20.<br />
+<br />
+nsppol 2<br />
+<br />
+toldfe 1.0d-6<br />
+<br />
+occopt 3<br />
+tsmear 0.002<br />
+<br />
+# DFT+U<br />
+usepawu&nbsp;&nbsp; 2 #1:FLL, 2:AMF(for metal and ...)<br />
+lpawu&nbsp;&nbsp; 2 2 -1<br />
+upawu&nbsp; 0.073 0.037 0.000 eV<br />
+jpawu&nbsp; 0.014 0.007 0.000 eV<br />
+-----<br />
+<br />
+□ Fe2VAl_DOS.files<br />
+------<br />
+Fe2VAl_DOS.in<br />
+Fe2VAl_DOS.out<br />
+Fe2VAlo<br />
+Fe2VAl_DOSo<br />
+Fe2VAl_DOStmp<br />
+Fe.GGA_PBE-JTH-paw.xml<br />
+V.GGA_PBE-JTH-paw.xml<br />
+Al.GGA_PBE-JTH-paw.xml<br />
+------<br />
+<br />
+□ Fe2VAl_DOS.in<br />
+------<br />
+# DOS INPUT<br />
+iscf -2 #DOS calculation<br />
+prtdos 2 #2:TDOS, 3:PDOS and PAW_DOS<br />
+#prtdosm<br />
+pawprtdos 0 #0:TDOS, 3:PDOS<br />
+nband 30<br />
+tolwfr 1.0e-10<br />
+dosdeltae 0.00100 #Ha<br />
+#enunit 1<br />
+<br />
+# SCF Calculation data<br />
+acell&nbsp;&nbsp;&nbsp; 3*10.8945922199 &nbsp;<br />
+<br />
+rprim&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+natom&nbsp;&nbsp;&nbsp; 4 &nbsp;<br />
+ntypat&nbsp;&nbsp; 3 &nbsp;<br />
+typat&nbsp;&nbsp;&nbsp; 1 1 2 3 &nbsp;<br />
+znucl&nbsp;&nbsp;&nbsp; 26 23 13 &nbsp;<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+<br />
+# change ngkpt 4 4 4 -&gt; 8 8 8<br />
+ngkpt 8 8 8<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+<br />
+ecut 15.<br />
+pawecutdg 20.<br />
+<br />
+nsppol 2<br />
+<br />
+# DFT+U<br />
+usepawu&nbsp;&nbsp; 2 #1:FLL, 2:AMF(for metal and ...)<br />
+lpawu&nbsp;&nbsp; 2 2 -1<br />
+upawu&nbsp; 0.073 0.037 0.000 eV<br />
+jpawu&nbsp; 0.014 0.007 0.000 eV<br />
+<br />
+#toldfe 1.0d-6<br />
+------<br />
+<br />
+□ Fe2VAl_boltztrap.files<br />
+-----<br />
+Fe2VAl_boltztrap.in<br />
+Fe2VAl_boltztrap.out<br />
+Fe2VAlo<br />
+Fe2VAl_boltztrapo<br />
+Fe2VAl_boltztraptmp<br />
+Fe.GGA_PBE-JTH-paw.xml<br />
+V.GGA_PBE-JTH-paw.xml<br />
+Al.GGA_PBE-JTH-paw.xml<br />
+-----<br />
+<br />
+□ Fe2VAl_boltztrap.in<br />
+-----<br />
+# boltztrap INPUT<br />
+iscf -2 #DOS calculation<br />
+prtbltztrp 1 # Print out input file for boltztrap<br />
+nband 30<br />
+tolwfr 1.0e-10<br />
+enunit 1<br />
+<br />
+# SCF Calculation data<br />
+acell&nbsp;&nbsp;&nbsp; 3*10.8945922199 &nbsp;<br />
+<br />
+rprim&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.500000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &nbsp;<br />
+natom&nbsp;&nbsp;&nbsp; 4 &nbsp;<br />
+ntypat&nbsp;&nbsp; 3 &nbsp;<br />
+typat&nbsp;&nbsp;&nbsp; 1 1 2 3 &nbsp;<br />
+znucl&nbsp;&nbsp;&nbsp; 26 23 13 &nbsp;<br />
+xred&nbsp;&nbsp;&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000<br />
+<br />
+# change ngkpt 4 4 4 -&gt; 8 8 8 for DOS case<br />
+# change ngkpt 4 4 4 -&gt; 9 9 9 for boltztrap case<br />
+ngkpt 9 9 9<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.5 0.0 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.5 0.0<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.0 0.0 0.5<br />
+<br />
+ecut 15.<br />
+pawecutdg 20.<br />
+<br />
+nsppol 2<br />
+<br />
+# DFT+U<br />
+usepawu&nbsp;&nbsp; 2 #1:FLL, 2:AMF(for metal and ...)<br />
+lpawu&nbsp;&nbsp; 2 2 -1<br />
+upawu&nbsp; 0.073 0.037 0.000 eV<br />
+jpawu&nbsp; 0.014 0.007 0.000 eV<br />
+<br />
+#toldfe 1.0d-6<br />
+-----<br />
+<br />
+□ boltztrap<br />
+Fe2VAl_boltztrapo_BLZTRP.struct<br />
+Fe2VAl_boltztrapo_BLZTRP.intrans<br />
+Fe2VAl_boltztrapo_BLZTRP.energy<br />
+Fe2VAl_boltztrapo_BLZTRP.def<br />
+<br />
+Fe2VAl_boltztrapo_BLZTRP.intrans<br />
+-----<br />
+GENE&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Format of input: generic format, with Symmetries<br />
+0 0 0 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # iskip (not presently used) idebug setgap shiftgap<br />
+0.740 0.1 0.1 48.0000&nbsp; # Fermilevel (Ry), energy grid spacing, energy span around Fermilevel, number of electrons<br />
+CALC&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # CALC (calculate expansion coeff), NOCALC read from file<br />
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # lpfac, number of latt-points per k-point<br />
+BOLTZ&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # run mode (only BOLTZ is supported)<br />
+.15&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # (efcut) energy range of chemical potential<br />
+1200. 50.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Tmax, temperature grid spacing<br />
+-1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # energyrange of bands given individual DOS output sig_xxx and dos_xxx (xxx is band number)<br />
+HISTO&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # DOS calculation method. Other possibility is TETRA<br />
+14.0 2.0 0.740 300&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #t-model. tauref(Reference lifetime (femtoseconds)), tauexp(scattering parameter &quot;r&quot;: 0 -&gt; acoustic phonons, 2 -&gt; ionized impurities), taurefen(Ry), taureftemp(K)<br />
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Number of doping levels coefficients will be output for<br />
+4.8E20 -4.8E20&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Values of doping levels (in carriers / cm^3<br />
+-----<br />
+<br />
+'/home/abinit/boltztrap-1.2.5/src/x_trans' BoltzTraP<br />
+'/home/abinit/boltztrap-1.2.5/src/x_trans' BoltzTraP -up<br />
+'/home/abinit/boltztrap-1.2.5/src/x_trans' BoltzTraP -dn<br />
+<br />
+<br />
+□ gnuplot (Seebeck coefficient)<br />
+-----<br />
+gnuplot<br />
+plot '/home/abinit/boltztrap-1.2.5/tests/Fe2VAl/Fe2VAl.trace'&nbsp; using 2:($5*1000000) w p ps 0.2 pt 7 t &quot;Fe2VAl PAW(JTH)&quot;<br />
+set xlabel &quot;{/Arial Temperature,{/Arial-Italic K}}&quot;<br />
+set ylabel &quot;{/Arial Seebeck Coefficient,{/Arial-Italic S ({/Symbol m}V / K)}}&quot;<br />
+set yrange[-15:15]<br />
+set termoption enhanced<br />
+replot<br />
+-----<br />
+<br />
+--------------------------------------------------------------------------------

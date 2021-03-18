@@ -1,0 +1,642 @@
+<div>------------------------------------------------------------------------------<br />
+■&nbsp;<span style="font-size:14px">eam_database_fit</span></div>
+
+<div>(Ubuntu 18.04 LTS or Debian 10.0)<br />
+(Edit: 6/Aug/2020)<br />
+&nbsp;</div>
+
+<div><span style="font-size:14px">□ Install (cif2cell-informal)</span></div>
+
+<div><span style="font-size:14px">1. sudo apt install -y git python python-setuptools python-dev gcc</span></div>
+
+<div><span style="font-size:14px">2. git clone https://github.com/by-student-2017/cif2cell-informal.git</span></div>
+
+<div><span style="font-size:14px">3. cd cif2cell-informal</span></div>
+
+<div><span style="font-size:14px">4. tar zxvf PyCifRW-3.3.tar.gz</span></div>
+
+<div><span style="font-size:14px">5. cd PyCifRW-3.3</span></div>
+
+<div><span style="font-size:14px">6. sudo python setup.py install</span></div>
+
+<div><span style="font-size:14px">7. cd ..</span></div>
+
+<div><span style="font-size:14px">8. sudo python setup.py install</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (lammps)</div>
+
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. sudo apt update</span></div>
+
+<div><span style="font-size:14px">3. sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</span></div>
+
+<div><span style="font-size:14px">4. wget https://lammps.sandia.gov/tars/</span>lammps-3Mar20<span style="font-size:14px">.tar.gz</span></div>
+
+<div><span style="font-size:14px">5. tar zxvf </span>lammps-3Mar20<span style="font-size:14px">.tar.gz</span></div>
+
+<div><span style="font-size:14px">6. cd lammps-3Mar20</span></div>
+
+<div><span style="font-size:14px">7. mkdir build ; cd build&nbsp;</span></div>
+
+<div><span style="font-size:14px">8. cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake</span></div>
+
+<div><span style="font-size:14px">9. cmake --build .</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Environment settings (lammps)</div>
+
+<div><span style="font-size:14px">1. echo ' ' &gt;&gt; ~/.bashrc</span></div>
+
+<div><span style="font-size:14px">2. echo '# lammps environment settings' &gt;&gt; ~/.bashrc</span></div>
+
+<div><span style="font-size:14px">3. echo 'export PATH=$PATH:$HOME/lammps-3Mar20/build' &gt;&gt; ~/.bashrc</span></div>
+
+<div><span style="font-size:14px">4. bash</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;Install (PWscf)</div>
+
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. sudo apt update</span></div>
+
+<div><span style="font-size:14px">3. sudo apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</span></div>
+
+<div><span style="font-size:14px">4. wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz</span></div>
+
+<div><span style="font-size:14px">5. tar zxvf qe-6.4.1.tar.gz</span></div>
+
+<div><span style="font-size:14px">6. cd q-e-qe-6.4.1</span></div>
+
+<div><span style="font-size:14px">7. wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff</span></div>
+
+<div><span style="font-size:14px">8. patch -p1 --merge &lt; backports-6.4.1.diff</span></div>
+
+<div><span style="font-size:14px">9. ./configure</span></div>
+
+<div><span style="font-size:14px">10. make pw</span></div>
+
+<div><span style="font-size:14px">11. sudo make install</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;set fitting&nbsp;</div>
+
+<div><span style="font-size:14px">1. cd ~</span></div>
+
+<div><span style="font-size:14px">2. sudo apt update</span></div>
+
+<div><span style="font-size:14px">3. sudo apt install -y git python-pip python-scipy csh gfortran</span></div>
+
+<div><span style="font-size:14px">4. git clone https://github.com/by-student-2017/eam_database_fit.git</span></div>
+
+<div><span style="font-size:14px">5. cd ~/eam_database_fit</span></div>
+
+<div>
+<div><span style="font-size:14px">6. gfortran -o Zhou04_EAM_2 Zhou04_create_v2.f<br />
+&nbsp; (</span>gfortran -o Zhou04_EAM_3&nbsp;Zhou04_create_v3.f) (debian 10.0)<span style="font-size:14px">&nbsp;</span></div>
+
+<div><span style="font-size:14px">7. gfortran -o plot plot.f</span></div>
+</div>
+
+<div>&nbsp;
+<div>□&nbsp;fit parameters by Nelder-Mead (NM)&nbsp;method</div>
+
+<div>
+<div>1. cd ~/eam_database_fit</div>
+
+<div>
+<div>2. cp EAM.input_temp EAM.input</div>
+
+<div>3. sed -i 's/Xx/Cu/g' EAM.input</div>
+
+<div>4. cp in.lmp_temp_v2 in.lmp_temp<br />
+5. gedit struct.dat</div>
+
+<div>6. python nm_v5_debian.py<br />
+&nbsp; (or&nbsp;python nm_v4_debian.py)</div>
+</div>
+</div>
+</div>
+
+<div><br />
+□&nbsp;fit parameters by genetic algorithm</div>
+
+<div>
+<div><span style="font-size:14px">1. cd ~/eam_database_fit</span></div>
+
+<div><span style="font-size:14px">2. pip install -U deap --user</span></div>
+
+<div>
+<div>
+<div><span style="font-size:14px">3. cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">4. sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">5. cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">6. sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">7. python ga.py<br />
+&nbsp; (python ga_debian.py) (debian 10.0)</span></div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;fit parameters by baysian method</div>
+
+<div>
+<div><span style="font-size:14px">1. cd ~/eam_database_fit</span></div>
+
+<div><span style="font-size:14px">2. pip install bayesian-optimization==1.1.0</span></div>
+
+<div>
+<div>
+<div><span style="font-size:14px">3. cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">4. sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">5. cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">6. sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">7. python </span>baysian<span style="font-size:14px">.py</span></div>
+</div>
+</div>
+</div>
+
+<div>&nbsp; (python baysian_debian.py) (debian 10.0)<br />
+&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">fit parameters by other methods</span></div>
+
+<div>
+<div><span style="font-size:14px">1. cd ~/eam_database_fit</span></div>
+
+<div>
+<div><span style="font-size:14px">2. cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">3. sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">4. cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">5. sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">6. python nm.py</span></div>
+</div>
+</div>
+
+<div>&nbsp; (or python powell.py)</div>
+
+<div>&nbsp; (or python bfgs.py)<br />
+&nbsp; (python nm_debian.py) (debian 10.0)<br />
+&nbsp; (python nm_v2.py) (fit energy)<br />
+&nbsp; (python nm_v3.py) (fit energy and every force)</div>
+
+<div>&nbsp;</div>
+
+<div>
+<div>□&nbsp;fit parameters by&nbsp;Particle Swarm Optimization (PSO)</div>
+
+<div>
+<div>1. cd ~/eam_database_fit</div>
+
+<div>2.&nbsp;pip2 install pyswarm==0.6</div>
+
+<div>&nbsp; or&nbsp;</div>
+
+<div>&nbsp;&nbsp;git clone https://github.com/tisimst/pyswarm.git</div>
+
+<div>&nbsp;&nbsp;cd pyswarm</div>
+
+<div>&nbsp;&nbsp;sudo python setup.py install</div>
+
+<div>
+<div>3. cp EAM.input_temp EAM.input</div>
+
+<div>4. sed -i 's/Xx/Cu/g' EAM.input</div>
+
+<div>5. gedit struct.dat</div>
+
+<div>6. python pyswarm_v6_debian.py&nbsp;(ubuntu 18.04 LTS or debian 10.0)</div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>
+<div>□&nbsp;fit parameters by&nbsp;<span style="font-size:14px">Particle Swarm Optimization (PSO)</span></div>
+
+<div>
+<div>1. cd ~/eam_database_fit</div>
+
+<div>2.&nbsp;pip2 install miniful</div>
+
+<div>3.&nbsp;<span style="font-size:14px">pip2 install fst-pso==1.4.12</span></div>
+
+<div><span style="font-size:14px">&nbsp; or pip2 install fst-pso==1.5.7</span></div>
+
+<div><span style="font-size:14px">&nbsp; or&nbsp;</span>pip2 install fst-pso==1.6.0</div>
+
+<div>&nbsp; or pip2 install fst-pso==1.7.5</div>
+
+<div>
+<div>4. cp EAM.input_temp EAM.input</div>
+
+<div>5. sed -i 's/Xx/Cu/g' EAM.input</div>
+
+<div>6. gedit struct.dat</div>
+
+<div>7. python fstpso_v6_debian.py&nbsp;(ubuntu 18.04 LTS or debian 10.0)</div>
+</div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">You could get config data (config_potfit) for potfit ( https://www.potfit.net/wiki/doku.php ).</span></div>
+
+<div><br />
+□&nbsp;<span style="font-size:14px">clean config_potfit</span></div>
+
+<div><span style="font-size:14px">1. echo -n &gt; config_potfit</span><br />
+&nbsp;
+<div>□&nbsp;<span style="font-size:14px">plot F, rho or z2r</span></div>
+
+<div><span style="font-size:14px">1. ./plot<br />
+2.&nbsp;gnuplot png.gp</span></div>
+</div>
+
+<div>------------------------------------------------------------------------------<br />
+■ eam_database_fit</div>
+
+<div><span style="font-size:14px">(Google Colaboratory)</span><br />
+?(Edit: 6/Aug/2020)</div>
+
+<div><br />
+□&nbsp;<span style="font-size:14px">Install (cif2cell-informal)</span></div>
+
+<div><span style="font-size:14px">!apt update</span></div>
+
+<div><span style="font-size:14px">!apt install -y git python python-setuptools python-dev</span></div>
+
+<div><span style="font-size:14px">%cd /content</span></div>
+
+<div><span style="font-size:14px">!git clone https://github.com/by-student-2017/cif2cell-informal.git</span></div>
+
+<div><span style="font-size:14px">%cd cif2cell-informal</span></div>
+
+<div><span style="font-size:14px">!tar zxvf PyCifRW-3.3.tar.gz</span></div>
+
+<div><span style="font-size:14px">%cd PyCifRW-3.3</span></div>
+
+<div><span style="font-size:14px">!python2 setup.py install</span></div>
+
+<div><span style="font-size:14px">%cd /content/cif2cell-informal</span></div>
+
+<div><span style="font-size:14px">!python2 setup.py install</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">Install (lammps)</span></div>
+
+<div><span style="font-size:14px">!apt update</span></div>
+
+<div><span style="font-size:14px">!apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</span></div>
+
+<div><span style="font-size:14px">%cd /content</span></div>
+
+<div><span style="font-size:14px">!wget https://lammps.sandia.gov/tars/</span>lammps-3Mar20<span style="font-size:14px">.tar.gz</span></div>
+
+<div><span style="font-size:14px">!tar zxvf </span>lammps-3Mar20<span style="font-size:14px">.tar.gz</span></div>
+
+<div><span style="font-size:14px">%cd lammps-3Mar20</span></div>
+
+<div><span style="font-size:14px">!mkdir build</span></div>
+
+<div><span style="font-size:14px">%cd build&nbsp;</span></div>
+
+<div><span style="font-size:14px">!cmake -D BUILD_MPI=on -D PKG_USER-MEAMC=on -D PKG_MANYBODY=on -D PKG_MC=on ../cmake</span></div>
+
+<div><span style="font-size:14px">!cmake --build .</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ['PATH'] = &quot;/content/lammps-3Mar20/build:&quot;+os.environ['PATH']</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">Install (PWscf)</span></div>
+
+<div><span style="font-size:14px">!apt update</span></div>
+
+<div><span style="font-size:14px">!apt install -y gcc g++ build-essential gfortran libopenblas-dev libfftw3-dev libopenmpi-dev wget</span></div>
+
+<div><span style="font-size:14px">%cd /content</span></div>
+
+<div><span style="font-size:14px">!wget https://github.com/QEF/q-e/archive/qe-6.4.1.tar.gz</span></div>
+
+<div><span style="font-size:14px">!tar zxvf qe-6.4.1.tar.gz</span></div>
+
+<div><span style="font-size:14px">%cd q-e-qe-6.4.1</span></div>
+
+<div><span style="font-size:14px">!wget https://github.com/QEF/q-e/releases/download/qe-6.4.1/backports-6.4.1.diff</span></div>
+
+<div><span style="font-size:14px">!patch -p1 --merge &lt; backports-6.4.1.diff</span></div>
+
+<div><span style="font-size:14px">!./configure</span></div>
+
+<div><span style="font-size:14px">!make pw</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ['PATH'] = &quot;/content/q-e-qe-6.4.1/bin:&quot;+os.environ['PATH']</span></div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">set fitting</span></div>
+
+<div><span style="font-size:14px">!apt update</span></div>
+
+<div><span style="font-size:14px">!apt install -y git python-pip python-scipy csh gfortran</span></div>
+
+<div><span style="font-size:14px">%cd /content</span></div>
+
+<div><span style="font-size:14px">!git clone https://github.com/by-student-2017/eam_database_fit.git</span></div>
+
+<div><span style="font-size:14px">%cd /content/eam_database_fit</span></div>
+
+<div>
+<div>!gfortran -o Zhou04_EAM_2&nbsp;Zhou04_create_v2.f<br />
+<span style="font-size:14px">!gfortran -o Zhou04_EAM_3 Zhou04_create_v3.f</span></div>
+
+<div><span style="font-size:14px">!gfortran -o plot plot.f</span></div>
+</div>
+
+<div>&nbsp;
+<div>□&nbsp;fit parameters by Nelder-Mead (NM)&nbsp;method</div>
+
+<div>
+<div>%cd /content/eam_database_fit</div>
+
+<div>import os</div>
+
+<div>os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</div>
+
+<div>os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</div>
+
+<div>
+<div>!cp EAM.input_temp EAM.input</div>
+
+<div>!sed -i 's/Xx/Cu/g' EAM.input</div>
+
+<div>!cp in.lmp_temp_v2 in.lmp_temp</div>
+
+<div>!python2 nm_v5_gc.py</div>
+</div>
+</div>
+</div>
+
+<div><br />
+□&nbsp;<span style="font-size:14px">fit parameters by genetic algorithm</span></div>
+
+<div>
+<div><span style="font-size:14px">!pip2 install -U deap --user</span></div>
+
+<div><span style="font-size:14px">%cd /content/eam_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div>
+<div><span style="font-size:14px">!cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">!cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!python2 ga_v3_gc.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">fit parameters by baysian method</span></div>
+
+<div>
+<div><span style="font-size:14px">!pip2 install bayesian-optimization==1.1.0</span></div>
+
+<div><span style="font-size:14px">%cd /content/eam_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div>
+<div><span style="font-size:14px">!cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">!cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!python2 baysian_v3_gc.py</span></div>
+</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">fit parameters by other methods</span></div>
+
+<div>
+<div><span style="font-size:14px">%cd /content/eam_database_fit</span></div>
+
+<div><span style="font-size:14px">import os</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;OMP_NUM_THREADS&quot;] = &quot;1,1&quot;</span></div>
+
+<div><span style="font-size:14px">os.environ[&quot;MKL_NUM_THREADS&quot;] = &quot;1&quot;</span></div>
+
+<div>
+<div><span style="font-size:14px">!cp EAM.input_temp EAM.input</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/Xx/Cu/g' EAM.input</span></div>
+
+<div><span style="font-size:14px">!cp in.lmp_temp_v2 in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!sed -i 's/YYYY/300.0/' in.lmp_temp</span></div>
+
+<div><span style="font-size:14px">!python2 nm_gc.py</span></div>
+</div>
+</div>
+
+<div>or !python2 powell_gc.py</div>
+
+<div>or !python2 bfgs_gc.py<br />
+or !python nm_v2.py (fit energy)<br />
+or !python nm_v3.py&nbsp;(fit energy and every force)</div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">You could get config data (config_potfit) for potfit ( https://www.potfit.net/wiki/doku.php ).</span></div>
+
+<div><br />
+□&nbsp;<span style="font-size:14px">clean config_potfit</span></div>
+
+<div><span style="font-size:14px">echo -n &gt; config_potfit</span><br />
+------------------------------------------------------------------------------<br />
+□ Information<br />
+<br />
+・G. Wang et al., Comp. Mater. Sci., 186 (2021) 110002.<br />
+(&nbsp;<a href="https://www.sciencedirect.com/science/article/pii/S0927025620304936">https://www.sciencedirect.com/science/article/pii/S0927025620304936</a>&nbsp;)<br />
+&nbsp;&nbsp;Since Purja Pun et al. proposed that the dipole function cannot effectively improve the quality of the potential [28], we did not use the dipole term. Because the Cauchy discrepancy of the bulk Au is positive [23], the EAM potential can be used to accurately describe its elastic constants and other properties, so for the pure element potential of Au, we only take the first two terms of Eq. (1).&nbsp;<br />
+※ &quot;The first two terms of Eq. (1)&quot; mean to use EAM potential form only.&nbsp;<br />
+[28]&nbsp;G.P. Purja Pun et al.,&nbsp;Acta Mater., 100 (2015) 377-391.: 10.1016/j.actamat.2015.08.052<br />
+[23]&nbsp;&nbsp;G. Simmons, H. Wang, &quot;Single Crystal Elastic Constants and Calculated Aggregate Properties: A handbook&quot;&nbsp;
+<div>(2nd ed.), MIT Press, Cambridge (1971).<br />
+<br />
+・<a href="https://www.sciencedirect.com/science/article/pii/S2213956714000425">https://www.sciencedirect.com/science/article/pii/S2213956714000425</a><br />
+&nbsp;&nbsp;A positive Cauchy pressure reveals ductility of crystal, while a negative value demonstrates brittleness.<br />
+<br />
+・<a href="https://arxiv.org/pdf/1704.01752.pdf">https://arxiv.org/pdf/1704.01752.pdf</a><br />
+&nbsp;&nbsp;Pettifor proposed the criterion that a positive Cauchy pressure indicates metallic bonds whereas negative Cauchy pressures are typical in the case of covalent bonds.<br />
+<br />
+・A. A. Oni-Ojo et al.,&nbsp;JONAMP 11 (2007) 509-515.<br />
+&nbsp; Sr:&nbsp;negative Cauchy discrepancy<br />
+<br />
+・<a href="https://euler.phys.cmu.edu/widom/pubs/PDF/JPCM25_2013_075402.pdf"><span style="font-size:14px">https://euler.phys.cmu.edu/widom/pubs/PDF/JPCM25_2013_075402.pdf</span></a><br />
+&nbsp; Cr:&nbsp;negative Cauchy pressure<br />
+<br />
+・<a href="https://www.researchgate.net/publication/232025597_Negative_Cauchy_Pressure_within_the_Tight-Binding_Approximation">https://www.researchgate.net/publication/232025597_Negative_Cauchy_Pressure_within_the_Tight-Binding_Approximation</a><br />
+&nbsp; Ir, Ti3Al, TiAl, TiAl3:&nbsp;negative Cauchy pressure<br />
+<br />
+・<a href="https://www.researchgate.net/publication/225346905_Modeling_the_dislocation_properties_and_mechanical_behavior_of_Ir_Rh_and_their_refractory_alloys"><span style="font-size:14px">https://www.researchgate.net/publication/225346905_Modeling_the_dislocation_properties_and_mechanical_behavior_of_Ir_Rh_and_their_refractory_alloys</span></a><br />
+&nbsp; Rh:&nbsp;negative Cauchy pressure&nbsp;<br />
+<br />
+・<a href="https://onlinelibrary.wiley.com/doi/abs/10.1002/pssb.200743075">https://onlinelibrary.wiley.com/doi/abs/10.1002/pssb.200743075</a><br />
+&nbsp;&nbsp;Ce, Yb, Th, U, Pu:&nbsp;negative Cauchy pressure<br />
+&nbsp; La: positive&nbsp;Cauchy pressure<br />
+<br />
+・J. David Schall et al., Phys. Rev. B 77 (2008) 115209.<br />
+&nbsp; Silicon has as negative Cauchy discrepancy (C<sub>12</sub>-C<sub>44</sub>)<br />
+<br />
+・<a href="https://aip.scitation.org/doi/pdf/10.1063/1.4928208">https://aip.scitation.org/doi/pdf/10.1063/1.4928208</a><br />
+&nbsp; CrFe<sub>2</sub>C: negative Cauchy pressure (C<sub>12</sub>-C<sub>66</sub>)<br />
+<br />
+・D. J. Srolovitz et al., &quot;Atomistic Simulation of Materials: Beyond Pair Potentials&quot;<br />
+&nbsp;&nbsp;The embedding function and pair interaction can be obtained from first principles, as is demonstrated in Ref. 28 with a model density functional for nickel (also see Ref. 22, for a different treatment).&nbsp;These first principles functions do resonably well in describing the properties of nickel.&nbsp;However, in practice, we have taken a semi-empirical approach, where the fundamental theory has guided the fitting of the embedding function and pair interaction to basic bulk properties.&nbsp;In general, we have fittied to lattice constant, cohesive energy, elastice constants, and vacancy formation energy.&nbsp;We have also found it useful to require that the cohesive energy as a function of lattice constant follow the &quot;universal binding curve&quot; of Ref. 30.&nbsp;In one paper, we have also fitted to the dilute heats of alloying for binary alloys. In general, the fits are overdeermined, and the fact that we can achieve any kind of fit is in some sense a check of self-consistency.&nbsp;Functional forms have varied: in some cases, the functions are determined by general splines, in other cases, we have found it more useful to use analytic functions.&nbsp;<br />
+&nbsp;&nbsp;There is one fact to be aware of in doing the fitting. The following transformation does not change the total energy:<br />
+&nbsp; F<sub>i</sub>(&rho;) -&gt;&nbsp;F<sub>i</sub>(&rho;)&nbsp;- c<sub>i</sub>&rho;<br />
+&nbsp; &Phi;<sub>ij</sub>(R) -&gt;&nbsp;&Phi;<sub>ij</sub>(R) +&nbsp;c<sub>i</sub>&rho;<sub>j</sub><sup>a</sup>(R)&nbsp;+ c<sub>j</sub>&rho;<sub>i</sub><sup>a</sup>(R)<br />
+&nbsp;&nbsp;Therefore, the embedding function cannot be determined to within a linear function. This is related to the fact that some of the electrostatic interaction can be grouped either as part of the pair term or as part of the embedding energy:&nbsp;the choice is arbitrary. This ambiguity also confuses the comparison of functions obtained by different workers.&nbsp;Some workers have required that &Phi;(R) be positive definite, which amounts to a particular choice of the constants in the transformation.&nbsp;Other workers have required that the embedding functions correspond to those obtained from atom-in-jellium calculations, which amounts to a different choice of the constants.&nbsp;However, the different choice of constants are arbitrary: very different looking sets of EAM functions may in fact give exactly the same energies.&nbsp;Insted of comparing embedding functions and pair interactions directly, one should compare the effective pair and trio interactions (Eqs. 9a and b). These effective interactions are unaffected by the transfromation, and therefore provide a way of comparing rather different looking sets of EAM functions.<br />
+&nbsp;&nbsp;In obtaining new functions, or in applying existing ones, there are several traps to avoid:&nbsp;<br />
+1)&nbsp;The functions should be smooth.<br />
+2)&nbsp;The embedding function should have positive curvature. This ensures that the bound strength decreases with incresing coordination (see the section on many-atom interactions). This is a basic property of embedding functions, as can be demonstrated from fundamental principles.<br />
+3)&nbsp;A direct consequence of the previous point is that metals with negative Cauchy discrepancy evidently have some basic properties which are neglected in the EAM.&nbsp;The approximations used in justifying the EAM break down in these cases.<br />
+4)&nbsp;Several workers have used the restriction of&nbsp;&Phi;<sub>ij&nbsp;</sub>= &radic;(&Phi;<sub>ii</sub>&Phi;<sub>jj</sub>). This was used only to restrict the number of free parameters and is generally not a good approximation.<br />
+5)&nbsp;Functions which have been fitted to the properties of two elemental metals with no regard for the alloying properties will be very lucky to describe the alloy properly.&nbsp;For example, Daw and Baskes give functions for Ni and functions for Pd. These functions were fitted to the elemental properties but do not describe the Ni-Pd system well. On the other hand, Foiles Baskes and Daw fitted the dilute heats of alloying and do well for Ni-Pd.<br />
+6)&nbsp;Avoid covalent materials, or ones with negative Cauchy discrepancy. The EAM does not describe the basic physics related to these properties.</div>
+
+<div>
+<div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
+
+<div><span style="font-size:14px">■ Particle Swarm Optimization (PSO)</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ fst-pso: https://pypi.org/project/fst-pso/</span></div>
+
+<div><span style="font-size:14px">・Github repository: https://github.com/aresio/fst-pso</span></div>
+
+<div>◇ Install</div>
+
+<div><span style="font-size:14px">・pip2 install miniful</span></div>
+
+<div><span style="font-size:14px">・pip2 install fst-pso==1.4.12&nbsp;</span></div>
+
+<div>&nbsp;</div>
+
+<div><span style="font-size:14px">□ psopy: https://pypi.org/project/psopy/</span></div>
+
+<div><span style="font-size:14px">・Github repository: https://github.com/jerrytheo/psopy</span></div>
+
+<div>◇ install<br />
+1. git clone https://github.com/jerrytheo/psopy.git<br />
+2. cd psopy<br />
+3. sudo python3 setup.py install<br />
+◇ test<br />
+1. python3 setup.py tests</div>
+
+<div>&nbsp;</div>
+
+<div>□ PYSWARMS: https://pyswarms.readthedocs.io/en/latest/</div>
+
+<div><span style="font-size:14px">・PySwarms is an extensible research toolkit for particle swarm optimization (PSO) in Python.</span></div>
+
+<div><span style="font-size:14px">・Free software: MIT license</span></div>
+
+<div><span style="font-size:14px">・Github repository: https://github.com/ljvmiranda921/pyswarms</span></div>
+
+<div><span style="font-size:14px">・Python versions: 3.5, 3.6, and 3.7</span></div>
+
+<div><span style="font-size:14px">・Chat with us: https://gitter.im/pyswarms/Issues</span></div>
+
+<div>
+<div>◇ install (python2.7)</div>
+
+<div>1. pip2 install pyswarms</div>
+
+<div>or</div>
+
+<div>1. git clone https://github.com/mamadyonline/pyswarms.git<br />
+2. cd pyswarms<br />
+3. sudo python setup.py install</div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□&nbsp;<span style="font-size:14px">&nbsp;pyswarm 0.6</span></div>
+
+<div>
+<div>◇ install (python2)</div>
+</div>
+
+<div>
+<div><span style="font-size:14px">1. pip2 install pyswarm==0.6</span></div>
+
+<div><span style="font-size:14px">or</span></div>
+
+<div><span style="font-size:14px">1. git clone https://github.com/tisimst/pyswarm.git</span></div>
+
+<div><span style="font-size:14px">2. cd pyswarm</span></div>
+
+<div><span style="font-size:14px">3. sudo python setup.py install</span></div>
+</div>
+
+<div>&nbsp;</div>
+
+<div>□ PyRETIS: http://www.pyretis.org/current/examples/examples-pso.html</div>
+
+<div>&nbsp;</div>
+
+<div>□ 利点と欠点 (Japanese)</div>
+
+<div><span style="font-size:14px">・https://qiita.com/ganariya/items/ae5a38a3537b06bd3842</span></div>
+</div>
+------------------------------------------------------------------------------</div>

@@ -1,0 +1,147 @@
+------------------------------------------------------------------------------<br />
+Å° CP2k v.7.1.0 (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+<br />
+Å† Install (OpenMP)<br />
+1. wget https://github.com/cp2k/cp2k/releases/download/v7.1.0/cp2k-7.1-Linux-x86_64.ssmp<br />
+2. chmod +x cp2k-7.1-Linux-x86_64.ssmp<br />
+<br />
+Å† version<br />
+1. ./cp2k-7.1-Linux-x86_64.ssmp --version<br />
+<br />
+Å† help<br />
+1. ./cp2k-7.1-Linux-x86_64.ssmp --help<br />
+<br />
+Å¶ écîOÇæÇ™Ç±ÇÃé¿çsÉtÉ@ÉCÉãÇ≈ÇÕxTBÇ»Ç«ÇìÆÇ©ÇπÇ»Ç¢ÅBç∂óìÇÃCygwinÇ‚â∫ãLÇ»Ç«ÇéQçlÇ…ÇµÇƒé©ï™Ç≈ÉRÉìÉpÉCÉãÇ∑ÇÈïKóvÇ™Ç†ÇÈ<br />
+Å¶ B3LYPÇ≈ÇÃåvéZÇ…ÇÕlibxcÇ™ïKóvÇ…Ç»ÇÈÅBÇ‡ÇµÇ©ÇµÇΩÇÁÅAversion 4.0.3ÇæÇ∆è„éËÇ≠Ç¢Ç≠Ç©Ç‡ÇµÇÍÇ»Ç¢<br />
+------------------------------------------------------------------------------<br />
+Å† Install (OpenMPI) (3/Jun/2020)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget make cmake gfortran g++ gcc build-essential libopenblas-dev libfftw3-dev libfftw3-mpi-dev libopenmpi-dev libscalapack-openmpi-dev python python3&nbsp;pkg-config libxc-dev libgsl-dev gsl-bin&nbsp;libhdf5-dev&nbsp;libhdf5-openmpi-dev git bison byacc libint-dev libint2-dev&nbsp;libelpa-dev<br />
+1. wget&nbsp;https://github.com/cp2k/cp2k/releases/download/v7.1.0/cp2k-7.1.tar.bz2<br />
+2. tar xvf&nbsp;cp2k-7.1.tar.bz2<br />
+3. cd cp2k-7.1<br />
+4. cd tools/toolchain/<br />
+&nbsp; (./install_cp2k_toolchain.sh --help)<br />
+5. sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so /usr/lib/x86_64-linux-gnu/libscalapack.so<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0 /usr/lib/x86_64-linux-gnu/libscalapa<br />
+ck.so.2.0<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0.2 /usr/lib/x86_64-linux-gnu/libscala<br />
+pack.so.2.0.2<br />
+6. ./install_cp2k_toolchain.sh --with-libxsmm=install --with-libint=install --with-libint=no --with-libxc=no --with-sirius=no --with-openblas=system --with-fftw=system --with-reflapack=no --with-mkl=no --with-scalapack=system --with-openmpi=system &nbsp;--with-mpich=no --enable-omp=no --enable-cuda=no --with-gsl=system --with-hdf5=system --with-cmake=install --with-elpa=install<br />
+7. cp ~/cp2k-7.1/tools/toolchain/install/arch/* ~/cp2k-7.1/arch/<br />
+8. source ~/cp2k-7.1/tools/toolchain/install/setup<br />
+9. cd ~/cp2k-7.1<br />
+10. make -j 4 ARCH=local VERSION=&quot;popt&quot;<br />
+11.&nbsp;~/cp2k-7.1/exe/local/cp2k.popt -h<br />
+&nbsp;&nbsp;~/cp2k-7.1/exe/local/cp2k.popt --version<br />
+<br />
+Å¶ (--with-libxc=install or system) Error: Symbol &lsquo;xc_f03_func_set_ext_params&rsquo; referenced at (1) not found in module &lsquo;xc_f03_lib_m&rsquo;<br />
+Å¶ (--with-libint=install or system) Error<br />
+------------------------------------------------------------------------------<br />
+Å† Install (OpenMPI) (latest version, this installation is not ver.7 but ver.8) (github)<br />
+(Attention!!!: This installation is test version) (2/Jun/2020)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget make cmake gfortran g++ gcc build-essential libopenblas-dev libfftw3-dev libfftw3-mpi-dev libopenmpi-dev libscalapack-openmpi-dev python python3&nbsp;pkg-config libxc-dev libgsl-dev gsl-bin&nbsp;libhdf5-dev&nbsp;libhdf5-openmpi-dev git bison byacc libint-dev libint2-dev&nbsp;libelpa-dev<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">1.&nbsp;git clone --recursive https://github.com/cp2k/cp2k.git cp2k</span><br />
+2. cd cp2k<br />
+3. cd tools/toolchain/<br />
+&nbsp; (./install_cp2k_toolchain.sh --help)<br />
+4. sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so /usr/lib/x86_64-linux-gnu/libscalapack.so<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0 /usr/lib/x86_64-linux-gnu/libscalapa<br />
+ck.so.2.0<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0.2 /usr/lib/x86_64-linux-gnu/libscala<br />
+pack.so.2.0.2<br />
+5. ./install_cp2k_toolchain.sh --with-libxsmm=no --with-libint=no --with-libxc=no --with-openblas=system --with-fftw=system --with-reflapack=no --with-mkl=no --with-scalapack=system --with-openmpi=system &nbsp;--with-mpich=no --enable-omp=no --enable-cuda=no --with-gsl=system --with-hdf5=system --with-cmake=install --with-elpa=install&nbsp;--with-sirius=no<br />
+6. cp ~/cp2k/tools/toolchain/install/arch/* ~/cp2k/arch/<br />
+7. source ~/cp2k/tools/toolchain/install/setup<br />
+8. cd ~/cp2k<br />
+9. make -j 4 ARCH=local VERSION=&quot;popt&quot;<br />
+------------------------------------------------------------------------------<br />
+Å† cp2k (latest version, this installation is not ver.7 but ver.8) (github)<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">(https://www.cp2k.org/exercises:2019_uzh_acpc2:installation)</span><br />
+(Attention!!!: This installation is test version) (2/Jun/2020)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget make cmake gfortran g++ gcc build-essential libopenblas-dev libfftw3-dev libfftw3-mpi-dev libopenmpi-dev libscalapack-openmpi-dev python python3&nbsp;pkg-config libxc-dev libgsl-dev gsl-bin&nbsp;libhdf5-dev&nbsp;libhdf5-openmpi-dev git bison byacc libint-dev libint2-dev&nbsp;libelpa-dev&nbsp;<br />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">1.&nbsp;git clone --recursive https://github.com/cp2k/cp2k.git cp2k</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">2. cd cp2k/arch</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">3. gedit ubuntu-x86-64-gfortran.psmp</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">-----</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">CC &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= mpicc<br />
+FC &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= mpif90<br />
+LD &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= mpif90<br />
+AR &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;= ar -r<br />
+<br />
+CFLAGS &nbsp; &nbsp; &nbsp;= -O2 -g -mtune=native<br />
+<br />
+DFLAGS &nbsp; &nbsp; &nbsp;= -D__FFTW3<br />
+DFLAGS &nbsp; &nbsp; += -D__MPI_VERSION=3<br />
+DFLAGS &nbsp; &nbsp; += -D__parallel -D__SCALAPACK<br />
+<br />
+FCFLAGS &nbsp; &nbsp; = $(CFLAGS) $(DFLAGS)<br />
+FCFLAGS &nbsp; &nbsp;+= -ffree-form -ffree-line-length-none<br />
+FCFLAGS &nbsp; &nbsp;+= -fopenmp<br />
+FCFLAGS &nbsp; &nbsp;+= -ftree-vectorize -funroll-loops -std=f2008<br />
+<br />
+LDFLAGS &nbsp; &nbsp; = $(FCFLAGS) -static-libgfortran<br />
+<br />
+LIBS &nbsp; &nbsp; &nbsp; += -lxcf03<br />
+LIBS &nbsp; &nbsp; &nbsp; += -lfftw3<br />
+LIBS &nbsp; &nbsp; &nbsp; += -lfftw3_threads<br />
+LIBS &nbsp; &nbsp; &nbsp; += -lscalapack-openmpi<br />
+LIBS &nbsp; &nbsp; &nbsp; += -lopenblas<br />
+LIBS &nbsp; &nbsp; &nbsp; += -ldl -lpthread -lstdc++</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">-----</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">4. cd ~/cp2k&nbsp;</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">5.&nbsp;make -j 2 ARCH=ubuntu-x86-64-gfortran VERSION=psmp</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">6. gedit ~/.bashrc</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">-----</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">export PATH=${PATH}:$HOME/cp2k/exe/ubuntu-x86-64-gfortran</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">-----</span><br style="color: rgb(0, 0, 0); font-family: verdana,tahoma,&quot;ÇçÇì ÉSÉVÉbÉN&quot;,&quot;ÇçÇì ÇêÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS pro w3&quot;,osaka?ìôïù,osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;" />
+<span style="display: inline !important; float: none; background-color: rgb(255, 255, 255); color: black; font-family: verdana,tahoma,&quot;ÇlÇr ÉSÉVÉbÉN&quot;,&quot;ÇlÇr ÇoÉSÉVÉbÉN&quot;,&quot;ÉqÉâÉMÉmäpÉS Pro W3&quot;,Osaka?ìôïù,Osaka,ïΩê¨äpÉSÉVÉbÉN,sans-serif; font-size: 14px; font-style: normal; font-variant: normal; font-weight: 400; letter-spacing: normal; line-height: 1.5; orphans: 2; text-align: left; text-decoration: none; text-indent: 0px; text-transform: none; -webkit-text-stroke-width: 0px; white-space: normal; word-spacing: 0px;">7.&nbsp;source ~/.bashrc<br />
+8. export OMP_NUM_THREADS=1<br />
+9. mpirun -np 2 ./cp2k.psmp --version</span><br />
+<br />
+Å† tests (QMMM and xTB)<br />
+1. cd&nbsp;~/cp2k/tests/QMMM/xTB/regtest<br />
+2. mpirun -np 2 cp2k.psmp -i epc_1.inp | tee epc_1.out<br />
+<br />
+Å† tests (TDDFPT)<br />
+1. cd&nbsp;~/cp2k/tests/QS/regtest-tddfpt<br />
+2. mpirun -np 2 cp2k.psmp -i H2O_tddfpt-s-1.inp | tee&nbsp;H2O_tddfpt-s-1.out<br />
+<br />
+Å¶ B3LYP or XAS-TDP need libxc and/or libint.<br />
+------------------------------------------------------------------------------<br />
+Å† Install (OpenMPI) (failed)<br />
+(Attention!!!: This installation is test version) (failed) (30/May/2020)<br />
+(https://github.com/cp2k/cp2k/releases/)<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install -y wget make cmake gfortran g++ gcc build-essential libopenblas-dev libfftw3-dev libfftw3-mpi-dev libopenmpi-dev libscalapack-openmpi-dev python python3&nbsp;pkg-config libxc-dev libgsl-dev gsl-bin&nbsp;libhdf5-dev&nbsp;libhdf5-openmpi-dev git bison byacc libint-dev libint2-dev&nbsp;libelpa-dev<br />
+1. wget https://github.com/cp2k/cp2k/archive/v7.1.0.tar.gz<br />
+2. tar zxvf v7.1.0.tar.gz<br />
+3. cd cp2k-7.1.0<br />
+4. cd tools/toolchain/<br />
+&nbsp; (./install_cp2k_toolchain.sh --help)<br />
+5. sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so /usr/lib/x86_64-linux-gnu/libscalapack.so<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0 /usr/lib/x86_64-linux-gnu/libscalapa<br />
+ck.so.2.0<br />
+&nbsp; sudo ln /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so.2.0.2 /usr/lib/x86_64-linux-gnu/libscala<br />
+pack.so.2.0.2<br />
+6. ./install_cp2k_toolchain.sh --with-libxsmm=no --with-libint=system --with-libxc=system --with-openblas=system --with-fftw=system --with-reflapack=no --with-mkl=no --with-scalapack=system --with-openmpi=system &nbsp;--with-mpich=no --enable-omp=no --enable-cuda=no --with-gsl=system --with-hdf5=system --with-cmake=install --with-elpa=no<br />
+7. cp ~/cp2k-7.1.0/tools/toolchain/install/arch/* ~/cp2k-7.1.0/arch/<br />
+8. source ~/cp2k-7.1.0/tools/toolchain/install/setup<br />
+9. cd ~/cp2k-7.1.0<br />
+10. make -j 4 ARCH=local VERSION=&quot;popt&quot;<br />
+<br />
+9.5. cd exts<br />
+&nbsp; rm -f -r dbscr<br />
+&nbsp;&nbsp;git clone https://github.com/cp2k/dbcsr.git<br />
+&nbsp; cd dbcsr<br />
+&nbsp;&nbsp;git submodule update --init --recursive<br />
+&nbsp; ~/cp2k-7.1.0/tools/toolchain/install/cmake-3.15.1/bin/cmake .<br />
+&nbsp; cd ~/cp2k-7.1.0<br />
+Å¶&nbsp;Fatal Error: Can't open module file &lsquo;dbcsr_data_methods.mod&rsquo; for reading at (1): No such file or directory<br />
+compilation terminated.<br />
+------------------------------------------------------------------------------

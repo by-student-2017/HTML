@@ -1,0 +1,246 @@
+VASP 5.4.1Feb16<br />
+------------------------------------------------------------------------------<br />
+Å° vasp.5.4.1.05Feb16.tar.gz [1]<br />
+(Youtube: https://www.youtube.com/watch?v=zczPEKRHfwU)<br />
+<br />
+Å† Install (gfortran) (ubuntu 18.04 LTS (64 bit))<br />
+ÅEvasp.5.4.1.05Feb16.tar.gz<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install csh<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libtmglib-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; (sudo apt install libatlas-base-dev liblapack-dev libblas-dev)<br />
+1. tar zxvf vasp.5.4.1.05Feb16.tar.gz<br />
+2. cd vasp.5.4.1<br />
+3. wget http://cms.mpi.univie.ac.at/patches/patch.5.4.1.14032016.gz<br />
+&nbsp; wget http://cms.mpi.univie.ac.at/patches/patch.5.4.1.03082016.gz<br />
+&nbsp; gunzip patch.5.4.1.14032016.gz<br />
+&nbsp; gunzip patch.5.4.1.03082016.gz<br />
+4. patch -p0 &lt; patch.5.4.1.14032016<br />
+&nbsp; patch -p0 &lt; patch.5.4.1.03082016<br />
+5. cp arch/makefile.include.linux_gfortran makefile.include<br />
+6. gedit makefile.include<br />
+# -----<br />
+# Precompiler options<br />
+CPP_OPTIONS= -DMPI -DHOST=\&quot;IFC91_ompi\&quot; -DIFC \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DCACHE_SIZE=4000 -Davoidalloc \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DMPI_BLOCK=8000 -DscaLAPACK -Duse_collective \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-Duse_bse_te -Duse_shmem -Dtbdyn<br />
+<br />
+CPP &nbsp; &nbsp; &nbsp; &nbsp;= gcc -E -P -C $*$(FUFFIX) &gt;$*$(SUFFIX) $(CPP_OPTIONS)<br />
+<br />
+FC &nbsp; &nbsp; &nbsp; &nbsp; = mpif90<br />
+FCL &nbsp; &nbsp; &nbsp; &nbsp;= mpif90<br />
+<br />
+FREE &nbsp; &nbsp; &nbsp; = -ffree-form -ffree-line-length-none<br />
+<br />
+FFLAGS &nbsp; &nbsp; =<br />
+OFLAG &nbsp; &nbsp; &nbsp;= -O2<br />
+OFLAG_IN &nbsp; = $(OFLAG)<br />
+DEBUG &nbsp; &nbsp; &nbsp;= -O0<br />
+<br />
+LIBDIR &nbsp; &nbsp; = /usr/lib/x86_64-linux-gnu<br />
+BLAS &nbsp; &nbsp; &nbsp; = -L$(LIBDIR) -lblas<br />
+LAPACK &nbsp; &nbsp; = -L$(LIBDIR) -ltmglib -llapack<br />
+BLACS &nbsp; &nbsp; &nbsp;=<br />
+SCALAPACK &nbsp;= -L$(LIBDIR) -lscalapack-openmpi $(BLACS)<br />
+<br />
+OBJECTS &nbsp; &nbsp;= fftmpiw.o fftmpi_map.o &nbsp;fftw3d.o &nbsp;fft3dlib.o \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;/usr/lib/x86_64-linux-gnu/libfftw3.a<br />
+INCS &nbsp; &nbsp; &nbsp; =-I/usr/include<br />
+<br />
+LLIBS &nbsp; &nbsp; &nbsp;= $(SCALAPACK) $(LAPACK) $(BLAS)<br />
+<br />
+OBJECTS_O1 += fft3dfurth.o fftw3d.o fftmpi.o fftmpiw.o chi.o<br />
+OBJECTS_O2 += fft3dlib.o<br />
+<br />
+# For what used to be vasp.5.lib<br />
+CPP_LIB &nbsp; &nbsp;= $(CPP)<br />
+FC_LIB &nbsp; &nbsp; = $(FC)<br />
+CC_LIB &nbsp; &nbsp; = gcc<br />
+CFLAGS_LIB = -O<br />
+FFLAGS_LIB = -O1<br />
+FREE_LIB &nbsp; = $(FREE)<br />
+<br />
+OBJECTS_LIB= linpack_double.o getshmem.o<br />
+<br />
+# Normally no need to change this<br />
+SRCDIR &nbsp; &nbsp; = ../../src<br />
+BINDIR &nbsp; &nbsp; = ../../bin<br />
+# -----<br />
+7. make all<br />
+(Å¶ /usr/lib/x86_64-linux-gnu/libscalapack-openmpi.so)<br />
+<br />
+Å† vdW-DF (no check) [2]<br />
+-----<br />
+6.1. cd src<br />
+6.2. gunzip vdw_kernel.bindat.gz<br />
+6.3. gunzip vdw_kernel.bindat.big_endian.gz<br />
+6.4. cd ..<br />
+-----<br />
+7. make all<br />
+<br />
+Å† Usage<br />
+(4 core {8 threads} case)<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/vasp.5.4.1/bin/vasp_std<br />
+------------------------------------------------------------------------------<br />
+Å° potpaw_PBE<br />
+<br />
+Å† Install<br />
+0. cd ~/vasp.5.4.1<br />
+1. mkdir potpaw_PBE<br />
+2. cd potpaw_PBE<br />
+3. tar zxvf potpaw_PBE.54.tar.gz<br />
+------------------------------------------------------------------------------<br />
+Å° potpaw_LDA<br />
+<br />
+Å† Install<br />
+0. cd ~/vasp.5.4.1<br />
+1. mkdir potpaw_LDA<br />
+2. cd potpaw_LDA<br />
+3. tar zxvf potpaw_LDA.54.tar.gz<br />
+------------------------------------------------------------------------------<br />
+Å° GCC (gfortran + gcc) + Intel MKL (free version) [3-6]<br />
+<br />
+Å† Intel MKL (&quot;free download&quot; from 2015/Aug/31))<br />
+Åû registration &amp; Download<br />
+1. https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; &gt; Register &amp; Download<br />
+&nbsp; &gt; (input data)<br />
+2. Choose Product to Download<br />
+&nbsp; &gt; Intel Math Kernel Library for linux<br />
+&nbsp; &gt; 2019 Update 5<br />
+3. Choose a Download Option<br />
+&nbsp; &gt; Full Package<br />
+Åû unpack and setup<br />
+1. tar zxvf l_mkl_2019.5.281.tgz<br />
+2. cd l_mkl_2019.5.281<br />
+3. (set) license_file.lic (from e-mail)<br />
+4. sudo ./install.sh<br />
+5. [Enter] &gt; [space] &gt; accept<br />
+6. Please type a selection or press &quot;Enter&quot; to accept default choice [ 1 ]: 1<br />
+7. Please type a selection or press &quot;Enter&quot; to accept default choice [ 3 ]: 1<br />
+&nbsp; &nbsp;1. [ ] &nbsp; &nbsp;IA-32<br />
+&nbsp; &nbsp;2. [x] &nbsp; &nbsp;Intel(R) 64<br />
+8. Enter<br />
+9. Enter (default)<br />
+&nbsp; (you can get following messages,)<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Complete<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Thank you for installing and for using Intel(R) Math Kernel Library 2019 Update 5 for Linux*.<br />
+&nbsp; --------------------------------------------------------------------------------<br />
+&nbsp; Press &quot;Enter&quot; key to quit:<br />
+10. Enter<br />
+Åû envirnmental settings<br />
+1. gedit ~/.bashrc<br />
+-----<br />
+export PATH=$PATH:/opt/intel/bin/compilervars.sh<br />
+source /opt/intel/mkl/bin/mklvars.sh intel64<br />
+-----<br />
+2. bash<br />
+Åû fftw3xf<br />
+1. cd /opt/intel/mkl/interfaces/fftw3xf<br />
+2. sudo make libintel64 compiler=gnu<br />
+&nbsp; (you can get libfftw3xf_gnu.a)<br />
+<br />
+Å† Install (gfortran+OpenMPI+MKL) (ubuntu 18.04 LTS (64 bit))<br />
+ÅEvasp.5.4.1.05Feb16.tar.gz<br />
+0. sudo apt update<br />
+&nbsp; sudo apt install csh<br />
+&nbsp; sudo apt install g++<br />
+&nbsp; sudo apt install gfortran<br />
+&nbsp; sudo apt install libopenmpi-dev<br />
+&nbsp; sudo apt install liblapack-dev<br />
+&nbsp; sudo apt install libtmglib-dev<br />
+&nbsp; sudo apt install libfftw3-dev<br />
+&nbsp; sudo apt install libscalapack-openmpi-dev<br />
+&nbsp; (sudo apt install libatlas-base-dev liblapack-dev libblas-dev)<br />
+1. tar zxvf vasp.5.4.1.05Feb16.tar.gz<br />
+2. cd vasp.5.4.1<br />
+3. wget http://cms.mpi.univie.ac.at/patches/patch.5.4.1.14032016.gz<br />
+&nbsp; wget http://cms.mpi.univie.ac.at/patches/patch.5.4.1.03082016.gz<br />
+&nbsp; gunzip patch.5.4.1.14032016.gz<br />
+&nbsp; gunzip patch.5.4.1.03082016.gz<br />
+4. patch -p0 &lt; patch.5.4.1.14032016<br />
+&nbsp; patch -p0 &lt; patch.5.4.1.03082016<br />
+5. cp arch/makefile.include.linux_gfortran makefile.include<br />
+6. gedit makefile.include<br />
+# -----<br />
+# Precompiler options<br />
+CPP_OPTIONS= -DHOST=\&quot;LinuxGNU\&quot; \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DMPI -DMPI_BLOCK=8000 -Duse_collective \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-DscaLAPACK -DCACHE_SIZE=4000 \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-Davoidalloc -Duse_bse_te \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;-Dtbdyn<br />
+<br />
+CPP &nbsp; &nbsp; &nbsp; &nbsp;= gcc -E -P -C $*$(FUFFIX) &gt;$*$(SUFFIX) $(CPP_OPTIONS)<br />
+<br />
+FC &nbsp; &nbsp; &nbsp; &nbsp; = mpif90 -m64 -I$(MKLROOT)/include<br />
+FCL &nbsp; &nbsp; &nbsp; &nbsp;= mpif90 -m64 -I$(MKLROOT)/include<br />
+<br />
+FREE &nbsp; &nbsp; &nbsp; = -ffree-form -ffree-line-length-none<br />
+<br />
+FFLAGS &nbsp; &nbsp; = -w<br />
+OFLAG &nbsp; &nbsp; &nbsp;= -O2 -mtune=native -m64<br />
+OFLAG_IN &nbsp; = $(OFLAG)<br />
+DEBUG &nbsp; &nbsp; &nbsp;= -O0<br />
+<br />
+#LIBDIR &nbsp; &nbsp; = $(MKLROOT)/lib/intel64<br />
+#BLAS &nbsp; &nbsp; &nbsp; =<br />
+#LAPACK &nbsp; &nbsp; =<br />
+#BLACS &nbsp; &nbsp; &nbsp;= -lmkl_blacs_intelmpi_lp64<br />
+#SCALAPACK &nbsp;= $(LIBDIR)/libmkl_scalapack_lp64.a $(BLACS)<br />
+<br />
+#LLIBS &nbsp; &nbsp; &nbsp;= $(SCALAPACK) $(LAPACK) $(BLAS)<br />
+LLIBS &nbsp; &nbsp; &nbsp;+= -L$(MKLROOT)/lib/intel64 -Wl,--no-as-needed -lmkl_scalapack_lp64 -lmkl_gf_lp64 -lmkl_sequential -lmkl_core -lmkl_blacs_openmpi_lp64 -lpthread -lm -ldl<br />
+INCS &nbsp; &nbsp; &nbsp; =-I$(MKLROOT)/include/fftw<br />
+<br />
+OBJECTS &nbsp; &nbsp;= fftmpiw.o fftmpi_map.o &nbsp;fftw3d.o &nbsp;fft3dlib.o \<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;$(MKLROOT)/interfaces/fftw3xf/libfftw3xf_gnu.a<br />
+<br />
+OBJECTS_O1 += fftw3d.o fftmpi.o fftmpiw.o # fft3dfurth.o chi.o<br />
+OBJECTS_O2 += fft3dlib.o<br />
+<br />
+# For what used to be vasp.5.lib<br />
+CPP_LIB &nbsp; &nbsp;= $(CPP)<br />
+FC_LIB &nbsp; &nbsp; = $(FC)<br />
+CC_LIB &nbsp; &nbsp; = gcc<br />
+CFLAGS_LIB = -O<br />
+FFLAGS_LIB = -O1<br />
+FREE_LIB &nbsp; = $(FREE)<br />
+<br />
+OBJECTS_LIB= linpack_double.o getshmem.o<br />
+<br />
+# For the parser library<br />
+#CXX_PARS &nbsp; = g++<br />
+#LIBS &nbsp; &nbsp; &nbsp; += parser<br />
+#LLIBS &nbsp; &nbsp; &nbsp;+= -Lparser -lparser -lstdc++<br />
+<br />
+# Normally no need to change this<br />
+SRCDIR &nbsp; &nbsp; = ../../src<br />
+BINDIR &nbsp; &nbsp; = ../../bin<br />
+# -----<br />
+7. make std gam ncl<br />
+&nbsp; (make all)<br />
+------------------------------------------------------------------------------<br />
+Å° References<br />
+<br />
+[1] Installing VASP (Vaspwiki)<br />
+&nbsp; https://cms.mpi.univie.ac.at/wiki/index.php/Installing_VASP<br />
+[2] VdW-DF functional of Langreth and Lundqvist et al.<br />
+&nbsp; https://cms.mpi.univie.ac.at/wiki/index.php/VdW-DF_functional_of_Langreth_and_Lundqvist_et_al.<br />
+[3] https://cms.mpi.univie.ac.at/wiki/index.php/Linking_gfortran_with_Intel_MKL<br />
+&nbsp; (the GNU compilers &quot;gfortran, gcc and g++&quot; in combination with IntelMKL and IntelMPI.)<br />
+[4] https://software.intel.com/en-us/articles/intel-mkl-link-line-advisor/<br />
+[5] https://software.intel.com/en-us/mkl/choose-download/linux<br />
+&nbsp; (Intel MKL, free version from 31/Aug/2015)<br />
+&nbsp; https://en.wikipedia.org/wiki/Math_Kernel_Library (wikipedia)<br />
+&nbsp; https://ja.wikipedia.org/wiki/Intel_Math_Kernel_Library (Japanese, wikipedia)<br />
+------------------------------------------------------------------------------

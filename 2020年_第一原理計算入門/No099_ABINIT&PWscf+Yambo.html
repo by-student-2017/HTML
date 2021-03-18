@@ -1,0 +1,67 @@
+&nbsp; ここではABINITとPWscf+Yamboを用いてTDDFTやGW近似、Optical spectraの計算などを解説する。<br />
+-------------------------------------------------------------------------------<br />
+Yambo<br />
+----------------------------------<br />
+■ NetCDFをインストールする場合(これは必要ない）<br />
+NetCDF : <a href="http://www.unidata.ucar.edu/software/netcdf/">http://www.unidata.ucar.edu/software/netcdf/</a><br />
+NetCDF C/C++/Fortran Stable Releases　<br />
+Intel Fortran Compilerの場合<br />
+&nbsp; tar zxvf netcdf-4.1.1.tar.gz<br />
+&nbsp; cd netcdf-4.1.1<br />
+&nbsp; ./condigure --prefix=/usr/local/netcdf F77=ifort FC=ifort F90=ifort CC=icc CXX=icpc<br />
+&nbsp; sudo | make check install<br />
+----------------------------------<br />
+■ Yamboのコンパイル （NetCDF無しの場合）<br />
+Intel Fortran Compilerの場合<br />
+&nbsp; (/home/centos5/PWscfでexpresso-4.2.1を解凍した場合)<br />
+　tar zxvf yambo-3.2.1-r.448.tar.gz<br />
+　cd yambo-3.2.1-r.448<br />
+&nbsp; ./configure F77=ifort FC=ifort F90=ifort --with-iotk='/home/centos5/PWscf/espresso-4.2.1/iotk' --with-p2y=4.0 &gt;&amp; configure.log<br />
+&nbsp; sudo | make yambo interfaces ypp &gt;&amp; make.log<br />
+&nbsp; configure.logにデータが書き込まれているので[X] PW (4.0) supportかを確認する。<br />
+----------------------------------&nbsp;<br />
+参考HP：<a href="http://nitrogen14.blog51.fc2.com/blog-entry-45.html">http://nitrogen14.blog51.fc2.com/blog-entry-45.html</a>　<br />
+-------------------------------------------------------------------------------<br />
+基本的に下記のHPを参照すれば良い。<br />
+<a href="http://www.yambo-code.org/doc/index.php">http://www.yambo-code.org/doc/index.php</a><br />
+----------------------------------<br />
+■ ABINITでの計算結果の変換<br />
+(調査中）<br />
+参考HP: <a href="http://www.yambo-code.org/doc/a2y_interface.php">http://www.yambo-code.org/doc/a2y_interface.php</a><br />
+----------------------------------<br />
+■ PWscfでの計算結果の変換<br />
+（下記は、PWguiを$HOMEで起動させた場合）<br />
+&nbsp; GGA及びウルトラ擬ポテンシャルはyambo-4.3.1でサポートされていない。LDAで計算が必要。また、擬ポテンシャルにはNorm-Conserving(ノルム保存）pseudopotentials(PPs)が必要となる。<a href="http://www.quantum-espresso.org/pseudo-notes.php">http://www.quantum-espresso.org/pseudo-notes.php</a>&nbsp;を参照して必要な擬ポテンシャルを得て下さい。<br />
+&nbsp; 1) PWgui &rarr; New &rarr; New PW.X.Input<br />
+&nbsp; 2) LDA及びノルム保存PPsでSCFの計算を走らせる。（左の欄のPWscfを参照）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;K-pointはAutomatic generation &lt;automatic&gt;にしておくとよいだろう。<br />
+&nbsp; 3) Control<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Type of calculation (calculation): Non-selfconsistent calculation&nbsp;&lt;nscf&gt;<br />
+&nbsp;&nbsp;&nbsp; Make&nbsp;a single restart file (wf_collect): Yes<br />
+&nbsp; 4) System &rarr; Optional variables<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Do not use the symmetry (nosym):&nbsp;No<br />
+&nbsp;&nbsp;&nbsp;&nbsp;Number of electronic states (nbnd):&nbsp;（include many unoccupied bands）にする<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; case.outで出された電子数程度を入力か？<br />
+&nbsp; 5) Electrons<br />
+&nbsp;&nbsp;&nbsp; Convergence threshold&nbsp;for ...... (diago_thr_init): 1.0e-6<br />
+&nbsp;&nbsp;&nbsp; Diagonalize empty states&nbsp;as&nbsp;......&nbsp;(diago_full_acc):&nbsp;Yes<br />
+&nbsp; 6) Run<br />
+&nbsp; 7) cd $HOME/pwscf.save<br />
+&nbsp; 8)&nbsp;$HOME/yambo-3.2.1-r.448/bin/p2y -S&nbsp;-N<br />
+参考HP: <a href="http://www.yambo-code.org/doc/p2y_interface.php">http://www.yambo-code.org/doc/p2y_interface.php</a>　<br />
+<a href="http://www.yambo-code.org/doc/getting_started.php">http://www.yambo-code.org/doc/getting_started.php</a><br />
+-------------------------------------------------------------------------------<br />
+■ Yamboの利用<br />
+&nbsp; ALDAを用いたOptical&nbsp;absorption spectrumの計算の仕方<br />
+&nbsp; 1) 入力ファイルの作成<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $HOME/yambo-3.2.1-r.448/bin/yambo -o b -t a -y h<br />
+&nbsp; 2)&nbsp;yamboでの計算の実行<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $HOME/yambo-3.2.1-r.448/bin/yambo<br />
+&nbsp; 3) Optical spectrumの表示（qxxxはq=&Gamma;点などに対応）<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; xmgrace o.eps_qxxx-rpa<br />
+　その他の条件での計算は、下記のHPにあるRunlevel combinations [1]から必要なコマンドを選べばよい。例えば、GW近似での準粒子エネルギーを計算するのであれば、上記1)の入力ファイル作成のコマンドは yambo -g n -p p 、その後はyamboとなる。<br />
+[1] <a href="http://www.yambo-code.org/doc/runlevels.php">http://www.yambo-code.org/doc/runlevels.php</a><br />
+-------------------------------------------------------------------------------<br />
+上記の計算結果を待っている間に下記のHPを見ながら勉学するのが効率的であろう。<br />
+Free Lecture Notes : <a href="http://www.yambo-code.org/lectures.php">http://www.yambo-code.org/lectures.php</a><br />
+-------------------------------------------------------------------------------

@@ -1,0 +1,136 @@
+-------------------------------------------------------------<br />
+■ 基本的な統計的方法<br />
+<br />
+◇ 記述統計: 集計表、グラフ、指標（平均、分散、中央値など）<br />
+<br />
+◇ 推測統計<br />
+・推定: 点推定（母平均の点推定値）、区間推定<br />
+・仮説検定<br />
+-------------------------------------------------------------<br />
+■ 基礎知識<br />
+<br />
+・信頼区間<br />
+&nbsp; 例えば、95%信頼区間であれば、1000回測定した場合、950の測定結果が95%信頼区間にある。<br />
+・交絡因子にも注意する<br />
+&nbsp; 例えば、第1と第2の因子でデータを構築して、実際には第3の因子がある場合。後から第3の因子を分析するのは無理。第1と第2の因子から求められない。<br />
+・研究論文の統計的側面に関しては、その方法が正確に理解されるように詳細に記述される必要がある<br />
+&nbsp; 研究者が何をしたかが明確に記述すべきである<br />
+・研究者自身が統計的推論の原理を理解していなければならない<br />
+・統計的方法の数式や方法を覚えておくことはそれほど重要ではない。それを調べることができればよい<br />
+・対象が正規分布に従うかなど、前提を確かめたか（チェックしたか）は論文では出てこないので注意<br />
+&nbsp; 実際には対象が正規分布に従うかどうかを線引きするのが難しい。<br />
+・論文では過去に何回やったかはわからない<br />
+&nbsp; 都合の良い結果だけを示さないように注意。技能や技術が向上して結果が変わったならその効果を検討するか、十分に技術や技術が向上してからデータを議論するようにする<br />
+-------------------------------------------------------------<br />
+■ 仮説検定<br />
+<br />
+・p値が小さい方が有意性が大きいとは言えるが、効果が大きいとするのは&times;<br />
+・検出力は医学や疫学分野では80%以上が必要<br />
+&nbsp; この条件を満たすために先行研究（無い場合は代替できる論文を探す）や指標で検出力が80%以上となる標本サイズを決める。研究計画において標本数を追加できるようにできるかも検討しておく。<br />
+・検出力が小さくて有意差がない場合、そのデータから差が見つからなかっただけということになる<br />
+・95%信頼区間も描く（ようになってきている）<br />
+&nbsp; 信頼区間の幅が小さいほど点推定値の信頼性が高い。一般に標本サイズが大きいほど信頼区間の幅は小さくなる。<br />
+・有意水準を0.05や0.01にするのは慣習。それ以外の値とするのは面倒になる<br />
+&nbsp; 0.01だと厳しすぎるし、0.1だと緩すぎる。分野や国で共通なのはこの有意水準の値くらい。それ以外の指標はジャーナル（投稿先の雑誌）の規定に従えばよい。<br />
+・ノンパラメトリックは正規分布でなくてもよい<br />
+&nbsp; 一方、t検定は正規分布に従っていないといけない<br />
+・帰無仮説（「〇と△に差がない」）が決まれば、対立仮説（「〇を成立させたい」や「〇と△に差がある」）は気にしなくてもよい（決まる）<br />
+&nbsp; 研究者は帰無仮説を棄てたいという方向で検討される<br />
+・擬似反復や多重性にも注意<br />
+&nbsp; 統計的検定において、全体の「第1種の誤り」の確率を制御したければ、多数の比較を行う際に「どの群間にも差がない」という帰無仮説に関して検定を行う必要がある（多重性の調整が必要。BonferroniやTukey, Dunnet法など様々な多重比較の方法を検討）<br />
+・検定においては複数の候補が挙げられる場合<br />
+&nbsp; 研究の初めにどの検定にするか決めるか、試した検定の結果を論文で全て示すなどする。<br />
+<br />
+◇ 仮説検定における2種類の誤り
+<table border="1" cellpadding="1" cellspacing="1" style="width: 405px;">
+	<tbody>
+		<tr>
+			<td colspan="2" rowspan="2" style="width: 39px; text-align: center;">&nbsp;</td>
+			<td colspan="2" rowspan="1" style="width: 110px; text-align: center;">判断</td>
+		</tr>
+		<tr>
+			<td style="width: 110px; text-align: center;">帰無仮説を棄却</td>
+			<td style="width: 111px; text-align: center;">帰無仮説を採択</td>
+		</tr>
+		<tr>
+			<td colspan="1" rowspan="2" style="width: 39px; text-align: center;">真実</td>
+			<td style="width: 125px; text-align: center;">帰無仮説は正しい</td>
+			<td style="width: 110px; text-align: center;">第1種の誤り</td>
+			<td style="width: 111px; text-align: center;">正しい採択</td>
+		</tr>
+		<tr>
+			<td style="width: 125px; text-align: center;">帰無仮説は誤り</td>
+			<td style="width: 110px; text-align: center;">正しい棄却</td>
+			<td style="width: 111px; text-align: center;">第2種の誤り</td>
+		</tr>
+	</tbody>
+</table>
+・有意水準5%検定とすると、第1種の誤りを生じる確率が5%以下である検定となる<br />
+・検出力 = 1 - 第2種の誤りを生じる確率<br />
+-------------------------------------------------------------<br />
+■ 統計手法の選び方<br />
+<br />
+・統計解析の検定方法の選択 (https://oshiete.goo.ne.jp/qa/2124752.html)<br />
+1. 二群比較<br />
+&nbsp; a) パラメトリック<br />
+&nbsp; &nbsp; 対応なし： Studentのt検定、Aspin-Welchのt検定<br />
+&nbsp; &nbsp; 対応あり： 対応あるt検定<br />
+&nbsp; b) ノンパラメトリック<br />
+&nbsp; &nbsp; 対応なし： Mann-WhitneyのU検定<br />
+&nbsp; &nbsp; 対応あり： Wilcoxon (符号付順位和検定)<br />
+2. 多群比較<br />
+&nbsp; a) パラメトリック<br />
+&nbsp; &nbsp; 対応なし： 分散分析<br />
+&nbsp; &nbsp; 対応あり： 反復測定分散分析<br />
+&nbsp; b) ノンパラメトリック<br />
+&nbsp; &nbsp; 対応なし： Kruskal-WallisのH検定<br />
+&nbsp; &nbsp; 対応あり： Friedmanの検定<br />
+3. 多重比較 (分散分析の後に行われることが慣例になっている)<br />
+&nbsp; a) パラメトリック<br />
+&nbsp; &nbsp; 全ての対比較：Tukey<br />
+&nbsp; &nbsp; 対照群： Dunnett<br />
+&nbsp; b) ノンパラメトリック<br />
+&nbsp; &nbsp; 全ての対比較：Steel-dwass, Games-Howell<br />
+&nbsp; &nbsp; 対照群： Steel, Dunnett's C<br />
+&nbsp; ※ Bonferroni法なども有名<br />
+※ 多重性の問題： 有意水準5%の場合、検定をN回行えば、少なくとも1回以上「第1種の誤り」が生じる確率は、1-(1-0.05)<sup>N</sup>となり全体として容易に5%を超えてしまう（例えば、N=3とすれば「第1種の誤り」が生じる確率は14.26%になる）。これを回避するためには各検定での有意水準を小さくする。<br />
+<br />
+・Welcom to MEPHAS<br />
+&nbsp; http://www.gen-info.osaka-u.ac.jp/MEPHAS/welcome.html<br />
+&nbsp; 統計手法の選び方<br />
+&nbsp;&nbsp;http://www.gen-info.osaka-u.ac.jp/MEPHAS/tejunn.html<br />
+・第9章 統計解析法の選定<br />
+&nbsp;&nbsp;https://www.ai.u-hyogo.ac.jp/~arima/lectures/JT-9.pdf<br />
+・統計分析手法 (DataScienceInstitute)<br />
+&nbsp;&nbsp;https://datascience.co.jp/method/<br />
+・Study channel (パラメトリック検定とノンパラメトリック検定の違い)<br />
+&nbsp;&nbsp;https://www.study-channel.com/2015/06/parametric-nonparametric-test.html<br />
+・多重比較法<br />
+&nbsp;&nbsp;http://cogpsy.educ.kyoto-u.ac.jp/personal/Kusumi/datasem06/hattori.pdf<br />
+-------------------------------------------------------------<br />
+■ 統計ソフト<br />
+・R (無料)<br />
+&nbsp; データ科学便覧 (https://data-science.gr.jp/implementation.html#ist)<br />
+&nbsp; Able Programming (https://www.youtube.com/channel/UCh5M2YUAPW7HnpfTUv7XHmA)<br />
+・js-STAR (無料)<br />
+・SPSS (有償)<br />
+・SAS (有償)<br />
+・JMP (有償)<br />
+※ お金がないなら汗を流すしかない。<br />
+-------------------------------------------------------------<br />
+■ References<br />
+<br />
+[S1] 科学的実験と統計的実験の境界<br />
+&nbsp;&nbsp;https://www.mbsj.jp/admins/ethics_and_edu/doc/20101208_teramukai.pdf<br />
+[S2]&nbsp;国立保健医療科学院 講義4 統計(1)<br />
+&nbsp;&nbsp;https://www.niph.go.jp/soshiki/gijutsu/staffs/yokoyama/etc/yokoyama.pdf<br />
+[S3] 統計誤差と上限値<br />
+&nbsp;&nbsp;http://www.rcnp.osaka-u.ac.jp/~tamii/statistics/statistics.pdf<br />
+[S4] 実験データを正しく扱うための実験・分析データの統計解析入門<br />
+&nbsp;&nbsp;http://www.chem.konan-u.ac.jp/applphys/web_material/data_analysis.pdf<br />
+[S5] 研究者に必要な統計学の基礎知識、埼玉県、2020年2月<br />
+[S6] Familywise Error Rate<br />
+&nbsp;&nbsp;http://www.med.osaka-u.ac.jp/pub/kid/clinicaljournalclub1.html<br />
+[S7] エンジニアのための実用統計学と信頼性解析<br />
+&nbsp;&nbsp;http://www.takeshi-nakamura.com/index.html<br />
+------------------------------------------------------------------------------

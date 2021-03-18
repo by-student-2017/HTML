@@ -1,0 +1,578 @@
+MUSIC (GCMC, MOF-5, H2 gas flow) (http://www.iec.northwestern.edu/music.php)<br />
+------------------------------------------------------------------------------<br />
+■ music-4.0-gnu version (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit)&nbsp;<br />
+(https://github.com/by-student-2017/music-gnu)<br />
+Note: Original music and excess(+fuga) code made by Dr. Q Snur and Dr. Tina group, respectively.<br />
+(I sligtly modified music code for gfortran and maintenanced scripts.)<br />
+<br />
+--------------------<br />
+◇ install music (on Ubuntu 18.04 LTS (64 bit))<br />
+・music-4.0-gnu.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu.tar.gz<br />
+・music-4.0-gnu-O2.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu-O2.tar.gz<br />
+・music-4.0-gnu-debug.tar.gz<br />
+&nbsp; tar zxvf music-4.0-gnu-debug.tar.gz<br />
+<br />
+◇ tests<br />
+1. cd ~/music-4.0/tests<br />
+2. ./testall<br />
+<br />
+◇ tutorial -1-<br />
+&nbsp;(IRMOF1(MOF-5) (GCMC) (UFF force field), CH4 gas flow)<br />
+1. cd ~/music-4.0/tutorial/make_pmap/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/map.exe ctr.map.IRMOF1.CH4<br />
+&nbsp; cp IRMOF1.CH4.UFF.pmap ../pmaps<br />
+2. cd ~/music-4.0/tutorial/gcmc/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/gcmc.exe gcmc.Methane.IRMOF1<br />
+&nbsp; (vmd finalconfig.xyz)<br />
+&nbsp; (vmd initconfig.xyz)<br />
+3. ~/music-4.0/post.exe post.ctr<br />
+&nbsp; (gedit post.ctr)<br />
+4. cp met.post IRMOF1.Methane.post<br />
+&nbsp; cp fugacity_IRMOF1.dat pressure.dat<br />
+&nbsp; cp fugacity_IRMOF1.dat pressure_fuga.dat<br />
+5. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+&nbsp; (gedit input.dat)<br />
+6. ~/music-4.0/fuga.exe &lt; input_fuga.dat<br />
+&nbsp; (gedit input_fuga.dat)<br />
+<br />
+◇ tutorial -2- (sequential calculation)<br />
+&nbsp;(IRMOF1(MOF-5) (GCMC) (UFF force field), CH4 gas flow)<br />
+1. cd ~/music-4.0/tutorial/make_pmap/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/map.exe ctr.map.IRMOF1.CH4<br />
+&nbsp; cp IRMOF1.CH4.UFF.pmap ../pmaps<br />
+2. cd ~/music-4.0/tutorial/gcmc/run<br />
+&nbsp; source set_path<br />
+&nbsp; ~/music-4.0/gcmc.exe gcmc.Methane.IRMOF1<br />
+3. cp pressure.dat fugacity_IRMOF1.dat<br />
+4. gedit gcmc.Methane.IRMOF1<br />
+&nbsp; ------before (Line 7)<br />
+&nbsp; 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Start numbering simulations from .<br />
+&nbsp; ------<br />
+&nbsp; ------after (Line 7)<br />
+&nbsp; XXXX &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Start numbering simulations from .<br />
+&nbsp; ------<br />
+5. ./run<br />
+&nbsp; (chmod +x run)<br />
+&nbsp; (./run)<br />
+6. gedit post.ctr<br />
+&nbsp; -----<br />
+&nbsp; 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder<br />
+&nbsp; new.met &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# name for new ctrlfile that will be regenerated<br />
+&nbsp; met.post &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Base name for output files<br />
+&nbsp; -----<br />
+&nbsp; -----<br />
+&nbsp; 1, 9 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # The first and last numbers of the .con files that were created in the gcmc folder<br />
+&nbsp; new.met &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# name for new ctrlfile that will be regenerated<br />
+&nbsp; IRMOF1.Methane.post &nbsp;# Base name for output files<br />
+&nbsp; -----<br />
+7. ~/music-4.0/post.exe post.ctr<br />
+8. ~/music-4.0/excess.exe &lt; input.dat&nbsp;<br />
+&nbsp; (gedit input.dat)<br />
+9. ~/music-4.0/fuga.exe &lt; input_fuga.dat<br />
+&nbsp; (gedit input_fuga.dat)<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ IRMOF1(MOF-5) (GCMC) (UFF force field) (simple mehotd)<br />
+(http://people.bath.ac.uk/td222/research/music/Tutorial/index.html)<br />
+<br />
+1. cd ~/music-4.0/tutorial/make_pmap<br />
+2. cd atoms<br />
+3. cp Methane.atm H2.atm<br />
+4. gedit H2.atm<br />
+-----<br />
+##### Basic Atom Information<br />
+<br />
+Atom_Name: H2<br />
+Atom_Symbol: H2<br />
+Atom_SS_Charge: 0.0<br />
+Atom_SZ_Charge: 0.0<br />
+Atom_Mass: 2.0<br />
+Atom_Valency: 0<br />
+-----<br />
+5. cd ..<br />
+6. cd molecules<br />
+7. cp Methane.mol H2.mol<br />
+8. gedit H2.mol<br />
+-----<br />
+### Methane Molecule File<br />
+<br />
+Molecule_Name: &nbsp;H2<br />
+<br />
+Coord_Info: Listed Cartesian Rigid<br />
+&nbsp; &nbsp; 1 &nbsp; &nbsp; # number of atoms in molecule<br />
+&nbsp; &nbsp; 1 &nbsp; &nbsp;0.000000 &nbsp; &nbsp;0.000000 &nbsp; &nbsp;0.000000 &nbsp; &nbsp; &nbsp;H2 &nbsp; 0.0 &nbsp;0 &nbsp; 0 &nbsp; #x,y,z,name,set,type<br />
+-----<br />
+9. cd ..<br />
+10. cd run<br />
+11. gedit intramolecular_file<br />
+-----<br />
+Intra: H2<br />
+Intra: IRMOF1<br />
+-----<br />
+12. cp atom_atom_file_Methane_UFF atom_atom_file_H2_UFF<br />
+13. gedit atom_atom_file_H2_UFF<br />
+-----<br />
+#This is the Atom-Atom interaction file for H2 into IRMOF1 simulation<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Oxygen &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@3.038 &nbsp; &nbsp; EPS@33.288 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Carbon &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@3.195 &nbsp; &nbsp; EPS@44.036 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Zinc &nbsp; &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.710 &nbsp; &nbsp; EPS@47.854 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Hydrogen &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.765 &nbsp; &nbsp; EPS@28.506 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.958 &nbsp; &nbsp; EPS@36.7 &nbsp; &nbsp; &nbsp;HICUT@12.8<br />
+<br />
+Oxygen &nbsp; &nbsp; Oxygen &nbsp; &nbsp; &nbsp;OFF<br />
+Carbon &nbsp; &nbsp; Carbon &nbsp; &nbsp; &nbsp;OFF<br />
+Hydrogen &nbsp; Hydrogen &nbsp; &nbsp;OFF<br />
+Oxygen &nbsp; &nbsp; Carbon &nbsp; &nbsp; &nbsp;OFF<br />
+Oxygen &nbsp; &nbsp; Hydrogen &nbsp; &nbsp;OFF<br />
+Carbon &nbsp; &nbsp; Hydrogen &nbsp; &nbsp;OFF<br />
+Zinc &nbsp; &nbsp; &nbsp; Zinc &nbsp; &nbsp; &nbsp; &nbsp;OFF<br />
+-----<br />
+14. cp sorb_sorb_file_Methane sorb_sorb_file_H2<br />
+15. gedit sorb_sorb_file_H2<br />
+-----<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; COUL &nbsp; &nbsp; &nbsp;OFF<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; NCOUL &nbsp; &nbsp; BASIC &nbsp; &nbsp; &nbsp; LJ &nbsp; &nbsp; FAST<br />
+<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; NCOUL &nbsp; &nbsp; BASIC &nbsp; &nbsp; &nbsp; LJ &nbsp; &nbsp; FAST<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; COUL &nbsp; &nbsp; &nbsp;OFF<br />
+<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; IRMOF1 &nbsp; &nbsp; NCOUL &nbsp; &nbsp; OFF<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; IRMOF1 &nbsp; &nbsp; COUL &nbsp; &nbsp; &nbsp;OFF<br />
+-----<br />
+16. cp ctr.map.IRMOF1.CH4 ctr.map.IRMOF1.H2<br />
+17. gedit ctr.map.IRMOF1.H2<br />
+-----<br />
+------ General Information ------------------------------------------<br />
+H2 in IRMOF1<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of iterations<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of steps between writes to output/log file<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of steps between writes to crash file<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of steps between writes to config. file<br />
+2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Start numbering simulations from .<br />
+1892134 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Iseeed<br />
+4 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# specifies contents of config file,<br />
+H2.res &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Restart File to write to<br />
+H2.con &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Configuration File<br />
+------ Atomic Types --------------------------------------------------<br />
+5 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# number of atomic types<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+H2.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # basic atom info file<br />
+<br />
+Carbon &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# atom type<br />
+Carbon.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# basic atom info file<br />
+<br />
+Oxygen &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+Oxygen.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# basic atom info file<br />
+<br />
+Hydrogen &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+Hydrogen.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# basic atom info file<br />
+<br />
+Zinc &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+Zinc.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# basic atom info file<br />
+<br />
+------ Molecule Types -------------------------------------------------<br />
+2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # number of sorbate types<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sorbate<br />
+H2.mol &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sorbate coordinates file<br />
+<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# sorbate<br />
+IRMOF1.mol &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# sorbate coordinates file<br />
+------ Simulation Cell Information --------------------------------------<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Fundamental cell type<br />
+1, 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of unit cells in x, y, z direction<br />
+1, 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # (1 = Periodic) in x, y, z<br />
+------ Forcefield Information -------------------------------------------<br />
+BASIC<br />
+SPC<br />
+atom_atom_file_H2_UFF &nbsp; &nbsp; &nbsp; &nbsp; # atom-atom interaction file<br />
+sorb_sorb_file_H2 &nbsp; &nbsp; &nbsp; &nbsp; # sorbate-sorbate interaction file (optional)<br />
+intramolecular_file &nbsp; &nbsp; &nbsp;# intramolecular interactions<br />
+------ Mapmaker Information --------------------------------------------<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Number of maps to make<br />
+<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Sorbate to map<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Sorbate to probe map with<br />
+NCOUL LJ &nbsp; &nbsp; &nbsp; # Interaction type to map<br />
+0.2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Approximate grid spacing (Ang)<br />
+100.0 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# High end potential cutoff (kJ/mol)<br />
+IRMOF1.H2.UFF.pmap &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Map filename or AUTO<br />
+------ Configuration Initialization -------------------------------------<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Sorbate_Type<br />
+Molecule NULL &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Source Filename<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Sorbate_Type<br />
+Fixed NULL &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Source Filename<br />
+-----<br />
+18. source set_path<br />
+19. ~/music-4.0/map.exe ctr.map.IRMOF1.H2<br />
+20. cp IRMOF1.H2.UFF.pmap ../pmaps<br />
+21. cd ~/music-4.0/tutorial/gcmc<br />
+22. cd atoms<br />
+23. cp ../../make_pmap/atoms/H2.atm ./<br />
+24. cd ..<br />
+25. cd molecules<br />
+26. cp ../../make_pmap/molecules/H2.mol &nbsp;./<br />
+27. cd ..<br />
+28. cd run<br />
+29. cp ../../make_pmap/run/intramolecular_file &nbsp;./<br />
+30. cp ../../make_pmap/run/atom_atom_file_H2_UFF &nbsp;./atom_atom_file_UFF<br />
+31. gedit atom_atom_file_UFF<br />
+-----<br />
+#This is the Atom-Atom interaction file for H2 into IRMOF1 simulation<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Oxygen &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@3.038 &nbsp; &nbsp; EPS@33.288 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Carbon &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@3.195 &nbsp; &nbsp; EPS@44.036 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Zinc &nbsp; &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.710 &nbsp; &nbsp; EPS@47.854 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; Hydrogen &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.765 &nbsp; &nbsp; EPS@28.506 &nbsp; &nbsp;HICUT@12.8<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;LJ &nbsp; &nbsp;SIG@2.958 &nbsp; &nbsp; EPS@36.7 &nbsp; &nbsp; &nbsp;HICUT@12.8<br />
+-----<br />
+32. gedit sorb_sorb_file_UFF<br />
+-----<br />
+H2 &nbsp; &nbsp; &nbsp;H2 &nbsp; &nbsp; &nbsp; &nbsp;NCOUL &nbsp;BASIC &nbsp;LJ &nbsp;FAST<br />
+H2 &nbsp; &nbsp; &nbsp;H2 &nbsp; &nbsp; &nbsp; &nbsp;COUL &nbsp; OFF<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp;IRMOF1 &nbsp; &nbsp;NCOUL &nbsp;MAP@IRMOF1 FAST H2@PMAP@IRMOF1.H2.UFF.pmap<br />
+H2 &nbsp; &nbsp; &nbsp;IRMOF1 &nbsp; &nbsp;COUL &nbsp; OFF<br />
+<br />
+IRMOF1 IRMOF1 NCOUL OFF<br />
+IRMOF1 IRMOF1 COUL OFF<br />
+-----<br />
+33. gedit fugacity_IRMOF1.dat<br />
+-----<br />
+&nbsp;H2<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; 1<br />
+&nbsp;100.<br />
+-----<br />
+34. cp gcmc.Methane.IRMOF1 gcmc.H2.IRMOF1<br />
+35. gedit gcmc.H2.IRMOF1<br />
+-----<br />
+------ General Information ------------------------------------------<br />
+H2 molecule in IRMOF1<br />
+1000000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of iterations<br />
+100000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of steps between writes to output/log file<br />
+100000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of steps between writes to crash file<br />
+5000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of steps between writes to config. file<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Start numbering simulations from .<br />
+10283 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Iseed<br />
+3 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# specifies contents of config file,<br />
+IRMOF1.H2.res &nbsp; &nbsp; &nbsp; &nbsp; # Restart File to write to<br />
+IRMOF1.H2.con &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Configuration File<br />
+------ Atomic Types --------------------------------------------------<br />
+5 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# number of atomic types<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# atom type<br />
+H2.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # basic atom info file<br />
+<br />
+Carbon &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# atom type<br />
+Carbon.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# basic atom info file<br />
+<br />
+Oxygen &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+Oxygen.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # basic atom info file<br />
+<br />
+Hydrogen &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # atom type<br />
+Hydrogen.atm &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # basic atom info file<br />
+<br />
+Zinc<br />
+Zinc.atm<br />
+<br />
+------ Molecule Types -------------------------------------------------<br />
+2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# number of sorbate types<br />
+<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sorbate<br />
+H2.mol &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sorbate coordinates file<br />
+<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# sorbate<br />
+IRMOF1.mol &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sorbate coordinates file<br />
+------ Simulation Cell Information ------------------------------------<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Fundamental cell file<br />
+1, 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of unit cells in x, y, z direction<br />
+1, 1, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# (1 = Periodic) in x, y, z<br />
+------ Forcefield Information -------------------------------------------<br />
+BASIC<br />
+SPC<br />
+atom_atom_file_UFF &nbsp; &nbsp; &nbsp; # atom-atom interaction file<br />
+sorb_sorb_file_UFF &nbsp; &nbsp; &nbsp; # sorbate-sorbate interaction file<br />
+intramolecular_file &nbsp;# intramolecular interaction file/specification<br />
+------ Ideal Parameters -----------------------------------------------<br />
+Ideal &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Equation of State<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# no. of sorbates<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Sorbate Name<br />
+------ GCMC Information -----------------------------------------------<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # No. of iterations<br />
+298. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# temperature<br />
+Ideal Parameters &nbsp; # Tag for the equation of state (NULL = Ideal Gas)<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# No. of simulation points (fugacity_IRMOF1.dat)<br />
+5000 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Block size for statistics<br />
+1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# no. of sorbates<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; -------------------------<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Sorbate Name<br />
+fugacity_IRMOF1.dat &nbsp; &nbsp; # &nbsp;pressure<br />
+Null &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # sitemap filename (Null = no sitemap)<br />
+3 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# no of gcmc movetypes<br />
+1.0, 1.0, 1.0 &nbsp; &nbsp; &nbsp;# move type weights<br />
+BINSERT &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # type of move.1<br />
+IRMOF1.H2.UFF.pmap &nbsp;# Bias Potential File, CAVITY-&gt; Implies cavitybias<br />
+298. &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Bias temperature for the bmap<br />
+BDELETE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # type of move.2<br />
+RTRANSLATE &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# type of move.4<br />
+0.2, 1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Delta Translate, adjust delta option (0=NO, 1=YES)<br />
+------ Configuration Initialization -------------------------------------<br />
+H2 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; # Sorbate_Type<br />
+GCMC NULL<br />
+IRMOF1 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;# Sorbate_Type<br />
+FIXED NULL<br />
+-------- &nbsp;Main Datafile Information --------<br />
+Energy, position, Velocity, pair_energy &nbsp;# contents of datafile<br />
+-----<br />
+36. source set_path<br />
+37. ~/music-4.0/gcmc.exe &nbsp;gcmc.H2.IRMOF1<br />
+--------------------<br />
+※ potentials [M1, M6]<br />
+-----<br />
+Site name|LJ Epsilon (K)|LJ Sigma (?)|charge (e)<br />
+H2 &nbsp; &nbsp; &nbsp; | &nbsp;36.7 | 2.958 | &nbsp;0<br />
+CH4 &nbsp; &nbsp; &nbsp;| 148.0 | 3.730 | &nbsp;0<br />
+N2 &nbsp; &nbsp; &nbsp; | &nbsp;95.1 | 3.7 &nbsp; | &nbsp;0<br />
+He &nbsp; &nbsp; &nbsp; |9.071224|2.653089|<br />
+Ar &nbsp; &nbsp; &nbsp; |128.326802|3.371914|<br />
+-----<br />
+※ H2についてはこれで良いようだ。一方、N2などの2分子以上やダミー原子を入れて計算している報告があるが、いまの私の実力では色々と試しているが上手くいかない。N2やO2などでの計算の入力ファイルは一部しか公開されてないため、どのような入力ファイルにすればよいかわからない。<br />
+※ mapmaker.F90: Line 212<br />
+&nbsp;If (nprobeatoms/=1) Then<br />
+と記載されているので分子の記述では1つの原子しか指定できない。<br />
+mapmaker.F90: &nbsp;213 Probe to map : Ethane Should have only one atom. Now it has &quot;#nprobeatoms&quot;<br />
+となるはずだが空白のままなのは気になる。<br />
+※ http://zeolites.cqe.northwestern.edu/Music/Documentation/node60.html を見ると<br />
+n\_Butane &nbsp; &nbsp; sili &nbsp; NCOUL &nbsp;MAP@sili &nbsp; FAST Methyl@PMAP@sili.Methyl.pmap Methylene@PMAP@sili.Methylene.pmap<br />
+Methanol &nbsp; &nbsp; sili &nbsp; &nbsp; &nbsp; &nbsp; NCOUL &nbsp;MAP@sili &nbsp; FAST Carbon@PMAP@sili.MeOH\_C.pmap Hydrogen@PMAP@sili.MeOH\_H.pmap Oxygen@PMAP@sili.MeOH\_O.pmap とあるので複数の原子で構成されている場合は複数のpmapgが必要になる。<br />
+<br />
+--------------------<br />
+□ UFF force field<br />
+<br />
+・Oxygen<br />
+&nbsp; SIG = xi/(2^(1/6) = 3.500/(2^(1/6) = 3.118<br />
+&nbsp; EPS = Di/0.0019872 = 0.060/0.0019872 = 30.193<br />
+<br />
+・Methane: xi=4.18662010682, Di=0.29410929031<br />
+&nbsp; SIG = xi/(2^(1/6) = 4.187/(2^(1/6) = 3.730<br />
+&nbsp; EPS = Di/0.0019872 = 0.2941093/0.0019872 = 148.002<br />
+&nbsp;&nbsp;<br />
+&nbsp; Methane (LJ): http://www.sklogwiki.org/SklogWiki/index.php/Methane<br />
+&nbsp; Force-filed | epsilon/kb(K) | sigma (Angstrom)<br />
+&nbsp; OPLS &nbsp; | 147.9 | 3.73<br />
+&nbsp; TraPPE | 148 &nbsp; | 3.73<br />
+<br />
+・Methane &nbsp; &nbsp; Oxygen &nbsp; &nbsp; &nbsp;LJ&nbsp;<br />
+&nbsp; SIGij = (SIGi + SIGj)/2 = (3.118+3.730)/2 = 3.424<br />
+&nbsp; EPSij = sqrt(EPSi x EPSj) = sqrt(30.193*148.002) = 66.848<br />
+<br />
+・O : xi=3.500, Di=0.060<br />
+&nbsp; SIG=3.118, EPS=30.193<br />
+・C : xi=3.851, Di=0.105<br />
+&nbsp; SIG=3.431, EPS=52.838<br />
+・Zn: xi=2.763, Di=0.124<br />
+&nbsp; SIG=2.462, EPS=62.399<br />
+・H : xi=2.886, Di=0.044<br />
+&nbsp; SIG=2.571, EPS=22.142<br />
+&nbsp;&nbsp;<br />
+・H_mid | 34.206 | &nbsp;2.960 | -0.9410<br />
+<br />
+・HICUT = cut-off radius = 12.8<br />
+<br />
+[UFF1] Rappe et al. &quot;UFF, a Full Periodic Table Force Field for Molecular Mechanics and Molecular Dynamics Simulations&quot;, Journal American Chemistry Society 1992, 114, 10024-10035. (http://wag.caltech.edu/publications/sup/pdf/275.pdf)<br />
+[UFF2] Music Tutorial - The atom atom file<br />
+&nbsp; http://people.bath.ac.uk/td222/research/music/Tutorial/atomatom.html<br />
+[P1] http://www.rsc.org/suppdata/cc/c2/c2cc17168f/c2cc17168f.pdf<br />
+&nbsp; sorbate atom | epsilon/kb(K) | sigma (Angstrom)<br />
+&nbsp; N(N2) | &nbsp;36.0 | 3.31<br />
+&nbsp; Ar &nbsp; &nbsp;| 119.8 | 3.40<br />
+&nbsp; H2 &nbsp; &nbsp;| &nbsp;36.7 | 2.958<br />
+&nbsp; ※ N(N2)の36.0は86.0の誤りか？<br />
+[P2] https://journals.aps.org/prb/pdf/10.1103/PhysRevB.75.075424<br />
+[P3] https://saecanet.com/20100716/saecanet_calculation_page.php?pagenumber=585<br />
+[P4] Per Freiesleben Hansen, &quot;The Science of Construction Materials&quot;, springer<br />
+&nbsp; Lennard-Jones parameters<br />
+&nbsp; Gas | J/mol | ro (Angstrom)<br />
+&nbsp; He &nbsp;| &nbsp;85 &nbsp; | 2.87<br />
+&nbsp; H2 &nbsp;| 308 &nbsp; | 3.29<br />
+&nbsp; Ar &nbsp;| 996 &nbsp; | 3.82<br />
+&nbsp; N2 &nbsp;| 791 &nbsp; | 4.15<br />
+&nbsp; O2 &nbsp;| 984 &nbsp; | 3.88<br />
+&nbsp; 1 J/mol = 0.120273 K<br />
+&nbsp; sigma = r0/2^(1/6)<br />
+&nbsp; Ar: 996 J/mol = 119.792 K = 119.792 [epsilon/kb(K)], r0=3.82 &gt; sigma=3.82/2^(1/6)=3.40 [Angstrom]<br />
+&nbsp; H2: 308 J/mol = &nbsp;37.044 K = &nbsp;37.044 [epsilon/kb(K)], r0=3.29 &gt; sigma=3.29/2^(1/6)=2.93 [Angstrom]<br />
+&nbsp; Energy Units Converter (http://www.colby.edu/chemistry/PChem/Hartree.html)<br />
+<br />
+◇ [M1, M3] &nbsp;(cutoff radius 12 Å [M3])<br />
+Site Name | r (Å) | Mass (AMU) | LJ Epsilon (K) | LJ sigma (Å) | Charge (e) | Static Polarizability (Å^3)<br />
+-----<br />
+・N2G | &nbsp;0 &nbsp; | &nbsp;0 &nbsp; &nbsp; &nbsp;| &nbsp;0 | 0 &nbsp; &nbsp;| &nbsp;0.964 | 0<br />
+・N2E | 0.55 | 14.0067 | 36 | 3.31 | -0.482 | 0<br />
+-----<br />
+<br />
+◇ [M2] (cutoff radius 12 Å)<br />
+Site Name | LJ Epsilon (K) | LJ sigma (Å) | Charge (e) | Static Polarizability (Å^3)<br />
+-----<br />
+・N_mid | &nbsp; 0 &nbsp; | 0 &nbsp; &nbsp; | &nbsp;0.964<br />
+・N_n2 &nbsp;| &nbsp;36.4 | 3.32 &nbsp;| -0.482<br />
+-----<br />
+・O_mid | &nbsp; 0 &nbsp; | 0 &nbsp; &nbsp; | &nbsp;0.224<br />
+・O_o2 &nbsp;|50.7273| 3.050 | -0.112<br />
+-----<br />
+・C_co2 | 28.129| 2.757 | &nbsp;0.6512<br />
+・O_co2 | 80.507| 3.033 | -0.3256<br />
+-----<br />
+・Ar &nbsp; &nbsp;| 119.8 | 3.405 | &nbsp;0<br />
+-----<br />
+<br />
+◇ [M4] (cutoff radius is nn data)<br />
+Name &nbsp; &nbsp; | LJ Epsilon (K) | LJ sigma (Å) |<br />
+-----<br />
+・H2 &nbsp; &nbsp; | 36.7 &nbsp; | 2.958 |<br />
+・MOF_O &nbsp;| 30.19 &nbsp;| 3.12 &nbsp;|<br />
+・MOF_C &nbsp;| 52.84 &nbsp;| 3.4 &nbsp; |<br />
+・MOF_H &nbsp;| 22.14 &nbsp;| 2.57 &nbsp;|<br />
+・MOF_Zn | 62.40 &nbsp;| 2.46 &nbsp;|&nbsp;<br />
+・MOF_Ni | &nbsp;7.548 | 2.52 &nbsp;|<br />
+-----<br />
+<br />
+◇ [M5] (cutoff radius 12 Å)<br />
+Atom type | LJ Epsilon (K) | LJ sigma (Å) | DDEC charge (e)<br />
+----<br />
+・H &nbsp; &nbsp;| &nbsp;7.65 | 2.85 | &nbsp;0.117<br />
+・H_h2 | 36.70 | 2.96 | -0.936<br />
+<br />
+◇ [M6] (cutoff radius 12.8 Å)<br />
+Atom type| LJ Epsilon (K) | LJ sigma (Å) | charge (e)<br />
+----<br />
+H2 &nbsp; &nbsp; &nbsp; | &nbsp;36.7 | 2.958 | &nbsp;0<br />
+CH4 &nbsp; &nbsp; &nbsp;| 148.0 | 3.730 | &nbsp;0<br />
+C_co2 &nbsp; &nbsp;| &nbsp;27.0 | 2.80 &nbsp;| &nbsp;0.70<br />
+O_co2 &nbsp; &nbsp;| &nbsp;79.0 | 3.05 &nbsp;| -0.35<br />
+-----<br />
+C_irmof &nbsp;| 47.856| 3.473 |<br />
+H_irmof &nbsp;| &nbsp;7.649| 2.846 |<br />
+O_irmof &nbsp;| 48.158| 3.033 |<br />
+Zn_irmof | 27.677| 4.045 |<br />
+<br />
+◇ [M7] (cutoff radius is nn data)<br />
+Atom type| LJ Epsilon (K) | LJ sigma (Å) | charge (e)<br />
+----<br />
+・H_h2 &nbsp;| &nbsp; - &nbsp; &nbsp;| &nbsp; - &nbsp; &nbsp;| &nbsp;0.4705<br />
+・H_mid | 34.206 | &nbsp;2.960 | -0.9410<br />
+----<br />
+・O_o2 &nbsp;| 48.951 | &nbsp;3.020 | -0.1336&nbsp;<br />
+・O_mid | &nbsp; - &nbsp; &nbsp;| &nbsp; - &nbsp; &nbsp;| &nbsp;0.2672<br />
+-----<br />
+<br />
+[M1] https://github.com/mpmccode/mpmc/wiki/Nitrogen<br />
+[M2] B. Vujic et al., Modelling Simul. Mater. Sci. Eng. 24 (2016) 045002 (26pp)<br />
+&nbsp; https://iopscience.iop.org/article/10.1088/0965-0393/24/4/045002<br />
+[M3] The Siepmann Group<br />
+&nbsp; http://chem-siepmann.oit.umn.edu/siepmann/trappe/index.html<br />
+[M4] S. Yu et al., J. Solid State Chem., 266 (2018) 31-36.<br />
+&nbsp; https://www.sciencedirect.com/science/article/pii/S0022459618301737<br />
+[M5] N. T. X. Huynh et al., RSC Adv., 7 (2017) 39583.<br />
+&nbsp; https://pubs.rsc.org/en/content/articlepdf/2017/ra/c7ra05801b<br />
+[M6] K. Gopalsamy et al., New J. Chem., 42 (2018) 4240-4250.<br />
+&nbsp; https://pubs.rsc.org/en/content/articlehtml/2018/nj/c7nj04538g<br />
+[M7] Electronic Supplementary Information&nbsp;<br />
+&nbsp; http://www.rsc.org/suppdata/ra/c2/c2ra01239a/c2ra01239a.pdf<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ converter (*.xyz to *.mol)<br />
+1. cd ~/music-4.0/utils/general<br />
+2. ./tomol IRMOF1.xyz<br />
+<br />
+□ modified tomo<br />
+1. cd ~/music-4.0/utils/general<br />
+2. gedit tomol<br />
+-----before<br />
+$nalist = 6;<br />
+@alist = ([&quot;H&quot;,&quot;Hydrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;C&quot;,&quot;Carbon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Si&quot;,&quot;Silicon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Al&quot;,&quot;Aluminum&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;N&quot;,&quot;Nitrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;O&quot;,&quot;Oxygen&quot;],<br />
+);<br />
+-----<br />
+-----after<br />
+$nalist = 13;<br />
+@alist = ([&quot;H&quot;,&quot;Hydrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;C&quot;,&quot;Carbon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Si&quot;,&quot;Silicon&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Al&quot;,&quot;Aluminum&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;N&quot;,&quot;Nitrogen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;O&quot;,&quot;Oxygen&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Zn&quot;,&quot;Zinc&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Li&quot;,&quot;Lithium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Na&quot;,&quot;Sodium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;K&quot;,&quot;Potassium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Ca&quot;,&quot;Calcium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Mg&quot;,&quot;Magnesium&quot;],<br />
+&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; [&quot;Ba&quot;,&quot;Barium&quot;],<br />
+);<br />
+-----<br />
+3. (change) IRMOF12.mol<br />
+-----<br />
+&nbsp;Molecule_name: IRMOF1<br />
+&nbsp;<br />
+&nbsp;Coord_Info: Listed Cartesian None<br />
+<br />
+&nbsp; Fundcell_Info: Listed<br />
+&nbsp; &nbsp; &nbsp; &nbsp;25.83200 &nbsp; &nbsp; &nbsp; 25.83200 &nbsp; &nbsp; &nbsp; 25.83200<br />
+&nbsp; &nbsp; &nbsp; &nbsp;90.00000 &nbsp; &nbsp; &nbsp; 90.00000 &nbsp; &nbsp; &nbsp; 90.00000<br />
+&nbsp; &nbsp; &nbsp; &nbsp; 0.00000 &nbsp; &nbsp; &nbsp; &nbsp;0.00000 &nbsp; &nbsp; &nbsp; &nbsp;0.00000<br />
+&nbsp; &nbsp; &nbsp; &nbsp;25.83200 &nbsp; &nbsp; &nbsp; 25.83200 &nbsp; &nbsp; &nbsp; 25.83200<br />
+-----<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+□ Accessible surface area per mass (m^2/g)<br />
+1. ./nonorthoSA.exe &lt; input_IRMOF1.dat&nbsp;<br />
+&nbsp; (Accessible surface area per mass in m^2/g: 3653.36)<br />
+※ Maximum Surface Area: 2517 m2 / g BET surface area<br />
+&nbsp;https://www.sigmaaldrich.com/technical-documents/articles/materials-science/metal-organic-frameworks/irmof-1.html<br />
+--------------------<br />
+<br />
+<br />
+--------------------<br />
+◇ ZIF-8 (under testing)<br />
+(https://datashare.is.ed.ac.uk/handle/10283/3047)<br />
+・DS_10283_3047.zip<br />
+1. mkdir ZIF-8_MUSIC<br />
+2. unzip DS_10283_3047.zip -d ZIF-8_MUSIC<br />
+3. cd ZIF-8_MUSIC<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+■ References<br />
+<br />
+[1] Music - Multipurpose Simulation Code<br />
+&nbsp; http://www.iec.northwestern.edu/music.php<br />
+[2] ZIF-8<br />
+&nbsp; https://datashare.is.ed.ac.uk/handle/10283/3047<br />
+[3] GCMC simulations with music<br />
+&nbsp; http://www.iec.northwestern.edu/Music/gcmc/gcmc.htm<br />
+[4] Music Tutorial (GCMC, IRMOF1 (MOF5))<br />
+&nbsp; http://people.bath.ac.uk/td222/research/music/Tutorial/<br />
+[5] Music Documentation<br />
+&nbsp; http://www.iec.northwestern.edu/Music/Documentation/index.html<br />
+[6] Snurr Research Group&nbsp;<br />
+&nbsp; https://github.com/snurr-group<br />
+[7] MCCCS Towhee: Related Software<br />
+&nbsp; http://towhee.sourceforge.net/software.html<br />
+------------------------------------------------------------------------------

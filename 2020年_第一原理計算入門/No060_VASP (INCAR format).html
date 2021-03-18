@@ -1,0 +1,202 @@
+<p>Å° INCAR<br />
+-------------------------------------------------------------------------------<br />
+Åû SCF ( + spin + structure optimize)<br />
+--------------------<br />
+#ALGO = Fast<br />
+#PREC = Accurate<br />
+<br />
+#For optimal performance we recommend that you set<br />
+#NPAR = 4 - approx SQRT( number of cores)<br />
+#(number of cores/NPAR must be integer)&nbsp;&nbsp;&nbsp;&nbsp;<br />
+NPAR = 2<br />
+<br />
+#spin 2, nonspin 1<br />
+ISPIN = 2<br />
+<br />
+#SCF<br />
+ISMEAR = -5<br />
+SIGMA = 0.2<br />
+# IBRION, 1=&nbsp;RMM-DIIS&nbsp; quasi-Newton, 2=conjugate-gradient=CG<br />
+<br />
+#SCF OPTIMIZATION<br />
+IBRION = 1<br />
+ISIF = 3<br />
+NSW = 40<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+##DOS range eV, same energy step as WIEN2k DOS<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band dispersion<br />
+#ICHARG=11<br />
+#ISMEAR = 0<br />
+#LORBIT=11<br />
+--------------------<br />
+-------------------------------------------------------------------------------<br />
+<br />
+Åû DOS<br />
+--------------------<br />
+#ALGO = Fast<br />
+#PREC = Accurate<br />
+<br />
+#For optimal performance we recommend that you set<br />
+#NPAR = 4 - approx SQRT( number of cores)<br />
+#(number of cores/NPAR must be integer)&nbsp;&nbsp;&nbsp;&nbsp;<br />
+NPAR = 2<br />
+<br />
+#spin 2, nonspin 1<br />
+ISPIN = 2<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+# IBRION, 1=&nbsp;RMM-DIIS&nbsp; quasi-Newton, 2=conjugate-gradient=CG<br />
+<br />
+#SCF OPTIMIZATION<br />
+#IBRION = 1<br />
+#ISIF = 3<br />
+#NSW = 40<br />
+<br />
+#DOS<br />
+ISMEAR = -5<br />
+NSW = 0<br />
+IBRION = -1<br />
+ICHARG = 11<br />
+LORBIT = 11<br />
+<br />
+#DOS range eV, same energy step as WIEN2k DOS<br />
+EMIN = -10.0<br />
+EMAX = 17.0<br />
+NEDOS = 1001<br />
+<br />
+#band dispersion<br />
+#ICHARG=11<br />
+#ISMEAR = 0<br />
+#LORBIT=11<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+Åü Band dispersion<br />
+--------------------<br />
+#ALGO = Fast<br />
+#PREC = Accurate<br />
+<br />
+#spin 2, nonspin 1<br />
+ISPIN = 2<br />
+<br />
+#SCF<br />
+#ISMEAR = -5<br />
+#SIGMA = 0.2<br />
+#ICHARG = 11<br />
+# IBRION, 1=&nbsp;RMM-DIIS&nbsp; quasi-Newton, 2=conjugate-gradient=CG<br />
+<br />
+#SCF OPTIMIZATION<br />
+#IBRION = 1<br />
+#ISIF = 3<br />
+#NSW = 40<br />
+<br />
+#DOS<br />
+#ISMEAR = -5<br />
+#NSW = 0<br />
+#IBRION = -1<br />
+#ICHARG = 11<br />
+#LORBIT = 11<br />
+<br />
+##DOS range eV, same energy step as WIEN2k DOS<br />
+#EMIN = -10.0<br />
+#EMAX = 17.0<br />
+#NEDOS = 1001<br />
+<br />
+#band dispersion<br />
+ICHARG=11<br />
+ISMEAR = 0<br />
+LORBIT=11<br />
+--------------------<br />
+Åü&nbsp;KPOINTS (band dispersion)<br />
+Åû FCC<br />
+--------------------<br />
+same&nbsp;line k point&nbsp; as WIEN2k_FCC.klist_band, Primitive Brillouin Zone<br />
+20 20 40 20 10<br />
+L ! Line-mode<br />
+r ! Reciprocal<br />
+0.250 0.500 0.750 ! W<br />
+0.500 0.500 0.500 ! L<br />
+<br />
+0.500 0.500 0.500 ! L<br />
+0.000 0.000 0.000 ! GAMMA<br />
+<br />
+0.000 0.000 0.000 ! GAMMA<br />
+0.000 0.500 0.500 ! X<br />
+<br />
+0.000 0.500 0.500 ! X<br />
+0.250 0.500 0.750 ! W<br />
+<br />
+0.250 0.500 0.750 ! W<br />
+0.375 0.375 0.750 ! K<br />
+--------------------<br />
+<br />
+Åû BCC<br />
+--------------------<br />
+same&nbsp;line k point as WIEN2k_BCC.klist_band, Primitive Brillouin Zone<br />
+40 20 20 20<br />
+L ! Line-mode<br />
+r ! Reciprocal<br />
+0.000 0.000 0.000 ! GAMMA<br />
+-0.500 0.500 0.500 ! H<br />
+<br />
+-0.500 0.500 0.500 ! H<br />
+0.000 0.000 0.500 ! N<br />
+<br />
+0.000 0.000 0.500 ! N<br />
+0.000 0.000 0.000 ! GAMMA<br />
+<br />
+0.000 0.000 0.000 ! GAMMA<br />
+0.250 0.250 0.250 ! P<br />
+--------------------<br />
+<br />
+Åû HCP<br />
+--------------------<br />
+same&nbsp;line k point as WIEN2k_HCP.klist_band, Primitive Brillouin Zone<br />
+20 10 20 10<br />
+L ! Line-mode<br />
+r ! Reciprocal<br />
+0.000 0.000 0.000 ! GAMMA<br />
+0.500 0.000 0.000 ! M<br />
+<br />
+0.500 0.000 0.000 ! M<br />
+0.333 0.333 0.000 ! K<br />
+<br />
+0.333 0.333 0.000 ! K<br />
+0.000 0.000 0.000 ! GAMMA<br />
+<br />
+0.000 0.000 0.000 ! GAMMA<br />
+0.000 0.000 0.500 ! A<br />
+--------------------<br />
+<br />
+Åû SC (simple cubic and super cell)<br />
+--------------------<br />
+same&nbsp;line k point as WIEN2k_SC.klist_band, Primitive Brillouin Zone<br />
+20 20 10 10<br />
+L ! Line-mode<br />
+r ! Reciprocal<br />
+0.500 0.500 0.500 ! R<br />
+0.000 0.000 0.000 ! GAMMA<br />
+<br />
+0.000 0.000 0.000 ! GAMMA<br />
+0.500 0.000 0.000 ! X<br />
+<br />
+0.500 0.000 0.000 ! X<br />
+0.500 0.000 0.500 ! M<br />
+<br />
+0.500 0.000 0.500 ! M<br />
+0.500 0.000 0.000 ! GAMMA<br />
+--------------------<br />
+------------------------------------------------------------------------------<br />
+&nbsp;</p>

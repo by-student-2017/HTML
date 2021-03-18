@@ -1,0 +1,256 @@
+------------------------------------------------------------------------------<br />
+■ Youtube動画：
+<div><iframe allowfullscreen="" frameborder="0" height="315" src="http://www.youtube.com/embed/i3e-gGlv3sc" width="560"></iframe></div>
+(&uarr;基本的な使い方： <a href="https://www.youtube.com/watch?v=i3e-gGlv3sc">https://www.youtube.com/watch?v=i3e-gGlv3sc</a>）<br />
+UKPOINTS: <a href="https://www.youtube.com/watch?v=Tm-ki0Rybvs">https://www.youtube.com/watch?v=Tm-ki0Rybvs</a>　<br />
+Github: <a href="https://github.com/by-student-2017/vasp">https://github.com/by-student-2017/vasp</a>&nbsp;<br />
+------------------------------------------------------------------------------<br />
+■ setting<br />
+0. sudo apt-get install python-scipy<br />
+1. chmod +x vasp_phonopy_qha_run<br />
+2. gedit vasp_phonopy_qha_run<br />
+change<br />
+------<br />
+set vasp_adress = $HOME'/vasp/vasp.5.4.1/bin/vasp_std'<br />
+set pseudo_potential_adress = $HOME'/vasp/potpaw_PBE'<br />
+------<br />
+3. gedit vasp_phonopy_qha_run<br />
+If you get libraries form Ubuntu Software center, I reccommend below,<br />
+------before<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+------after<br />
+#set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+------<br />
+4. if you change volume setting<br />
+------before<br />
+foreach no ( -5 -4 -3 -2 -1 0 1 2 3 4 5 )<br />
+------<br />
+------after (for example)<br />
+foreach no ( -6 -4 -2 0 2 4 6 )<br />
+------<br />
+------------------------------------------------------------------------------<br />
+■ Usage<br />
+1. vasp_phonopy_qha_run<br />
+&nbsp; if you use k mesh from cif2cell, I use below,<br />
+&nbsp;&nbsp;&nbsp; vasp_phonopy_qha_run -k<br />
+&nbsp; if you use your setting k mesh (UKPOINTS), I use below,<br />
+&nbsp;&nbsp;&nbsp; vasp_phonopy_qha_run -k UKPOINTS<br />
+2. cd made folder (for example, cd Al)<br />
+3. phonopy-qha --sparse=20 -p e-v.dat thermal_properties.yaml-{-{5..1},{0..5}}<br />
+------------------------------------------------------------------------------<br />
+■ Main process<br />
+1. e-v.dat<br />
+&nbsp; a) SCF calculation for change Volume.<br />
+&nbsp; b) make e-v.dat<br />
+&nbsp; ------<br />
+&nbsp; Volume TOTEN<br />
+&nbsp; ------<br />
+2. therm_prop_yaml<br />
+&nbsp; a) mv POSCAR POSCAR-unitcell<br />
+&nbsp; b) phonopy -d --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+&nbsp; c) mv SPOSCAR POSCAR<br />
+&nbsp; d) mpirun -np 4 $HOME'/vasp.5.4.1/bin/vasp_std'<br />
+&nbsp; e) phonopy --fc vasprun.xml<br />
+&nbsp; f) phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -t -p mesh.conf -s<br />
+&nbsp; g) cp thermal_properties.yaml thermal_properties.yaml--5<br />
+&nbsp; h) repeat a)-g) for changing volume and &quot;-5&quot;, e.g. -4, -3, -2, -1, 0, 1, 2, 3, 4, 5<br />
+&nbsp;&nbsp;&nbsp; vasp_phonopy_run store these data in therm_prop_yaml.<br />
+3.<span class="n"> phonopy</span><span class="o">-</span><span class="n">qha</span> --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 <span class="o">-</span><span class="n">p</span> <span class="n">e</span><span class="o">-</span><span class="n">v</span><span class="o">.</span><span class="n">dat</span> <span class="n">thermal_properties</span><span class="o">.</span><span class="n">yaml</span><span class="o">-</span><span class="p">{</span><span class="o">-</span><span class="p">{</span><span class="mf">5.</span><span class="o">.</span><span class="mi">1</span><span class="p">},{</span><span class="mf">0.</span><span class="o">.</span><span class="mi">5</span><span class="p">}}</span>&nbsp;-s<br />
+4. <span class="n">phonopy</span><span class="o">-</span><span class="n">qha</span> --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 <span class="o">-</span><span class="n">p</span> <span class="n">e</span><span class="o">-</span><span class="n">v</span><span class="o">.</span><span class="n">dat</span> <span class="n">thermal_properties</span><span class="o">.</span><span class="n">yaml</span><span class="o">-</span><span class="p">{</span><span class="o">-</span><span class="p">{</span><span class="mf">5.</span><span class="o">.</span><span class="mi">1</span><span class="p">},{</span><span class="mf">0.</span><span class="o">.</span><span class="mi">5</span><span class="p">}}</span>&nbsp;-s<br />
+5. phonopy-qha -b e-v.dat<br />
+6. phonopy-qha --eos='birch_murnaghan' -b e-v.dat<br />
+Reference: <a href="https://atztogo.github.io/phonopy/qha.html#phonopy-qha">https://atztogo.github.io/phonopy/qha.html#phonopy-qha</a><br />
+------------------------------------------------------------------------------<br />
+■ vasp_phonopy_qha_run<br />
+----------<br />
+#! /bin/csh -f<br />
+# VASP run command<br />
+#<br />
+# user settting<br />
+#set vasp_adress = $HOME'/vasp/vasp.5.3/vasp'<br />
+set vasp_adress = $HOME'/vasp/vasp.5.4.1/bin/vasp_std'<br />
+set pseudo_potential_adress = $HOME'/vasp/potpaw_PBE'<br />
+#set standard_input_adress = $HOME'/Desktop/Link to vasp_work/standard_input_files'<br />
+set __mpirun__ = &quot;mpirun&quot;<br />
+#if you get libraries form Ubuntu Software center, I reccommend below,<br />
+#set __mpirun__ = &quot;mpirun.openmpi&quot;<br />
+#<br />
+# Automatically setting<br />
+set kpoint_mesh = $1<br />
+set kpoint_mesh_name = $2<br />
+setenv OMP_NUM_THREADS 1<br />
+set node = `grep 'physical id' /proc/cpuinfo | sort -u | wc -l`<br />
+set num_core = `grep 'core id' /proc/cpuinfo | sort -u | wc -l`<br />
+echo &quot;&quot;<br />
+set DATE = `date`<br />
+echo $DATE<br />
+echo &quot;Automatically setting environments&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo &quot;OpenMP threads = 1&quot;<br />
+echo &quot;automatic setting Parallel calculation (MPI) = &quot;$num_core&quot; core&quot;&quot; / &quot;&quot;$node&quot;&quot; node&quot;<br />
+set NPAR = `echo 4-&quot;sqrt($num_core)&quot; | bc`<br />
+echo &quot;automatic setting NPAR = &quot;$NPAR<br />
+#sed 's/#NPAR/NPAR = '${NPAR}'/g' &quot;${standard_input_adress}/INCAR_scf_template&quot; &gt; &quot;${standard_input_adress}/INCAR_scf&quot;<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+echo $vasp_adress<br />
+echo $pseudo_potential_adress<br />
+#echo $standard_input_adress<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+# current adress setting<br />
+set address = `pwd`<br />
+echo &quot;$address&quot;<br />
+set DATE = `date`<br />
+#<br />
+# get cif data<br />
+set cif_list=`ls *.cif`<br />
+foreach cif_name ( $cif_list )<br />
+&nbsp; # remove extension<br />
+&nbsp; set cif_folder_name = `echo $cif_name:r`<br />
+&nbsp; mkdir ${cif_folder_name}<br />
+&nbsp; cp &quot;$address/$cif_name&quot; &quot;$address/${cif_folder_name}/$cif_name&quot;<br />
+end<br />
+echo &quot;include&quot;<br />
+set list=`find . -maxdepth 1 -mindepth 1 -type d | awk -F/ '{print $NF}'`<br />
+echo $list<br />
+echo &quot;------------------------------------------------------------&quot;<br />
+#<br />
+# loop<br />
+foreach folder_name_list ( $cif_list )<br />
+&nbsp; set folder_name = `echo $folder_name_list:r`<br />
+&nbsp; set DATE = `date`<br />
+&nbsp; #<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; echo &quot;vasp calculation start: &quot;&quot;$folder_name&quot;<br />
+&nbsp; echo &quot;&quot;<br />
+&nbsp; date<br />
+&nbsp; #<br />
+&nbsp; cd &quot;$address/$folder_name&quot;<br />
+&nbsp; #<br />
+&nbsp; if ( -f disp.yaml ) then<br />
+&nbsp;&nbsp;&nbsp; echo &quot;already disp.yaml&quot;<br />
+&nbsp; else<br />
+&nbsp;&nbsp;&nbsp; echo &quot;run cif2cell&quot;<br />
+&nbsp;&nbsp;&nbsp; cif2cell -p vasp --setup-all --vasp-format=5 --vasp-encutfac=1.0 --vasp-pseudo-libdr=&quot;${pseudo_potential_adress}&quot; --vasp-cartesian-lattice-vectors -f *.cif<br />
+&nbsp;&nbsp;&nbsp; cp INCAR INCAR_cif2cell<br />
+&nbsp;&nbsp;&nbsp; cp POSCAR POSCAR_temp<br />
+&nbsp;&nbsp;&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp;&nbsp;&nbsp; # change volume, (defaut value -5 -4 -3 -2 -1 0 1 2 3 4 5)<br />
+&nbsp;&nbsp;&nbsp; foreach no ( -5 -4 -3 -2 -1 0 1 2 3 4 5 )<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # scf calculation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( ${kpoint_mesh} == &quot;-k&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( ${kpoint_mesh_name} == &quot;&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mv KPOINTS_ KPOINTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp $address/${kpoint_mesh_name} KPOINTS<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set DATE = `date`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;scf calculation&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;${no}, scf calculation: &quot;$DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;NPAR = &quot;$NPAR &gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp;&nbsp; PREC = Accurate&quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;#&nbsp; ENCUT = 500&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot; ISMEAR = 0; SIGMA = 0.1&quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp; LREAL =&nbsp; Auto&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set volume_times = `awk -v p=&quot;${no}&quot; 'NR==2 {print $1*(100-p)/100}' POSCAR_temp`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; sed 1,2d POSCAR_temp &gt; POSCAR_temp2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo qha calculation &gt; POSCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo ${volume_times} &gt;&gt; POSCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cat POSCAR_temp2 &gt;&gt; POSCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; rm -f -r POSCAR_temp2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${__mpirun__} -np $num_core $vasp_adress # vasp calculation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # volume and total energy<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grep &quot;volume of cell&quot; OUTCAR | tail -1 &gt; Volume_temp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set Volume = `awk '{print $5}' Volume_temp`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; grep &quot;TOTEN&quot; OUTCAR | tail -1 &gt; TOTEN_temp<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set TOTEN&nbsp; = `awk '{print $5}' TOTEN_temp`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo ${Volume}&quot;&nbsp;&nbsp; &quot;${TOTEN} &gt;&gt; e-v.dat<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp OUTCAR OUTCAR-${no}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp POSCAR POSCAR-${no}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # dftp calculation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( ${kpoint_mesh} == &quot;-k&quot; ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mv KPOINTS KPOINTS_<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; date<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set DATE = `date`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;dfpt calculation&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;${no}, dfpt calculation: &quot;$DATE<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp;&nbsp; PREC = Accurate&quot; &gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;#&nbsp; ENCUT = 500&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot; IBRION = 8&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp; EDIFF = 1.0e-08 &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp; IALGO = 38&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot; ISMEAR = 0; SIGMA = 0.1&quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp; LREAL = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;ADDGRID = .TRUE.&nbsp; &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;&nbsp; LWAVE = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot; LCHARG = .FALSE. &quot; &gt;&gt; INCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp POSCAR POSCAR_backup<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mv POSCAR POSCAR-unitcell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phonopy -d --dim=&quot;2 2 2&quot; -c POSCAR-unitcell<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; mv SPOSCAR POSCAR<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ${__mpirun__} -np $num_core $vasp_adress # vasp calculation<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phonopy --fc vasprun.xml<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # phonopy, thermal_properties.yaml<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ( -f mesh.conf ) then<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;use mesh.conf&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; else<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;automatically make mesh.conf file&quot;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;DIM = 2 2 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&nbsp; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;MP = 16 16 16&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;FORCE_CONSTANTS = READ&quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;TPROP = .TRUE.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;TMIN&nbsp; = 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;TMAX&nbsp; = 2000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;TSTEP = 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; &quot; &gt;&gt; mesh.conf<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; phonopy --dim=&quot;2 2 2&quot; -c POSCAR-unitcell -t -p mesh.conf -s<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; cp thermal_properties.yaml thermal_properties.yaml-${no}<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; set therm_prop_yaml = `cat therm_prop_yaml_name_list`<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; echo &quot;${therm_prop_yaml} thermal_properties.yaml-${no}&quot; &gt; therm_prop_yaml_name_list<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; endif<br />
+&nbsp;&nbsp;&nbsp; #<br />
+&nbsp;&nbsp;&nbsp; end<br />
+&nbsp; #<br />
+&nbsp; endif<br />
+&nbsp; #<br />
+&nbsp; set therm_prop_yaml = `cat therm_prop_yaml_name_list`<br />
+&nbsp; #rm -f -r therm_prop_yaml_temp<br />
+&nbsp; # pressure, GPa units<br />
+&nbsp; #phonopy-qha --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 -p e-v.dat thermal_properties.yaml-{-{5..1},{0..5}} -s<br />
+&nbsp; phonopy-qha --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 -p e-v.dat ${therm_prop_yaml} -s<br />
+&nbsp; #<br />
+&nbsp; #phonopy-qha --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 -p e-v.dat thermal_properties.yaml-{-{5..1},{0..5}}<br />
+&nbsp; phonopy-qha --sparse=14&nbsp; --tmax=1400 --pressure=0.000101325 -p e-v.dat ${therm_prop_yaml}<br />
+&nbsp; #<br />
+&nbsp; # change volume, (defaut value -5 -4 -3 -2 -1 0 1 2 3 4 5)<br />
+&nbsp; #phonopy-qha --sparse=14 --tmax=1400 --pressure=0.000101325 -p e-v.dat thermal_properties.yaml--5 thermal_properties.yaml--4 thermal_properties.yaml--3 thermal_properties.yaml--2 thermal_properties.yaml--1 thermal_properties.yaml-0 thermal_properties.yaml-1 thermal_properties.yaml-2 thermal_properties.yaml-3 thermal_properties.yaml-4 thermal_properties.yaml-5 -s<br />
+&nbsp; #<br />
+&nbsp; # change volume, (defaut value -5 -4 -3 -2 -1 0 1 2 3 4 5)<br />
+&nbsp; #phonopy-qha --sparse=14 --tmax=1400 --pressure=0.000101325 -p e-v.dat thermal_properties.yaml--5 thermal_properties.yaml--4 thermal_properties.yaml--3 thermal_properties.yaml--2 thermal_properties.yaml--1 thermal_properties.yaml-0 thermal_properties.yaml-1 thermal_properties.yaml-2 thermal_properties.yaml-3 thermal_properties.yaml-4 thermal_properties.yaml-5 &amp;<br />
+&nbsp; #<br />
+&nbsp; phonopy-qha -b e-v.dat<br />
+&nbsp; phonopy-qha --eos='birch_murnaghan' -b e-v.dat<br />
+&nbsp; rm -f -r POSCAR_temp<br />
+&nbsp; cd $address<br />
+end<br />
+#<br />
+----------<br />
+------------------------------------------------------------------------------

@@ -1,0 +1,227 @@
+　WIEN2kでのコマンド入力がMacで必要となる計算についてまとめる<br />
+<span>-------------------------------------------------------------------------------</span><br />
+■ XSPEC<br />
+1. w2webの画面でedit .inxs まで進める<br />
+2. cd 計算するフォルダ名<br />
+3. x_lapw xspec (non-spin case)<br />
+&nbsp;x_lapw xspec -up (spin case)<br />
+<br />
+□ plot画面を表示するための書き換え<br />
+SRC_w2web/htdocs/exec/xspec.pl<br />
+$DIR = Session adress (e.g. WIEN2k/Fe_bcc)<br />
+$plotfile.ps = ~/.w2web/xxxxx.local/tmp/327245-3816.ps<br />
+----------<br />
+&lt;$tmp1=&quot;$DIR/:xspec1&quot;;<br />
+-----<br />
+&gt;$tmp1=&quot;$DIR/xspec1&quot;;<br />
+----------<br />
+&lt; set terminal png (png occur the error)<br />
+&lt; set output '$plotfile.png'<br />
+-----<br />
+&gt;set terminal postscript<br />
+&gt;set output '$plotfile.ps'<br />
+----------<br />
+close (FILE);<br />
+<br />
+&nbsp; $umps = qx(cd $DIR;gnuplot $tmp 2&gt;&amp;1);<br />
+&nbsp; $umps = qx(gs -sDEVICE=jpeg -sOutputFile=xspec_plot.jpg -dBATCH -dNOPAUSE -r60 -g500x350 -c -20 450 translate 0.8 0.8 scale -90 rotate -f $plotfile.ps);<br />
+<br />
+&gt; IMG SRC=xspec_plot.jpg<br />
+----------<br />
+<span>-------------------------------------------------------------------------------</span><br />
+■ SO ( do not support AFM )<br />
+x symmetso -&gt;&nbsp; x_lapw symmetso<br />
+x kgen -&gt; x_lapw kgen<br />
+<br />
+または<br />
+SRC_w2web/htdocs/util/initso.pl<br />
+x -&gt; x_lapw<br />
+x symmetso -&gt;&nbsp; x_lapw symmetso<br />
+x kgen -&gt; x_lapw kgen<br />
+<span>-------------------------------------------------------------------------------</span><br />
+■ OPTIC( SO + XMCD) ( SO do not support AFM )<br />
+1. cp case.struct case.ksym<br />
+2. x_lapw kgen -so<br />
+3. vi case.in2c (case.in2c_so, case.in2c_st))<br />
+&nbsp; TOT -&gt; FERMI<br />
+&nbsp; 金属の場合はさらにvalueの値を0（や0.000など）から101にする。<br />
+&lt; TETRA 0.0 (EF-method (ROOT,TEMP,GAUSS,TETRA,ALL),value)<br />
+---<br />
+&gt; TETRA 101 (EF-method (ROOT,TEMP,GAUSS,TETRA,ALL),value)<br />
+4. vi case.inc (case.inc_so, case.inc_st)<br />
+&nbsp; IPRINT&nbsp; 0 -&gt; 1 にする。例えば、<br />
+&lt; 4 0.0 0 # of orbitals, shift of potential, print switch<br />
+---<br />
+&gt; 4 0.0 1 # of orbitals, shift of potential, print switch<br />
+5. runsp_lapw -so<br />
+(マニュアルには記載がないが、これを行わないとFe_bcc.corewfdnが正しく作られなかった)<br />
+6. runsp_lapw -so -s lapw1 -e lcore<br />
+7. w2web [OPTIC] -&gt; Required steps: -&gt; x_lapw lapw2 -fermi -up<br />
+8. edit case.inop<br />
+&nbsp;&nbsp;XMCD 2 L23 : optional line: for XMCD of 2nd atom and L23 spectrum を2行目の後に加える。例えば、<br />
+---------------- top of file: case.inop --------------------<br />
+99999 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NKMAX, NKFIRST<br />
+-5.0 2.0&nbsp; 99999 &nbsp;&nbsp;&nbsp; : EMIN, EMAX, NBvalMAX<br />
+XMCD&nbsp; 1&nbsp; L23 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : optional line: for&nbsp; XMCD of 2nd atom and L23 spectrum<br />
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : number of choices (columns in *symmat)<br />
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Re xx<br />
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : Re zz<br />
+OFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : ON/OFF&nbsp;&nbsp; writes MME to unit 4<br />
+------------------- bottom of file -------------------------<br />
+&nbsp;9. x_lapw optic -c -so -up<br />
+10. grep :2P case.scf<br />
+　core energies は 上記のコマンド（grep :2P case.scf または grep :2P case.scfc）から得られる。他の内殻でのデータが欲しい場合は2Pを他の軌道に変える。<br />
+11. vi case.injoint<br />
+　下記の様に書き換える。<br />
+---------------- top of file: case.injoint -----------------------<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp; 9999&nbsp; 9999 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : LOWER,UPPER,upper-valence BANDINDEX<br />
+&nbsp; -1.0000&nbsp;&nbsp;&nbsp; 0.00100&nbsp;&nbsp; 2.0000 : EMIN DE EMAX FOR ENERGYGRID IN ryd<br />
+eV &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : output units&nbsp; eV / ryd&nbsp;<br />
+XMCD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : omitt these 4 lines for non-XMCD<br />
+&nbsp;-62.12 -63.5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : core energies in Ry (grep :2P case.scfc or case.scf)(L2, L3)<br />
+&nbsp;&nbsp; 0.8 &nbsp;&nbsp; 1.4 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : core-hole broadening (eV) for both core states (L2, L3)<br />
+&nbsp;&nbsp; 0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spectrometer broadening (eV)<br />
+&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : SWITCH<br />
+&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NUMBER OF COLUMNS<br />
+&nbsp;&nbsp; 0.1&nbsp; 0.1&nbsp; 0.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : BROADENING (FOR DRUDE MODEL - switch 6,7)<br />
+------------------- bottom of file -------------------------------<br />
+12. x_lapw joint -up<br />
+13. case.xmcd -&gt; Igor or other plot soft<br />
+&nbsp; (case.broad1, case.broad2, case.jointup, case.outputjointup, case.raw1, case.raw2, case.rawxmcd, case.xmcd, case.joint1up, case.joint2up)<br />
+<br />
+bash-3.2$ x_lapw optic -c -so -up<br />
+At line 219 of file sph-UPcor_tmp.f (unit = 36, file = 'Fe_bcc.corewfdn')<br />
+Fortran runtime error: End of file<br />
+0.003u 0.001s 0:00.01 0.0%&nbsp;&nbsp;&nbsp; 0+0k 0+2io 0pf+0w<br />
+error: command&nbsp;&nbsp; /Users/mizumakim/WIEN2k_14/opticc upoptic.def&nbsp;&nbsp; failed<br />
+-&gt; runsp_lapw -so ( or [run SCF] )-&gt; 5. runsp_lapw -so -s lapw1 -e lcore -&gt; 6. ....<br />
+<br />
+□ plot画面を表示するための書き換え（ただし、XMCDには対応していない）<br />
+SRC_w2web/htdocs/exec/optic.pl<br />
+----------<br />
+&lt; set terminal png<br />
+&lt; set output '$plotfile.png'<br />
+-----<br />
+&gt; set terminal postscript<br />
+&gt; set output '$plotfile.ps'<br />
+----------<br />
+close(FILE)<br />
+$umps = qx(cd $DIR;gnuplot $tmp2 2&gt;&amp;1);<br />
+$umps = qx(gs -sDEVICE=jpeg -sOutputFile=xspec_plot.jpg -dBATCH -dNOPAUSE -r60 -g500x350 -c -20 450 translate 0.8 0.8 scale -90 rotate -f $plotfile.ps);<br />
+&gt; IMG SRC=optic_plot.jpg<br />
+<br />
+□ plot画面を表示するための書き換え(xmcd対応)<br />
+SRC_w2web/htdocs/exec/optic.pl<br />
+----------<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; $plotfile=&quot;$tempdir/$SID-$$&quot;;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$infile=&quot;$DIR/$CASE.&quot;;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$titline=1;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$delline=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $selxmcd=&quot;&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $seljointupdn=&quot;&quot;;<br />
+----------<br />
+&nbsp;&nbsp;&nbsp; if ($selfile =~ /xmcd/) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $infile.=&quot;xmcd&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $titline=1;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $delline=0;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $selxmcd=&quot;selected&quot;;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } elsif ($selfile =~ /jointupdn/ ) {<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$infile.=&quot;joint$updn&quot;;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$titline=2;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;$delline=3;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $seljointupdn=&quot;selected&quot;;<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;} elsif ($selfile =~ /joint/ ) {<br />
+----------<br />
+&lt;SELECT NAME=&quot;selfile&quot;&gt;<br />
+&lt;option $selxmcd value=&quot;xmcd&quot;&gt;$CASE.xmcd<br />
+&lt;option $seljointupdn value=&quot;jointupdn&quot;&gt;$CASE.joint$updn<br />
+----------<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if (!($_ =~ /^\.$/ )) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ($dir =~ /\/$/) {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $F = $dir . $_;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; } else {<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; $F = $dir . &quot;/&quot; . $_;<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; }<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; if ($_ =~ /\.xmcd.*$/ ) {<br />
+続きは「if ($_ =~ /\.joint.*$/ ) {」と同様<br />
+----------<br />
+2: RIGHT_POL(RP)<br />
+3: LEFT_POL(LP)<br />
+4: XMCD<br />
+5: XAS<br />
+<br />
+□ plotをXMCD専用にしてもいい場合<br />
+----------<br />
+&nbsp;&nbsp;&nbsp; print FILE &lt;&lt;__STOP__;<br />
+show all<br />
+set terminal postscript enhanced color<br />
+set output '$plotfile.ps'<br />
+set title '$title'<br />
+set style data lines<br />
+set xrange [$xmin:$xmax]<br />
+set yrange [$ymin:$ymax]<br />
+set xlabel &quot;$xlabel&quot;<br />
+set ylabel &quot;Intensity [arb.units]&quot;<br />
+<br />
+set $axis<br />
+$plotoptions<br />
+plot &quot;$tmp1&quot; using 1:$col title &quot;RIGHT POL&quot; linecolor rgbcolor &quot;red&quot;, &quot;$tmp1&quot; using 1:3 title &quot;LEFT POL&quot; linecolor rgbcolor &quot;green&quot;, &quot;$tmp1&quot; using 1:4 title &quot;XMCD&quot; linecolor rgbcolor &quot;blue&quot;, &quot;$tmp1&quot; using 1:5 title &quot;XAS&quot; linecolor rgbcolor &quot;black&quot;<br />
+set terminal postscript enhanced color<br />
+set output '$plotfile.ps'<br />
+replot<br />
+__STOP__<br />
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;close(FILE);<br />
+----------<br />
+<br />
+■ Results<br />
+CeFe2: 7.31 Ang., Fd-3m (No. 227) -&gt; F (SOC calculation)<br />
+Fe 0 0 0, RMT = 2.42<br />
+Ce 0.375 0.375 0.375, RMT = 2.5<br />
+<br />
+□ CeFe2 ( Fe L2,3 XMCD and XAS)<br />
+<br />
+<img src="http://mizumac-2.local:7890/exec/optic_plot.jpg" /><br />
+Fig. 1. Absorption and dichroic spectra for the L2,3 edge of iron in CeFe2.<br />
+　横軸はクープマンズの定理だと実験値に比べて１％ほどズレた値になるのであまり気にしなくていい。&Delta;SCF法やより精度の高い計算を行えば横軸も合わせ られるが、計算コストが膨大になるのであまりオススメしない。それよりもスペクトルの形状やその因果関係について議論することが重要となる。<br />
+<br />
+<br />
+□ CeFe2 ( Ce L2,3 XMCD and XAS)<br />
+<br />
+---------------- top of file: case.inop --------------------<br />
+99999 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number of k-points, first k-point<br />
+-5.0 2.0 99999 Emin, Emax for matrix elements, NBvalMAX<br />
+XMCD 2 L23<br />
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; number of choices (columns in *outmat): 2: hex or tetrag. case<br />
+1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Re xx<br />
+3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Re zz<br />
+OFF&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ON/OFF&nbsp;&nbsp; writes MME to unit 4<br />
+------------------- bottom of file -------------------------<br />
+<br />
+grep :2P CeFe2.sc<br />
+-----<br />
+:2PP001: 2P*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -50.669279458 Ry<br />
+:2P 001: 2P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -49.751025457 Ry<br />
+:2PP002: 2P*&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -445.636325141 Ry<br />
+:2P 002: 2P&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -412.811670370 Ry<br />
+-----<br />
+001 = Fe<br />
+002 = Ce<br />
+Please, see case.struct.<br />
+<br />
+---------------- top of file: case.injoint -----------------------<br />
+&nbsp;&nbsp;&nbsp; 1&nbsp; 9999 9999&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : LOWER,UPPER and (optional) UPPER-VAL BANDINDEX<br />
+&nbsp;-1.0000&nbsp;&nbsp;&nbsp; 0.00100&nbsp; 2.0000 : EMIN DE EMAX FOR ENERGYGRID IN ryd<br />
+eV&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : output units&nbsp; eV / ryd &nbsp;<br />
+XMCD&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : omitt these 4 lines for non-XMCD<br />
+&nbsp;-412.8 -445.6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : core energies in Ry (grep :2P case.scfc)<br />
+&nbsp;&nbsp; 3.4&nbsp;&nbsp;&nbsp; 3.2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : core-hole broadening (eV) for both core states<br />
+&nbsp;&nbsp; 0.1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spectrometer broadening (eV)<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 4&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : SWITCH &nbsp;<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : NUMBER OF COLUMNS<br />
+&nbsp;&nbsp; 0.1&nbsp; 0.1&nbsp; 0.3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : BROADENING (FOR DRUDE MODEL - switch 6,7 -<br />
+ONLY)<br />
+------------------- bottom of file -------------------------------<br />
+<br />
+References<br />
+[1] L. Pardini et al.,arXiv:1104.1558v1 [cond-mat.mtrl-sci] 8 Apr 2011.: <a href="http://arxiv.org/abs/1104.1558v1">http://arxiv.org/abs/1104.1558v1</a><br />
+<span>-------------------------------------------------------------------------------</span>

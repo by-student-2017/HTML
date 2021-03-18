@@ -1,0 +1,310 @@
+&nbsp; Elkを用いたMn2CoGaでのXASの入力ファイルとその結果を掲載していく。<br />
+&nbsp; 論文は同じコードを用いた&nbsp; (<a href="http://arxiv.org/pdf/1107.0887v2.pdf">http://arxiv.org/pdf/1107.0887v2.pdf</a> )とした。ただし、全く同じ条件で計算することは私の実力が無くて出来ないので幾つか変更する。<br />
+[1] <a href="http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405">http://journals.aps.org/prb/pdf/10.1103/PhysRevB.84.132405</a>,&nbsp; <a href="http://arxiv.org/pdf/1107.0887v2.pdf">http://arxiv.org/pdf/1107.0887v2.pdf</a>, <a href="http://escholarship.org/uc/item/6k33p9br#page-6">http://escholarship.org/uc/item/6k33p9br#page-6</a><br />
+[2] <a href="http://arxiv.org/pdf/1402.5755v1.pdf">http://arxiv.org/pdf/1402.5755v1.pdf</a><br />
+--------------------------------------------------------------------------------<br />
+■ XMCDの構造が再現できなかった件について<br />
+　M. Meinert博士に相談しました。メールを出して直ぐに（4時間後）に丁寧な返答を頂きました。感動！！<br />
+　入力ファイルの設定は良いようです。しかし、「Mn2CoGaはフェリ磁性なので、Mnサイトを二つに分けて、異なったMnサイトで反対の磁性になるように計算する」、「異なったMnサイトからの寄与を分離するために、あなたの興味のあるサイトのみにMn_loを入れる」、「異なったサイトでMn_loを用いていくつか計算して欲しい」と、アドバイスして頂きました。<br />
+--------------------------------------------------------------------------------<br />
+■ calculation condition<br />
+Elk distribution<br />
+lattice constant : The experimental bulk lattice parameter<br />
+The small distortion and off-stoichiometry have negligible influence<br />
+The Brillouin zone integration : 16x16x16 k-point mesh in the irreducible wedge<br />
+XC potential: the Perdew-Burke-Ernzerhof functional = GGA (PBE)<br />
+spin-orbit coupling : second-variational scheme.<br />
+The absorption and dichroic spectra were calculated within a first order optical response formalism, i.e., core-hole correlations were not taken into account.<br />
+<br />
+&nbsp; The theoretical spectra are normalized to 1 about 40 eV above the L3 edge and are shifted to match the experimental absorption onset at L3.<br />
+<br />
+&nbsp; The asymmetric line shape and the broad tails of the resonances are a consequence of 2p-3d e-e correlation, which is neglected in our simulations. Electron-hole correlations can significantly significantly alter the shape of the XAS or XMCD spectra of 3d transition elements, even in a metallic environment.Thus, the good agreement of our calculations with the experimental spectra indicates an effective screening of the 2p core-hole.<br />
+--------------------------------------------------------------------------------<br />
+■ test condition<br />
+Elk distribution<br />
+lattice constant : The experimental bulk lattice parameter<br />
+The small distortion and off-stoichiometry have negligible influence<br />
+The Brillouin zone integration : 8x8x8 k-point mesh<br />
+XC potential: the Perdew-Burke-Ernzerhof functional = GGA (PBE)<br />
+spin-orbit coupling : second-variational scheme.<br />
+The absorption and dichroic spectra were calculated within a first order optical response formalism, i.e., core-hole correlations were not taken into account.<br />
+----------<br />
+■ PC spec<br />
+CentOS6.4 (Final) 64-bit<br />
+CPU: Intel&reg; Core&trade; i7-2600K CPU @ 3.50GHz &times; 8<br />
+Memory: 15.6 GiB<br />
+espresso-5.1<br />
+Compiler: ifort 13.1.1<br />
+VESTA v.2.1.6<br />
+--------------------------------------------------------------------------------<br />
+■ Mn2CoGa XAS(GGA-PBE)<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 562px; height: 400px;" />
+<div style="text-align: center;">ngridk 8 8 8 (16h37m) (plot Im[epsilon_11.OUT] only)</div>
+<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 561px; height: 403px;" />
+<div style="text-align: center;">ngridk 10 10 10, vkloff 0.5&nbsp; 0.5&nbsp; 0.5 (24h35m) (plot Im[epsilon_11.OUT] only)</div>
+<br />
+<br />
+<img alt="" src="data:image/png;base64,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" style="width: 560px; height: 402px;" />
+<div style="text-align: center;">ngridk 13 13 13, vkloff 0.5&nbsp; 0.5&nbsp; 0.5 (52h50m28s, 9.6 GB) (plot Im[epsilon_11.OUT] only)</div>
+<br />
+<br />
+□&nbsp;Mn_lo.in<br />
+&nbsp; -----<br />
+&nbsp;'Mn'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spsymb<br />
+&nbsp;'manganese'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spname<br />
+&nbsp; -25.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spzn<br />
+&nbsp;&nbsp; 100145.9369&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spmass<br />
+&nbsp; 0.400000E-06&nbsp;&nbsp;&nbsp; 2.0000&nbsp;&nbsp; 35.6837&nbsp;&nbsp; 500&nbsp;&nbsp;&nbsp; : sprmin, rmt, sprmax, nrmt<br />
+&nbsp; 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spnst<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spn, spl, spk, spocc, spcore<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; T<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 2&nbsp;&nbsp; 2&nbsp;&nbsp; 3.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 4&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : apword<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : apwe0, apwdm, apwve<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nlx<br />
+&nbsp;&nbsp; 7&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nlorb<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp; -23.4000&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -3.1372&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -1.9857&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -0.2553&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp; -----<br />
+<br />
+<br />
+□ Co_lo.in<br />
+&nbsp; -----<br />
+&nbsp;'Co'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spsymb<br />
+&nbsp;'cobalt'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spname<br />
+&nbsp; -27.0000&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spzn<br />
+&nbsp;&nbsp; 107428.6517&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spmass<br />
+&nbsp; 0.384900E-06&nbsp;&nbsp;&nbsp; 2.0000&nbsp;&nbsp; 35.6837&nbsp;&nbsp; 500&nbsp;&nbsp;&nbsp; : sprmin, rmt, sprmax, nrmt<br />
+&nbsp; 10&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spnst<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; T&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spn, spl, spk, spocc, spcore<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; T<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 1&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 2&nbsp;&nbsp; 2&nbsp;&nbsp; 4.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 3&nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp; 3.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 4&nbsp;&nbsp; 0&nbsp;&nbsp; 1&nbsp;&nbsp; 2.00000&nbsp;&nbsp;&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : apword<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : apwe0, apwdm, apwve<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nlx<br />
+&nbsp;&nbsp; 6&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nlorb<br />
+&nbsp;&nbsp; 0&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp; -28.0000&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;&nbsp; 1&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -2.3834&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp;&nbsp; 2&nbsp;&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbl, lorbord<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 0&nbsp; F&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : lorbe0, lorbdm, lorbve<br />
+&nbsp;&nbsp;&nbsp; 0.1500&nbsp;&nbsp; 1&nbsp; F<br />
+&nbsp;&nbsp; -0.3072&nbsp;&nbsp; 0&nbsp; T<br />
+&nbsp; -----<br />
+<br />
+<br />
+□ input file (SCF calculation)<br />
+elk.in<br />
+&nbsp; -----<br />
+tasks<br />
+&nbsp; 0<br />
+<br />
+sppath<br />
+&nbsp; './'<br />
+<br />
+wplot<br />
+&nbsp; 400 200 0<br />
+&nbsp; 22.4 23.9<br />
+<br />
+! compute the xx, xy, and zz components<br />
+optcomp<br />
+&nbsp; 1 1<br />
+&nbsp; 1 2<br />
+&nbsp; 3 3<br />
+<br />
+spinpol<br />
+&nbsp; .true.<br />
+<br />
+spinorb<br />
+&nbsp; .true.<br />
+<br />
+! use GGA<br />
+xctype<br />
+&nbsp; 20<br />
+<br />
+ngridk<br />
+&nbsp; 4 4 4<br />
+<br />
+! start with a large magnetic field and reduce at each iteration<br />
+bfieldc<br />
+&nbsp; 0.0&nbsp; 0.0&nbsp; 2.0<br />
+<br />
+reducebf<br />
+&nbsp; 0.8<br />
+<br />
+! large number of empty states necessary for &quot;continuum&quot; absorption<br />
+nempty<br />
+&nbsp; 10<br />
+<br />
+! a Lorentzian broadening is applied to the spectrum<br />
+swidth<br />
+&nbsp; 0.01<br />
+<br />
+avec<br />
+&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.0000000000<br />
+&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.5000000000<br />
+&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.5000000000<br />
+<br />
+scale<br />
+&nbsp; 11.073794293<br />
+<br />
+atoms<br />
+&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nspecies<br />
+'Mn_lo.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 2<br />
+&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+'Co_lo.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 1<br />
+&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+'Ga.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 1<br />
+&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+&nbsp; -----<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+----------<br />
+<br />
+<br />
+□ input file (16h37m) (XAS calculation)<br />
+elk.in<br />
+&nbsp; -----<br />
+tasks<br />
+&nbsp; 1<br />
+&nbsp; 120<br />
+&nbsp; 121<br />
+<br />
+sppath<br />
+&nbsp; './'<br />
+<br />
+wplot<br />
+&nbsp; 400 200 0<br />
+&nbsp; 22.4 23.9<br />
+<br />
+! compute the xx, xy, and zz components<br />
+optcomp<br />
+&nbsp; 1 1<br />
+&nbsp; 1 2<br />
+&nbsp; 3 3<br />
+<br />
+spinpol<br />
+&nbsp; .true.<br />
+<br />
+spinorb<br />
+&nbsp; .true.<br />
+<br />
+! use GGA<br />
+xctype<br />
+&nbsp; 20<br />
+<br />
+ngridk<br />
+&nbsp; 8 8 8<br />
+<br />
+! start with a large magnetic field and reduce at each iteration<br />
+bfieldc<br />
+&nbsp; 0.0&nbsp; 0.0&nbsp; 2.0<br />
+<br />
+reducebf<br />
+&nbsp; 0.8<br />
+<br />
+! large number of empty states necessary for &quot;continuum&quot; absorption<br />
+nempty<br />
+&nbsp; 10<br />
+<br />
+! a Lorentzian broadening is applied to the spectrum<br />
+swidth<br />
+&nbsp; 0.01<br />
+<br />
+avec<br />
+&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.0000000000<br />
+&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.5000000000<br />
+&nbsp;&nbsp; 0.0000000000&nbsp;&nbsp; 0.5000000000&nbsp;&nbsp; 0.5000000000<br />
+<br />
+scale<br />
+&nbsp; 11.073794293<br />
+<br />
+atoms<br />
+&nbsp; 3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : nspecies<br />
+'Mn_lo.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 2<br />
+&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp; 0.250000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp; 0.750000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+'Co_lo.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 1<br />
+&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp; 0.500000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+'Ga.in'&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; : spfname<br />
+&nbsp; 1<br />
+&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp; 0.000000000000000&nbsp;&nbsp;&nbsp; 0.00000000&nbsp; 0.00000000&nbsp; 0.00000000<br />
+&nbsp; -----<br />
+export OMP_NUM_THREADS=1<br />
+mpirun -np 4 $HOME/elk-2.3.22/src/elk<br />
+----------<br />
+<br />
+<br />
+□ gnuplot (XAS plot) (shift +18 eV)<br />
+-----<br />
+gnuplot<br />
+plot '/home/pc3/elk-2.3.22/elk_calc/Mn2CoGa_XAS/EPSILON_11.OUT' u ($1*13.602*2+18):2 w l t &quot;Mn2CoGa Mn XAS&quot;, '/home/pc3/elk-2.3.22/elk_calc/Mn2CoGa_XAS/EPSILON_12.OUT' u ($1*13.602*2+18):($2*-2) w l t &quot;Mn2CoGa Mn XMCD&quot;<br />
+set xzeroaxis<br />
+set xlabel &quot;Energy / eV&quot;<br />
+set ylabel &quot;XAS, XMCD&quot;<br />
+set xrange [635:658]<br />
+set yrange [-0.007:0.016]<br />
+replot<br />
+-----<br />
+<br />
+--------------------------------------------------------------------------------

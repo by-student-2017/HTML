@@ -1,0 +1,382 @@
+<p>&nbsp;&nbsp; ここではPWscfを用いたGW近似計算からBoltzTraPの計算までを解説する。<br />
+-------------------------------------------------------------------------------<br />
+■ BerkeleyGW<br />
+□ download<br />
+1. <a href="http://www.berkeleygw.org/">http://www.berkeleygw.org/</a>&nbsp;に入る。<br />
+2. Create new account で登録する。<br />
+3. 最後のGの質問は、GW近似のGが何か?である。Gの二番目の文字を英語で入力する。<br />
+4. メールが届くので、書かれているアドレスをクリックして飛ぶ。<br />
+5. downloadでプログラムを得る。最新版は下記になるが、古いのも得ておこう。<br />
+BerkeleyGW 1.0.5 (Source Code - All Platforms): <a href="http://www.berkeleygw.org/releases/BGW-1.0.5.tar.gz">BGW-1.0.5.tar.gz</a> - <a href="http://www.berkeleygw.org/releases/license.txt">License</a> released 30 Aug 2013<br />
+<br />
+□ Compiling BerkeleyGW (Need fftw-2.1.5)<br />
+1. tar zxvf BGW-1.0.5.tar.gz<br />
+2. mv BerkeleyGW-1.0.5 BerkeleyGW<br />
+3. cd Ber*<br />
+4. Copy mk file<br />
+&nbsp; A) ifort case<br />
+&nbsp;&nbsp;&nbsp; cp config/serial_ifort64.mk arch.mk<br />
+&nbsp; B) ifort + mpi case<br />
+&nbsp;&nbsp;&nbsp; cp lawrencium.mk arch.mk<br />
+&nbsp; C) gfortran case<br />
+&nbsp;&nbsp;&nbsp; cp config/generic.serial.linux.mk arch.mk<br />
+&nbsp; D) gfortran + mpi case<br />
+&nbsp;&nbsp;&nbsp; cp config/generic.mpi.linux.mk arch.mk<br />
+5. gedit arch.mk<br />
+&nbsp;A) (cp config/serial_ifort64.mk arch.mk) case<br />
+&nbsp;&nbsp; FFTWLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = -L/usr/local/lib -lfftw<br />
+&nbsp;&nbsp; FFTWINCLUDE&nbsp; = /home/username/fftw-2.1.5/fortran<br />
+&nbsp;&nbsp; MKLPATH = /opt/intel/mkl/lib/intel64<br />
+&nbsp;B) (cp lawrencium.mk arch.mk) intel case<br />
+&nbsp;&nbsp; FOPTS&nbsp;&nbsp; = -O3 -no-prec-div -axAVX,SSE4.2,SSE4.1,SSE3,SSSE3,SSE2<br />
+&nbsp;&nbsp; FFTWPATH&nbsp;&nbsp;&nbsp;&nbsp; = -L/usr/local/<br />
+&nbsp;&nbsp; FFTWLIB&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = $(FFTWPATH)/lib -lfftw -lfftw_mpi<br />
+&nbsp;&nbsp; FFTWINCLUDE&nbsp; = $(HOME)/fftw-2.1.5/fortran<br />
+&nbsp;&nbsp; MKLPATH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; = /opt/intel/mkl/lib/intel64<br />
+&nbsp;&nbsp; TESTSCRIPT = make check-parallel<br />
+6. Copy mk file<br />
+&nbsp; A) ALL case, but low calculation speed.<br />
+&nbsp;&nbsp;&nbsp; cp flavor_cplx.mk flavor.mk<br />
+&nbsp; B) (a system with inversion symmetry about the origin) case<br />
+&nbsp;&nbsp;&nbsp; cp flavor_real.mk&nbsp; flavor.mk<br />
+7. make<br />
+&nbsp; A) 1 cpu calculation<br />
+&nbsp;&nbsp;&nbsp; make all<br />
+&nbsp; B) mpi(multi core{cpu}) calculation<br />
+&nbsp;&nbsp;&nbsp; make -j all-flavors or make -j all-j<br />
+<br />
+test1<br />
+1. cd examples/EPM/silicon<br />
+2. script_0.sh (add the k-points to EPM input files)<br />
+3. script_1.sh (create symbolic links)<br />
+4. script_2.sh (generate wavefunction files)<br />
+5. script_3.sh (calculate epsilon, sigma, kernel and absorption)<br />
+<br />
+□ Compiling pw2bgw (for PWscf version 4.3.2)<br />
+1. cd $HOME/espresso-4.3.2<br />
+2. $HOME/BerkeleyGW/MeanField/ESPRESSO/install.sh<br />
+<br />
+test2<br />
+1. cd BerkeleyGW/examples/DFT/Si2_bs<br />
+2. gedit script<br />
+&nbsp; 1) for PWscf 5.0.2<br />
+&nbsp; &nbsp; MPI_CMD=&quot;mpirun -np 4&quot;<br />
+&nbsp; &nbsp; SCRATCH=$HOME<br />
+&nbsp; &nbsp; PW_EXEC=&quot;$SCRATCH/espresso-5.0/bin/pw.x&quot;<br />
+&nbsp; &nbsp; PW2BGW_EXEC=&quot;$SCRATCH/espresso-5.0/bin/pw2bgw.x&quot;<br />
+&nbsp; &nbsp; EPSILON_EXEC=&quot;$SCRATCH/BerkeleyGW/Epsilon/epsilon.real.x&quot;<br />
+&nbsp; &nbsp; SIGMA_EXEC=&quot;$SCRATCH/BerkeleyGW/Sigma/sigma.real.x&quot;<br />
+&nbsp; &nbsp; EQP_SCRIPT=&quot;$SCRATCH/BerkeleyGW/bin/eqp.py&quot;<br />
+&nbsp; &nbsp; INTEQP_EXEC=&quot;$SCRATCH/BerkeleyGW/BSE/inteqp.real.x&quot;<br />
+&nbsp; &nbsp; cd $SCRATCH/BerkeleyGW/examples/DFT/Si2_bs<br />
+&nbsp; 2) for PWscf 4.3.2 (not successful)<br />
+&nbsp; If you want to run them with Quantum ESPRESSO 4.3.2 or earlier version, you should modify the input files for pw.x.<br />
+&nbsp;&nbsp;&nbsp; Change &quot;calculation = 'bands'&quot; to &quot;calculation = 'nscf'&quot; and &quot;CELL_PARAMETERS&quot; to &quot;CELL_PARAMETERS cubic&quot; in Si2.wfn.in, Si2.wfnq.in, Si2.wfn_inner.in and Si2.kpath.in, except Si2.scf.in.<br />
+&nbsp;&nbsp;&nbsp; MPI_CMD=&quot;mpirun -np 4&quot;<br />
+&nbsp;&nbsp;&nbsp; SCRATCH=$HOME<br />
+&nbsp; &nbsp; PW_EXEC=&quot;$SCRATCH/espresso-4.3.2/bin/pw.x&quot;<br />
+&nbsp;&nbsp;&nbsp; PW2BGW_EXEC=&quot;$SCRATCH/espresso-4.3.2/bin/pw2bgw.x&quot;<br />
+&nbsp; &nbsp; EPSILON_EXEC=&quot;$SCRATCH/BerkeleyGW/Epsilon/epsilon.real.x&quot;<br />
+&nbsp; &nbsp; SIGMA_EXEC=&quot;$SCRATCH/BerkeleyGW/Sigma/sigma.real.x&quot;<br />
+&nbsp; &nbsp; EQP_SCRIPT=&quot;$SCRATCH/BerkeleyGW/bin/eqp.py&quot;<br />
+&nbsp; &nbsp; INTEQP_EXEC=&quot;$SCRATCH/BerkeleyGW/BSE/inteqp.real.x&quot;<br />
+&nbsp; &nbsp; cd $SCRATCH/BerkeleyGW/examples/DFT/Si2_bs<br />
+3. ./script<br />
+-------------------------------------------------------------------------------<br />
+■ kgrid<br />
+1. cd $HOME/BerkeleyGW/examples/DFT/silicon/ESPRESSO/00-kgrid<br />
+2. kgrid.inp ( = WFN.in, WFNq.in, WFN_co.in, WFN_fi.in and WFNq_fi.in )<br />
+---------------<br />
+5 5 5 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! numbers of k-points along b1,b2,b3<br />
+0.5 0.5 0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! k-grid offset (0.0 unshifted, 0.5 shifted by half a grid step)<br />
+0.0 0.0 0.001&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! a small q-shift (0.0 unshifted(for WFN.in), 0.001 shifted(for WFNq.in) by one 1000th of b3)<br />
+<br />
+0.0 0.5 0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! lattice vectors in Cartesian coordinates (x,y,z)<br />
+0.5 0.0 0.5&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! in units of the lattice parameter<br />
+0.5 0.5 0.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; !<br />
+2&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! number of atoms in the unit cell<br />
+1 -0.125 -0.125 -0.125 ! atomic species and positions in Cartesian coordinates (x,y,z)<br />
+1&nbsp; 0.125&nbsp; 0.125&nbsp; 0.125 ! in units of the lattice parameter<br />
+24 24 24 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! size of FFT grid<br />
+.false.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! turn off time-reversal symmetry for BerkeleyGW<br />
+.false.&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ! OPTIONAL: k-points in the log file are in Cartesian coordinates<br />
+---------------<br />
+3. ./script_0<br />
+<br />
+(1) wfn: 5x5x5, half a grid shift<br />
+(2) wfnq: 5x5x5, half a grid shift+small q_0 shift<br />
+(3) wfn_co: 5x5x5, zero shift<br />
+In the above, can I use the same k points for wfn and wfn_co calculations, i.e., 5x5x5 k-grid with zero shift for wfn?<br />
+Yes, you can use the same grid for (1) wfn and (3) wfn_co so long as the grid is unshifted. An unshifted grid is currently required for the BSE kernel calculations, wfn_co (this requirement ensures we have dielectric matrix in epsmat that we will need). [9]<br />
+(4) wfn_fi: 5x5x5, zero shift<br />
+(5) wfnq_fi: 5x5x5, zero shift<br />
+<br />
+■ PWscf -&gt; BerkeleyGW<br />
+□ Input file ( except I) case, show changing point)<br />
+A) case.scf.in ( cif2cell -&gt; abinit2pw.plx -&gt; PWgui -&gt; change and add keyword)<br />
+&nbsp; tstress = .true.<br />
+&nbsp; tprnfor = .true.<br />
+&nbsp; nbnd = 4 (&lt;-see number of electrons in output file or calculate UPF files. see z_valence in hgh or, Zval or valence in case.scf.out)<br />
+&nbsp; diago_full_acc = .true. ( &lt;- need ?)<br />
+&nbsp; K_POINTS automatic<br />
+&nbsp; 5 5 5 1 1 1<br />
+B) case.wfn.in ( almost same&nbsp; as case.scf.in )<br />
+&nbsp; calculation = 'nscf'<br />
+&nbsp; nbnd = 30 (&lt;- the value is about 7 times bigger than the nbnd in case.scf.in)<br />
+&nbsp; startingwfc = 'random'<br />
+&nbsp; CELL_PARAMETERS cubic<br />
+&nbsp; ( and copy WFN.out data)<br />
+C) case.wfn.pp.in ( pw2bgw input file )<br />
+&nbsp; &amp;input_pw2bgw<br />
+&nbsp;&nbsp;&nbsp; prefix = 'pwscf'<br />
+&nbsp;&nbsp;&nbsp; real_or_complex = 1 (&lt;- 1: real, 2: complex. default: 2 )<br />
+&nbsp;&nbsp;&nbsp; wfng_flag = .true.<br />
+&nbsp;&nbsp;&nbsp; wfng_kgrid = .true.<br />
+&nbsp;&nbsp;&nbsp; wfng_nk1 = 5<br />
+&nbsp;&nbsp;&nbsp; wfng_nk2 = 5<br />
+&nbsp; &nbsp; wfng_nk3 = 5<br />
+&nbsp; &nbsp; wfng_dk1 = 0.5<br />
+&nbsp; &nbsp; wfng_dk2 = 0.5<br />
+&nbsp; &nbsp; wfng_dk3 = 0.5<br />
+&nbsp; /<br />
+D) case.wfnq.in ( almost same&nbsp; as case.wfn.in )<br />
+&nbsp; wf_collect = .true. (&lt;-default)<br />
+&nbsp; tstress = .false. (&lt;-default)<br />
+&nbsp; tprnfor = .false. (&lt;-default)<br />
+&nbsp; nbnd = 4 (&lt;- same as case.scf.in )<br />
+&nbsp; ( and copy WFNq.out data)<br />
+E) case.wfnq.pp.in ( pw2bgw input file, almost same&nbsp; as case.wfn.pp.in )<br />
+&nbsp;&nbsp; wfng_file = 'WFNq'<br />
+&nbsp;&nbsp; wfng_nk1 = 5<br />
+&nbsp;&nbsp; wfng_nk2 = 5<br />
+&nbsp;&nbsp; wfng_nk3 = 5<br />
+&nbsp;&nbsp; wfng_dk1 = 0.5<br />
+&nbsp;&nbsp; wfng_dk2 = 0.5<br />
+&nbsp;&nbsp; wfng_dk3 = 0.505 &nbsp; (&lt;-! + a small q-shift (0.0 unshifted, 0.001 shifted by one 1000th of b3)*wfng_nk3)<br />
+F) case.wfn_inner.in ( almost same&nbsp; as case.wfn.in or wfn_co)<br />
+&nbsp; nbnd = 33 (&lt;- the value is about 1.1 times bigger than the nbnd in case.wfn.in)<br />
+&nbsp; ( and copy WFN_co.out data)<br />
+G) case.wfn_inner.pp.in ( pw2bgw input file, almost same&nbsp; as case.wfn.pp.in )<br />
+&nbsp; wfng_file = 'WFN_inner'<br />
+&nbsp; rhog_flag = .true.<br />
+&nbsp; vxc_flag = .true.<br />
+&nbsp; vxc_diag_nmin = 1 (minimum band index for diagonal Vxc matrix elements. e.g. 1)<br />
+&nbsp; vxc_diag_nmax = 15 (maximum band index for daigonal Vxc matrix elements. e.g. nbnd in case.kpath.in, related number of band in sigma calculation)<br />
+&nbsp;&nbsp;&nbsp; wfng_nk1 = 5<br />
+&nbsp;&nbsp;&nbsp; wfng_nk2 = 5<br />
+&nbsp;&nbsp;&nbsp; wfng_nk3 = 5<br />
+&nbsp;&nbsp;&nbsp; wfng_dk1 = 0.0<br />
+&nbsp;&nbsp;&nbsp; wfng_dk2 = 0.0<br />
+&nbsp;&nbsp;&nbsp; wfng_dk3 = 0.0<br />
+H) case.kpath.in ( almost same&nbsp; as case.wfn.in )<br />
+&nbsp; wf_collect = .true.<br />
+&nbsp; tstress = .false.<br />
+&nbsp; tprnfor = .false.<br />
+&nbsp; nbnd = 15 (&lt;- the value is more than half of the nbnd in case.wfn.in)<br />
+&nbsp; ( and copy WFN_fi.out data)<br />
+I) case.kpath.pp.in ( pw2bgw input file, almost same&nbsp; as case.wfn_inner.pp.in )<br />
+&nbsp; prefix = 'pwscf'<br />
+&nbsp; real_or_complex = 1<br />
+&nbsp; wfng_flag = .true.<br />
+&nbsp; wfng_file = 'WFN_fi'<br />
+J) epsilon.inp[3, 4, 10] (The requested number of valence bands is available in WFN. kgrids for WFN and WFNq must be the same. Need match for rqq point:&nbsp;&nbsp; X.XXXX Y.YYYY Z.ZZZZ in file WFN or WFNq)<br />
+&nbsp; (use WFN_co.out and change last row to 1.0, then add 0 or 1(for 0.0 0.0 0.001) to last row in epsilon.inp, respectively)<br />
+&nbsp; epsilon_cutoff 10.0 (&lt;- 10/25 of the ecutwfc in case.scf.in)<br />
+&nbsp; number_bands 29 (&lt;- the value is about 7 times bigger than the nbnd in case.scf.in)<br />
+&nbsp; band_occupation 4*1 25*0 (&lt;- occu.*1 uncoou.*0)<br />
+&nbsp; nmuber_qpoints 10<br />
+&nbsp; begin qpoints<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.001000000&nbsp;&nbsp; 1.0 1<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.200000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.200000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.800000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.400000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.000000000&nbsp; 0.400000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; 0.200000000&nbsp; 0.400000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0 0<br />
+&nbsp; end<br />
+K) sigma.inp[5] ( Reading WFN_inner. use WFN_co.out and change last row to 1.0)<br />
+&nbsp; screened_coulomb_cutoff 10.0 (&lt;- 10/25 of the ecutwfc in case.scf.in)<br />
+&nbsp; bare_coulomb_cutoff 25.0 (&lt;- about equal to the ecutwfc in case.scf.in)<br />
+&nbsp; number_bands 32<br />
+&nbsp; band_cooupation 4*1 28*0<br />
+&nbsp; band_index_min 1 (&lt;- degeneracy_check.x show # of bands )<br />
+&nbsp; band_index_max 14 (&lt;- degeneracy_check.x show # of bands )<br />
+&nbsp; screening_semiconductor<br />
+&nbsp; mumber_kpoints 10<br />
+&nbsp; begin kpoints<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.000000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.200000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.000000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.200000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.200000000&nbsp; 0.800000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.400000000&nbsp; 0.400000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.000000000&nbsp; 0.400000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0<br />
+&nbsp; 0.200000000&nbsp; 0.400000000&nbsp; 0.600000000&nbsp;&nbsp; 1.0<br />
+&nbsp; end<br />
+&nbsp; # For metal case, Need to change from screening_semiconductor to screening_metal.&nbsp;<br />
+L) inteqp.inp[6,7] (The requested number of valence bands is available in WFN_fi.)<br />
+&nbsp; number_val_bands_coarse 4 (&lt;- Number of occupied bands on coarse (input) k-point grid)<br />
+&nbsp; number_val_bands_fine 4 (&lt;- Number of occupied bands on fine (interpolated) k-point grid)<br />
+&nbsp; number_cond_bands_coarse 10 (&lt;- Number of unoccupied bands on coarse (input) k-point grid)</p>
+
+<p>&nbsp; number_cond_bands_fine 10 (&lt;- Number of unoccupied bands on fine (interpolated) k-point grid)<br />
+&nbsp; coarse_grid_points 125<br />
+&nbsp; use_symmetries_coarse_grid<br />
+&nbsp; no_symmetries_fine_grid<br />
+&nbsp; no_symmetries_shifted_grid<br />
+<br />
+----------<br />
+From epsilon.inp:[3, 4]<br />
+# qx qy qz 1/scale_factor is_q0<br />
+# scale_factor is for specifying values such as 1/3<br />
+# is_q0 = 1 for a small q-vector in semiconductors<br />
+# is_q0 = 2 for a small q-vector in metals<br />
+# is_q0 = 0 for non-zero q-vectors<br />
+----------<br />
+For simga.inp<br />
+$HOME/BerkeleyGW/bin/degeneracy_check.x WFN_inner<br />
+$HOME/BerkeleyGW/bin/degeneracy_check.x WFN_fi<br />
+<br />
+For example,<br />
+Reading eigenvalues from file /home/pc4/BerkeleyGW/examples/DFT/Fe2VAl_bs/WFN_inner<br />
+Number of spins:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br />
+Number of bands:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 33<br />
+Number of k-points:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 10<br />
+<br />
+== Degeneracy-allowed numbers of bands (for epsilon and sigma) ==<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 1<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 9<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 14<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 16<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 19<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 23<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 29<br />
+Note: cannot assess whether or not highest band&nbsp;&nbsp;&nbsp;&nbsp; 33 is degenerate.<br />
+<br />
+== Degeneracy-allowed numbers of valence bands (for inteqp, kernel, and absorption) ==<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 3<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 12<br />
+<br />
+== Degeneracy-allowed numbers of conduction bands (for inteqp, kernel, and absorption) ==<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 2<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 4<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 7<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 11<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 17<br />
+Note: cannot assess whether or not highest conduction band&nbsp;&nbsp;&nbsp;&nbsp; 21 is degenerate.<br />
+----------<br />
+Select from the above number for band_index_min and band_index_max. (number_val_bands_coarse, number_val_bands_fine 4, number_cond_bands_coarse 10 amd number_cond_bands_fine 10, too)<br />
+<br />
+References<br />
+[1] <a href="http://www.quantum-espresso.org/wp-content/uploads/Doc/INPUT_PW.html#id3122329">http://www.quantum-espresso.org/wp-content/uploads/Doc/INPUT_PW.html#id3122329</a><br />
+[2] <a href="http://stuff.mit.edu/afs/athena/software/espresso_v5.0.1/amd64_linux26/espresso-5.0.1/Doc/INPUT_pw2bgw.html#id224316">http://stuff.mit.edu/afs/athena/software/espresso_v5.0.1/amd64_linux26/espresso-5.0.1/Doc/INPUT_pw2bgw.html#id224316</a><br />
+[3] <a href="http://berkeleygw.org/?q=node/186">http://berkeleygw.org/?q=node/186</a>　<br />
+[4] <a href="https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/Epsilon/epsilon.inp">https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/Epsilon/epsilon.inp</a>　<br />
+[5] <a href="https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/Sigma/sigma.inp">https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/Sigma/sigma.inp</a>　<br />
+[6] <a href="https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/inteqp.inp">https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/inteqp.inp</a>　<br />
+[7] <a href="https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/absorption.inp">https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/absorption.inp</a>　<br />
+[8] <a href="https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/kernel.inp">https://github.com/timurbazhirov/BerkeleyGW/blob/master/Visual/BSE/kernel.inp</a>　<br />
+[9] http://berkeleygw.org/?q=node/197<br />
+[10] http://berkeleygw.org/?q=node/193<br />
+<br />
+□ modify bash script<br />
+1. gedit script<br />
+2. Ctrl + H<br />
+&nbsp; exchange from Si2 to $1<br />
+<br />
+■ Run BerkeleyGW<br />
+1. cd $HOME/BerkeleyGW/examples/DFT<br />
+2. mkdir case_bs<br />
+3. put input files and script into case_bs<br />
+4. ./script case<br />
+<br />
+■ BoltzTraP (OK?)<br />
+1. qe2boltz.py case&nbsp;inteqp 1.0e7 0<br />
+2. x_trans BoltzTraP<br />
+Usage: C:\Users\\boltztrap-1.2.3\util\qe2boltz.py prefix format efermi nbnd_exclude [fn_pw [fn_energy]]<br />
+<br />
+※ qe2boltz.py を wordpad などで開いて解読すると下記のようになっている。下記のargv[5]とargv[6]はargv[2]でpwを指定した場合、特に入力しなくても良い。<br />
+qe2boltz.py argv[1] argv[2] argv[3] argv[4]&nbsp;argv[5] argv[6]<br />
+argv[1]: prefixで case.pw.out を入力する（ファイルは case.nscf.out として、prifix に case を指定すればよいだろう）<br />
+argv[2]: pw, bands or inteqp のいずれかを選択するために指定。通常 pw、BerkeleyGWでは inteqp を指定。<br />
+argv[3]: efermi (eV) に対応する。入力した値をプログラム中でrydberg で割って処理している。1.0e6を超える場合は、prefix で指定したファイルから読み込まれる。「the Fermi energy is」または「highest occupied, lowest unoccupied level (ev):&nbsp;」の行に書かれている値を用いる。後者の場合は (highest +lowest)/2/Ry としてプログラム中で処理される。<br />
+argv[4]: nband_excludeに対応する。0を指定すればよい。もし、計算時間を短くしたい場合は、バンドの番号を入力すると、低いエネルギーから入力したバンドの番号までが除かれる。<br />
+argv[5]: fname_pw または fn_pw で ディフォルトは prefix.nscf.out になっている。<br />
+argv[6]: fname_energy またはfn_energy<br />
+出力ファイルは、argv[1].intarns などとして出力される。<br />
+-------------------------------------------------------------------------------<br />
+■ absorption calculation<br />
+1. cd $HOME/BerkeleyGW/examples/DFT/silicon/ESPRESSO/00-kgrid<br />
+2. ./script_0 (&lt;- make WFN file series)<br />
+3. ./script_1 (&lt;- make link)<br />
+4. ./script_2 (&lt;- scf and pw2bgw calculation)<br />
+5. cd ..<br />
+6. ./script_3 (&lt;- epsilon, sigma, kernel and absorption calculation)<br />
+-------------------------------------------------------------------------------<br />
+■ GW (PWscf)<br />
+References<br />
+[1] <a href="http://www.quantum-espresso.org/wp-content/uploads/2013/06/tutorial_gwl.pdf">http://www.quantum-espresso.org/wp-content/uploads/2013/06/tutorial_gwl.pdf</a><br />
+-------------------------------------------------------------------------------<br />
+■ Appendix: Abinit GW calculation<br />
+1. VESTA -&gt; cif files<br />
+2. cif2cell -p abinit -f cif<br />
+3. gedit case.in<br />
+ndtset 3<br />
+<br />
+nbandkss1 -1<br />
+nband1 58<br />
+<br />
+optdriver2 3<br />
+getkss2 -1<br />
+nband2 58<br />
+ecutwfn2 30.0<br />
+ecuteps2 7.0<br />
+ppmfrq2 16.7 eV<br />
+awtr2 0<br />
+<br />
+optdriver3 4<br />
+getkss3 -2<br />
+getscr3 -1<br />
+nband3 58<br />
+ecutwfn3 30.0<br />
+ecutsigx3 30.0<br />
+nkptgw3 1<br />
+kptgw3<br />
+0.0 0.0 0.125<br />
+bdgw3 47 48<br />
+<br />
+ngkpt 4 4 4<br />
+nshiftk 4<br />
+shiftk 0.5 0.5 0.5<br />
+0.5 0.0 0.0<br />
+0.0 0.5 0.0<br />
+0.0 0.0 0.5<br />
+istwfk *1<br />
+symmorphi 0<br />
+ecut 30<br />
+diemac 12.0<br />
+#iscf 5<br />
+toldfe 1.0d-6<br />
+<br />
+chkprim 0<br />
+<br />
+acell ...(cif2cell make data)<br />
+4. export OMP_NUM_THREADS=4<br />
+5. abinit &lt; case.files &gt; case.log<br />
+-------------------------------------------------------------------------------<br />
+■ Appendix: VASP GW calculation<br />
+References<br />
+[1] <a href="http://cms.mpi.univie.ac.at/wiki/index.php/VASP_example_calculations">http://cms.mpi.univie.ac.at/wiki/index.php/VASP_example_calculations</a><br />
+[2] <a href="http://cms.mpi.univie.ac.at/wiki/index.php/GW_calculations">http://cms.mpi.univie.ac.at/wiki/index.php/GW_calculations</a><br />
+[3] <a href="http://cms.mpi.univie.ac.at/vasp/vasp/ALGO_response_functions_GW_calculations.html">http://cms.mpi.univie.ac.at/vasp/vasp/ALGO_response_functions_GW_calculations.html</a><br />
+[4] <a href="http://www.vasp.at/mmars/day2.pdf">http://www.vasp.at/mmars/day2.pdf</a><br />
+[5] <a href="http://ja.scribd.com/doc/24155624/GW-approximation-and-its-implementation-in-VASP">http://ja.scribd.com/doc/24155624/GW-approximation-and-its-implementation-in-VASP</a><br />
+<br />
+-------------------------------------------------------------------------------</p>
