@@ -1,8 +1,9 @@
 <p>Lammps Metal for education (windows 10 (64 bit))<br />
 ------------------------------------------------------------------------------<br />
 ■ lammps<br />
+(Edit: Jun/27/2021)<br />
 <br />
-□ インストール方法&nbsp;(Edit: Jun/27/2021)<br />
+□ インストール方法<br />
 1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
 &nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
 2. <a href="https://rpm.lammps.org/windows/admin/64bit/LAMMPS-64bit-18Jun2019.exe">LAMMPS-64bit-18Jun2019.exe</a> をダウンロードして実行する<br />
@@ -22,6 +23,7 @@
 3. システムの環境設定 &gt; 環境変数（N）... &gt; システム環境変数（S）のPath &gt; 編集（I）... &gt; 新規（N）&gt;&nbsp;C:\Program Files\gnuplot\bin を追加する &gt; OK &gt; OK<br />
 ------------------------------------------------------------------------------<br />
 ■ 分子動力学シミュレーション<br />
+(Edit: Feb/14/2021)<br />
 <br />
 □ 入力ファイルのダウンロード<br />
 &nbsp; by-student-2017 の lammps_education_metal_win (<a href="https://github.com/by-student-2017/lammps_education_metal_win">https://github.com/by-student-2017/lammps_education_metal_win</a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
@@ -37,7 +39,7 @@
 ※ 計算終了後の構造を用いたい場合は&quot;in.data&quot;において&quot;read_data data.in.restart&quot;と&quot;replicate 1 1 1&quot;とします<br />
 ※ 歪と圧力の関係から弾性定数を求めるには、まず構造緩和（格子と原子）をして圧力の非常に小さい構造（体積）を得ます。そして、例えば、xの長さをわずかに変えて、原子だけ構造緩和し、出力される圧力 pxx, pyy, pxy (=-&sigma;<sub>xx</sub>, -&sigma;<sub>yy</sub>, -&sigma;<sub>xy</sub>) [bar]などを応力として用いて弾性定数を計算します。行列式は教科書やwikipediaを参照してください。1 bar = 0.1 MPaです。lammpsで出力される圧力は圧縮が正になります<br />
 <br />
-◇ data.inの作り方 (Edit: Feb/14/2021)<br />
+◇ data.inの作り方<br />
 1. VESTAやAvogadroで構造を作成しvaspの形式で出力する<br />
 2. 作成したvasp形式のファイルをOvitoで読み込む<br />
 3. Ovito上で、Export File<br />
@@ -240,6 +242,7 @@ pair_coeff &nbsp; &nbsp; &nbsp;* * ./eam/Fe-Ni-Cr_fcc.eam.fs Fe Ni Cr<br />
 <p>------------------------------------------------------------------------------</p>
 
 <div>■ high entropy alloys (HEA)<br />
+(Edit: Mar/14/2021)<br />
 <br />
 □ Information<br />
 ・every element: 5 - 35 at.%<br />
@@ -469,7 +472,16 @@ C&nbsp; &nbsp;4, Si 4, Ge 4, Sn 4</div>
 [6]&nbsp;<a href="http://slideplayer.com/slide/5866092/">http://slideplayer.com/slide/5866092/</a><br />
 ------------------------------------------------------------------------------<br />
 ■ lammps (並列計算)<br />
-(Edit: Mar/17/2021)<br />
+(Edit: Mar/24/2021)<br />
+<br />
+□ parallel (3コア以上が推奨)<br />
+・並列計算用のbatスクリプトファイルです<br />
+・並列計算の難易度は MPICH2 &gt;&nbsp;OpenMP となります<br />
+&nbsp; 最初はOpenMPをオススメします。慣れてきたら MPICH2 での並列計算も試してみると良いでしょう<br />
+・詳細は settings.txt をお読みください<br />
+※ in.XXXは一つのフォルダの中に一つだけにしてください<br />
+※ 全てのファイルをチェックできていないことやPCの環境依存の問題もありますので、あまり高い期待は抱かないでください。MPICH2での並列計算の環境設定は下記の通りです<br />
+※ <span class="pl-s">Reference_TAD_Si と </span>Reference_NEB_Si はMPICH2の並列でファイルに既に入っているファイルを用いてください<br />
 <br />
 □ MPICH2のインストール<br />
 1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a><br />
@@ -494,6 +506,9 @@ C&nbsp; &nbsp;4, Si 4, Ge 4, Sn 4</div>
 1. set.batを[管理者として実行]します<br />
 2. run.batをダブルクリックして実行します<br />
 （現在、最後に処理されるpythonが正常に動作しません。ご注意ください）<br />
+<br />
+<span class="pl-s">※ </span>既知の問題<br />
+&nbsp; MPIパラレルモードで実行している間、画面への出力はブロックバッファリングされ、通常のようにラインバッファリングされません。つまり、出力はすぐには表示されませんが、一定量の出力が蓄積された後にのみ表示されます。これは効率上の理由から行われます。マルチスレッドの並列実行またはシリアル実行は影響を受けません。また、mpiexecで実行する場合、MPICHはプロセスを単一の物理CPUに制限し、実行効率が低下するため、マルチスレッドを使用しないでください（これは set OMP_NUM_THREADS=1 の状態で計算してくださいという意味です。ディフォルトではこの設定になっています）<br />
 ------------------------------------------------------------------------------<br />
 ■ (Google Colaboratory)<br />
 (Edit: 15/Jul/2020)<br />

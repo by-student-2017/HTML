@@ -1,8 +1,9 @@
 <p>Lammps LJ&nbsp;for education (windows 10 (64 bit))<br />
 ------------------------------------------------------------------------------<br />
 ■ lammps<br />
+(Edit: Jun/27/2021)<br />
 <br />
-□ インストール方法&nbsp;(Edit: Jun/27/2021)<br />
+□ インストール方法<br />
 1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
 &nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
 2. <a href="https://rpm.lammps.org/windows/admin/64bit/LAMMPS-64bit-18Jun2019.exe">LAMMPS-64bit-18Jun2019.exe</a> をダウンロードして実行する<br />
@@ -22,6 +23,7 @@
 3. システムの環境設定 &gt; 環境変数（N）... &gt; システム環境変数（S）のPath &gt; 編集（I）... &gt; 新規（N）&gt;&nbsp;C:\Program Files\gnuplot\bin を追加する &gt; OK &gt; OK<br />
 ------------------------------------------------------------------------------<br />
 ■ 分子動力学シミュレーション<br />
+(Edit: Jun/27/2021)<br />
 <br />
 □ 入力ファイルのダウンロード<br />
 &nbsp; by-student-2017 の lammps_education_LJ_win (<a href="https://github.com/by-student-2017/lammps_education_LJ_win.git"><span style="font-size:14px">https://github.com/by-student-2017/lammps_education_LJ_win.git</span></a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
@@ -82,7 +84,34 @@
 
 <div><span style="font-size:14px">※ 兵庫県立大のlammps講習会（無料）をノートPCで行うために作りました（Focusの利用期間である講習後1週間を過ぎてしまって復習できなくなり、どうしようかと困ったので作りました。入力ファイルの詳細は兵庫県立大のlammps講習会で詳しく解説してくれます）。</span></div>
 
-<div><span style="font-size:14px">※ 東北大の村島先生のgnuplotやpythonスクリプトを用いると図で視覚的にRouseとの比較をすることができます。</span></div>
+<div><span style="font-size:14px">※ 東北大の村島先生のgnuplotやpythonスクリプトを用いると図で視覚的にRouseとの比較をすることができます。</span><br />
+------------------------------------------------------------------------------<br />
+■ lammps (並列計算)<br />
+(Edit: Mar/24/2021)<br />
+<br />
+□ parallel (3コア以上が推奨)<br />
+・並列計算用のbatスクリプトファイルです<br />
+・並列計算の難易度は MPICH2 &gt;&nbsp;OpenMP となります<br />
+&nbsp; 最初はOpenMPをオススメします。慣れてきたら MPICH2 での並列計算も試してみると良いでしょう<br />
+・詳細は settings.txt をお読みください<br />
+※ in.XXXは一つのフォルダの中に一つだけにしてください<br />
+※ 全てのファイルをチェックできていないことやPCの環境依存の問題もありますので、あまり高い期待は抱かないでください。MPICH2での並列計算の環境設定は下記の通りです<br />
+<br />
+□ MPICH2のインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a><br />
+2. <a href="http://www.mpich.org/static/tarballs/1.4.1p1/mpich2-1.4.1p1-win-x86-64.msi">mpich2-1.4.1p1-win-x86-64.msi</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+<br />
+□ 並列版のlammpsのインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="http://LAMMPS-64bit-18Jun2019-MPI.exe">LAMMPS-64bit-18Jun2019-MPI.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[<span class="pl-s"><span class="pl-pds">&quot;</span>C:\Program Files\LAMMPS 64-bit 18Jun2019</span>-MPI<span class="pl-s">\bin\lmp_mpi.exe<span class="pl-pds">&quot;</span></span> -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[<span class="pl-s">C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります</span><br />
+<br />
+□ 既知の問題<br />
+&nbsp; MPIパラレルモードで実行している間、画面への出力はブロックバッファリングされ、通常のようにラインバッファリングされません。つまり、出力はすぐには表示されませんが、一定量の出力が蓄積された後にのみ表示されます。これは効率上の理由から行われます。マルチスレッドの並列実行またはシリアル実行は影響を受けません。また、mpiexecで実行する場合、MPICHはプロセスを単一の物理CPUに制限し、実行効率が低下するため、マルチスレッドを使用しないでください（これは set OMP_NUM_THREADS=1 の状態で計算してくださいという意味です。ディフォルトではこの設定になっています）</div>
 
 <div><span style="font-size:14px">------------------------------------------------------------------------------</span></div>
 
@@ -90,7 +119,8 @@
 
 <div>&nbsp;</div>
 
-<div><span style="font-size:14px">[LJ1] lammps講習会, 兵庫県立大</span></div>
+<div><span style="font-size:14px">[LJ1] lammps講習会、兵庫県立大<br />
+&nbsp; </span>兵庫県立大のlammps講習会ではKremer-Grestモデルを用いた計算に必要な知識を学ぶことができる</div>
 
 <div><span style="font-size:14px">[LJ2] <a href="https://github.com/t-murash/lammps-hands-on/tree/master/04deform">https://github.com/t-murash/lammps-hands-on/tree/master/04deform</a></span></div>
 
@@ -103,9 +133,8 @@
 
 <div>------------------------------------------------------------------------------</div>
 
-<div>■ 高分子メルトおよびゴムでよく使われる設定</div>
-
-<div>（無料で開催されている兵庫県立大のlammps講習会では、Kremer-Grestモデルを用いた計算に必要な知識を学ぶことができる）</div>
+<div>■ 高分子メルトおよびゴムでよく使われる設定<br />
+(Edit: Jun/27/2021)</div>
 
 <div>&nbsp;</div>
 

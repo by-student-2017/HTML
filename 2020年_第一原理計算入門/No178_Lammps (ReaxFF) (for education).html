@@ -1,7 +1,7 @@
 Lammps ReaxFF for education (windows 10 (64 bit))<br />
-(Edit: Feb/14/2021)<br />
 ------------------------------------------------------------------------------<br />
 ■ lammps<br />
+(Edit: Feb/14/2021)<br />
 <br />
 □ インストール方法<br />
 1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
@@ -18,6 +18,7 @@ Lammps ReaxFF for education (windows 10 (64 bit))<br />
 ※ web上に情報がありますので、お手数をおかけしますが、そちらをご参照ください<br />
 ------------------------------------------------------------------------------<br />
 ■ 分子動力学シミュレーション<br />
+(Edit: Feb/14/2021)<br />
 <br />
 □ 入力ファイルのダウンロード<br />
 &nbsp; &nbsp; by-student-2017 の lammps_education_reaxff_win (<a href="https://github.com/by-student-2017/lammps_education_reaxff_win">https://github.com/by-student-2017/lammps_education_reaxff_win</a>) から入力ファイルをダウンロードして解凍する。右側の[Clone or download]をクリックしていただくと Download ZIP が表示されます<br />
@@ -44,7 +45,7 @@ Lammps ReaxFF for education (windows 10 (64 bit))<br />
 <br />
 □ cluster<br />
 &nbsp; こちらはテストバージョンです。クラスターの例が記載されています。クラスターを作り、分子を配置するbashスクリプトも含めてあります（これはLinuxで動作します）。Auは構造データのみです。Pdは論文ではGCMCですが他の方法にしてあります。<br />
-　No.5のAlとC<sub>2</sub>H<sub>4</sub>の反応は確率過程のため、短時間でシミュレーションをするためにC<sub>2</sub>H<sub>4</sub>を2500 Kにしています。Alは300 Kから始まる。最終的にC<sub>2</sub>H<sub>4</sub>は2500 Kから300 Kになるようにしています。文献では45x45x45 [A^3]となっていますが計算中にAlクラスターが境界を越えて繋がるため60x60x60 [A^3]にしています<br />
+　No.5のAlとC<sub>2</sub>H<sub>4</sub>の反応は確率過程のため、短時間でシミュレーションをするためにC<sub>2</sub>H<sub>4</sub>を2500 Kにしています。Alは300 Kから始まる。最終的にC<sub>2</sub>H<sub>4</sub>は2500 Kから300 Kになるようにしています。文献では45x45x45 [A<sup>3</sup>]となっていますが計算中にAlクラスターが境界を越えて繋がるため60x60x60 [A<sup>3</sup>]にしています<br />
 　構造やエネルギーはReaxFFで得られます。一方、電子構造はDFTB+や第一原理計算を用いてください。XAFSはFDMNESなどを用います。<br />
 <br />
 □ gcmc（非常に長い計算時間が必要です）<br />
@@ -68,6 +69,7 @@ Lammps ReaxFF for education (windows 10 (64 bit))<br />
 ・<a href="https://mitocw.ups.edu.ec/courses/materials-science-and-engineering/3-021j-introduction-to-modeling-and-simulation-spring-2012/part-i-lectures-readings/">Part I: Particle and Continuum Methods</a> at MITOPEMCOURSEWARE<br />
 ------------------------------------------------------------------------------<br />
 ■ ReaxFFの特徴<br />
+(Edit: Feb/14/2021)<br />
 <br />
 □ 主な計算対象 [1]<br />
 ・「反応」と「破壊」が扱える<br />
@@ -205,7 +207,7 @@ angle_info&nbsp;0<br />
 　対応するパラメーターがあれば、ReaxFFだけでなく、DFTB+やxTB, MOPACなどでも検討してみてください。特に質量分析（MS）の結果を予測するには膨大な数の計算が必要になるのでDFTではなく、xTBを用いた方法などを検討することが必要になってくる（<a href="https://www.chemie.uni-bonn.de/pctc/mulliken-center/software/movies_grimme/qceims">QCEIMS and movies from QCEIMS trajectories</a>）（ReaxFFで可能かは私はまだ試していない）。<br />
 ※ 私の経験では各種の実験の物性値は同じ条件で作製と測定をしても&plusmn;10%程度（常に最前線で戦っている現場経験豊富なその道のエキスパートだと&plusmn;5%程度になるが、そのような人は世界に数えるほどしかいない。日本では5年経つ前に雇止め（運が良くても減給など不利な条件での再雇用）。偉くなれたとしても最前線で戦えるのは土日の私用時間を削った上での話になる）の差がある。DFTは良く合う条件で実験値の&plusmn;10%程度となる。古典MDは良く合う条件でDFTと&plusmn;20%程度の差。古典MDでは絶対値でDFTの0.5倍や2倍の値になることもある。どういう条件で実験値に近くなるのかといったことや相対値で議論して同じ結論になるのかどうかなど経験を積み重ねて賢い研究をして欲しい。ちなみに、DFTB+やxTBではDFTとの差が&sigma;値で論文として議論されている。若い方はこのようなことを学びながら研究者として成長していって欲しい。AIが注目されている時代において統計を扱った議論ができていないのは、私自身の勉学が足りていない証拠でもあり反省している。<br />
 <br />
-□ 結合の種類と形成要因 [2]<br />
+□ 結合の種類と形成要因 [TH2]<br />
 （エネルギー範囲の単位はkcal/mol（=0.04337 eV）。Tは運動エネルギー）
 <table border="1" cellpadding="5" cellspacing="0" rules="all" style="width: 521.991px;">
 	<tbody>
@@ -303,7 +305,7 @@ angle_info&nbsp;0<br />
 </table>
 ※ 上記にこだわって研究への柔軟性を欠かないこと。思考がより柔軟な研究者に「この系では上手くいくのか！」や「こんな考え方が！」と思わせられる結果を報告されて何もしなかった（頭っでっかちであった）ことを悔いることになる。<br />
 <br />
-□ 時間スケール [1]<br />
+□ 時間スケール [TH1]<br />
 ・アト秒（10<sup>-18</sup>秒）：電子の運動<br />
 ・フェムト秒（10<sup>-15</sup>秒）：分子の振動<br />
 　水のような分子は10<sup>-14</sup>秒ぐらいで1回振動する<br />
@@ -318,12 +320,12 @@ angle_info&nbsp;0<br />
 　タンパク質やDNAのような高分子は、基本的に長さに依存して、どんどん遅い時間スケールで運動するようになる。おそらく、タンパク質が高分子であるという特性が遅さに影響を与えているのでしょう<br />
 　単純な系でも、温度を変えると運動の空間スケールや時間スケールが変わり、特異な熱力学的な性質が生まれることがある<br />
 <br />
-□&nbsp;CCSD(T) [1]<br />
+□&nbsp;CCSD(T) [TH1]<br />
 ・cc-pCVQZ以上では、1 kacl/mol誤差内の化学的精度が期待できる（簡単な閉殻分子からなる等電子対化学反応熱に対する平均絶対誤差の基底関数依存性）。<br />
 ・原子化エネルギーに対する正規分布関数を見ると、CCSD(T)-F12法では2 kJ/molの精度で原子化エネルギーを計算することが可能である。<br />
-・化学的精度（数 kcal/molのオーダー）[2]<br />
+・化学的精度（数 kcal/molのオーダー）[TH2]<br />
 <br />
-□ 各種計算法での比較<br />
+□ 計算手法での比較<br />
 # ReaxFF<br />
 ・T. Qi et al., J. Phys. Chem. A 118 (2014) 5355-5357.<br />
 &nbsp;&nbsp;<a href="https://pubs.acs.org/doi/pdf/10.1021/jp505594b">https://pubs.acs.org/doi/pdf/10.1021/jp505594b</a><br />
@@ -356,12 +358,116 @@ angle_info&nbsp;0<br />
 ・S. Grimme et al.,&nbsp;J. Chem. Theory Comput. 13 (2017) 1989-2009.<br />
 &nbsp;&nbsp;<a href="https://pubs.acs.org/doi/10.1021/acs.jctc.7b00118">https://pubs.acs.org/doi/10.1021/acs.jctc.7b00118</a><br />
 <br />
-[1] 日本化学会『巨大分子系の計算化学』化学同人<br />
-[2] 山口兆ら『錯体化学会選書10 金属錯体の量子・計算化学』三共出版<br />
-[3] ショール、ステッケル『密度汎関数理論入門』吉岡書店<br />
+[TH1] 日本化学会『巨大分子系の計算化学』化学同人<br />
+[TH2] 山口兆ら『錯体化学会選書10 金属錯体の量子・計算化学』三共出版<br />
+[TH3] ショール、ステッケル『密度汎関数理論入門』吉岡書店<br />
 ※ 2012年の様子を見ると、DFT（構造最適化）&rarr; cc-pCVQZ(or cc-pVQZ)以上の基底関数 + CCSD(T)（一点計算）が良いようだ。計算結果が化学的精度に近づいてきている。<br />
 ------------------------------------------------------------------------------<br />
+■ Surface<br />
+(Edit: Feb/14/2021)<br />
+<br />
+□ 各方位での構造<br />
+　Au(111)などの構造は、Material Projectでの下の方にあるSurfacesで、Slabでのcif形式のファイルを取得できます。VESTAなどでVASP形式（Cartesian座標）で5原子層か7原子層に書き換えて、その上に吸着させる有機物、さらに10Å以上の何もない真空層となるようにします（真空層は上下の合計で10ÅでもOKです）。<br />
+<br />
+□ FCC (001) -&gt; FCC (111)<br />
+&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
+----------<br />
+Rotation matrix P | Origin shift p<br />
+-0.5 -0.5 -1.0 | 0.0&nbsp;<br />
+-0.5&nbsp; 0.5 -1.0 | 0.0<br />
+&nbsp;1.0&nbsp; 0.0 -1.0 | 0.0<br />
+----------<br />
+&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
+<br />
+□ AvogadroによるCartesian座標のvasp形式ファイルの書き換え&nbsp;<br />
+&nbsp; [*.xyz -&gt; Avogadro -&gt; Build -&gt; Cartesian Editor... -&gt; XYZ, coords only]（最後の構造の一覧はコピー（Ctrl+C）できる。それをvasp形式のファイルに張り付ける。原子種と原子数、場合によっては格子定数も含めて書き換えればよい。<br />
+------------------------------------------------------------------------------<br />
+■ Cluster<br />
+(Edit: Feb/14/2021)<br />
+<br />
+□ unit cell -&gt; 15x15x15 supercell<br />
+&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
+----------<br />
+Rotation matrix P | Origin shift p<br />
+15.0 0.0 0.0 | 0.0&nbsp;<br />
+&nbsp;0.0 15.0 0.0 | 0.0<br />
+&nbsp;0.0&nbsp; 0.0 15.0 | 0.0<br />
+----------<br />
+&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
+&nbsp; File &gt; Export Data... &gt; VASP (POSCAR;*.vasp) &gt; Cartesian coordinates<br />
+<br />
+□&nbsp;linux_bash_tool<br />
+(*.vaspから球状のクラスターを切り出す)<br />
+1. gedit settings.txt<br />
+----------<br />
+| rcut |&nbsp; x y z of new origin&nbsp; | center of coord. x y z |<br />
+&nbsp; 15.0&nbsp;&nbsp;&nbsp;&nbsp; 30.0&nbsp; 30.0&nbsp; 30.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 28.272510529 28.272510529 28.272510529<br />
+----------<br />
+※ クラスターの半径: rcut = 15.0 Angstrom<br />
+※ 作られるクラスターの中心座標 [x y z of new origin]: x=30.0 y=30.0 z=30.0 [Angstrom]<br />
+&nbsp; cell size: x=30.0*2, y=30.0*2, z=30.0*2<br />
+※ *.vaspでの中心となる原子の座標 [center of coord. x y z]<br />
+2. chmod +x rcut.sh<br />
+3. ./rcut.sh<br />
+※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
+<br />
+□&nbsp;linux_bash_tool_add_mol<br />
+(*.vaspから球状のクラスターを切り出して等間隔に分子を並べる)<br />
+1. gedit settings.txt<br />
+----------<br />
+| rcut |&nbsp; x y z of new origin&nbsp; | center of coord. x y z |<br />
+&nbsp; 15.0&nbsp;&nbsp;&nbsp;&nbsp; 30.0&nbsp; 30.0&nbsp; 30.0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 28.272510529 28.272510529 28.272510529<br />
+<br />
+| rcut for molecule |<br />
+&nbsp; 24.0<br />
+! number of mesh (x y z) |<br />
+&nbsp; 8.0&nbsp; 8.0&nbsp; 8.0<br />
+| number of molecule posision line |<br />
+&nbsp; 6<br />
+| molecule position |<br />
+C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.9718692638&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.1343221150&nbsp;&nbsp;&nbsp;&nbsp; -0.0000000156<br />
+C&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2.3076565708&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.1343219988&nbsp;&nbsp;&nbsp;&nbsp; -0.0000002919<br />
+H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.4119830610&nbsp;&nbsp;&nbsp;&nbsp; -0.5082275286&nbsp;&nbsp;&nbsp;&nbsp; -0.6722724368<br />
+H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -0.4119834509&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.7768718562&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.6722726371<br />
+H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2.8675423837&nbsp;&nbsp;&nbsp;&nbsp; -0.5082277424&nbsp;&nbsp;&nbsp;&nbsp; -0.6722729446<br />
+H&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -2.8675427736&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.7768716424&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 0.6722721293<br />
+----------<br />
+※ 分子を中心から配置しない距離（半径）: rcut = 24.0 Angstrom<br />
+※ セルの分割数 [number of mesh (x y z)]<br />
+2. chmod +x&nbsp;add_mol.sh<br />
+3. ./add_mol.sh<br />
+※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
+※ クラスターと追加する分子に同じ元素があると処理が複雑になるので、mol.xyzとAvogadroを用いて*.vaspを書き換えてください<br />
+------------------------------------------------------------------------------<br />
+■ lammps (並列計算)<br />
+(Edit: Mar/24/2021)<br />
+<br />
+□ parallel (3コア以上が推奨)<br />
+・並列計算用のbatスクリプトファイルです<br />
+・並列計算の難易度は MPICH2 &gt;&nbsp;OpenMP となります<br />
+&nbsp; 最初はOpenMPをオススメします。慣れてきたら MPICH2 での並列計算も試してみると良いでしょう<br />
+・詳細は settings.txt をお読みください<br />
+※ in.XXXは一つのフォルダの中に一つだけにしてください<br />
+※ 全てのファイルをチェックできていないことやPCの環境依存の問題もありますので、あまり高い期待は抱かないでください。MPICH2での並列計算の環境設定は下記の通りです<br />
+<br />
+□ MPICH2のインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a><br />
+2. <a href="http://www.mpich.org/static/tarballs/1.4.1p1/mpich2-1.4.1p1-win-x86-64.msi">mpich2-1.4.1p1-win-x86-64.msi</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+<br />
+□ 並列版のlammpsのインストール<br />
+1. <a href="http://packages.lammps.org/windows.html">http://packages.lammps.org/windows.html</a> のHPで&quot;<a href="http://rpm.lammps.org/windows/admin/">their own download area</a>&quot;と&rdquo;<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">64bit</a>&rdquo;をクリックする<br />
+&nbsp; （<a href="https://rpm.lammps.org/windows/admin/64bit/index.html">LAMMPS Binaries Repository: ./admin/64bit</a>）<br />
+2. <a href="http://LAMMPS-64bit-18Jun2019-MPI.exe">LAMMPS-64bit-18Jun2019-MPI.exe</a> をダウンロードして実行する<br />
+3. ディフォルトの設定のまま最後まで進めばよい<br />
+以上で lammps のダウンロードと設定は完了です<br />
+※ 配布元のHPが変更を加えるなどして、別のバージョンのlammpsを使う必要になった場合には、run.batで[<span class="pl-s"><span class="pl-pds">&quot;</span>C:\Program Files\LAMMPS 64-bit 18Jun2019</span>-MPI<span class="pl-s">\bin\lmp_mpi.exe<span class="pl-pds">&quot;</span></span> -in in.lmp]の部分をインストールしたlammpsのバージョンに対応するものに書き換えてください。または[<span class="pl-s">C:\Program Files\LAMMPS 64-bit **********]を書き換えるという方法もあります</span><br />
+<br />
+□ 既知の問題<br />
+&nbsp; MPIパラレルモードで実行している間、画面への出力はブロックバッファリングされ、通常のようにラインバッファリングされません。つまり、出力はすぐには表示されませんが、一定量の出力が蓄積された後にのみ表示されます。これは効率上の理由から行われます。マルチスレッドの並列実行またはシリアル実行は影響を受けません。また、mpiexecで実行する場合、MPICHはプロセスを単一の物理CPUに制限し、実行効率が低下するため、マルチスレッドを使用しないでください（これは set OMP_NUM_THREADS=1 の状態で計算してくださいという意味です。ディフォルトではこの設定になっています）<br />
+------------------------------------------------------------------------------<br />
 ■ ZTCに関する基礎的な計算<br />
+(Edit: Feb/14/2021)<br />
 （ReaxFF ポテンシャルを用いた分子動力学シミュレーション）<br />
 <br />
 □ tutorial_1_temp_and_press<br />
@@ -402,6 +508,7 @@ angle_info&nbsp;0<br />
 ※ 炭素と水素と酸素で計算したい場合は、reaxFFを用いると可能になる。ポテンシャルのファイルの情報は、NIST（<a href="https://www.ctcms.nist.gov/potentials/system/C/#C-H-O">https://www.ctcms.nist.gov/potentials/system/C/#C-H-O</a>）に記載されている。NISTで計算されているポテンシャルを用いて、上記の入力ファイルを書きかえればC-H-OだけでなくC-SiやC-Cu, C-Fe, B-C-Nといった元素の組み合わせでも定性的または半定量的な予測が可能になります。<br />
 ------------------------------------------------------------------------------<br />
 ■ 発展（ReaxFF ポテンシャルを用いた分子動力学シミュレーション）<br />
+(Edit: Feb/14/2021)<br />
 &nbsp; これらはreaxFFのポテンシャルを用いているため、上の例で用いているaireboポテンシャルよりも計算時間が多くかかります。使い方は上と同様です。<br />
 <br />
 □ tutorial_1_ch<br />
@@ -428,6 +535,7 @@ angle_info&nbsp;0<br />
 ※ CHO用のファイルのparam.qeqはCHOの順に書き換えています。<br />
 ------------------------------------------------------------------------------<br />
 ■ 赤外スペクトル<br />
+(Edit: Feb/14/2021)<br />
 <br />
 □ pythonのインストール<br />
 1. python(<a href="https://www.python.org/downloads">https://www.python.org/downloads</a>)から Release version と書かれたところから下にある Python 3.8.1 をクリックします。Windows x86-64 executable installer をクリックして保存します。<br />
@@ -475,82 +583,6 @@ angle_info&nbsp;0<br />
 ※ IR-と付いたファイルがあると上手く動作しないことがあります。その場合は、IR-と付いたファイルを削除してください。Linux OSのUbuntuでそれが発生しました。<br />
 ※ [IR-zoom-spectra-quantumcorrection.png] をダブルクリックして図を表示しても良いですし、IR-data.txt（の1列目と最後の列）を使ってExcelなどで図を描くこともできます。<br />
 ※ 横軸はスケーリングファクターを掛けて実験値をより合うようにするのも良いかと思います。<br />
-------------------------------------------------------------------------------<br />
-■ Surface<br />
-<br />
-□ 各方位での構造<br />
-　Au(111)などの構造は、Material Projectでの下の方にあるSurfacesで、Slabでのcif形式のファイルを取得できます。VESTAなどでVASP形式（Cartesian座標）で5原子層か7原子層に書き換えて、その上に吸着させる有機物、さらに10Å以上の何もない真空層となるようにします（真空層は上下の合計で10ÅでもOKです）。<br />
-<br />
-□ FCC -&gt; (111)<br />
-&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
-----------<br />
-Rotation matrix P | Origin shift p<br />
--0.5 -0.5 -1.0 | 0.0&nbsp;<br />
--0.5&nbsp; 0.5 -1.0 | 0.0<br />
-&nbsp;1.0&nbsp; 0.0 -1.0 | 0.0<br />
-----------<br />
-&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
-<br />
-□ AvogadroによるCartesian座標のvasp形式ファイルの書き換え&nbsp;<br />
-&nbsp; [*.xyz -&gt; Avogadro -&gt; Build -&gt; Cartesian Editor... -&gt; XYZ, coords only]（最後の構造の一覧はコピー（Ctrl+C）できる。それをvasp形式のファイルに張り付ける。原子種と原子数、場合によっては格子定数も含めて書き換えればよい。<br />
-------------------------------------------------------------------------------<br />
-■ Cluster<br />
-<br />
-□ unit cell -&gt; 12x12x12 supercell<br />
-&nbsp; VESTA -&gt; Edit -&gt; Edit Data.. -&gt; Unit Cell -&gt; Transform...<br />
-----------<br />
-Rotation matrix P | Origin shift p<br />
-12.0 0.0 0.0 | 0.0&nbsp;<br />
-&nbsp;0.0 12.0 0.0 | 0.0<br />
-&nbsp;0.0&nbsp; 0.0 12.0 | 0.0<br />
-----------<br />
-&nbsp; Add new equivalent positions to ... -&gt; OK -&gt; OK<br />
-&nbsp; File &gt; Export Data... &gt; VASP (POSCAR;*.vasp) &gt; Cartesian coordinates<br />
-<br />
-□&nbsp;linux_bash_tool<br />
-(*.vaspから球状のクラスターを切り出す)<br />
-1. gedit settings.txt<br />
-----------<br />
-| rcut | &nbsp;x y z of new origin &nbsp;| center of coord. x y z |<br />
-&nbsp; 20.0 &nbsp; &nbsp; 30.0 &nbsp;30.0 &nbsp;30.0 &nbsp; &nbsp; &nbsp;20.856439590 20.856439590 20.856439590<br />
-----------<br />
-※ クラスターの半径: rcut = 20 Angstrom<br />
-※ 作られるクラスターの中心座標 [x y z of new origin]: x=30.0 y=30.0 z=30.0 [Angstrom]<br />
-&nbsp; cell size: x=30.0*2, y=30.0*2, z=30.0*2<br />
-※ *.vaspでの中心となる原子の座標 [center of coord. x y z]<br />
-2. chmod +x rcut.sh<br />
-3. ./rcut.sh<br />
-※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
-<br />
-□&nbsp;linux_bash_tool_add_mol<br />
-(*.vaspから球状のクラスターを切り出して等間隔に分子を並べる)<br />
-1. gedit settings.txt<br />
-----------<br />
-| rcut | &nbsp;x y z of new origin &nbsp;| center of coord. x y z |<br />
-&nbsp; 15.0 &nbsp; &nbsp; 22.5 &nbsp;22.5 &nbsp;22.5 &nbsp; &nbsp; &nbsp;20.856439590 20.856439590 20.856439590<br />
-<br />
-| rcut for molecule |<br />
-&nbsp; 18.0<br />
-| number of mesh (x y z) |<br />
-&nbsp; 8.0 &nbsp;8.0 &nbsp;8.0<br />
-| number of molecule posision line |<br />
-&nbsp; 8<br />
-| molecule position |<br />
-C &nbsp; &nbsp; &nbsp; -2.3957918956 &nbsp; &nbsp; &nbsp;0.1343219911 &nbsp; &nbsp; -0.0000003101 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-C &nbsp; &nbsp; &nbsp; -0.8837339390 &nbsp; &nbsp; &nbsp;0.1343221227 &nbsp; &nbsp; &nbsp;0.0000000026 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -2.7801633561 &nbsp; &nbsp; &nbsp;0.7533004398 &nbsp; &nbsp; -0.8161768892 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -2.7801636208 &nbsp; &nbsp; &nbsp;0.5316624055 &nbsp; &nbsp; &nbsp;0.9441390489 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -2.7801633567 &nbsp; &nbsp; -0.8819968808 &nbsp; &nbsp; -0.1279631117 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -0.4993624785 &nbsp; &nbsp; &nbsp;1.1506410049 &nbsp; &nbsp; &nbsp;0.1279627229 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -0.4993622138 &nbsp; &nbsp; -0.2630183668 &nbsp; &nbsp; -0.9441393248 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-H &nbsp; &nbsp; &nbsp; -0.4993624779 &nbsp; &nbsp; -0.4846562606 &nbsp; &nbsp; &nbsp;0.8161766311 &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<br />
-----------<br />
-※ 分子を中心から配置しない距離（半径）: rcut = 20 Angstrom<br />
-※ セルの分割数 [number of mesh (x y z)]<br />
-2. chmod +x&nbsp;add_mol.sh<br />
-3. ./add_mol.sh<br />
-※ READMEにも書いているが、*.vaspが複数あると動作しない<br />
-※ クラスターと追加する分子に同じ元素があると処理が複雑になるので、mol.xyzとAvogadroを用いて*.vaspを書き換えてください<br />
 ------------------------------------------------------------------------------<br />
 ■ References<br />
 [1]&nbsp; 兵庫県立大 lammpsセミナー<br />
