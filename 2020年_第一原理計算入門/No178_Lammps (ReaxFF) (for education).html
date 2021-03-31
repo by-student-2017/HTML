@@ -1,4 +1,4 @@
-Lammps ReaxFF for education (windows 10 (64 bit))<br />
+<p>Lammps ReaxFF for education (windows 10 (64 bit))<br />
 ------------------------------------------------------------------------------<br />
 ■ lammps<br />
 (Edit: Feb/14/2021)<br />
@@ -45,7 +45,6 @@ Lammps ReaxFF for education (windows 10 (64 bit))<br />
 <br />
 □ cluster<br />
 &nbsp; こちらはテストバージョンです。クラスターの例が記載されています。クラスターを作り、分子を配置するbashスクリプトも含めてあります（これはLinuxで動作します）。Auは構造データのみです。Pdは論文ではGCMCですが他の方法にしてあります。<br />
-　No.5のAlとC<sub>2</sub>H<sub>4</sub>の反応は確率過程のため、短時間でシミュレーションをするためにC<sub>2</sub>H<sub>4</sub>を2500 Kにしています。Alは300 Kから始まる。最終的にC<sub>2</sub>H<sub>4</sub>は2500 Kから300 Kになるようにしています。文献では45x45x45 [A<sup>3</sup>]となっていますが計算中にAlクラスターが境界を越えて繋がるため60x60x60 [A<sup>3</sup>]にしています<br />
 　構造やエネルギーはReaxFFで得られます。一方、電子構造はDFTB+や第一原理計算を用いてください。XAFSはFDMNESなどを用います。<br />
 <br />
 □ gcmc（非常に長い計算時間が必要です）<br />
@@ -183,10 +182,28 @@ angle_info&nbsp;0<br />
 ※ 全ての入力ファイルも一緒に公開してくれていたらさらに良かったのだが。日本を含め諸外国はKIFFを超えて欲しい（SCM社を超えられたら凄いけど）。AIの予算はついてもAI用のデータ構築に必要な基礎研究への予算は実際にはついていないことが良くわかる。DFTB+や2NN MEAMを含め産業利用に重要でもあるのだが理解者はいない<br />
 <br />
 □&nbsp;ffield.reaxでエラーが出る場合<br />
-(ERROR: Missing parameter(s) in line 10.0000 2.5000 4.0000 0.0000 0.0000 5.00009999.9999 0.0000)<br />
-(まだ色々とチェックできていないので注意)<br />
-1.&nbsp;[! Nr of atoms; ]の左にある数を一つ減らす。<br />
-&nbsp;&nbsp;例えば、下記の5なら4にする。<br />
+&nbsp; &quot;ERROR: Missing parameter(s) in line 10.0000 2.5000 4.0000 0.0000 0.0000 5.00009999.9999 0.0000&quot;の場合は&quot;5.00009999.9999&quot;にスペースが無いことが原因となっている<br />
+&nbsp; 対処方法として以下のmethod AからCの3つの方法がある（私の主観でAからB, Cとなるほど難易度が高くなる）。<br />
+----------------------------------------<br />
+◇ method A<br />
+1. &quot;5.00009999.9999&quot; -&gt; &quot;5.0000 9999.9999&quot;<br />
+&nbsp; -----------<br />
+&nbsp; X -0.1000 2.0000 1.0080 2.0000 0.0000 0.0100 -0.1000 6.0000<br />
+&nbsp; 10.0000 2.5000 4.0000 0.0000 0.0000 5.0000 9999.9999 0.0000<br />
+&nbsp; -0.1000 0.0000 -2.3700 8.7410 13.3640 0.6690 0.9745 0.0000<br />
+&nbsp; -11.0000 2.7466 1.0338 2.0000 2.8793 0.0000 0.0000 0.0000<br />
+&nbsp; -----------<br />
+◇ method B<br />
+1. 上手く動作しているffield.reaxのXの部分をコピー&amp;ペーストする<br />
+&nbsp; -----------<br />
+&nbsp;X&nbsp;&nbsp; -0.1000&nbsp;&nbsp; 2.0000&nbsp;&nbsp; 1.0080&nbsp;&nbsp; 2.0000&nbsp;&nbsp; 0.0000&nbsp;&nbsp; 1.0000&nbsp; -0.1000&nbsp;&nbsp; 6.0000<br />
+&nbsp;&nbsp;&nbsp;&nbsp; 10.0000&nbsp;&nbsp; 2.5000&nbsp;&nbsp; 4.0000&nbsp;&nbsp; 0.0000&nbsp;&nbsp; 0.0000&nbsp;&nbsp; 8.5000&nbsp;&nbsp; 1.5000&nbsp;&nbsp; 0.0000<br />
+&nbsp;&nbsp;&nbsp;&nbsp; -0.1000&nbsp;&nbsp; 0.0000&nbsp; -2.3700&nbsp;&nbsp; 8.7410&nbsp; 13.3640&nbsp;&nbsp; 0.6690&nbsp;&nbsp; 0.9745&nbsp;&nbsp; 0.0000<br />
+&nbsp;&nbsp;&nbsp; -11.0000&nbsp;&nbsp; 2.7466&nbsp;&nbsp; 1.0338&nbsp;&nbsp; 6.2998&nbsp;&nbsp; 2.8793&nbsp;&nbsp; 0.0000&nbsp;&nbsp; 0.0000&nbsp;&nbsp; 0.0000<br />
+&nbsp; -----------<br />
+◇ method C<br />
+1.&nbsp;[! Nr of atoms; ]の左にある数を一つ減らす<br />
+（例えば、下記の5なら4にする）<br />
 &nbsp; -----------(before)<br />
 &nbsp; 5 ! Nr of atoms;&nbsp;<br />
 &nbsp; -----------(after)<br />
@@ -199,6 +216,45 @@ angle_info&nbsp;0<br />
 &nbsp; -0.1000 0.0000 -2.3700 8.7410 13.3640 0.6690 0.9745 0.0000<br />
 &nbsp; -11.0000 2.7466 1.0338 2.0000 2.8793 0.0000 0.0000 0.0000<br />
 &nbsp; -----------<br />
+----------------------------------------<br />
+※ 他のエラーの場合は、エラーのコメントとともに表示される*.cppの部分をgoogleなどで検索する。その*.cppのソースコードに対してエラーのコメントが書かれている行を検索して問題の解決方法を見つけるのがよい<br />
+<br />
+□ 計算条件の設定<br />
+&nbsp; 多くの文献（下記の文献[C0-C8]以外も含めて）を参照すると以下のように設定するのがよい。基本的には0.25 fsが用いられる。衝突と反応など結合が変化する系や高温（1500 K以上）の場合は0.1 fsが推奨される（温度が制御しやすくなる）<br />
+--------------------<br />
+・Normally, timestep is 0.5 - 1.0 fs [C0,C1]<br />
+・timestep 0.50 # 0.50 fs at 0 - 1000 K [C2]<br />
+・timestep 0.25 # 0.25 fs at 300 K [C4, C5]<br />
+&nbsp; fix f3 all temp/berendsen 300 300 100<br />
+・timestep 0.25 # 0.25 fs at 300 - 750 K or 1250 K [C6]<br />
+&nbsp; # A Berendsen thermostat with a damping constant of 100 fs<br />
+・timestep 0.25 # 0.25 fs at 1250 K [C3]<br />
+&nbsp; fix f3 all temp/berendsen 1250 1250 100<br />
+・timestep 0.10 # 0.10 fs at 1500 K [C2]<br />
+&nbsp; # At more elevated temperatures smaller time steps.<br />
+&nbsp; fix f3 all temp/berendsen 1500 1500 250<br />
+&nbsp; # A Berendsen thermostat with a temperature-damping constant of 250 fs.<br />
+・timestep 0.10 # 0.10 fs at 2500 K [C0]<br />
+&nbsp; # During the equilibration simulations<br />
+&nbsp; fix f3 all temp/berendsen 2500 2500 100<br />
+&nbsp; # The equilibrated systems<br />
+&nbsp; fix f3 all temp/berendsen 2500 2500 500<br />
+・timestep 0.10 # 0.10 fs at 2500 - 3000 K [C1]<br />
+&nbsp; fix f3 all temp/berendsen 2500 2500 100<br />
+・timestep 0.10 # 0.10 fs at 4100 - 4500 K [C7]<br />
+&nbsp; fix f1 all nvt temp 4100.0 4500.0 3.0 # is this correct ?<br />
+--------------------<br />
+[C0] <a href="https://pubs.acs.org/doi/10.1021/jp709896w">https://pubs.acs.org/doi/10.1021/jp709896w</a><br />
+[C1] <a href="http://dx.doi.org/10.1021/acs.jpcc.6b00786">http://dx.doi.org/10.1021/acs.jpcc.6b00786</a><br />
+[C2] <a href="http://dx.doi.org/10.1021/jp046244d">http://dx.doi.org/10.1021/jp046244d</a><br />
+[C3] <a href="http://dx.doi.org/10.1021/jp411015a">http://dx.doi.org/10.1021/jp411015a</a><br />
+[C4] <a href="http://dx.doi.org/10.1021/jp312828d">http://dx.doi.org/10.1021/jp312828d</a><br />
+[C5] <a href="https://pubs.acs.org/doi/10.1021/acs.jpclett.5b02769">https://pubs.acs.org/doi/10.1021/acs.jpclett.5b02769</a><br />
+[C6] <a href="http://dx.doi.org/10.1021/jp411015a">http://dx.doi.org/10.1021/jp411015a</a><br />
+[C7] <a href="https://pubs.acs.org/doi/10.1021/jp510274e">https://pubs.acs.org/doi/10.1021/jp510274e</a><br />
+[C8] <a href="http://dx.doi.org/10.1063/1.4774332">http://dx.doi.org/10.1063/1.4774332</a><br />
+※ Generally, the time step should be 1 order of magnitudesmaller than the shortest motion or approximately 0.5 to 1.0 fs. With ReaxFF, a smaller time step is required because the chargesand bond orders are allowed to change at every time step. Forhigh-temperature (2500 K) ReaxFF MD simulations, we havefound that a time step of 0.1 fs allows for efficient coverage ofthe phase space and collisions and reactions to occur smoothly. [C0]<br />
+※ The calculations were performed in an isothermal-isobaric (NPT) ensemble with Verlet integrator and a time step of 0.25 fs. The pressure and temperature were controlled by the Bersendsen barostatting and thermostatting methods, with damping constants of 2500 fs and 100 fs, respectively. [C8]<br />
 <br />
 □ 論文を参照してDFTとReaxFFの距離とポテンシャルの比較をすることが大切<br />
 　発表された論文での原子間距離に対するポテンシャルの変化を見ると、原子核近傍から最安定距離まではDFTと比較的良く一致している（遠距離近傍も比較的よく一致）（※ 全範囲がDFTと比べてズレているものもある。Alに関する論文を参照するとよい）。一方、最安定から遠距離までのポテンシャルはReaxFFの方が浅くなっているものがある。この場合、十分に距離を取った構造や最安定の構造はDFTと比較的良くあうことになる。一方で、安定構造から距離を離していく（基板から原子を引っ張っていく）ような場合には、DFTよりも最初は強い力が必要で、その後、弱い力で引き離していく挙動となる。同様に、基板から分子を引き離す場合は、DFTよりも浅いポテンシャルで弱い力で引き離される傾向になる（吸着エネルギーもDFTよりも小さい値になる）。予測精度を上げたい場合は、論文の図を見たり、実際に距離をいくつか変えてDFTとの差を調べ、ReaxFFではどのように考えれば良いかを検討するようにする。例えば、気になる構造をReaxFFで得て、DFTで距離を変えたエネルギーを3点以上計算してモースポテンシャルなどで近似し、ReaxFFの結果を補正したりする。計算資源がある場合は、EZFFを用いてReaxFFを目的の系に対応するようにパラメーターをフィットし直すという方法もあります。<br />
@@ -208,7 +264,8 @@ angle_info&nbsp;0<br />
 ※ 私の経験では各種の実験の物性値は同じ条件で作製と測定をしても&plusmn;10%程度（常に最前線で戦っている現場経験豊富なその道のエキスパートだと&plusmn;5%程度になるが、そのような人は世界に数えるほどしかいない。日本では5年経つ前に雇止め（運が良くても減給など不利な条件での再雇用）。偉くなれたとしても最前線で戦えるのは土日の私用時間を削った上での話になる）の差がある。DFTは良く合う条件で実験値の&plusmn;10%程度となる。古典MDは良く合う条件でDFTと&plusmn;20%程度の差。古典MDでは絶対値でDFTの0.5倍や2倍の値になることもある。どういう条件で実験値に近くなるのかといったことや相対値で議論して同じ結論になるのかどうかなど経験を積み重ねて賢い研究をして欲しい。ちなみに、DFTB+やxTBではDFTとの差が&sigma;値で論文として議論されている。若い方はこのようなことを学びながら研究者として成長していって欲しい。AIが注目されている時代において統計を扱った議論ができていないのは、私自身の勉学が足りていない証拠でもあり反省している。<br />
 <br />
 □ 結合の種類と形成要因 [TH2]<br />
-（エネルギー範囲の単位はkcal/mol（=0.04337 eV）。Tは運動エネルギー）
+（エネルギー範囲の単位はkcal/mol（=0.04337 eV）。Tは運動エネルギー）</p>
+
 <table border="1" cellpadding="5" cellspacing="0" rules="all" style="width: 521.991px;">
 	<tbody>
 		<tr>
