@@ -1,6 +1,76 @@
-pyGAPS (https://github.com/pauliacomi/pyGAPS)<br />
+pyGAPS (<a href="https://github.com/pauliacomi/pyGAPS">https://github.com/pauliacomi/pyGAPS</a>)<br />
 ------------------------------------------------------------------------------<br />
-Å° pyGAPS (Python 3 code) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+Å° pyGAPS (v.2.0.2) (ubuntu 20.04 LTS&nbsp;(64 bit))<br />
+(16/April/2021)<br />
+<br />
+Å† Install<br />
+1. cd ~<br />
+2. sudo apt update<br />
+3. sudo apt -y install python3-pip<br />
+4. pip3 install pygaps==2.0.2<br />
+5. git clone https://github.com/by-student-2017/pyGAPS-python3.7-template.git<br />
+6. cd ~/pyGAPS-python3.7-template<br />
+7. chmod +x run.sh<br />
+8. chmod +x&nbsp;run_sequential.sh<br />
+<br />
+Å† initial setting for desorption data<br />
+1. cd ~/pyGAPS-python3.7-template<br />
+2. python3 set_case.py<br />
+(2. python3 set_case_tab.py) (When the numeric data is separated by tab.)<br />
+3. mv case.csv case_original.csv<br />
+4. mv new_case.csv case.csv<br />
+<br />
+Å† Usage -1-<br />
+1.&nbsp;cd ~/pyGAPS-python3.7-template<br />
+2. python3 dft_fit_csv_des.py<br />
+(see plot)<br />
+(write your data on case.csv, please.)<br />
+<br />
+Å† Usage -2-<br />
+1.&nbsp;cd ~/pyGAPS-python3.7-template<br />
+2. ./run.sh | tee ./plot/info.txt<br />
+(see plot)<br />
+(write your data on case.csv, please.)<br />
+<br />
+Å† Usage -3-<br />
+1.&nbsp;cd ~/pyGAPS-python3.7-template<br />
+2. ./run_sequential.sh<br />
+(see plot_sequential)<br />
+(write your data on *.csv file in sequential_data directory, please.)<br />
+<br />
+Å† Ubuntu 20.04 LTS (WSL version case)<br />
+1. sudo apt install x11-apps<br />
+2. echo 'export DISPLAY=localhost:0.0' &gt;&gt; ~/.bashrc<br />
+3. source ~/.bashrc<br />
+4. sudo apt -y install python3-tk<br />
+(plase install XLaunch)<br />
+------------------------------------------------------------------------------<br />
+Å° pyGAPS (latest version)<br />
+(ubuntu 20.04 LTS&nbsp;(64 bit) on windows 10 (64 bit))<br />
+(16/April/2021)<br />
+<br />
+Å† Install<br />
+1. cd ~<br />
+2. sudo apt update<br />
+3. sudo apt -y install python3-pip<br />
+4. pip3 install pygaps<br />
+5. git clone https://github.com/by-student-2017/pyGAPS-python3.7-template.git<br />
+<br />
+Å† Usage<br />
+1.&nbsp;cd ~/pyGAPS-python3.7-template<br />
+2. python3 dft_fit_csv_des.py<br />
+(see plot)<br />
+(write your data on case.csv, please.)<br />
+<br />
+Å† Ubuntu 20.04 LTS (WSL version case)<br />
+1. sudo apt install x11-apps<br />
+2. echo 'export DISPLAY=localhost:0.0' &gt;&gt; ~/.bashrc<br />
+3. source ~/.bashrc<br />
+4. sudo apt -y install python3-tk<br />
+(plase install XLaunch)<br />
+------------------------------------------------------------------------------<br />
+Å° pyGAPS (v.2.0.2) (ubuntu 18.04 LTS (64 bit) on windows 10 (64 bit))<br />
+(8/April/2020)<br />
 <br />
 Å† Install (easy method)<br />
 0. pip3 install --upgrade pip --user<br />
